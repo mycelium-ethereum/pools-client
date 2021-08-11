@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Children } from 'libs/types';
+import { Children } from 'libs/types/General';
 import styled from 'styled-components';
 import { useResizeDetector } from 'react-resize-detector';
 

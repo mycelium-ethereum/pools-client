@@ -1,5 +1,6 @@
 import { CurrencyType, PoolType } from '@libs/types/General';
-import { BigNumber, ethers } from 'ethers';
+import { ethers } from 'ethers';
+import { BigNumber } from 'bignumber.js';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -41,7 +42,7 @@ export const etherToApproxCurrency: (num: BigNumber) => string = (num) => {
         // reject if num is falsey or is 0
         return '$0.00';
     }
-    const parsedNum = parseFloat(ethers.utils.formatEther(num));
+    const parsedNum = parseFloat(ethers.utils.formatEther(num.toNumber()));
     return parsedNum.toLocaleString('en-us', {
         style: 'currency',
         currency: 'USD',
@@ -116,30 +117,28 @@ export const timeAgo: (current: number, previous: number) => string = (current, 
 };
 
 /**
- * 
+ *
  * @param time as timestamp value in seconds
  */
 export const timeTill: (time: number) => {
-    'd'?: number,
-    'h'?: number,
-    'm'?: number,
-    's': number
-}  = (time) => {
-
-    let difference = time - (Date.now() / 1000);
+    d?: number;
+    h?: number;
+    m?: number;
+    s: number;
+} = (time) => {
+    const difference = time - Date.now() / 1000;
     if (difference > 0) {
-      return(
-        {
+        return {
             d: Math.floor(difference / (1000 * 60 * 60 * 24)),
             h: Math.floor((difference / (1000 * 60 * 60)) % 24),
             m: Math.floor((difference / 1000 / 60) % 60),
-            s: Math.floor((difference / 1000) % 60)
-        }
-    )}
-    return {
-        s: 0
+            s: Math.floor((difference / 1000) % 60),
+        };
     }
-}
+    return {
+        s: 0,
+    };
+};
 
 /**
  * Formats a given date into HH:MM:SS
@@ -172,45 +171,42 @@ export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, 
  * @requires pools names to follow naming convention
  */
 export const deconstructNames: (pools: PoolType[]) => {
-    leverageOptions: string[],
-    settlementOptions: (CurrencyType | "All")[],
+    leverageOptions: string[];
+    settlementOptions: (CurrencyType | 'All')[];
 } = (pools) => {
     // Naming convention 1UP-TSLA/USD+aDAI
     // 2DOWN-TSLA/USD+aDAI
     // leverageSIDE-base/quote+collateral
     // collateral === settlement
 
-    const leverageOptions: string[] = ["All"]
-    const settlementOptions: (CurrencyType | "All")[] = ["All"];
+    const leverageOptions: string[] = ['All'];
+    const settlementOptions: (CurrencyType | 'All')[] = ['All'];
 
     pools.map((pool) => {
         const poolName = pool.name;
-        let [leverage_, _base, quote, collateral] = poolName.replace('+', '-').split('-');
+        // [leverage, _base, quote, collateral]
+        const name = poolName.replace('+', '-').split('-');
+        let leverage = name[0];
+        const quote = name[2];
+        let collateral = name[3];
         // fetch leverage
-        let leverage;
-        if (leverage_.includes('DOWN')) {
-            leverage = leverage_.replace('DOWN', '')
+        if (leverage.includes('DOWN')) {
+            leverage = leverage.replace('DOWN', '');
         } else {
-            leverage = leverage_.replace('UP', '')
+            leverage = leverage.replace('UP', '');
         }
         // set collateral to quote if its falsey
         collateral = !!collateral ? collateral : quote;
 
         if (!leverageOptions.includes(leverage)) {
-            leverageOptions.push(leverage)
+            leverageOptions.push(leverage);
         }
         if (!settlementOptions.includes(collateral as CurrencyType)) {
-            settlementOptions.push(collateral as CurrencyType)
+            settlementOptions.push(collateral as CurrencyType);
         }
-    })
+    });
     return {
         leverageOptions,
-        settlementOptions
-    }
-}
-
-
-/**
- * Function to convert an ethers big number to a js number
- */
-export const formatEtherBigNumber = (num: BigNumber) => parseInt(ethers.utils.formatEther(num)).toFixed(2)
+        settlementOptions,
+    };
+};

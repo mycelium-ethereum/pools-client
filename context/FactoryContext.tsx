@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Children } from 'libs/types';
+import { Children } from 'libs/types/General';
 import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { PoolFactory } from '@libs/types/contracts';
 import { PoolType } from '@libs/types/General';
 
 interface ContextProps {
-    pools: PoolType[]
+    pools: PoolType[];
 }
-
 
 export const FactoryContext = React.createContext<Partial<ContextProps>>({});
 
@@ -18,7 +17,7 @@ export const FactoryContext = React.createContext<Partial<ContextProps>>({});
 export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, config, account } = useWeb3();
     const [contract, setContract] = useState<PoolFactory | undefined>(undefined);
-	const [pools, setPools] = useState<PoolType[]>([]);
+    const [pools, setPools] = useState<PoolType[]>([]);
 
     useEffect(() => {
         if (provider) {
@@ -41,10 +40,10 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                 const createdMarkets = contract.filters.DeployPool();
                 const allEvents = await contract?.queryFilter(createdMarkets);
                 const pools = allEvents.map((event) => ({
-                    name: event.args.poolCode,
-                    address: event.args.pool
-                }))
-                setPools(pools)
+                    name: event.args.ticker,
+                    address: event.args.pool,
+                }));
+                setPools(pools);
             }
         };
         fetch();

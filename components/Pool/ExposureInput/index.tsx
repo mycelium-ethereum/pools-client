@@ -4,26 +4,13 @@ import React, { ChangeEventHandler } from 'react';
 import styled from 'styled-components';
 import { SectionContainer, Label } from '..';
 
-export default (({ 
-    selectedCurrency, 
-    amount, 
-    onInputChange, 
-    onSettlementChange,
-    settlementOptions
-}) => {
+export default (({ selectedCurrency, amount, onInputChange, onSettlementChange, settlementOptions }) => {
     return (
         <SectionContainer>
             <Label>Amount</Label>
             <ExposureInputs>
-                <Input
-                    value={Number.isNaN(amount) ? '' : amount}
-                    placeholder={'0.0'}
-                    onChange={onInputChange}
-                />
-                <Select
-                    value={selectedCurrency}
-                    onChange={onSettlementChange}
-                >
+                <Input value={Number.isNaN(amount) ? '' : amount} placeholder={'0.0'} onChange={onInputChange} />
+                <Select value={selectedCurrency} onChange={onSettlementChange}>
                     {settlementOptions?.map((currency) => (
                         <SelectOption
                             key={`currency-${currency}`}
@@ -41,8 +28,8 @@ export default (({
     selectedCurrency: CurrencyType;
     amount: number;
     onInputChange: ChangeEventHandler<HTMLInputElement>;
-    onSettlementChange: ChangeEventHandler<HTMLSelectElement>
-    settlementOptions: string[]
+    onSettlementChange: ChangeEventHandler<HTMLSelectElement>;
+    settlementOptions: string[];
 }>;
 
 const ExposureInputs = styled.div`

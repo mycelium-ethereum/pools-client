@@ -54,7 +54,7 @@ export const NavBarContent = styled(({ className }) => {
                 logout={resetOnboard}
                 handleConnect={handleConnect}
             />
-            
+
             <ThemeSwitcher />
 
             {/** TODO this will need to change to Arbritrum network id */}

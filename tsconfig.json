@@ -19,6 +19,8 @@
         "importHelpers": true,
         "removeComments": true,
         "jsx": "preserve",
+        "types": [],
+
         "baseUrl": ".",
         "paths": {
             "@components/*": ["components/*"],
@@ -29,6 +31,6 @@
             "@public/*": ["public/*"]
         }
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
-    "exclude": ["node_modules", "components/**/*.stories.tsx"]
+    "exclude": ["node_modules", "libs/types/contracts"],
+    "include": ["next-env.d.ts", "components/**/*.ts", "components/**/*.tsx", "next.config.js"]
 }

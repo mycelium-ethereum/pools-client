@@ -68,11 +68,13 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             },
         );
         const res = callMethod(...params);
-        res
-        .then(async (contractTransaction) => {
+        res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
             updateToast(toastId as unknown as string, {
-                content: ['Transaction submitted', statusMessages?.userConfirmed ?? `Transaction submitted ${contractTransaction.hash}`],
+                content: [
+                    'Transaction submitted',
+                    statusMessages?.userConfirmed ?? `Transaction submitted ${contractTransaction.hash}`,
+                ],
                 appearance: 'success' as AppearanceTypes,
                 autoDismiss: true,
             });
@@ -84,27 +86,24 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             updateToast(toastId as unknown as string, {
                 content: [
                     'Transaction Successful',
-                    statusMessages?.success ??
-                    <a href={`https://kovan.etherscan/tx/${receipt.transactionHash}`}>View transaction</a>
+                    statusMessages?.success ?? (
+                        <a href={`https://kovan.etherscan/tx/${receipt.transactionHash}`}>View transaction</a>
+                    ),
                 ],
                 appearance: 'success',
                 autoDismiss: true,
             });
             onSuccess ? onSuccess(receipt) : null;
-        })
-        .catch((error) => {
-            console.error("Failed transaction", error)
+        }).catch((error) => {
+            console.error('Failed transaction', error);
             updateToast(toastId as unknown as string, {
                 // confirmed this is a string
-                content: [
-                    'Transaction Cancelled',
-                    statusMessages?.error ?? `Transaction cancelled: ${error.message}`,
-                ],
+                content: ['Transaction Cancelled', statusMessages?.error ?? `Transaction cancelled: ${error.message}`],
                 appearance: 'error',
                 autoDismiss: true,
             });
             onError ? onError(error) : null;
-        })
+        });
     };
 
     /** Very similiar function to above but handles regular async functions, mainly signing */

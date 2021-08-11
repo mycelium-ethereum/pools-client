@@ -7,7 +7,7 @@ export const Table = styled.table`
 export const TableHeader = styled.thead``;
 
 export const TableHeading = styled.th<{
-    width: string
+    width: string;
 }>`
     text-align: left;
     color: var(--color-primary);
@@ -22,7 +22,7 @@ export const TableHeading = styled.th<{
         border-left: 1px solid var(--color-accent);
     }
 
-    width: ${props => props?.width ? props.width : 'auto'};
+    width: ${(props) => (props?.width ? props.width : 'auto')};
 `;
 
 export const TableBody = styled.tbody``;

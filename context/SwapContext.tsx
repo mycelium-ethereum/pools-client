@@ -1,12 +1,11 @@
 import React, { useReducer } from 'react';
-import { Children } from 'libs/types';
+import { Children } from 'libs/types/General';
 import { TokenType, MarketType, LeverageType, CurrencyType, SideType, MINT, LONG } from '@libs/types/General';
 
 interface ContextProps {
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }
-
 
 type SwapState = {
     amount: number;

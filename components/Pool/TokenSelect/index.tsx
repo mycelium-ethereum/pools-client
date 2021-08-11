@@ -7,10 +7,7 @@ export default (({ selectedMarket, tokens, onChange }) => {
     return (
         <SectionContainer>
             <Label>Token</Label>
-            <Select
-                value={selectedMarket}
-                onChange={onChange}
-            >
+            <Select value={selectedMarket} onChange={onChange}>
                 {tokens?.map((token) => (
                     <SelectOption key={`token-${token}`} value={token} selected={selectedMarket === token}>
                         {token}
@@ -21,8 +18,8 @@ export default (({ selectedMarket, tokens, onChange }) => {
     );
 }) as React.FC<{
     selectedMarket: string;
-    tokens: string[]
-    onChange: ChangeEventHandler<HTMLSelectElement>
+    tokens: string[];
+    onChange: ChangeEventHandler<HTMLSelectElement>;
 }>;
 
 const Label = styled.p``;

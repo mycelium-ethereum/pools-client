@@ -22,7 +22,6 @@ export type APIResult = {
     data: any;
 };
 
-
 export const LONG = 'Long';
 export const SHORT = 'Short';
 export type SideType = typeof LONG | typeof SHORT;
@@ -39,8 +38,7 @@ export type CurrencyType = 'DAI' | 'USDC';
 
 export type LeverageType = number;
 
-
 export type PoolType = {
-    name: string,
-    address: string
-}
+    name: string;
+    address: string;
+};

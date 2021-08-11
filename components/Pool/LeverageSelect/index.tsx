@@ -7,10 +7,7 @@ export default (({ selectedLeverage, options, onChange }) => {
     return (
         <SectionContainer>
             <Label>Leverage</Label>
-            <Select
-                value={selectedLeverage}
-                onChange={onChange}
-            >
+            <Select value={selectedLeverage} onChange={onChange}>
                 {options.map((leverage) => (
                     <SelectOption
                         key={`leverage-${leverage}`}
@@ -26,6 +23,6 @@ export default (({ selectedLeverage, options, onChange }) => {
 }) as React.FC<{
     selectedLeverage: number;
     swapDispatch: React.Dispatch<SwapAction>;
-    onChange: ChangeEventHandler<HTMLSelectElement>
-    options: number[]
+    onChange: ChangeEventHandler<HTMLSelectElement>;
+    options: number[];
 }>;

@@ -148,7 +148,7 @@ const Error: React.FC<EProps> = styled(({ className, error, message, context }: 
                 {error_?.moreInfo ? (
                     <>
                         {/* <StyledTooltip title={error_?.moreInfo}> */}
-                            <SInfoCircleOutlined />
+                        <SInfoCircleOutlined />
                         {/* </StyledTooltip> */}
                     </>
                 ) : null}

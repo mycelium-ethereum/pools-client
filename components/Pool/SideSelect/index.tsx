@@ -1,5 +1,6 @@
 import { Select, SelectOption } from '@components/General';
-import { SideType, SwapAction } from '@context/SwapContext';
+import { SwapAction } from '@context/SwapContext';
+import { SideType } from '@libs/types/General';
 import React from 'react';
 import { SectionContainer, Label } from '..';
 

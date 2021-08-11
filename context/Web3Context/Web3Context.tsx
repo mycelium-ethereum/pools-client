@@ -52,7 +52,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     checkNetwork = (networkIds && networkIds.length > 0) || false,
 }) => {
     const [account, setAccount] = useState<string | undefined>(undefined);
-    const [signer, setSigner] = useState<ethers.Signer| undefined>(undefined);
+    const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(undefined);
     const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
@@ -144,7 +144,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     useEffect(() => {
         const signer = provider?.getSigner();
         setSigner(signer);
-    }, [provider, account])
+    }, [provider, account]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
