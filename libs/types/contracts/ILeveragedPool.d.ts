@@ -25,9 +25,12 @@ interface ILeveragedPoolInterface extends ethers.utils.Interface {
     "executeCommitment(uint128[])": FunctionFragment;
     "executePriceChange(int256,int256)": FunctionFragment;
     "getOraclePrice()": FunctionFragment;
-    "initialize(address,address,address,address,string,uint32,uint32,bytes16,uint16,address,address)": FunctionFragment;
+    "initialize(tuple)": FunctionFragment;
     "intervalPassed()": FunctionFragment;
+    "keeperOracle()": FunctionFragment;
     "oracleWrapper()": FunctionFragment;
+    "setKeeper(address)": FunctionFragment;
+    "transferGovernance(address)": FunctionFragment;
     "uncommit(uint128)": FunctionFragment;
     "updateFeeAddress(address)": FunctionFragment;
     "updateInterval()": FunctionFragment;
@@ -52,17 +55,21 @@ interface ILeveragedPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "initialize",
     values: [
-      string,
-      string,
-      string,
-      string,
-      string,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BigNumberish,
-      string,
-      string
+      {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      }
     ]
   ): string;
   encodeFunctionData(
@@ -70,8 +77,17 @@ interface ILeveragedPoolInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "keeperOracle",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "oracleWrapper",
     values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "setKeeper", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "transferGovernance",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "uncommit",
@@ -105,7 +121,16 @@ interface ILeveragedPoolInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "keeperOracle",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "oracleWrapper",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setKeeper", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferGovernance",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "uncommit", data: BytesLike): Result;
@@ -197,23 +222,39 @@ export class ILeveragedPool extends BaseContract {
     getOraclePrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     intervalPassed(overrides?: CallOverrides): Promise<[boolean]>;
 
+    keeperOracle(overrides?: CallOverrides): Promise<[string]>;
+
     oracleWrapper(overrides?: CallOverrides): Promise<[string]>;
+
+    setKeeper(
+      _keeper: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     uncommit(
       commitID: BigNumberish,
@@ -248,23 +289,39 @@ export class ILeveragedPool extends BaseContract {
   getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
   initialize(
-    _updater: string,
-    _oracleWrapper: string,
-    _longToken: string,
-    _shortToken: string,
-    _poolCode: string,
-    _frontRunningInterval: BigNumberish,
-    _updateInterval: BigNumberish,
-    _fee: BytesLike,
-    _leverageAmount: BigNumberish,
-    _feeAddress: string,
-    _quoteToken: string,
+    initialization: {
+      _owner: string;
+      _keeper: string;
+      _oracleWrapper: string;
+      _keeperOracle: string;
+      _longToken: string;
+      _shortToken: string;
+      _poolCode: string;
+      _frontRunningInterval: BigNumberish;
+      _updateInterval: BigNumberish;
+      _fee: BytesLike;
+      _leverageAmount: BigNumberish;
+      _feeAddress: string;
+      _quoteToken: string;
+    },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   intervalPassed(overrides?: CallOverrides): Promise<boolean>;
 
+  keeperOracle(overrides?: CallOverrides): Promise<string>;
+
   oracleWrapper(overrides?: CallOverrides): Promise<string>;
+
+  setKeeper(
+    _keeper: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferGovernance(
+    _governance: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   uncommit(
     commitID: BigNumberish,
@@ -299,23 +356,36 @@ export class ILeveragedPool extends BaseContract {
     getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: CallOverrides
     ): Promise<void>;
 
     intervalPassed(overrides?: CallOverrides): Promise<boolean>;
 
+    keeperOracle(overrides?: CallOverrides): Promise<string>;
+
     oracleWrapper(overrides?: CallOverrides): Promise<string>;
+
+    setKeeper(_keeper: string, overrides?: CallOverrides): Promise<void>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     uncommit(commitID: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -393,23 +463,39 @@ export class ILeveragedPool extends BaseContract {
     getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     intervalPassed(overrides?: CallOverrides): Promise<BigNumber>;
 
+    keeperOracle(overrides?: CallOverrides): Promise<BigNumber>;
+
     oracleWrapper(overrides?: CallOverrides): Promise<BigNumber>;
+
+    setKeeper(
+      _keeper: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     uncommit(
       commitID: BigNumberish,
@@ -445,23 +531,39 @@ export class ILeveragedPool extends BaseContract {
     getOraclePrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     intervalPassed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    keeperOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     oracleWrapper(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    setKeeper(
+      _keeper: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     uncommit(
       commitID: BigNumberish,

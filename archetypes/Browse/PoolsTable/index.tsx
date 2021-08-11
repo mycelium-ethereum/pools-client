@@ -40,6 +40,10 @@ const headings: Heading[] = [
 		width: "auto"
 	},
 	{
+		text: "Oracle Price",
+		width: "auto"
+	},
+	{
 		text: "24h Change",
 		width: "auto"
 	},

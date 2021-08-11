@@ -1,7 +1,7 @@
 import React from "react"
 import { TableCell, TableRow } from "@components/General/Table"
 import { Pool, usePool } from "@hooks/usePool"
-import { toApproxCurrency } from "@libs/utils"
+import { etherToApproxCurrency, toApproxCurrency } from "@libs/utils"
 import { Button } from '@components/General'
 import styled from "styled-components"
 import { LONG, PoolType, SHORT, SideType } from "@libs/types/General"
@@ -24,7 +24,8 @@ export default (({ poolInfo, openTradeModal }) => {
 		<>
 			<TableRow>
 				<TableCell>{tokenState.shortTokenName}</TableCell>
-				<TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
+				<TableCell>{etherToApproxCurrency(poolState.lastPrice)}</TableCell>
+				<TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
 				<TableCell>{poolState.marketChange}</TableCell>
 				<TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
 				<TableCell>
@@ -38,7 +39,8 @@ export default (({ poolInfo, openTradeModal }) => {
 			</TableRow>
 			<TableRow>
 				<TableCell>{tokenState.longTokenName}</TableCell>
-				<TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
+				<TableCell>{etherToApproxCurrency(poolState.lastPrice)}</TableCell>
+				<TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
 				<TableCell>{poolState.marketChange}</TableCell>
 				<TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
 				<TableCell>

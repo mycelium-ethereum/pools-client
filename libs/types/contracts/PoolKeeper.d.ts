@@ -21,60 +21,61 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface PoolKeeperInterface extends ethers.utils.Interface {
   functions: {
-    "ADMIN()": FunctionFragment;
-    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "checkUpkeep(bytes)": FunctionFragment;
-    "executionPrice(string)": FunctionFragment;
+    "BASE_TIP()": FunctionFragment;
+    "BLOCK_TIME()": FunctionFragment;
+    "TIP_DELTA_PER_BLOCK()": FunctionFragment;
+    "checkUpkeepMultiplePools(address[])": FunctionFragment;
+    "checkUpkeepSinglePool(address)": FunctionFragment;
+    "executionPrice(address)": FunctionFragment;
     "factory()": FunctionFragment;
-    "getRoleAdmin(bytes32)": FunctionFragment;
-    "getRoleMember(bytes32,uint256)": FunctionFragment;
-    "getRoleMemberCount(bytes32)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "hasRole(bytes32,address)": FunctionFragment;
-    "lastExecutionPrice(string)": FunctionFragment;
-    "lastExecutionTime(string)": FunctionFragment;
-    "newPool(string,address)": FunctionFragment;
-    "performUpkeep(bytes)": FunctionFragment;
-    "poolRoundStart(string)": FunctionFragment;
-    "pools(string)": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
+    "keeperFees(address)": FunctionFragment;
+    "keeperGas(address,uint256,uint256)": FunctionFragment;
+    "keeperReward(address,uint256,uint256)": FunctionFragment;
+    "keeperTip(address)": FunctionFragment;
+    "lastExecutionPrice(address)": FunctionFragment;
+    "lastExecutionTime(address)": FunctionFragment;
+    "newPool(address)": FunctionFragment;
+    "owner()": FunctionFragment;
+    "performUpkeepMultiplePools(address[])": FunctionFragment;
+    "performUpkeepSinglePool(address)": FunctionFragment;
+    "poolRoundStart(address)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setFactory(address)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "ADMIN", values?: undefined): string;
+  encodeFunctionData(functionFragment: "BASE_TIP", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
+    functionFragment: "BLOCK_TIME",
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "checkUpkeep",
-    values: [BytesLike]
+    functionFragment: "TIP_DELTA_PER_BLOCK",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkUpkeepMultiplePools",
+    values: [string[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "checkUpkeepSinglePool",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "executionPrice",
     values: [string]
   ): string;
   encodeFunctionData(functionFragment: "factory", values?: undefined): string;
+  encodeFunctionData(functionFragment: "keeperFees", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "getRoleAdmin",
-    values: [BytesLike]
+    functionFragment: "keeperGas",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "getRoleMember",
-    values: [BytesLike, BigNumberish]
+    functionFragment: "keeperReward",
+    values: [string, BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMemberCount",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "hasRole",
-    values: [BytesLike, string]
-  ): string;
+  encodeFunctionData(functionFragment: "keeperTip", values: [string]): string;
   encodeFunctionData(
     functionFragment: "lastExecutionPrice",
     values: [string]
@@ -83,35 +84,42 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     functionFragment: "lastExecutionTime",
     values: [string]
   ): string;
+  encodeFunctionData(functionFragment: "newPool", values: [string]): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "newPool",
-    values: [string, string]
+    functionFragment: "performUpkeepMultiplePools",
+    values: [string[]]
   ): string;
   encodeFunctionData(
-    functionFragment: "performUpkeep",
-    values: [BytesLike]
+    functionFragment: "performUpkeepSinglePool",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "poolRoundStart",
     values: [string]
   ): string;
-  encodeFunctionData(functionFragment: "pools", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "renounceRole",
-    values: [BytesLike, string]
+    functionFragment: "renounceOwnership",
+    values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "setFactory", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "revokeRole",
-    values: [BytesLike, string]
+    functionFragment: "transferOwnership",
+    values: [string]
   ): string;
 
-  decodeFunctionResult(functionFragment: "ADMIN", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "BASE_TIP", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "BLOCK_TIME", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
+    functionFragment: "TIP_DELTA_PER_BLOCK",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "checkUpkeep",
+    functionFragment: "checkUpkeepMultiplePools",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkUpkeepSinglePool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -119,20 +127,13 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "factory", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "keeperFees", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "keeperGas", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getRoleAdmin",
+    functionFragment: "keeperReward",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMember",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMemberCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "keeperTip", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "lastExecutionPrice",
     data: BytesLike
@@ -142,42 +143,42 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "newPool", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "performUpkeep",
+    functionFragment: "performUpkeepMultiplePools",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "performUpkeepSinglePool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "poolRoundStart",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "pools", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceRole",
+    functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setFactory", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "CreateMarket(string,address)": EventFragment;
-    "ExecutePriceChange(int256,int256,uint32,string)": EventFragment;
-    "NewRound(int256,int256,uint32,string)": EventFragment;
-    "PoolAdded(address,int256,string)": EventFragment;
-    "PoolUpdateError(string,string)": EventFragment;
-    "PriceSample(int256,int256,uint32,string)": EventFragment;
-    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
-    "RoleGranted(bytes32,address,address)": EventFragment;
-    "RoleRevoked(bytes32,address,address)": EventFragment;
+    "ExecutePriceChange(int256,int256,uint32,address)": EventFragment;
+    "NewRound(int256,int256,uint32,address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
+    "PoolAdded(address,int256,address)": EventFragment;
+    "PoolUpdateError(address,string)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "CreateMarket"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ExecutePriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewRound"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolUpdateError"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PriceSample"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
 }
 
 export class PoolKeeper extends BaseContract {
@@ -224,16 +225,21 @@ export class PoolKeeper extends BaseContract {
   interface: PoolKeeperInterface;
 
   functions: {
-    ADMIN(overrides?: CallOverrides): Promise<[string]>;
+    BASE_TIP(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
+    BLOCK_TIME(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    checkUpkeep(
-      checkData: BytesLike,
+    TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    checkUpkeepMultiplePools(
+      _pools: string[],
       overrides?: CallOverrides
-    ): Promise<
-      [boolean, string] & { upkeepNeeded: boolean; performData: string }
-    >;
+    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
+
+    checkUpkeepSinglePool(
+      _pool: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
 
     executionPrice(
       arg0: string,
@@ -242,30 +248,23 @@ export class PoolKeeper extends BaseContract {
 
     factory(overrides?: CallOverrides): Promise<[string]>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+    keeperFees(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getRoleMemberCount(
-      role: BytesLike,
+    keeperGas(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
+    keeperReward(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[BigNumber]>;
+
+    keeperTip(_pool: string, overrides?: CallOverrides): Promise<[BigNumber]>;
 
     lastExecutionPrice(
       arg0: string,
@@ -278,13 +277,19 @@ export class PoolKeeper extends BaseContract {
     ): Promise<[BigNumber]>;
 
     newPool(
-      _poolCode: string,
       _poolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    performUpkeep(
-      performData: BytesLike,
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    performUpkeepSinglePool(
+      _pool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -293,60 +298,58 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    pools(arg0: string, overrides?: CallOverrides): Promise<[string]>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFactory(
+      _factory: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  ADMIN(overrides?: CallOverrides): Promise<string>;
+  BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
-  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+  BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
 
-  checkUpkeep(
-    checkData: BytesLike,
+  TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
+
+  checkUpkeepMultiplePools(
+    _pools: string[],
     overrides?: CallOverrides
-  ): Promise<
-    [boolean, string] & { upkeepNeeded: boolean; performData: string }
-  >;
+  ): Promise<boolean>;
+
+  checkUpkeepSinglePool(
+    _pool: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   executionPrice(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   factory(overrides?: CallOverrides): Promise<string>;
 
-  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+  keeperFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  getRoleMember(
-    role: BytesLike,
-    index: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getRoleMemberCount(
-    role: BytesLike,
+  keeperGas(
+    _pool: string,
+    _gasPrice: BigNumberish,
+    _gasSpent: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  grantRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  hasRole(
-    role: BytesLike,
-    account: string,
+  keeperReward(
+    _pool: string,
+    _gasPrice: BigNumberish,
+    _gasSpent: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<boolean>;
+  ): Promise<BigNumber>;
+
+  keeperTip(_pool: string, overrides?: CallOverrides): Promise<BigNumber>;
 
   lastExecutionPrice(
     arg0: string,
@@ -359,72 +362,76 @@ export class PoolKeeper extends BaseContract {
   ): Promise<BigNumber>;
 
   newPool(
-    _poolCode: string,
     _poolAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  performUpkeep(
-    performData: BytesLike,
+  owner(overrides?: CallOverrides): Promise<string>;
+
+  performUpkeepMultiplePools(
+    poolCodes: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  performUpkeepSinglePool(
+    _pool: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   poolRoundStart(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-  pools(arg0: string, overrides?: CallOverrides): Promise<string>;
-
-  renounceRole(
-    role: BytesLike,
-    account: string,
+  renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  revokeRole(
-    role: BytesLike,
-    account: string,
+  setFactory(
+    _factory: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    ADMIN(overrides?: CallOverrides): Promise<string>;
+    BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
+    BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
 
-    checkUpkeep(
-      checkData: BytesLike,
+    TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
+
+    checkUpkeepMultiplePools(
+      _pools: string[],
       overrides?: CallOverrides
-    ): Promise<
-      [boolean, string] & { upkeepNeeded: boolean; performData: string }
-    >;
+    ): Promise<boolean>;
+
+    checkUpkeepSinglePool(
+      _pool: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     executionPrice(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     factory(overrides?: CallOverrides): Promise<string>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+    keeperFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getRoleMemberCount(
-      role: BytesLike,
+    keeperGas(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
+    keeperReward(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<BigNumber>;
 
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    keeperTip(_pool: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     lastExecutionPrice(
       arg0: string,
@@ -436,43 +443,33 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    newPool(
-      _poolCode: string,
-      _poolAddress: string,
+    newPool(_poolAddress: string, overrides?: CallOverrides): Promise<void>;
+
+    owner(overrides?: CallOverrides): Promise<string>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
       overrides?: CallOverrides
     ): Promise<void>;
 
-    performUpkeep(
-      performData: BytesLike,
+    performUpkeepSinglePool(
+      _pool: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
     poolRoundStart(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    pools(arg0: string, overrides?: CallOverrides): Promise<string>;
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    setFactory(_factory: string, overrides?: CallOverrides): Promise<void>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    transferOwnership(
+      newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
   filters: {
-    CreateMarket(
-      marketCode?: null,
-      oracle?: null
-    ): TypedEventFilter<
-      [string, string],
-      { marketCode: string; oracle: string }
-    >;
-
     ExecutePriceChange(
       oldPrice?: BigNumberish | null,
       newPrice?: BigNumberish | null,
@@ -503,6 +500,14 @@ export class PoolKeeper extends BaseContract {
       }
     >;
 
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
+    ): TypedEventFilter<
+      [string, string],
+      { previousOwner: string; newOwner: string }
+    >;
+
     PoolAdded(
       poolAddress?: string | null,
       firstPrice?: BigNumberish | null,
@@ -513,60 +518,25 @@ export class PoolKeeper extends BaseContract {
     >;
 
     PoolUpdateError(
-      poolCode?: string | null,
+      pool?: null,
       reason?: null
-    ): TypedEventFilter<[string, string], { poolCode: string; reason: string }>;
-
-    PriceSample(
-      cumulativePrice?: BigNumberish | null,
-      count?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      market?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        cumulativePrice: BigNumber;
-        count: BigNumber;
-        updateInterval: number;
-        market: string;
-      }
-    >;
-
-    RoleAdminChanged(
-      role?: BytesLike | null,
-      previousAdminRole?: BytesLike | null,
-      newAdminRole?: BytesLike | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; previousAdminRole: string; newAdminRole: string }
-    >;
-
-    RoleGranted(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
-    >;
-
-    RoleRevoked(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
-    >;
+    ): TypedEventFilter<[string, string], { pool: string; reason: string }>;
   };
 
   estimateGas: {
-    ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
+    BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
+    BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
 
-    checkUpkeep(
-      checkData: BytesLike,
+    TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
+
+    checkUpkeepMultiplePools(
+      _pools: string[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    checkUpkeepSinglePool(
+      _pool: string,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -574,33 +544,23 @@ export class PoolKeeper extends BaseContract {
 
     factory(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleAdmin(
-      role: BytesLike,
+    keeperFees(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
+
+    keeperGas(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
+    keeperReward(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    keeperTip(_pool: string, overrides?: CallOverrides): Promise<BigNumber>;
 
     lastExecutionPrice(
       arg0: string,
@@ -613,42 +573,55 @@ export class PoolKeeper extends BaseContract {
     ): Promise<BigNumber>;
 
     newPool(
-      _poolCode: string,
       _poolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    performUpkeep(
-      performData: BytesLike,
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    performUpkeepSinglePool(
+      _pool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     poolRoundStart(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    pools(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFactory(
+      _factory: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    BASE_TIP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    DEFAULT_ADMIN_ROLE(
+    BLOCK_TIME(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    TIP_DELTA_PER_BLOCK(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    checkUpkeep(
-      checkData: BytesLike,
+    checkUpkeepMultiplePools(
+      _pools: string[],
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkUpkeepSinglePool(
+      _pool: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -659,31 +632,27 @@ export class PoolKeeper extends BaseContract {
 
     factory(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getRoleAdmin(
-      role: BytesLike,
+    keeperFees(
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
+    keeperGas(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getRoleMemberCount(
-      role: BytesLike,
+    keeperReward(
+      _pool: string,
+      _gasPrice: BigNumberish,
+      _gasSpent: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
+    keeperTip(
+      _pool: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -698,13 +667,19 @@ export class PoolKeeper extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     newPool(
-      _poolCode: string,
       _poolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    performUpkeep(
-      performData: BytesLike,
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    performUpkeepSinglePool(
+      _pool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -713,20 +688,17 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    pools(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFactory(
+      _factory: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

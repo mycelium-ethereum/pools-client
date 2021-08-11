@@ -19,7 +19,7 @@ const _abi = [
       {
         indexed: false,
         internalType: "string",
-        name: "poolCode",
+        name: "ticker",
         type: "string",
       },
     ],
@@ -30,11 +30,6 @@ const _abi = [
     inputs: [
       {
         components: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
           {
             internalType: "string",
             name: "poolCode",
@@ -51,19 +46,9 @@ const _abi = [
             type: "uint32",
           },
           {
-            internalType: "bytes16",
-            name: "fee",
-            type: "bytes16",
-          },
-          {
             internalType: "uint16",
             name: "leverageAmount",
             type: "uint16",
-          },
-          {
-            internalType: "address",
-            name: "feeAddress",
-            type: "address",
           },
           {
             internalType: "address",
@@ -73,6 +58,11 @@ const _abi = [
           {
             internalType: "address",
             name: "oracleWrapper",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "keeperOracle",
             type: "address",
           },
         ],
@@ -89,6 +79,128 @@ const _abi = [
         type: "address",
       },
     ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_pool",
+        type: "address",
+      },
+    ],
+    name: "isValidPool",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "numPools",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes32",
+        name: "uniquePoolId",
+        type: "bytes32",
+      },
+    ],
+    name: "poolIdTaken",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "id",
+        type: "uint256",
+      },
+    ],
+    name: "pools",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "bytes16",
+        name: "_fee",
+        type: "bytes16",
+      },
+    ],
+    name: "setFee",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_feeReceiver",
+        type: "address",
+      },
+    ],
+    name: "setFeeReceiver",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint16",
+        name: "newMaxLeverage",
+        type: "uint16",
+      },
+    ],
+    name: "setMaxLeverage",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_poolKeeper",
+        type: "address",
+      },
+    ],
+    name: "setPoolKeeper",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },

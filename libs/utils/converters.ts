@@ -1,5 +1,5 @@
 import { CurrencyType, PoolType } from '@libs/types/General';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -29,6 +29,24 @@ export const round: (num: number, decimalPlaces: number) => number = (num, decim
     const p = Math.pow(10, decimalPlaces);
     const n = num * p * (1 + Number.EPSILON);
     return Math.round(n) / p;
+};
+
+/**
+ * Returns a currency representation of a given ether BigNumber
+ * @param num_ number to convert to currency
+ * @returns returns the LocaleString representation of the value
+ */
+export const etherToApproxCurrency: (num: BigNumber) => string = (num) => {
+    if (!num || num?.eq(0)) {
+        // reject if num is falsey or is 0
+        return '$0.00';
+    }
+    const parsedNum = parseFloat(ethers.utils.formatEther(num));
+    return parsedNum.toLocaleString('en-us', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2,
+    });
 };
 
 /**
@@ -190,3 +208,9 @@ export const deconstructNames: (pools: PoolType[]) => {
         settlementOptions
     }
 }
+
+
+/**
+ * Function to convert an ethers big number to a js number
+ */
+export const formatEtherBigNumber = (num: BigNumber) => parseInt(ethers.utils.formatEther(num)).toFixed(2)

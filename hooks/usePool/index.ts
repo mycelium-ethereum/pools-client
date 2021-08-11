@@ -1,15 +1,14 @@
 import { Dispatch, useEffect, useReducer, useState, useContext } from 'react';
 import { BigNumber, ethers } from 'ethers';
-import poolJSON from 'abis/LeveragedPool.json';
 import tokenJSON from 'abis/PoolToken.json';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { PoolType } from '@libs/types/General';
-import { LeveragedPool, PoolToken, TestToken, TestToken__factory } from '@libs/types/contracts';
-import { PoolState, PoolAction, reducer, initialPoolState } from './dispatch';
+import { PoolState, PoolAction, reducer, initialPoolState } from './poolDispatch';
 import { TokenState, TokenAction, tokenReducer, initialTokenState } from './tokenDispatch';
 import { calcLossMultiplier, calcRatio } from '@libs/utils/calcs';
 import { LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from './constants';
 import { TransactionContext } from '@context/TransactionContext';
+import { LeveragedPool, PoolToken, TestToken, TestToken__factory, LeveragedPool__factory } from '@libs/types/contracts';
 
 export interface Pool {
     poolState: PoolState;
@@ -31,29 +30,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
 
     useEffect(() => {
         if (pool.address && provider) {
-            const contract_ = new ethers.Contract(pool.address, poolJSON.abi, provider?.getSigner() ?? provider) as LeveragedPool;
-            const fetch = async () => {
-                const updateInterval = await contract_.updateInterval();
-                const lastUpdate = await contract_.lastPriceTimestamp();
-                const nextUpdate = updateInterval + lastUpdate;
-                poolDispatch({ type: 'setNextRebalance', nextRebalance: nextUpdate })
-                poolDispatch({ type: 'setUpdateInterval', updateInterval: updateInterval })
-
-                const shortBalance = await contract_.shortBalance();
-                const longBalance = await contract_.longBalance();
-                poolDispatch({ type: 'setPoolBalances', balances: {
-                    shortBalance: shortBalance,
-                    longBalance: longBalance
-                }})
-
-                const oraclePrice = await contract_.getOraclePrice();
-                poolDispatch({ type: 'setOraclePrice', oraclePrice: oraclePrice })
-
-                
-                const quoteToken = await contract_.quoteToken();
-                setQuoteToken(new ethers.Contract(quoteToken, TestToken__factory.abi, provider?.getSigner() ?? provider) as TestToken)
-            }
-            fetch();
+            const contract_ = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider?.getSigner() ?? provider) as LeveragedPool;
             poolDispatch({ type: 'setToken', token: pool.name })
             setContract(contract_)
         }
@@ -61,6 +38,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
 
 
     useEffect(() => {
+        fetchInitialValues();
         fetchMarketChange();
         fetchPoolTokens();
     }, [contract])
@@ -106,7 +84,6 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
      */
     const mint = (amount: number, isShort: boolean) => {
         if (contract && handleTransaction) {
-            console.log(contract)
             const commitType = isShort ? SHORT_MINT : LONG_MINT
             handleTransaction(
                 contract.commit,
@@ -130,14 +107,38 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         }
     }
 
+    const fetchInitialValues = async () => {
+        if (contract) {
+            const updateInterval = await contract.updateInterval();
+            const lastUpdate = await contract.lastPriceTimestamp();
+            const nextUpdate = updateInterval + lastUpdate;
+            poolDispatch({ type: 'setNextRebalance', nextRebalance: nextUpdate })
+            poolDispatch({ type: 'setUpdateInterval', updateInterval: updateInterval })
+
+            const shortBalance = await contract.shortBalance();
+            const longBalance = await contract.longBalance();
+            poolDispatch({ type: 'setPoolBalances', balances: {
+                shortBalance: shortBalance,
+                longBalance: longBalance
+            }})
+
+            const oraclePrice = await contract.getOraclePrice();
+            poolDispatch({ type: 'setOraclePrice', oraclePrice: oraclePrice })
+
+            
+            const quoteToken = await contract.quoteToken();
+            setQuoteToken(new ethers.Contract(quoteToken, TestToken__factory.abi, provider?.getSigner() ?? provider) as TestToken)
+        }
+    }
 
     const fetchMarketChange = async () => {
         if (contract) {
             const prices = contract.filters.PriceChange()
-            const allEvents = await contract?.queryFilter(prices);
+            const allEvents = await contract.queryFilter(prices);
             const yesterday = Date.now() / 1000;
             let twentyFourHourPrice = BigNumber.from(0);
             let latestPrice = BigNumber.from(0);
+            console.log(allEvents, "All events")
             if (allEvents[0]) {
                 latestPrice = allEvents[0].args.endPrice;
             }
@@ -200,11 +201,11 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                         longToken: res[2],
                         shortToken: res[3]
                     })
-                    poolDispatch({ type: 'setPoolTokenBalances', balances: balances })
-                    poolDispatch({ type: 'setApprovedTokens', approvals: approvals})
+                    tokenDispatch({ type: 'setPoolTokenBalances', balances: balances })
+                    tokenDispatch({ type: 'setApprovedTokens', approvals: approvals})
                 }).catch((err) => {
                     console.error("Failed to fetch pool token balances", err)
-                    poolDispatch({ type: 'setPoolTokenBalances', balances: {
+                    tokenDispatch({ type: 'setPoolTokenBalances', balances: {
                         longToken: ethers.BigNumber.from(0),
                         shortToken: ethers.BigNumber.from(0),
                     }})
@@ -220,12 +221,12 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                     console.debug("Fetched quoteToken balance", res[0])
                     console.debug("Fetched quoteToken allowance", res[1])
                     const max = BigNumber.from(Number.MAX_SAFE_INTEGER.toString())
-                    poolDispatch({ type: 'setQuoteTokenBalance', quoteTokenBalance: res[0] })
-                    poolDispatch({ type: 'setApprovedQuoteToken', value: res[1].gte(max)})
+                    tokenDispatch({ type: 'setQuoteTokenBalance', quoteTokenBalance: res[0] })
+                    tokenDispatch({ type: 'setApprovedQuoteToken', value: res[1].gte(max)})
                 })
                 .catch((err) => {
                     console.error("Failed to fetch quote token balance", err)
-                    poolDispatch({ type: 'setQuoteTokenBalance', quoteTokenBalance: ethers.BigNumber.from(0)})
+                    tokenDispatch({ type: 'setQuoteTokenBalance', quoteTokenBalance: ethers.BigNumber.from(0)})
                 })
         }
     }

@@ -11,25 +11,6 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: "string",
-        name: "marketCode",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "oracle",
-        type: "address",
-      },
-    ],
-    name: "CreateMarket",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: "int256",
         name: "oldPrice",
@@ -49,9 +30,9 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "string",
+        internalType: "address",
         name: "pool",
-        type: "string",
+        type: "address",
       },
     ],
     name: "ExecutePriceChange",
@@ -80,9 +61,9 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "string",
+        internalType: "address",
         name: "poolCode",
-        type: "string",
+        type: "address",
       },
     ],
     name: "NewRound",
@@ -105,9 +86,9 @@ const _abi = [
       },
       {
         indexed: false,
-        internalType: "string",
+        internalType: "address",
         name: "poolCode",
-        type: "string",
+        type: "address",
       },
     ],
     name: "PoolAdded",
@@ -117,10 +98,10 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "string",
-        name: "poolCode",
-        type: "string",
+        indexed: false,
+        internalType: "address",
+        name: "pool",
+        type: "address",
       },
       {
         indexed: false,
@@ -133,43 +114,45 @@ const _abi = [
     type: "event",
   },
   {
-    anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: "int256",
-        name: "cumulativePrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "count",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "uint32",
-        name: "updateInterval",
-        type: "uint32",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "market",
-        type: "string",
+        internalType: "address[]",
+        name: "poolCodes",
+        type: "address[]",
       },
     ],
-    name: "PriceSample",
-    type: "event",
+    name: "checkUpkeepMultiplePools",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "upkeepNeeded",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
   },
   {
     inputs: [
       {
-        internalType: "string",
-        name: "_poolCode",
-        type: "string",
+        internalType: "address",
+        name: "poolCode",
+        type: "address",
       },
+    ],
+    name: "checkUpkeepSinglePool",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "upkeepNeeded",
+        type: "bool",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "address",
         name: "_poolAddress",
@@ -177,6 +160,45 @@ const _abi = [
       },
     ],
     name: "newPool",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address[]",
+        name: "poolCodes",
+        type: "address[]",
+      },
+    ],
+    name: "performUpkeepMultiplePools",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "poolCode",
+        type: "address",
+      },
+    ],
+    name: "performUpkeepSinglePool",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_factory",
+        type: "address",
+      },
+    ],
+    name: "setFactory",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

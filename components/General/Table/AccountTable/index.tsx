@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Children } from '@libs/types';
+import { Children } from '@libs/types/General';
 
 type TProps = {
     headings: string[];

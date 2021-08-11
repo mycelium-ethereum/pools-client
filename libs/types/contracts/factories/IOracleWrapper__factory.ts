@@ -24,25 +24,6 @@ const _abi = [
     type: "function",
   },
   {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "isAdmin",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
     inputs: [],
     name: "oracle",
     outputs: [
@@ -64,19 +45,6 @@ const _abi = [
       },
     ],
     name: "setOracle",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "_admin",
-        type: "address",
-      },
-    ],
-    name: "switchAdmin",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

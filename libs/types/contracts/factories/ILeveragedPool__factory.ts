@@ -194,59 +194,76 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "_updater",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_oracleWrapper",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_longToken",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_shortToken",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "_poolCode",
-        type: "string",
-      },
-      {
-        internalType: "uint32",
-        name: "_frontRunningInterval",
-        type: "uint32",
-      },
-      {
-        internalType: "uint32",
-        name: "_updateInterval",
-        type: "uint32",
-      },
-      {
-        internalType: "bytes16",
-        name: "_fee",
-        type: "bytes16",
-      },
-      {
-        internalType: "uint16",
-        name: "_leverageAmount",
-        type: "uint16",
-      },
-      {
-        internalType: "address",
-        name: "_feeAddress",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "_quoteToken",
-        type: "address",
+        components: [
+          {
+            internalType: "address",
+            name: "_owner",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_keeper",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_oracleWrapper",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_keeperOracle",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_longToken",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_shortToken",
+            type: "address",
+          },
+          {
+            internalType: "string",
+            name: "_poolCode",
+            type: "string",
+          },
+          {
+            internalType: "uint32",
+            name: "_frontRunningInterval",
+            type: "uint32",
+          },
+          {
+            internalType: "uint32",
+            name: "_updateInterval",
+            type: "uint32",
+          },
+          {
+            internalType: "bytes16",
+            name: "_fee",
+            type: "bytes16",
+          },
+          {
+            internalType: "uint16",
+            name: "_leverageAmount",
+            type: "uint16",
+          },
+          {
+            internalType: "address",
+            name: "_feeAddress",
+            type: "address",
+          },
+          {
+            internalType: "address",
+            name: "_quoteToken",
+            type: "address",
+          },
+        ],
+        internalType: "struct ILeveragedPool.Initialization",
+        name: "initialization",
+        type: "tuple",
       },
     ],
     name: "initialize",
@@ -269,6 +286,19 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "keeperOracle",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "oracleWrapper",
     outputs: [
       {
@@ -278,6 +308,32 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_keeper",
+        type: "address",
+      },
+    ],
+    name: "setKeeper",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_governance",
+        type: "address",
+      },
+    ],
+    name: "transferGovernance",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

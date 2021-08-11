@@ -21,141 +21,135 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface PoolFactoryInterface extends ethers.utils.Interface {
   functions: {
-    "ADMIN()": FunctionFragment;
-    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "OPERATOR()": FunctionFragment;
     "deployPool(tuple)": FunctionFragment;
-    "getRoleAdmin(bytes32)": FunctionFragment;
-    "getRoleMember(bytes32,uint256)": FunctionFragment;
-    "getRoleMemberCount(bytes32)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "hasRole(bytes32,address)": FunctionFragment;
+    "fee()": FunctionFragment;
+    "isValidPool(address)": FunctionFragment;
+    "maxLeverage()": FunctionFragment;
+    "numPools()": FunctionFragment;
+    "owner()": FunctionFragment;
     "pairTokenBase()": FunctionFragment;
     "poolBase()": FunctionFragment;
+    "poolIdTaken(bytes32)": FunctionFragment;
     "poolKeeper()": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
-    "setOperator(address)": FunctionFragment;
+    "pools(uint256)": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setFee(bytes16)": FunctionFragment;
+    "setFeeReceiver(address)": FunctionFragment;
+    "setMaxLeverage(uint16)": FunctionFragment;
     "setPoolKeeper(address)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "ADMIN", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "OPERATOR", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "deployPool",
     values: [
       {
-        owner: string;
         poolCode: string;
         frontRunningInterval: BigNumberish;
         updateInterval: BigNumberish;
-        fee: BytesLike;
         leverageAmount: BigNumberish;
-        feeAddress: string;
         quoteToken: string;
         oracleWrapper: string;
+        keeperOracle: string;
       }
     ]
   ): string;
+  encodeFunctionData(functionFragment: "fee", values?: undefined): string;
+  encodeFunctionData(functionFragment: "isValidPool", values: [string]): string;
   encodeFunctionData(
-    functionFragment: "getRoleAdmin",
-    values: [BytesLike]
+    functionFragment: "maxLeverage",
+    values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMember",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMemberCount",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "hasRole",
-    values: [BytesLike, string]
-  ): string;
+  encodeFunctionData(functionFragment: "numPools", values?: undefined): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "pairTokenBase",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "poolBase", values?: undefined): string;
   encodeFunctionData(
+    functionFragment: "poolIdTaken",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "poolKeeper",
     values?: undefined
   ): string;
+  encodeFunctionData(functionFragment: "pools", values: [BigNumberish]): string;
   encodeFunctionData(
-    functionFragment: "renounceRole",
-    values: [BytesLike, string]
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "setFee", values: [BytesLike]): string;
+  encodeFunctionData(
+    functionFragment: "setFeeReceiver",
+    values: [string]
   ): string;
   encodeFunctionData(
-    functionFragment: "revokeRole",
-    values: [BytesLike, string]
+    functionFragment: "setMaxLeverage",
+    values: [BigNumberish]
   ): string;
-  encodeFunctionData(functionFragment: "setOperator", values: [string]): string;
   encodeFunctionData(
     functionFragment: "setPoolKeeper",
     values: [string]
   ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [string]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "ADMIN", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "OPERATOR", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deployPool", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "fee", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "getRoleAdmin",
+    functionFragment: "isValidPool",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getRoleMember",
+    functionFragment: "maxLeverage",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMemberCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "numPools", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "pairTokenBase",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "poolBase", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "poolKeeper", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "renounceRole",
+    functionFragment: "poolIdTaken",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "poolKeeper", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "pools", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "setOperator",
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setFee", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setFeeReceiver",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMaxLeverage",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setPoolKeeper",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
   events: {
     "DeployPool(address,string)": EventFragment;
-    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
-    "RoleGranted(bytes32,address,address)": EventFragment;
-    "RoleRevoked(bytes32,address,address)": EventFragment;
+    "OwnershipTransferred(address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "DeployPool"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
 
 export class PoolFactory extends BaseContract {
@@ -202,72 +196,55 @@ export class PoolFactory extends BaseContract {
   interface: PoolFactoryInterface;
 
   functions: {
-    ADMIN(overrides?: CallOverrides): Promise<[string]>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<[string]>;
-
     deployPool(
       deploymentParameters: {
-        owner: string;
         poolCode: string;
         frontRunningInterval: BigNumberish;
         updateInterval: BigNumberish;
-        fee: BytesLike;
         leverageAmount: BigNumberish;
-        feeAddress: string;
         quoteToken: string;
         oracleWrapper: string;
+        keeperOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
+    fee(overrides?: CallOverrides): Promise<[string]>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
+    isValidPool(arg0: string, overrides?: CallOverrides): Promise<[boolean]>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
+    maxLeverage(overrides?: CallOverrides): Promise<[number]>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+    numPools(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    owner(overrides?: CallOverrides): Promise<[string]>;
 
     pairTokenBase(overrides?: CallOverrides): Promise<[string]>;
 
     poolBase(overrides?: CallOverrides): Promise<[string]>;
 
+    poolIdTaken(arg0: BytesLike, overrides?: CallOverrides): Promise<[boolean]>;
+
     poolKeeper(overrides?: CallOverrides): Promise<[string]>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    pools(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFee(
+      _fee: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    setOperator(
-      _operator: string,
+    setFeeReceiver(
+      _feeReceiver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setMaxLeverage(
+      newMaxLeverage: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -275,74 +252,62 @@ export class PoolFactory extends BaseContract {
       _poolKeeper: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
-
-  ADMIN(overrides?: CallOverrides): Promise<string>;
-
-  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  OPERATOR(overrides?: CallOverrides): Promise<string>;
 
   deployPool(
     deploymentParameters: {
-      owner: string;
       poolCode: string;
       frontRunningInterval: BigNumberish;
       updateInterval: BigNumberish;
-      fee: BytesLike;
       leverageAmount: BigNumberish;
-      feeAddress: string;
       quoteToken: string;
       oracleWrapper: string;
+      keeperOracle: string;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+  fee(overrides?: CallOverrides): Promise<string>;
 
-  getRoleMember(
-    role: BytesLike,
-    index: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
+  isValidPool(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
-  getRoleMemberCount(
-    role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
+  maxLeverage(overrides?: CallOverrides): Promise<number>;
 
-  grantRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  numPools(overrides?: CallOverrides): Promise<BigNumber>;
 
-  hasRole(
-    role: BytesLike,
-    account: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  owner(overrides?: CallOverrides): Promise<string>;
 
   pairTokenBase(overrides?: CallOverrides): Promise<string>;
 
   poolBase(overrides?: CallOverrides): Promise<string>;
 
+  poolIdTaken(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
   poolKeeper(overrides?: CallOverrides): Promise<string>;
 
-  renounceRole(
-    role: BytesLike,
-    account: string,
+  pools(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  renounceOwnership(
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  revokeRole(
-    role: BytesLike,
-    account: string,
+  setFee(
+    _fee: BytesLike,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  setOperator(
-    _operator: string,
+  setFeeReceiver(
+    _feeReceiver: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setMaxLeverage(
+    newMaxLeverage: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -351,75 +316,66 @@ export class PoolFactory extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  transferOwnership(
+    newOwner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
-    ADMIN(overrides?: CallOverrides): Promise<string>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<string>;
-
     deployPool(
       deploymentParameters: {
-        owner: string;
         poolCode: string;
         frontRunningInterval: BigNumberish;
         updateInterval: BigNumberish;
-        fee: BytesLike;
         leverageAmount: BigNumberish;
-        feeAddress: string;
         quoteToken: string;
         oracleWrapper: string;
+        keeperOracle: string;
       },
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
+    fee(overrides?: CallOverrides): Promise<string>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
+    isValidPool(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    maxLeverage(overrides?: CallOverrides): Promise<number>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    numPools(overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    owner(overrides?: CallOverrides): Promise<string>;
 
     pairTokenBase(overrides?: CallOverrides): Promise<string>;
 
     poolBase(overrides?: CallOverrides): Promise<string>;
 
+    poolIdTaken(arg0: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
     poolKeeper(overrides?: CallOverrides): Promise<string>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    pools(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setFee(_fee: BytesLike, overrides?: CallOverrides): Promise<void>;
+
+    setFeeReceiver(
+      _feeReceiver: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setMaxLeverage(
+      newMaxLeverage: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    setOperator(_operator: string, overrides?: CallOverrides): Promise<void>;
 
     setPoolKeeper(
       _poolKeeper: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -427,193 +383,151 @@ export class PoolFactory extends BaseContract {
   filters: {
     DeployPool(
       pool?: string | null,
-      poolCode?: null
-    ): TypedEventFilter<[string, string], { pool: string; poolCode: string }>;
+      ticker?: null
+    ): TypedEventFilter<[string, string], { pool: string; ticker: string }>;
 
-    RoleAdminChanged(
-      role?: BytesLike | null,
-      previousAdminRole?: BytesLike | null,
-      newAdminRole?: BytesLike | null
+    OwnershipTransferred(
+      previousOwner?: string | null,
+      newOwner?: string | null
     ): TypedEventFilter<
-      [string, string, string],
-      { role: string; previousAdminRole: string; newAdminRole: string }
-    >;
-
-    RoleGranted(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
-    >;
-
-    RoleRevoked(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
+      [string, string],
+      { previousOwner: string; newOwner: string }
     >;
   };
 
   estimateGas: {
-    ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<BigNumber>;
-
     deployPool(
       deploymentParameters: {
-        owner: string;
         poolCode: string;
         frontRunningInterval: BigNumberish;
         updateInterval: BigNumberish;
-        fee: BytesLike;
         leverageAmount: BigNumberish;
-        feeAddress: string;
         quoteToken: string;
         oracleWrapper: string;
+        keeperOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    getRoleAdmin(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    fee(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    isValidPool(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    maxLeverage(overrides?: CallOverrides): Promise<BigNumber>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
+    numPools(overrides?: CallOverrides): Promise<BigNumber>;
 
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
 
     pairTokenBase(overrides?: CallOverrides): Promise<BigNumber>;
 
     poolBase(overrides?: CallOverrides): Promise<BigNumber>;
 
+    poolIdTaken(arg0: BytesLike, overrides?: CallOverrides): Promise<BigNumber>;
+
     poolKeeper(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    pools(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFee(
+      _fee: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    setOperator(
-      _operator: string,
+    setFeeReceiver(
+      _feeReceiver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setMaxLeverage(
+      newMaxLeverage: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     setPoolKeeper(
       _poolKeeper: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DEFAULT_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    OPERATOR(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     deployPool(
       deploymentParameters: {
-        owner: string;
         poolCode: string;
         frontRunningInterval: BigNumberish;
         updateInterval: BigNumberish;
-        fee: BytesLike;
         leverageAmount: BigNumberish;
-        feeAddress: string;
         quoteToken: string;
         oracleWrapper: string;
+        keeperOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    getRoleAdmin(
-      role: BytesLike,
+    fee(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    isValidPool(
+      arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    maxLeverage(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    numPools(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     pairTokenBase(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     poolBase(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    poolIdTaken(
+      arg0: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     poolKeeper(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
+    pools(
+      arg0: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setFee(
+      _fee: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    setOperator(
-      _operator: string,
+    setFeeReceiver(
+      _feeReceiver: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setMaxLeverage(
+      newMaxLeverage: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     setPoolKeeper(
       _poolKeeper: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

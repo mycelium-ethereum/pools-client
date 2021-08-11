@@ -6,6 +6,7 @@ export type { AggregatorV2V3Interface } from "./AggregatorV2V3Interface";
 export type { AggregatorV3Interface } from "./AggregatorV3Interface";
 export type { UpkeepInterface } from "./UpkeepInterface";
 export type { AccessControl } from "./AccessControl";
+export type { Ownable } from "./Ownable";
 export type { ERC20 } from "./ERC20";
 export type { IERC20 } from "./IERC20";
 export type { LeveragedPool } from "./LeveragedPool";
@@ -30,6 +31,7 @@ export { AggregatorV2V3Interface__factory } from "./factories/AggregatorV2V3Inte
 export { AggregatorV3Interface__factory } from "./factories/AggregatorV3Interface__factory";
 export { UpkeepInterface__factory } from "./factories/UpkeepInterface__factory";
 export { AccessControl__factory } from "./factories/AccessControl__factory";
+export { Ownable__factory } from "./factories/Ownable__factory";
 export { ERC20__factory } from "./factories/ERC20__factory";
 export { IERC20__factory } from "./factories/IERC20__factory";
 export { LeveragedPool__factory } from "./factories/LeveragedPool__factory";

@@ -7,11 +7,13 @@ import { Button, Input } from '@components/General';
 import styled from 'styled-components';
 import { SectionContainer, Label } from '@components/Pool';
 import { Pool } from '@hooks/usePool';
+import { etherToApproxCurrency } from '@libs/utils';
+import { BigNumber } from 'ethers';
 
 
 export default (({ show, onClose, pool }) => {
 	const { swapState = defaultState, swapDispatch = noDispatch } =  useContext(SwapContext);
-	
+	const balance = tokenBalance(pool.pool, pool.token, swapState.tokenType);
 
 	const handleClick = () => {
 		if (pool.pool) {
@@ -36,7 +38,7 @@ export default (({ show, onClose, pool }) => {
 		>	
 			<TokenName {...pool} />
 			<StyledSlideSelect
-				onClick={(index) => swapDispatch({ type: 'setTokenType', value: index as TokenType })}
+				onClick={(index: TokenType) => swapDispatch({ type: 'setTokenType', value: index as TokenType })}
 				value={swapState?.tokenType}
 			>
 				<Option>Mint</Option>
@@ -49,6 +51,9 @@ export default (({ show, onClose, pool }) => {
 					placeholder={'0.0'}
 					onChange={(e:any) => swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value)})}
 				/>
+				<Balance>
+					Available: {etherToApproxCurrency(balance)}
+				</Balance>
 			</SectionContainer>
 			<Button onClick={handleClick}>
 				{swapState?.tokenType === MINT ? 'Mint' : 'Burn'}
@@ -63,6 +68,25 @@ export default (({ show, onClose, pool }) => {
 		token: SideType
 	}
 }>
+
+const tokenBalance: (
+	pool: Pool | undefined, token: SideType, tokenType: TokenType
+) => BigNumber = (pool , token, tokenType) => {
+	if (pool) {
+		if (tokenType === MINT) {
+			return pool.tokenState.tokenBalances.quoteToken
+		} else { // is burn
+			return (token === SHORT 
+				? pool.tokenState.tokenBalances.shortToken
+				: pool.tokenState.tokenBalances.longToken
+			)
+		}
+	}
+	return BigNumber.from(0)
+}
+
+const Balance = styled.div`
+`
 
 const TokenName: React.FC<{
 	pool: Pool | undefined,

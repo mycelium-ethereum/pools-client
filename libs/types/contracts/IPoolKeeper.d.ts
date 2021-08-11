@@ -21,31 +21,63 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IPoolKeeperInterface extends ethers.utils.Interface {
   functions: {
-    "newPool(string,address)": FunctionFragment;
+    "checkUpkeepMultiplePools(address[])": FunctionFragment;
+    "checkUpkeepSinglePool(address)": FunctionFragment;
+    "newPool(address)": FunctionFragment;
+    "performUpkeepMultiplePools(address[])": FunctionFragment;
+    "performUpkeepSinglePool(address)": FunctionFragment;
+    "setFactory(address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "newPool",
-    values: [string, string]
+    functionFragment: "checkUpkeepMultiplePools",
+    values: [string[]]
   ): string;
+  encodeFunctionData(
+    functionFragment: "checkUpkeepSinglePool",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "newPool", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "performUpkeepMultiplePools",
+    values: [string[]]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "performUpkeepSinglePool",
+    values: [string]
+  ): string;
+  encodeFunctionData(functionFragment: "setFactory", values: [string]): string;
 
+  decodeFunctionResult(
+    functionFragment: "checkUpkeepMultiplePools",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "checkUpkeepSinglePool",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "newPool", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "performUpkeepMultiplePools",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "performUpkeepSinglePool",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setFactory", data: BytesLike): Result;
 
   events: {
-    "CreateMarket(string,address)": EventFragment;
-    "ExecutePriceChange(int256,int256,uint32,string)": EventFragment;
-    "NewRound(int256,int256,uint32,string)": EventFragment;
-    "PoolAdded(address,int256,string)": EventFragment;
-    "PoolUpdateError(string,string)": EventFragment;
-    "PriceSample(int256,int256,uint32,string)": EventFragment;
+    "ExecutePriceChange(int256,int256,uint32,address)": EventFragment;
+    "NewRound(int256,int256,uint32,address)": EventFragment;
+    "PoolAdded(address,int256,address)": EventFragment;
+    "PoolUpdateError(address,string)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "CreateMarket"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ExecutePriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NewRound"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolUpdateError"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PriceSample"): EventFragment;
 }
 
 export class IPoolKeeper extends BaseContract {
@@ -92,36 +124,94 @@ export class IPoolKeeper extends BaseContract {
   interface: IPoolKeeperInterface;
 
   functions: {
+    checkUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
+
+    checkUpkeepSinglePool(
+      poolCode: string,
+      overrides?: CallOverrides
+    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
+
     newPool(
-      _poolCode: string,
       _poolAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    performUpkeepSinglePool(
+      poolCode: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    setFactory(
+      _factory: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
+  checkUpkeepMultiplePools(
+    poolCodes: string[],
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  checkUpkeepSinglePool(
+    poolCode: string,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   newPool(
-    _poolCode: string,
     _poolAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  performUpkeepMultiplePools(
+    poolCodes: string[],
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  performUpkeepSinglePool(
+    poolCode: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  setFactory(
+    _factory: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
-    newPool(
-      _poolCode: string,
-      _poolAddress: string,
+    checkUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    checkUpkeepSinglePool(
+      poolCode: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    newPool(_poolAddress: string, overrides?: CallOverrides): Promise<void>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    performUpkeepSinglePool(
+      poolCode: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setFactory(_factory: string, overrides?: CallOverrides): Promise<void>;
   };
 
   filters: {
-    CreateMarket(
-      marketCode?: null,
-      oracle?: null
-    ): TypedEventFilter<
-      [string, string],
-      { marketCode: string; oracle: string }
-    >;
-
     ExecutePriceChange(
       oldPrice?: BigNumberish | null,
       newPrice?: BigNumberish | null,
@@ -162,38 +252,71 @@ export class IPoolKeeper extends BaseContract {
     >;
 
     PoolUpdateError(
-      poolCode?: string | null,
+      pool?: null,
       reason?: null
-    ): TypedEventFilter<[string, string], { poolCode: string; reason: string }>;
-
-    PriceSample(
-      cumulativePrice?: BigNumberish | null,
-      count?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      market?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        cumulativePrice: BigNumber;
-        count: BigNumber;
-        updateInterval: number;
-        market: string;
-      }
-    >;
+    ): TypedEventFilter<[string, string], { pool: string; reason: string }>;
   };
 
   estimateGas: {
+    checkUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    checkUpkeepSinglePool(
+      poolCode: string,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     newPool(
-      _poolCode: string,
       _poolAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    performUpkeepSinglePool(
+      poolCode: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    setFactory(
+      _factory: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    checkUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    checkUpkeepSinglePool(
+      poolCode: string,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     newPool(
-      _poolCode: string,
       _poolAddress: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    performUpkeepMultiplePools(
+      poolCodes: string[],
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    performUpkeepSinglePool(
+      poolCode: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setFactory(
+      _factory: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

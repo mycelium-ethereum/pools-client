@@ -128,7 +128,6 @@ export const FilterStore:React.FC = ({ children }) => {
     useEffect(() => {
         if (pools && pools?.length) {
             const { leverageOptions, settlementOptions } = deconstructNames(pools)
-            console.log(pools)
             filterDispatch({ type: 'setSettlementOptions', value: settlementOptions })
             filterDispatch({ type: 'setLeverageOptions', value: leverageOptions })
             filterDispatch({ type: 'filterPools', pools: pools })

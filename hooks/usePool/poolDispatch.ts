@@ -10,20 +10,10 @@ export type PoolState = {
     leverage: BigNumber;
     lastPrice: BigNumber;
     oraclePrice: BigNumber;
-    tokenBalances: {
-        shortToken: BigNumber,
-        longToken: BigNumber,
-        quoteToken: BigNumber
-    },
     poolBalances: {
         longBalance: BigNumber,
         shortBalance: BigNumber,
     },
-    approvedTokens: {
-        shortToken: boolean,
-        longToken: boolean,
-        quoteToken: boolean 
-    }
 };
 
 export const initialPoolState: PoolState = {
@@ -35,20 +25,10 @@ export const initialPoolState: PoolState = {
     leverage: BigNumber.from(0),
     lastPrice: BigNumber.from(0),
     oraclePrice: BigNumber.from(0),
-    tokenBalances: {
-        shortToken: ethers.BigNumber.from(0),
-        longToken: ethers.BigNumber.from(0),
-        quoteToken: ethers.BigNumber.from(0),
-    },
     poolBalances: {
         shortBalance: ethers.BigNumber.from(0),
         longBalance: ethers.BigNumber.from(0),
     },
-    approvedTokens: {
-        shortToken: false,
-        longToken: false,
-        quoteToken: false,
-    }
 };
 
 export type PoolAction = 
@@ -59,18 +39,10 @@ export type PoolAction =
     | { type: 'setUpdateInterval'; updateInterval: number }
     | { type: 'setLeverage'; leverage: BigNumber}
     | { type: 'setRebalanceMultiplier'; rebalanceMultiplier: BigNumber}
-    | { type: 'setPoolTokenBalances'; balances: {
-        shortToken: BigNumber, longToken: BigNumber
-    }}
+    | { type: 'setOraclePrice'; oraclePrice: BigNumber }
     | { type: 'setPoolBalances'; balances: {
         shortBalance: BigNumber, longBalance: BigNumber
     }}
-    | { type: 'setApprovedTokens'; approvals: {
-        shortToken: boolean, longToken: boolean 
-    }}
-    | { type: 'setQuoteTokenBalance'; quoteTokenBalance: BigNumber }
-    | { type: 'setOraclePrice'; oraclePrice: BigNumber }
-    | { type: 'setApprovedQuoteToken'; value: boolean}
     | { type: 'setContract'; contract: any };
 
 export const reducer = (state: PoolState, action: PoolAction) => {
@@ -120,24 +92,6 @@ export const reducer = (state: PoolState, action: PoolAction) => {
                 ...state,
                 oraclePrice: action.oraclePrice
             }
-        case 'setQuoteTokenBalance':
-            return {
-                ...state,
-                tokenBalances: {
-                    ...state.tokenBalances,
-                    quoteToken: action.quoteTokenBalance
-                }
-            }
-        case 'setPoolTokenBalances': {
-            return {
-                ...state,
-                tokenBalances: {
-                    ...state.tokenBalances,
-                    shortToken: action.balances.shortToken,
-                    longToken: action.balances.longToken,
-                }
-            }
-        }
         case 'setPoolBalances': {
             return {
                 ...state,
@@ -145,25 +99,6 @@ export const reducer = (state: PoolState, action: PoolAction) => {
                     ...state.poolBalances,
                     shortBalance: action.balances.shortBalance,
                     longBalance: action.balances.longBalance,
-                }
-            }
-        }
-        case 'setApprovedTokens': {
-            return {
-                ...state,
-                approvedTokens: {
-                    ...state.approvedTokens,
-                    shortToken: action.approvals.shortToken,
-                    longToken: action.approvals.longToken,
-                }
-            }
-        }
-        case 'setApprovedQuoteToken': {
-            return {
-                ...state,
-                approvedTokens: {
-                    ...state.approvedTokens,
-                    quoteToken: action.value,
                 }
             }
         }

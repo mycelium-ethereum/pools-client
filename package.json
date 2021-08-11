@@ -8,6 +8,7 @@
         "@apollo/client": "^3.3.7",
         "@ensdomains/ensjs": "^2.0.0",
         "@tracer-protocol/onboard": "^1.29.2",
+        "bignumber.js": "^9.0.1",
         "ethers": "^5.4.3",
         "next": "^10.0.9",
         "rc-slider": "^9.7.2",

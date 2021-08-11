@@ -1,6 +1,6 @@
 import React, { createContext, useRef } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
-import { Children, Result } from 'libs/types';
+import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
 
 export type Options = {
@@ -84,7 +84,8 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             updateToast(toastId as unknown as string, {
                 content: [
                     'Transaction Successful',
-                    statusMessages?.success ?? `Transaction successful: ${receipt.transactionHash}`,
+                    statusMessages?.success ??
+                    <a href={`https://kovan.etherscan/tx/${receipt.transactionHash}`}>View transaction</a>
                 ],
                 appearance: 'success',
                 autoDismiss: true,

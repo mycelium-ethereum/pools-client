@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 export const Input = styled.input`
     color: #fff;
+    border-bottom: 1px solid var(--color-text);
 
     &::placeholder {
         /* Chrome, Firefox, Opera, Safari 10.1+ */

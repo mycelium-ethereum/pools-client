@@ -21,10 +21,6 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface LeveragedPoolInterface extends ethers.utils.Interface {
   functions: {
-    "ADMIN()": FunctionFragment;
-    "DEFAULT_ADMIN_ROLE()": FunctionFragment;
-    "FEE_HOLDER()": FunctionFragment;
-    "UPDATER()": FunctionFragment;
     "commit(uint8,uint112)": FunctionFragment;
     "commitIDCounter()": FunctionFragment;
     "commits(uint128)": FunctionFragment;
@@ -34,39 +30,27 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     "feeAddress()": FunctionFragment;
     "frontRunningInterval()": FunctionFragment;
     "getOraclePrice()": FunctionFragment;
-    "getRoleAdmin(bytes32)": FunctionFragment;
-    "getRoleMember(bytes32,uint256)": FunctionFragment;
-    "getRoleMemberCount(bytes32)": FunctionFragment;
-    "grantRole(bytes32,address)": FunctionFragment;
-    "hasRole(bytes32,address)": FunctionFragment;
-    "initialize(address,address,address,address,string,uint32,uint32,bytes16,uint16,address,address)": FunctionFragment;
+    "governance()": FunctionFragment;
+    "initialize(tuple)": FunctionFragment;
     "intervalPassed()": FunctionFragment;
+    "keeper()": FunctionFragment;
+    "keeperOracle()": FunctionFragment;
     "lastPriceTimestamp()": FunctionFragment;
     "leverageAmount()": FunctionFragment;
     "longBalance()": FunctionFragment;
     "oracleWrapper()": FunctionFragment;
     "poolCode()": FunctionFragment;
     "quoteToken()": FunctionFragment;
-    "renounceRole(bytes32,address)": FunctionFragment;
-    "revokeRole(bytes32,address)": FunctionFragment;
+    "setKeeper(address)": FunctionFragment;
     "shadowPools(uint8)": FunctionFragment;
     "shortBalance()": FunctionFragment;
     "tokens(uint256)": FunctionFragment;
+    "transferGovernance(address)": FunctionFragment;
     "uncommit(uint128)": FunctionFragment;
     "updateFeeAddress(address)": FunctionFragment;
     "updateInterval()": FunctionFragment;
   };
 
-  encodeFunctionData(functionFragment: "ADMIN", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "FEE_HOLDER",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "UPDATER", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "commit",
     values: [BigNumberish, BigNumberish]
@@ -101,43 +85,36 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "getRoleAdmin",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMember",
-    values: [BytesLike, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "getRoleMemberCount",
-    values: [BytesLike]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "grantRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "hasRole",
-    values: [BytesLike, string]
+    functionFragment: "governance",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "initialize",
     values: [
-      string,
-      string,
-      string,
-      string,
-      string,
-      BigNumberish,
-      BigNumberish,
-      BytesLike,
-      BigNumberish,
-      string,
-      string
+      {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      }
     ]
   ): string;
   encodeFunctionData(
     functionFragment: "intervalPassed",
+    values?: undefined
+  ): string;
+  encodeFunctionData(functionFragment: "keeper", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "keeperOracle",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -161,14 +138,7 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     functionFragment: "quoteToken",
     values?: undefined
   ): string;
-  encodeFunctionData(
-    functionFragment: "renounceRole",
-    values: [BytesLike, string]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "revokeRole",
-    values: [BytesLike, string]
-  ): string;
+  encodeFunctionData(functionFragment: "setKeeper", values: [string]): string;
   encodeFunctionData(
     functionFragment: "shadowPools",
     values: [BigNumberish]
@@ -180,6 +150,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "tokens",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferGovernance",
+    values: [string]
   ): string;
   encodeFunctionData(
     functionFragment: "uncommit",
@@ -194,13 +168,6 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     values?: undefined
   ): string;
 
-  decodeFunctionResult(functionFragment: "ADMIN", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "DEFAULT_ADMIN_ROLE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "FEE_HOLDER", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "UPDATER", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "commit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "commitIDCounter",
@@ -225,23 +192,15 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     functionFragment: "getOraclePrice",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleAdmin",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMember",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "getRoleMemberCount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "grantRole", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "hasRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "governance", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "initialize", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "intervalPassed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "keeper", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "keeperOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -262,11 +221,7 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "poolCode", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "quoteToken", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "renounceRole",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "revokeRole", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setKeeper", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "shadowPools",
     data: BytesLike
@@ -276,6 +231,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "tokens", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferGovernance",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "uncommit", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "updateFeeAddress",
@@ -292,9 +251,6 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     "PoolInitialized(address,address,address,string)": EventFragment;
     "PriceChange(int256,int256,uint112)": EventFragment;
     "RemoveCommit(uint128,uint128,uint8)": EventFragment;
-    "RoleAdminChanged(bytes32,bytes32,bytes32)": EventFragment;
-    "RoleGranted(bytes32,address,address)": EventFragment;
-    "RoleRevoked(bytes32,address,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CreateCommit"): EventFragment;
@@ -302,9 +258,6 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "PoolInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "RemoveCommit"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleAdminChanged"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleGranted"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "RoleRevoked"): EventFragment;
 }
 
 export class LeveragedPool extends BaseContract {
@@ -351,14 +304,6 @@ export class LeveragedPool extends BaseContract {
   interface: LeveragedPoolInterface;
 
   functions: {
-    ADMIN(overrides?: CallOverrides): Promise<[string]>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<[string]>;
-
-    FEE_HOLDER(overrides?: CallOverrides): Promise<[string]>;
-
-    UPDATER(overrides?: CallOverrides): Promise<[string]>;
-
     commit(
       commitType: BigNumberish,
       amount: BigNumberish,
@@ -398,47 +343,32 @@ export class LeveragedPool extends BaseContract {
 
     getOraclePrice(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<[string]>;
-
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[string]>;
-
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    governance(overrides?: CallOverrides): Promise<[string]>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
     intervalPassed(overrides?: CallOverrides): Promise<[boolean]>;
+
+    keeper(overrides?: CallOverrides): Promise<[string]>;
+
+    keeperOracle(overrides?: CallOverrides): Promise<[string]>;
 
     lastPriceTimestamp(overrides?: CallOverrides): Promise<[number]>;
 
@@ -452,15 +382,8 @@ export class LeveragedPool extends BaseContract {
 
     quoteToken(overrides?: CallOverrides): Promise<[string]>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setKeeper(
+      _keeper: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -472,6 +395,11 @@ export class LeveragedPool extends BaseContract {
     shortBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     tokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<[string]>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     uncommit(
       _commitID: BigNumberish,
@@ -485,14 +413,6 @@ export class LeveragedPool extends BaseContract {
 
     updateInterval(overrides?: CallOverrides): Promise<[number]>;
   };
-
-  ADMIN(overrides?: CallOverrides): Promise<string>;
-
-  DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-  FEE_HOLDER(overrides?: CallOverrides): Promise<string>;
-
-  UPDATER(overrides?: CallOverrides): Promise<string>;
 
   commit(
     commitType: BigNumberish,
@@ -533,47 +453,32 @@ export class LeveragedPool extends BaseContract {
 
   getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-  getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
-
-  getRoleMember(
-    role: BytesLike,
-    index: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<string>;
-
-  getRoleMemberCount(
-    role: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
-  grantRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  hasRole(
-    role: BytesLike,
-    account: string,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+  governance(overrides?: CallOverrides): Promise<string>;
 
   initialize(
-    _updater: string,
-    _oracleWrapper: string,
-    _longToken: string,
-    _shortToken: string,
-    _poolCode: string,
-    _frontRunningInterval: BigNumberish,
-    _updateInterval: BigNumberish,
-    _fee: BytesLike,
-    _leverageAmount: BigNumberish,
-    _feeAddress: string,
-    _quoteToken: string,
+    initialization: {
+      _owner: string;
+      _keeper: string;
+      _oracleWrapper: string;
+      _keeperOracle: string;
+      _longToken: string;
+      _shortToken: string;
+      _poolCode: string;
+      _frontRunningInterval: BigNumberish;
+      _updateInterval: BigNumberish;
+      _fee: BytesLike;
+      _leverageAmount: BigNumberish;
+      _feeAddress: string;
+      _quoteToken: string;
+    },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   intervalPassed(overrides?: CallOverrides): Promise<boolean>;
+
+  keeper(overrides?: CallOverrides): Promise<string>;
+
+  keeperOracle(overrides?: CallOverrides): Promise<string>;
 
   lastPriceTimestamp(overrides?: CallOverrides): Promise<number>;
 
@@ -587,15 +492,8 @@ export class LeveragedPool extends BaseContract {
 
   quoteToken(overrides?: CallOverrides): Promise<string>;
 
-  renounceRole(
-    role: BytesLike,
-    account: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  revokeRole(
-    role: BytesLike,
-    account: string,
+  setKeeper(
+    _keeper: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -607,6 +505,11 @@ export class LeveragedPool extends BaseContract {
   shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
   tokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+  transferGovernance(
+    _governance: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   uncommit(
     _commitID: BigNumberish,
@@ -621,14 +524,6 @@ export class LeveragedPool extends BaseContract {
   updateInterval(overrides?: CallOverrides): Promise<number>;
 
   callStatic: {
-    ADMIN(overrides?: CallOverrides): Promise<string>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<string>;
-
-    FEE_HOLDER(overrides?: CallOverrides): Promise<string>;
-
-    UPDATER(overrides?: CallOverrides): Promise<string>;
-
     commit(
       commitType: BigNumberish,
       amount: BigNumberish,
@@ -668,47 +563,32 @@ export class LeveragedPool extends BaseContract {
 
     getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleAdmin(role: BytesLike, overrides?: CallOverrides): Promise<string>;
-
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
+    governance(overrides?: CallOverrides): Promise<string>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: CallOverrides
     ): Promise<void>;
 
     intervalPassed(overrides?: CallOverrides): Promise<boolean>;
+
+    keeper(overrides?: CallOverrides): Promise<string>;
+
+    keeperOracle(overrides?: CallOverrides): Promise<string>;
 
     lastPriceTimestamp(overrides?: CallOverrides): Promise<number>;
 
@@ -722,17 +602,7 @@ export class LeveragedPool extends BaseContract {
 
     quoteToken(overrides?: CallOverrides): Promise<string>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
+    setKeeper(_keeper: string, overrides?: CallOverrides): Promise<void>;
 
     shadowPools(
       arg0: BigNumberish,
@@ -742,6 +612,11 @@ export class LeveragedPool extends BaseContract {
     shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     uncommit(_commitID: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
@@ -796,44 +671,9 @@ export class LeveragedPool extends BaseContract {
       [BigNumber, BigNumber, number],
       { commitID: BigNumber; amount: BigNumber; commitType: number }
     >;
-
-    RoleAdminChanged(
-      role?: BytesLike | null,
-      previousAdminRole?: BytesLike | null,
-      newAdminRole?: BytesLike | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; previousAdminRole: string; newAdminRole: string }
-    >;
-
-    RoleGranted(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
-    >;
-
-    RoleRevoked(
-      role?: BytesLike | null,
-      account?: string | null,
-      sender?: string | null
-    ): TypedEventFilter<
-      [string, string, string],
-      { role: string; account: string; sender: string }
-    >;
   };
 
   estimateGas: {
-    ADMIN(overrides?: CallOverrides): Promise<BigNumber>;
-
-    DEFAULT_ADMIN_ROLE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    FEE_HOLDER(overrides?: CallOverrides): Promise<BigNumber>;
-
-    UPDATER(overrides?: CallOverrides): Promise<BigNumber>;
-
     commit(
       commitType: BigNumberish,
       amount: BigNumberish,
@@ -863,50 +703,32 @@ export class LeveragedPool extends BaseContract {
 
     getOraclePrice(overrides?: CallOverrides): Promise<BigNumber>;
 
-    getRoleAdmin(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    governance(overrides?: CallOverrides): Promise<BigNumber>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     intervalPassed(overrides?: CallOverrides): Promise<BigNumber>;
+
+    keeper(overrides?: CallOverrides): Promise<BigNumber>;
+
+    keeperOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     lastPriceTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -920,15 +742,8 @@ export class LeveragedPool extends BaseContract {
 
     quoteToken(overrides?: CallOverrides): Promise<BigNumber>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setKeeper(
+      _keeper: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -940,6 +755,11 @@ export class LeveragedPool extends BaseContract {
     shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     uncommit(
       _commitID: BigNumberish,
@@ -955,16 +775,6 @@ export class LeveragedPool extends BaseContract {
   };
 
   populateTransaction: {
-    ADMIN(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    DEFAULT_ADMIN_ROLE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    FEE_HOLDER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    UPDATER(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     commit(
       commitType: BigNumberish,
       amount: BigNumberish,
@@ -999,50 +809,32 @@ export class LeveragedPool extends BaseContract {
 
     getOraclePrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    getRoleAdmin(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRoleMember(
-      role: BytesLike,
-      index: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getRoleMemberCount(
-      role: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    grantRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    hasRole(
-      role: BytesLike,
-      account: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
+    governance(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     initialize(
-      _updater: string,
-      _oracleWrapper: string,
-      _longToken: string,
-      _shortToken: string,
-      _poolCode: string,
-      _frontRunningInterval: BigNumberish,
-      _updateInterval: BigNumberish,
-      _fee: BytesLike,
-      _leverageAmount: BigNumberish,
-      _feeAddress: string,
-      _quoteToken: string,
+      initialization: {
+        _owner: string;
+        _keeper: string;
+        _oracleWrapper: string;
+        _keeperOracle: string;
+        _longToken: string;
+        _shortToken: string;
+        _poolCode: string;
+        _frontRunningInterval: BigNumberish;
+        _updateInterval: BigNumberish;
+        _fee: BytesLike;
+        _leverageAmount: BigNumberish;
+        _feeAddress: string;
+        _quoteToken: string;
+      },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     intervalPassed(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    keeper(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    keeperOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     lastPriceTimestamp(
       overrides?: CallOverrides
@@ -1058,15 +850,8 @@ export class LeveragedPool extends BaseContract {
 
     quoteToken(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    renounceRole(
-      role: BytesLike,
-      account: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    revokeRole(
-      role: BytesLike,
-      account: string,
+    setKeeper(
+      _keeper: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1080,6 +865,11 @@ export class LeveragedPool extends BaseContract {
     tokens(
       arg0: BigNumberish,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    transferGovernance(
+      _governance: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     uncommit(

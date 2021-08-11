@@ -15,6 +15,8 @@ export const calcLossMultiplier: (
 	priceRatio: BigNumber, leverage: BigNumber
 ) => BigNumber = (priceRatio, leverage) => {
 	const direction = calcDirection(priceRatio);
+	console.log(priceRatio)
+	
 	return (
 		leverage.mul(
 			((direction.lt(0) ? BigNumber.from(1) : BigNumber.from(0)).mul(priceRatio)).add(
