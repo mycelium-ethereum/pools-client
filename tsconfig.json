@@ -19,18 +19,17 @@
         "importHelpers": true,
         "removeComments": true,
         "jsx": "preserve",
-        "types": [],
-
         "baseUrl": ".",
         "paths": {
             "@components/*": ["components/*"],
+            "@types/*": ["types/*"],
             "@context/*": ["context/*"],
-            "@archetypes/*": ["archetypes/*"],
             "@hooks/*": ["hooks/*"],
             "@libs/*": ["libs/*"],
+            "@archetypes/*": ["archetypes/*"],
             "@public/*": ["public/*"]
         }
     },
-    "exclude": ["node_modules"],
-    "include": ["next-env.d.ts", "components/**/*.ts", "components/**/*.tsx", "next.config.js"]
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
+    "exclude": ["node_modules", "components/**/*.stories.tsx", "public/static/*"]
 }

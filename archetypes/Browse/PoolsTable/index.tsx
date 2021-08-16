@@ -1,6 +1,7 @@
 import { Table, TableBody, TableHeader, TableHeading } from '@components/General/Table';
 import { Pool } from '@hooks/usePool';
-import { PoolType, SideType } from '@libs/types/General';
+import { PoolToken } from '@hooks/usePool/tokenDispatch';
+import { PoolType } from '@libs/types/General';
 import React from 'react';
 import PoolRow from './PoolRow';
 
@@ -27,7 +28,7 @@ export default (({ pools, openTradeModal }) => {
     );
 }) as React.FC<{
     pools: PoolType[];
-    openTradeModal: (pool: Pool, side: SideType) => void;
+    openTradeModal: (pool: Pool, token: PoolToken) => void;
 }>;
 
 // last heading is for mint and burn

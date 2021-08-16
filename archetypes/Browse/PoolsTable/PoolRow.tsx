@@ -4,7 +4,9 @@ import { Pool, usePool } from '@hooks/usePool';
 import { toApproxCurrency } from '@libs/utils';
 import { Button } from '@components/General';
 import styled from 'styled-components';
-import { LONG, PoolType, SHORT, SideType } from '@libs/types/General';
+import { PoolType, SideType } from '@libs/types/General';
+import { SHORT, LONG } from '@libs/constants';
+import { PoolToken } from '@hooks/usePool/tokenDispatch';
 
 export default (({ poolInfo, openTradeModal }) => {
     const pool = usePool(poolInfo);
@@ -14,12 +16,12 @@ export default (({ poolInfo, openTradeModal }) => {
         if (isMint) {
         } else {
         }
-        openTradeModal(pool, side);
+        openTradeModal(pool, side === SHORT ? pool.tokenState.shortToken : pool.tokenState.longToken);
     };
     return (
         <>
             <TableRow>
-                <TableCell>{tokenState.shortTokenName}</TableCell>
+                <TableCell>{tokenState.shortToken.tokenName}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
                 <TableCell>
@@ -32,7 +34,7 @@ export default (({ poolInfo, openTradeModal }) => {
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell>{tokenState.longTokenName}</TableCell>
+                <TableCell>{tokenState.longToken.tokenName}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
                 <TableCell>
@@ -48,7 +50,7 @@ export default (({ poolInfo, openTradeModal }) => {
     );
 }) as React.FC<{
     poolInfo: PoolType;
-    openTradeModal: (pool: Pool, side: SideType) => void;
+    openTradeModal: (pool: Pool, token: PoolToken) => void;
 }>;
 
 const StyledButton = styled(Button)`

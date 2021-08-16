@@ -20,7 +20,7 @@ export type FilterState = {
     settlementCurrency: CurrencyType | 'All';
     settlementOptions: (CurrencyType | 'All')[];
     side: SideType | 'All';
-    sideOptions: (SideType | 'All')[];
+    sideOptions: (string | 'All')[];
     market: MarketType | 'All';
     markets: (MarketType | 'All')[];
 

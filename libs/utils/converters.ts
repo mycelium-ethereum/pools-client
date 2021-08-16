@@ -126,7 +126,7 @@ export const timeTill: (time: number) => {
     m?: number;
     s: number;
 } = (time) => {
-    const difference = time - Date.now() / 1000;
+    const difference = Math.abs(time - Date.now() / 1000);
     if (difference > 0) {
         return {
             d: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -183,28 +183,28 @@ export const deconstructNames: (pools: PoolType[]) => {
     const settlementOptions: (CurrencyType | 'All')[] = ['All'];
 
     pools.map((pool) => {
-        console.log(pool)
-        const poolName = pool.name;
+        // TODO re add filtering
+        console.log("Found pool", pool)
         // [leverage, _base, quote, collateral]
-        const name = poolName.replace('+', '-').split('-');
-        let leverage = name[0];
-        const quote = name[2];
-        let collateral = name[3];
-        // fetch leverage
-        if (leverage.includes('DOWN')) {
-            leverage = leverage.replace('DOWN', '');
-        } else {
-            leverage = leverage.replace('UP', '');
-        }
-        // set collateral to quote if its falsey
-        collateral = !!collateral ? collateral : quote;
+        // const name = poolName.replace('+', '-').split('-');
+        // let leverage = name[0];
+        // const quote = name[2];
+        // let collateral = name[3];
+        // // fetch leverage
+        // if (leverage.includes('DOWN')) {
+        //     leverage = leverage.replace('DOWN', '');
+        // } else {
+        //     leverage = leverage.replace('UP', '');
+        // }
+        // // set collateral to quote if its falsey
+        // collateral = !!collateral ? collateral : quote;
 
-        if (!leverageOptions.includes(leverage)) {
-            leverageOptions.push(leverage);
-        }
-        if (!settlementOptions.includes(collateral as CurrencyType)) {
-            settlementOptions.push(collateral as CurrencyType);
-        }
+        // if (!leverageOptions.includes(leverage)) {
+        //     leverageOptions.push(leverage);
+        // }
+        // if (!settlementOptions.includes(collateral as CurrencyType)) {
+        //     settlementOptions.push(collateral as CurrencyType);
+        // }
     });
     return {
         leverageOptions,

@@ -12,22 +12,28 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
         function handleClickOutside(event: any) {
             const dropdown = document.getElementById('account-dropdown');
             if (dropdown) {
+                console.debug("Closing account dropdown")
                 if (!dropdown.contains(event.target)) {
-                    setOpen(false);
-                }
+                    setOpen(false)
+                } 
             }
         }
-        document.addEventListener('mousedown', handleClickOutside);
+        if (!open) {
+            document.removeEventListener('mousedown', handleClickOutside);
+        } else {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [open]);
+    }, [open])
+
     return (
-        <StyledDropdown className={open ? 'open' : ''} id="account-dropdown">
+        <StyledAccountDropdown className={open ? 'open' : ''} id="account-dropdown">
             <MainButton>
                 <AccountDropdown
                     className={!open ? 'show-hover' : ''}
-                    onClick={async () => {
+                    onClick={() => {
                         if (!!account) {
                             setOpen(true);
                         } else {
@@ -44,14 +50,14 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
             </MainButton>
 
             <StyledMenu>
-                <MenuItem />
-                <MenuItem>
+                <StyledMenuItem />
+                <StyledMenuItem>
                     <Section className="p-0" label="Balance">
                         {`${parseFloat(tokenBalance.toFixed(5))} ETH`}
                     </Section>
                     <Section label="Network">{networkName(network)}</Section>
-                </MenuItem>
-                <MenuItem className="button-container">
+                </StyledMenuItem>
+                <StyledMenuItem className="button-container">
                     <StyledButton onClick={() => onboard?.walletSelect()}>Switch Wallets</StyledButton>
                     <StyledButton
                         onClick={() => {
@@ -61,9 +67,9 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                     >
                         Logout
                     </StyledButton>
-                </MenuItem>
+                </StyledMenuItem>
             </StyledMenu>
-        </StyledDropdown>
+        </StyledAccountDropdown>
     );
 }) as React.FC<{
     account: string | undefined;
@@ -138,41 +144,42 @@ const MainButton = styled.div`
     z-index: 11;
 `;
 
-export const StyledMenu = styled(Menu)`
+const StyledMenu = styled(Menu)`
     text-align: center;
     padding: 1rem !important;
     right: -2rem !important;
     font-size: var(--font-size-small);
-`;
 
-const StyledDropdown = styled.div`
+    // when parent is open
+    .open & {
+        opacity: 1;
+        transform: none;
+    }
+`;
+const StyledMenuItem = styled(MenuItem)`
+    // when parent is open
+    .open & {
+        opacity: 1;
+        padding-left: 0;
+
+        &:nth-child(2) {
+            transition: all 400ms ease 300ms;
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+        }
+        &:nth-child(3) {
+            transition: all 400ms ease 450ms;
+        }
+        &:last-child {
+            display: flex;
+            padding: 1rem 0 0 0 !important;
+        }
+    }
+`
+const StyledAccountDropdown = styled.div`
     position: relative;
     display: flex;
     align-items: center;
-
-    &.open {
-        ${StyledMenu} {
-            opacity: 1;
-            transform: none;
-        }
-        ${MenuItem} {
-            opacity: 1;
-            padding-left: 0;
-
-            &:nth-child(2) {
-                transition: all 400ms ease 300ms;
-                padding-top: 0.2rem;
-                padding-bottom: 0.2rem;
-            }
-            &:nth-child(3) {
-                transition: all 400ms ease 450ms;
-            }
-            &:last-child {
-                display: flex;
-                padding: 1rem 0 0 0 !important;
-            }
-        }
-    }
 `;
 
 const StyledButton = styled(Button)`

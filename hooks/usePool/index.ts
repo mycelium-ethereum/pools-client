@@ -1,15 +1,14 @@
 import { Dispatch, useEffect, useReducer, useState, useContext } from 'react';
 import { ethers } from 'ethers';
-import tokenJSON from 'abis/PoolToken.json';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { PoolType } from '@libs/types/General';
 import { PoolState, PoolAction, reducer, initialPoolState } from './poolDispatch';
 import { TokenState, TokenAction, tokenReducer, initialTokenState } from './tokenDispatch';
 import { calcLossMultiplier, calcRatio } from '@libs/utils/calcs';
-import { LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from './constants';
+import { LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import { TransactionContext } from '@context/TransactionContext';
 import { BigNumber } from 'bignumber.js';
-import { LeveragedPool, PoolToken, TestToken, TestToken__factory, LeveragedPool__factory } from '@libs/types/contracts';
+import { LeveragedPool, PoolToken, TestToken, TestToken__factory, LeveragedPool__factory, PoolCommitter, PoolCommitter__factory } from '@libs/types/typechain';
 
 export interface Pool {
     poolState: PoolState;
@@ -24,6 +23,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
     const { provider, account } = useWeb3();
     const { handleTransaction } = useContext(TransactionContext);
     const [contract, setContract] = useState<LeveragedPool | undefined>();
+    const [committer, setCommitter] = useState<PoolCommitter | undefined>();
     const [poolTokens, setPoolTokens] = useState<PoolToken[]>([]);
     const [quoteToken, setQuoteToken] = useState<TestToken>();
     const [poolState, poolDispatch] = useReducer(reducer, initialPoolState);
@@ -38,9 +38,8 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             const contract_ = new ethers.Contract(
                 pool.address,
                 LeveragedPool__factory.abi,
-                provider?.getSigner() ?? provider,
+                provider,
             ) as LeveragedPool;
-            poolDispatch({ type: 'setToken', token: pool.name });
             setContract(contract_);
         }
     }, [provider, pool]);
@@ -57,6 +56,12 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         }
     }, [contract]);
 
+    useEffect(() => {
+        if (committer) {
+            subscribeCommitter();
+        }
+    }, [committer]);
+
     // Subscribes and fetches all relevent quoteToken info
     useEffect(() => {
         fetchQuoteTokenBalance();
@@ -71,7 +76,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
 
     // connects the contracts to the new signer whenever the account changes
     useEffect(() => {
-        if (provider) {
+        if (provider && account) {
             const setSigner = async () => {
                 const signer = await provider?.getSigner();
                 if (contract) {
@@ -82,6 +87,9 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                 }
                 if (quoteToken) {
                     setQuoteToken(quoteToken.connect(signer ?? provider));
+                }
+                if (committer) {
+                    setCommitter(committer.connect(signer ?? provider));
                 }
             };
             setSigner();
@@ -103,9 +111,9 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
      * @param isShort boolean correseponding to users preference of minting long or short tokens
      */
     const mint = (amount: number, isShort: boolean) => {
-        if (contract && handleTransaction) {
+        if (committer && handleTransaction) {
             const commitType = isShort ? SHORT_MINT : LONG_MINT;
-            handleTransaction(contract.commit, [commitType, amount]);
+            handleTransaction(committer.commit, [commitType, amount]);
         }
     };
 
@@ -115,9 +123,9 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
      * @param isShort boolean correseponding to users preference of minting long or short tokens
      */
     const burn = (amount: number, isShort: boolean) => {
-        if (contract && handleTransaction) {
+        if (committer && handleTransaction) {
             const commitType = isShort ? SHORT_BURN : LONG_BURN;
-            handleTransaction(contract.commit, [commitType, amount]);
+            handleTransaction(committer.commit, [commitType, amount]);
         }
     };
 
@@ -136,11 +144,27 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                 fetchLastPriceUpdate();
                 fetchOraclePrice();
             });
-            contract.on('ExecuteCommit', () => {
-                console.debug();
-            });
         }
     };
+
+    const subscribeCommitter = () => {
+        if (committer) {
+            committer.on('CreateCommit', () => {
+                console.debug("Successfully created commit");
+            });
+
+            committer.on('ExecuteCommit', () => {
+                console.debug("Successfully executed commit");
+            });
+
+            committer.on('RemoveCommit', () => {
+                console.debug("Successfully removed commit");
+            });
+            committer.on('FailedCommitExecution', () => {
+                console.debug("Failed to execute commit");
+            });
+        }
+    }
 
     // subscribe to the appropriate token events
     const subscribeQuoteToken = () => {
@@ -168,7 +192,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         if (contract) {
             const updateInterval = await contract.updateInterval();
             const lastUpdate = await contract.lastPriceTimestamp();
-            const nextUpdate = updateInterval + lastUpdate;
+            const nextUpdate = updateInterval + lastUpdate.toNumber();
             poolDispatch({ type: 'setNextRebalance', nextRebalance: nextUpdate });
             poolDispatch({ type: 'setUpdateInterval', updateInterval: updateInterval });
 
@@ -181,11 +205,16 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                     longBalance: new BigNumber(longBalance.toString()),
                 },
             });
-
+            
             const quoteToken = await contract.quoteToken();
             setQuoteToken(
-                new ethers.Contract(quoteToken, TestToken__factory.abi, provider?.getSigner() ?? provider) as TestToken,
+                new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken,
             );
+
+            const poolCommitter = await contract.poolCommitter();
+            setCommitter(
+                new ethers.Contract(poolCommitter, PoolCommitter__factory.abi, provider) as PoolCommitter
+            )
         }
     };
 
@@ -200,7 +229,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         if (contract) {
             const updateInterval = await contract.updateInterval();
             const lastUpdate = await contract.lastPriceTimestamp();
-            const nextUpdate = updateInterval + lastUpdate;
+            const nextUpdate = updateInterval + lastUpdate.toNumber();
             poolDispatch({ type: 'setNextRebalance', nextRebalance: nextUpdate });
             poolDispatch({ type: 'setUpdateInterval', updateInterval: updateInterval });
         }
@@ -251,13 +280,13 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             const shortTokenAddress = await contract.tokens(1);
             const shortToken = new ethers.Contract(
                 shortTokenAddress,
-                tokenJSON.abi,
-                provider?.getSigner() ?? provider,
+                TestToken__factory.abi,
+                provider,
             ) as PoolToken;
             const longToken = new ethers.Contract(
                 longTokenAddress,
-                tokenJSON.abi,
-                provider?.getSigner() ?? provider,
+                TestToken__factory.abi,
+                provider,
             ) as PoolToken;
             const shortTokenName = await shortToken.name();
             const longTokenName = await longToken.name();

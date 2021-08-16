@@ -2,38 +2,39 @@ import React, { useContext } from 'react';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import TracerModal from '@components/General/TracerModal';
 import { SwapContext, defaultState, noDispatch } from '@context/SwapContext';
-import { MINT, SHORT, SideType, TokenType } from '@libs/types/General';
+import { TokenType } from '@libs/types/General';
 import { Button, Input } from '@components/General';
 import styled from 'styled-components';
 import { SectionContainer, Label } from '@components/Pool';
 import { Pool } from '@hooks/usePool';
-import { initialPoolState as defaultPoolState } from '@hooks/usePool/poolDispatch';
-import { etherToApproxCurrency } from '@libs/utils';
+import { etherToApproxCurrency, toApproxCurrency } from '@libs/utils';
 import { BigNumber } from 'bignumber.js';
 import PoolSummary from './PoolSummary';
+import { PoolToken } from '@hooks/usePool/tokenDispatch';
+import { MINT, SHORT } from '@libs/constants';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 
-export default (({ show, onClose, pool }) => {
+export default (({ show, onClose, pool, token }) => {
     const { swapState = defaultState, swapDispatch = noDispatch } = useContext(SwapContext);
-    const balance = tokenBalance(pool.pool, pool.token, swapState.tokenType);
+    const balance = tokenBalance(pool, token, swapState.tokenType);
 
     const handleClick = () => {
-        if (pool.pool) {
+        if (pool) {
             if (!swapState.amount) {
                 console.error('Commit amount cannot be 0');
                 return;
             }
-            const { pool: pool_, token } = pool;
             if (swapState?.tokenType === MINT) {
-                pool_.mint(swapState.amount, token === SHORT);
+                pool.mint(swapState.amount, token.side === SHORT);
             } else {
-                pool_.burn(swapState.amount, token === SHORT);
+                pool.burn(swapState.amount, token.side === SHORT);
             }
         }
     };
 
     return (
         <TracerModal loading={false} show={show} onClose={onClose}>
-            <TokenName {...pool} />
+            <Title>{token.tokenName}</Title>
             <StyledSlideSelect
                 onClick={(index) => swapDispatch({ type: 'setTokenType', value: index as TokenType })}
                 value={swapState?.tokenType}
@@ -48,10 +49,13 @@ export default (({ show, onClose, pool }) => {
                     placeholder={'0.0'}
                     onChange={(e: any) => swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) })}
                 />
-                <Balance>Available: {etherToApproxCurrency(balance)}</Balance>
+                <Balance>Available: {toApproxCurrency(balance)}</Balance>
             </SectionContainer>
             <PoolSummary 
-                pool={pool?.pool ?? defaultPoolState}
+                tokenName={token.tokenName}
+                rebalanceMultiplier={pool?.poolState.rebalanceMultiplier ?? DEFAULT_POOLSTATE.rebalanceMultiplier}
+                expectedPrice={pool?.poolState?.lastPrice ?? DEFAULT_POOLSTATE.lastPrice}
+                nextRebalance={pool?.poolState?.nextRebalance ?? DEFAULT_POOLSTATE.nextRebalance}
             />
             <Button onClick={handleClick}>{swapState?.tokenType === MINT ? 'Mint' : 'Burn'}</Button>
         </TracerModal>
@@ -59,37 +63,28 @@ export default (({ show, onClose, pool }) => {
 }) as React.FC<{
     show: boolean;
     onClose: () => void;
-    pool: {
-        pool: Pool | undefined;
-        token: SideType;
-    };
+    pool: Pool | undefined;
+    token: PoolToken;
 }>;
 
-const tokenBalance: (pool: Pool | undefined, token: SideType, tokenType: TokenType) => BigNumber = (
+const tokenBalance: (pool: Pool | undefined, token: PoolToken, tokenType: TokenType) => BigNumber = (
     pool,
     token,
     tokenType,
 ) => {
     if (pool) {
         if (tokenType === MINT) {
-            return pool.tokenState.tokenBalances.quoteToken;
+            return pool.tokenState.quoteToken.balance;
         } else {
             // is burn
-            return token === SHORT ? pool.tokenState.tokenBalances.shortToken : pool.tokenState.tokenBalances.longToken;
+            return token.balance
         }
     }
     return new BigNumber(0);
 };
 
-const Balance = styled.div``;
 
-const TokenName: React.FC<{
-    pool: Pool | undefined;
-    token: SideType;
-}> = ({ pool, token }) => {
-    const tokenState = pool?.tokenState;
-    return <Title>{token === SHORT ? tokenState?.shortTokenName : tokenState?.longTokenName}</Title>;
-};
+const Balance = styled.div``;
 
 const Title = styled.h2``;
 

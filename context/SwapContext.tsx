@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react';
-import { Children } from 'libs/types/General';
-import { TokenType, MarketType, LeverageType, CurrencyType, SideType, MINT, LONG } from '@libs/types/General';
+import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType } from '@libs/types/General';
+import { MINT, LONG } from '@libs/constants'
 
 interface ContextProps {
     swapState: SwapState;

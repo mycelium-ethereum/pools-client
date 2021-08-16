@@ -1,6 +1,7 @@
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { SwapAction } from '@context/SwapContext';
-import { BURN, MINT, TokenType } from '@libs/types/General';
+import { TokenType } from '@libs/types/General';
+import { BURN, MINT } from '@libs/constants';
 import React from 'react';
 import { SectionContainer } from '..';
 

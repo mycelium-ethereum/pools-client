@@ -1,6 +1,7 @@
 import { FilterContext, noDispatch, defaultState } from '@context/FilterContext';
 import { Pool } from '@hooks/usePool';
-import { SHORT, SideType } from '@libs/types/General';
+import { PoolToken } from '@hooks/usePool/tokenDispatch';
+import { EMPTY_TOKEN } from '@libs/constants';
 import React, { useState } from 'react';
 import { useContext } from 'react';
 import styled from 'styled-components';
@@ -13,10 +14,10 @@ export const Browse: React.FC = () => {
     const [showModal, setShowModal] = useState(false);
     const [focusedPool, setFocusedPool] = useState<{
         pool: Pool | undefined;
-        token: SideType;
+        token: PoolToken;
     }>({
         pool: undefined,
-        token: SHORT,
+        token: EMPTY_TOKEN
     });
     return (
         <Container className="container">
@@ -32,7 +33,7 @@ export const Browse: React.FC = () => {
                     });
                 }}
             />
-            <TradeModal show={showModal} onClose={() => setShowModal(false)} pool={focusedPool} />
+            <TradeModal show={showModal} onClose={() => setShowModal(false)} pool={focusedPool.pool} token={focusedPool.token} />
         </Container>
     );
 };

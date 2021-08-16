@@ -1,7 +1,4 @@
-import keeperJSON from 'abis/PoolKeeper.json';
-import poolSwapLibraryJSON from 'abis/PoolSwapLibrary.json';
-import factoryJSON from 'abis/PoolFactory.json';
-import oracleJSON from 'abis/TestOracleWrapper.json';
+import { PoolKeeper__factory, PoolFactory__factory, TestOracle__factory } from '@libs/types/typechain';
 import { ethers } from 'ethers';
 
 export type Network = {
@@ -35,19 +32,15 @@ export const networkConfig: Record<string, Network> = {
         contracts: {
             poolKeeper: {
                 address: '0xe3aB9987a8A8331b85A651fEb85855c6548CD0Db',
-                abi: keeperJSON.abi,
-            },
-            poolSwapLibrary: {
-                address: '0xd046bC64854a7aF5bB61C207A9B2636148B04CAf',
-                abi: poolSwapLibraryJSON.abi,
+                abi: PoolKeeper__factory.abi,
             },
             poolFactory: {
                 address: '0xcD95A675eD9df9b7f280E6C0BE5199DA574A7B3b',
-                abi: factoryJSON.abi,
+                abi: PoolFactory__factory.abi,
             },
             oracleWrapper: {
                 address: '0xF8f2A07D299c1683E8F06611733908D135700d14',
-                abi: oracleJSON.abi,
+                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
@@ -57,19 +50,15 @@ export const networkConfig: Record<string, Network> = {
         contracts: {
             poolKeeper: {
                 address: '0xe3aB9987a8A8331b85A651fEb85855c6548CD0Db',
-                abi: keeperJSON.abi,
-            },
-            poolSwapLibrary: {
-                address: '0xd046bC64854a7aF5bB61C207A9B2636148B04CAf',
-                abi: poolSwapLibraryJSON.abi,
+                abi: PoolKeeper__factory.abi,
             },
             poolFactory: {
                 address: '0xcD95A675eD9df9b7f280E6C0BE5199DA574A7B3b',
-                abi: factoryJSON.abi,
+                abi: PoolFactory__factory.abi,
             },
             oracleWrapper: {
                 address: '0xF8f2A07D299c1683E8F06611733908D135700d14',
-                abi: oracleJSON.abi,
+                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
@@ -80,19 +69,15 @@ export const networkConfig: Record<string, Network> = {
         contracts: {
             poolKeeper: {
                 address: process.env.NEXT_PUBLIC_POOL_KEEPER_ADDRESS,
-                abi: keeperJSON.abi,
-            },
-            poolSwapLibrary: {
-                address: process.env.NEXT_PUBLIC_POOL_LIBRARY_ADDRESS,
-                abi: poolSwapLibraryJSON.abi,
+                abi: PoolKeeper__factory.abi,
             },
             poolFactory: {
                 address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
-                abi: factoryJSON.abi,
+                abi: PoolFactory__factory.abi,
             },
             oracleWrapper: {
                 address: process.env.NEXT_PUBLIC_POOL_ORACLE_ADDRESS,
-                abi: oracleJSON.abi,
+                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',

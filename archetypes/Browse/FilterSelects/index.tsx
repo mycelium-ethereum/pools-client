@@ -1,5 +1,6 @@
 import { Input, Select, SelectOption } from '@components/General';
 import { FilterState, FilterAction } from '@context/FilterContext';
+import { SIDE_MAP } from '@libs/constants';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -22,7 +23,7 @@ export default (({ filterState, filterDispatch }) => {
                 filterDispatch={filterDispatch}
                 dispatchAction={'setSide'}
                 title={'Side'}
-                selectedOption={filterState?.side}
+                selectedOption={filterState?.side === 'All' ? 'All' : SIDE_MAP[filterState?.side]}
             />
             <DropdownSelect
                 options={filterState?.settlementOptions}

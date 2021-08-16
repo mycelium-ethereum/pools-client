@@ -1,35 +1,43 @@
-import { LeveragedPool } from '../../../pool-swaps-contracts/typechain/LeveragedPool'
+import { SideType } from '@libs/types/General';
+import { LeveragedPool } from '@libs/types/typechain'
 import { BigNumber } from 'bignumber.js';
+import { SHORT, LONG } from '@libs/constants';
+
+export type Token = {
+    tokenName: string,
+    balance: BigNumber,
+    approved: boolean,
+}
+
+export type PoolToken = {
+    side: SideType
+} & Token
 
 export type TokenState = {
     contract: LeveragedPool | undefined;
-    longTokenName: string;
-    shortTokenName: string;
-    tokenBalances: {
-        shortToken: BigNumber;
-        longToken: BigNumber;
-        quoteToken: BigNumber;
-    };
-    approvedTokens: {
-        shortToken: boolean;
-        longToken: boolean;
-        quoteToken: boolean;
-    };
+    longToken: PoolToken;
+    shortToken: PoolToken;
+    quoteToken: Token
 };
 
 export const initialTokenState: TokenState = {
     contract: undefined,
-    longTokenName: '',
-    shortTokenName: '',
-    tokenBalances: {
-        shortToken: new BigNumber(0),
-        longToken: new BigNumber(0),
-        quoteToken: new BigNumber(0),
+    longToken: {
+        tokenName: '',
+        balance: new BigNumber(0),
+        approved: false,
+        side: LONG
     },
-    approvedTokens: {
-        shortToken: false,
-        longToken: false,
-        quoteToken: false,
+    shortToken: {
+        tokenName: '',
+        balance: new BigNumber(0),
+        approved: false,
+        side: SHORT
+    },
+    quoteToken: {
+        tokenName: '',
+        balance: new BigNumber(0),
+        approved: false
     },
 };
 
@@ -63,44 +71,56 @@ export const tokenReducer: (state: TokenState, action: TokenAction) => TokenStat
         case 'setNames':
             return {
                 ...state,
-                longTokenName: action.longToken,
-                shortTokenName: action.shortToken,
+                shortToken: {
+                    ...state.shortToken,
+                    tokenName: action.shortToken
+                },
+                longToken: {
+                    ...state.longToken,
+                    tokenName: action.shortToken
+                }
             };
         case 'setQuoteTokenBalance':
             return {
                 ...state,
-                tokenBalances: {
-                    ...state.tokenBalances,
-                    quoteToken: action.quoteTokenBalance,
-                },
+                quoteToken: {
+                    ...state.quoteToken,
+                    balance: action.quoteTokenBalance
+                }
             };
         case 'setPoolTokenBalances': {
             return {
                 ...state,
-                tokenBalances: {
-                    ...state.tokenBalances,
-                    shortToken: action.balances.shortToken,
-                    longToken: action.balances.longToken,
+                shortToken: {
+                    ...state.shortToken,
+                    balance: action.balances.shortToken
                 },
+                longToken: {
+                    ...state.longToken,
+                    balance: action.balances.longToken
+                }
             };
         }
         case 'setApprovedTokens': {
             return {
                 ...state,
-                approvedTokens: {
-                    ...state.approvedTokens,
-                    shortToken: action.approvals.shortToken,
-                    longToken: action.approvals.longToken,
+                shortToken: {
+                    ...state.shortToken,
+                    approved: action.approvals.shortToken
                 },
+                longToken: {
+                    ...state.longToken,
+                    approved: action.approvals.longToken
+                }
             };
         }
         case 'setApprovedQuoteToken': {
             return {
                 ...state,
-                approvedTokens: {
-                    ...state.approvedTokens,
-                    quoteToken: action.value,
-                },
+                quoteToken: {
+                    ...state.quoteToken,
+                    approved: action.value
+                }
             };
         }
         default:

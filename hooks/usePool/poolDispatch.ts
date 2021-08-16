@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js';
-import { LeveragedPool } from '../../../pool-swaps-contracts/typechain/LeveragedPool'
+import { LeveragedPool } from '@libs/types/typechain'
 
 export type PoolState = {
     contract: LeveragedPool | undefined;

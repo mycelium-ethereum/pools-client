@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Children } from 'libs/types/General';
 import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import { PoolFactory } from '../../pool-swaps-contracts/typechain/PoolFactory'
+import { PoolFactory } from '../../pool-swaps-contracts/typechain'
 import { PoolType } from '@libs/types/General';
 
 interface ContextProps {
@@ -40,7 +40,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                 const createdMarkets = contract.filters.DeployPool();
                 const allEvents = await contract?.queryFilter(createdMarkets);
                 const pools = allEvents.map((event) => ({
-                    name: event.args.poolCode,
+                    name: event.args.ticker,
                     address: event.args.pool,
                 }));
                 setPools(pools);

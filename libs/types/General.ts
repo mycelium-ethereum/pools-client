@@ -1,3 +1,4 @@
+import { SHORT, LONG, MINT, BURN } from '@libs/constants';
 import React from 'react';
 
 /**
@@ -21,13 +22,8 @@ export type APIResult = {
     message: string;
     data: any;
 };
-
-export const LONG = 'Long';
-export const SHORT = 'Short';
 export type SideType = typeof LONG | typeof SHORT;
 
-export const MINT = 0;
-export const BURN = 1;
 export type TokenType = typeof MINT | typeof BURN;
 
 // TODO change this to known markets

@@ -143,6 +143,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     useEffect(() => {
         const signer = provider?.getSigner();
+        console.log(signer, "Signer")
         setSigner(signer);
     }, [provider, account]);
 
