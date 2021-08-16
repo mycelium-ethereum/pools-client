@@ -1,7 +1,7 @@
 import React from 'react';
 import { TableCell, TableRow } from '@components/General/Table';
 import { Pool, usePool } from '@hooks/usePool';
-import { etherToApproxCurrency, toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils';
 import { Button } from '@components/General';
 import styled from 'styled-components';
 import { LONG, PoolType, SHORT, SideType } from '@libs/types/General';
@@ -20,9 +20,11 @@ export default (({ poolInfo, openTradeModal }) => {
         <>
             <TableRow>
                 <TableCell>{tokenState.shortTokenName}</TableCell>
-                <TableCell>{etherToApproxCurrency(poolState.lastPrice)}</TableCell>
+                <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
-                <TableCell>{poolState.marketChange}</TableCell>
+                <TableCell>
+                    <MarketChange marketChange={poolState.marketChange} />
+                </TableCell>
                 <TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(SHORT, true)}>Mint</StyledButton>
@@ -31,9 +33,11 @@ export default (({ poolInfo, openTradeModal }) => {
             </TableRow>
             <TableRow>
                 <TableCell>{tokenState.longTokenName}</TableCell>
-                <TableCell>{etherToApproxCurrency(poolState.lastPrice)}</TableCell>
+                <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
                 <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
-                <TableCell>{poolState.marketChange}</TableCell>
+                <TableCell>
+                    <MarketChange marketChange={poolState.marketChange} />
+                </TableCell>
                 <TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(LONG, true)}>Mint</StyledButton>
@@ -50,3 +54,14 @@ export default (({ poolInfo, openTradeModal }) => {
 const StyledButton = styled(Button)`
     display: inline;
 `;
+
+const MarketChange = (styled(({ marketChange, className }) => (
+    <span className={className}>
+        {`${marketChange.toFixed(2)}%`}
+    </span>
+))`
+    color: ${props => props.marketChange > 0 ? 'var(--color-green)' : 'var(--color-red)'};
+
+`) as React.FC<{
+    marketChange: number
+}>

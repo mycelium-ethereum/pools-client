@@ -52,6 +52,7 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             fetchLastPriceUpdate();
             fetchMarketChange();
             fetchPoolTokens();
+            fetchOraclePrice();
             subscribePool();
         }
     }, [contract]);
@@ -88,13 +89,13 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
     }, [account, provider]);
 
     // Calulates the rebalanceMultiplier when the lastPrice or oraclePrice changes
-    // useEffect(() => {
-    //     if (!poolState.oraclePrice.eq(0) && !poolState.lastPrice.eq(0)) {
-    //         const priceRatio = calcRatio(poolState.oraclePrice, poolState.lastPrice)
-    //         const rebalanceMultiplier = calcLossMultiplier(priceRatio, poolState.leverage)
-    //         poolDispatch({ type: 'setRebalanceMultiplier', rebalanceMultiplier: rebalanceMultiplier })
-    //     }
-    // }, [poolState.lastPrice, poolState.oraclePrice])
+    useEffect(() => {
+        if (!poolState.oraclePrice.eq(0) && !poolState.lastPrice.eq(0)) {
+            const priceRatio = calcRatio(poolState.oraclePrice, poolState.lastPrice)
+            const rebalanceMultiplier = calcLossMultiplier(priceRatio, poolState.leverage)
+            poolDispatch({ type: 'setRebalanceMultiplier', rebalanceMultiplier: rebalanceMultiplier })
+        }
+    }, [poolState.lastPrice, poolState.oraclePrice])
 
     /**
      * Mints an amount of pool tokens. This can be long or short pool tokens
@@ -128,12 +129,12 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
                 const oldPrice = new BigNumber(ethers.utils.formatEther(startPrice));
                 const newPrice = new BigNumber(ethers.utils.formatEther(endPrice));
                 console.debug(
-                    `Pool price changed, start: $${oldPrice.toNumber()}, end: $${newPrice.toNumber()}, transferred: ${transferAmount}`,
+                    `Pool price changed, old: $${oldPrice.toNumber()}, new: $${newPrice.toNumber()}, transferred: ${transferAmount}`,
                 );
-                const priceRatio = calcRatio(oldPrice, newPrice);
-                const rebalanceMultiplier = calcLossMultiplier(priceRatio, poolState.leverage);
-                poolDispatch({ type: 'setRebalanceMultiplier', rebalanceMultiplier: rebalanceMultiplier });
+                // TODO this might need to calc 24 hour change
+                poolDispatch({ type: 'setLastPrice', lastPrice: newPrice });
                 fetchLastPriceUpdate();
+                fetchOraclePrice();
             });
             contract.on('ExecuteCommit', () => {
                 console.debug();
@@ -176,13 +177,10 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             poolDispatch({
                 type: 'setPoolBalances',
                 balances: {
-                    shortBalance: new BigNumber(shortBalance.toNumber()),
-                    longBalance: new BigNumber(longBalance.toNumber()),
+                    shortBalance: new BigNumber(shortBalance.toString()),
+                    longBalance: new BigNumber(longBalance.toString()),
                 },
             });
-
-            const oraclePrice = await contract.getOraclePrice();
-            poolDispatch({ type: 'setOraclePrice', oraclePrice: new BigNumber(oraclePrice.toNumber()) });
 
             const quoteToken = await contract.quoteToken();
             setQuoteToken(
@@ -190,6 +188,13 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             );
         }
     };
+
+    const fetchOraclePrice = async () => {
+        if (contract) {
+            const oraclePrice = await contract.getOraclePrice();
+            poolDispatch({ type: 'setOraclePrice', oraclePrice: new BigNumber(oraclePrice.toNumber()) });
+        }
+    }
 
     const fetchLastPriceUpdate = async () => {
         if (contract) {
@@ -207,17 +212,19 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         if (contract) {
             const prices = contract.filters.PriceChange();
             const allEvents = await contract.queryFilter(prices);
-            const yesterday = Date.now() / 1000;
+
+            // instead we will do 60 seconds for testing
+            const yesterday = (Date.now() / 1000) - 120 ;
             let twentyFourHourPrice = new BigNumber(0);
             let latestPrice = new BigNumber(0);
 
-            if (allEvents[0]) {
-                latestPrice = new BigNumber(allEvents[0].args.endPrice.toNumber());
+            if (allEvents.length) {
+                latestPrice = new BigNumber(ethers.utils.formatEther(allEvents[allEvents.length -1].args.endPrice));
             }
             for (let i = 1; i < allEvents.length; i++) {
                 const priceChange = allEvents[i];
                 if ((await priceChange.getBlock()).timestamp < yesterday) {
-                    twentyFourHourPrice = new BigNumber(priceChange.args.endPrice.toNumber());
+                    twentyFourHourPrice = new BigNumber(priceChange.args.endPrice.toString());
                     break;
                 }
             }
@@ -269,11 +276,11 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
             Promise.all([longTokenBalance, shortTokenBalance, longTokenAllowance, shortTokenAllowance])
                 .then((res) => {
                     const balances = {
-                        longToken: new BigNumber(res[0].toNumber()),
-                        shortToken: new BigNumber(res[1].toNumber()),
+                        longToken: new BigNumber(res[0].toString()),
+                        shortToken: new BigNumber(res[1].toString()),
                     };
-                    const approvedLong = new BigNumber(res[2].toNumber());
-                    const approvedShort = new BigNumber(res[3].toNumber());
+                    const approvedLong = new BigNumber(res[2].toString());
+                    const approvedShort = new BigNumber(res[3].toString());
                     const max = new BigNumber(Number.MAX_SAFE_INTEGER.toString());
                     const approvals = {
                         longToken: approvedLong.gte(max),
@@ -305,8 +312,8 @@ export const usePool: (pool: PoolType) => Pool = (pool) => {
         if (quoteToken && account) {
             Promise.all([quoteToken.balanceOf(account), quoteToken.allowance(account, contract?.address as string)])
                 .then((res) => {
-                    const tokenBalance = new BigNumber(res[0].toNumber());
-                    const approvedAmount = new BigNumber(res[1].toNumber());
+                    const tokenBalance = new BigNumber(res[0].toString());
+                    const approvedAmount = new BigNumber(res[1].toString());
                     console.debug('Fetched quoteToken balance', res[0]);
                     console.debug('Fetched quoteToken allowance', res[1]);
                     const max = new BigNumber(Number.MAX_SAFE_INTEGER.toString());

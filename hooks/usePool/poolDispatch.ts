@@ -1,10 +1,9 @@
 import { BigNumber } from 'bignumber.js';
-import { LeveragedPool } from '@libs/types/contracts';
+import { LeveragedPool } from '../../../pool-swaps-contracts/typechain/LeveragedPool'
 
 export type PoolState = {
     contract: LeveragedPool | undefined;
     nextRebalance: number;
-    token: string;
     marketChange: number;
     rebalanceMultiplier: BigNumber;
     leverage: BigNumber;
@@ -19,7 +18,6 @@ export type PoolState = {
 export const initialPoolState: PoolState = {
     contract: undefined,
     nextRebalance: 0,
-    token: '4DOWN-BTC/USDC',
     marketChange: 31.25,
     rebalanceMultiplier: new BigNumber(0),
     leverage: new BigNumber(5),
@@ -32,7 +30,6 @@ export const initialPoolState: PoolState = {
 };
 
 export type PoolAction =
-    | { type: 'setToken'; token: string }
     | { type: 'setNextRebalance'; nextRebalance: number }
     | { type: 'setLastPrice'; lastPrice: BigNumber }
     | { type: 'setMarketChange'; marketChange: number }
@@ -55,11 +52,6 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             return {
                 ...state,
                 contract: action.contract,
-            };
-        case 'setToken':
-            return {
-                ...state,
-                token: action.token,
             };
         case 'setNextRebalance':
             return {

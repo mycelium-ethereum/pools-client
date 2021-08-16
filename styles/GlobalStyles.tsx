@@ -13,6 +13,7 @@ export default createGlobalStyle`
         --table-darkborder: #00156C;
         --table-semidarkborder: #000240;
         --table-lightborder: #002886;
+
     }
 
   	html {
@@ -22,6 +23,8 @@ export default createGlobalStyle`
         --color-primary: #3da8f5;
         --color-secondary: #005ea4;
         --color-accent: #002886;
+        --color-red: #F15025;
+        --color-green: #05CB3A; 
 
         --font-size-ultra-small: 11px;
         --status-lightblue: #3da8f5;

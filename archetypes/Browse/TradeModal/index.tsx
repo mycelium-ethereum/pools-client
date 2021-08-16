@@ -7,8 +7,10 @@ import { Button, Input } from '@components/General';
 import styled from 'styled-components';
 import { SectionContainer, Label } from '@components/Pool';
 import { Pool } from '@hooks/usePool';
+import { initialPoolState as defaultPoolState } from '@hooks/usePool/poolDispatch';
 import { etherToApproxCurrency } from '@libs/utils';
 import { BigNumber } from 'bignumber.js';
+import PoolSummary from './PoolSummary';
 
 export default (({ show, onClose, pool }) => {
     const { swapState = defaultState, swapDispatch = noDispatch } = useContext(SwapContext);
@@ -48,6 +50,9 @@ export default (({ show, onClose, pool }) => {
                 />
                 <Balance>Available: {etherToApproxCurrency(balance)}</Balance>
             </SectionContainer>
+            <PoolSummary 
+                pool={pool?.pool ?? defaultPoolState}
+            />
             <Button onClick={handleClick}>{swapState?.tokenType === MINT ? 'Mint' : 'Burn'}</Button>
         </TracerModal>
     );

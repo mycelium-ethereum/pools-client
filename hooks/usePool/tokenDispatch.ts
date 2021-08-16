@@ -1,5 +1,4 @@
-// import { BigNumber, ethers } from 'ethers';
-import { LeveragedPool } from '@libs/types/contracts';
+import { LeveragedPool } from '../../../pool-swaps-contracts/typechain/LeveragedPool'
 import { BigNumber } from 'bignumber.js';
 
 export type TokenState = {

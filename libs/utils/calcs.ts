@@ -29,8 +29,6 @@ export const calcRatio: (newPrice: BigNumber, oldPrice: BigNumber) => BigNumber 
     if (oldPrice.eq(0)) {
         new BigNumber(0);
     }
-    console.log(newPrice.toNumber(), oldPrice.toNumber(), 'devisions');
-    console.log(newPrice.div(oldPrice).toNumber(), 'rario');
     return newPrice.div(oldPrice);
 };
 

@@ -42,7 +42,7 @@ export const etherToApproxCurrency: (num: BigNumber) => string = (num) => {
         // reject if num is falsey or is 0
         return '$0.00';
     }
-    const parsedNum = parseFloat(ethers.utils.formatEther(num.toNumber()));
+    const parsedNum = parseFloat(ethers.utils.formatEther(num.toString()));
     return parsedNum.toLocaleString('en-us', {
         style: 'currency',
         currency: 'USD',
@@ -183,6 +183,7 @@ export const deconstructNames: (pools: PoolType[]) => {
     const settlementOptions: (CurrencyType | 'All')[] = ['All'];
 
     pools.map((pool) => {
+        console.log(pool)
         const poolName = pool.name;
         // [leverage, _base, quote, collateral]
         const name = poolName.replace('+', '-').split('-');

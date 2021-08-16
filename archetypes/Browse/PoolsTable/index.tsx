@@ -12,8 +12,8 @@ export default (({ pools, openTradeModal }) => {
     return (
         <Table>
             <TableHeader>
-                {headings.map((heading) => (
-                    <TableHeading key={`pool-heading-row-${heading}`} width={heading.width}>
+                {headings.map((heading, index) => (
+                    <TableHeading key={`pool-heading-row-${index}`} width={heading.width}>
                         {heading.text}
                     </TableHeading>
                 ))}
