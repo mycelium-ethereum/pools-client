@@ -6,7 +6,7 @@ import ThemeSwitcher from './ThemeSwitcher';
 // @ts-ignore
 import ENS, { getEnsAddress } from '@ensdomains/ensjs';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 
 const NavBar: React.FC = styled(({ className }) => {
@@ -25,7 +25,18 @@ const NavBar: React.FC = styled(({ className }) => {
 export const NavBarContent = styled(({ className }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
-    const { account, onboard, network, resetOnboard, ethBalance, handleConnect } = useWeb3();
+    const { 
+        account, 
+        network,
+        ethBalance
+    } = useWeb3();
+    
+    const {
+        onboard, 
+        resetOnboard, 
+        handleConnect
+    } = useWeb3Actions();
+
     const ensName = useEnsName(account ?? '');
 
     const linkStyles = 'mx-2 py-2';

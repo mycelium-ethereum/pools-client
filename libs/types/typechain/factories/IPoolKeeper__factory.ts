@@ -12,37 +12,6 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "int256",
-        name: "oldPrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "newPrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "uint32",
-        name: "updateInterval",
-        type: "uint32",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "pool",
-        type: "address",
-      },
-    ],
-    name: "ExecutePriceChange",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: "address",
         name: "_pool",
         type: "address",
@@ -73,44 +42,19 @@ const _abi = [
         type: "address",
       },
       {
+        indexed: true,
+        internalType: "address",
+        name: "keeper",
+        type: "address",
+      },
+      {
         indexed: false,
-        internalType: "string",
-        name: "reason",
-        type: "string",
+        internalType: "uint256",
+        name: "expectedReward",
+        type: "uint256",
       },
     ],
     name: "KeeperPaymentError",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "oldPrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "newPrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "uint32",
-        name: "updateInterval",
-        type: "uint32",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "pool",
-        type: "address",
-      },
-    ],
-    name: "NewRound",
     type: "event",
   },
   {
@@ -136,7 +80,7 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "pool",
         type: "address",
@@ -148,7 +92,7 @@ const _abi = [
         type: "string",
       },
     ],
-    name: "PoolUpdateError",
+    name: "PoolUpkeepError",
     type: "event",
   },
   {
@@ -163,7 +107,7 @@ const _abi = [
     outputs: [
       {
         internalType: "bool",
-        name: "upkeepNeeded",
+        name: "",
         type: "bool",
       },
     ],
@@ -182,7 +126,7 @@ const _abi = [
     outputs: [
       {
         internalType: "bool",
-        name: "upkeepNeeded",
+        name: "",
         type: "bool",
       },
     ],

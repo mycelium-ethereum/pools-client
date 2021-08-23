@@ -42,27 +42,27 @@ const _abi = [
     outputs: [
       {
         internalType: "uint80",
-        name: "roundId",
+        name: "",
         type: "uint80",
       },
       {
         internalType: "int256",
-        name: "answer",
+        name: "",
         type: "int256",
       },
       {
         internalType: "uint256",
-        name: "startedAt",
+        name: "",
         type: "uint256",
       },
       {
         internalType: "uint256",
-        name: "updatedAt",
+        name: "",
         type: "uint256",
       },
       {
         internalType: "uint80",
-        name: "answeredInRound",
+        name: "",
         type: "uint80",
       },
     ],

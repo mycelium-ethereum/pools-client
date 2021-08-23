@@ -22,7 +22,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface PoolCommitterInterface extends ethers.utils.Interface {
   functions: {
     "NO_COMMITS_REMAINING()": FunctionFragment;
-    "commit(uint8,uint112)": FunctionFragment;
+    "commit(uint8,uint256)": FunctionFragment;
     "commitIDCounter()": FunctionFragment;
     "commitTypeToUint(uint8)": FunctionFragment;
     "commits(uint128)": FunctionFragment;
@@ -171,11 +171,11 @@ interface PoolCommitterInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "uncommit", data: BytesLike): Result;
 
   events: {
-    "CreateCommit(uint128,uint128,uint8)": EventFragment;
+    "CreateCommit(uint128,uint256,uint8)": EventFragment;
     "ExecuteCommit(uint128)": EventFragment;
     "FailedCommitExecution(uint128)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "RemoveCommit(uint128,uint128,uint8)": EventFragment;
+    "RemoveCommit(uint128,uint256,uint8)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CreateCommit"): EventFragment;
@@ -299,7 +299,7 @@ export class PoolCommitter extends BaseContract {
     ): Promise<ContractTransaction>;
 
     setQuoteAndPool(
-      quoteToken: string,
+      _quoteToken: string,
       _leveragedPool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -388,7 +388,7 @@ export class PoolCommitter extends BaseContract {
   ): Promise<ContractTransaction>;
 
   setQuoteAndPool(
-    quoteToken: string,
+    _quoteToken: string,
     _leveragedPool: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -473,7 +473,7 @@ export class PoolCommitter extends BaseContract {
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     setQuoteAndPool(
-      quoteToken: string,
+      _quoteToken: string,
       _leveragedPool: string,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -495,7 +495,7 @@ export class PoolCommitter extends BaseContract {
     CreateCommit(
       commitID?: BigNumberish | null,
       amount?: BigNumberish | null,
-      commitType?: null
+      commitType?: BigNumberish | null
     ): TypedEventFilter<
       [BigNumber, BigNumber, number],
       { commitID: BigNumber; amount: BigNumber; commitType: number }
@@ -579,7 +579,7 @@ export class PoolCommitter extends BaseContract {
     ): Promise<BigNumber>;
 
     setQuoteAndPool(
-      quoteToken: string,
+      _quoteToken: string,
       _leveragedPool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -661,7 +661,7 @@ export class PoolCommitter extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     setQuoteAndPool(
-      quoteToken: string,
+      _quoteToken: string,
       _leveragedPool: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

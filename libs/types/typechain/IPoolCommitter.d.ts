@@ -21,7 +21,7 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface IPoolCommitterInterface extends ethers.utils.Interface {
   functions: {
-    "commit(uint8,uint112)": FunctionFragment;
+    "commit(uint8,uint256)": FunctionFragment;
     "executeAllCommitments()": FunctionFragment;
     "executeCommitment(tuple)": FunctionFragment;
     "getCommit(uint128)": FunctionFragment;
@@ -78,10 +78,10 @@ interface IPoolCommitterInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "uncommit", data: BytesLike): Result;
 
   events: {
-    "CreateCommit(uint128,uint128,uint8)": EventFragment;
+    "CreateCommit(uint128,uint256,uint8)": EventFragment;
     "ExecuteCommit(uint128)": EventFragment;
     "FailedCommitExecution(uint128)": EventFragment;
-    "RemoveCommit(uint128,uint128,uint8)": EventFragment;
+    "RemoveCommit(uint128,uint256,uint8)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "CreateCommit"): EventFragment;
@@ -267,7 +267,7 @@ export class IPoolCommitter extends BaseContract {
     CreateCommit(
       commitID?: BigNumberish | null,
       amount?: BigNumberish | null,
-      commitType?: null
+      commitType?: BigNumberish | null
     ): TypedEventFilter<
       [BigNumber, BigNumber, number],
       { commitID: BigNumber; amount: BigNumber; commitType: number }

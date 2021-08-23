@@ -14,13 +14,13 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "oldAddress",
         type: "address",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "newAddress",
         type: "address",
@@ -33,13 +33,13 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "oldAddress",
         type: "address",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "newAddress",
         type: "address",
@@ -52,13 +52,13 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "oldAddress",
         type: "address",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "address",
         name: "newAddress",
         type: "address",
@@ -115,6 +115,25 @@ const _abi = [
       },
     ],
     name: "PriceChange",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "int256",
+        name: "startPrice",
+        type: "int256",
+      },
+      {
+        indexed: true,
+        internalType: "int256",
+        name: "endPrice",
+        type: "int256",
+      },
+    ],
+    name: "PriceChangeError",
     type: "event",
   },
   {
@@ -187,7 +206,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "_keeperOracle",
+            name: "_settlementEthOracle",
             type: "address",
           },
           {
@@ -266,19 +285,6 @@ const _abi = [
   },
   {
     inputs: [],
-    name: "keeperOracle",
-    outputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
     name: "lastPriceTimestamp",
     outputs: [
       {
@@ -308,9 +314,9 @@ const _abi = [
     name: "longBalance",
     outputs: [
       {
-        internalType: "uint112",
+        internalType: "uint256",
         name: "",
-        type: "uint112",
+        type: "uint256",
       },
     ],
     stateMutability: "view",
@@ -350,6 +356,30 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "payKeeperFromBalances",
+    outputs: [
+      {
+        internalType: "bool",
+        name: "",
+        type: "bool",
+      },
+    ],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -479,14 +509,14 @@ const _abi = [
   {
     inputs: [
       {
-        internalType: "uint112",
+        internalType: "uint256",
         name: "_longBalance",
-        type: "uint112",
+        type: "uint256",
       },
       {
-        internalType: "uint112",
+        internalType: "uint256",
         name: "_shortBalance",
-        type: "uint112",
+        type: "uint256",
       },
     ],
     name: "setNewPoolBalances",
@@ -496,12 +526,25 @@ const _abi = [
   },
   {
     inputs: [],
+    name: "settlementEthOracle",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
     name: "shortBalance",
     outputs: [
       {
-        internalType: "uint112",
+        internalType: "uint256",
         name: "",
-        type: "uint112",
+        type: "uint256",
       },
     ],
     stateMutability: "view",

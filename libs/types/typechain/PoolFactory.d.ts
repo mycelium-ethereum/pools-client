@@ -51,7 +51,7 @@ interface PoolFactoryInterface extends ethers.utils.Interface {
         leverageAmount: BigNumberish;
         quoteToken: string;
         oracleWrapper: string;
-        keeperOracle: string;
+        settlementEthOracle: string;
       }
     ]
   ): string;
@@ -213,7 +213,7 @@ export class PoolFactory extends BaseContract {
         leverageAmount: BigNumberish;
         quoteToken: string;
         oracleWrapper: string;
-        keeperOracle: string;
+        settlementEthOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -281,7 +281,7 @@ export class PoolFactory extends BaseContract {
       leverageAmount: BigNumberish;
       quoteToken: string;
       oracleWrapper: string;
-      keeperOracle: string;
+      settlementEthOracle: string;
     },
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -349,7 +349,7 @@ export class PoolFactory extends BaseContract {
         leverageAmount: BigNumberish;
         quoteToken: string;
         oracleWrapper: string;
-        keeperOracle: string;
+        settlementEthOracle: string;
       },
       overrides?: CallOverrides
     ): Promise<string>;
@@ -428,7 +428,7 @@ export class PoolFactory extends BaseContract {
         leverageAmount: BigNumberish;
         quoteToken: string;
         oracleWrapper: string;
-        keeperOracle: string;
+        settlementEthOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -497,7 +497,7 @@ export class PoolFactory extends BaseContract {
         leverageAmount: BigNumberish;
         quoteToken: string;
         oracleWrapper: string;
-        keeperOracle: string;
+        settlementEthOracle: string;
       },
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;

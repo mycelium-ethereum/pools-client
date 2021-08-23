@@ -11,6 +11,25 @@ import type {
 
 const _abi = [
   {
+    inputs: [
+      {
+        internalType: "int256",
+        name: "wad",
+        type: "int256",
+      },
+    ],
+    name: "fromWad",
+    outputs: [
+      {
+        internalType: "int256",
+        name: "",
+        type: "int256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [],
     name: "getPrice",
     outputs: [

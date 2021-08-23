@@ -6,6 +6,7 @@ interface SNBProps {
     tabs: string[];
     setTab: (id: number) => void;
     background?: string;
+    className?: string;
     position?: 'end' | 'start';
 }
 
@@ -33,9 +34,9 @@ const SideNavItem = styled.div`
 `;
 
 const SideNav: React.FC<SNBProps> = (props: SNBProps) => {
-    const { tabs, selected, setTab } = props;
+    const { tabs, selected, setTab, className } = props;
     return (
-        <SideNavContainer>
+        <SideNavContainer className={className}>
             {tabs.map((tab_, index) => (
                 <SideNavItem
                     className={index === selected ? 'selected' : ''}

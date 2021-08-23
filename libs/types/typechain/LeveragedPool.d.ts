@@ -30,12 +30,12 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     "initialize(tuple)": FunctionFragment;
     "intervalPassed()": FunctionFragment;
     "keeper()": FunctionFragment;
-    "keeperOracle()": FunctionFragment;
     "lastPriceTimestamp()": FunctionFragment;
     "leverageAmount()": FunctionFragment;
     "longBalance()": FunctionFragment;
     "mintTokens(uint256,uint256,address)": FunctionFragment;
     "oracleWrapper()": FunctionFragment;
+    "payKeeperFromBalances(address,uint256)": FunctionFragment;
     "poolCommitter()": FunctionFragment;
     "poolName()": FunctionFragment;
     "poolTokens()": FunctionFragment;
@@ -44,7 +44,8 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     "quoteTokenTransfer(address,uint256)": FunctionFragment;
     "quoteTokenTransferFrom(address,address,uint256)": FunctionFragment;
     "setKeeper(address)": FunctionFragment;
-    "setNewPoolBalances(uint112,uint112)": FunctionFragment;
+    "setNewPoolBalances(uint256,uint256)": FunctionFragment;
+    "settlementEthOracle()": FunctionFragment;
     "shortBalance()": FunctionFragment;
     "tokens(uint256)": FunctionFragment;
     "transferGovernance(address)": FunctionFragment;
@@ -80,7 +81,7 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
         _owner: string;
         _keeper: string;
         _oracleWrapper: string;
-        _keeperOracle: string;
+        _settlementEthOracle: string;
         _longToken: string;
         _shortToken: string;
         _poolCommitter: string;
@@ -100,10 +101,6 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "keeper", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "keeperOracle",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
     functionFragment: "lastPriceTimestamp",
     values?: undefined
   ): string;
@@ -122,6 +119,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "oracleWrapper",
     values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "payKeeperFromBalances",
+    values: [string, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "poolCommitter",
@@ -152,6 +153,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "setNewPoolBalances",
     values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "settlementEthOracle",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "shortBalance",
@@ -193,10 +198,6 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "keeper", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "keeperOracle",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "lastPriceTimestamp",
     data: BytesLike
   ): Result;
@@ -211,6 +212,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "mintTokens", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "oracleWrapper",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "payKeeperFromBalances",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -232,6 +237,10 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "setKeeper", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setNewPoolBalances",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "settlementEthOracle",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -258,6 +267,7 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
     "KeeperAddressChanged(address,address)": EventFragment;
     "PoolInitialized(address,address,address,string)": EventFragment;
     "PriceChange(int256,int256)": EventFragment;
+    "PriceChangeError(int256,int256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "FeeAddressUpdated"): EventFragment;
@@ -265,6 +275,7 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   getEvent(nameOrSignatureOrTopic: "KeeperAddressChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolInitialized"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PriceChange"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PriceChangeError"): EventFragment;
 }
 
 export class LeveragedPool extends BaseContract {
@@ -333,7 +344,7 @@ export class LeveragedPool extends BaseContract {
         _owner: string;
         _keeper: string;
         _oracleWrapper: string;
-        _keeperOracle: string;
+        _settlementEthOracle: string;
         _longToken: string;
         _shortToken: string;
         _poolCommitter: string;
@@ -352,8 +363,6 @@ export class LeveragedPool extends BaseContract {
 
     keeper(overrides?: CallOverrides): Promise<[string]>;
 
-    keeperOracle(overrides?: CallOverrides): Promise<[string]>;
-
     lastPriceTimestamp(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     leverageAmount(overrides?: CallOverrides): Promise<[string]>;
@@ -368,6 +377,12 @@ export class LeveragedPool extends BaseContract {
     ): Promise<ContractTransaction>;
 
     oracleWrapper(overrides?: CallOverrides): Promise<[string]>;
+
+    payKeeperFromBalances(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     poolCommitter(overrides?: CallOverrides): Promise<[string]>;
 
@@ -406,6 +421,8 @@ export class LeveragedPool extends BaseContract {
       _shortBalance: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    settlementEthOracle(overrides?: CallOverrides): Promise<[string]>;
 
     shortBalance(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -446,7 +463,7 @@ export class LeveragedPool extends BaseContract {
       _owner: string;
       _keeper: string;
       _oracleWrapper: string;
-      _keeperOracle: string;
+      _settlementEthOracle: string;
       _longToken: string;
       _shortToken: string;
       _poolCommitter: string;
@@ -465,8 +482,6 @@ export class LeveragedPool extends BaseContract {
 
   keeper(overrides?: CallOverrides): Promise<string>;
 
-  keeperOracle(overrides?: CallOverrides): Promise<string>;
-
   lastPriceTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
   leverageAmount(overrides?: CallOverrides): Promise<string>;
@@ -481,6 +496,12 @@ export class LeveragedPool extends BaseContract {
   ): Promise<ContractTransaction>;
 
   oracleWrapper(overrides?: CallOverrides): Promise<string>;
+
+  payKeeperFromBalances(
+    to: string,
+    amount: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   poolCommitter(overrides?: CallOverrides): Promise<string>;
 
@@ -519,6 +540,8 @@ export class LeveragedPool extends BaseContract {
     _shortBalance: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
+
+  settlementEthOracle(overrides?: CallOverrides): Promise<string>;
 
   shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -559,7 +582,7 @@ export class LeveragedPool extends BaseContract {
         _owner: string;
         _keeper: string;
         _oracleWrapper: string;
-        _keeperOracle: string;
+        _settlementEthOracle: string;
         _longToken: string;
         _shortToken: string;
         _poolCommitter: string;
@@ -578,8 +601,6 @@ export class LeveragedPool extends BaseContract {
 
     keeper(overrides?: CallOverrides): Promise<string>;
 
-    keeperOracle(overrides?: CallOverrides): Promise<string>;
-
     lastPriceTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     leverageAmount(overrides?: CallOverrides): Promise<string>;
@@ -594,6 +615,12 @@ export class LeveragedPool extends BaseContract {
     ): Promise<void>;
 
     oracleWrapper(overrides?: CallOverrides): Promise<string>;
+
+    payKeeperFromBalances(
+      to: string,
+      amount: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     poolCommitter(overrides?: CallOverrides): Promise<string>;
 
@@ -630,6 +657,8 @@ export class LeveragedPool extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    settlementEthOracle(overrides?: CallOverrides): Promise<string>;
+
     shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
     tokens(arg0: BigNumberish, overrides?: CallOverrides): Promise<string>;
@@ -646,24 +675,24 @@ export class LeveragedPool extends BaseContract {
 
   filters: {
     FeeAddressUpdated(
-      oldAddress?: null,
-      newAddress?: null
+      oldAddress?: string | null,
+      newAddress?: string | null
     ): TypedEventFilter<
       [string, string],
       { oldAddress: string; newAddress: string }
     >;
 
     GovernanceAddressChanged(
-      oldAddress?: null,
-      newAddress?: null
+      oldAddress?: string | null,
+      newAddress?: string | null
     ): TypedEventFilter<
       [string, string],
       { oldAddress: string; newAddress: string }
     >;
 
     KeeperAddressChanged(
-      oldAddress?: null,
-      newAddress?: null
+      oldAddress?: string | null,
+      newAddress?: string | null
     ): TypedEventFilter<
       [string, string],
       { oldAddress: string; newAddress: string }
@@ -685,6 +714,14 @@ export class LeveragedPool extends BaseContract {
     >;
 
     PriceChange(
+      startPrice?: BigNumberish | null,
+      endPrice?: BigNumberish | null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber],
+      { startPrice: BigNumber; endPrice: BigNumber }
+    >;
+
+    PriceChangeError(
       startPrice?: BigNumberish | null,
       endPrice?: BigNumberish | null
     ): TypedEventFilter<
@@ -716,7 +753,7 @@ export class LeveragedPool extends BaseContract {
         _owner: string;
         _keeper: string;
         _oracleWrapper: string;
-        _keeperOracle: string;
+        _settlementEthOracle: string;
         _longToken: string;
         _shortToken: string;
         _poolCommitter: string;
@@ -735,8 +772,6 @@ export class LeveragedPool extends BaseContract {
 
     keeper(overrides?: CallOverrides): Promise<BigNumber>;
 
-    keeperOracle(overrides?: CallOverrides): Promise<BigNumber>;
-
     lastPriceTimestamp(overrides?: CallOverrides): Promise<BigNumber>;
 
     leverageAmount(overrides?: CallOverrides): Promise<BigNumber>;
@@ -751,6 +786,12 @@ export class LeveragedPool extends BaseContract {
     ): Promise<BigNumber>;
 
     oracleWrapper(overrides?: CallOverrides): Promise<BigNumber>;
+
+    payKeeperFromBalances(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
     poolCommitter(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -789,6 +830,8 @@ export class LeveragedPool extends BaseContract {
       _shortBalance: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    settlementEthOracle(overrides?: CallOverrides): Promise<BigNumber>;
 
     shortBalance(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -832,7 +875,7 @@ export class LeveragedPool extends BaseContract {
         _owner: string;
         _keeper: string;
         _oracleWrapper: string;
-        _keeperOracle: string;
+        _settlementEthOracle: string;
         _longToken: string;
         _shortToken: string;
         _poolCommitter: string;
@@ -851,8 +894,6 @@ export class LeveragedPool extends BaseContract {
 
     keeper(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    keeperOracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     lastPriceTimestamp(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
@@ -869,6 +910,12 @@ export class LeveragedPool extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     oracleWrapper(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    payKeeperFromBalances(
+      to: string,
+      amount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
 
     poolCommitter(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -906,6 +953,10 @@ export class LeveragedPool extends BaseContract {
       _longBalance: BigNumberish,
       _shortBalance: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    settlementEthOracle(
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     shortBalance(overrides?: CallOverrides): Promise<PopulatedTransaction>;

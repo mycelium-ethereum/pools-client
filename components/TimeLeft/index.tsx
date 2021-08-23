@@ -1,6 +1,9 @@
 import { timeTill } from '@libs/utils';
 import React, { useEffect, useState } from 'react';
 
+/**
+ * @param targetTime time you want to countdown till in seconds
+ */
 export default (({ targetTime }) => {
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);

@@ -23,6 +23,7 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
   functions: {
     "BASE_TIP()": FunctionFragment;
     "BLOCK_TIME()": FunctionFragment;
+    "MAX_DECIMALS()": FunctionFragment;
     "TIP_DELTA_PER_BLOCK()": FunctionFragment;
     "checkUpkeepMultiplePools(address[])": FunctionFragment;
     "checkUpkeepSinglePool(address)": FunctionFragment;
@@ -31,7 +32,6 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     "keeperGas(address,uint256,uint256)": FunctionFragment;
     "keeperReward(address,uint256,uint256,uint256,uint256)": FunctionFragment;
     "keeperTip(uint256,uint256)": FunctionFragment;
-    "lastExecutionTime(address)": FunctionFragment;
     "newPool(address)": FunctionFragment;
     "owner()": FunctionFragment;
     "performUpkeepMultiplePools(address[])": FunctionFragment;
@@ -44,6 +44,10 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
   encodeFunctionData(functionFragment: "BASE_TIP", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "BLOCK_TIME",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "MAX_DECIMALS",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -75,10 +79,6 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     functionFragment: "keeperTip",
     values: [BigNumberish, BigNumberish]
   ): string;
-  encodeFunctionData(
-    functionFragment: "lastExecutionTime",
-    values: [string]
-  ): string;
   encodeFunctionData(functionFragment: "newPool", values: [string]): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -102,6 +102,10 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "BASE_TIP", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "BLOCK_TIME", data: BytesLike): Result;
   decodeFunctionResult(
+    functionFragment: "MAX_DECIMALS",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "TIP_DELTA_PER_BLOCK",
     data: BytesLike
   ): Result;
@@ -124,10 +128,6 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "keeperTip", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "lastExecutionTime",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "newPool", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
@@ -149,22 +149,18 @@ interface PoolKeeperInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
-    "ExecutePriceChange(int256,int256,uint32,address)": EventFragment;
     "KeeperPaid(address,address,uint256)": EventFragment;
-    "KeeperPaymentError(address,string)": EventFragment;
-    "NewRound(int256,int256,uint32,address)": EventFragment;
+    "KeeperPaymentError(address,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "PoolAdded(address,int256)": EventFragment;
-    "PoolUpdateError(address,string)": EventFragment;
+    "PoolUpkeepError(address,string)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ExecutePriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "KeeperPaid"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "KeeperPaymentError"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "NewRound"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolAdded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PoolUpdateError"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PoolUpkeepError"): EventFragment;
 }
 
 export class PoolKeeper extends BaseContract {
@@ -215,6 +211,8 @@ export class PoolKeeper extends BaseContract {
 
     BLOCK_TIME(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     checkUpkeepMultiplePools(
@@ -256,11 +254,6 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    lastExecutionTime(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<[BigNumber]>;
-
     newPool(
       _poolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -296,6 +289,8 @@ export class PoolKeeper extends BaseContract {
   BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
   BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
+
+  MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
 
   TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -335,11 +330,6 @@ export class PoolKeeper extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  lastExecutionTime(
-    arg0: string,
-    overrides?: CallOverrides
-  ): Promise<BigNumber>;
-
   newPool(
     _poolAddress: string,
     overrides?: Overrides & { from?: string | Promise<string> }
@@ -375,6 +365,8 @@ export class PoolKeeper extends BaseContract {
     BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
     BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
 
     TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -414,11 +406,6 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    lastExecutionTime(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     newPool(_poolAddress: string, overrides?: CallOverrides): Promise<void>;
 
     owner(overrides?: CallOverrides): Promise<string>;
@@ -444,21 +431,6 @@ export class PoolKeeper extends BaseContract {
   };
 
   filters: {
-    ExecutePriceChange(
-      oldPrice?: BigNumberish | null,
-      newPrice?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      pool?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        oldPrice: BigNumber;
-        newPrice: BigNumber;
-        updateInterval: number;
-        pool: string;
-      }
-    >;
-
     KeeperPaid(
       _pool?: string | null,
       keeper?: string | null,
@@ -470,22 +442,11 @@ export class PoolKeeper extends BaseContract {
 
     KeeperPaymentError(
       _pool?: string | null,
-      reason?: null
-    ): TypedEventFilter<[string, string], { _pool: string; reason: string }>;
-
-    NewRound(
-      oldPrice?: BigNumberish | null,
-      newPrice?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      pool?: null
+      keeper?: string | null,
+      expectedReward?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        oldPrice: BigNumber;
-        newPrice: BigNumber;
-        updateInterval: number;
-        pool: string;
-      }
+      [string, string, BigNumber],
+      { _pool: string; keeper: string; expectedReward: BigNumber }
     >;
 
     OwnershipTransferred(
@@ -504,8 +465,8 @@ export class PoolKeeper extends BaseContract {
       { poolAddress: string; firstPrice: BigNumber }
     >;
 
-    PoolUpdateError(
-      pool?: null,
+    PoolUpkeepError(
+      pool?: string | null,
       reason?: null
     ): TypedEventFilter<[string, string], { pool: string; reason: string }>;
   };
@@ -514,6 +475,8 @@ export class PoolKeeper extends BaseContract {
     BASE_TIP(overrides?: CallOverrides): Promise<BigNumber>;
 
     BLOCK_TIME(overrides?: CallOverrides): Promise<BigNumber>;
+
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
 
     TIP_DELTA_PER_BLOCK(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -553,11 +516,6 @@ export class PoolKeeper extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    lastExecutionTime(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     newPool(
       _poolAddress: string,
       overrides?: Overrides & { from?: string | Promise<string> }
@@ -594,6 +552,8 @@ export class PoolKeeper extends BaseContract {
     BASE_TIP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     BLOCK_TIME(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     TIP_DELTA_PER_BLOCK(
       overrides?: CallOverrides
@@ -635,11 +595,6 @@ export class PoolKeeper extends BaseContract {
     keeperTip(
       _savedPreviousUpdatedTimestamp: BigNumberish,
       _poolInterval: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    lastExecutionTime(
-      arg0: string,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

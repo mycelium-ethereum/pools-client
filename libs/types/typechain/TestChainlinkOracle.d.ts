@@ -120,15 +120,7 @@ export class TestChainlinkOracle extends BaseContract {
 
     latestRoundData(
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        roundId: BigNumber;
-        answer: BigNumber;
-        startedAt: BigNumber;
-        updatedAt: BigNumber;
-        answeredInRound: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
 
     price(overrides?: CallOverrides): Promise<[BigNumber]>;
 
@@ -151,15 +143,7 @@ export class TestChainlinkOracle extends BaseContract {
 
   latestRoundData(
     overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-      roundId: BigNumber;
-      answer: BigNumber;
-      startedAt: BigNumber;
-      updatedAt: BigNumber;
-      answeredInRound: BigNumber;
-    }
-  >;
+  ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
 
   price(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -182,15 +166,7 @@ export class TestChainlinkOracle extends BaseContract {
 
     latestRoundData(
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber, BigNumber, BigNumber] & {
-        roundId: BigNumber;
-        answer: BigNumber;
-        startedAt: BigNumber;
-        updatedAt: BigNumber;
-        answeredInRound: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
 
     price(overrides?: CallOverrides): Promise<BigNumber>;
 

@@ -68,20 +68,16 @@ interface IPoolKeeperInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "setFactory", data: BytesLike): Result;
 
   events: {
-    "ExecutePriceChange(int256,int256,uint32,address)": EventFragment;
     "KeeperPaid(address,address,uint256)": EventFragment;
-    "KeeperPaymentError(address,string)": EventFragment;
-    "NewRound(int256,int256,uint32,address)": EventFragment;
+    "KeeperPaymentError(address,address,uint256)": EventFragment;
     "PoolAdded(address,int256)": EventFragment;
-    "PoolUpdateError(address,string)": EventFragment;
+    "PoolUpkeepError(address,string)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "ExecutePriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "KeeperPaid"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "KeeperPaymentError"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "NewRound"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolAdded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PoolUpdateError"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "PoolUpkeepError"): EventFragment;
 }
 
 export class IPoolKeeper extends BaseContract {
@@ -131,12 +127,12 @@ export class IPoolKeeper extends BaseContract {
     checkUpkeepMultiplePools(
       pools: string[],
       overrides?: CallOverrides
-    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
+    ): Promise<[boolean]>;
 
     checkUpkeepSinglePool(
       pool: string,
       overrides?: CallOverrides
-    ): Promise<[boolean] & { upkeepNeeded: boolean }>;
+    ): Promise<[boolean]>;
 
     newPool(
       _poolAddress: string,
@@ -216,21 +212,6 @@ export class IPoolKeeper extends BaseContract {
   };
 
   filters: {
-    ExecutePriceChange(
-      oldPrice?: BigNumberish | null,
-      newPrice?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      pool?: null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        oldPrice: BigNumber;
-        newPrice: BigNumber;
-        updateInterval: number;
-        pool: string;
-      }
-    >;
-
     KeeperPaid(
       _pool?: string | null,
       keeper?: string | null,
@@ -242,22 +223,11 @@ export class IPoolKeeper extends BaseContract {
 
     KeeperPaymentError(
       _pool?: string | null,
-      reason?: null
-    ): TypedEventFilter<[string, string], { _pool: string; reason: string }>;
-
-    NewRound(
-      oldPrice?: BigNumberish | null,
-      newPrice?: BigNumberish | null,
-      updateInterval?: BigNumberish | null,
-      pool?: null
+      keeper?: string | null,
+      expectedReward?: null
     ): TypedEventFilter<
-      [BigNumber, BigNumber, number, string],
-      {
-        oldPrice: BigNumber;
-        newPrice: BigNumber;
-        updateInterval: number;
-        pool: string;
-      }
+      [string, string, BigNumber],
+      { _pool: string; keeper: string; expectedReward: BigNumber }
     >;
 
     PoolAdded(
@@ -268,8 +238,8 @@ export class IPoolKeeper extends BaseContract {
       { poolAddress: string; firstPrice: BigNumber }
     >;
 
-    PoolUpdateError(
-      pool?: null,
+    PoolUpkeepError(
+      pool?: string | null,
       reason?: null
     ): TypedEventFilter<[string, string], { pool: string; reason: string }>;
   };

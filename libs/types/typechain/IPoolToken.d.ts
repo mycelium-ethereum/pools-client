@@ -19,31 +19,28 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface IOracleWrapperInterface extends ethers.utils.Interface {
+interface IPoolTokenInterface extends ethers.utils.Interface {
   functions: {
-    "fromWad(int256)": FunctionFragment;
-    "getPrice()": FunctionFragment;
-    "oracle()": FunctionFragment;
-    "setOracle(address)": FunctionFragment;
+    "burn(uint256,address)": FunctionFragment;
+    "mint(uint256,address)": FunctionFragment;
   };
 
   encodeFunctionData(
-    functionFragment: "fromWad",
-    values: [BigNumberish]
+    functionFragment: "burn",
+    values: [BigNumberish, string]
   ): string;
-  encodeFunctionData(functionFragment: "getPrice", values?: undefined): string;
-  encodeFunctionData(functionFragment: "oracle", values?: undefined): string;
-  encodeFunctionData(functionFragment: "setOracle", values: [string]): string;
+  encodeFunctionData(
+    functionFragment: "mint",
+    values: [BigNumberish, string]
+  ): string;
 
-  decodeFunctionResult(functionFragment: "fromWad", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getPrice", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "oracle", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setOracle", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
 
   events: {};
 }
 
-export class IOracleWrapper extends BaseContract {
+export class IPoolToken extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -84,69 +81,74 @@ export class IOracleWrapper extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IOracleWrapperInterface;
+  interface: IPoolTokenInterface;
 
   functions: {
-    fromWad(wad: BigNumberish, overrides?: CallOverrides): Promise<[BigNumber]>;
+    burn(
+      amount: BigNumberish,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
-    getPrice(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    oracle(overrides?: CallOverrides): Promise<[string]>;
-
-    setOracle(
-      _oracle: string,
+    mint(
+      amount: BigNumberish,
+      account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
 
-  fromWad(wad: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+  burn(
+    amount: BigNumberish,
+    account: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
-  getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-  oracle(overrides?: CallOverrides): Promise<string>;
-
-  setOracle(
-    _oracle: string,
+  mint(
+    amount: BigNumberish,
+    account: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    fromWad(wad: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    burn(
+      amount: BigNumberish,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
-    getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    oracle(overrides?: CallOverrides): Promise<string>;
-
-    setOracle(_oracle: string, overrides?: CallOverrides): Promise<void>;
+    mint(
+      amount: BigNumberish,
+      account: string,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
   };
 
   filters: {};
 
   estimateGas: {
-    fromWad(wad: BigNumberish, overrides?: CallOverrides): Promise<BigNumber>;
+    burn(
+      amount: BigNumberish,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
 
-    getPrice(overrides?: CallOverrides): Promise<BigNumber>;
-
-    oracle(overrides?: CallOverrides): Promise<BigNumber>;
-
-    setOracle(
-      _oracle: string,
+    mint(
+      amount: BigNumberish,
+      account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    fromWad(
-      wad: BigNumberish,
-      overrides?: CallOverrides
+    burn(
+      amount: BigNumberish,
+      account: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    getPrice(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    oracle(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    setOracle(
-      _oracle: string,
+    mint(
+      amount: BigNumberish,
+      account: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -21,12 +21,12 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "uint128",
+        internalType: "uint256",
         name: "amount",
-        type: "uint128",
+        type: "uint256",
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: "enum IPoolCommitter.CommitType",
         name: "commitType",
         type: "uint8",
@@ -72,9 +72,9 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "uint128",
+        internalType: "uint256",
         name: "amount",
-        type: "uint128",
+        type: "uint256",
       },
       {
         indexed: true,
@@ -94,9 +94,9 @@ const _abi = [
         type: "uint8",
       },
       {
-        internalType: "uint112",
+        internalType: "uint256",
         name: "amount",
-        type: "uint112",
+        type: "uint256",
       },
     ],
     name: "commit",
@@ -116,9 +116,9 @@ const _abi = [
       {
         components: [
           {
-            internalType: "uint112",
+            internalType: "uint256",
             name: "amount",
-            type: "uint112",
+            type: "uint256",
           },
           {
             internalType: "enum IPoolCommitter.CommitType",
@@ -159,9 +159,9 @@ const _abi = [
       {
         components: [
           {
-            internalType: "uint112",
+            internalType: "uint256",
             name: "amount",
-            type: "uint112",
+            type: "uint256",
           },
           {
             internalType: "enum IPoolCommitter.CommitType",

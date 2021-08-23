@@ -22,24 +22,28 @@ type Web3ContextProps = {
     onboardConfig?: OnboardConfig;
 };
 
-type Web3Context = {
-    account?: string;
-    signer?: ethers.Signer;
-    ethBalance?: number;
+type OnboardContext = {
     isReady: boolean;
     isMobile: boolean;
-    network?: number;
     onboard?: OnboardApi;
-    wallet?: Wallet;
-    config?: Network;
-    provider?: providers.Web3Provider;
-
     checkIsReady(): Promise<boolean>;
     resetOnboard(): void;
     handleConnect(): void;
 };
 
+type Web3Context = {
+    account?: string;
+    signer?: ethers.Signer;
+    ethBalance?: number;
+    gasPrice?: number;
+    network?: number;
+    wallet?: Wallet;
+    config?: Network;
+    provider?: providers.Web3Provider;
+};
+
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
+const OnboardContext = React.createContext<OnboardContext | undefined>(undefined);
 
 /**
  * Handles connection through BlockNative Onboard library
@@ -56,6 +60,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [network, setNetwork] = useState<number | undefined>(undefined);
     const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
+    const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
@@ -147,6 +152,24 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         setSigner(signer);
     }, [provider, account]);
 
+    React.useMemo(() => {
+        let mounted = true;
+        const fetch = async () => {
+            const gasPrice = await (provider as ethers.providers.JsonRpcProvider).getGasPrice();
+            console.log(gasPrice, "fetched gas price")
+            if (mounted) {
+                setGasPrice(parseInt(ethers.utils.formatUnits(gasPrice, "gwei")))
+            }
+        }
+        if (provider) {
+            fetch()
+        }
+        return () => {
+            mounted = false;
+        }
+
+    }, [provider])
+
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
         setIsReady(!!isReady);
@@ -187,28 +210,34 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         }
     };
 
+    const web3Context = React.useMemo(() => ({
+        account: account,
+        signer: signer,
+        network: network,
+        ethBalance: ethBalance,
+        provider: provider,
+        wallet: wallet,
+        gasPrice,
+        config,
+    }), [provider, signer, gasPrice, account, network, ethBalance, config, wallet])
+
     const onboardState = onboard?.getState();
     return (
         <>
-            <Web3Context.Provider
-                value={{
-                    account: account,
-                    signer: signer,
-                    network: network,
-                    ethBalance: ethBalance,
-                    provider: provider,
-                    wallet: wallet,
-                    onboard: onboard,
-                    isReady: isReady,
-                    checkIsReady,
-                    resetOnboard,
-                    handleConnect,
-                    config,
-                    isMobile: !!onboardState?.mobileDevice,
-                }}
-            >
-                {children}
-            </Web3Context.Provider>
+            <OnboardContext.Provider value={{
+                onboard: onboard,
+                isReady: isReady,
+                checkIsReady,
+                isMobile: !!onboardState?.mobileDevice,
+                resetOnboard,
+                handleConnect,
+            }}>
+                <Web3Context.Provider
+                    value={web3Context}
+                >
+                    {children}
+                </Web3Context.Provider>
+            </OnboardContext.Provider>
             <ApproveConnectionModal
                 acceptedTerms={acceptedTerms}
                 show={showTerms}
@@ -222,7 +251,15 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 const useWeb3: () => Web3Context = () => {
     const context = React.useContext(Web3Context);
     if (context === undefined) {
-        throw new Error('useOnboard must be used within a OnboardProvider');
+        throw new Error('useWeb3 must be used within a OnboardProvider');
+    }
+    return context;
+};
+
+export const useWeb3Actions: () => OnboardContext = () => {
+    const context = React.useContext(OnboardContext);
+    if (context === undefined) {
+        throw new Error('useWeb3Actions must be used within a OnboardProvider');
     }
     return context;
 };

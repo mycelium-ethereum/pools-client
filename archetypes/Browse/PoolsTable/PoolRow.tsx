@@ -1,46 +1,94 @@
 import React from 'react';
 import { TableCell, TableRow } from '@components/General/Table';
-import { Pool, usePool } from '@hooks/usePool';
 import { toApproxCurrency } from '@libs/utils';
 import { Button } from '@components/General';
 import styled from 'styled-components';
 import { PoolType, SideType } from '@libs/types/General';
 import { SHORT, LONG } from '@libs/constants';
-import { PoolToken } from '@hooks/usePool/tokenDispatch';
+import { usePool } from '@context/PoolContext';
+import { calcTokenPrice } from '@libs/utils/calcs';
 
-export default (({ poolInfo, openTradeModal }) => {
-    const pool = usePool(poolInfo);
-    const { poolState, tokenState } = pool;
+export default (({ poolInfo }) => {
+    const pool = usePool(poolInfo.address);
+    const { shortToken, longToken } = pool;
 
-    const handleClick = (side: SideType, isMint: boolean) => {
+    const handleClick = (_side: SideType, isMint: boolean) => {
         if (isMint) {
         } else {
         }
-        openTradeModal(pool, side === SHORT ? pool.tokenState.shortToken : pool.tokenState.longToken);
     };
     return (
         <>
             <TableRow>
-                <TableCell>{tokenState.shortToken.tokenName}</TableCell>
-                <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
-                <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
+                {/** Token name */}
+                <TableCell>{shortToken.name}</TableCell>
+                
+                {/** Last Price */}
                 <TableCell>
-                    <MarketChange marketChange={poolState.marketChange} />
+                    {toApproxCurrency(calcTokenPrice(pool.shortBalance, pool.shortToken.supply))}
                 </TableCell>
-                <TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
+                
+                {/** 24H Change */}
+                <TableCell>
+                    {toApproxCurrency(pool.oraclePrice)}
+                </TableCell>
+
+                {/** 30d Realised APY */}
+                <TableCell>
+                    {/* <MarketChange marketChange={pool.marketChange} /> */}
+                </TableCell>
+                
+                {/** Rebalance Multiplier */}
+                <TableCell>
+                </TableCell>
+
+                {/** TVL */}
+                <TableCell>
+                    {toApproxCurrency(pool.shortBalance)}
+                </TableCell>
+
+                {/** My Holdings */}
+                <TableCell>
+                    {shortToken.balance.toFixed(3)}
+                </TableCell>
+
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(SHORT, true)}>Mint</StyledButton>
                     <StyledButton onClick={(_e) => handleClick(SHORT, false)}>Burn</StyledButton>
                 </TableCell>
             </TableRow>
             <TableRow>
-                <TableCell>{tokenState.longToken.tokenName}</TableCell>
-                <TableCell>{toApproxCurrency(poolState.lastPrice)}</TableCell>
-                <TableCell>{toApproxCurrency(poolState.oraclePrice)}</TableCell>
+                {/** Token name */}
+                <TableCell>{longToken.name}</TableCell>
+                
+                {/** Last Price */}
                 <TableCell>
-                    <MarketChange marketChange={poolState.marketChange} />
+                    {toApproxCurrency(calcTokenPrice(pool.longBalance, pool.longToken.supply))}
                 </TableCell>
-                <TableCell>{poolState.rebalanceMultiplier.toNumber().toFixed(3)}</TableCell>
+                
+                {/** 24H Change */}
+                <TableCell>
+                    {toApproxCurrency(pool.oraclePrice)}
+                </TableCell>
+
+                {/** 30d Realised APY */}
+                <TableCell>
+                    {/* <MarketChange marketChange={pool.marketChange} /> */}
+                </TableCell>
+                
+                {/** Rebalance Multiplier */}
+                <TableCell>
+                </TableCell>
+
+                {/** TVL */}
+                <TableCell>
+                    {toApproxCurrency(pool.longBalance)}
+                </TableCell>
+
+                {/** My Holdings */}
+                <TableCell>
+                    {longToken.balance.toFixed(3)}
+                </TableCell>
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(LONG, true)}>Mint</StyledButton>
                     <StyledButton onClick={(_e) => handleClick(LONG, false)}>Burn</StyledButton>
@@ -50,20 +98,19 @@ export default (({ poolInfo, openTradeModal }) => {
     );
 }) as React.FC<{
     poolInfo: PoolType;
-    openTradeModal: (pool: Pool, token: PoolToken) => void;
 }>;
 
 const StyledButton = styled(Button)`
     display: inline;
 `;
 
-const MarketChange = (styled(({ marketChange, className }) => (
-    <span className={className}>
-        {`${marketChange.toFixed(2)}%`}
-    </span>
-))`
-    color: ${props => props.marketChange > 0 ? 'var(--color-green)' : 'var(--color-red)'};
+// const MarketChange = (styled(({ marketChange, className }) => (
+//     <span className={className}>
+//         {`${marketChange.toFixed(2)}%`}
+//     </span>
+// ))`
+//     color: ${props => props.marketChange > 0 ? 'var(--color-green)' : 'var(--color-red)'};
 
-`) as React.FC<{
-    marketChange: number
-}>
+// `) as React.FC<{
+//     marketChange: number
+// }>

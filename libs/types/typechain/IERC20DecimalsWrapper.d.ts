@@ -18,40 +18,19 @@ import { Listener, Provider } from "@ethersproject/providers";
 import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
-interface IChainlinkOracleInterface extends ethers.utils.Interface {
+interface IERC20DecimalsWrapperInterface extends ethers.utils.Interface {
   functions: {
     "decimals()": FunctionFragment;
-    "description()": FunctionFragment;
-    "latestRoundData()": FunctionFragment;
-    "version()": FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "decimals", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "description",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "latestRoundData",
-    values?: undefined
-  ): string;
-  encodeFunctionData(functionFragment: "version", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "decimals", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "description",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "latestRoundData",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "version", data: BytesLike): Result;
 
   events: {};
 }
 
-export class IChainlinkOracle extends BaseContract {
+export class IERC20DecimalsWrapper extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
@@ -92,61 +71,25 @@ export class IChainlinkOracle extends BaseContract {
     toBlock?: string | number | undefined
   ): Promise<Array<TypedEvent<EventArgsArray & EventArgsObject>>>;
 
-  interface: IChainlinkOracleInterface;
+  interface: IERC20DecimalsWrapperInterface;
 
   functions: {
     decimals(overrides?: CallOverrides): Promise<[number]>;
-
-    description(overrides?: CallOverrides): Promise<[string]>;
-
-    latestRoundData(
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
-
-    version(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   decimals(overrides?: CallOverrides): Promise<number>;
 
-  description(overrides?: CallOverrides): Promise<string>;
-
-  latestRoundData(
-    overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
-
-  version(overrides?: CallOverrides): Promise<BigNumber>;
-
   callStatic: {
     decimals(overrides?: CallOverrides): Promise<number>;
-
-    description(overrides?: CallOverrides): Promise<string>;
-
-    latestRoundData(
-      overrides?: CallOverrides
-    ): Promise<[BigNumber, BigNumber, BigNumber, BigNumber, BigNumber]>;
-
-    version(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
 
   estimateGas: {
     decimals(overrides?: CallOverrides): Promise<BigNumber>;
-
-    description(overrides?: CallOverrides): Promise<BigNumber>;
-
-    latestRoundData(overrides?: CallOverrides): Promise<BigNumber>;
-
-    version(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     decimals(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    description(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    latestRoundData(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    version(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

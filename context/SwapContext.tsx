@@ -1,6 +1,8 @@
-import React, { useReducer } from 'react';
-import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType } from '@libs/types/General';
-import { MINT, LONG } from '@libs/constants'
+import React, { useContext, useReducer } from 'react';
+import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
+import { MINT, LONG, SHORT } from '@libs/constants'
+import { FactoryContext } from '.';
+import { useEffect } from 'react';
 
 interface ContextProps {
     swapState: SwapState;
@@ -10,10 +12,15 @@ interface ContextProps {
 type SwapState = {
     amount: number;
     tokenType: TokenType;
-    market: MarketType;
+    selectedPool: string | undefined; // address of selected pool
     side: SideType;
     leverage: LeverageType;
     currency: CurrencyType;
+    options: {
+        leverageOptions: LeverageType[],
+        sides: SideType[],
+        poolOptions: PoolType[]
+    }
 };
 
 export type SwapAction =
@@ -22,16 +29,22 @@ export type SwapAction =
     | { type: 'setMarket'; value: MarketType }
     | { type: 'setLeverage'; value: LeverageType }
     | { type: 'setCurrency'; value: CurrencyType }
-    | { type: 'setLeverageOptions'; value: LeverageType[] }
+    | { type: 'setSelectedPool'; value: string}
+    | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setSide'; value: SideType };
 
-export const defaultState: SwapState = {
+export const swapDefaults : SwapState = {
     amount: NaN,
     tokenType: MINT,
-    market: undefined,
+    selectedPool: undefined,
     side: LONG,
     leverage: NaN,
     currency: 'DAI',
+    options: {
+        leverageOptions: [2, 3, 4], // leverage options available to the pool
+        sides: [LONG, SHORT], // will always be long and short
+        poolOptions: [] // available pools
+    }
 };
 
 export const SwapContext = React.createContext<Partial<ContextProps>>({});
@@ -40,7 +53,8 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
  * Wrapper store for the swap page state
  */
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
-    const initialState: SwapState = defaultState;
+    const { pools } = useContext(FactoryContext);
+    const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
         switch (action.type) {
@@ -50,18 +64,34 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 return { ...state, tokenType: action.value };
             case 'setSide':
                 return { ...state, side: action.value };
-            case 'setMarket':
-                return { ...state, market: action.value };
             case 'setLeverage':
                 return { ...state, leverage: action.value };
             case 'setCurrency':
                 return { ...state, currency: action.value };
+            case 'setSelectedPool':
+                return { ...state, selectedPool: action.value };
+            case 'setPoolOptions':
+                return {
+                    ...state,
+                    options: {
+                        ...state.options,
+                        poolOptions: action.options
+                    }
+                };
             default:
                 throw new Error('Unexpected action');
         }
     };
 
     const [swapState, swapDispatch] = useReducer(reducer, initialState);
+
+    useEffect(() => {
+        if (pools?.length) {
+            swapDispatch({
+                type: 'setPoolOptions', options: pools
+            })
+        }
+    }, [pools])
 
     return (
         <SwapContext.Provider
@@ -76,3 +106,12 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 };
 
 export const noDispatch: any = () => console.error('Swap dispatch undefined');
+
+
+export const useSwapContext: () => Partial<ContextProps> = () => {
+  const context = useContext(SwapContext)
+  if (context === undefined) {
+    throw new Error(`useSwapContext must be called within SwapContext`)
+  }
+  return context
+}

@@ -1,6 +1,4 @@
 import { Table, TableBody, TableHeader, TableHeading } from '@components/General/Table';
-import { Pool } from '@hooks/usePool';
-import { PoolToken } from '@hooks/usePool/tokenDispatch';
 import { PoolType } from '@libs/types/General';
 import React from 'react';
 import PoolRow from './PoolRow';
@@ -9,7 +7,7 @@ type Heading = {
     text: string;
     width: string; // string width
 };
-export default (({ pools, openTradeModal }) => {
+export default (({ pools }) => {
     return (
         <Table>
             <TableHeader>
@@ -21,14 +19,13 @@ export default (({ pools, openTradeModal }) => {
             </TableHeader>
             <TableBody>
                 {pools.map((pool) => (
-                    <PoolRow key={`pool-row-${pool.name}`} poolInfo={pool} openTradeModal={openTradeModal} />
+                    <PoolRow key={`pool-row-${pool.name}`} poolInfo={pool} />
                 ))}
             </TableBody>
         </Table>
     );
 }) as React.FC<{
     pools: PoolType[];
-    openTradeModal: (pool: Pool, token: PoolToken) => void;
 }>;
 
 // last heading is for mint and burn
@@ -42,11 +39,11 @@ const headings: Heading[] = [
         width: 'auto',
     },
     {
-        text: 'Oracle Price',
+        text: '24h Change',
         width: 'auto',
     },
     {
-        text: '24h Change',
+        text: '30d Realised APY',
         width: 'auto',
     },
     {
@@ -54,7 +51,15 @@ const headings: Heading[] = [
         width: 'auto',
     },
     {
+        text: 'TVL',
+        width: 'auto',
+    },
+    {
+        text: 'My holdings',
+        width: 'auto',
+    },
+    {
         text: '',
-        width: '40%',
+        width: '30%',
     },
 ];

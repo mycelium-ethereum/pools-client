@@ -20,21 +20,29 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface PoolSwapLibraryInterface extends ethers.utils.Interface {
   functions: {
+    "MAX_DECIMALS()": FunctionFragment;
     "calculatePriceChange(tuple)": FunctionFragment;
     "compareDecimals(bytes16,bytes16)": FunctionFragment;
     "convertDecimalToUInt(bytes16)": FunctionFragment;
-    "convertUIntToDecimal(uint112)": FunctionFragment;
+    "convertUIntToDecimal(uint256)": FunctionFragment;
     "divInt(int256,int256)": FunctionFragment;
-    "getAmountOut(bytes16,uint112)": FunctionFragment;
-    "getLossAmount(bytes16,uint112)": FunctionFragment;
+    "fromWad(uint256,uint256)": FunctionFragment;
+    "getAmountOut(bytes16,uint256)": FunctionFragment;
+    "getBalancesAfterFees(uint256,uint256,uint256)": FunctionFragment;
+    "getLossAmount(bytes16,uint256)": FunctionFragment;
     "getLossMultiplier(bytes16,int8,bytes16)": FunctionFragment;
-    "getMintAmount(uint256,uint112,uint112,uint112)": FunctionFragment;
-    "getRatio(uint112,uint112)": FunctionFragment;
+    "getMintAmount(uint256,uint256,uint256,uint256)": FunctionFragment;
+    "getRatio(uint256,uint256)": FunctionFragment;
+    "isBeforeFrontRunningInterval(uint256,uint256,uint256)": FunctionFragment;
     "multiplyDecimalByUInt(bytes16,uint256)": FunctionFragment;
     "one()": FunctionFragment;
     "zero()": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "MAX_DECIMALS",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "calculatePriceChange",
     values: [
@@ -65,8 +73,16 @@ interface PoolSwapLibraryInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "fromWad",
+    values: [BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getAmountOut",
     values: [BytesLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getBalancesAfterFees",
+    values: [BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "getLossAmount",
@@ -85,12 +101,20 @@ interface PoolSwapLibraryInterface extends ethers.utils.Interface {
     values: [BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "isBeforeFrontRunningInterval",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
     functionFragment: "multiplyDecimalByUInt",
     values: [BytesLike, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "one", values?: undefined): string;
   encodeFunctionData(functionFragment: "zero", values?: undefined): string;
 
+  decodeFunctionResult(
+    functionFragment: "MAX_DECIMALS",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "calculatePriceChange",
     data: BytesLike
@@ -108,8 +132,13 @@ interface PoolSwapLibraryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "divInt", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "fromWad", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getAmountOut",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getBalancesAfterFees",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -125,6 +154,10 @@ interface PoolSwapLibraryInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getRatio", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "isBeforeFrontRunningInterval",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "multiplyDecimalByUInt",
     data: BytesLike
@@ -179,6 +212,8 @@ export class PoolSwapLibrary extends BaseContract {
   interface: PoolSwapLibraryInterface;
 
   functions: {
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     calculatePriceChange(
       priceChange: {
         oldPrice: BigNumberish;
@@ -189,13 +224,7 @@ export class PoolSwapLibrary extends BaseContract {
         fee: BytesLike;
       },
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        newLongBalance: BigNumber;
-        newShortBalance: BigNumber;
-        totalFeeAmount: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber, BigNumber, BigNumber]>;
 
     compareDecimals(
       x: BytesLike,
@@ -219,11 +248,24 @@ export class PoolSwapLibrary extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    fromWad(
+      _wadValue: BigNumberish,
+      _decimals: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getAmountOut(
       ratio: BytesLike,
       amountIn: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
+
+    getBalancesAfterFees(
+      reward: BigNumberish,
+      shortBalance: BigNumberish,
+      longBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber]>;
 
     getLossAmount(
       lossMultiplier: BytesLike,
@@ -252,6 +294,13 @@ export class PoolSwapLibrary extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
+    isBeforeFrontRunningInterval(
+      lastPriceTimestamp: BigNumberish,
+      updateInterval: BigNumberish,
+      frontRunningInterval: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
     multiplyDecimalByUInt(
       a: BytesLike,
       b: BigNumberish,
@@ -263,6 +312,8 @@ export class PoolSwapLibrary extends BaseContract {
     zero(overrides?: CallOverrides): Promise<[string]>;
   };
 
+  MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
+
   calculatePriceChange(
     priceChange: {
       oldPrice: BigNumberish;
@@ -273,13 +324,7 @@ export class PoolSwapLibrary extends BaseContract {
       fee: BytesLike;
     },
     overrides?: CallOverrides
-  ): Promise<
-    [BigNumber, BigNumber, BigNumber] & {
-      newLongBalance: BigNumber;
-      newShortBalance: BigNumber;
-      totalFeeAmount: BigNumber;
-    }
-  >;
+  ): Promise<[BigNumber, BigNumber, BigNumber]>;
 
   compareDecimals(
     x: BytesLike,
@@ -303,11 +348,24 @@ export class PoolSwapLibrary extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  fromWad(
+    _wadValue: BigNumberish,
+    _decimals: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getAmountOut(
     ratio: BytesLike,
     amountIn: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getBalancesAfterFees(
+    reward: BigNumberish,
+    shortBalance: BigNumberish,
+    longBalance: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber]>;
 
   getLossAmount(
     lossMultiplier: BytesLike,
@@ -336,6 +394,13 @@ export class PoolSwapLibrary extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
+  isBeforeFrontRunningInterval(
+    lastPriceTimestamp: BigNumberish,
+    updateInterval: BigNumberish,
+    frontRunningInterval: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   multiplyDecimalByUInt(
     a: BytesLike,
     b: BigNumberish,
@@ -347,6 +412,8 @@ export class PoolSwapLibrary extends BaseContract {
   zero(overrides?: CallOverrides): Promise<string>;
 
   callStatic: {
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
+
     calculatePriceChange(
       priceChange: {
         oldPrice: BigNumberish;
@@ -357,13 +424,7 @@ export class PoolSwapLibrary extends BaseContract {
         fee: BytesLike;
       },
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber, BigNumber] & {
-        newLongBalance: BigNumber;
-        newShortBalance: BigNumber;
-        totalFeeAmount: BigNumber;
-      }
-    >;
+    ): Promise<[BigNumber, BigNumber, BigNumber]>;
 
     compareDecimals(
       x: BytesLike,
@@ -387,11 +448,24 @@ export class PoolSwapLibrary extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
+    fromWad(
+      _wadValue: BigNumberish,
+      _decimals: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getAmountOut(
       ratio: BytesLike,
       amountIn: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getBalancesAfterFees(
+      reward: BigNumberish,
+      shortBalance: BigNumberish,
+      longBalance: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber]>;
 
     getLossAmount(
       lossMultiplier: BytesLike,
@@ -419,6 +493,13 @@ export class PoolSwapLibrary extends BaseContract {
       _denominator: BigNumberish,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    isBeforeFrontRunningInterval(
+      lastPriceTimestamp: BigNumberish,
+      updateInterval: BigNumberish,
+      frontRunningInterval: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
 
     multiplyDecimalByUInt(
       a: BytesLike,
@@ -434,6 +515,8 @@ export class PoolSwapLibrary extends BaseContract {
   filters: {};
 
   estimateGas: {
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<BigNumber>;
+
     calculatePriceChange(
       priceChange: {
         oldPrice: BigNumberish;
@@ -468,9 +551,22 @@ export class PoolSwapLibrary extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    fromWad(
+      _wadValue: BigNumberish,
+      _decimals: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getAmountOut(
       ratio: BytesLike,
       amountIn: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getBalancesAfterFees(
+      reward: BigNumberish,
+      shortBalance: BigNumberish,
+      longBalance: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -498,6 +594,13 @@ export class PoolSwapLibrary extends BaseContract {
     getRatio(
       _numerator: BigNumberish,
       _denominator: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isBeforeFrontRunningInterval(
+      lastPriceTimestamp: BigNumberish,
+      updateInterval: BigNumberish,
+      frontRunningInterval: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -513,6 +616,8 @@ export class PoolSwapLibrary extends BaseContract {
   };
 
   populateTransaction: {
+    MAX_DECIMALS(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     calculatePriceChange(
       priceChange: {
         oldPrice: BigNumberish;
@@ -547,9 +652,22 @@ export class PoolSwapLibrary extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    fromWad(
+      _wadValue: BigNumberish,
+      _decimals: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     getAmountOut(
       ratio: BytesLike,
       amountIn: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getBalancesAfterFees(
+      reward: BigNumberish,
+      shortBalance: BigNumberish,
+      longBalance: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -577,6 +695,13 @@ export class PoolSwapLibrary extends BaseContract {
     getRatio(
       _numerator: BigNumberish,
       _denominator: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isBeforeFrontRunningInterval(
+      lastPriceTimestamp: BigNumberish,
+      updateInterval: BigNumberish,
+      frontRunningInterval: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

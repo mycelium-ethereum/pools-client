@@ -127,12 +127,13 @@ export const timeTill: (time: number) => {
     s: number;
 } = (time) => {
     const difference = Math.abs(time - Date.now() / 1000);
+    console.log(difference)
     if (difference > 0) {
         return {
-            d: Math.floor(difference / (1000 * 60 * 60 * 24)),
-            h: Math.floor((difference / (1000 * 60 * 60)) % 24),
-            m: Math.floor((difference / 1000 / 60) % 60),
-            s: Math.floor((difference / 1000) % 60),
+            d: Math.floor(difference / (60 * 60 * 24)),
+            h: Math.floor((difference / (60 * 60)) % 24),
+            m: Math.floor((difference / 60) % 60),
+            s: Math.floor((difference) % 60),
         };
     }
     return {

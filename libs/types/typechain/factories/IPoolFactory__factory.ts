@@ -62,7 +62,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "keeperOracle",
+            name: "settlementEthOracle",
             type: "address",
           },
         ],

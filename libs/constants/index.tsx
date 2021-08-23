@@ -1,5 +1,4 @@
-import { PoolToken } from "@hooks/usePool/tokenDispatch";
-import { SideType } from "@libs/types/General";
+import { PoolToken, SideType } from "@libs/types/General";
 import BigNumber from "bignumber.js";
 
 // side types
@@ -21,8 +20,10 @@ export const LONG_MINT = 2;
 export const LONG_BURN = 3;
 
 export const EMPTY_TOKEN: PoolToken = {
-	tokenName: '',
+	name: '',
+	address: '',
 	balance: new BigNumber(0),
+	supply: new BigNumber(0),
 	approved: false,
 	side: SHORT
 }

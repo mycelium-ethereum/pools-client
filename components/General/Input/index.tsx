@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const Input = styled.input`
-    color: #fff;
+    color: #000;
     border-bottom: 1px solid var(--color-text);
+    background: #fff;
 
     &::placeholder {
         /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -27,6 +28,15 @@ export const Input = styled.input`
         box-shadow: none;
     }
 `;
+
+export const InnerInputText = styled.div`
+    color: #000;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+`
 
 interface CBCProps {
     display?: boolean;
