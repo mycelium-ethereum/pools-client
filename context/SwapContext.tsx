@@ -1,6 +1,6 @@
 import React, { useContext, useReducer } from 'react';
 import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
-import { MINT, LONG, SHORT } from '@libs/constants'
+import { MINT, LONG, SHORT } from '@libs/constants';
 import { FactoryContext } from '.';
 import { useEffect } from 'react';
 
@@ -17,10 +17,10 @@ type SwapState = {
     leverage: LeverageType;
     currency: CurrencyType;
     options: {
-        leverageOptions: LeverageType[],
-        sides: SideType[],
-        poolOptions: PoolType[]
-    }
+        leverageOptions: LeverageType[];
+        sides: SideType[];
+        poolOptions: PoolType[];
+    };
 };
 
 export type SwapAction =
@@ -29,11 +29,11 @@ export type SwapAction =
     | { type: 'setMarket'; value: MarketType }
     | { type: 'setLeverage'; value: LeverageType }
     | { type: 'setCurrency'; value: CurrencyType }
-    | { type: 'setSelectedPool'; value: string}
+    | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setSide'; value: SideType };
 
-export const swapDefaults : SwapState = {
+export const swapDefaults: SwapState = {
     amount: NaN,
     tokenType: MINT,
     selectedPool: undefined,
@@ -43,8 +43,8 @@ export const swapDefaults : SwapState = {
     options: {
         leverageOptions: [2, 3, 4], // leverage options available to the pool
         sides: [LONG, SHORT], // will always be long and short
-        poolOptions: [] // available pools
-    }
+        poolOptions: [], // available pools
+    },
 };
 
 export const SwapContext = React.createContext<Partial<ContextProps>>({});
@@ -75,8 +75,8 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                     ...state,
                     options: {
                         ...state.options,
-                        poolOptions: action.options
-                    }
+                        poolOptions: action.options,
+                    },
                 };
             default:
                 throw new Error('Unexpected action');
@@ -88,10 +88,11 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         if (pools?.length) {
             swapDispatch({
-                type: 'setPoolOptions', options: pools
-            })
+                type: 'setPoolOptions',
+                options: pools,
+            });
         }
-    }, [pools])
+    }, [pools]);
 
     return (
         <SwapContext.Provider
@@ -107,11 +108,10 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
 export const noDispatch: any = () => console.error('Swap dispatch undefined');
 
-
 export const useSwapContext: () => Partial<ContextProps> = () => {
-  const context = useContext(SwapContext)
-  if (context === undefined) {
-    throw new Error(`useSwapContext must be called within SwapContext`)
-  }
-  return context
-}
+    const context = useContext(SwapContext);
+    if (context === undefined) {
+        throw new Error(`useSwapContext must be called within SwapContext`);
+    }
+    return context;
+};

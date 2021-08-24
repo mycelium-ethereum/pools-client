@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Timer from '@components/Timer';
 // @ts-ignore
 import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
+import { PENDING_COMMIT } from '@libs/constants';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -48,6 +49,12 @@ const appearances: Record<
     },
     error: {
         icon: <CloseCircleTwoTone twoToneColor={'#F15025'} />,
+        text: '#F15025',
+        fg: '#FF5630',
+        bg: '#FFEBE6',
+    },
+    pendingCommit: {
+        icon: <></>, // pending commit notification will have no icon
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -188,6 +195,7 @@ type HProps = {
     placement: PlacementType; // this is default but its what we want anyway
     transitionDuration: number; // inherited from ToastProvider
     transitionState: TransitionState; // inherited from ToastProvider
+    type?: typeof PENDING_COMMIT;
 };
 
 const toastWidth = 'auto';
@@ -205,6 +213,7 @@ const Hashie: React.FC<HProps | any> = ({
     appearance: appearance_,
     placement,
     autoDismissTimeout,
+    type,
     // isRunning,
     children,
 }: HProps) => {
@@ -220,15 +229,30 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <IconWrap>{appearance.icon}</IconWrap>
-            <ContentWrapper>
-                <Header
-                    onDismiss={onDismiss}
-                    title={children_[0]}
-                />
-                <Content>{children_[1]}</Content>
-            </ContentWrapper>
-            <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
+            {type === PENDING_COMMIT
+                ?   
+                    <>
+                        <ContentWrapper>
+                            <Header
+                                onDismiss={onDismiss}
+                                title={children_[0]}
+                            />
+                            <Content>{children_[1]}</Content>
+                        </ContentWrapper>
+                        <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
+                    </>
+                :   <>
+                        <IconWrap>{appearance.icon}</IconWrap>
+                        <ContentWrapper>
+                            <Header
+                                onDismiss={onDismiss}
+                                title={children_[0]}
+                            />
+                            <Content>{children_[1]}</Content>
+                        </ContentWrapper>
+                        <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
+                    </>
+            }
         </ToastWrapper>
     );
 };

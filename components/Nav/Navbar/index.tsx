@@ -25,17 +25,9 @@ const NavBar: React.FC = styled(({ className }) => {
 export const NavBarContent = styled(({ className }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
-    const { 
-        account, 
-        network,
-        ethBalance
-    } = useWeb3();
-    
-    const {
-        onboard, 
-        resetOnboard, 
-        handleConnect
-    } = useWeb3Actions();
+    const { account, network, ethBalance } = useWeb3();
+
+    const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
 
     const ensName = useEnsName(account ?? '');
 

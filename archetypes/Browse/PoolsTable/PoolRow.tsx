@@ -22,35 +22,24 @@ export default (({ poolInfo }) => {
             <TableRow>
                 {/** Token name */}
                 <TableCell>{shortToken.name}</TableCell>
-                
+
                 {/** Last Price */}
-                <TableCell>
-                    {toApproxCurrency(calcTokenPrice(pool.shortBalance, pool.shortToken.supply))}
-                </TableCell>
-                
+                <TableCell>{toApproxCurrency(calcTokenPrice(pool.shortBalance, pool.shortToken.supply))}</TableCell>
+
                 {/** 24H Change */}
-                <TableCell>
-                    {toApproxCurrency(pool.oraclePrice)}
-                </TableCell>
+                <TableCell>{toApproxCurrency(pool.oraclePrice)}</TableCell>
 
                 {/** 30d Realised APY */}
-                <TableCell>
-                    {/* <MarketChange marketChange={pool.marketChange} /> */}
-                </TableCell>
-                
+                <TableCell>{/* <MarketChange marketChange={pool.marketChange} /> */}</TableCell>
+
                 {/** Rebalance Multiplier */}
-                <TableCell>
-                </TableCell>
+                <TableCell></TableCell>
 
                 {/** TVL */}
-                <TableCell>
-                    {toApproxCurrency(pool.shortBalance)}
-                </TableCell>
+                <TableCell>{toApproxCurrency(pool.shortBalance)}</TableCell>
 
                 {/** My Holdings */}
-                <TableCell>
-                    {shortToken.balance.toFixed(3)}
-                </TableCell>
+                <TableCell>{shortToken.balance.toFixed(3)}</TableCell>
 
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(SHORT, true)}>Mint</StyledButton>
@@ -60,35 +49,24 @@ export default (({ poolInfo }) => {
             <TableRow>
                 {/** Token name */}
                 <TableCell>{longToken.name}</TableCell>
-                
+
                 {/** Last Price */}
-                <TableCell>
-                    {toApproxCurrency(calcTokenPrice(pool.longBalance, pool.longToken.supply))}
-                </TableCell>
-                
+                <TableCell>{toApproxCurrency(calcTokenPrice(pool.longBalance, pool.longToken.supply))}</TableCell>
+
                 {/** 24H Change */}
-                <TableCell>
-                    {toApproxCurrency(pool.oraclePrice)}
-                </TableCell>
+                <TableCell>{toApproxCurrency(pool.oraclePrice)}</TableCell>
 
                 {/** 30d Realised APY */}
-                <TableCell>
-                    {/* <MarketChange marketChange={pool.marketChange} /> */}
-                </TableCell>
-                
+                <TableCell>{/* <MarketChange marketChange={pool.marketChange} /> */}</TableCell>
+
                 {/** Rebalance Multiplier */}
-                <TableCell>
-                </TableCell>
+                <TableCell></TableCell>
 
                 {/** TVL */}
-                <TableCell>
-                    {toApproxCurrency(pool.longBalance)}
-                </TableCell>
+                <TableCell>{toApproxCurrency(pool.longBalance)}</TableCell>
 
                 {/** My Holdings */}
-                <TableCell>
-                    {longToken.balance.toFixed(3)}
-                </TableCell>
+                <TableCell>{longToken.balance.toFixed(3)}</TableCell>
                 <TableCell>
                     <StyledButton onClick={(_e) => handleClick(LONG, true)}>Mint</StyledButton>
                     <StyledButton onClick={(_e) => handleClick(LONG, false)}>Burn</StyledButton>

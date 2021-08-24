@@ -2,7 +2,9 @@ import { timeTill } from '@libs/utils';
 import React, { useEffect, useState } from 'react';
 
 /**
+ * Counts down to targetTime. This is generally lastUpdatedTime + updateInterval
  * @param targetTime time you want to countdown till in seconds
+ *
  */
 export default (({ targetTime }) => {
     const [hours, setHours] = useState(0);
@@ -10,6 +12,9 @@ export default (({ targetTime }) => {
     const [seconds, setSeconds] = useState(0);
 
     useEffect(() => {
+        if (targetTime - Date.now() / 1000 < 0) {
+            return;
+        }
         const timeTill_ = timeTill(targetTime);
         setHours(timeTill_.h ?? 0);
         setMinutes(timeTill_.m ?? 0);
@@ -46,7 +51,11 @@ export default (({ targetTime }) => {
 
     return (
         <>
-            <span>{`${hours}h ${minutes}m ${seconds}s`}</span>
+            <span>
+                {!hours && !minutes && !seconds // unlucky no time left
+                    ? 'Waiting'
+                    : `${hours}h ${minutes}m ${seconds}s`}
+            </span>
         </>
     );
 }) as React.FC<{ targetTime: number }>;

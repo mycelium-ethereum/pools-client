@@ -12,10 +12,10 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
         function handleClickOutside(event: any) {
             const dropdown = document.getElementById('account-dropdown');
             if (dropdown) {
-                console.debug("Closing account dropdown")
+                console.debug('Closing account dropdown');
                 if (!dropdown.contains(event.target)) {
-                    setOpen(false)
-                } 
+                    setOpen(false);
+                }
             }
         }
         if (!open) {
@@ -26,7 +26,7 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [open])
+    }, [open]);
 
     return (
         <StyledAccountDropdown className={open ? 'open' : ''} id="account-dropdown">
@@ -175,7 +175,7 @@ const StyledMenuItem = styled(MenuItem)`
             padding: 1rem 0 0 0 !important;
         }
     }
-`
+`;
 const StyledAccountDropdown = styled.div`
     position: relative;
     display: flex;

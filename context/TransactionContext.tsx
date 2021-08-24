@@ -1,7 +1,10 @@
-import React, { createContext, useRef } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
+import BigNumber from 'bignumber.js';
+import PendingCommit from '@components/General/Notification/PendingCommit';
+import { PENDING_COMMIT } from '@libs/constants';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -31,17 +34,30 @@ type HandleAsyncType =
       ) => void)
     | undefined;
 
-export const TransactionContext = createContext<{
+interface TransactionContextProps {
     handleTransaction: HandleTransactionType;
     handleAsync: HandleAsyncType;
-    setPending: ((status: 'matched_partial' | 'matched') => void) | undefined;
-    closePending: ((success: boolean) => void) | undefined;
-}>({
-    handleTransaction: undefined,
-    handleAsync: undefined,
-    setPending: undefined,
-    closePending: undefined,
-});
+}
+interface CommitContextProps {
+    addCommit: (
+        id: number,
+        commitInfo: {
+            tokenName: string;
+            amount: BigNumber;
+            value: BigNumber;
+            timeTillUpkeep: number;
+            timeTillFrontRunning: number;
+            action: {
+                text: string; // button text
+                onClick: any; // on button click
+            };
+        },
+    ) => void;
+    removeCommit: (id: number) => void;
+}
+
+export const TransactionContext = createContext<Partial<TransactionContextProps>>({});
+export const CommitContext = createContext<Partial<CommitContextProps>>({});
 
 // type Status = 'INITIALIZED' | 'PROCESSING' | 'ERROR' | 'SUCCESS'
 
@@ -54,13 +70,14 @@ export const TransactionContext = createContext<{
  */
 export const TransactionStore: React.FC = ({ children }: Children) => {
     const { addToast, updateToast } = useToasts();
-    const pendingRef = useRef('');
+    // maps the commit id to a toast notification id
+    const [pendingCommits, setPendingCommits] = useState<Record<number, string>>({});
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
         const { statusMessages, onError, onSuccess, afterConfirmation } = options ?? {};
         // actually returns a string error in the library
-        let toastId = addToast(
+        const toastId = addToast(
             ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
             {
                 appearance: 'loading' as AppearanceTypes,
@@ -73,12 +90,8 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             updateToast(toastId as unknown as string, {
                 content: [
                     'Transaction submitted',
-                    statusMessages?.userConfirmed ?? `Transaction submitted ${contractTransaction.hash}`,
+                    statusMessages?.userConfirmed ?? `Waiting for confirmation ${contractTransaction.hash}`,
                 ],
-                appearance: 'success' as AppearanceTypes,
-                autoDismiss: true,
-            });
-            toastId = addToast(['Pending Transaction', statusMessages?.pending ?? 'Transaction pending'], {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
             });
@@ -102,6 +115,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 appearance: 'error',
                 autoDismiss: true,
             });
+            console.log(error, 'Error');
             onError ? onError(error) : null;
         });
     };
@@ -139,40 +153,58 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    /** Adds a pending toaster with id set to an object ref if the order is Partially or Fully Matched */
-    const setPending = (status: 'matched_partial' | 'matched') => {
-        const toastId = addToast(
+    const addCommit: (
+        id: number,
+        commitInfo: {
+            tokenName: string;
+            amount: BigNumber;
+            value: BigNumber;
+            timeTillUpkeep: number;
+            timeTillFrontRunning: number;
+            action: {
+                text: string; // button text
+                onClick: any; // on button click
+            };
+        },
+    ) => void = (id, commitInfo) => {
+        const toastID = addToast(
             [
-                status === 'matched_partial' ? 'Partially matched order' : 'Fully matched order',
-                'Order is being matched on chain',
+                commitInfo.tokenName,
+                <PendingCommit
+                    key={`pending-commit-${id}`}
+                    amount={commitInfo.amount.toFixed(2)}
+                    value={commitInfo.value}
+                    action={commitInfo.action}
+                    timeTillFrontRunning={commitInfo.timeTillFrontRunning}
+                    timeTillUpkeep={commitInfo.timeTillUpkeep}
+                />,
             ],
             {
-                appearance: 'loading' as AppearanceTypes,
+                appearance: 'pendingCommit' as unknown as AppearanceTypes,
                 autoDismiss: false,
+                type: PENDING_COMMIT,
             },
         );
-        pendingRef.current = toastId as unknown as string;
+
+        setPendingCommits({
+            ...pendingCommits,
+            [id]: toastID as unknown as string,
+        });
     };
 
-    /** Closes the pending toaster attached to the pendingRef */
-    const closePending = (success: boolean) => {
-        if (pendingRef.current) {
-            if (success) {
-                updateToast(pendingRef.current as unknown as string, {
-                    content: 'Successfully matched orders on chain',
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-                pendingRef.current = '';
-            } else {
-                updateToast(pendingRef.current as unknown as string, {
-                    content: 'Failed to match orders on chain',
-                    appearance: 'error',
-                    autoDismiss: true,
-                });
-                pendingRef.current = '';
-            }
-        }
+    const removeCommit: (id: number) => void = (id) => {
+        const toastID = pendingCommits[id];
+        updateToast(toastID as unknown as string, {
+            content: 'Cancelled commit',
+            appearance: 'pendingCommit' as unknown as AppearanceTypes,
+            autoDismiss: true,
+            type: PENDING_COMMIT,
+        });
+        const newPending = { ...pendingCommits };
+        delete newPending[id];
+        setPendingCommits({
+            ...newPending,
+        });
     };
 
     return (
@@ -180,11 +212,32 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             value={{
                 handleTransaction,
                 handleAsync,
-                setPending,
-                closePending,
             }}
         >
-            {children}
+            <CommitContext.Provider
+                value={{
+                    addCommit,
+                    removeCommit,
+                }}
+            >
+                {children}
+            </CommitContext.Provider>
         </TransactionContext.Provider>
     );
+};
+
+export const useCommitActions: () => Partial<CommitContextProps> = () => {
+    const context = useContext(CommitContext);
+    if (context === undefined) {
+        throw new Error(`useCommitActions must be called within CommitContext`);
+    }
+    return context;
+};
+
+export const useTransactionContext: () => Partial<TransactionContextProps> = () => {
+    const context = useContext(TransactionContext);
+    if (context === undefined) {
+        throw new Error(`useTransactionContext must be called within TransactionContext`);
+    }
+    return context;
 };

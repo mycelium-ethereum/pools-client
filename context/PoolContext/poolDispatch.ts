@@ -1,28 +1,32 @@
-import { Pool } from '@libs/types/General';
+import { SHORT } from '@libs/constants';
+import { Pool, SideType } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
-    pools: Record<string, Pool>,
-    selectedPool: string | undefined,
-    poolsInitialised: boolean,
+    pools: Record<string, Pool>;
+    selectedPool: string | undefined;
+    poolsInitialised: boolean;
 };
 
 export const initialPoolState: PoolState = {
     pools: {},
     selectedPool: undefined,
-    poolsInitialised: false
+    poolsInitialised: false,
+};
+
+type Balance = {
+    approved: boolean;
+    balance: BigNumber;
 };
 
 export type PoolAction =
-    | { type: 'setPool'; key: string, pool: Pool }
+    | { type: 'setPool'; key: string; pool: Pool }
     | { type: 'setSelectedPool'; pool: string }
-    | { type: 'setTokenBalances'; 
-        pool: string ,
-        shortToken: BigNumber,
-        quoteToken: BigNumber,
-        longToken: BigNumber
-    }
-	| { type: 'setPoolsInitialised'; value: boolean}
+    | { type: 'setTokenBalances'; pool: string; shortToken: Balance; quoteToken: Balance; longToken: Balance }
+    | { type: 'setPoolsInitialised'; value: boolean }
+    | { type: 'setSubscribed'; pool: string; value: boolean }
+    | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
+    | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
@@ -32,9 +36,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 ...state,
                 pools: {
                     ...state.pools,
-                    [action.key]: action.pool
-                }
-            }
+                    [action.key]: action.pool,
+                },
+            };
         case 'setTokenBalances':
             return {
                 ...state,
@@ -44,29 +48,73 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         ...state.pools[action.pool],
                         shortToken: {
                             ...state.pools[action.pool].shortToken,
-                            balance: action.shortToken
+                            ...action.shortToken,
                         },
                         longToken: {
                             ...state.pools[action.pool].longToken,
-                            balance: action.longToken
+                            ...action.longToken,
                         },
                         quoteToken: {
                             ...state.pools[action.pool].quoteToken,
-                            balance: action.quoteToken
-                        }
-                    }
-                }
+                            ...action.quoteToken,
+                        },
+                    },
+                },
+            };
+        case 'setSubscribed':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        subscribed: action.value,
+                    },
+                },
+            };
+        case 'addToPending':
+            const committer = state.pools[action.pool].committer;
+            if (action.side === SHORT) {
+                committer.pendingShort = committer.pendingShort.plus(action.amount);
+            } else {
+                committer.pendingLong = committer.pendingLong.plus(action.amount);
             }
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        committer: {
+                            ...committer,
+                        },
+                    },
+                },
+            };
         case 'setPoolsInitialised':
             return {
                 ...state,
-                poolsInitialised: action.value
-            }
+                poolsInitialised: action.value,
+            };
+        case 'setTokenApproved':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        [action.token]: {
+                            ...state.pools[action.pool][action.token],
+                            approved: action.value,
+                        },
+                    },
+                },
+            };
         case 'setSelectedPool':
             return {
                 ...state,
-                selectedPool: action.pool
-            }
+                selectedPool: action.pool,
+            };
         default:
             throw new Error('Unexpected action');
     }

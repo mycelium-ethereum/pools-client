@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Children } from 'libs/types/General';
 import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import { PoolFactory } from '@libs/types/typechain'
+import { PoolFactory } from '@libs/types/typechain';
 import { PoolType } from '@libs/types/General';
 
 interface ContextProps {

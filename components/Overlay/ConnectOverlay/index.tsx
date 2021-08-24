@@ -1,10 +1,10 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 import Overlay from '@components/Overlay';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useWeb3Actions } from '@context/Web3Context/Web3Context';
 
 const ConnectOverlay: FC = () => {
-    const { handleConnect } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
     return (
         <StyledOverlay>
             No wallet connected.

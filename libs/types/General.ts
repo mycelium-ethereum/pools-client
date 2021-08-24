@@ -1,4 +1,4 @@
-import { SHORT, LONG, MINT, BURN } from '@libs/constants';
+import { SHORT, LONG, MINT, BURN, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 
@@ -27,6 +27,8 @@ export type SideType = typeof LONG | typeof SHORT;
 
 export type TokenType = typeof MINT | typeof BURN;
 
+export type CommitType = typeof SHORT_MINT | typeof SHORT_BURN | typeof LONG_MINT | typeof LONG_BURN;
+
 // TODO change this to known markets
 export type MarketType = 'ETH/USDC' | 'ETH/TUSD' | 'BTC/USD' | undefined;
 
@@ -41,29 +43,37 @@ export type PoolType = {
 };
 
 export type Token = {
-    address: string,
-    name: string,
-    balance: BigNumber,
-    approved: boolean,
-}
+    address: string;
+    name: string;
+    balance: BigNumber;
+    approved: boolean;
+};
 
 export type PoolToken = Token & {
-    side: SideType,
-    supply: BigNumber
-}
+    side: SideType;
+    supply: BigNumber;
+};
+
+export type Committer = {
+    address: string;
+    pendingLong: BigNumber;
+    pendingShort: BigNumber;
+};
 
 export type Pool = {
-    address: string,
-    name: string,
-    updateInterval: BigNumber,
-    lastUpdate: BigNumber,
-    lastPrice: BigNumber,
-    shortBalance: BigNumber,
-    leverage: BigNumber,
-    longBalance: BigNumber,
-    oraclePrice: BigNumber,
-    quoteToken: Token,
-    shortToken: PoolToken,
-    longToken: PoolToken,
-    committer: string,
-}
+    address: string;
+    name: string;
+    updateInterval: BigNumber;
+    frontRunningInterval: BigNumber;
+    lastUpdate: BigNumber;
+    lastPrice: BigNumber;
+    shortBalance: BigNumber;
+    leverage: BigNumber;
+    longBalance: BigNumber;
+    oraclePrice: BigNumber;
+    quoteToken: Token;
+    shortToken: PoolToken;
+    longToken: PoolToken;
+    committer: Committer;
+    subscribed: boolean;
+};

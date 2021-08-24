@@ -11,9 +11,7 @@ export const Browse: React.FC = () => {
         <Container>
             <Title>Perpetual Pool Tokens</Title>
             <FilterSelects filterState={filterState ?? defaultState} filterDispatch={filterDispatch ?? noDispatch} />
-            <PoolsTable
-                pools={filterState?.filteredPools ?? []}
-            />
+            <PoolsTable pools={filterState?.filteredPools ?? []} />
         </Container>
     );
 };

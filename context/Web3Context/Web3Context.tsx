@@ -148,7 +148,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     useEffect(() => {
         const signer = provider?.getSigner();
-        console.log(signer, "Signer")
+        console.log(signer, 'Signer');
         setSigner(signer);
     }, [provider, account]);
 
@@ -156,19 +156,18 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         let mounted = true;
         const fetch = async () => {
             const gasPrice = await (provider as ethers.providers.JsonRpcProvider).getGasPrice();
-            console.log(gasPrice, "fetched gas price")
+            console.log(gasPrice, 'fetched gas price');
             if (mounted) {
-                setGasPrice(parseInt(ethers.utils.formatUnits(gasPrice, "gwei")))
+                setGasPrice(parseInt(ethers.utils.formatUnits(gasPrice, 'gwei')));
             }
-        }
+        };
         if (provider) {
-            fetch()
+            fetch();
         }
         return () => {
             mounted = false;
-        }
-
-    }, [provider])
+        };
+    }, [provider]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
@@ -210,33 +209,34 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         }
     };
 
-    const web3Context = React.useMemo(() => ({
-        account: account,
-        signer: signer,
-        network: network,
-        ethBalance: ethBalance,
-        provider: provider,
-        wallet: wallet,
-        gasPrice,
-        config,
-    }), [provider, signer, gasPrice, account, network, ethBalance, config, wallet])
+    const web3Context = React.useMemo(
+        () => ({
+            account: account,
+            signer: signer,
+            network: network,
+            ethBalance: ethBalance,
+            provider: provider,
+            wallet: wallet,
+            gasPrice,
+            config,
+        }),
+        [provider, signer, gasPrice, account, network, ethBalance, config, wallet],
+    );
 
     const onboardState = onboard?.getState();
     return (
         <>
-            <OnboardContext.Provider value={{
-                onboard: onboard,
-                isReady: isReady,
-                checkIsReady,
-                isMobile: !!onboardState?.mobileDevice,
-                resetOnboard,
-                handleConnect,
-            }}>
-                <Web3Context.Provider
-                    value={web3Context}
-                >
-                    {children}
-                </Web3Context.Provider>
+            <OnboardContext.Provider
+                value={{
+                    onboard: onboard,
+                    isReady: isReady,
+                    checkIsReady,
+                    isMobile: !!onboardState?.mobileDevice,
+                    resetOnboard,
+                    handleConnect,
+                }}
+            >
+                <Web3Context.Provider value={web3Context}>{children}</Web3Context.Provider>
             </OnboardContext.Provider>
             <ApproveConnectionModal
                 acceptedTerms={acceptedTerms}

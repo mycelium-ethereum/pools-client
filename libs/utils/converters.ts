@@ -126,14 +126,13 @@ export const timeTill: (time: number) => {
     m?: number;
     s: number;
 } = (time) => {
-    const difference = Math.abs(time - Date.now() / 1000);
-    console.log(difference)
+    const difference = time - Date.now() / 1000;
     if (difference > 0) {
         return {
             d: Math.floor(difference / (60 * 60 * 24)),
             h: Math.floor((difference / (60 * 60)) % 24),
             m: Math.floor((difference / 60) % 60),
-            s: Math.floor((difference) % 60),
+            s: Math.floor(difference % 60),
         };
     }
     return {
@@ -185,7 +184,7 @@ export const deconstructNames: (pools: PoolType[]) => {
 
     pools.map((pool) => {
         // TODO re add filtering
-        console.log("Found pool", pool)
+        console.log('Found pool', pool);
         // [leverage, _base, quote, collateral]
         // const name = poolName.replace('+', '-').split('-');
         // let leverage = name[0];

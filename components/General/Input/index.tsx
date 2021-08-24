@@ -36,7 +36,7 @@ export const InnerInputText = styled.div`
     top: 0;
     bottom: 0;
     margin: auto;
-`
+`;
 
 interface CBCProps {
     display?: boolean;
