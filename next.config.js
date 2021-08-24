@@ -19,6 +19,7 @@ module.exports = withAntdLess({
     exportPathMap: () => {
         return {
             '/': { page: '/' },
+            '/browse': { page: '/browse' },
         };
     },
     less: {

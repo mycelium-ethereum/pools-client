@@ -3,20 +3,16 @@ import { TableCell, TableRow } from '@components/General/Table';
 import { toApproxCurrency } from '@libs/utils';
 import { Button } from '@components/General';
 import styled from 'styled-components';
-import { PoolType, SideType } from '@libs/types/General';
-import { SHORT, LONG } from '@libs/constants';
+import { PoolType } from '@libs/types/General';
+import { SHORT, LONG, MINT, BURN } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { calcTokenPrice } from '@libs/utils/calcs';
+import Link from 'next/link';
 
 export default (({ poolInfo }) => {
     const pool = usePool(poolInfo.address);
     const { shortToken, longToken } = pool;
 
-    const handleClick = (_side: SideType, isMint: boolean) => {
-        if (isMint) {
-        } else {
-        }
-    };
     return (
         <>
             <TableRow>
@@ -42,8 +38,22 @@ export default (({ poolInfo }) => {
                 <TableCell>{shortToken.balance.toFixed(3)}</TableCell>
 
                 <TableCell>
-                    <StyledButton onClick={(_e) => handleClick(SHORT, true)}>Mint</StyledButton>
-                    <StyledButton onClick={(_e) => handleClick(SHORT, false)}>Burn</StyledButton>
+                    <Link
+                        href={{
+                            pathname: '/',
+                            query: { pool: poolInfo.address, type: MINT, side: SHORT },
+                        }}
+                    >
+                        <StyledButton>Mint</StyledButton>
+                    </Link>
+                    <Link
+                        href={{
+                            pathname: '/',
+                            query: { pool: poolInfo.address, type: BURN, side: SHORT },
+                        }}
+                    >
+                        <StyledButton>Burn</StyledButton>
+                    </Link>
                 </TableCell>
             </TableRow>
             <TableRow>
@@ -68,8 +78,22 @@ export default (({ poolInfo }) => {
                 {/** My Holdings */}
                 <TableCell>{longToken.balance.toFixed(3)}</TableCell>
                 <TableCell>
-                    <StyledButton onClick={(_e) => handleClick(LONG, true)}>Mint</StyledButton>
-                    <StyledButton onClick={(_e) => handleClick(LONG, false)}>Burn</StyledButton>
+                    <Link
+                        href={{
+                            pathname: '/',
+                            query: { pool: poolInfo.address, type: MINT, side: LONG },
+                        }}
+                    >
+                        <StyledButton>Mint</StyledButton>
+                    </Link>
+                    <Link
+                        href={{
+                            pathname: '/',
+                            query: { pool: poolInfo.address, type: BURN, side: LONG },
+                        }}
+                    >
+                        <StyledButton>Burn</StyledButton>
+                    </Link>
                 </TableCell>
             </TableRow>
         </>

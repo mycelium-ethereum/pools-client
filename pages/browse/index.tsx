@@ -4,10 +4,9 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 
 import SideNav from '@components/Nav/SideNav';
+import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
-import { SwapStore } from '@context/SwapContext';
 import { useRouter } from 'next/router';
-import Exchange from '@archetypes/Exchange';
 
 const EXCHANGE = 0;
 const BROWSE = 1;
@@ -16,14 +15,14 @@ export default (() => {
     const router = useRouter();
 
     const setPage = (index: number) => {
-        if (index === BROWSE) {
+        if (index === EXCHANGE) {
             router.push({
-                pathname: '/browse',
+                pathname: '/',
             });
         } // else do nothing
     };
     useEffect(() => {
-        router.prefetch('/browse');
+        router.prefetch('/');
     }, []);
 
     return (
@@ -31,10 +30,8 @@ export default (() => {
             <NavBar />
             <PoolStore>
                 <Container className="container">
-                    <SideNav className="side-nav" selected={EXCHANGE} setTab={setPage} tabs={['Exchange', 'Browse']} />
-                    <SwapStore>
-                        <Exchange />
-                    </SwapStore>
+                    <SideNav className="side-nav" selected={BROWSE} setTab={setPage} tabs={['Exchange', 'Browse']} />
+                    <Browse />
                 </Container>
             </PoolStore>
             <Footer />
