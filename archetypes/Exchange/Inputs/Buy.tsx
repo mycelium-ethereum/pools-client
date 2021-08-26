@@ -1,5 +1,6 @@
 import React from 'react';
-import { Input, Select, SelectOption, InnerInputText, HiddenExpand, Section } from '@components/General';
+import { Input, Select, SelectOption, InnerInputText } from '@components/General/Input';
+import { HiddenExpand, Section } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
 import { LeverageType, Pool, SideType } from '@libs/types/General';
@@ -155,7 +156,7 @@ const Summary: React.FC<{
             <Box>
                 <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
                 <Section label="Receive In">
-                    <TimeLeft targetTime={Date.now() / 1000 + 100} />
+                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
                 </Section>
                 <Section label="Expected Token Price">{`${toApproxCurrency(pool.oraclePrice)}`}</Section>
                 <Section label="Expected Number of Tokens">

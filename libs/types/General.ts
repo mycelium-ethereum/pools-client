@@ -77,3 +77,16 @@ export type Pool = {
     committer: Committer;
     subscribed: boolean;
 };
+
+export type PendingCommitInfo = {
+    tokenName: string;
+    amount: BigNumber;
+    value: BigNumber;
+    updateInterval: BigNumber;
+    frontRunningInterval: BigNumber;
+    lastUpdate: BigNumber;
+    action: {
+        text: string; // button text
+        onClick: any; // on button click
+    };
+};

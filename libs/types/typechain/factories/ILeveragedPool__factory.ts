@@ -15,6 +15,25 @@ const _abi = [
     inputs: [
       {
         indexed: true,
+        internalType: "int256",
+        name: "startPrice",
+        type: "int256",
+      },
+      {
+        indexed: true,
+        internalType: "int256",
+        name: "endPrice",
+        type: "int256",
+      },
+    ],
+    name: "CompletedUpkeep",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "oldAddress",
         type: "address",
@@ -96,25 +115,6 @@ const _abi = [
       },
     ],
     name: "PoolInitialized",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "startPrice",
-        type: "int256",
-      },
-      {
-        indexed: true,
-        internalType: "int256",
-        name: "endPrice",
-        type: "int256",
-      },
-    ],
-    name: "PriceChange",
     type: "event",
   },
   {

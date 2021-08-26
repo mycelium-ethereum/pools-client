@@ -1,5 +1,5 @@
 import { timeTill } from '@libs/utils';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 /**
  * Counts down to targetTime. This is generally lastUpdatedTime + updateInterval
@@ -11,7 +11,7 @@ export default (({ targetTime }) => {
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
 
-    useEffect(() => {
+    useMemo(() => {
         if (targetTime - Date.now() / 1000 < 0) {
             return;
         }
@@ -19,7 +19,7 @@ export default (({ targetTime }) => {
         setHours(timeTill_.h ?? 0);
         setMinutes(timeTill_.m ?? 0);
         setSeconds(timeTill_.s ?? 0);
-    }, []);
+    }, [targetTime]);
 
     useEffect(() => {
         const myInterval = setInterval(() => {

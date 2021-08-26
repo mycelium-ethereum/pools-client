@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from 'react';
 import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
 import { MINT, LONG, SHORT } from '@libs/constants';
-import { FactoryContext } from '.';
+import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';
 
 interface ContextProps {

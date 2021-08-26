@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Input, Select, SelectOption } from '@components/General';
+import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { ExchangeButton, InputContainer, Label } from '.';
 import { usePool } from '@context/PoolContext';

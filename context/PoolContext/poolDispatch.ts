@@ -24,6 +24,7 @@ export type PoolAction =
     | { type: 'setSelectedPool'; pool: string }
     | { type: 'setTokenBalances'; pool: string; shortToken: Balance; quoteToken: Balance; longToken: Balance }
     | { type: 'setPoolsInitialised'; value: boolean }
+    | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setSubscribed'; pool: string; value: boolean }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
     | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
@@ -69,6 +70,17 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     [action.pool]: {
                         ...state.pools[action.pool],
                         subscribed: action.value,
+                    },
+                },
+            };
+        case 'setLastUpdate':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        lastUpdate: action.value,
                     },
                 },
             };

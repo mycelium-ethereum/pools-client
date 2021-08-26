@@ -1,9 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useRef } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
-import { Children, Result } from '@libs/types/General';
+import { Children, Result, PendingCommitInfo } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
 import BigNumber from 'bignumber.js';
-import PendingCommit from '@components/General/Notification/PendingCommit';
 import { PENDING_COMMIT } from '@libs/constants';
 
 export type Options = {
@@ -38,22 +37,17 @@ interface TransactionContextProps {
     handleTransaction: HandleTransactionType;
     handleAsync: HandleAsyncType;
 }
+
+type AddCommit = (id: number, commitInfo: PendingCommitInfo) => void;
 interface CommitContextProps {
-    addCommit: (
+    addCommit: AddCommit;
+    removeCommit: (id: number) => void;
+    updatePoolInfo: (
         id: number,
-        commitInfo: {
-            tokenName: string;
-            amount: BigNumber;
-            value: BigNumber;
-            timeTillUpkeep: number;
-            timeTillFrontRunning: number;
-            action: {
-                text: string; // button text
-                onClick: any; // on button click
-            };
+        info: {
+            lastUpdate: BigNumber;
         },
     ) => void;
-    removeCommit: (id: number) => void;
 }
 
 export const TransactionContext = createContext<Partial<TransactionContextProps>>({});
@@ -71,7 +65,7 @@ export const CommitContext = createContext<Partial<CommitContextProps>>({});
 export const TransactionStore: React.FC = ({ children }: Children) => {
     const { addToast, updateToast } = useToasts();
     // maps the commit id to a toast notification id
-    const [pendingCommits, setPendingCommits] = useState<Record<number, string>>({});
+    const pendingCommits = useRef<Record<number, string>>({});
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
@@ -153,58 +147,52 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    const addCommit: (
-        id: number,
-        commitInfo: {
-            tokenName: string;
-            amount: BigNumber;
-            value: BigNumber;
-            timeTillUpkeep: number;
-            timeTillFrontRunning: number;
-            action: {
-                text: string; // button text
-                onClick: any; // on button click
-            };
-        },
-    ) => void = (id, commitInfo) => {
-        const toastID = addToast(
-            [
-                commitInfo.tokenName,
-                <PendingCommit
-                    key={`pending-commit-${id}`}
-                    amount={commitInfo.amount.toFixed(2)}
-                    value={commitInfo.value}
-                    action={commitInfo.action}
-                    timeTillFrontRunning={commitInfo.timeTillFrontRunning}
-                    timeTillUpkeep={commitInfo.timeTillUpkeep}
-                />,
-            ],
-            {
-                appearance: 'pendingCommit' as unknown as AppearanceTypes,
-                autoDismiss: false,
-                type: PENDING_COMMIT,
+    const addCommit: AddCommit = (id, commitInfo) => {
+        const toastID = addToast([commitInfo.tokenName], {
+            appearance: 'pendingCommit' as unknown as AppearanceTypes,
+            autoDismiss: false,
+            type: PENDING_COMMIT,
+            commitInfo: {
+                ...commitInfo,
             },
-        );
+        });
 
-        setPendingCommits({
-            ...pendingCommits,
+        console.log('added id', id, toastID);
+        pendingCommits.current = {
+            ...pendingCommits.current,
             [id]: toastID as unknown as string,
+        };
+    };
+
+    const updatePoolInfo: (
+        id: number,
+        info: {
+            lastUpdate: BigNumber;
+        },
+    ) => void = (id, info) => {
+        const toastID = pendingCommits.current[id];
+        if (!toastID) {
+            return;
+        }
+        console.log(`Removing commit ${id}: ${toastID}`, pendingCommits);
+        updateToast(toastID as unknown as string, {
+            poolInfo: info,
         });
     };
 
     const removeCommit: (id: number) => void = (id) => {
-        const toastID = pendingCommits[id];
+        const toastID = pendingCommits.current[id];
+        if (!toastID) {
+            return;
+        }
+        console.log(`Removing commit ${id}: ${toastID}`, pendingCommits);
         updateToast(toastID as unknown as string, {
             content: 'Cancelled commit',
             appearance: 'pendingCommit' as unknown as AppearanceTypes,
             autoDismiss: true,
             type: PENDING_COMMIT,
         });
-        const newPending = { ...pendingCommits };
-        delete newPending[id];
-        setPendingCommits({
-            ...newPending,
-        });
+        delete pendingCommits.current[id];
     };
 
     return (
@@ -218,6 +206,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 value={{
                     addCommit,
                     removeCommit,
+                    updatePoolInfo,
                 }}
             >
                 {children}

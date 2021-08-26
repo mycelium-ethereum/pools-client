@@ -5,6 +5,11 @@ import Timer from '@components/Timer';
 // @ts-ignore
 import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
 import { PENDING_COMMIT } from '@libs/constants';
+import { PendingCommitInfo } from '@libs/types/General';
+import BigNumber from 'bignumber.js';
+
+import dynamic from 'next/dynamic';
+const PendingCommit = dynamic(() => import('./PendingCommit'));
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -79,6 +84,8 @@ const appearances: Record<
     },
 };
 
+
+
 const IconWrap = styled.span`
     display: inline-flex;
     align-items: center;
@@ -126,6 +133,10 @@ const Close = styled.div`
         background-image: url('/img/general/close-white.svg');
     } 
 `;
+
+
+
+
 const Header: React.FC<{ onDismiss: (e: any) => any, title: React.ReactNode }> = ({ onDismiss, title }) => {
     return (
         <div
@@ -196,6 +207,7 @@ type HProps = {
     transitionDuration: number; // inherited from ToastProvider
     transitionState: TransitionState; // inherited from ToastProvider
     type?: typeof PENDING_COMMIT;
+    commitInfo?: PendingCommitInfo;
 };
 
 const toastWidth = 'auto';
@@ -214,6 +226,7 @@ const Hashie: React.FC<HProps | any> = ({
     placement,
     autoDismissTimeout,
     type,
+    commitInfo,
     // isRunning,
     children,
 }: HProps) => {
@@ -229,7 +242,7 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            {type === PENDING_COMMIT
+            {type === PENDING_COMMIT && commitInfo
                 ?   
                     <>
                         <ContentWrapper>
@@ -237,7 +250,11 @@ const Hashie: React.FC<HProps | any> = ({
                                 onDismiss={onDismiss}
                                 title={children_[0]}
                             />
-                            <Content>{children_[1]}</Content>
+                            <Content>
+                                <PendingCommit
+                                    {...commitInfo}
+                                />
+                            </Content>
                         </ContentWrapper>
                         <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
                     </>
@@ -263,6 +280,18 @@ Hashie.defaultProps = {
     appearance: 'info',
     placement: 'top-right',
     autoDismissTimeout: 5000,
+    commitInfo: {
+        tokenName: '',
+        amount: new BigNumber(0),
+        value: new BigNumber(0),
+        updateInterval: new BigNumber(0),
+        frontRunningInterval: new BigNumber(0),
+        lastUpdate: new BigNumber(0),
+        action: {
+            text: '', // button text
+            onClick: () => undefined // on button click
+        }
+    }
 };
 
 const ToastWrapper = styled.div`
@@ -279,10 +308,4 @@ const ToastWrapper = styled.div`
     }
 `
 
-export const NotificationsContainer = styled.div`
-    position: absolute;
-    top: 4rem;
-    right: 0;
-    margin: 0.25rem;
-`;
 export const Notification = ({ children, ...props }: any) => <Hashie {...props}>{children}</Hashie>;

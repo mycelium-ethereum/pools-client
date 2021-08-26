@@ -69,7 +69,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
     const quoteTokenName = await quoteTokenInstance.name();
 
-    console.log('Leverage still whack', leverageAmount);
+    console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),

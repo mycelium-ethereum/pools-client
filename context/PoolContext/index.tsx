@@ -1,6 +1,6 @@
 import React, { useContext, useReducer, useState } from 'react';
 import { Children, CommitType, Pool } from '@libs/types/General';
-import { FactoryContext } from '..';
+import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { reducer, initialPoolState } from './poolDispatch';
@@ -9,7 +9,14 @@ import { useMemo } from 'react';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
-import { PoolCommitter, PoolCommitter__factory, PoolToken, PoolToken__factory } from '@libs/types/typechain';
+import {
+    LeveragedPool,
+    LeveragedPool__factory,
+    PoolCommitter,
+    PoolCommitter__factory,
+    PoolToken,
+    PoolToken__factory,
+} from '@libs/types/typechain';
 import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommitActions, useTransactionContext } from '@context/TransactionContext';
@@ -50,20 +57,24 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 .then((res) => {
                     res.forEach((pool) => {
                         poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
-                        initCommitter(pool.committer.address, provider).then((committerInfo) => {
-                            poolsDispatch({
-                                type: 'addToPending',
-                                pool: pool.address,
-                                side: LONG,
-                                amount: committerInfo.pendingLong,
+                        try {
+                            initCommitter(pool.committer.address, provider).then((committerInfo) => {
+                                poolsDispatch({
+                                    type: 'addToPending',
+                                    pool: pool.address,
+                                    side: LONG,
+                                    amount: committerInfo.pendingLong,
+                                });
+                                poolsDispatch({
+                                    type: 'addToPending',
+                                    pool: pool.address,
+                                    side: SHORT,
+                                    amount: committerInfo.pendingShort,
+                                });
                             });
-                            poolsDispatch({
-                                type: 'addToPending',
-                                pool: pool.address,
-                                side: SHORT,
-                                amount: committerInfo.pendingShort,
-                            });
-                        });
+                        } catch (err) {
+                            console.error('Failed to initialise committer', err);
+                        }
                     });
                     if (res.length) {
                         // if pools exist
@@ -83,26 +94,28 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             Object.values(poolsState.pools).map((pool) => {
                 const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
                 fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
+                    console.log(
+                        ethers.utils.formatEther(balances[0][1]),
+                        ethers.utils.formatEther(balances[1][1]),
+                        ethers.utils.formatEther(balances[2][1]),
+                    );
+                    const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0][0]));
+                    const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1][0]));
+                    const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2][0]));
                     poolsDispatch({
                         type: 'setTokenBalances',
                         pool: pool.address,
                         shortToken: {
-                            balance: new BigNumber(ethers.utils.formatEther(balances[0][0])),
-                            approved: new BigNumber(ethers.utils.formatEther(balances[0][1])).gte(
-                                Number.MAX_SAFE_INTEGER,
-                            ),
+                            balance: shortTokenBalance,
+                            approved: new BigNumber(ethers.utils.formatEther(balances[0][1])).gte(shortTokenBalance),
                         },
                         longToken: {
-                            balance: new BigNumber(ethers.utils.formatEther(balances[1][0])),
-                            approved: new BigNumber(ethers.utils.formatEther(balances[1][1])).gte(
-                                Number.MAX_SAFE_INTEGER,
-                            ),
+                            balance: longTokenBalance,
+                            approved: new BigNumber(ethers.utils.formatEther(balances[1][1])).gte(longTokenBalance),
                         },
                         quoteToken: {
-                            balance: new BigNumber(ethers.utils.formatEther(balances[2][0])),
-                            approved: new BigNumber(ethers.utils.formatEther(balances[2][1])).gte(
-                                Number.MAX_SAFE_INTEGER,
-                            ),
+                            balance: quoteTokenBalance,
+                            approved: new BigNumber(ethers.utils.formatEther(balances[2][1])).gte(quoteTokenBalance),
                         },
                     });
                 });
@@ -134,22 +147,31 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     buttonText,
                 } = constructNotification(poolsState.pools[pool], type as CommitType, amount);
 
-                log.getTransaction().then((txn) => {
+                log.getTransaction().then(async (txn) => {
+                    console.log('not the same');
                     if (txn.from.toLowerCase() === account?.toLowerCase()) {
                         if (!addCommit) {
                             return;
                         }
-                        const { lastUpdate, updateInterval, frontRunningInterval } = poolsState.pools[pool];
+                        const poolInstance = new ethers.Contract(
+                            pool,
+                            LeveragedPool__factory.abi,
+                            provider,
+                        ) as LeveragedPool;
+                        const lastUpdate = await poolInstance.lastPriceTimestamp();
+                        // lastUpdate
+                        const { updateInterval, frontRunningInterval } = poolsState.pools[pool];
+                        console.log(poolsState);
+                        console.log(lastUpdate);
+                        console.log(updateInterval.toNumber(), lastUpdate.toNumber(), 'update interval');
 
                         addCommit(id.toNumber(), {
                             amount: amount_,
                             value,
                             tokenName,
-                            timeTillUpkeep: lastUpdate.plus(updateInterval).toNumber(),
-                            timeTillFrontRunning: lastUpdate
-                                .plus(updateInterval)
-                                .minus(frontRunningInterval)
-                                .toNumber(),
+                            updateInterval,
+                            lastUpdate: new BigNumber(lastUpdate.toNumber()),
+                            frontRunningInterval,
                             action: {
                                 text: buttonText,
                                 onClick: () => {
@@ -168,6 +190,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     amount,
                     type,
                 });
+                if (removeCommit) {
+                    removeCommit(id.toNumber());
+                }
             });
 
             committer.on('RemoveCommit', (id, amount, type) => {
@@ -176,9 +201,26 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     amount,
                     type,
                 });
+                if (removeCommit) {
+                    removeCommit(id.toNumber());
+                }
             });
             committer.on('FailedCommitExecution', () => {
                 console.debug('Failed to execute commit');
+            });
+
+            const poolInstance = new ethers.Contract(pool, LeveragedPool__factory.abi, provider) as LeveragedPool;
+
+            poolInstance.on('CompletedUpkeep', () => {
+                console.log('Completed upkeep');
+                poolInstance.lastPriceTimestamp().then((lastUpdate) => {
+                    console.log(lastUpdate.toNumber());
+                    poolsDispatch({
+                        type: 'setLastUpdate',
+                        pool: poolInstance.address,
+                        value: new BigNumber(lastUpdate.toString()),
+                    });
+                });
             });
 
             poolsDispatch({ type: 'setSubscribed', pool: pool, value: true });
@@ -377,6 +419,7 @@ export const usePool: (pool: string | undefined) => Pool = (pool) => {
     const [pool_, setPool] = useState<Pool>(DEFAULT_POOLSTATE);
     useMemo(() => {
         if (pool) {
+            console.log(pools, 'ppooools');
             setPool(pools?.[pool] ?? DEFAULT_POOLSTATE);
         }
     }, [pool, pools]);
@@ -384,8 +427,26 @@ export const usePool: (pool: string | undefined) => Pool = (pool) => {
     return pool_;
 };
 
+type TargetType = 'lastUpdate';
+export const useSpecific: (poolAddress: string | undefined, target: TargetType, defaultValue: any) => any = (
+    poolAddress,
+    target,
+    defaultValue,
+) => {
+    const pool = usePool(poolAddress);
+    const [value, setValue] = useState<any | undefined>(defaultValue);
+    useMemo(() => {
+        if (pool) {
+            setValue(pool[target]);
+        }
+    }, [pool?.[target]]);
+    console.log(pool, poolAddress);
+
+    return value;
+};
+
 const constructNotification = (pool: Pool, type: CommitType, amount: EthersBigNumber) => {
-    const amount_ = new BigNumber(ethers.utils.formatEther(amount));
+    const amount_ = new BigNumber(amount.toString());
     const { shortBalance, longBalance, shortToken, longToken } = pool;
     const tokenPrice =
         type === SHORT_MINT || type === SHORT_BURN
@@ -393,6 +454,7 @@ const constructNotification = (pool: Pool, type: CommitType, amount: EthersBigNu
             : calcTokenPrice(longBalance, longToken.supply);
     const tokenName = type === SHORT_MINT || type === SHORT_BURN ? shortToken.name : longToken.name;
     const buttonText = type === SHORT_BURN || type === LONG_BURN ? 'Cancel Sell' : 'Cancel Buy';
+    console.log(amount_.toNumber(), 'Amount');
     return {
         amount: amount_,
         value: amount_.times(tokenPrice),

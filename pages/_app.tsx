@@ -66,6 +66,17 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                             hideBranding: true,
                             walletSelect: {
                                 heading: 'Connect Wallet',
+                                wallets: [
+                                    { walletName: 'metamask' },
+                                    { walletName: 'coinbase' },
+                                    { walletName: 'torus' },
+                                    // { walletName: "binance" },
+
+                                    // {
+                                    //     walletName: "walletConnect",
+                                    //     infuraKey: INFURA_KEY
+                                    // },
+                                ],
                                 // agreement: {
                                 //     version: '1.0',
                                 //     termsUrl: 'https://google.com',

@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '@components/General';
+import { Select, SelectOption } from '@components/General/Input';
 import { SwapAction } from '@context/SwapContext';
 import { LONG, SHORT } from '@libs/constants';
 import { SideType } from '@libs/types/General';

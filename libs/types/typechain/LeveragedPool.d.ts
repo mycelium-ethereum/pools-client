@@ -262,19 +262,19 @@ interface LeveragedPoolInterface extends ethers.utils.Interface {
   ): Result;
 
   events: {
+    "CompletedUpkeep(int256,int256)": EventFragment;
     "FeeAddressUpdated(address,address)": EventFragment;
     "GovernanceAddressChanged(address,address)": EventFragment;
     "KeeperAddressChanged(address,address)": EventFragment;
     "PoolInitialized(address,address,address,string)": EventFragment;
-    "PriceChange(int256,int256)": EventFragment;
     "PriceChangeError(int256,int256)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "CompletedUpkeep"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "FeeAddressUpdated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "GovernanceAddressChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "KeeperAddressChanged"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PoolInitialized"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "PriceChange"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "PriceChangeError"): EventFragment;
 }
 
@@ -674,6 +674,14 @@ export class LeveragedPool extends BaseContract {
   };
 
   filters: {
+    CompletedUpkeep(
+      startPrice?: BigNumberish | null,
+      endPrice?: BigNumberish | null
+    ): TypedEventFilter<
+      [BigNumber, BigNumber],
+      { startPrice: BigNumber; endPrice: BigNumber }
+    >;
+
     FeeAddressUpdated(
       oldAddress?: string | null,
       newAddress?: string | null
@@ -711,14 +719,6 @@ export class LeveragedPool extends BaseContract {
         quoteToken: string;
         poolName: string;
       }
-    >;
-
-    PriceChange(
-      startPrice?: BigNumberish | null,
-      endPrice?: BigNumberish | null
-    ): TypedEventFilter<
-      [BigNumber, BigNumber],
-      { startPrice: BigNumber; endPrice: BigNumber }
     >;
 
     PriceChangeError(

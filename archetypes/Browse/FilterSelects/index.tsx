@@ -1,4 +1,4 @@
-import { Input, Select, SelectOption } from '@components/General';
+import { Input, Select, SelectOption } from '@components/General/Input';
 import { FilterState, FilterAction } from '@context/FilterContext';
 import { SIDE_MAP } from '@libs/constants';
 import React from 'react';

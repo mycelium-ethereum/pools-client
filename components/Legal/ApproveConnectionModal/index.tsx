@@ -1,4 +1,4 @@
-import { Checkbox, CheckboxContainer, CheckboxTitle } from '@components/General';
+import { Checkbox, CheckboxContainer, CheckboxTitle } from '@components/General/Input';
 import TracerModal from '@components/General/TracerModal';
 import Link from 'next/link';
 import styled from 'styled-components';
@@ -44,7 +44,6 @@ const ApproveConnectionModal: React.FC<ACMProps> = (props: ACMProps) => {
                     e.preventDefault();
                     props.acceptTerms(!props.acceptedTerms);
                 }}
-                id="checkbox-container"
             >
                 <Checkbox checked={props.acceptedTerms} />
                 <CheckboxTitle>I agree to Tracer’s Terms of use</CheckboxTitle>
@@ -59,7 +58,6 @@ const LegalModal = styled(TracerModal)`
     max-width: 422px;
 
     ${CheckboxContainer} {
-        display: flex;
         margin-top: 16px;
     }
 

@@ -1,4 +1,4 @@
-import { Select, SelectOption } from '@components/General';
+import { Select, SelectOption } from '@components/General/Input';
 import { SwapAction } from '@context/SwapContext';
 import React, { ChangeEventHandler } from 'react';
 import { SectionContainer, Label } from '..';

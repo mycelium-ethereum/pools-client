@@ -1,4 +1,4 @@
-import { Input, Select, SelectOption } from '@components/General';
+import { Input, Select, SelectOption } from '@components/General/Input';
 import { CurrencyType } from '@libs/types/General';
 import React, { ChangeEventHandler } from 'react';
 import styled from 'styled-components';

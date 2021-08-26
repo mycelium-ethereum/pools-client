@@ -1,4 +1,5 @@
-import { Select, Button } from '@components/General';
+import { Select } from '@components/General/Input';
+import { Button } from '@components/General';
 import styled from 'styled-components';
 
 export const Label = styled.p`

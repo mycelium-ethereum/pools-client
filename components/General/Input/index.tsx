@@ -38,12 +38,8 @@ export const InnerInputText = styled.div`
     margin: auto;
 `;
 
-interface CBCProps {
-    display?: boolean;
-}
-
-export const CheckboxContainer = styled.div<CBCProps>`
-    display: ${(props) => (props.display ? 'flex' : 'none')};
+export const CheckboxContainer = styled.div`
+    display: flex;
     cursor: pointer;
     width: fit-content;
 `;
@@ -135,4 +131,8 @@ export const Checkbox: React.FC<CBProps> = styled(({ className, checked, onClick
     }
 `;
 
-export * from './select';
+export const Select = styled.select`
+    color: #000;
+`;
+
+export const SelectOption = styled.option``;
