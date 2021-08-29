@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { Button, Section } from '@components/General';
 import { Menu, MenuItem } from './HeaderDropdown';
+import ArbitrumBridge from '@components/ArbitrumBridge';
 
 export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network }) => {
     const [open, setOpen] = useState(false);
@@ -56,6 +57,9 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                         {`${parseFloat(tokenBalance.toFixed(5))} ETH`}
                     </Section>
                     <Section label="Network">{networkName(network)}</Section>
+                </StyledMenuItem>
+                <StyledMenuItem>
+                    <ArbitrumBridge />
                 </StyledMenuItem>
                 <StyledMenuItem className="button-container">
                     <StyledButton onClick={() => onboard?.walletSelect()}>Switch Wallets</StyledButton>

@@ -128,6 +128,7 @@ const logos: Record<string, string> = {
     ETH: '/img/logos/currencies/eth.svg',
     TEST1: '/img/logos/currencies/eth.svg',
     LINK: '/img/logos/currencies/link.svg',
+    ARBITRUM: '/img/logos/currencies/arbitrum.svg',
     DEFAULT: '/img/logos/currencies/tesla.svg',
 };
 

@@ -50,17 +50,6 @@ export const modalReducer: (state: ModalState, action: ModalAction) => ModalStat
     }
 };
 
-interface TProps {
-    show: boolean;
-    title?: React.ReactNode;
-    subTitle?: string;
-    onClose: () => void;
-    children: React.ReactNode;
-    loading: boolean;
-    className?: string;
-    id?: string;
-}
-
 export const Title = styled.h3`
     text-align: left;
     font-size: var(--font-size-medium);
@@ -105,6 +94,17 @@ const Overlay = styled.div<{ show: boolean }>`
     bottom: 0;
     z-index: 2;
 `;
+
+interface TProps {
+    show: boolean;
+    title?: React.ReactNode;
+    subTitle?: string;
+    onClose: () => void;
+    children: React.ReactNode;
+    loading: boolean;
+    className?: string;
+    id?: string;
+}
 
 const TracerModal: React.FC<TProps> = styled((props: TProps) => {
     const ref = useRef(null);
