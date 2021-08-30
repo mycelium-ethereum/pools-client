@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import styled from 'styled-components';
 
 const Dark = styled.img`
@@ -51,12 +52,16 @@ const Slider = styled.span`
 `;
 
 export default styled(({ className }) => {
-    const [toggle, setToggle] = useState(false);
+    const [toggle, setToggle] = useState(true);
 
     const handleClick = (_e: any) => {
         document.getElementsByTagName('html')[0].classList.toggle('light');
         setToggle(!toggle);
     };
+
+    useEffect(() => {
+        document.getElementsByTagName('html')[0].classList.add('light');
+    }, [])
 
     return (
         <div onClick={handleClick} className={`${className} ${toggle ? 'checked' : ''}`}>

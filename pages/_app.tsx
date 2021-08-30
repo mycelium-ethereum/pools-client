@@ -58,7 +58,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <meta name="theme-color" content="#000240" />
             </Head>
             <GlobalStyles />
-            <Desktop>
+            {/* <Desktop> */}
                 <ToastProvider components={{ Toast: Notification }}>
                     <Web3Store
                         networkIds={[42, 421611]}
@@ -93,14 +93,14 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                         </FactoryStore>
                     </Web3Store>
                 </ToastProvider>
-            </Desktop>
-            <Mobile>
+            {/* </Desktop> */}
+            {/* <Mobile>
                 <h1>Mobile coming soon.</h1>
                 <p>
                     Alpha testing is available on desktop only. <br />
                     Switch to desktop to conduct testing.
                 </p>
-            </Mobile>
+            </Mobile> */}
         </div>
     );
 };

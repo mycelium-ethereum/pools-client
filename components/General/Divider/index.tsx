@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 type DProps = {
-    text: string;
+    text?: string;
     className?: string;
 };
 
@@ -23,13 +23,13 @@ const Divider = styled.div`
     &::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid var(--color-primary);
+        border-bottom: 1px solid #E6E6E6;
     }
 `;
 export default styled(({ text, className }: DProps) => (
     <div className={className}>
         <Divider>{text}</Divider>
     </div>
-))`
+))<DProps>`
     margin: 0.5rem 0;
-` as React.FC<DProps>;
+`

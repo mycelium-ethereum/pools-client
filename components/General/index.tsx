@@ -17,57 +17,18 @@ export const DateAndTime = styled(({ className, date, time }) => {
     }
 `;
 
+export const Container = styled(({ className, children }) => {
+    return (
+        <div className={`${className} container`}>
+            {children}
+        </div>
+    )
+})`
+`
+
 export const Box = styled.div`
     display: flex;
     padding: 12px;
-`;
-
-export const Button = styled.button<{ height?: 'medium' | 'small' | 'extra-small' }>`
-    width: 160px;
-    border-radius: 20px;
-    transition: 0.3s;
-    border: 1px solid var(--color-primary);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    color: var(--color-primary);
-    height: var(--height-${(props) => props.height as string}-button);
-    cursor: pointer;
-
-    &:hover {
-        background: var(--color-primary);
-        color: var(--color-text);
-    }
-
-    &:focus,
-    &:active {
-        outline: none;
-        border: 1px solid var(--color-primary);
-        border-radius: 20px;
-    }
-
-    &.primary {
-        background: var(--color-primary);
-        color: var(--color-text);
-    }
-
-    &.primary:hover {
-        background: var(--color-background);
-        color: var(--color-primary);
-    }
-
-    &:disabled,
-    &[disabled],
-    .button-disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-
-        &:hover {
-            background: none;
-            color: var(--color-text);
-        }
-    }
 `;
 
 export const Card = styled.div`
@@ -116,33 +77,6 @@ export const Section: React.FC<SProps> = styled(({ className, children, label }:
         width: 100%;
         padding-left: 0.25rem;
     }
-`;
-
-const clearLogos: Record<string, string> = {
-    ETH: '/img/logos/currencies/eth_clear.svg',
-    TEST1: '/img/logos/currencies/eth_clear.svg',
-};
-
-const logos: Record<string, string> = {
-    TSLA: '/img/logos/currencies/tesla.svg',
-    ETH: '/img/logos/currencies/eth.svg',
-    TEST1: '/img/logos/currencies/eth.svg',
-    LINK: '/img/logos/currencies/link.svg',
-    ARBITRUM: '/img/logos/currencies/arbitrum.svg',
-    DEFAULT: '/img/logos/currencies/tesla.svg',
-};
-
-interface LProps {
-    className?: string;
-    ticker: string;
-    clear?: boolean; // true then display outlined image
-}
-
-export const Logo: React.FC<LProps> = styled(({ className, ticker, clear }: LProps) => {
-    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['TSLA']} alt="logo" />;
-})`
-    width: 30px;
-    margin: 5px 0;
 `;
 
 export const Previous = styled.span`
@@ -239,6 +173,8 @@ export const ProgressBar = styled(({ percent, className }: IProps) => {
 `;
 
 export * from './Dropdown';
+export * from './Logo';
+export * from './Button';
 // export * from './Input';
 // export * from './Notification';
 // export * from './';

@@ -6,7 +6,7 @@ import { Direction, ARB_ETH, ETH_ARB } from './state';
 
 export default (({ direction, setDirection }) => {
 	return (
-		<span>
+		<Container>
 			<Side>
 				<Label>From</Label>
 				<div>
@@ -22,15 +22,16 @@ export default (({ direction, setDirection }) => {
 					<StyledLogo ticker={direction === ARB_ETH ? 'ETH' : 'ARBITRUM'}/>
 				</div>
 			</Side>
-		</span>
+		</Container>
 	)
 }) as React.FC<{
 	direction: Direction,
 	setDirection: (direction: Direction) => void
 }>
 
-const Container = styled.div`
+const Container = styled.span`
 	display: inline;
+	
 `
 
 const Side = styled.span``

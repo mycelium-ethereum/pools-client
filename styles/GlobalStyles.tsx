@@ -4,9 +4,9 @@ export default createGlobalStyle`
 
     html.light {
         --color-background: #fff;
-        --color-background-secondary: #00125D;
-        --color-text: #fff;
-        --color-primary: #3da8f5;
+        --color-background-secondary: #E5E5E5;
+        --color-text: #000;
+        --color-primary: #0000B0;
         --color-secondary: #005ea4;
         --color-accent: #002886;
 

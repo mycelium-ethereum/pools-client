@@ -8,6 +8,9 @@ import ENS, { getEnsAddress } from '@ensdomains/ensjs';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
+import { Select, SelectOption } from '@components/General/Input';
+import { Logo } from '@components/General';
+import { ARBITRUM } from '@libs/constants';
 
 const NavBar: React.FC = styled(({ className }) => {
     return (
@@ -36,10 +39,20 @@ export const NavBarContent = styled(({ className }) => {
     return (
         <nav className={`${className} container`}>
             <HeaderSiteSwitcher />
-            <ul>
+            <Links>
                 <li className={linkStyles + (route === '' ? ' selected' : '')}>
                     <Link href="/">
                         <a className="m-auto">Trade</a>
+                    </Link>
+                </li>
+                <li className={linkStyles + (route === 'strategise' ? ' selected' : '')}>
+                    <Link href="/">
+                        <a className="m-auto">Strategise</a>
+                    </Link>
+                </li>
+                <li className={linkStyles + (route === 'portfolio' ? ' selected' : '')}>
+                    <Link href="/">
+                        <a className="m-auto">Portfolio</a>
                     </Link>
                 </li>
                 {/* <li className={linkStyles + (route === 'browse' ? ' selected' : '')}>
@@ -47,7 +60,10 @@ export const NavBarContent = styled(({ className }) => {
                         <a className="m-auto">Browse</a>
                     </Link>
                 </li> */}
-            </ul>
+            </Links>
+			<NetworkDropdown preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
+				<SelectOption>Arbitrum</SelectOption>
+			</NetworkDropdown>
             <AccountDropdown
                 onboard={onboard}
                 account={account}
@@ -75,53 +91,7 @@ export const NavBarContent = styled(({ className }) => {
     background-repeat: no-repeat;
     background-size: cover;
 
-    > ul {
-        display: flex;
-        margin-left: auto;
-        margin-bottom: 0;
-        font-size: 14px;
-    }
 
-    > ul li {
-        display: flex;
-        transition: 0.2s;
-        padding: 0 20px;
-    }
-
-    > ul li.selected {
-        color: #37b1f6;
-    }
-
-    > ul li:hover {
-        color: #37b1f6;
-    }
-
-    > ul li .trade-toggle {
-        display: none;
-    }
-
-    > ul li.selected .trade-toggle {
-        display: flex;
-        margin: auto 20px;
-        border: 1px solid var(--color-primary);
-        border-radius: 20px;
-    }
-
-    > ul li.selected .trade-toggle div {
-        width: 100px;
-        text-align: center;
-        transition: 0.2s;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    > ul li.selected .trade-toggle div.selected {
-        color: var(--color-background);
-        background-color: var(--color-primary);
-        border-radius: 20px;
-    }
 `;
 
 export default NavBar;
@@ -192,6 +162,85 @@ export default NavBar;
 //     transition: ${(props) =>
 //         props.display ? 'bottom 0.3s, opacity 0.3s 0.1s' : 'bottom 0.3s 0.15s, opacity 0.3s, z-index 0.3s 0.3s'};
 // `;
+
+const NetworkDropdown = styled(Select)`
+	border: 1px solid #FFFFFF;
+	box-sizing: border-box;
+	border-radius: 7px;
+	background: transparent;
+	margin: auto 1rem;
+	width: 158px;
+	height: 42px;
+`
+
+const Links = styled.ul`
+	display: flex;
+	margin-right: auto;
+	margin-left: 1rem;
+	color: #fff;
+	margin-bottom: 0;
+	font-size: 14px;
+
+    & li {
+        display: flex;
+        transition: 0.2s;
+        padding: 0 20px;
+    }
+
+    & li.selected {
+        color: #37b1f6;
+    }
+
+    & li:hover {
+        color: #37b1f6;
+    }
+
+    & li .trade-toggle {
+        display: none;
+    }
+
+    & li.selected .trade-toggle {
+        display: flex;
+        margin: auto 20px;
+        border: 1px solid var(--color-primary);
+        border-radius: 20px;
+    }
+
+    & li.selected .trade-toggle div {
+        width: 100px;
+        text-align: center;
+        transition: 0.2s;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    & li.selected .trade-toggle div.selected {
+        color: var(--color-background);
+        background-color: var(--color-primary);
+        border-radius: 20px;
+    }
+
+
+`
+
+const NetworkPreview = styled(({ networkID, networkName, className }) => {
+	return (
+		<div className={className}>
+			<Logo ticker={networkID} />
+			{networkName}
+		</div>
+	)
+})`
+	color: #fff;
+	${Logo} {
+		display: inline;
+		width: 20px;
+		height: 22px;
+	}
+	margin: auto;
+`
 
 const useEnsName = (account: string) => {
     const [ensName, setEnsName] = useState(account);

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import { CurrencyType, MarketType, PoolType, SideType } from '@libs/types/General';
-import { FactoryContext } from './FactoryContext';
+import { FactoryContext } from '../FactoryContext';
 import { deconstructNames } from '@libs/utils';
 
 interface ContextProps {
@@ -8,21 +8,39 @@ interface ContextProps {
     filterDispatch: React.Dispatch<FilterAction>;
 }
 
+
 const sideMap: Record<string, string> = {
     Long: 'UP',
     Short: 'DOWN',
 };
 
+// types
+const PRICE_CHANGE = 0;
+const TVL = 1;
+export const SORT_MAP = {
+    [PRICE_CHANGE]: '24h Change',
+    [TVL]: 'TVL',
+}
+
+type SortType = typeof PRICE_CHANGE | typeof TVL;
+
 export type FilterState = {
     search: string;
+    
     leverage: string;
     leverageOptions: string[];
+
     settlementCurrency: CurrencyType | 'All';
     settlementOptions: (CurrencyType | 'All')[];
+
     side: SideType | 'All';
     sideOptions: (string | 'All')[];
+
     market: MarketType | 'All';
     markets: (MarketType | 'All')[];
+
+    sortBy: SortType;
+    sortOptions: SortType[];
 
     filteredPools: PoolType[];
 };
@@ -34,6 +52,7 @@ export type FilterAction =
     | { type: 'setSettlementCurrency'; value: CurrencyType | 'All' }
     | { type: 'setSettlementOptions'; value: (CurrencyType | 'All')[] }
     | { type: 'setSide'; value: SideType | 'All' }
+    | { type: 'setSortBy'; value: SortType }
     | { type: 'filterPools'; pools: PoolType[] };
 
 export const defaultState: FilterState = {
@@ -51,6 +70,10 @@ export const defaultState: FilterState = {
     // selected market
     market: 'ETH/USDC',
     markets: ['ETH/USDC'],
+
+    // table sort options
+    sortBy: PRICE_CHANGE,
+    sortOptions: [PRICE_CHANGE, TVL],
 
     filteredPools: [],
 };
@@ -169,3 +192,5 @@ const getSortRank: (word: string, expressions: string[]) => number = (word, expr
     }
     return expressions.length;
 };
+
+

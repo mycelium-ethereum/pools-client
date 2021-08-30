@@ -10,18 +10,12 @@ export const TableHeading = styled.th<{
     width: string;
 }>`
     text-align: left;
-    color: var(--color-primary);
+    color: #111928;
     height: 40px;
     font-size: var(--font-size-extra-small);
     padding-left: 10px;
-    border-right: 1px solid var(--color-accent);
-    border-bottom: 1px solid var(--color-accent);
-    border-top: 1px solid var(--color-accent);
-
-    &:first-child {
-        border-left: 1px solid var(--color-accent);
-    }
-
+    border-bottom: 1px solid #DEDEFF;
+    background: #F3F4F6;
     width: ${(props) => (props?.width ? props.width : 'auto')};
 `;
 
@@ -29,8 +23,12 @@ export const TableBody = styled.tbody``;
 
 export const TableRow = styled.tr`
     transition: 0.5s;
-    color: white;
+    color: #111928;
     opacity: 1;
+
+    &:nth-child(even) {
+        background: #F9FAFB
+    }
 
     &:hover {
         background: var(--color-accent);
@@ -40,10 +38,5 @@ export const TableRow = styled.tr`
 
 export const TableCell = styled.td`
     padding: 0 10px;
-    border-right: 1px solid var(--color-accent);
-    border-bottom: 1px solid var(--color-accent);
-
-    &:first-child {
-        border-left: 1px solid var(--color-accent);
-    }
+    height: 54px;
 `;

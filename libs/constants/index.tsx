@@ -36,3 +36,9 @@ export const EMPTY_TOKEN: PoolToken = {
     approved: false,
     side: SHORT,
 };
+
+
+// networks
+
+export const ARBITRUM = '421611'
+export const KOVAN = '42'

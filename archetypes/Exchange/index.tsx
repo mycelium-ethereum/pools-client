@@ -8,6 +8,7 @@ import Gas from './Gas';
 import Buy from './Inputs/Buy';
 import Sell from './Inputs/Sell';
 import { useRouter } from 'next/router';
+import Divider from '@components/General/Divider';
 
 export default (() => {
     const router = useRouter();
@@ -46,6 +47,8 @@ export default (() => {
                     <Gas />
                 </Header>
 
+                <Divider />
+
                 {/** Inputs */}
                 {swapState?.tokenType === BURN ? <Sell /> : <Buy />}
             </TradeModal>
@@ -59,17 +62,34 @@ const Content = styled.div`
 `;
 
 const TradeModal = styled.div`
-    border: 1px solid var(--color-accent);
     background: var(--color-background);
-    width: 500px;
-    border-radius: 10px;
-    padding: 1rem;
-    margin: auto;
+    width: 611px;
+    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
+    border-radius: 20px;
+    padding: 71px 65px;
+    margin: 5vh auto;
+
+    @media (max-width: 611px) {
+        width: 100%;
+        border-radius: 0;
+        box-shadow: 0;
+        margin: 0;
+        padding: 2rem 1rem;
+    }
+
+    ${Divider} {
+        margin: 2.5rem 0;
+    }
 `;
 
 const Header = styled.div`
     display: flex;
     ${SlideSelect} {
-        width: 100%;
+        width: 330px;
+        height: 50px;
+        border-radius: 7px;
+        border: none;
+        margin: 0 auto 0 0;
+        background: #F0F0FF;
     }
 `;

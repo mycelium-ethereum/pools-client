@@ -1,25 +1,32 @@
-import React from 'react';
+import { SearchOutlined } from '@ant-design/icons';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 export const Input = styled.input`
     color: #000;
-    border-bottom: 1px solid var(--color-text);
-    background: #fff;
+    background: #F9FAFB;
+    border: 1px solid #D1D5DB;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    border-radius: 7px;
+    height: 55px;
+
+    position: relative;
 
     &::placeholder {
         /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: #fff;
+        color: #6B7280;
         opacity: 1; /* Firefox */
     }
 
     &:-ms-input-placeholder {
         /* Internet Explorer 10-11 */
-        color: #fff;
+        color: #6B7280;
     }
 
     &::-ms-input-placeholder {
         /* Microsoft Edge */
-        color: #fff;
+        color: #6B7280;
     }
 
     &:focus {
@@ -29,12 +36,54 @@ export const Input = styled.input`
     }
 `;
 
+export const SearchBar = styled(({ className, ...props }) => {
+    return (
+        <InputWrapper className={className}>
+            <Input
+                type="text"
+                placeholder="Search"
+                {...props} 
+            />
+            <SearchOutlined />
+        </InputWrapper>
+    )
+})`
+    & ${Input} {
+        padding: 12px 14px 12px 32px;
+    }
+
+    & svg {
+        width: 14px;
+        height: 14px;
+        position: absolute;
+        left: 0.8rem;
+        top: 0;
+        bottom: 0;
+        margin: auto;
+        vertical-align: 0.125rem;
+    }
+
+`
+
+export const InputWrapper = styled.div`
+    position: relative;
+    ${Input} {
+        width: 100%;
+    }
+
+`
+
 export const InnerInputText = styled.div`
-    color: #000;
+    color: var(--color-primary);
     position: absolute;
-    right: 0;
     top: 0;
     bottom: 0;
+    align-items: center;
+    line-height: 1rem;
+    font-size: 1rem;
+    height: 50%;
+    display: flex;
+    right: 1rem;
     margin: auto;
 `;
 
@@ -131,8 +180,72 @@ export const Checkbox: React.FC<CBProps> = styled(({ className, checked, onClick
     }
 `;
 
-export const Select = styled.select`
-    color: #000;
+const SelectDropdown = styled.div`
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    right: 0;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    background: #fff;
+    border-radius: 6px;
+    transform-origin: top center;
+    transform: scale(1, 0);
+    transition: all 300ms ease-in-out;
+    z-index: 10;
+`
+
+export const Select = styled(({ preview, onChange, className, children }) => {
+    const ref = useRef<HTMLDivElement>(null);
+
+    const handleClick = (e: any) => {
+        if (e.target.value) {
+            onChange(e)
+        }
+        ref?.current?.classList?.toggle('open')
+    }
+
+    return (
+        <div ref={ref} className={className} onClick={handleClick}>
+            {preview}
+            <SelectDropdown>
+                {children}
+            </SelectDropdown>
+        </div>
+    )
+
+})<{
+    preview: React.ReactNode,
+    onChange: React.MouseEventHandler<HTMLDivElement>
+}>`
+    background: #F9FAFB;
+    border: 1px solid #D1D5DB;
+    box-sizing: border-box;
+    border-radius: 7px;
+    color: #6B7280;
+    cursor: pointer;
+    position: relative;
+    box-sizing: border-box;
+
+    &.open {
+        ${SelectDropdown} {
+            transform: none;
+            opacity: 1;
+        }
+    }
 `;
 
-export const SelectOption = styled.option``;
+export const SelectOption = styled.option`
+    backround: #fff;
+    padding: 12px 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+        background: #D1D5DB;
+    }
+
+    &:last-child {
+        border-top: 1px solid #F3F4F6;
+    }
+`;

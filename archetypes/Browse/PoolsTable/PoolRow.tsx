@@ -15,7 +15,7 @@ export default (({ poolInfo }) => {
 
     return (
         <>
-            <TableRow>
+            <StyledTableRow>
                 {/** Token name */}
                 <TableCell>{shortToken.name}</TableCell>
 
@@ -55,8 +55,8 @@ export default (({ poolInfo }) => {
                         <StyledButton>Burn</StyledButton>
                     </Link>
                 </TableCell>
-            </TableRow>
-            <TableRow>
+            </StyledTableRow>
+            <StyledTableRow>
                 {/** Token name */}
                 <TableCell>{longToken.name}</TableCell>
 
@@ -95,7 +95,7 @@ export default (({ poolInfo }) => {
                         <StyledButton>Burn</StyledButton>
                     </Link>
                 </TableCell>
-            </TableRow>
+            </StyledTableRow>
         </>
     );
 }) as React.FC<{
@@ -104,7 +104,23 @@ export default (({ poolInfo }) => {
 
 const StyledButton = styled(Button)`
     display: inline;
+    border: 1px solid #3535DC;
+    border-radius: 12px;
+    background: #DEDEFF;
+    width: 65px;
+    height: 32px;
+    font-size: 12px;
+    color: #374151;
+    &:first-child {
+        margin-right: 1rem;
+    }
 `;
+
+const StyledTableRow = styled(TableRow)`
+    ${TableCell}:last-child {
+        text-align: right;
+    }
+`
 
 // const MarketChange = (styled(({ marketChange, className }) => (
 //     <span className={className}>

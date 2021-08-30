@@ -30,7 +30,7 @@ export default (() => {
             <NavBar />
             <PoolStore>
                 <Container className="container">
-                    <SideNav className="side-nav" selected={BROWSE} setTab={setPage} tabs={['Exchange', 'Browse']} />
+                    {/* <SideNav className="side-nav" selected={BROWSE} setTab={setPage} tabs={['Exchange', 'Browse']} /> */}
                     <Browse />
                 </Container>
             </PoolStore>

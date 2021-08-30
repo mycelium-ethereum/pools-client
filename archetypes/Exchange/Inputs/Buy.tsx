@@ -1,16 +1,17 @@
 import React from 'react';
-import { Input, Select, SelectOption, InnerInputText } from '@components/General/Input';
-import { HiddenExpand, Section } from '@components/General';
+import { Input, Select, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
+import { HiddenExpand, Logo, Section } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
-import { LeverageType, Pool, SideType } from '@libs/types/General';
-import { LONG, LONG_MINT, SHORT_MINT, SIDE_MAP } from '@libs/constants';
-import { Label, InputContainer, ExchangeButton } from '.';
+import { Pool, SideType } from '@libs/types/General';
+import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
+import { Label, ExchangeButton } from '.';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import TimeLeft from '@components/TimeLeft';
 import BigNumber from 'bignumber.js';
 import { calcLeverageLossMultiplier } from '@libs/utils/calcs';
 import { toApproxCurrency } from '@libs/utils';
+import SlideSelect, { Option } from '@components/General/SlideSelect';
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -20,7 +21,7 @@ export default (() => {
         selectedPool,
         side,
         amount,
-        options: { leverageOptions, poolOptions, sides },
+        options: { leverageOptions, poolOptions },
     } = swapState;
 
     const pool = usePool(selectedPool);
@@ -28,63 +29,45 @@ export default (() => {
 
     return (
         <>
-            <InputContainer>
-                <Label>Market</Label>
-                <Select
-                    onChange={(e) => swapDispatch({ type: 'setSelectedPool', value: e.currentTarget.value as string })}
-                >
-                    {poolOptions.map((pool) => (
-                        <SelectOption
-                            key={`pool-dropdown-option-${pool.address}`}
-                            value={pool.address}
-                            selected={selectedPool === pool.address}
-                        >
-                            {pool.name}
-                        </SelectOption>
-                    ))}
-                </Select>
-            </InputContainer>
-            <InputContainer>
-                <Label>Side</Label>
-                <Select
-                    onChange={(e) =>
-                        swapDispatch({ type: 'setSide', value: parseInt(e.currentTarget.value) as SideType })
-                    }
-                    disabled={!selectedPool}
-                >
-                    {sides.map((sideOption) => (
-                        <SelectOption
-                            key={`side-dropdown-option-${sideOption}`}
-                            value={sideOption}
-                            selected={side === sideOption}
-                        >
-                            {SIDE_MAP[sideOption]}
-                        </SelectOption>
-                    ))}
-                </Select>
-            </InputContainer>
-            <InputContainer>
+            <InputRow className="markets">
+                <span>
+                    <Label>Market</Label>
+                    <MarketSelect
+                        preview={pool.name}
+                        onChange={(e: any) => swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })}
+                    >
+                        {poolOptions.map((pool) => (
+                            <SelectOption
+                                key={`pool-dropdown-option-${pool.address}`}
+                                value={pool.address}
+                                selected={selectedPool === pool.address}
+                            >
+                                {pool.name}
+                            </SelectOption>
+                        ))}
+                    </MarketSelect>
+                </span>
+                <span>
+                    <Label>Side</Label>
+                    <StyledSlideSelect className="side" value={side} onClick={(index) => swapDispatch({ type: 'setSide', value: index as SideType })}>
+                        <Option>Long</Option>
+                        <Option>Short</Option>
+                    </StyledSlideSelect>
+                </span>
+            </InputRow>
+            <InputRow>
                 <Label>Leverage</Label>
-                <Select
-                    onChange={(e) =>
-                        swapDispatch({ type: 'setLeverage', value: parseInt(e.currentTarget.value) as LeverageType })
-                    }
-                    disabled={!selectedPool}
-                >
+                <StyledSlideSelect className="leverage" value={leverage} onClick={(index) => swapDispatch({ type: 'setLeverage', value: index as SideType })}>
                     {leverageOptions.map((option) => (
-                        <SelectOption
-                            key={`leverage-dropdown-option-${option}`}
-                            value={option}
-                            selected={leverage === option}
-                        >
+                        <Option>
                             {option}x
-                        </SelectOption>
+                        </Option>
                     ))}
-                </Select>
-            </InputContainer>
-            <InputContainer>
+                </StyledSlideSelect>
+            </InputRow>
+            <InputRow>
                 <Label>Amount</Label>
-                <Wrapper>
+                <InputWrapper>
                     <Input
                         value={amount}
                         onChange={(e) => {
@@ -96,15 +79,19 @@ export default (() => {
                     />
                     <InnerInputText
                         onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })}
-                    >
-                        Max
+                    >   
+                        <Currency>
+                            <Logo ticker={"USDC"} />
+                            <span>{`USDC`}</span>
+                        </Currency>
+                        {`MAX`}
                     </InnerInputText>
-                </Wrapper>
+                </InputWrapper>
                 <div>
                     {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
                     {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
                 </div>
-            </InputContainer>
+            </InputRow>
             <Summary pool={pool} isLong={side === LONG} amount={amount} />
             {!pool.quoteToken.approved ? (
                 <ExchangeButton
@@ -128,23 +115,11 @@ export default (() => {
                     commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
                 }}
             >
-                Buy
+                Ok, let's buy
             </ExchangeButton>
         </>
     );
 }) as React.FC;
-
-const Wrapper = styled.div`
-    position: relative;
-    height: 25px;
-    width: 150px;
-    border-radius: 5px;
-    border: 1px solid #000;
-    ${Input} {
-        width: 100%;
-        border-radius: 5px;
-    }
-`;
 
 const Summary: React.FC<{
     pool: Pool;
@@ -177,3 +152,70 @@ const Box = styled.div`
 `;
 
 const Token = styled.h2``;
+
+
+const MarketSelect = styled(Select)`
+    width: 285px;
+    height: 55px;
+    padding: 13px 20px;
+
+    @media (max-width: 611px) {
+        width: 156px; 
+        height: 44px;
+    }
+`
+
+const StyledSlideSelect = styled(SlideSelect)`
+    border: 1px solid #D1D5DB;
+    background: #F9FAFB;
+
+    &.side {
+        width: 180px;
+        height: 55px;
+    }
+
+    &.leverage {
+        width: 110px;
+        height: 55px;
+        margin: 0;
+    }
+    
+    @media (max-width: 611px) {
+        &.side {
+            width: 156px; 
+            height: 44px;
+        }
+
+        &.leverage {
+            height: 44px;
+            margin: 0;
+        }
+    }
+`
+
+export const InputRow = styled.div`
+    position: relative;
+    margin: 1rem 0;
+    &.markets {
+        display: flex;
+        justify-content: space-between;
+    }
+`;
+
+const Currency = styled.div`
+    background: #FFFFFF;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    padding: 0px 8px 0px 4px;
+    margin-right: 0.5rem;
+    color: #71717A;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    ${Logo} {
+        width: 22px;
+        height: 22px;
+        display: inline;
+        margin: 0 5px 0 0;
+    }
+`

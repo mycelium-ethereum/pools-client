@@ -2,6 +2,7 @@ import { PoolKeeper__factory, PoolFactory__factory, TestOracle__factory } from '
 import { ethers } from 'ethers';
 
 export type Network = {
+    name: string;
     previewUrl: string;
     contracts: {
         [name: string]: {
@@ -23,11 +24,12 @@ export type Network = {
 export const networkConfig: Record<string, Network> = {
     '0': {
         previewUrl: '',
+        name: 'Select Network',
         contracts: {},
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
     },
     '421611': {
-        // arbitrum
+        name: 'Arbitrum',
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolKeeper: {
@@ -46,6 +48,7 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
     },
     '42': {
+        name: 'Kovan',
         previewUrl: 'https://kovan.etherscan.io',
         contracts: {
             poolKeeper: {
@@ -64,7 +67,7 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
     },
     '1337': {
-        // local
+        name: 'Local',
         previewUrl: '',
         contracts: {
             poolKeeper: {

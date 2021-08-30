@@ -135,6 +135,11 @@ const AccountDropdown = styled.button`
     padding: 0 10px;
     margin: auto 10px;
 
+    border: 1px solid #FFFFFF;
+    border-radius: 7px;
+    color: #fff;
+    background: transparent;
+
     &:focus {
         outline: none;
     }

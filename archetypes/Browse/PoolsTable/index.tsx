@@ -31,23 +31,23 @@ export default (({ pools }) => {
 // last heading is for mint and burn
 const headings: Heading[] = [
     {
-        text: 'Token',
+        text: 'TOKEN',
         width: 'auto',
     },
     {
-        text: 'Last Price',
+        text: 'LAST PRICE',
         width: 'auto',
     },
     {
-        text: '24h Change',
+        text: '24H CHANGE',
         width: 'auto',
     },
     {
-        text: '30d Realised APY',
+        text: '30D REALISED APY',
         width: 'auto',
     },
     {
-        text: 'Rebalance Multiplier',
+        text: 'REBALANCE RATE',
         width: 'auto',
     },
     {
@@ -55,7 +55,7 @@ const headings: Heading[] = [
         width: 'auto',
     },
     {
-        text: 'My holdings',
+        text: 'MY HOLDINGS',
         width: 'auto',
     },
     {
