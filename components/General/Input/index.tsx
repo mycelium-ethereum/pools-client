@@ -1,4 +1,4 @@
-import { SearchOutlined } from '@ant-design/icons';
+import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -208,6 +208,7 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     return (
         <div ref={ref} className={className} onClick={handleClick}>
             {preview}
+            <DownOutlined />
             <SelectDropdown>
                 {children}
             </SelectDropdown>
@@ -227,10 +228,24 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     position: relative;
     box-sizing: border-box;
 
+    & svg {
+        width: 1rem;
+        height: 0.8rem;
+        position: absolute;
+        top: 40%;
+        right: 1rem;
+        margin: auto;
+        transition: 0.3s;
+        transform: rotate(0);
+    }
+
     &.open {
         ${SelectDropdown} {
             transform: none;
             opacity: 1;
+        }
+        & svg {
+            transform: rotate(180deg);
         }
     }
 `;

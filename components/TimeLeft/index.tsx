@@ -1,12 +1,13 @@
-import { timeTill } from '@libs/utils';
 import React, { useEffect, useState, useMemo } from 'react';
+import { timeTill } from '@libs/utils';
+import styled from 'styled-components';
 
 /**
  * Counts down to targetTime. This is generally lastUpdatedTime + updateInterval
  * @param targetTime time you want to countdown till in seconds
  *
  */
-export default (({ targetTime }) => {
+export default styled(({ targetTime, className }) => {
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
@@ -51,11 +52,13 @@ export default (({ targetTime }) => {
 
     return (
         <>
-            <span>
+            <span className={className}>
                 {!hours && !minutes && !seconds // unlucky no time left
                     ? 'Waiting'
                     : `${hours}h ${minutes}m ${seconds}s`}
             </span>
         </>
     );
-}) as React.FC<{ targetTime: number }>;
+})<{
+    targetTime: number
+}>`` 

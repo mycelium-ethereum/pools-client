@@ -61,9 +61,11 @@ export const NavBarContent = styled(({ className }) => {
                     </Link>
                 </li> */}
             </Links>
+
 			<NetworkDropdown preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
 				<SelectOption>Arbitrum</SelectOption>
 			</NetworkDropdown>
+
             <AccountDropdown
                 onboard={onboard}
                 account={account}
@@ -171,6 +173,10 @@ const NetworkDropdown = styled(Select)`
 	margin: auto 1rem;
 	width: 158px;
 	height: 42px;
+
+	& svg {
+		fill: #fff;
+	}
 `
 
 const Links = styled.ul`
@@ -188,7 +194,8 @@ const Links = styled.ul`
     }
 
     & li.selected {
-        color: #37b1f6;
+        // color: #37b1f6;
+		text-decoration: underline;
     }
 
     & li:hover {
@@ -234,12 +241,17 @@ const NetworkPreview = styled(({ networkID, networkName, className }) => {
 	)
 })`
 	color: #fff;
+	display: flex;
+	margin: 0.25rem;
+	line-height: 2rem;
+	padding: 0 0.5rem;
 	${Logo} {
 		display: inline;
+		vertical-align: 0;
 		width: 20px;
 		height: 22px;
+		margin-right: 0.5rem;
 	}
-	margin: auto;
 `
 
 const useEnsName = (account: string) => {

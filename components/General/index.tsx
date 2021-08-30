@@ -48,14 +48,14 @@ type SProps = {
     className?: string;
     label: string;
 } & Children;
-export const Section: React.FC<SProps> = styled(({ className, children, label }: SProps) => {
+export const Section = styled(({ className, children, label }: SProps) => {
     return (
         <div className={`${className}`}>
             <div className={'label'}>{label}</div>
             <span className={'content'}>{children}</span>
         </div>
     );
-})`
+})<SProps>`
     width: 100%;
     display: flex;
     padding-bottom: 0.3rem;

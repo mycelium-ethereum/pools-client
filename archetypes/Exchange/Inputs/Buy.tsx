@@ -94,29 +94,38 @@ export default (() => {
             </InputRow>
             <Summary pool={pool} isLong={side === LONG} amount={amount} />
             {!pool.quoteToken.approved ? (
+                <>
+                    <ExchangeButton
+                        className="primary"
+                        disabled={!selectedPool}
+                        onClick={(_e) => {
+                            if (!approve) {
+                                return;
+                            }
+                            approve(selectedPool ?? '');
+                        }}
+                    >
+                        Unlock USDC
+                    </ExchangeButton>
+                    <HelperText>
+                        Unlock DAI to start investing with Tracer. 
+                        This is a one-time transaction for each pool. <a>Learn more.</a>
+                    </HelperText>
+                </>
+            ) : 
                 <ExchangeButton
-                    disabled={!selectedPool}
+                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
+                    className="primary"
                     onClick={(_e) => {
-                        if (!approve) {
+                        if (!commit) {
                             return;
                         }
-                        approve(selectedPool ?? '');
+                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
                     }}
                 >
-                    Approve
+                    Ok, let's buy
                 </ExchangeButton>
-            ) : null}
-            <ExchangeButton
-                disabled={!selectedPool || !pool.quoteToken.approved}
-                onClick={(_e) => {
-                    if (!commit) {
-                        return;
-                    }
-                    commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
-                }}
-            >
-                Ok, let's buy
-            </ExchangeButton>
+            }
         </>
     );
 }) as React.FC;
@@ -127,12 +136,10 @@ const Summary: React.FC<{
     amount: number;
 }> = ({ pool, isLong, amount }) => {
     return (
-        <HiddenExpand defaultHeight={0} open={!!pool.name}>
+        <StyledHiddenExpand defaultHeight={0} open={!!pool.name}>
             <Box>
                 <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
-                <Section label="Receive In">
-                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
-                </Section>
+
                 <Section label="Expected Token Price">{`${toApproxCurrency(pool.oraclePrice)}`}</Section>
                 <Section label="Expected Number of Tokens">
                     {`${new BigNumber(amount).div(pool.oraclePrice).toFixed(3)}`}
@@ -140,16 +147,62 @@ const Summary: React.FC<{
                 <Section label="Expected Rebalance Multiplier">
                     {`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}
                 </Section>
+                <Countdown>
+                    {'Receive In'}
+                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
+                </Countdown>
             </Box>
-        </HiddenExpand>
+        </StyledHiddenExpand>
     );
 };
 
-const Box = styled.div`
-    border: 2px solid var(--color-accent);
-    border-radius: 20px;
-    padding: 0.5rem;
+const StyledHiddenExpand = styled(HiddenExpand)`
+    overflow: visible;
 `;
+
+const Box = styled.div`
+    border: 1px solid #E5E7EB;
+    box-sizing: border-box;
+    border-radius: 14px;
+    position: relative;
+    padding: 1rem 1rem 0.5rem 1rem;
+
+    ${Section}, ${Section} .label {
+        color: #374151;
+    }
+`;
+
+
+const Countdown = styled.div`
+    position: absolute;
+    background: #fff;
+    left: 1.5rem;
+    top: -1rem;
+    height: 2rem;
+    font-size: 1rem;
+    z-index: 2;
+    padding 0 5px;
+
+    ${TimeLeft} {
+        display: inline;
+        background: #FAFAFA;
+        border: 1px solid #E4E4E7;
+        margin-left: 5px;
+        padding: 0 5px;
+        border-radius: 10px;
+        color: #6B7280;
+    }
+`;
+
+const HelperText = styled.p`
+    color: #6B7280;
+    font-size: 14px;
+
+    a {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+`
 
 const Token = styled.h2``;
 

@@ -79,8 +79,8 @@ export default styled(({ className }) => {
 
     &.checked {
         ${Slider} {
-            background-color: #2196f3;
-            box-shadow: 0 0 1px #2196f3;
+            background-color: var(--color-primary);
+            box-shadow: 0 0 1px var(--color-primary);
         }
         ${Slider}:before {
             -webkit-transform: translateX(16px);

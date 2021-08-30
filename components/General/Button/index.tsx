@@ -27,7 +27,7 @@ export const Button = styled.button<{ height?: 'medium' | 'small' | 'extra-small
 
     &.primary {
         background: var(--color-primary);
-        color: var(--color-text);
+        color: #fff;
     }
 
     &.primary:hover {

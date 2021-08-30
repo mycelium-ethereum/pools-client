@@ -51,13 +51,6 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     &.open .body {
         opacity: 1;
     }
-    div[class*='General__Section'] {
-        padding: 6px 16px;
-        border-bottom: 1px solid var(--table-darkborder);
-    }
-    div[class*='General__Section']:last-of-type {
-        border-bottom: 0;
-    }
 `;
 
 /**
