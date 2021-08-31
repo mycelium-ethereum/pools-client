@@ -15,7 +15,7 @@ export default (() => {
     } = swapState;
 
     const pool = usePool(selectedPool);
-    console.log('Selected pool', pool);
+    console.log('Selected address', pool?.address);
 
     return (
         <>
@@ -23,13 +23,13 @@ export default (() => {
                 <Label>Amount</Label>
                 <Input
                     value={amount}
-                    onChange={(e) => {
+                    onChange={(e: any) => {
                         swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
                     }}
                     type={'number'}
                     min={0}
                 />
-                <Select onChange={(e) => swapDispatch({ type: 'setSelectedPool', value: e.currentTarget.value })}>
+                <Select onChange={(e: any) => swapDispatch({ type: 'setSelectedPool', value: e.currentTarget.value })}>
                     {poolOptions.map((pool) => (
                         <SelectOption
                             key={`token-dropdown-option-${pool.address}`}

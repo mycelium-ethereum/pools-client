@@ -1,5 +1,5 @@
 import Web3 from 'web3';
-import { ERC20 as ERC20Token } from '@tracer-protocol/contracts/types/ERC20';
+import { ERC20 as ERC20Token } from '@tracer-protocol/perpetual-pools-contracts/types/ERC20';
 
 /**
  * Checks the allowance of a contract to spend a given from address's funds
@@ -19,8 +19,8 @@ export const checkAllowance: (
         return -1;
     }
     try {
-        const currentAllowed = await token.methods.allowance(from, contractAddress).call();
-        if (parseInt(Web3.utils.fromWei(currentAllowed)) < ARBITRARY_AMOUNT) {
+        const currentAllowed = await token.allowance(from, contractAddress);
+        if (parseInt(Web3.utils.fromWei(currentAllowed.toString())) < ARBITRARY_AMOUNT) {
             return 0;
         } // else
         return 1;

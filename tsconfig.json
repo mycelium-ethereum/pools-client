@@ -1,35 +1,63 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "isolatedModules": true,
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strictNullChecks": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "importHelpers": true,
-        "removeComments": true,
-        "jsx": "preserve",
-        "baseUrl": ".",
-        "paths": {
-            "@components/*": ["components/*"],
-            "@types/*": ["types/*"],
-            "@context/*": ["context/*"],
-            "@hooks/*": ["hooks/*"],
-            "@libs/*": ["libs/*"],
-            "@archetypes/*": ["archetypes/*"],
-            "@public/*": ["public/*"]
-        }
+  "compilerOptions": {
+    "target": "es5",
+    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    // "noEmitOnError": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "removeComments": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@components/*": [
+        "components/*"
+      ],
+      "@types/*": [
+        "types/*"
+      ],
+      "@context/*": [
+        "context/*"
+      ],
+      "@hooks/*": [
+        "hooks/*"
+      ],
+      "@libs/*": [
+        "libs/*"
+      ],
+      "@archetypes/*": [
+        "archetypes/*"
+      ],
+      "@public/*": [
+        "public/*"
+      ]
     },
-    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
-    "exclude": ["node_modules", "components/**/*.stories.tsx", "public/static/*", "libs/types/typechain/*"]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    "next.config.js",
+    "node_modules/@tracer-protocol/perpetual-pools-contracts"
+  ],
+  "exclude": [
+    "components/**/*.stories.tsx",
+    "public/static/*"
+  ]
 }

@@ -78,7 +78,7 @@ export default (() => {
                 <InputWrapper>
                     <Input
                         value={amount}
-                        onChange={(e) => {
+                        onChange={(e: any) => {
                             swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
                         }}
                         disabled={!selectedPool}

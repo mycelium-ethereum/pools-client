@@ -1,4 +1,5 @@
-import { PoolKeeper__factory, PoolFactory__factory, TestOracle__factory } from '@libs/types/typechain';
+import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+
 import { ethers } from 'ethers';
 
 export type Network = {
@@ -32,17 +33,9 @@ export const networkConfig: Record<string, Network> = {
         name: 'Arbitrum',
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
-            poolKeeper: {
-                address: '0xe3aB9987a8A8331b85A651fEb85855c6548CD0Db',
-                abi: PoolKeeper__factory.abi,
-            },
             poolFactory: {
                 address: '0xcD95A675eD9df9b7f280E6C0BE5199DA574A7B3b',
                 abi: PoolFactory__factory.abi,
-            },
-            oracleWrapper: {
-                address: '0xF8f2A07D299c1683E8F06611733908D135700d14',
-                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
@@ -51,17 +44,9 @@ export const networkConfig: Record<string, Network> = {
         name: 'Kovan',
         previewUrl: 'https://kovan.etherscan.io',
         contracts: {
-            poolKeeper: {
-                address: '0xe3aB9987a8A8331b85A651fEb85855c6548CD0Db',
-                abi: PoolKeeper__factory.abi,
-            },
             poolFactory: {
-                address: '0xcD95A675eD9df9b7f280E6C0BE5199DA574A7B3b',
+                address: '0x2e2A925EF653aa7e246F0587dFE86805E0e65B12',
                 abi: PoolFactory__factory.abi,
-            },
-            oracleWrapper: {
-                address: '0xF8f2A07D299c1683E8F06611733908D135700d14',
-                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
@@ -70,17 +55,9 @@ export const networkConfig: Record<string, Network> = {
         name: 'Local',
         previewUrl: '',
         contracts: {
-            poolKeeper: {
-                address: process.env.NEXT_PUBLIC_POOL_KEEPER_ADDRESS,
-                abi: PoolKeeper__factory.abi,
-            },
             poolFactory: {
                 address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
                 abi: PoolFactory__factory.abi,
-            },
-            oracleWrapper: {
-                address: process.env.NEXT_PUBLIC_POOL_ORACLE_ADDRESS,
-                abi: TestOracle__factory.abi,
             },
         },
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',

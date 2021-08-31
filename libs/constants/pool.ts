@@ -12,6 +12,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     leverage: new BigNumber(0),
     longBalance: new BigNumber(0),
     oraclePrice: new BigNumber(0),
+    frontRunningInterval: new BigNumber(0),
     quoteToken: {
         address: '',
         name: '',

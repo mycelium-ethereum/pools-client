@@ -2,16 +2,17 @@ import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs
 import { Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
+    TestToken__factory,
+    PoolCommitter__factory,
+    ERC20__factory,
+    ERC20,
+    PoolCommitter,
     LeveragedPool,
     PoolToken,
-    TestToken__factory,
-    ERC20,
-    PoolCommitter__factory,
-    PoolCommitter,
-} from '@libs/types/typechain';
+    TestToken 
+} from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
-import { ERC20__factory, TestToken } from '@libs/types/typechain';
 
 /**
  *

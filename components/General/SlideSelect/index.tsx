@@ -48,7 +48,7 @@ const SlideSelect = styled(({ onClick, value, children, className }: TSSProps) =
             {React.Children.toArray(children).map((child, index) => {
                 return (
                     <SlideOption
-                        onClick={(e) => onClick(index, e)}
+                        onClick={(e: any) => onClick(index, e)}
                         key={`slide-option-${index}`}
                         className={`${index === value ? 'selected' : ''}`}
                     >

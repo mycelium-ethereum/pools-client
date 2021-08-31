@@ -41,7 +41,7 @@ const SideNav: React.FC<SNBProps> = (props: SNBProps) => {
                 <SideNavItem
                     className={index === selected ? 'selected' : ''}
                     key={`sub-nav-${index}`}
-                    onClick={(e) => {
+                    onClick={(e: any) => {
                         e.preventDefault();
                         setTab(index);
                     }}

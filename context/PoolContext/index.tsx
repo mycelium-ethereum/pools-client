@@ -16,7 +16,7 @@ import {
     PoolCommitter__factory,
     PoolToken,
     PoolToken__factory,
-} from '@libs/types/typechain';
+} from '@tracer-protocol/perpetual-pools-contracts/types';
 import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommitActions, useTransactionContext } from '@context/TransactionContext';
@@ -133,6 +133,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 provider,
             ) as PoolCommitter;
 
+            // @ts-ignore
             committer.on(committer.filters.CreateCommit(), (id, amount, type, log) => {
                 console.debug('Commit created', {
                     id,
@@ -147,7 +148,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     buttonText,
                 } = constructNotification(poolsState.pools[pool], type as CommitType, amount);
 
-                log.getTransaction().then(async (txn) => {
+                log.getTransaction().then(async (txn: ethers.providers.TransactionResponse) => {
                     console.log('not the same');
                     if (txn.from.toLowerCase() === account?.toLowerCase()) {
                         if (!addCommit) {
