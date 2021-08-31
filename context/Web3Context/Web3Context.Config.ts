@@ -45,7 +45,7 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: 'https://kovan.etherscan.io',
         contracts: {
             poolFactory: {
-                address: '0x2e2A925EF653aa7e246F0587dFE86805E0e65B12',
+                address: '0x24d73Dd9Aa5ca7C7eA59e5aB3B5f5BA9784733F5',
                 abi: PoolFactory__factory.abi,
             },
         },
