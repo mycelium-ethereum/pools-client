@@ -23,7 +23,7 @@ const Divider = styled.div`
     &::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid #E6E6E6;
+        border-bottom: 1px solid #e6e6e6;
     }
 `;
 export default styled(({ text, className }: DProps) => (
@@ -32,4 +32,4 @@ export default styled(({ text, className }: DProps) => (
     </div>
 ))<DProps>`
     margin: 0.5rem 0;
-`
+`;

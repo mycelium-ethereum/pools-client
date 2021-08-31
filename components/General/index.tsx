@@ -18,13 +18,8 @@ export const DateAndTime = styled(({ className, date, time }) => {
 `;
 
 export const Container = styled(({ className, children }) => {
-    return (
-        <div className={`${className} container`}>
-            {children}
-        </div>
-    )
-})`
-`
+    return <div className={`${className} container`}>{children}</div>;
+})``;
 
 export const Box = styled.div`
     display: flex;

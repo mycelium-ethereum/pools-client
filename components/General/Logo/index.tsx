@@ -1,5 +1,6 @@
-import { ARBITRUM, KOVAN } from "@libs/constants";
-import styled from "styled-components";
+import React from 'react';
+import { ARBITRUM, KOVAN } from '@libs/constants';
+import styled from 'styled-components';
 
 const clearLogos: Record<string, string> = {
     ETH: '/img/logos/currencies/eth_clear.svg',

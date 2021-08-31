@@ -2,6 +2,9 @@ import React from 'react';
 import MobileSocialLogos from './MobileSocialLogos';
 import styled from 'styled-components';
 import { Menu, MenuItem } from './HeaderDropdown';
+// @ts-ignore
+import ArrowDown from '@public/img/general/caret_down.svg';
+import Icon from '@ant-design/icons';
 
 export default (() => (
     <StyledHeaderSiteSwitcher>
@@ -9,7 +12,7 @@ export default (() => (
             <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_perps.svg" />
         </MainLink>
 
-        <StyledTriangleDown src="/img/general/triangle_down_cropped.svg" />
+        <Arrow component={ArrowDown} />
 
         <Menu>
             <StyledMenuItem>
@@ -43,10 +46,12 @@ const MainLink = styled.a`
     z-index: 11;
 `;
 
-const StyledTriangleDown = styled.img`
-    height: 1rem;
+const Arrow = styled(Icon)`
+    height: 8px;
+    width: 15px;
     transition: all 400ms ease-in-out;
     z-index: 11;
+    vertical-align: 0;
 `;
 
 const StyledTracerLogo = styled.img`
@@ -72,7 +77,7 @@ const StyledHeaderSiteSwitcher = styled.div`
 
     &:hover {
         cursor: pointer;
-        ${StyledTriangleDown} {
+        ${Arrow} {
             transform: rotate(180deg);
         }
         ${Menu} {

@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Button = styled.button<{ height?: 'medium' | 'small' | 'extra-small' }>`
     width: 160px;

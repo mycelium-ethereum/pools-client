@@ -90,6 +90,6 @@ const Header = styled.div`
         border-radius: 7px;
         border: none;
         margin: 0 auto 0 0;
-        background: #F0F0FF;
+        background: #f0f0ff;
     }
 `;

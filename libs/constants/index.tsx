@@ -37,8 +37,7 @@ export const EMPTY_TOKEN: PoolToken = {
     side: SHORT,
 };
 
-
 // networks
 
-export const ARBITRUM = '421611'
-export const KOVAN = '42'
+export const ARBITRUM = '421611';
+export const KOVAN = '42';

@@ -6,7 +6,7 @@ import { Button, Section } from '@components/General';
 import { Menu, MenuItem } from './HeaderDropdown';
 import ArbitrumBridge from '@components/ArbitrumBridge';
 
-export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network }) => {
+export default styled(({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
     }, [open]);
 
     return (
-        <StyledAccountDropdown className={open ? 'open' : ''} id="account-dropdown">
+        <div className={`${className} ${open ? 'open' : ''}`} id="account-dropdown">
             <MainButton>
                 <AccountDropdown
                     className={!open ? 'show-hover' : ''}
@@ -73,9 +73,9 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                     </StyledButton>
                 </StyledMenuItem>
             </StyledMenu>
-        </StyledAccountDropdown>
+        </div>
     );
-}) as React.FC<{
+})<{
     account: string | undefined;
     ensName: string;
     onboard: OnboardApi | undefined;
@@ -83,7 +83,11 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
     handleConnect: () => void;
     network: number;
     tokenBalance: number;
-}>;
+}>`
+    position: relative;
+    display: flex;
+    align-items: center;
+`;
 
 function networkName(id: any) {
     switch (Number(id)) {
@@ -135,7 +139,7 @@ const AccountDropdown = styled.button`
     padding: 0 10px;
     margin: auto 10px;
 
-    border: 1px solid #FFFFFF;
+    border: 1px solid #ffffff;
     border-radius: 7px;
     color: #fff;
     background: transparent;
@@ -184,11 +188,6 @@ const StyledMenuItem = styled(MenuItem)`
             padding: 1rem 0 0 0 !important;
         }
     }
-`;
-const StyledAccountDropdown = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
 `;
 
 const StyledButton = styled(Button)`

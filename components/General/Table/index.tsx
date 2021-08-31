@@ -14,8 +14,8 @@ export const TableHeading = styled.th<{
     height: 40px;
     font-size: var(--font-size-extra-small);
     padding-left: 10px;
-    border-bottom: 1px solid #DEDEFF;
-    background: #F3F4F6;
+    border-bottom: 1px solid #dedeff;
+    background: #f3f4f6;
     width: ${(props) => (props?.width ? props.width : 'auto')};
 `;
 
@@ -27,7 +27,7 @@ export const TableRow = styled.tr`
     opacity: 1;
 
     &:nth-child(even) {
-        background: #F9FAFB
+        background: #f9fafb;
     }
 
     &:hover {

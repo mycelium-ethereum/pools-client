@@ -10,32 +10,8 @@ import { Notification } from '@components/General/Notification';
 import { TransactionStore } from '@context/TransactionContext';
 import { FactoryStore } from '@context/FactoryContext';
 import GlobalStyles from 'styles/GlobalStyles';
-import styled from 'styled-components';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { FilterStore } from '@context/FilterContext';
-
-const Desktop = styled.div`
-    display: block;
-    @media (max-width: 1024px) {
-        display: none;
-    }
-`;
-
-const Mobile = styled.div`
-    display: none;
-    padding-top: 10vh;
-    padding-left: 10vw;
-    height: 100%;
-    background: var(--color-background);
-    color: var(--color-text);
-    @media (max-width: 1024px) {
-        display: block;
-    }
-    > h1 {
-        font-size: 55px;
-        font-weight: lighter;
-    }
-`;
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
     return (
@@ -58,49 +34,40 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <meta name="theme-color" content="#000240" />
             </Head>
             <GlobalStyles />
-            {/* <Desktop> */}
-                <ToastProvider components={{ Toast: Notification }}>
-                    <Web3Store
-                        networkIds={[42, 421611]}
-                        onboardConfig={{
-                            hideBranding: true,
-                            walletSelect: {
-                                heading: 'Connect Wallet',
-                                wallets: [
-                                    { walletName: 'metamask' },
-                                    { walletName: 'coinbase' },
-                                    { walletName: 'torus' },
-                                    // { walletName: "binance" },
+            <ToastProvider components={{ Toast: Notification }}>
+                <Web3Store
+                    networkIds={[42, 421611]}
+                    onboardConfig={{
+                        hideBranding: true,
+                        walletSelect: {
+                            heading: 'Connect Wallet',
+                            wallets: [
+                                { walletName: 'metamask' },
+                                { walletName: 'coinbase' },
+                                { walletName: 'torus' },
+                                // { walletName: "binance" },
 
-                                    // {
-                                    //     walletName: "walletConnect",
-                                    //     infuraKey: INFURA_KEY
-                                    // },
-                                ],
-                                // agreement: {
-                                //     version: '1.0',
-                                //     termsUrl: 'https://google.com',
+                                // {
+                                //     walletName: "walletConnect",
+                                //     infuraKey: INFURA_KEY
                                 // },
-                            },
-                        }}
-                    >
-                        <FactoryStore>
-                            <FilterStore>
-                                <TransactionStore>
-                                    <Component {...pageProps} />
-                                </TransactionStore>
-                            </FilterStore>
-                        </FactoryStore>
-                    </Web3Store>
-                </ToastProvider>
-            {/* </Desktop> */}
-            {/* <Mobile>
-                <h1>Mobile coming soon.</h1>
-                <p>
-                    Alpha testing is available on desktop only. <br />
-                    Switch to desktop to conduct testing.
-                </p>
-            </Mobile> */}
+                            ],
+                            // agreement: {
+                            //     version: '1.0',
+                            //     termsUrl: 'https://google.com',
+                            // },
+                        },
+                    }}
+                >
+                    <FactoryStore>
+                        <FilterStore>
+                            <TransactionStore>
+                                <Component {...pageProps} />
+                            </TransactionStore>
+                        </FilterStore>
+                    </FactoryStore>
+                </Web3Store>
+            </ToastProvider>
         </div>
     );
 };

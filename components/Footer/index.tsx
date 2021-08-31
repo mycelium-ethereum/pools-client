@@ -1,14 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+import { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
 
 const Footer = styled(({ className }) => {
     return (
         <FooterContent className={`${className} container`}>
-            <Section>
-                <Logo alt="tracer-logo" src="/img/logos/tracer/tracer_perps.svg" />
-                <Copyright>&copy; 2021 Tracer DAO</Copyright>
-            </Section>
+            <Copyright>&copy; 2021 Tracer DAO</Copyright>
+            <Socials>
+                <TwitterOutlined />
+                <GithubOutlined />
+            </Socials>
             <Section>
                 <Item>
                     <Link href="/privacy-policy">Privacy Policy</Link>
@@ -46,9 +48,14 @@ const Footer = styled(({ className }) => {
 })`
     display: flex;
     position: fixed;
+    color: #27272a;
     bottom: 0;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    left: 0;
+    right: 0;
+    padding-bottom: 1rem;
+
+    @media (max-width: 768px) {
+        padding: 0 0.5rem 1rem 0.5rem;
 `;
 
 const FooterContent = styled.div`
@@ -58,21 +65,35 @@ const FooterContent = styled.div`
 
 const Section = styled.div`
     display: flex;
+    @media (max-width: 1127px) {
+        display: none;
+    }
+`;
+const Socials = styled.div`
+    margin-right: auto;
+    margin-left: auto;
+    @media (max-width: 1127px) {
+        margin-right: 0;
+    }
+    & svg {
+        display: inline;
+        height: 18px;
+        width: 18px;
+        margin: 0 1rem;
+        color: #27272a;
+    }
 `;
 
 const Item = styled.div`
     margin-left: 2rem;
-    color: var(--color-secondary);
+    color: #27272a;
+    display: inline;
 `;
 
 const Copyright = styled.div`
     white-space: nowrap;
-    color: var(--color-primary);
-`;
-
-const Logo = styled.img`
-    height: 1.2rem;
-    margin-right: 4rem;
+    color: #27272a;
+    display: inline;
 `;
 
 export default Footer;

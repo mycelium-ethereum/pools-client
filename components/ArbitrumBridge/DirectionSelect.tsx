@@ -5,38 +5,38 @@ import { Logo } from '@components/General';
 import { Direction, ARB_ETH, ETH_ARB } from './state';
 
 export default (({ direction, setDirection }) => {
-	return (
-		<Container>
-			<Side>
-				<Label>From</Label>
-				<div>
-					<StyledLogo ticker={direction === ARB_ETH ? 'ARBITRUM' : 'ETH'}/>
-				</div>
-			</Side>
-			<ArrowRightOutlined onClick={() => {
-				setDirection(direction === ARB_ETH ? ETH_ARB : ARB_ETH)
-			}}/>
-			<Side>
-				<Label>From</Label>
-				<div>
-					<StyledLogo ticker={direction === ARB_ETH ? 'ETH' : 'ARBITRUM'}/>
-				</div>
-			</Side>
-		</Container>
-	)
+    return (
+        <Container>
+            <Side>
+                <Label>From</Label>
+                <div>
+                    <StyledLogo ticker={direction === ARB_ETH ? 'ARBITRUM' : 'ETH'} />
+                </div>
+            </Side>
+            <ArrowRightOutlined
+                onClick={() => {
+                    setDirection(direction === ARB_ETH ? ETH_ARB : ARB_ETH);
+                }}
+            />
+            <Side>
+                <Label>From</Label>
+                <div>
+                    <StyledLogo ticker={direction === ARB_ETH ? 'ETH' : 'ARBITRUM'} />
+                </div>
+            </Side>
+        </Container>
+    );
 }) as React.FC<{
-	direction: Direction,
-	setDirection: (direction: Direction) => void
-}>
+    direction: Direction;
+    setDirection: (direction: Direction) => void;
+}>;
 
 const Container = styled.span`
-	display: inline;
-	
-`
+    display: inline;
+`;
 
-const Side = styled.span``
+const Side = styled.span``;
 
-const Label = styled.p``
+const Label = styled.p``;
 
-const StyledLogo = styled(Logo)``
-
+const StyledLogo = styled(Logo)``;

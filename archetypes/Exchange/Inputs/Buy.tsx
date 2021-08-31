@@ -34,7 +34,9 @@ export default (() => {
                     <Label>Market</Label>
                     <MarketSelect
                         preview={pool.name}
-                        onChange={(e: any) => swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })}
+                        onChange={(e: any) =>
+                            swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
+                        }
                     >
                         {poolOptions.map((pool) => (
                             <SelectOption
@@ -49,7 +51,11 @@ export default (() => {
                 </span>
                 <span>
                     <Label>Side</Label>
-                    <StyledSlideSelect className="side" value={side} onClick={(index) => swapDispatch({ type: 'setSide', value: index as SideType })}>
+                    <StyledSlideSelect
+                        className="side"
+                        value={side}
+                        onClick={(index) => swapDispatch({ type: 'setSide', value: index as SideType })}
+                    >
                         <Option>Long</Option>
                         <Option>Short</Option>
                     </StyledSlideSelect>
@@ -57,11 +63,13 @@ export default (() => {
             </InputRow>
             <InputRow>
                 <Label>Leverage</Label>
-                <StyledSlideSelect className="leverage" value={leverage} onClick={(index) => swapDispatch({ type: 'setLeverage', value: index as SideType })}>
+                <StyledSlideSelect
+                    className="leverage"
+                    value={leverage}
+                    onClick={(index) => swapDispatch({ type: 'setLeverage', value: index as SideType })}
+                >
                     {leverageOptions.map((option) => (
-                        <Option>
-                            {option}x
-                        </Option>
+                        <Option key={`leverage-option-${option}`}>{option}x</Option>
                     ))}
                 </StyledSlideSelect>
             </InputRow>
@@ -79,9 +87,9 @@ export default (() => {
                     />
                     <InnerInputText
                         onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })}
-                    >   
+                    >
                         <Currency>
-                            <Logo ticker={"USDC"} />
+                            <Logo ticker={'USDC'} />
                             <span>{`USDC`}</span>
                         </Currency>
                         {`MAX`}
@@ -108,11 +116,11 @@ export default (() => {
                         Unlock USDC
                     </ExchangeButton>
                     <HelperText>
-                        Unlock DAI to start investing with Tracer. 
-                        This is a one-time transaction for each pool. <a>Learn more.</a>
+                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
+                        <a>Learn more.</a>
                     </HelperText>
                 </>
-            ) : 
+            ) : (
                 <ExchangeButton
                     disabled={!selectedPool || !pool.quoteToken.approved || !amount}
                     className="primary"
@@ -123,9 +131,9 @@ export default (() => {
                         commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
                     }}
                 >
-                    Ok, let's buy
+                    {`Ok, let's buy`}
                 </ExchangeButton>
-            }
+            )}
         </>
     );
 }) as React.FC;
@@ -161,7 +169,7 @@ const StyledHiddenExpand = styled(HiddenExpand)`
 `;
 
 const Box = styled.div`
-    border: 1px solid #E5E7EB;
+    border: 1px solid #e5e7eb;
     box-sizing: border-box;
     border-radius: 14px;
     position: relative;
@@ -171,7 +179,6 @@ const Box = styled.div`
         color: #374151;
     }
 `;
-
 
 const Countdown = styled.div`
     position: absolute;
@@ -195,17 +202,16 @@ const Countdown = styled.div`
 `;
 
 const HelperText = styled.p`
-    color: #6B7280;
+    color: #6b7280;
     font-size: 14px;
 
     a {
         text-decoration: underline;
         cursor: pointer;
     }
-`
+`;
 
 const Token = styled.h2``;
-
 
 const MarketSelect = styled(Select)`
     width: 285px;
@@ -213,14 +219,14 @@ const MarketSelect = styled(Select)`
     padding: 13px 20px;
 
     @media (max-width: 611px) {
-        width: 156px; 
+        width: 156px;
         height: 44px;
     }
-`
+`;
 
 const StyledSlideSelect = styled(SlideSelect)`
-    border: 1px solid #D1D5DB;
-    background: #F9FAFB;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
 
     &.side {
         width: 180px;
@@ -232,10 +238,10 @@ const StyledSlideSelect = styled(SlideSelect)`
         height: 55px;
         margin: 0;
     }
-    
+
     @media (max-width: 611px) {
         &.side {
-            width: 156px; 
+            width: 156px;
             height: 44px;
         }
 
@@ -244,7 +250,7 @@ const StyledSlideSelect = styled(SlideSelect)`
             margin: 0;
         }
     }
-`
+`;
 
 export const InputRow = styled.div`
     position: relative;
@@ -256,12 +262,12 @@ export const InputRow = styled.div`
 `;
 
 const Currency = styled.div`
-    background: #FFFFFF;
+    background: #ffffff;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
     border-radius: 50px;
     padding: 0px 8px 0px 4px;
     margin-right: 0.5rem;
-    color: #71717A;
+    color: #71717a;
     height: 29px;
     display: flex;
     align-items: center;
@@ -271,4 +277,4 @@ const Currency = styled.div`
         display: inline;
         margin: 0 5px 0 0;
     }
-`
+`;

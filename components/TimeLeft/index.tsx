@@ -60,5 +60,5 @@ export default styled(({ targetTime, className }) => {
         </>
     );
 })<{
-    targetTime: number
-}>`` 
+    targetTime: number;
+}>``;

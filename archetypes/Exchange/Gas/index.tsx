@@ -2,6 +2,8 @@ import Icon from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import React from 'react';
 import styled from 'styled-components';
+
+// @ts-ignore
 import GasIcon from '@public/img/general/gas_icon.svg';
 
 export default (() => {
@@ -9,11 +11,9 @@ export default (() => {
     return (
         <Gas>
             <Icon component={GasIcon} className="icon" />
-            <span className="text">
-                {gasPrice}
-            </span>
+            <span className="text">{gasPrice}</span>
         </Gas>
-    )
+    );
 }) as React.FC;
 
 const Gas = styled.div`

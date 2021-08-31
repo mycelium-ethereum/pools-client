@@ -104,9 +104,9 @@ export default (({ poolInfo }) => {
 
 const StyledButton = styled(Button)`
     display: inline;
-    border: 1px solid #3535DC;
+    border: 1px solid #3535dc;
     border-radius: 12px;
-    background: #DEDEFF;
+    background: #dedeff;
     width: 65px;
     height: 32px;
     font-size: 12px;
@@ -120,7 +120,7 @@ const StyledTableRow = styled(TableRow)`
     ${TableCell}:last-child {
         text-align: right;
     }
-`
+`;
 
 // const MarketChange = (styled(({ marketChange, className }) => (
 //     <span className={className}>

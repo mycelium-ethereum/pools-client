@@ -8,7 +8,6 @@ interface ContextProps {
     filterDispatch: React.Dispatch<FilterAction>;
 }
 
-
 const sideMap: Record<string, string> = {
     Long: 'UP',
     Short: 'DOWN',
@@ -20,13 +19,13 @@ const TVL = 1;
 export const SORT_MAP = {
     [PRICE_CHANGE]: '24h Change',
     [TVL]: 'TVL',
-}
+};
 
 type SortType = typeof PRICE_CHANGE | typeof TVL;
 
 export type FilterState = {
     search: string;
-    
+
     leverage: string;
     leverageOptions: string[];
 
@@ -192,5 +191,3 @@ const getSortRank: (word: string, expressions: string[]) => number = (word, expr
     }
     return expressions.length;
 };
-
-

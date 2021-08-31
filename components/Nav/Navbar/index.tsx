@@ -11,6 +11,7 @@ import AccountDropdown from './AccountDropdown';
 import { Select, SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
 import { ARBITRUM } from '@libs/constants';
+import MobileMenu from './MobileMenu';
 
 const NavBar: React.FC = styled(({ className }) => {
     return (
@@ -23,6 +24,93 @@ const NavBar: React.FC = styled(({ className }) => {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
+`;
+
+const NetworkDropdown = styled(Select)`
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 7px;
+    background: transparent;
+    margin: auto 1rem;
+    width: 158px;
+    height: 42px;
+
+    & svg {
+        fill: #fff;
+    }
+`;
+
+const Links = styled.ul`
+    display: flex;
+    margin-right: auto;
+    margin-left: 1rem;
+    color: #fff;
+    margin-bottom: 0;
+    font-size: 14px;
+
+    & li {
+        display: flex;
+        transition: 0.2s;
+        padding: 0 20px;
+    }
+
+    & li.selected {
+        // color: #37b1f6;
+        text-decoration: underline;
+    }
+
+    & li:hover {
+        color: #37b1f6;
+    }
+
+    & li .trade-toggle {
+        display: none;
+    }
+
+    & li.selected .trade-toggle {
+        display: flex;
+        margin: auto 20px;
+        border: 1px solid var(--color-primary);
+        border-radius: 20px;
+    }
+
+    & li.selected .trade-toggle div {
+        width: 100px;
+        text-align: center;
+        transition: 0.2s;
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    & li.selected .trade-toggle div.selected {
+        color: var(--color-background);
+        background-color: var(--color-primary);
+        border-radius: 20px;
+    }
+`;
+
+const NetworkPreview = styled(({ networkID, networkName, className }) => {
+    return (
+        <div className={className}>
+            <Logo ticker={networkID} />
+            {networkName}
+        </div>
+    );
+})`
+    color: #fff;
+    display: flex;
+    margin: 0.25rem;
+    line-height: 2rem;
+    padding: 0 0.5rem;
+    ${Logo} {
+        display: inline;
+        vertical-align: 0;
+        width: 20px;
+        height: 22px;
+        margin-right: 0.5rem;
+    }
 `;
 
 export const NavBarContent = styled(({ className }) => {
@@ -55,16 +143,11 @@ export const NavBarContent = styled(({ className }) => {
                         <a className="m-auto">Portfolio</a>
                     </Link>
                 </li>
-                {/* <li className={linkStyles + (route === 'browse' ? ' selected' : '')}>
-                    <Link href="/browse">
-                        <a className="m-auto">Browse</a>
-                    </Link>
-                </li> */}
             </Links>
 
-			<NetworkDropdown preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
-				<SelectOption>Arbitrum</SelectOption>
-			</NetworkDropdown>
+            <NetworkDropdown preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
+                <SelectOption>Arbitrum</SelectOption>
+            </NetworkDropdown>
 
             <AccountDropdown
                 onboard={onboard}
@@ -77,6 +160,8 @@ export const NavBarContent = styled(({ className }) => {
             />
 
             <ThemeSwitcher />
+
+            <MobileMenu />
 
             {/** TODO this will need to change to Arbritrum network id */}
             {/* {process.env.NEXT_PUBLIC_DEPLOYMENT !== 'DEVELOPMENT' ? (
@@ -93,7 +178,21 @@ export const NavBarContent = styled(({ className }) => {
     background-repeat: no-repeat;
     background-size: cover;
 
+    ${MobileMenu} {
+        display: none;
+    }
 
+    @media (max-width: 768px) {
+        padding: 0 1rem;
+    }
+    @media (max-width: 1127px) {
+        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links} {
+            display: none;
+        }
+        ${MobileMenu} {
+            display: block;
+        }
+    }
 `;
 
 export default NavBar;
@@ -164,95 +263,6 @@ export default NavBar;
 //     transition: ${(props) =>
 //         props.display ? 'bottom 0.3s, opacity 0.3s 0.1s' : 'bottom 0.3s 0.15s, opacity 0.3s, z-index 0.3s 0.3s'};
 // `;
-
-const NetworkDropdown = styled(Select)`
-	border: 1px solid #FFFFFF;
-	box-sizing: border-box;
-	border-radius: 7px;
-	background: transparent;
-	margin: auto 1rem;
-	width: 158px;
-	height: 42px;
-
-	& svg {
-		fill: #fff;
-	}
-`
-
-const Links = styled.ul`
-	display: flex;
-	margin-right: auto;
-	margin-left: 1rem;
-	color: #fff;
-	margin-bottom: 0;
-	font-size: 14px;
-
-    & li {
-        display: flex;
-        transition: 0.2s;
-        padding: 0 20px;
-    }
-
-    & li.selected {
-        // color: #37b1f6;
-		text-decoration: underline;
-    }
-
-    & li:hover {
-        color: #37b1f6;
-    }
-
-    & li .trade-toggle {
-        display: none;
-    }
-
-    & li.selected .trade-toggle {
-        display: flex;
-        margin: auto 20px;
-        border: 1px solid var(--color-primary);
-        border-radius: 20px;
-    }
-
-    & li.selected .trade-toggle div {
-        width: 100px;
-        text-align: center;
-        transition: 0.2s;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    & li.selected .trade-toggle div.selected {
-        color: var(--color-background);
-        background-color: var(--color-primary);
-        border-radius: 20px;
-    }
-
-
-`
-
-const NetworkPreview = styled(({ networkID, networkName, className }) => {
-	return (
-		<div className={className}>
-			<Logo ticker={networkID} />
-			{networkName}
-		</div>
-	)
-})`
-	color: #fff;
-	display: flex;
-	margin: 0.25rem;
-	line-height: 2rem;
-	padding: 0 0.5rem;
-	${Logo} {
-		display: inline;
-		vertical-align: 0;
-		width: 20px;
-		height: 22px;
-		margin-right: 0.5rem;
-	}
-`
 
 const useEnsName = (account: string) => {
     const [ensName, setEnsName] = useState(account);

@@ -4,8 +4,8 @@ import styled from 'styled-components';
 
 export const Input = styled.input`
     color: #000;
-    background: #F9FAFB;
-    border: 1px solid #D1D5DB;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
     box-sizing: border-box;
     padding: 12px 20px;
     border-radius: 7px;
@@ -15,18 +15,18 @@ export const Input = styled.input`
 
     &::placeholder {
         /* Chrome, Firefox, Opera, Safari 10.1+ */
-        color: #6B7280;
+        color: #6b7280;
         opacity: 1; /* Firefox */
     }
 
     &:-ms-input-placeholder {
         /* Internet Explorer 10-11 */
-        color: #6B7280;
+        color: #6b7280;
     }
 
     &::-ms-input-placeholder {
         /* Microsoft Edge */
-        color: #6B7280;
+        color: #6b7280;
     }
 
     &:focus {
@@ -39,14 +39,10 @@ export const Input = styled.input`
 export const SearchBar = styled(({ className, ...props }) => {
     return (
         <InputWrapper className={className}>
-            <Input
-                type="text"
-                placeholder="Search"
-                {...props} 
-            />
+            <Input type="text" placeholder="Search" {...props} />
             <SearchOutlined />
         </InputWrapper>
-    )
+    );
 })`
     & ${Input} {
         padding: 12px 14px 12px 32px;
@@ -62,16 +58,14 @@ export const SearchBar = styled(({ className, ...props }) => {
         margin: auto;
         vertical-align: 0.125rem;
     }
-
-`
+`;
 
 export const InputWrapper = styled.div`
     position: relative;
     ${Input} {
         width: 100%;
     }
-
-`
+`;
 
 export const InnerInputText = styled.div`
     color: var(--color-primary);
@@ -193,37 +187,34 @@ const SelectDropdown = styled.div`
     transform: scale(1, 0);
     transition: all 300ms ease-in-out;
     z-index: 10;
-`
+`;
 
 export const Select = styled(({ preview, onChange, className, children }) => {
     const ref = useRef<HTMLDivElement>(null);
 
     const handleClick = (e: any) => {
         if (e.target.value) {
-            onChange(e)
+            onChange(e);
         }
-        ref?.current?.classList?.toggle('open')
-    }
+        ref?.current?.classList?.toggle('open');
+    };
 
     return (
         <div ref={ref} className={className} onClick={handleClick}>
             {preview}
             <DownOutlined />
-            <SelectDropdown>
-                {children}
-            </SelectDropdown>
+            <SelectDropdown>{children}</SelectDropdown>
         </div>
-    )
-
+    );
 })<{
-    preview: React.ReactNode,
-    onChange: React.MouseEventHandler<HTMLDivElement>
+    preview: React.ReactNode;
+    onChange: React.MouseEventHandler<HTMLDivElement>;
 }>`
-    background: #F9FAFB;
-    border: 1px solid #D1D5DB;
+    background: #f9fafb;
+    border: 1px solid #d1d5db;
     box-sizing: border-box;
     border-radius: 7px;
-    color: #6B7280;
+    color: #6b7280;
     cursor: pointer;
     position: relative;
     box-sizing: border-box;
@@ -257,10 +248,10 @@ export const SelectOption = styled.option`
     transition: 0.3s;
 
     &:hover {
-        background: #D1D5DB;
+        background: #d1d5db;
     }
 
     &:last-child {
-        border-top: 1px solid #F3F4F6;
+        border-top: 1px solid #f3f4f6;
     }
 `;

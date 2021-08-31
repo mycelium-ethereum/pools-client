@@ -10,16 +10,15 @@ export const Browse: React.FC = () => {
     return (
         <BrowseContainer>
             <BrowseButtons>
-                <PageButton>
-                    Exchange
-                </PageButton>
-                <PageButton className="primary">
-                    Browse
-                </PageButton>
+                <PageButton>Exchange</PageButton>
+                <PageButton className="primary">Browse</PageButton>
             </BrowseButtons>
             <BrowseModal>
                 <Title>Pool Tokens</Title>
-                <FilterSelects filterState={filterState ?? defaultState} filterDispatch={filterDispatch ?? noDispatch} />
+                <FilterSelects
+                    filterState={filterState ?? defaultState}
+                    filterDispatch={filterDispatch ?? noDispatch}
+                />
                 <PoolsTable pools={filterState?.filteredPools ?? []} />
             </BrowseModal>
         </BrowseContainer>
@@ -36,26 +35,25 @@ const Title = styled.h1`
 
 const BrowseContainer = styled(Container)`
     margin-top: 100px;
-`
+`;
 
 const BrowseButtons = styled.div`
     margin-bottom: 1rem;
-`
+`;
 
 const BrowseModal = styled.div`
     background: var(--color-background);
     box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
     border-radius: 20px;
     padding: 48px 32px;
-`
-
+`;
 
 const PageButton = styled(Button)`
     width: 122px;
     height: 55px;
     display: inline;
-    background: #E5E7EB;
-    color: #6B7280;
+    background: #e5e7eb;
+    color: #6b7280;
     border: none;
 
     &:hover {
@@ -67,4 +65,4 @@ const PageButton = styled(Button)`
         border: 1px solid var(--color-primary);
         margin-left: 0.5rem;
     }
-`
+`;

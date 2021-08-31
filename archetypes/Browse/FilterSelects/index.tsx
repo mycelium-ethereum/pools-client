@@ -55,18 +55,20 @@ const StyledSearchBar = styled(SearchBar)`
 
 const DropdownSelect: React.FC<{
     options: (string | number)[];
-    keyMap?: Record<(string | number), string>;
+    keyMap?: Record<string | number, string>;
     filterDispatch: React.Dispatch<FilterAction>;
     dispatchAction: 'setSide' | 'setLeverage' | 'setSortBy';
     title: string;
-    selectedOption: (string | number);
+    selectedOption: string | number;
 }> = ({ options, filterDispatch, dispatchAction, selectedOption, title, keyMap }) => {
     return (
         <DropdownContainer>
             <Label>{title}</Label>
             <Select
                 preview={keyMap ? keyMap[selectedOption] : selectedOption}
-                onChange={(e: any) => filterDispatch({ type: dispatchAction, value: e.currentTarget.value } as FilterAction)}
+                onChange={(e: any) =>
+                    filterDispatch({ type: dispatchAction, value: e.currentTarget.value } as FilterAction)
+                }
             >
                 {options.map((option) => (
                     <SelectOption

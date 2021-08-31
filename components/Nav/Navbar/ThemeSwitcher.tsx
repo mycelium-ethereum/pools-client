@@ -61,7 +61,7 @@ export default styled(({ className }) => {
 
     useEffect(() => {
         document.getElementsByTagName('html')[0].classList.add('light');
-    }, [])
+    }, []);
 
     return (
         <div onClick={handleClick} className={`${className} ${toggle ? 'checked' : ''}`}>
