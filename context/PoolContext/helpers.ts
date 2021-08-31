@@ -9,7 +9,7 @@ import {
     PoolCommitter,
     LeveragedPool,
     PoolToken,
-    TestToken 
+    TestToken,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
