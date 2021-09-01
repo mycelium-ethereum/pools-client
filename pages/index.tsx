@@ -6,6 +6,8 @@ import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import { useRouter } from 'next/router';
 import Exchange from '@archetypes/Exchange';
+import InvestNav from '@components/Nav/InvestNav';
+import PendingCommits from '@components/PendingCommits';
 
 export default (() => {
     const router = useRouter();
@@ -17,10 +19,12 @@ export default (() => {
     return (
         <Page className={`page`}>
             <NavBar />
+            <InvestNav />
             <PoolStore>
                 <SwapStore>
                     <Exchange />
                 </SwapStore>
+                <PendingCommits show={true} />
             </PoolStore>
             <Footer />
         </Page>

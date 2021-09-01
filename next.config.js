@@ -15,15 +15,15 @@ module.exports = ({
         ignored: ['node_modules', 'public/static' ],
     },
 
-    // exportPathMap: () => {
-    //     return {
-    //         '/': { page: '/' },
-    //         '/browse': { page: '/browse' },
-    //     };
+    // resolve: {
+    //     symlinks: true,
     // },
-
-    resolve: {
-        symlinks: true,
+    typescript: {
+        // !! WARN !!
+        // Dangerously allow production builds to successfully complete even if
+        // your project has type errors.
+        // !! WARN !!
+        ignoreBuildErrors: true,
     },
 
 

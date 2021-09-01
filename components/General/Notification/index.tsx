@@ -8,9 +8,6 @@ import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 
-import dynamic from 'next/dynamic';
-const PendingCommit = dynamic(() => import('./PendingCommit'));
-
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
 type TransitionState = 'entering' | 'entered' | 'exiting' | 'exited';
@@ -225,8 +222,8 @@ const Hashie: React.FC<HProps | any> = ({
     appearance: appearance_,
     placement,
     autoDismissTimeout,
-    type,
-    commitInfo,
+    // type,
+    // commitInfo,
     // isRunning,
     children,
 }: HProps) => {
@@ -242,7 +239,7 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            {type === PENDING_COMMIT && commitInfo
+            {/* {type === PENDING_COMMIT && commitInfo
                 ?   
                     <>
                         <ContentWrapper>
@@ -257,8 +254,9 @@ const Hashie: React.FC<HProps | any> = ({
                             </Content>
                         </ContentWrapper>
                         <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
-                    </>
-                :   <>
+                    </> */}
+                {/* :    */}
+                <>
                         <IconWrap>{appearance.icon}</IconWrap>
                         <ContentWrapper>
                             <Header
@@ -269,7 +267,7 @@ const Hashie: React.FC<HProps | any> = ({
                         </ContentWrapper>
                         <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
                     </>
-            }
+            {/* } */}
         </ToastWrapper>
     );
 };

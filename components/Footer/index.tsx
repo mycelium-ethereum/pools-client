@@ -47,8 +47,8 @@ const Footer = styled(({ className }) => {
     );
 })`
     display: flex;
-    position: fixed;
     color: #27272a;
+    margin-top: auto;
     bottom: 0;
     left: 0;
     right: 0;

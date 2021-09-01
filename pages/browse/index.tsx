@@ -5,6 +5,7 @@ import Footer from '@components/Footer';
 import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
+import InvestNav from '@components/Nav/InvestNav';
 
 export default (() => {
     const router = useRouter();
@@ -16,6 +17,7 @@ export default (() => {
     return (
         <Page className={`page`}>
             <NavBar />
+            <InvestNav />
             <PoolStore>
                 <Container className="container">
                     <Browse />

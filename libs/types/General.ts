@@ -1,6 +1,8 @@
+import React from 'react';
 import { SHORT, LONG, MINT, BURN, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import BigNumber from 'bignumber.js';
-import React from 'react';
+import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
+import { ethers } from 'ethers';
 
 /**
  * Can be used when component passes down children
@@ -58,7 +60,23 @@ export type Committer = {
     address: string;
     pendingLong: BigNumber;
     pendingShort: BigNumber;
+    allUnexecutedCommits: CreatedCommitType[]
 };
+
+export type QueuedCommit = {
+	token: PoolToken,
+	spent: BigNumber,
+	tokenPrice: BigNumber,
+	amount: BigNumber
+	nextRebalance: BigNumber
+}
+
+
+export type CreatedCommitType = TypedEvent<[ethers.BigNumber, ethers.BigNumber, number] & {
+    commitID: ethers.BigNumber;
+    amount: ethers.BigNumber;
+    commitType: number;
+}>
 
 export type Pool = {
     address: string;
@@ -79,14 +97,14 @@ export type Pool = {
 };
 
 export type PendingCommitInfo = {
-    tokenName: string;
+    pool: string;
+    id: number;
+    type: CommitType,
     amount: BigNumber;
-    value: BigNumber;
-    updateInterval: BigNumber;
-    frontRunningInterval: BigNumber;
-    lastUpdate: BigNumber;
-    action: {
-        text: string; // button text
-        onClick: any; // on button click
-    };
+};
+
+// table heading initialiser
+export type Heading = {
+    text: string;
+    width: string; // string width
 };

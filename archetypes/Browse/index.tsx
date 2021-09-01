@@ -3,16 +3,19 @@ import { FilterContext, noDispatch, defaultState } from '@context/FilterContext'
 import styled from 'styled-components';
 import FilterSelects from './FilterSelects';
 import PoolsTable from './PoolsTable';
-import { Button, Container } from '@components/General';
+import { 
+    // Button, 
+    Container 
+} from '@components/General';
 
 export const Browse: React.FC = () => {
     const { filterState, filterDispatch } = useContext(FilterContext);
     return (
         <BrowseContainer>
-            <BrowseButtons>
+            {/* <BrowseButtons>
                 <PageButton>Exchange</PageButton>
                 <PageButton className="primary">Browse</PageButton>
-            </BrowseButtons>
+            </BrowseButtons> */}
             <BrowseModal>
                 <Title>Pool Tokens</Title>
                 <FilterSelects
@@ -37,9 +40,9 @@ const BrowseContainer = styled(Container)`
     margin-top: 100px;
 `;
 
-const BrowseButtons = styled.div`
-    margin-bottom: 1rem;
-`;
+// const BrowseButtons = styled.div`
+//     margin-bottom: 1rem;
+// `;
 
 const BrowseModal = styled.div`
     background: var(--color-background);
@@ -48,21 +51,21 @@ const BrowseModal = styled.div`
     padding: 48px 32px;
 `;
 
-const PageButton = styled(Button)`
-    width: 122px;
-    height: 55px;
-    display: inline;
-    background: #e5e7eb;
-    color: #6b7280;
-    border: none;
+// const PageButton = styled(Button)`
+//     width: 122px;
+//     height: 55px;
+//     display: inline;
+//     background: #e5e7eb;
+//     color: #6b7280;
+//     border: none;
 
-    &:hover {
-        color: #fff;
-    }
+//     &:hover {
+//         color: #fff;
+//     }
 
-    &.primary {
-        color: #fff;
-        border: 1px solid var(--color-primary);
-        margin-left: 0.5rem;
-    }
-`;
+//     &.primary {
+//         color: #fff;
+//         border: 1px solid var(--color-primary);
+//         margin-left: 0.5rem;
+//     }
+// `;

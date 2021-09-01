@@ -7,13 +7,13 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
-    // "noEmitOnError": true,
+    "noEmitOnError": true,
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -57,7 +57,6 @@
     "node_modules/@tracer-protocol/perpetual-pools-contracts"
   ],
   "exclude": [
-    "components/**/*.stories.tsx",
     "public/static/*"
   ]
 }

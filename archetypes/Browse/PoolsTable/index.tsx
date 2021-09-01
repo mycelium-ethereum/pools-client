@@ -1,12 +1,8 @@
 import { Table, TableBody, TableHeader, TableHeading } from '@components/General/Table';
-import { PoolType } from '@libs/types/General';
+import { Heading, PoolType } from '@libs/types/General';
 import React from 'react';
 import PoolRow from './PoolRow';
 
-type Heading = {
-    text: string;
-    width: string; // string width
-};
 export default (({ pools }) => {
     return (
         <Table>

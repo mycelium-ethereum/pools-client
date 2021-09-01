@@ -12,6 +12,7 @@ import { FactoryStore } from '@context/FactoryContext';
 import GlobalStyles from 'styles/GlobalStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { FilterStore } from '@context/FilterContext';
+import { UsersCommitStore } from '@context/UsersCommitContext';
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
     return (
@@ -62,7 +63,9 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     <FactoryStore>
                         <FilterStore>
                             <TransactionStore>
-                                <Component {...pageProps} />
+                                <UsersCommitStore>
+                                    <Component {...pageProps} />
+                                </UsersCommitStore>
                             </TransactionStore>
                         </FilterStore>
                     </FactoryStore>

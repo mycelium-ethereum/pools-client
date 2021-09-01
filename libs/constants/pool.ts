@@ -1,4 +1,4 @@
-import { Pool } from '@libs/types/General';
+import { CreatedCommitType, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 import { LONG, SHORT } from '.';
 
@@ -39,6 +39,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         address: '',
         pendingLong: new BigNumber(0),
         pendingShort: new BigNumber(0),
+        allUnexecutedCommits: [] as CreatedCommitType[]
     },
     subscribed: false,
 };

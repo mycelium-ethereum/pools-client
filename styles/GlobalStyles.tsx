@@ -17,6 +17,7 @@ export default createGlobalStyle`
     }
 
   	html {
+
         --color-background: #000240;
         --color-background-secondary: #00125D;
         --color-text: #fff;

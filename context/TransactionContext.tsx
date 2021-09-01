@@ -1,9 +1,7 @@
-import React, { createContext, useContext, useRef } from 'react';
+import React, { createContext, useContext } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
-import { Children, Result, PendingCommitInfo } from '@libs/types/General';
+import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
-import BigNumber from 'bignumber.js';
-import { PENDING_COMMIT } from '@libs/constants';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -38,20 +36,7 @@ interface TransactionContextProps {
     handleAsync: HandleAsyncType;
 }
 
-type AddCommit = (id: number, commitInfo: PendingCommitInfo) => void;
-interface CommitContextProps {
-    addCommit: AddCommit;
-    removeCommit: (id: number) => void;
-    updatePoolInfo: (
-        id: number,
-        info: {
-            lastUpdate: BigNumber;
-        },
-    ) => void;
-}
-
 export const TransactionContext = createContext<Partial<TransactionContextProps>>({});
-export const CommitContext = createContext<Partial<CommitContextProps>>({});
 
 // type Status = 'INITIALIZED' | 'PROCESSING' | 'ERROR' | 'SUCCESS'
 
@@ -64,8 +49,6 @@ export const CommitContext = createContext<Partial<CommitContextProps>>({});
  */
 export const TransactionStore: React.FC = ({ children }: Children) => {
     const { addToast, updateToast } = useToasts();
-    // maps the commit id to a toast notification id
-    const pendingCommits = useRef<Record<number, string>>({});
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
@@ -109,7 +92,6 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 appearance: 'error',
                 autoDismiss: true,
             });
-            console.log(error, 'Error');
             onError ? onError(error) : null;
         });
     };
@@ -147,53 +129,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    const addCommit: AddCommit = (id, commitInfo) => {
-        const toastID = addToast([commitInfo.tokenName], {
-            appearance: 'pendingCommit' as unknown as AppearanceTypes,
-            autoDismiss: false,
-            type: PENDING_COMMIT,
-            commitInfo: {
-                ...commitInfo,
-            },
-        });
-
-        console.log('added id', id, toastID);
-        pendingCommits.current = {
-            ...pendingCommits.current,
-            [id]: toastID as unknown as string,
-        };
-    };
-
-    const updatePoolInfo: (
-        id: number,
-        info: {
-            lastUpdate: BigNumber;
-        },
-    ) => void = (id, info) => {
-        const toastID = pendingCommits.current[id];
-        if (!toastID) {
-            return;
-        }
-        console.log(`Removing commit ${id}: ${toastID}`, pendingCommits);
-        updateToast(toastID as unknown as string, {
-            poolInfo: info,
-        });
-    };
-
-    const removeCommit: (id: number) => void = (id) => {
-        const toastID = pendingCommits.current[id];
-        if (!toastID) {
-            return;
-        }
-        console.log(`Removing commit ${id}: ${toastID}`, pendingCommits);
-        updateToast(toastID as unknown as string, {
-            content: 'Cancelled commit',
-            appearance: 'pendingCommit' as unknown as AppearanceTypes,
-            autoDismiss: true,
-            type: PENDING_COMMIT,
-        });
-        delete pendingCommits.current[id];
-    };
+    
 
     return (
         <TransactionContext.Provider
@@ -202,25 +138,9 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 handleAsync,
             }}
         >
-            <CommitContext.Provider
-                value={{
-                    addCommit,
-                    removeCommit,
-                    updatePoolInfo,
-                }}
-            >
-                {children}
-            </CommitContext.Provider>
+            {children}
         </TransactionContext.Provider>
     );
-};
-
-export const useCommitActions: () => Partial<CommitContextProps> = () => {
-    const context = useContext(CommitContext);
-    if (context === undefined) {
-        throw new Error(`useCommitActions must be called within CommitContext`);
-    }
-    return context;
 };
 
 export const useTransactionContext: () => Partial<TransactionContextProps> = () => {

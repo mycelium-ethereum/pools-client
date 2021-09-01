@@ -1,5 +1,5 @@
 import { SHORT } from '@libs/constants';
-import { Pool, SideType } from '@libs/types/General';
+import { CreatedCommitType, Pool, SideType } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
@@ -26,6 +26,7 @@ export type PoolAction =
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setSubscribed'; pool: string; value: boolean }
+    | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
     | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
@@ -70,6 +71,20 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     [action.pool]: {
                         ...state.pools[action.pool],
                         subscribed: action.value,
+                    },
+                },
+            };
+        case 'setUnexecutedCommits':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        committer: {
+                            ...state.pools[action.pool].committer,
+                            allUnexecutedCommits: action.commits,
+                        }
                     },
                 },
             };

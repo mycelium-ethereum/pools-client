@@ -1,5 +1,5 @@
 import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
-import { Pool, PoolType } from '@libs/types/General';
+import { CreatedCommitType, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -84,6 +84,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: poolCommitter,
             pendingLong: new BigNumber(0),
             pendingShort: new BigNumber(0),
+            allUnexecutedCommits: []
         },
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: new BigNumber(2),
@@ -113,26 +114,34 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     };
 };
 
+
 export const initCommitter: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
     pendingLong: BigNumber;
     pendingShort: BigNumber;
+    allUnexecutedCommits: CreatedCommitType[]
 }> = async (committer, provider) => {
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
     const earliestUnexecuted = await contract?.earliestCommitUnexecuted();
+
     // once we have this we can get the block number and query all commits from that block number
     const earliestUnexecutedCommit = (
-        await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted))
+        await contract?.queryFilter(
+            contract.filters.CreateCommit(earliestUnexecuted))
     )?.[0];
+
+    console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit)
 
     const allUnexecutedCommits = await contract?.queryFilter(
         contract.filters.CreateCommit(),
         earliestUnexecutedCommit?.blockNumber,
     );
+
     console.debug('All unexecuted commits', allUnexecutedCommits);
+
     let pendingLong = new BigNumber(0);
     let pendingShort = new BigNumber(0);
     allUnexecutedCommits?.forEach((commit) => {
@@ -141,10 +150,12 @@ export const initCommitter: (
             type: commit.args.commitType,
         });
     });
+
     console.debug(`Pending commit amounts. Long: ${pendingLong.toNumber()}, short: ${pendingShort.toNumber()}`);
     return {
         pendingLong,
         pendingShort,
+        allUnexecutedCommits
     };
 };
 
@@ -161,6 +172,18 @@ export const fetchTokenBalances: (
         }),
     );
 };
+
+export const filterUserCommits = async (allUnexecutedCommits:CreatedCommitType[], account: string) => {
+    const userCommits = allUnexecutedCommits?.map(async (commit) => {
+        const txn = await commit.getTransactionReceipt();
+        if (txn.from.toLowerCase() === account.toLowerCase()) {
+            return commit
+        } else return null
+    })
+    return Promise.all(userCommits).then((res) => {
+        return res.filter((commit) => commit !== null);
+    })
+}
 
 export const addToPending: (
     pendingShort: BigNumber,
