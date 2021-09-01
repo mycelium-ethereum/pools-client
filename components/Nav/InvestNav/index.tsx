@@ -5,7 +5,8 @@ import styled from 'styled-components';
 const EXCHANGE = 0;
 const BROWSE = 1;
 
-export default ({}) => {
+// const InvestNav
+export default (() => {
     const router = useRouter();
 
     useEffect(() => {
@@ -41,7 +42,7 @@ export default ({}) => {
             </Item>
         </InvestNav>
     );
-};
+}) as React.FC;
 
 const InvestNav = styled.div`
     background: #eeeef6;

@@ -171,20 +171,6 @@ export const fetchTokenBalances: (
     );
 };
 
-export const filterUserCommits = async (allUnexecutedCommits: CreatedCommitType[], account: string) => {
-    const userCommits = allUnexecutedCommits?.map(async (commit) => {
-        const txn = await commit.getTransactionReceipt();
-        if (txn.from.toLowerCase() === account.toLowerCase()) {
-            return commit;
-        } else {
-            return null;
-        }
-    });
-    return Promise.all(userCommits).then((res) => {
-        return res.filter((commit) => commit !== null);
-    });
-};
-
 export const addToPending: (
     pendingShort: BigNumber,
     pendingLong: BigNumber,

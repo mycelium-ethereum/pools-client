@@ -6,7 +6,7 @@ import { QueuedCommit } from '@libs/types/General';
 import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommits } from '@context/UsersCommitContext';
 
-export default () => {
+export default (() => {
     const { account, provider } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools } = usePools();
@@ -42,4 +42,4 @@ export default () => {
     }, [pools, commits, provider]);
 
     return allQueuedCommits;
-};
+}) as () => QueuedCommit[];

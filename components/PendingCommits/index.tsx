@@ -42,14 +42,15 @@ export default (() => {
                 <Table>
                     <TableHeader>
                         {headings.map((heading, index) => (
-                            <TableHeading key={`pending-commit-heading-row-${index}`} width={heading.width}>
+                            /* pchr -> pending-commit-heading-row */
+                            <TableHeading key={`pchr-${index}`} width={heading.width}>
                                 {heading.text}
                             </TableHeading>
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {commits.map((commit) => (
-                            <CommitRow {...commit} />
+                        {commits.map((commit, index) => (
+                            <CommitRow key={`pcr-${index}`} {...commit} />
                         ))}
                     </TableBody>
                 </Table>

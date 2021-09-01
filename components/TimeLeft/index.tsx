@@ -52,9 +52,7 @@ export default styled(({ targetTime, className }) => {
 
     return (
         <>
-            <span className={className}>
-                {`${hours}h ${minutes}m ${seconds}s`}
-            </span>
+            <span className={className}>{`${hours}h ${minutes}m ${seconds}s`}</span>
         </>
     );
 })<{

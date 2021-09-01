@@ -31,7 +31,7 @@ export const TableRow = styled.tr`
     }
 
     &:hover {
-        background: #EDEBFE;
+        background: #edebfe;
         cursor: pointer;
     }
 `;

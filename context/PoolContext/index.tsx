@@ -18,7 +18,6 @@ import {
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
-// import { calcTokenPrice } from '@libs/utils/calcs';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 
@@ -155,7 +154,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             ) as PoolCommitter;
 
             // @ts-ignore
-            committer.on(committer.filters.CreateCommit(), (id, amount, type, log) => {
+            committer.on(committer.filters.CreateCommit(), (id, amount, type) => {
                 console.debug('Commit created', {
                     id,
                     amount,
@@ -361,6 +360,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
         }
     };
+
     /**
      * Subscribes to a given pool address
      */

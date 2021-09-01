@@ -5,11 +5,11 @@ import { ARBITRUM } from '@libs/constants';
 import styled from 'styled-components';
 
 export default styled(({ className }) => {
-	return (
-		<Select className={className} preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
-			<SelectOption>Arbitrum</SelectOption>
-		</Select>
-	)
+    return (
+        <Select className={className} preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
+            <SelectOption>Arbitrum</SelectOption>
+        </Select>
+    );
 })`
     border: 1px solid #ffffff;
     box-sizing: border-box;
@@ -22,8 +22,7 @@ export default styled(({ className }) => {
     & svg {
         fill: #fff;
     }
-`
-
+`;
 
 const NetworkPreview = styled(({ networkID, networkName, className }) => {
     return (
