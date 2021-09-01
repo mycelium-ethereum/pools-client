@@ -30,10 +30,10 @@ export default (() => {
                         tokenPrice = calcTokenPrice(longBalance, longToken.supply);
                     }
                     return {
+                        ...commit,
                         token,
                         tokenPrice,
                         spent: commit.amount.times(tokenPrice),
-                        amount: commit.amount,
                         nextRebalance: lastUpdate.plus(updateInterval),
                     };
                 }),

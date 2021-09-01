@@ -1,4 +1,5 @@
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -189,7 +190,7 @@ export const SelectDropdown = styled.div`
     z-index: 10;
 `;
 
-export const Select = styled(({ preview, onChange, className, children }) => {
+export const Select = styled(({ preview, onChange, icon, className, children }) => {
     const ref = useRef<HTMLDivElement>(null);
 
     const handleClick = (e: any) => {
@@ -202,13 +203,14 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     return (
         <div ref={ref} className={className} onClick={handleClick}>
             {preview}
-            <DownOutlined />
+            {icon ? icon : <DownOutlined />}
             <SelectDropdown>{children}</SelectDropdown>
         </div>
     );
 })<{
     preview: React.ReactNode;
     onChange: React.MouseEventHandler<HTMLDivElement>;
+    icon?: AntdIconProps;
 }>`
     background: #f9fafb;
     border: 1px solid #d1d5db;
@@ -220,7 +222,11 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     position: relative;
     box-sizing: border-box;
 
-    & svg {
+    > .anticon {
+        vertical-align: 0;
+    }
+
+    & > svg {
         width: 1rem;
         height: 0.8rem;
         position: absolute;

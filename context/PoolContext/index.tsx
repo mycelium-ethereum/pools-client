@@ -28,6 +28,7 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitType, amount: number) => void;
     approve: (pool: string) => void;
+    uncommit: (pool: string, commitID: number) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -83,6 +84,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                             id: commit.args.commitID.toNumber(),
                                             amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
                                             type: commit.args.commitType as CommitType,
+                                            txnHash: commit.transactionHash,
                                         },
                                     });
                                 });
@@ -312,29 +314,29 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    // const _uncommit: (pool: string, commitID: EthersBigNumber) => void = (pool, commitID) => {
-    //     const committerAddress = poolsState.pools[pool].committer.address;
-    //     if (!committerAddress) {
-    //         console.error('Committer address undefined when trying to mint');
-    //         // TODO handle error
-    //     }
-    //     const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
-    //     if (handleTransaction) {
-    //         handleTransaction(committer.uncommit, [commitID], {
-    //             statusMessages: {
-    //                 waiting: 'Submitting commit',
-    //                 error: 'Failed to commit',
-    //             },
-    //             onSuccess: async (receipt) => {
-    //                 console.log(receipt);
-    //                 // if (!removeCommit) {
-    //                 //     return;
-    //                 // }
-    //                 // removeCommit(commitID.toNumber());
-    //             },
-    //         });
-    //     }
-    // };
+    const uncommit: (pool: string, commitID: number) => void = (pool, commitID) => {
+        const committerAddress = poolsState.pools[pool].committer.address;
+        if (!committerAddress) {
+            console.error('Committer address undefined when trying to mint');
+            // TODO handle error
+        }
+        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
+        if (handleTransaction) {
+            handleTransaction(committer.uncommit, [commitID], {
+                statusMessages: {
+                    waiting: 'Submitting commit',
+                    error: 'Failed to commit',
+                },
+                onSuccess: async (receipt) => {
+                    console.log(receipt);
+                    // if (!removeCommit) {
+                    //     return;
+                    // }
+                    // removeCommit(commitID.toNumber());
+                },
+            });
+        }
+    };
 
     const approve: (pool: string) => void = (pool) => {
         const token = new ethers.Contract(
@@ -420,6 +422,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
+                    uncommit,
                 }}
             >
                 {children}

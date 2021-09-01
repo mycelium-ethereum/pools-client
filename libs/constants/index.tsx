@@ -40,3 +40,7 @@ export const EMPTY_TOKEN: PoolToken = {
 // networks
 export const ARBITRUM = '421611';
 export const KOVAN = '42';
+
+// Commit context
+export const BUYS = 0;
+export const SELLS = 1;

@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import { Children, PendingCommitInfo } from '@libs/types/General';
+import { Children, CommitsFocus, PendingCommitInfo } from '@libs/types/General';
 import { useReducer } from 'react';
 import { CommitAction, initialCommitState, reducer } from './commitDispatch';
 
@@ -10,6 +10,7 @@ interface CommitActionsProps {
 interface CommitContextProps {
     commits: Record<string, PendingCommitInfo>;
     showCommits: boolean;
+    focus: CommitsFocus;
 }
 // type AddCommit = (id: number, commitInfo: PendingCommitInfo) => void;
 // interface CommitContextProps {

@@ -1,6 +1,8 @@
 import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
+import { BUYS, SELLS } from '@libs/constants';
+import { CommitsFocus } from '@libs/types/General';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import React from 'react';
 import styled from 'styled-components';
@@ -10,9 +12,9 @@ export default (() => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
 
-    const handleClick = () => {
+    const handleClick = (focus: CommitsFocus) => {
         if (commitDispatch) {
-            commitDispatch({ type: 'setShow', value: true });
+            commitDispatch({ type: 'show', focus: focus });
         } else {
             console.error('Commitdispatch undefined');
         }
@@ -23,10 +25,10 @@ export default (() => {
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
-            <Link onClick={handleClick}>
+            <Link onClick={() => handleClick(BUYS)}>
                 <a>{buys} Buys</a>
             </Link>
-            <Link onClick={handleClick}>
+            <Link onClick={() => handleClick(SELLS)}>
                 <a>{sells} Sells</a>
             </Link>
         </QueuedDropdown>

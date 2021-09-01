@@ -1,28 +1,25 @@
-import { CommitType } from '@libs/types/General';
-import { BigNumber } from 'bignumber.js';
+import { BUYS } from '@libs/constants';
+import { CommitsFocus, PendingCommitInfo } from '@libs/types/General';
 
-type PendingCommitInfo = {
-    pool: string;
-    id: number;
-    type: CommitType;
-    amount: BigNumber;
-};
 export type CommitsState = {
     commits: Record<string, PendingCommitInfo>; // id is {POOL_ADDRESS}-{COMMIT_ID}
     updateCommits: boolean; // trigger that can be used to listen on commit updates
     showCommits: boolean; // opens and closes commit modal
+    focus: CommitsFocus; // show buys or show sells
 };
 
 export const initialCommitState: CommitsState = {
     commits: {},
     updateCommits: false,
     showCommits: true,
+    focus: BUYS,
 };
 
 export type CommitAction =
     | { type: 'addCommit'; commitInfo: PendingCommitInfo }
     | { type: 'removeCommit'; id: number; pool: string }
-    | { type: 'setShow'; value: boolean }
+    | { type: 'hide' }
+    | { type: 'show'; focus: CommitsFocus }
     | { type: 'updateCommits' };
 
 export const reducer: (state: CommitsState, action: CommitAction) => CommitsState = (state, action) => {
@@ -43,10 +40,16 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
                 ...state,
                 commits: commitsWithout,
             };
-        case 'setShow':
+        case 'show':
             return {
                 ...state,
-                showCommits: action.value,
+                showCommits: true,
+                focus: action.focus,
+            };
+        case 'hide':
+            return {
+                ...state,
+                showCommits: false,
             };
         default:
             throw new Error('Unexpected action');
