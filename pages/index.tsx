@@ -18,9 +18,9 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <NavBar />
-            <InvestNav />
             <PoolStore>
+                <NavBar />
+                <InvestNav />
                 <SwapStore>
                     <Exchange />
                 </SwapStore>

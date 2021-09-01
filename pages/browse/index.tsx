@@ -16,9 +16,9 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <NavBar />
-            <InvestNav />
             <PoolStore>
+                <NavBar />
+                <InvestNav />
                 <Container className="container">
                     <Browse />
                 </Container>

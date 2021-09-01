@@ -31,7 +31,7 @@ export const TableRow = styled.tr`
     }
 
     &:hover {
-        background: var(--color-accent);
+        background: #EDEBFE;
         cursor: pointer;
     }
 `;

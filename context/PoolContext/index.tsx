@@ -72,19 +72,21 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     side: SHORT,
                                     amount: committerInfo.pendingShort,
                                 });
-                                
+
                                 committerInfo.allUnexecutedCommits.map((commit) => {
-                                    if (!commitDispatch) return;
+                                    if (!commitDispatch) {
+                                        return;
+                                    }
                                     commitDispatch({
                                         type: 'addCommit',
                                         commitInfo: {
                                             pool: pool.address,
                                             id: commit.args.commitID.toNumber(),
                                             amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
-                                            type: commit.args.commitType as CommitType
-                                        }
-                                    })
-                                })
+                                            type: commit.args.commitType as CommitType,
+                                        },
+                                    });
+                                });
                             });
                         } catch (err) {
                             console.error('Failed to initialise committer', err);
@@ -111,7 +113,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
                 fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
                     console.debug(
-                        "Balances",
+                        'Balances',
                         ethers.utils.formatEther(balances[0][1]),
                         ethers.utils.formatEther(balances[1][1]),
                         ethers.utils.formatEther(balances[2][1]),
@@ -139,7 +141,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                 // subscribe
                 subscribeToPool(pool.address);
-
             });
         }
     }, [account, poolsState.poolsInitialised]);
@@ -186,21 +187,21 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 //         console.log(lastUpdate);
                 //         console.log(updateInterval.toNumber(), lastUpdate.toNumber(), 'update interval');
 
-                        // addCommit(id.toNumber(), {
-                        //     amount: amount_,
-                        //     value,
-                        //     tokenName,
-                        //     updateInterval,
-                        //     lastUpdate: new BigNumber(lastUpdate.toNumber()),
-                        //     frontRunningInterval,
-                        //     action: {
-                        //         text: buttonText,
-                        //         onClick: () => {
-                        //             uncommit(pool, id);
-                        //         },
-                        //     },
-                        // });
-                    // }
+                // addCommit(id.toNumber(), {
+                //     amount: amount_,
+                //     value,
+                //     tokenName,
+                //     updateInterval,
+                //     lastUpdate: new BigNumber(lastUpdate.toNumber()),
+                //     frontRunningInterval,
+                //     action: {
+                //         text: buttonText,
+                //         onClick: () => {
+                //             uncommit(pool, id);
+                //         },
+                //     },
+                // });
+                // }
                 // });
                 addAmountToPendingPools(pool, type as CommitType, amount);
             });
@@ -216,7 +217,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         type: 'removeCommit',
                         id: id.toNumber(),
                         pool: pool,
-                    })
+                    });
                 }
             });
 
@@ -231,7 +232,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         type: 'removeCommit',
                         id: id.toNumber(),
                         pool: pool,
-                    })
+                    });
                 }
             });
             committer.on('FailedCommitExecution', () => {
@@ -243,7 +244,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             poolInstance.on('CompletedUpkeep', () => {
                 console.debug('Completed upkeep');
                 poolInstance.lastPriceTimestamp().then((lastUpdate) => {
-                    console.debug("Last update", lastUpdate.toNumber());
+                    console.debug('Last update', lastUpdate.toNumber());
                     poolsDispatch({
                         type: 'setLastUpdate',
                         pool: poolInstance.address,
@@ -306,7 +307,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.debug("Failed to commit: ", receipt);
+                    console.debug('Failed to commit: ', receipt);
                 },
             });
         }

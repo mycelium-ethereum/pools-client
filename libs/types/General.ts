@@ -60,23 +60,24 @@ export type Committer = {
     address: string;
     pendingLong: BigNumber;
     pendingShort: BigNumber;
-    allUnexecutedCommits: CreatedCommitType[]
+    allUnexecutedCommits: CreatedCommitType[];
 };
 
 export type QueuedCommit = {
-	token: PoolToken,
-	spent: BigNumber,
-	tokenPrice: BigNumber,
-	amount: BigNumber
-	nextRebalance: BigNumber
-}
+    token: PoolToken;
+    spent: BigNumber;
+    tokenPrice: BigNumber;
+    amount: BigNumber;
+    nextRebalance: BigNumber;
+};
 
-
-export type CreatedCommitType = TypedEvent<[ethers.BigNumber, ethers.BigNumber, number] & {
-    commitID: ethers.BigNumber;
-    amount: ethers.BigNumber;
-    commitType: number;
-}>
+export type CreatedCommitType = TypedEvent<
+    [ethers.BigNumber, ethers.BigNumber, number] & {
+        commitID: ethers.BigNumber;
+        amount: ethers.BigNumber;
+        commitType: number;
+    }
+>;
 
 export type Pool = {
     address: string;
@@ -99,7 +100,7 @@ export type Pool = {
 export type PendingCommitInfo = {
     pool: string;
     id: number;
-    type: CommitType,
+    type: CommitType;
     amount: BigNumber;
 };
 

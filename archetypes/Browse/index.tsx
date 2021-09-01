@@ -3,9 +3,9 @@ import { FilterContext, noDispatch, defaultState } from '@context/FilterContext'
 import styled from 'styled-components';
 import FilterSelects from './FilterSelects';
 import PoolsTable from './PoolsTable';
-import { 
-    // Button, 
-    Container 
+import {
+    // Button,
+    Container,
 } from '@components/General';
 
 export const Browse: React.FC = () => {

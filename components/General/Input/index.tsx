@@ -174,7 +174,7 @@ export const Checkbox: React.FC<CBProps> = styled(({ className, checked, onClick
     }
 `;
 
-const SelectDropdown = styled.div`
+export const SelectDropdown = styled.div`
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
@@ -214,6 +214,7 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     border: 1px solid #d1d5db;
     box-sizing: border-box;
     border-radius: 7px;
+    padding-left: 1rem;
     color: #6b7280;
     cursor: pointer;
     position: relative;

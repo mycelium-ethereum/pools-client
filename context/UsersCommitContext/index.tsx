@@ -3,14 +3,13 @@ import { Children, PendingCommitInfo } from '@libs/types/General';
 import { useReducer } from 'react';
 import { CommitAction, initialCommitState, reducer } from './commitDispatch';
 
-
 interface CommitActionsProps {
-    commitDispatch: React.Dispatch<CommitAction>
+    commitDispatch: React.Dispatch<CommitAction>;
 }
 
 interface CommitContextProps {
-    commits: Record<string, PendingCommitInfo>,
-    showCommits: boolean
+    commits: Record<string, PendingCommitInfo>;
+    showCommits: boolean;
 }
 // type AddCommit = (id: number, commitInfo: PendingCommitInfo) => void;
 // interface CommitContextProps {
@@ -23,7 +22,6 @@ interface CommitContextProps {
 //         },
 //     ) => void;
 // }
-
 
 export const CommitContext = createContext<Partial<CommitContextProps>>({});
 export const CommitActionsContext = createContext<Partial<CommitActionsProps>>({});
@@ -84,12 +82,12 @@ export const UsersCommitStore: React.FC = ({ children }: Children) => {
     return (
         <CommitContext.Provider
             value={{
-                ...state
+                ...state,
             }}
         >
             <CommitActionsContext.Provider
                 value={{
-                    commitDispatch
+                    commitDispatch,
                 }}
             >
                 {children}

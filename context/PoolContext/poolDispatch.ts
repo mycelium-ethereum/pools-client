@@ -84,7 +84,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         committer: {
                             ...state.pools[action.pool].committer,
                             allUnexecutedCommits: action.commits,
-                        }
+                        },
                     },
                 },
             };

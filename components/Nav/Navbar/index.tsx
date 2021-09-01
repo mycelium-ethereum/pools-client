@@ -8,10 +8,9 @@ import ENS, { getEnsAddress } from '@ensdomains/ensjs';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
-import { Select, SelectOption } from '@components/General/Input';
-import { Logo } from '@components/General';
-import { ARBITRUM } from '@libs/constants';
 import MobileMenu from './MobileMenu';
+import CommitDropdown from './CommitDropdown';
+import NetworkDropdown from './NetworkDropdown';
 
 const NavBar: React.FC = styled(({ className }) => {
     return (
@@ -24,20 +23,6 @@ const NavBar: React.FC = styled(({ className }) => {
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
-`;
-
-const NetworkDropdown = styled(Select)`
-    border: 1px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 7px;
-    background: transparent;
-    margin: auto 1rem;
-    width: 158px;
-    height: 42px;
-
-    & svg {
-        fill: #fff;
-    }
 `;
 
 const Links = styled.ul`
@@ -91,28 +76,6 @@ const Links = styled.ul`
     }
 `;
 
-const NetworkPreview = styled(({ networkID, networkName, className }) => {
-    return (
-        <div className={className}>
-            <Logo ticker={networkID} />
-            {networkName}
-        </div>
-    );
-})`
-    color: #fff;
-    display: flex;
-    margin: 0.25rem;
-    line-height: 2rem;
-    padding: 0 0.5rem;
-    ${Logo} {
-        display: inline;
-        vertical-align: 0;
-        width: 20px;
-        height: 22px;
-        margin-right: 0.5rem;
-    }
-`;
-
 export const NavBarContent = styled(({ className }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
@@ -145,9 +108,7 @@ export const NavBarContent = styled(({ className }) => {
                 </li>
             </Links>
 
-            <NetworkDropdown preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
-                <SelectOption>Arbitrum</SelectOption>
-            </NetworkDropdown>
+            <NetworkDropdown />
 
             <AccountDropdown
                 onboard={onboard}
@@ -158,6 +119,8 @@ export const NavBarContent = styled(({ className }) => {
                 logout={resetOnboard}
                 handleConnect={handleConnect}
             />
+
+            <CommitDropdown />
 
             <ThemeSwitcher />
 

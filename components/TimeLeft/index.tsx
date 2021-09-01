@@ -53,9 +53,7 @@ export default styled(({ targetTime, className }) => {
     return (
         <>
             <span className={className}>
-                {!hours && !minutes && !seconds // unlucky no time left
-                    ? 'Waiting'
-                    : `${hours}h ${minutes}m ${seconds}s`}
+                {`${hours}h ${minutes}m ${seconds}s`}
             </span>
         </>
     );

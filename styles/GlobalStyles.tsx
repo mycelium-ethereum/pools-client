@@ -64,6 +64,11 @@ export default createGlobalStyle`
       
         background-color: var(--color-background);
         color: var(--color-text);
+
+        // a {
+        //     color: #3DA8F5;
+        //     text-decoration: underline;
+        // }
   	}
 
     .tracer-loading {
@@ -116,6 +121,5 @@ export default createGlobalStyle`
     .react-toast-notifications__container {
         top: 65px !important;
         z-index: 100001 !important;
-        max-width: 400px !important;
     }
 `;

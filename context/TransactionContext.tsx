@@ -129,8 +129,6 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    
-
     return (
         <TransactionContext.Provider
             value={{
