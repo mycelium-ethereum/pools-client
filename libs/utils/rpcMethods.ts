@@ -56,6 +56,7 @@ export const switchNetworks: (
     } catch (error) {
         // This error code indicates that the chain has not been added to MetaMask.
         console.error('failed to switch network', error);
+        // @ts-ignore
         if (error?.code === 4902) { // unknown network
             try {
                 await provider?.send('wallet_addEthereumChain', [
