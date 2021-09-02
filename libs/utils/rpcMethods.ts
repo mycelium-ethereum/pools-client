@@ -40,7 +40,6 @@ export const watchAsset: (provider: ethers.providers.JsonRpcProvider | null, tok
         });
 };
 
-const UNKNOWN_NETWORK = 4902;
 export const switchNetworks: (
     provider: ethers.providers.JsonRpcProvider | undefined,
     networkID: string,
@@ -57,7 +56,7 @@ export const switchNetworks: (
     } catch (error) {
         // This error code indicates that the chain has not been added to MetaMask.
         console.error('failed to switch network', error);
-        if (error.code === UNKNOWN_NETWORK) {
+        if (error.code === 4902) { // unknown network
             try {
                 await provider?.send('wallet_addEthereumChain', [
                     {
@@ -73,8 +72,8 @@ export const switchNetworks: (
                 return false;
             }
         }
-        return false;
     }
+    return false;
 };
 
 // Not really an RPC but thought it kind of belongs here
