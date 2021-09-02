@@ -2835,10 +2835,10 @@
     walletlink "^2.1.0"
     web3-provider-engine "^15.0.4"
 
-"@tracer-protocol/perpetual-pools-contracts@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.1.tgz#a5b14ffac3904e74cedfb29441e751e68825fa4e"
-  integrity sha512-boWs1pql6YM9N03eP5JbHdTbybvE1rEncWLczTUvP/mtkZM4Tzy3vXsGEL6OQ3iO3zdt/2kmG3aYDeDANEaH4w==
+"@tracer-protocol/perpetual-pools-contracts@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.2.tgz#72836bcdfdea88409fe442107406ac9ff258c51b"
+  integrity sha512-RPadj2ew2jftaszjHmNZl/dzJkgb1t+5qX6EvshTmP/Zpt8PGEUTk5JZzYUO39a5L0XKlM8i+OqxNRzQfsGP/g==
   dependencies:
     "@chainlink/contracts" "^0.2.1"
     "@openzeppelin/contracts" "^4.2.0"
