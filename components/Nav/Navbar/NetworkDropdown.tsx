@@ -17,7 +17,7 @@ export default styled(({ className }) => {
     background: transparent;
     margin: auto 1rem;
     width: 158px;
-    height: 42px;
+    height: 2.625rem;
 
     & svg {
         fill: #fff;
@@ -34,13 +34,12 @@ const NetworkPreview = styled(({ networkID, networkName, className }) => {
 })`
     color: #fff;
     display: flex;
-    margin: 0.25rem;
-    line-height: 2rem;
+    line-height: 2.625rem;
     ${Logo} {
         display: inline;
         vertical-align: 0;
         width: 20px;
         height: 22px;
-        margin-right: 0.5rem;
+        margin: auto 0.5rem auto 0;
     }
 `;

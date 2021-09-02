@@ -42,8 +42,8 @@ const QueuedDropdown = styled(Select)`
     background: #3da8f5;
     margin: auto 1rem;
     width: 158px;
-    height: 42px;
-    line-height: 42px;
+    height: 2.625rem;
+    line-height: 2.625rem;
     color: #fff;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 6px;

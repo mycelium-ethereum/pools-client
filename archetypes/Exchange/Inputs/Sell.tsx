@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, Label } from '.';
+import { ExchangeButton, InputContainer } from '.';
 import { usePool } from '@context/PoolContext';
+import { LONG } from '@libs/constants';
+import Summary from '../Summary';
+import { Label } from '@components/Pool';
+import SelectToken from '@components/SelectToken';
 
 export default (() => {
+    const [showTokenSelect, setShowTokenSelect] = useState(true);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
     const {
         amount,
         selectedPool,
+        side,
         options: { poolOptions },
     } = swapState;
 
@@ -19,45 +25,63 @@ export default (() => {
 
     return (
         <>
-            <StyledInputContainer>
-                <Label>Amount</Label>
-                <Input
-                    value={amount}
-                    onChange={(e: any) => {
-                        swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
-                    }}
-                    type={'number'}
-                    min={0}
-                />
-                <Select onChange={(e: any) => swapDispatch({ type: 'setSelectedPool', value: e.currentTarget.value })}>
-                    {poolOptions.map((pool) => (
-                        <SelectOption
-                            key={`token-dropdown-option-${pool.address}`}
-                            value={pool.address}
-                            selected={selectedPool === pool?.address}
-                        >
-                            {pool.name}
-                        </SelectOption>
-                    ))}
-                </Select>
-            </StyledInputContainer>
-
-            <ExchangeButton>Sell</ExchangeButton>
+            <InputRow>
+                <span>
+                    <Label>Token</Label>
+                    <Select
+                        preview={pool.name}
+                        onClick={() => {
+                            setShowTokenSelect(true);
+                        }}
+                        onChange={(e: any) =>
+                            swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
+                        }
+                    >
+                        {poolOptions.map((pool) => (
+                            <SelectOption
+                                key={`pool-dropdown-option-${pool.address}`}
+                                value={pool.address}
+                                selected={selectedPool === pool.address}
+                            >
+                                {pool.name}
+                            </SelectOption>
+                        ))}
+                    </Select>
+                </span>
+                <InputContainer>
+                    <Label>Amount</Label>
+                    <Input
+                        value={amount}
+                        onChange={(e: any) => {
+                            swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
+                        }}
+                        type={'number'}
+                        min={0}
+                    />
+                </InputContainer>
+            </InputRow>
+            <Summary pool={pool} isLong={side === LONG} amount={amount} />
+            <ExchangeButton className="primary" disabled={!amount || !selectedPool}>
+                Sell
+            </ExchangeButton>
+            <SelectToken show={showTokenSelect} />
         </>
     );
 }) as React.FC;
 
-const StyledInputContainer = styled(InputContainer)`
+const InputRow = styled.div`
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+
     ${Select} {
-        position: absolute;
-        bottom: 0;
-        right: 5px;
-        border-radius: 7px;
+        width: 245px;
+        height: 3.44rem; // 55px
+        line-height: 3.44rem; // 55px
     }
+
     ${Input} {
-        height: 50px;
+        max-width: 220px;
         width: 100%;
-        border: 1px solid var(--color-accent);
-        border-radius: 5px;
     }
 `;

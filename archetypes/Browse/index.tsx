@@ -53,7 +53,7 @@ const BrowseModal = styled.div`
 
 // const PageButton = styled(Button)`
 //     width: 122px;
-//     height: 55px;
+//     height: 3.44rem; // 55px
 //     display: inline;
 //     background: #e5e7eb;
 //     color: #6b7280;

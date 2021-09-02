@@ -11,7 +11,7 @@ export type CommitsState = {
 export const initialCommitState: CommitsState = {
     commits: {},
     updateCommits: false,
-    showCommits: true,
+    showCommits: false,
     focus: BUYS,
 };
 

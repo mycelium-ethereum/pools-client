@@ -66,7 +66,7 @@ const TradeModal = styled.div`
     width: 611px;
     box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
     border-radius: 20px;
-    padding: 71px 65px;
+    padding: 2rem 3rem;
     margin: 5vh auto;
 
     @media (max-width: 611px) {
@@ -78,7 +78,7 @@ const TradeModal = styled.div`
     }
 
     ${Divider} {
-        margin: 2.5rem 0;
+        margin: 2rem 0;
     }
 `;
 
@@ -86,7 +86,7 @@ const Header = styled.div`
     display: flex;
     ${SlideSelect} {
         width: 330px;
-        height: 50px;
+        height: 3.125rem;
         border-radius: 7px;
         border: none;
         margin: 0 auto 0 0;

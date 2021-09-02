@@ -24,7 +24,7 @@ export default (() => {
                 <SwapStore>
                     <Exchange />
                 </SwapStore>
-                <PendingCommits show={true} />
+                <PendingCommits />
             </PoolStore>
             <Footer />
         </Page>

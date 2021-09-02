@@ -53,6 +53,10 @@ export type Token = {
     approved: boolean;
 };
 
+export type TokenBreakdown = PoolToken & {
+    tokenPrice: BigNumber;
+};
+
 export type PoolToken = Token & {
     side: SideType;
     supply: BigNumber;

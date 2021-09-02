@@ -17,6 +17,7 @@ export default createGlobalStyle`
     }
 
   	html {
+        font-size:16px;
 
         --color-background: #000240;
         --color-background-secondary: #00125D;
@@ -64,6 +65,10 @@ export default createGlobalStyle`
       
         background-color: var(--color-background);
         color: var(--color-text);
+
+        @media (max-height: 800px) {
+            font-size: 12px;
+        }
 
         // a {
         //     color: #3DA8F5;

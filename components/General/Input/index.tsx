@@ -8,9 +8,10 @@ export const Input = styled.input`
     background: #f9fafb;
     border: 1px solid #d1d5db;
     box-sizing: border-box;
-    padding: 12px 20px;
     border-radius: 7px;
-    height: 55px;
+    box-sizing: border-box;
+    padding: 12px 20px;
+    height: 3.44rem; // 55px
 
     position: relative;
 
@@ -226,7 +227,7 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
         vertical-align: 0;
     }
 
-    & > svg {
+    & svg {
         width: 1rem;
         height: 0.8rem;
         position: absolute;

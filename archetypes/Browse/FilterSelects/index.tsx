@@ -101,7 +101,7 @@ const DropdownContainer = styled.div`
     }
 
     ${Select} {
-        width: 142px;
+        width: 12.625rem;
         height: 44px;
         line-height: 44px;
         padding-left: 1rem;

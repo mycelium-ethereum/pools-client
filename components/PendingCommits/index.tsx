@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { Heading, QueuedCommit } from '@libs/types/General';
@@ -14,68 +14,37 @@ import { Select, SelectDropdown } from '@components/General/Input';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
+import Modal, { ModalInner } from '@components/General/Modal';
 
 // TODO filter buys and sells
 export default (() => {
     const { provider } = useWeb3();
-    const ref = useRef(null);
     const { showCommits = false, focus = BUYS } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const { uncommit = () => console.error('uncommit undefined') } = usePoolActions();
     const commits = usePendingCommits();
 
-    useEffect(() => {
-        /**
-         * Alert if clicked on outside of element
-         */
-        const handleClickOutside = (event: any) => {
-            if (ref.current && !(ref.current as any).contains(event.target)) {
-                commitDispatch({
-                    type: 'hide',
-                });
-            }
-        };
-
-        // Bind the event listener
-        document?.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            // Unbind the event listener on clean up
-            document?.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [ref]);
-
     return (
-        <PendingCommits show={showCommits}>
-            <Overlay show={showCommits} />
-            <PendingCommitsModal ref={ref} show={showCommits}>
-                <Title>Queued {focus === BUYS ? 'Buys' : 'Sells'}</Title>
-                <Table>
-                    <TableHeader>
-                        {headings.map((heading, index) => (
-                            /* pchr -> pending-commit-heading-row */
-                            <TableHeading key={`pchr-${index}`} width={heading.width}>
-                                {heading.text}
-                            </TableHeading>
-                        ))}
-                    </TableHeader>
-                    <TableBody>
-                        {commits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                {...commit}
-                                provider={provider ?? null}
-                                uncommit={uncommit}
-                            />
-                        ))}
-                    </TableBody>
-                </Table>
-            </PendingCommitsModal>
-        </PendingCommits>
+        <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
+            <Title>Queued {focus === BUYS ? 'Buys' : 'Sells'}</Title>
+            <Table>
+                <TableHeader>
+                    {headings.map((heading, index) => (
+                        /* pchr -> pending-commit-heading-row */
+                        <TableHeading key={`pchr-${index}`} width={heading.width}>
+                            {heading.text}
+                        </TableHeading>
+                    ))}
+                </TableHeader>
+                <TableBody>
+                    {commits.map((commit, index) => (
+                        <CommitRow key={`pcr-${index}`} {...commit} provider={provider ?? null} uncommit={uncommit} />
+                    ))}
+                </TableBody>
+            </Table>
+        </PendingCommitsModal>
     );
-}) as React.FC<{
-    show: boolean;
-    // setShow: (val: boolean) => any
-}>;
+}) as React.FC;
 
 const Title = styled.h1`
     font-style: normal;
@@ -84,38 +53,11 @@ const Title = styled.h1`
     color: #111928;
 `;
 
-const PendingCommits = styled.div<{ show: boolean }>``;
-
-const Overlay = styled.div<{ show: boolean }>`
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: 0.3s;
-    opacity: ${(props) => (props.show ? 0.5 : 0)};
-    background: black;
-    z-index: ${(props) => (props.show ? 1 : -1)};
-`;
-
-const PendingCommitsModal = styled.div<{ show: boolean }>`
-    transition: 0.3s;
-    padding-top: ${(props) => (props.show ? '0' : '5vh')};
-    opacity: ${(props) => (props.show ? 1 : 0)};
-    position: absolute;
-    width: 1010px;
-    height: 700px;
-    background: #fff;
-    padding: 71px 65px;
-    // z-index: 2;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: auto;
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-    z-index: ${(props) => (props.show ? 2 : -1)};
+const PendingCommitsModal = styled(Modal)`
+    ${ModalInner} {
+        max-width: 1010px;
+        height: 700px;
+    }
 `;
 
 const CommitRow: React.FC<

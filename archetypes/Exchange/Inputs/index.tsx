@@ -12,7 +12,7 @@ export const InputContainer = styled.div`
 
 export const ExchangeButton = styled(Button)`
     border-radius: 7px;
-    height: 50px;
+    height: 3.125rem;
     margin: 1rem auto;
     width: 100%;
 `;
