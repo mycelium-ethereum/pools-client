@@ -1,13 +1,24 @@
 import React from 'react';
 import { Select, SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
-import { ARBITRUM } from '@libs/constants';
 import styled from 'styled-components';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { switchNetworks } from '@libs/utils/rpcMethods';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { ARBITRUM, KOVAN } from '@libs/constants';
 
 export default styled(({ className }) => {
+    const { provider, network = '0' } = useWeb3();
     return (
-        <Select className={className} preview={<NetworkPreview networkID={ARBITRUM} networkName={'Arbitrum'} />}>
-            <SelectOption>Arbitrum</SelectOption>
+        <Select
+            className={className}
+            preview={<NetworkPreview networkID={network} networkName={networkConfig[network].name ?? 'Unknown'} />}
+            onChange={(event: any) => {
+                switchNetworks(provider, event.target.value);
+            }}
+        >
+            <SelectOption value={ARBITRUM}>Arbitrum</SelectOption>
+            <SelectOption value={KOVAN}>Kovan</SelectOption>
         </Select>
     );
 })`

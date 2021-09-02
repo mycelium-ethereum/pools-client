@@ -1,4 +1,5 @@
 import { PoolToken } from '@libs/types/General';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ethers } from 'ethers';
 
 /**
@@ -37,6 +38,43 @@ export const watchAsset: (provider: ethers.providers.JsonRpcProvider | null, tok
             console.error('Failed to watch asset', err);
             return false;
         });
+};
+
+const UNKNOWN_NETWORK = 4902;
+export const switchNetworks: (
+    provider: ethers.providers.JsonRpcProvider | undefined,
+    networkID: string,
+) => Promise<boolean> = async (provider, networkID) => {
+    const config = networkConfig[networkID];
+    try {
+        await provider?.send('wallet_switchEthereumChain', [
+            {
+                // @ts-ignore
+                chainId: config.hex,
+            },
+        ]);
+        return true;
+    } catch (error) {
+        // This error code indicates that the chain has not been added to MetaMask.
+        console.error('failed to switch network', error);
+        if (error.code === UNKNOWN_NETWORK) {
+            try {
+                await provider?.send('wallet_addEthereumChain', [
+                    {
+                        // @ts-ignore
+                        chainId: config.hex,
+                        chainName: config.name,
+                        rpcUrls: [config.publicRPC],
+                    },
+                ]);
+                return true;
+            } catch (addError) {
+                console.error('Failed to add ethereum chain', addError);
+                return false;
+            }
+        }
+        return false;
+    }
 };
 
 // Not really an RPC but thought it kind of belongs here

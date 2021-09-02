@@ -11,6 +11,8 @@ export type Network = {
             abi: ethers.ContractInterface;
         };
     };
+    hex: string;
+    publicRPC: string;
     graphUri: string;
 };
 /**
@@ -25,8 +27,10 @@ export type Network = {
 export const networkConfig: Record<string, Network> = {
     '0': {
         previewUrl: '',
-        name: 'Select Network',
+        name: 'Unknown',
         contracts: {},
+        publicRPC: '',
+        hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
     },
     '421611': {
@@ -34,10 +38,12 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
-                address: '0xcD95A675eD9df9b7f280E6C0BE5199DA574A7B3b',
+                address: '0x799b73BC2ae5333d90b2A1075295998Da24C58a4',
                 abi: PoolFactory__factory.abi,
             },
         },
+        hex: '0x66EEB',
+        publicRPC: 'https://rinkeby.arbitrum.io/rpc',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
     },
     '42': {
@@ -49,6 +55,8 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        publicRPC: 'https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
     },
     '1337': {
@@ -60,6 +68,8 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        hex: '',
+        publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
     },
 };
