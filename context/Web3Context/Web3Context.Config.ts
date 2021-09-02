@@ -43,7 +43,7 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         hex: '0x66EEB',
-        publicRPC: 'https://rinkeby.arbitrum.io/rpc',
+        publicRPC: 'https://arbitrum-rinkeby.infura.io/v3/a0458173591d445880be6f8dfbb78a67',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
     },
     '42': {
