@@ -55,6 +55,7 @@ export type Token = {
 
 export type TokenBreakdown = PoolToken & {
     tokenPrice: BigNumber;
+    pool: string;
 };
 
 export type PoolToken = Token & {

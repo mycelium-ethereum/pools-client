@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Input, Select, SelectOption } from '@components/General/Input';
+import { Input, Select } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { ExchangeButton, InputContainer } from '.';
 import { usePool } from '@context/PoolContext';
@@ -10,15 +10,10 @@ import { Label } from '@components/Pool';
 import SelectToken from '@components/SelectToken';
 
 export default (() => {
-    const [showTokenSelect, setShowTokenSelect] = useState(true);
+    const [showTokenSelect, setShowTokenSelect] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
-    const {
-        amount,
-        selectedPool,
-        side,
-        options: { poolOptions },
-    } = swapState;
+    const { amount, selectedPool, side } = swapState;
 
     const pool = usePool(selectedPool);
     console.log('Selected address', pool?.address);
@@ -26,27 +21,18 @@ export default (() => {
     return (
         <>
             <InputRow>
-                <span>
+                <span
+                    onClick={() => {
+                        setShowTokenSelect(true);
+                    }}
+                >
                     <Label>Token</Label>
                     <Select
                         preview={pool.name}
-                        onClick={() => {
-                            setShowTokenSelect(true);
-                        }}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
                         }
-                    >
-                        {poolOptions.map((pool) => (
-                            <SelectOption
-                                key={`pool-dropdown-option-${pool.address}`}
-                                value={pool.address}
-                                selected={selectedPool === pool.address}
-                            >
-                                {pool.name}
-                            </SelectOption>
-                        ))}
-                    </Select>
+                    ></Select>
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>
@@ -64,7 +50,7 @@ export default (() => {
             <ExchangeButton className="primary" disabled={!amount || !selectedPool}>
                 Sell
             </ExchangeButton>
-            <SelectToken show={showTokenSelect} />
+            <SelectToken show={showTokenSelect} onClose={() => setShowTokenSelect(false)} />
         </>
     );
 }) as React.FC;

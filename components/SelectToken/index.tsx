@@ -7,11 +7,11 @@ import TokenTable from './TokenTable';
 import Modal from '@components/General/Modal';
 
 // const SelectToken
-export default (({ show }) => {
+export default (({ show, onClose }) => {
     const { tokens, filter, setFilter } = useTokens();
 
     return (
-        <Modal show={show} onClose={() => console.error('undefined')}>
+        <Modal show={show} onClose={onClose}>
             <span>
                 <Label>Token</Label>
                 <Input
@@ -28,6 +28,7 @@ export default (({ show }) => {
     );
 }) as React.FC<{
     show: boolean;
+    onClose: (...args: any) => any;
 }>;
 
 // const SelectModal = styled.div<{ show: boolean }>`

@@ -4,9 +4,11 @@ import { Table, TableHeader, TableHeading, TableBody, TableRow, TableCell } from
 import { TokenBreakdown } from '@libs/types/General';
 import styled from 'styled-components';
 import { toApproxCurrency } from '@libs/utils';
+import { useSwapContext } from '@context/SwapContext';
 
 // const TokenTable
 export default (({ tokens }) => {
+    const { swapDispatch } = useSwapContext();
     return (
         <Table>
             <TableHeader>
@@ -19,7 +21,16 @@ export default (({ tokens }) => {
             </TableHeader>
             <TableBody>
                 {tokens.map((token, index) => (
-                    <TokenRow key={`txr-${index}`} {...token} />
+                    <TokenRow
+                        key={`txr-${index}`}
+                        {...token}
+                        onClick={() => {
+                            if (swapDispatch) {
+                                swapDispatch({ type: 'setSide', value: token.side });
+                                swapDispatch({ type: 'setSelectedPool', value: token.pool });
+                            }
+                        }}
+                    />
                 ))}
             </TableBody>
         </Table>

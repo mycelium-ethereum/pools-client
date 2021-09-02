@@ -79,7 +79,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             try {
                 const onboard = Onboard({
                     ...onboardConfig,
-                    networkId: networkIds ? networkIds[0] : 42, //Default to kovan
+                    networkId: networkIds ? networkIds[0] : 421611, //Default to arb
                     walletCheck: checks,
                     subscriptions: {
                         address: (address) => {
