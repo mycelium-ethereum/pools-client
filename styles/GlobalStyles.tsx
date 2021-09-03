@@ -13,8 +13,24 @@ export default createGlobalStyle`
         --table-darkborder: #00156C;
         --table-semidarkborder: #000240;
         --table-lightborder: #002886;
-
     }
+    
+    body,
+    html {
+        font-family: 'SourceSansPro', ui-sans-serif, system-ui, -apple-system, serif !important;
+    }
+
+    html,
+    body,
+    body > div:first-child,
+    div#__next,
+    div#__next > div {
+        height: 100%;
+    }
+    body > div:first-child {
+        display: block;
+        overflow: auto;
+}
 
   	html {
         font-size:16px;

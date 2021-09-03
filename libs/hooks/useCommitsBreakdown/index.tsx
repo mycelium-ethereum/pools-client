@@ -15,9 +15,7 @@ export default (() => {
             let buys = 0,
                 sells = 0,
                 nextUpdate = 0;
-            console.log('Breakingdown');
             Object.values(commits).map((commit) => {
-                console.log(commit, 'in the breakdown');
                 if (commit.type === SHORT_MINT || commit.type === LONG_MINT) {
                     buys += 1;
                 } else {

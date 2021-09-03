@@ -122,20 +122,25 @@ export const initCommitter: (
     pendingShort: BigNumber;
     allUnexecutedCommits: CreatedCommitType[];
 }> = async (committer, provider) => {
+    console.debug('Initialising committer');
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
     const earliestUnexecuted = await contract?.earliestCommitUnexecuted();
 
+    // current blocknumber alchemy has a 2000 block limit
+    const minBlockCheck = (await provider.getBlockNumber()) - 1990;
+
+    console.debug(`Not checking past ${minBlockCheck}`);
     // once we have this we can get the block number and query all commits from that block number
     const earliestUnexecutedCommit = (
-        await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted))
+        await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted), minBlockCheck)
     )?.[0];
 
     console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit);
 
     const allUnexecutedCommits = await contract?.queryFilter(
         contract.filters.CreateCommit(),
-        earliestUnexecutedCommit?.blockNumber,
+        Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
     );
 
     console.debug('All unexecuted commits', allUnexecutedCommits);

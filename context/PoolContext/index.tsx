@@ -302,7 +302,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
-            handleTransaction(committer.commit, [commitType, ethers.utils.formatEther(amount)], {
+            handleTransaction(committer.commit, [commitType, ethers.utils.parseEther(amount.toString())], {
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',

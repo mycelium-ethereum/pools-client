@@ -23,7 +23,7 @@ export default (({ show, onClose }) => {
                 />
             </span>
             <Divider />
-            <TokenTable tokens={tokens} />
+            <TokenTable tokens={tokens} onClose={onClose} />
         </Modal>
     );
 }) as React.FC<{

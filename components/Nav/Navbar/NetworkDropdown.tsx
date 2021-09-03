@@ -12,7 +12,7 @@ export default styled(({ className }) => {
     return (
         <Select
             className={className}
-            preview={<NetworkPreview networkID={network} networkName={networkConfig[network].name ?? 'Unknown'} />}
+            preview={<NetworkPreview networkID={network} networkName={networkConfig[network]?.name ?? 'Unknown'} />}
             onChange={(event: any) => {
                 switchNetworks(provider, event.target.value);
             }}

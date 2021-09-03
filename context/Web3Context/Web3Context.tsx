@@ -38,6 +38,7 @@ type Web3Context = {
     gasPrice?: number;
     network?: number;
     wallet?: Wallet;
+    blockNumber: number;
     config?: Network;
     provider?: providers.Web3Provider;
 };
@@ -60,6 +61,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [network, setNetwork] = useState<number | undefined>(undefined);
     const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
+    const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
@@ -104,11 +106,8 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                             if (!networkIds || networkIds.includes(network)) {
                                 onboard.config({ networkId: network });
                             }
-                            wallet &&
-                                wallet?.provider &&
-                                setProvider(new ethers.providers.Web3Provider(wallet.provider, 'any'));
-                            setNetwork(network);
                             console.info(`Changing network ${network}`);
+                            setNetwork(network);
                             setConfig(networkConfig[network]);
                             checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
@@ -154,20 +153,33 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     React.useMemo(() => {
         let mounted = true;
-        const fetch = async () => {
-            const gasPrice = await (provider as ethers.providers.JsonRpcProvider).getGasPrice();
-            console.log(ethers.utils.formatUnits(gasPrice, 'gwei'), 'fetched gas price');
-            if (mounted) {
-                setGasPrice(parseFloat(ethers.utils.formatUnits(gasPrice, 'gwei')));
-            }
-        };
         if (provider) {
-            fetch();
+            provider.getBlockNumber().then((num) => {
+                console.debug(`Setting block number: ${num}`);
+                if (mounted) {
+                    setBlockNumber(num);
+                }
+            });
+            provider.getGasPrice().then((gasPrice) => {
+                console.debug(`Setting gas price: ${gasPrice.toNumber()}`);
+                if (mounted) {
+                    setGasPrice(parseFloat(ethers.utils.formatUnits(gasPrice, 'gwei')));
+                }
+            });
         }
         return () => {
             mounted = false;
         };
-    }, [provider]);
+    }, [provider, network]);
+
+    useEffect(() => {
+        console.debug('Detected wallet change');
+        if (wallet && wallet?.provider) {
+            console.debug('Setting new provider');
+            const provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
+            setProvider(provider);
+        }
+    }, [wallet]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
@@ -218,9 +230,10 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             provider: provider,
             wallet: wallet,
             gasPrice,
+            blockNumber,
             config,
         }),
-        [provider, signer, gasPrice, account, network, ethBalance, config, wallet],
+        [provider, signer, gasPrice, account, network, ethBalance, config, wallet, blockNumber],
     );
 
     const onboardState = onboard?.getState();

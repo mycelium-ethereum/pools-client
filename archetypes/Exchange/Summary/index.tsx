@@ -10,7 +10,7 @@ import styled from 'styled-components';
 // const Summary
 export default (({ pool, isLong, amount }) => {
     return (
-        <StyledHiddenExpand defaultHeight={0} open={!!pool.name}>
+        <StyledHiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
 

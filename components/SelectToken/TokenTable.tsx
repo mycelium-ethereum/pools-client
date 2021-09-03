@@ -7,7 +7,7 @@ import { toApproxCurrency } from '@libs/utils';
 import { useSwapContext } from '@context/SwapContext';
 
 // const TokenTable
-export default (({ tokens }) => {
+export default (({ tokens, onClose }) => {
     const { swapDispatch } = useSwapContext();
     return (
         <Table>
@@ -29,6 +29,7 @@ export default (({ tokens }) => {
                                 swapDispatch({ type: 'setSide', value: token.side });
                                 swapDispatch({ type: 'setSelectedPool', value: token.pool });
                             }
+                            onClose();
                         }}
                     />
                 ))}
@@ -37,11 +38,12 @@ export default (({ tokens }) => {
     );
 }) as React.FC<{
     tokens: TokenBreakdown[];
+    onClose: () => any;
 }>;
 
-const TokenRow = styled(({ name, balance, tokenPrice, supply, className }) => {
+const TokenRow = styled(({ name, balance, tokenPrice, supply, onClick, className }) => {
     return (
-        <TableRow className={className}>
+        <TableRow className={className} onClick={onClick}>
             <TableCell>{name}</TableCell>
             <TableCell>{balance.toFixed(2)}</TableCell>
             <TableCell>{toApproxCurrency(tokenPrice)}</TableCell>
