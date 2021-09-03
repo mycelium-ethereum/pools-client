@@ -156,9 +156,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         let mounted = true;
         const fetch = async () => {
             const gasPrice = await (provider as ethers.providers.JsonRpcProvider).getGasPrice();
-            console.log(gasPrice, 'fetched gas price');
+            console.log(ethers.utils.formatUnits(gasPrice, 'gwei'), 'fetched gas price');
             if (mounted) {
-                setGasPrice(parseInt(ethers.utils.formatUnits(gasPrice, 'gwei')));
+                setGasPrice(parseFloat(ethers.utils.formatUnits(gasPrice, 'gwei')));
             }
         };
         if (provider) {

@@ -4,6 +4,7 @@ import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
+import { ARBITRUM } from '@libs/constants';
 
 interface ContextProps {
     pools: PoolType[];
@@ -15,7 +16,7 @@ export const FactoryContext = React.createContext<Partial<ContextProps>>({});
  * Wrapper store for the FactoryContext.
  */
 export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
-    const { provider, config, account } = useWeb3();
+    const { provider, config, account, network } = useWeb3();
     const [contract, setContract] = useState<PoolFactory | undefined>(undefined);
     const [pools, setPools] = useState<PoolType[]>([]);
 
@@ -37,13 +38,22 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         const fetch = async () => {
             if (contract) {
-                const createdMarkets = contract.filters.DeployPool();
-                const allEvents = await contract?.queryFilter(createdMarkets);
-                const pools = allEvents.map((event) => ({
-                    name: event.args.ticker,
-                    address: event.args.pool,
-                }));
-                setPools(pools);
+                if (network === parseInt(ARBITRUM)) {
+                    setPools([
+                        {
+                            name: 'tBTC/USD',
+                            address: '0xA1a3Cb7f1D504A65B4187B93eF9EE975095FA598',
+                        },
+                    ]);
+                } else {
+                    const createdMarkets = contract.filters.DeployPool();
+                    const allEvents = await contract?.queryFilter(createdMarkets);
+                    const pools = allEvents.map((event) => ({
+                        name: event.args.ticker,
+                        address: event.args.pool,
+                    }));
+                    setPools(pools);
+                }
             }
         };
         fetch();

@@ -43,7 +43,7 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         hex: '0x66EEB',
-        publicRPC: 'https://arbitrum-rinkeby.infura.io/v3/a0458173591d445880be6f8dfbb78a67',
+        publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
     },
     '42': {
@@ -55,7 +55,7 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
-        publicRPC: 'https://kovan.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
     },

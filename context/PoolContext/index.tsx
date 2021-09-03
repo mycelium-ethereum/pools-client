@@ -302,7 +302,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
-            handleTransaction(committer.commit, [commitType, amount], {
+            handleTransaction(committer.commit, [commitType, ethers.utils.formatEther(amount)], {
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
@@ -362,55 +362,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
         }
     };
-
-    /**
-     * Subscribes to a given pool address
-     */
-    // const subscribeToPool = (pool: string) => {
-    //     if (poolsState?.pools[pool]) {
-    //         const pools = poolsState?.pools;
-    //         const poolContract = new ethers.Contract(
-    //             pool,
-    //             LeveragedPool__factory.abi,
-    //             provider,
-    //         ) as LeveragedPool;
-    //         const shortToken = new ethers.Contract(
-    //             pools[pool].shortToken.address,
-    //             TestToken__factory.abi,
-    //             provider,
-    //         ) as PoolTokenContract;
-    //         const longToken = new ethers.Contract(
-    //             pools[pool].longToken.address,
-    //             TestToken__factory.abi,
-    //             provider,
-    //         ) as PoolTokenContract;
-    //         const quoteToken = new ethers.Contract(
-    //             pools[pool].quoteToken.address,
-    //             TestToken__factory.abi,
-    //             provider,
-    //         ) as TestToken;
-
-    //         shortToken.on('Transfer', () => {
-    //             console.log("Detected short token transfer")
-    //         });
-
-    //         longToken.on('Transfer', () => {
-    //             console.log("Detected long token transfer")
-    //         });
-
-    //         quoteToken.on('Transfer', () => {
-    //             console.log("Detected quote token transfer")
-    //         });
-    //         poolContract.on('PriceChange', (startPrice, endPrice, transferAmount) => {
-    //             console.log("Pool price change", startPrice, endPrice, transferAmount)
-    //             // const oldPrice = new BigNumber(ethers.utils.formatEther(startPrice));
-    //             // const newPrice = new BigNumber(ethers.utils.formatEther(endPrice));
-    //             // console.debug(
-    //             //     `Pool price changed, old: $${oldPrice.toNumber()}, new: $${newPrice.toNumber()}, transferred: ${transferAmount}`,
-    //             // );
-    //         });
-    //     }
-    // }
 
     return (
         <PoolsContext.Provider

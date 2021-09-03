@@ -79,7 +79,6 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
     totalQuoteValue,
     tokenSupply,
 ) => {
-    console.log(totalQuoteValue.toNumber(), tokenSupply.toNumber());
     if (tokenSupply.eq(0)) {
         return new BigNumber(0);
     }
