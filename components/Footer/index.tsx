@@ -5,13 +5,14 @@ import { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
 
 const Footer = styled(({ className }) => {
     return (
-        <FooterContent className={`${className} container`}>
-            <Copyright>&copy; 2021 Tracer DAO</Copyright>
+        <div className={`${className} flex flex-col md:flex-row md:justify-between p-8 w-full`}>
+            <Copyright className="">&copy; 2021 Tracer DAO</Copyright>
             <Socials>
                 <TwitterOutlined />
+                <span className="w-8" />
                 <GithubOutlined />
             </Socials>
-            <Section>
+            <div className="flex flex-col md:flex-row ">
                 <Item>
                     <Link href="/privacy-policy">Privacy Policy</Link>
                 </Item>
@@ -22,10 +23,16 @@ const Footer = styled(({ className }) => {
                     <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
                 <Item>
-                    <a onClick={() => window.open('https://docs.tracer.finance', '_blank', 'noopener')}>Docs</a>
+                    <a
+                        className="cursor-pointer"
+                        onClick={() => window.open('https://docs.tracer.finance', '_blank', 'noopener')}
+                    >
+                        Docs
+                    </a>
                 </Item>
                 <Item>
                     <a
+                        className="cursor-pointer"
                         onClick={() =>
                             window.open('https://docs.tracer.finance/perpetual-swaps-faq', '_blank', 'noopener')
                         }
@@ -35,6 +42,7 @@ const Footer = styled(({ className }) => {
                 </Item>
                 <Item>
                     <a
+                        className="cursor-pointer"
                         onClick={() =>
                             window.open('https://docs.tracer.finance/trader-tutorials', '_blank', 'noopener')
                         }
@@ -42,8 +50,8 @@ const Footer = styled(({ className }) => {
                         Tutorials
                     </a>
                 </Item>
-            </Section>
-        </FooterContent>
+            </div>
+        </div>
     );
 })`
     display: flex;
@@ -58,34 +66,23 @@ const Footer = styled(({ className }) => {
         padding: 0 0.5rem 1rem 0.5rem;
 `;
 
-const FooterContent = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const Section = styled.div`
-    display: flex;
-    @media (max-width: 1127px) {
-        display: none;
-    }
-`;
 const Socials = styled.div`
-    margin-right: auto;
-    margin-left: auto;
-    @media (max-width: 1127px) {
-        margin-right: 0;
+    @media (max-width: 768px) {
+        margin: 2rem 0 4rem;
     }
-    & svg {
-        display: inline;
-        height: 18px;
-        width: 18px;
-        margin: 0 1rem;
-        color: #27272a;
-    }
+    margin: 0.25rem 1rem 0 1rem;
+    display: flex;
 `;
 
 const Item = styled.div`
-    margin-left: 2rem;
+    @media (max-width: 1023px) {
+        margin-left: 1.5rem;
+    }
+    @media (max-width: 768px) {
+        padding-bottom: 1rem;
+        margin-left: 0;
+    }
+    margin-left: 3.5rem;
     color: #27272a;
     display: inline;
 `;
