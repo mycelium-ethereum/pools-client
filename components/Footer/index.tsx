@@ -68,7 +68,7 @@ const Footer = styled(({ className }) => {
 
 const Socials = styled.div`
     @media (max-width: 768px) {
-        margin: 2rem 0 4rem;
+        margin: 2rem 0 3.5rem;
     }
     margin: 0.25rem 1rem 0 1rem;
     display: flex;
