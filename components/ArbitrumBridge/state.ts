@@ -1,66 +1,46 @@
-export const ETH_ARB = 0;
-export const ARB_ETH = 1;
+export enum BridgeStepEnum {
+    Collateral,
+    Gas,
+}
 
-export type Direction = typeof ETH_ARB | typeof ARB_ETH;
-
-export const USDC = 0;
-export const ETH = 1;
-export const TOKEN_MAP = {
-    [USDC]: {
-        name: 'USDC',
-        address: '',
-    },
-    [ETH]: {
-        name: 'ETH',
-        address: '',
-    },
-};
-
-export type BridgeTokenType = typeof USDC | typeof ETH;
-export type BridgeState = {
-    amount: number;
-    open: boolean;
-    selectedToken: BridgeTokenType;
-    direction: Direction;
-};
+export interface BridgeState {
+    step: BridgeStepEnum;
+    USDCAmount?: number;
+    ETHAmount?: number;
+    isBridging: boolean;
+}
 
 export type BridgeAction =
-    | { type: 'setAmount'; amount: number }
-    | { type: 'setSelectedToken'; token: BridgeTokenType }
-    | { type: 'setDirection'; direction: Direction }
-    | { type: 'setOpen'; value: boolean }
-    | { type: 'setLoading'; loading: boolean };
+    | { type: 'setStep'; step: BridgeStepEnum }
+    | { type: 'setUSDC'; amount: number | undefined }
+    | { type: 'setETH'; amount: number | undefined }
+    | { type: 'setBridging'; status: boolean };
 
 export const bridgeReducer: (state: BridgeState, action: BridgeAction) => BridgeState = (state, action) => {
+    console.log(action);
     switch (action.type) {
-        case 'setAmount': {
+        case 'setStep': {
             return {
                 ...state,
-                amount: action.amount,
+                step: action.step,
             };
         }
-        case 'setSelectedToken': {
+        case 'setUSDC': {
             return {
                 ...state,
-                selectedToken: action.token,
+                USDCAmount: action.amount,
             };
         }
-        case 'setDirection': {
+        case 'setETH': {
             return {
                 ...state,
-                direction: action.direction,
+                ETHAmount: action.amount,
             };
         }
-        case 'setLoading': {
+        case 'setBridging': {
             return {
                 ...state,
-                loading: action.loading,
-            };
-        }
-        case 'setOpen': {
-            return {
-                ...state,
-                open: action.value,
+                isBridging: action.status,
             };
         }
         default:
