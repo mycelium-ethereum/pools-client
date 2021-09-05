@@ -3,7 +3,7 @@ import { ArbitrumBridgeModal } from './Modal';
 
 // ArbitrumBridge
 export default (() => {
-    const [isOpen, setOpen] = useState(true);
+    const [isOpen, setOpen] = useState(false);
 
     // TODO: Replace these with actual values & bridging functions
     const ETHBalance = 3.14159;
