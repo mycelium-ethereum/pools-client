@@ -21,5 +21,13 @@ module.exports = {
             },
         },
     },
+    variants: {
+        extend: {
+            backgroundColor: ['active', 'disabled'],
+            cursor: ['disabled'],
+            opacity: ['disabled'],
+            textColor: ['disabled'],
+        },
+    },
     plugins: [],
 };
