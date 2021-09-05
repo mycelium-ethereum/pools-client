@@ -1,7 +1,7 @@
 import { TWModal } from '@components/General/TWModal';
 import { toApproxCurrency } from '@libs/utils';
 import { useReducer } from 'react';
-import { bridgeReducer, BridgeState, BridgeStepEnum } from './state';
+import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
 
 interface ArbitrumBridgeModalProps {
     isOpen: boolean;
@@ -13,10 +13,7 @@ interface ArbitrumBridgeModalProps {
 }
 
 export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) => {
-    const [state, dispatch] = useReducer(bridgeReducer, {
-        step: BridgeStepEnum.Collateral,
-        isBridging: false,
-    } as BridgeState);
+    const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
 
     function isConnectBtnEnabled() {
         if (state.isBridging) return false;

@@ -14,10 +14,15 @@ export type BridgeAction =
     | { type: 'setStep'; step: BridgeStepEnum }
     | { type: 'setUSDC'; amount: number | undefined }
     | { type: 'setETH'; amount: number | undefined }
-    | { type: 'setBridging'; status: boolean };
+    | { type: 'setBridging'; status: boolean }
+    | { type: 'reset' };
+
+export const DefaultBridgeState: BridgeState = {
+    step: BridgeStepEnum.Collateral,
+    isBridging: false,
+};
 
 export const bridgeReducer: (state: BridgeState, action: BridgeAction) => BridgeState = (state, action) => {
-    console.log(action);
     switch (action.type) {
         case 'setStep': {
             return {
@@ -42,6 +47,9 @@ export const bridgeReducer: (state: BridgeState, action: BridgeAction) => Bridge
                 ...state,
                 isBridging: action.status,
             };
+        }
+        case 'reset': {
+            return DefaultBridgeState;
         }
         default:
             throw new Error('Unexpected action');
