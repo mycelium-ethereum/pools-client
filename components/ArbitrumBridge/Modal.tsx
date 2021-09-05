@@ -54,6 +54,8 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
             const success = await props.onBridgeETH(state.ETHAmount);
             if (!success) throw Error('Bridge failed');
             props.onClose();
+            // Wait 1 second for animation to complete
+            setTimeout(() => dispatch({ type: 'reset' }), 1000);
         } catch (err) {
             // Display error here message if necessary
         } finally {
