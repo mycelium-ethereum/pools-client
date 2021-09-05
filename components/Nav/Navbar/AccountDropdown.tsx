@@ -132,13 +132,11 @@ const Identicon = dynamic(import('./Identicon'), { ssr: false });
 
 const AccountDropdown = styled.button`
     display: flex;
-    border-radius: 100px;
     width: 160px;
     height: 40px;
     transition: 0.2s;
     padding: 0 10px;
     margin: auto 10px;
-
     border: 1px solid #ffffff;
     border-radius: 7px;
     color: #fff;
@@ -162,6 +160,11 @@ const StyledMenu = styled(Menu)`
     padding: 1rem !important;
     right: -2rem !important;
     font-size: var(--font-size-small);
+    color: #fff;
+
+    ${Section} > .label {
+        color: #3da8f5;
+    }
 
     // when parent is open
     .open & {
@@ -170,6 +173,7 @@ const StyledMenu = styled(Menu)`
     }
 `;
 const StyledMenuItem = styled(MenuItem)`
+    border-bottom: 1px solid #3da8f5;
     // when parent is open
     .open & {
         opacity: 1;
@@ -196,4 +200,11 @@ const StyledButton = styled(Button)`
     line-height: var(--height-extra-small-button);
     font-size: var(--font-size-extra-small);
     padding: 0;
+    color: #3da8f5;
+    border: 1px solid #3da8f5;
+
+    &:hover {
+        color: #fff;
+        background: #3da8f5;
+    }
 `;
