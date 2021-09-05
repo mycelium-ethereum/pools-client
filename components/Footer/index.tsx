@@ -6,7 +6,7 @@ import { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
 const Footer = styled(({ className }) => {
     return (
         <div className={`${className} flex flex-col md:flex-row md:justify-between p-8 w-full`}>
-            <Copyright className="">&copy; 2021 Tracer DAO</Copyright>
+            <Copyright>&copy; 2021 Tracer DAO</Copyright>
             <Socials>
                 <TwitterOutlined />
                 <span className="w-8" />
