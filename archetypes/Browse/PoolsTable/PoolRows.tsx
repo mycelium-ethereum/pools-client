@@ -12,32 +12,21 @@ import Link from 'next/link';
 // const PoolRow
 export default (({ poolInfo }) => {
     const pool = usePool(poolInfo.address);
-    
+
     return (
         <>
-            <TokenRow 
-                pool={pool}
-                isShortToken={true}
-            />
-            <TokenRow 
-                pool={pool}
-                isShortToken={false}
-            />
+            <TokenRow pool={pool} isShortToken={true} />
+            <TokenRow pool={pool} isShortToken={false} />
         </>
     );
 }) as React.FC<{
     poolInfo: PoolType;
 }>;
 
-
 const TokenRow: React.FC<{
-    pool: Pool,
-    isShortToken: boolean
-}> = ({
-    pool,
-    isShortToken
-}) => {
-
+    pool: Pool;
+    isShortToken: boolean;
+}> = ({ pool, isShortToken }) => {
     const balance = isShortToken ? pool.shortBalance : pool.longBalance;
     const token = isShortToken ? pool.shortToken : pool.longToken;
     return (
@@ -78,9 +67,8 @@ const TokenRow: React.FC<{
                 </Link>
             </TableCell>
         </StyledTableRow>
-    )
-
-}
+    );
+};
 
 const StyledButton = styled(Button)`
     display: inline;
