@@ -122,7 +122,7 @@ export const NavBarContent = styled(({ className }) => {
 
             <CommitDropdown />
 
-            <ThemeSwitcher />
+            {/* <ThemeSwitcher /> */}
 
             <MobileMenu />
 
