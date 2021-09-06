@@ -1,7 +1,7 @@
 import { Table, TableBody, TableHeader, TableHeading } from '@components/General/Table';
 import { Heading, PoolType } from '@libs/types/General';
 import React from 'react';
-import PoolRow from './PoolRow';
+import PoolRows from './PoolRows';
 
 export default (({ pools }) => {
     return (
@@ -15,7 +15,7 @@ export default (({ pools }) => {
             </TableHeader>
             <TableBody>
                 {pools.map((pool) => (
-                    <PoolRow key={`pool-row-${pool.name}`} poolInfo={pool} />
+                    <PoolRows key={`pool-row-${pool.name}`} poolInfo={pool} />
                 ))}
             </TableBody>
         </Table>
@@ -36,10 +36,6 @@ const headings: Heading[] = [
     },
     {
         text: '24H CHANGE',
-        width: 'auto',
-    },
-    {
-        text: '30D REALISED APY',
         width: 'auto',
     },
     {
