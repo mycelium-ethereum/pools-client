@@ -84,7 +84,7 @@ export const NavBarContent = styled(({ className }) => {
 
     const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
 
-    // setter used between account balance and queued
+    // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
 
     const ensName = useEnsName(account ?? '');
