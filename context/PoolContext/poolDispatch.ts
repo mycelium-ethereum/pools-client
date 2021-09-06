@@ -30,6 +30,7 @@ export type PoolAction =
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
     | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
     | { type: 'resetPools' }
+    | { type: 'resetCommits' }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
