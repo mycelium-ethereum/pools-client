@@ -124,7 +124,10 @@ export const NavBarContent = styled(({ className }) => {
                 handleConnect={handleConnect}
             />
 
-            {showQueued ? <CommitDropdown setShowQueued={setShowQueued} /> : <AccountBalance />}
+            {/* Hide if showing queued */}
+            <AccountBalance show={!showQueued} />
+
+            <CommitDropdown show={showQueued} setShowQueued={setShowQueued} />
 
             {/* <ThemeSwitcher /> */}
 

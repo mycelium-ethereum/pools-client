@@ -20,6 +20,7 @@ export type CommitAction =
     | { type: 'removeCommit'; id: number; pool: string }
     | { type: 'hide' }
     | { type: 'show'; focus: CommitsFocus }
+    | { type: 'resetCommits' }
     | { type: 'updateCommits' };
 
 export const reducer: (state: CommitsState, action: CommitAction) => CommitsState = (state, action) => {
@@ -45,6 +46,11 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
                 ...state,
                 showCommits: true,
                 focus: action.focus,
+            };
+        case 'resetCommits':
+            return {
+                ...state,
+                commits: {},
             };
         case 'hide':
             return {

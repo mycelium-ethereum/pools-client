@@ -46,6 +46,7 @@ export default styled(({ className }) => {
 })`
     margin: auto 0 auto 0.5rem;
     color: #fff;
+    display: ${(props) => (props.show ? 'block' : 'none')};
 `;
 
 const StyledIcon = styled(Icon)`

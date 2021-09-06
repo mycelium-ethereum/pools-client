@@ -8,7 +8,7 @@ import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import styled from 'styled-components';
 
 // const CommitDropdown
-export default (({ setShowQueued }) => {
+export default (({ setShowQueued, show }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
 
@@ -29,7 +29,7 @@ export default (({ setShowQueued }) => {
     };
 
     return (
-        <QueuedDropdown preview={`${buys + sells} Queued`}>
+        <QueuedDropdown preview={`${buys + sells} Queued`} show={show}>
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
@@ -43,9 +43,12 @@ export default (({ setShowQueued }) => {
     );
 }) as React.FC<{
     setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
+    show: boolean;
 }>;
 
-export const QueuedDropdown = styled(Select)`
+export const QueuedDropdown = styled(Select)<{
+    show: boolean;
+}>`
     border: 1px solid #ffffff;
     box-sizing: border-box;
     border-radius: 7px;
@@ -57,6 +60,8 @@ export const QueuedDropdown = styled(Select)`
     color: #fff;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
+
+    display: ${(props) => (props.show ? 'block' : 'none')};
 
     // for size of menu
     ${SelectDropdown} {
