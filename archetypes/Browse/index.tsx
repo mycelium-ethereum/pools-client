@@ -7,9 +7,19 @@ import {
     // Button,
     Container,
 } from '@components/General';
+import { TEST_POOL_DATA } from './PoolsTable/testData';
 
 export const Browse: React.FC = () => {
     const { filterState, filterDispatch } = useContext(FilterContext);
+
+    const handleBuyToken = (address: string) => {
+        // Trigger buy token UX
+    };
+
+    const handleSellToken = (address: string) => {
+        // Trigger sell token UX
+    };
+
     return (
         <BrowseContainer>
             {/* <BrowseButtons>
@@ -22,7 +32,7 @@ export const Browse: React.FC = () => {
                     filterState={filterState ?? defaultState}
                     filterDispatch={filterDispatch ?? noDispatch}
                 />
-                <PoolsTable pools={filterState?.filteredPools ?? []} />
+                <PoolsTable pools={TEST_POOL_DATA} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
             </BrowseModal>
         </BrowseContainer>
     );

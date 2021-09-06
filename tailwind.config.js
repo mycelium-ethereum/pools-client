@@ -21,5 +21,9 @@ module.exports = {
             },
         },
     },
+    variants: {
+        opacity: ['disabled'],
+        cursor: ['disabled'],
+    },
     plugins: [],
 };
