@@ -30,6 +30,7 @@ export const COMMIT_TYPE_MAP: Record<CommitType, string> = {
 
 export const EMPTY_TOKEN: PoolToken = {
     name: '',
+    symbol: '',
     address: '',
     balance: new BigNumber(0),
     supply: new BigNumber(0),

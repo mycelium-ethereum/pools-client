@@ -27,6 +27,7 @@ export default (() => {
                         tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
                     } else {
                         token = longToken;
+                        console.log(longToken.name, 'Name in here');
                         tokenPrice = calcTokenPrice(longBalance, longToken.supply);
                     }
                     return {
