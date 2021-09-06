@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowseTableRowData } from '../state';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
+    console.log(rows);
     return (
         <Table>
             <TableHeader>
@@ -33,7 +34,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             Buy
                         </button>
                         <button
-                            className="py-2 px-5 mx-1 bg-indigo-100 font-bold border-2 rounded-2xl border-indigo-500 uppercase disabled:cursor-not-allowed disabled:opacity-50"
+                            className={`py-2 px-5 mx-1 bg-indigo-100 font-bold border-2 rounded-2xl border-indigo-500 uppercase ${
+                                pool.myHoldings <= 0 ? 'opacity-50 cursor-not-allowed' : ''
+                            }`}
                             disabled={pool.myHoldings <= 0}
                             onClick={() => onClickSell(pool.tokenAddress)}
                         >
