@@ -9,6 +9,7 @@ interface ArbitrumBridgeModalProps {
     ETHBalance: number;
     onClose: () => void;
     onBridgeUSDC: (amount: number) => Promise<boolean>;
+    onApproveUSDC: () => Promise<boolean>;
     onBridgeETH: (amount: number) => Promise<boolean>;
 }
 
@@ -44,6 +45,19 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
             // Display error here message if necessary
         } finally {
             dispatch({ type: 'setBridging', status: false });
+        }
+    }
+
+    async function handleApproveUSDC() {
+        dispatch({ type: 'setApproving', status: true });
+        try {
+            const success = await props.onApproveUSDC();
+            if (!success) throw Error('Approve failed');
+            dispatch({ type: 'setStep', step: BridgeStepEnum.Gas });
+        } catch (err) {
+            // Display error here message if necessary
+        } finally {
+            dispatch({ type: 'setApproving', status: false });
         }
     }
 
@@ -188,6 +202,14 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
                         Ok, let's connect
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleApproveUSDC()}
+                        disabled={false}
+                        className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
+                    >
+                        Approve USDC
                     </button>
                 </div>
 
