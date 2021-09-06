@@ -16,12 +16,14 @@ export const DEFAULT_POOLSTATE: Pool = {
     quoteToken: {
         address: '',
         name: '',
+        symbol: '',
         balance: new BigNumber(0),
         approved: false,
     },
     shortToken: {
         address: '',
         name: '',
+        symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
         approved: false,
@@ -30,6 +32,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     longToken: {
         address: '',
         name: '',
+        symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
         approved: false,

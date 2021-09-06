@@ -55,20 +55,25 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     console.log(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
-    const [shortTokenName, shortTokenSupply] = await Promise.all([
+    const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
         shortTokenInstance.name(),
+        shortTokenInstance.symbol(),
         shortTokenInstance.totalSupply(),
     ]);
 
     const longTokenInstance = new ethers.Contract(longToken, TestToken__factory.abi, provider) as PoolToken;
-    const [longTokenName, longTokenSupply] = await Promise.all([
+    const [longTokenName, longTokenSymbol, longTokenSupply] = await Promise.all([
         longTokenInstance.name(),
+        longTokenInstance.symbol(),
         longTokenInstance.totalSupply(),
     ]);
 
     // fetch quote token info
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const quoteTokenName = await quoteTokenInstance.name();
+    const [quoteTokenName, quoteTokenSymbol] = await Promise.all([
+        quoteTokenInstance.name(),
+        quoteTokenInstance.symbol(),
+    ]);
 
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     return {
@@ -91,6 +96,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         longToken: {
             address: longToken,
             name: longTokenName,
+            symbol: longTokenSymbol,
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
@@ -99,6 +105,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         shortToken: {
             address: shortToken,
             name: shortTokenName,
+            symbol: shortTokenSymbol,
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
@@ -107,6 +114,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         quoteToken: {
             address: quoteToken,
             name: quoteTokenName,
+            symbol: quoteTokenSymbol,
             approved: false,
             balance: new BigNumber(0),
         },
