@@ -41,8 +41,8 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                 if (network === parseInt(ARBITRUM)) {
                     setPools([
                         {
-                            name: 'tBTC/USD',
-                            address: '0xA1a3Cb7f1D504A65B4187B93eF9EE975095FA598',
+                            name: 'BTC/USDC',
+                            address: '0xCb77C0d14d4ac84477eA41EA394b19137c6fD35C',
                         },
                     ]);
                 } else {

@@ -15,30 +15,31 @@ export default (() => {
     useMemo(() => {
         // filter user commits
         if (pools && Object.keys(pools).length && provider && account) {
-            setAllQueuedCommits(
-                Object.values(commits).map((commit) => {
-                    const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
-                        pools[commit.pool];
+            const parsedCommits = [];
+            for (const commit of Object.values(commits)) {
+                if (!pools[commit.pool]) continue;
+                const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
+                    pools[commit.pool];
 
-                    let token, tokenPrice;
+                let token, tokenPrice;
 
-                    if (commit.type === SHORT_MINT || commit.type === SHORT_BURN) {
-                        token = shortToken;
-                        tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
-                    } else {
-                        token = longToken;
-                        console.log(longToken.name, 'Name in here');
-                        tokenPrice = calcTokenPrice(longBalance, longToken.supply);
-                    }
-                    return {
-                        ...commit,
-                        token,
-                        tokenPrice,
-                        spent: commit.amount.times(tokenPrice),
-                        nextRebalance: lastUpdate.plus(updateInterval),
-                    };
-                }),
-            );
+                if (commit.type === SHORT_MINT || commit.type === SHORT_BURN) {
+                    token = shortToken;
+                    tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
+                } else {
+                    token = longToken;
+                    tokenPrice = calcTokenPrice(longBalance, longToken.supply);
+                }
+                parsedCommits.push({
+                    ...commit,
+                    token,
+                    tokenPrice,
+                    spent: commit.amount.times(tokenPrice),
+                    nextRebalance: lastUpdate.plus(updateInterval),
+                })
+            }
+
+            setAllQueuedCommits(parsedCommits);
         }
     }, [pools, commits, provider]);
 
