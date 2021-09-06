@@ -2,11 +2,11 @@ import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
 
-    html.light {
-        --color-background: #fff;
-        --color-background-secondary: #E5E5E5;
-        --color-text: #000;
-        --color-primary: #0000B0;
+    html.dark {
+        --color-background: #000240;
+        --color-background-secondary: #00125D;
+        --color-text: #fff;
+        --color-primary: #3da8f5;
         --color-secondary: #005ea4;
         --color-accent: #002886;
 
@@ -35,12 +35,17 @@ export default createGlobalStyle`
   	html {
         font-size:16px;
 
-        --color-background: #000240;
-        --color-background-secondary: #00125D;
-        --color-text: #fff;
-        --color-primary: #3da8f5;
+        --color-background: #fff;
+        --color-background-secondary: #E5E5E5;
+        --color-text: #000;
+        --color-primary: #0000B0;
         --color-secondary: #005ea4;
         --color-accent: #002886;
+
+        --table-darkborder: #00156C;
+        --table-semidarkborder: #000240;
+        --table-lightborder: #002886;
+
         --color-red: #F15025;
         --color-green: #05CB3A; 
 
