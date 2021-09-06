@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
@@ -14,8 +14,8 @@ import {
     SideFilterEnum,
     SortByEnum,
 } from './state';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -24,8 +24,14 @@ export const Browse: React.FC = () => {
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
-        filterModalOpen: true,
+        filterModalOpen: false,
     } as BrowseState);
+
+    useEffect(() => {
+        if (account && state.sortBy === SortByEnum.Name) {
+            dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyHoldings });
+        }
+    }, [account]);
 
     const pools = getPoolData();
 
