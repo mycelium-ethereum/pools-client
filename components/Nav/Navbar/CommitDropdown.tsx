@@ -35,7 +35,7 @@ export default (() => {
     );
 }) as React.FC;
 
-const QueuedDropdown = styled(Select)`
+export const QueuedDropdown = styled(Select)`
     border: 1px solid #ffffff;
     box-sizing: border-box;
     border-radius: 7px;

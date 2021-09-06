@@ -9,7 +9,7 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown from './CommitDropdown';
+import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 
 const NavBar: React.FC = styled(({ className }) => {
@@ -149,7 +149,7 @@ export const NavBarContent = styled(({ className }) => {
         padding: 0 1rem;
     }
     @media (max-width: 1127px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links} {
+        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown} {
             display: none;
         }
         ${MobileMenu} {
@@ -159,30 +159,6 @@ export const NavBarContent = styled(({ className }) => {
 `;
 
 export default NavBar;
-
-// const switchNetworks = async () => {
-//     // @ts-ignore
-//     const ethereum = window.ethereum;
-//     try {
-//         await ethereum.request({
-//             method: 'wallet_switchEthereumChain',
-//             params: [{ chainId: '0x66EEB' }], //arbitrum
-//         });
-//     } catch (error) {
-//         // This error code indicates that the chain has not been added to MetaMask.
-//         if (error.code === 4902) {
-//             try {
-//                 await ethereum.request({
-//                     method: 'wallet_addEthereumChain',
-//                     params: [{ chainId: '0x66EEB', rpcUrl: 'https://rinkeby.arbitrum.io/rpc' }],
-//                 });
-//             } catch (addError) {
-//                 // handle "add" error
-//             }
-//         }
-//         // handle other "switch" errors
-//     }
-// };
 
 // const NetworkButton = styled.span`
 //     border: 1px solid #fff;
