@@ -1,19 +1,9 @@
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils';
 import React from 'react';
+import { BrowseTableRowData } from '../state';
 
-export interface PoolRowItem {
-    tokenAddress: string;
-    tokenName: string;
-    lastPrice: number;
-    change24Hours: number;
-    APY30Days: number;
-    rebalanceRate: number;
-    totalValueLocked: number;
-    myHoldings: number;
-}
-
-export default (({ pools, onClickBuy, onClickSell }) => {
+export default (({ rows, onClickBuy, onClickSell }) => {
     return (
         <Table>
             <TableHeader>
@@ -26,9 +16,9 @@ export default (({ pools, onClickBuy, onClickSell }) => {
                 <span>My Holdings</span>
                 <span>{/* Empty header for buttons column */}</span>
             </TableHeader>
-            {pools.map((pool, index) => (
+            {rows.map((pool, index) => (
                 <TableRow key={index} rowNumber={index}>
-                    <span>{pool.tokenName}</span>
+                    <span>{formatTokenName(pool)}</span>
                     <span>{toApproxCurrency(pool.lastPrice)}</span>
                     <ColoredChangeNumber number={pool.change24Hours} />
                     <span>{pool.rebalanceRate.toFixed(2)}%</span>
@@ -55,7 +45,7 @@ export default (({ pools, onClickBuy, onClickSell }) => {
         </Table>
     );
 }) as React.FC<{
-    pools: PoolRowItem[];
+    rows: BrowseTableRowData[];
     onClickBuy: (tokenAddress: string) => void;
     onClickSell: (tokenAddress: string) => void;
 }>;
@@ -69,3 +59,12 @@ const ColoredChangeNumber = (({ number }) => {
 }) as React.FC<{
     number: number;
 }>;
+
+function formatTokenName(pool: BrowseTableRowData) {
+    let result = '';
+    result += pool.leverage;
+    if (pool.side === 'long') result += 'UP-';
+    else result += 'DOWN-';
+    result += pool.tokenName;
+    return result;
+}
