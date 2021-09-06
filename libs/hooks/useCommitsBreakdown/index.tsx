@@ -11,7 +11,6 @@ export default (() => {
     const [nextUpdate, setNextUpdate] = useState<number>(0);
 
     useEffect(() => {
-        console.log('commits updated', commits);
         if (commits && Object.keys(pools).length) {
             let buys = 0,
                 sells = 0,
