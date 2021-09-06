@@ -1,6 +1,7 @@
 import React, { useReducer } from 'react';
 import styled from 'styled-components';
-import FilterSelects from './FilterSelects';
+import FilterBar from './FilterSelects/Bar';
+import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
 import { Container } from '@components/General';
 import dummyPoolData from './testData';
@@ -23,6 +24,7 @@ export const Browse: React.FC = () => {
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
+        filterModalOpen: true,
     } as BrowseState);
 
     const pools = getPoolData();
@@ -31,14 +33,6 @@ export const Browse: React.FC = () => {
         // Update this to fetch real data
         return dummyPoolData;
     }
-
-    const handleBuyToken = (address: string) => {
-        // Trigger buy token UX
-    };
-
-    const handleSellToken = (address: string) => {
-        // Trigger sell token UX
-    };
 
     const leverageFilter = (pool: BrowseTableRowData): boolean => {
         switch (state.leverage) {
@@ -99,20 +93,43 @@ export const Browse: React.FC = () => {
     };
 
     const filteredPools = pools.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const sortedFilteredPools = filteredPools.sort(sorter);
 
-    const sortedPools = filteredPools.sort(sorter);
+    const handleBuyToken = (address: string) => {
+        // Trigger buy token UX
+    };
+
+    const handleSellToken = (address: string) => {
+        // Trigger sell token UX
+    };
+
+    const SearchButton = (
+        <SearchOutlined
+            className="m-2 cursor-pointer md:hidden"
+            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
+        />
+    );
+    const FilterButton = (
+        <FilterFilled
+            className="m-2 cursor-pointer md:hidden"
+            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
+        />
+    );
 
     return (
         <>
-            <InvestNav left={<SearchOutlined />} right={<FilterFilled className="" />} />
+            <InvestNav left={SearchButton} right={FilterButton} />
             <BrowseContainer>
                 <BrowseModal>
-                    <Title>Pool Tokens</Title>
-                    <p className="mb-1 text-gray-500">This is a list of latest transactions.</p>
-                    <FilterSelects state={state} dispatch={dispatch} />
-                    <PoolsTable rows={sortedPools} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <section className="hidden md:block">
+                        <Title>Pool Tokens</Title>
+                        <p className="mb-1 text-gray-500">This is a list of latest transactions.</p>
+                        <FilterBar state={state} dispatch={dispatch} />
+                    </section>
+                    <PoolsTable rows={sortedFilteredPools} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
                 </BrowseModal>
             </BrowseContainer>
+            <FilterModal state={state} dispatch={dispatch} />
         </>
     );
 };
