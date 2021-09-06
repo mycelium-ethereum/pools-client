@@ -11,6 +11,7 @@ import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
 import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
+import AccountBalance from './AccountBalance';
 
 const NavBar: React.FC = styled(({ className }) => {
     return (
@@ -120,9 +121,11 @@ export const NavBarContent = styled(({ className }) => {
                 handleConnect={handleConnect}
             />
 
+            <AccountBalance />
+
             <CommitDropdown />
 
-            <ThemeSwitcher />
+            {/* <ThemeSwitcher /> */}
 
             <MobileMenu />
 
