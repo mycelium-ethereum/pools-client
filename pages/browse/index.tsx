@@ -5,7 +5,6 @@ import Footer from '@components/Footer';
 import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
-import InvestNav from '@components/Nav/InvestNav';
 
 export default (() => {
     const router = useRouter();
@@ -18,10 +17,7 @@ export default (() => {
         <Page className={`page`}>
             <PoolStore>
                 <NavBar />
-                <InvestNav />
-                <Container className="container">
-                    <Browse />
-                </Container>
+                <Browse />
             </PoolStore>
             <Footer />
         </Page>
@@ -31,11 +27,4 @@ export default (() => {
 const Page = styled.div`
     position: relative;
     background: var(--color-background);
-`;
-
-const Container = styled.div`
-    display: flex;
-    .side-nav {
-        width: 20vw;
-    }
 `;
