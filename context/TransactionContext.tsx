@@ -36,7 +36,7 @@ interface TransactionActionsContextProps {
     handleAsync: HandleAsyncType;
 }
 interface TransactionContextProps {
-    pendingCount: number
+    pendingCount: number;
 }
 
 export const TransactionContext = createContext<Partial<TransactionContextProps>>({});
@@ -149,7 +149,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         >
             <TransactionContext.Provider
                 value={{
-                    pendingCount
+                    pendingCount,
                 }}
             >
                 {children}

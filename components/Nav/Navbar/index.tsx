@@ -84,6 +84,9 @@ export const NavBarContent = styled(({ className }) => {
 
     const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
 
+    // setter used between account balance and queued
+    const [showQueued, setShowQueued] = useState(false);
+
     const ensName = useEnsName(account ?? '');
 
     const linkStyles = 'mx-2 py-2';
@@ -121,9 +124,7 @@ export const NavBarContent = styled(({ className }) => {
                 handleConnect={handleConnect}
             />
 
-            <AccountBalance />
-
-            <CommitDropdown />
+            {showQueued ? <CommitDropdown setShowQueued={setShowQueued} /> : <AccountBalance />}
 
             {/* <ThemeSwitcher /> */}
 
@@ -152,7 +153,7 @@ export const NavBarContent = styled(({ className }) => {
         padding: 0 1rem;
     }
     @media (max-width: 1127px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown} {
+        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
             display: none;
         }
         ${MobileMenu} {
