@@ -1,16 +1,24 @@
+import React, { useMemo } from 'react';
 import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { BUYS, SELLS } from '@libs/constants';
 import { CommitsFocus } from '@libs/types/General';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
-import React from 'react';
 import styled from 'styled-components';
 
 // const CommitDropdown
-export default (() => {
+export default (({ setShowQueued }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
+
+    useMemo(() => {
+        if (buys + sells > 0) {
+            setShowQueued(true);
+        } else {
+            setShowQueued(false);
+        }
+    }, [buys, sells]);
 
     const handleClick = (focus: CommitsFocus) => {
         if (commitDispatch) {
@@ -33,9 +41,11 @@ export default (() => {
             </Link>
         </QueuedDropdown>
     );
-}) as React.FC;
+}) as React.FC<{
+    setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
+}>;
 
-const QueuedDropdown = styled(Select)`
+export const QueuedDropdown = styled(Select)`
     border: 1px solid #ffffff;
     box-sizing: border-box;
     border-radius: 7px;

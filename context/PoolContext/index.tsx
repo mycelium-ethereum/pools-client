@@ -54,6 +54,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useMemo(() => {
         // if pools from factory change
         if (pools && provider) {
+            poolsDispatch({ type: 'resetPools' });
             Promise.all(pools.map((pool) => initPool(pool, provider)))
                 .then((res) => {
                     res.forEach((pool) => {
