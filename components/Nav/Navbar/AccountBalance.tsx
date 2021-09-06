@@ -24,6 +24,7 @@ const useBalance = () => {
             setBalance(Object.values(pools)[0].quoteToken.balance);
         }
     }, [pools]);
+
     return balance;
 };
 
@@ -43,7 +44,8 @@ export default styled(({ className }) => {
         </div>
     );
 })`
-    margin-left: auto 0 auto 0.5rem;
+    margin: auto 0 auto 0.5rem;
+    color: #fff;
 `;
 
 const StyledIcon = styled(Icon)`

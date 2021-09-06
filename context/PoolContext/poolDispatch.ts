@@ -29,6 +29,7 @@ export type PoolAction =
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
     | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
+    | { type: 'resetPools' }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
@@ -40,6 +41,12 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     ...state.pools,
                     [action.key]: action.pool,
                 },
+            };
+        case 'resetPools':
+            return {
+                ...state,
+                pools: {},
+                poolsInitialised: false,
             };
         case 'setTokenBalances':
             return {
