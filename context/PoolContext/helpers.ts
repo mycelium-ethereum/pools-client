@@ -145,6 +145,7 @@ export const fetchCommits: (
             allUnexecutedCommits: [],
         };
     }
+
     // current blocknumber alchemy has a 2000 block limit
     const minBlockCheck = (await provider.getBlockNumber()) - 1990;
 
