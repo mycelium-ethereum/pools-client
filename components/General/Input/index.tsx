@@ -221,7 +221,6 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
     color: #6b7280;
     cursor: pointer;
     position: relative;
-    box-sizing: border-box;
 
     > .anticon {
         vertical-align: 0;
@@ -250,16 +249,11 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
 `;
 
 export const SelectOption = styled.option`
-    backround: #fff;
     padding: 12px 1rem;
     cursor: pointer;
     transition: 0.3s;
 
     &:hover {
         background: #d1d5db;
-    }
-
-    &:last-child {
-        border-top: 1px solid #f3f4f6;
     }
 `;
