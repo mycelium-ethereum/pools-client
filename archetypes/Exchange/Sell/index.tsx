@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
+import { ExchangeButton, InputContainer, InputRow } from '../Inputs';
 import { usePool } from '@context/PoolContext';
 import { LONG } from '@libs/constants';
 import { Label } from '@components/Pool';
