@@ -1,5 +1,5 @@
+import React, { useRef } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { useRef } from 'react';
 import styled from 'styled-components';
 
 interface SelectProps {
