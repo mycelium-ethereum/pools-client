@@ -18,16 +18,7 @@ export default (() => {
     const { commit } = usePoolActions();
     const tokens = usePoolTokens();
 
-<<<<<<< HEAD
     const { amount, side, selectedPool, commitAction } = swapState;
-=======
-    const {
-        amount,
-        selectedPool,
-        side,
-        commitAction,
-    } = swapState;
->>>>>>> e10ecf3... Update connection modal (#3)
 
     const pool = usePool(selectedPool);
     const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
@@ -35,7 +26,6 @@ export default (() => {
     return (
         <>
             <StyledInputRow>
-<<<<<<< HEAD
                 <span>
                     <Label>Token</Label>
                     <Select
@@ -57,27 +47,6 @@ export default (() => {
                             </SelectOption>
                         ))}
                     </Select>
-=======
-                <span
-                >
-                    <Label>Token</Label>
-                    <MarketSelect
-                        preview={pool.name}
-                        onChange={(e: any) =>
-                            swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
-                        }
-                    >
-                        {poolOptions.map((pool) => (
-                            <SelectOption
-                                key={`pool-dropdown-option-${pool.address}`}
-                                value={pool.address}
-                                selected={selectedPool === pool.address}
-                            >
-                                {pool.name}
-                            </SelectOption>
-                        ))}
-                    </MarketSelect>
->>>>>>> e10ecf3... Update connection modal (#3)
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>
