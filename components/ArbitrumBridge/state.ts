@@ -16,17 +16,17 @@ export const TOKEN_MAP = {
     },
 };
 
-export type BridgeTokenType = typeof USDC | typeof ETH;
+export type BridgeCommitActionType = typeof USDC | typeof ETH;
 export type BridgeState = {
     amount: number;
     open: boolean;
-    selectedToken: BridgeTokenType;
+    selectedToken: BridgeCommitActionType;
     direction: Direction;
 };
 
 export type BridgeAction =
     | { type: 'setAmount'; amount: number }
-    | { type: 'setSelectedToken'; token: BridgeTokenType }
+    | { type: 'setSelectedToken'; token: BridgeCommitActionType }
     | { type: 'setDirection'; direction: Direction }
     | { type: 'setOpen'; value: boolean }
     | { type: 'setLoading'; loading: boolean };

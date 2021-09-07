@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, MarketSelect } from '.';
+import { ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
 import { usePool } from '@context/PoolContext';
 import { LONG } from '@libs/constants';
-import Summary from '../Summary';
 import { Label } from '@components/Pool';
 import SelectToken from '@components/SelectToken';
+import { SellSummary } from '../Summary';
+import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
+import { toCommitType } from '@libs/utils/converters';
 
 export default (() => {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
@@ -17,15 +19,17 @@ export default (() => {
         amount,
         selectedPool,
         side,
+        commitAction,
         options: { poolOptions },
     } = swapState;
 
     const pool = usePool(selectedPool);
-    console.log('Selected address', pool?.address);
+
+    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction))
 
     return (
         <>
-            <InputRow>
+            <StyledInputRow>
                 <span
                 >
                     <Label>Token</Label>
@@ -57,17 +61,20 @@ export default (() => {
                         min={0}
                     />
                 </InputContainer>
-            </InputRow>
-            <Summary pool={pool} isLong={side === LONG} amount={amount} />
+            </StyledInputRow>
+
+            <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
+
             <ExchangeButton className="primary" disabled={!amount || !selectedPool}>
                 Sell
             </ExchangeButton>
+            
             <SelectToken show={showTokenSelect} onClose={() => setShowTokenSelect(false)} />
         </>
     );
 }) as React.FC;
 
-const InputRow = styled.div`
+const StyledInputRow = styled(InputRow)`
     display: flex;
     justify-content: space-between;
     margin-bottom: 2rem;
@@ -83,3 +90,14 @@ const InputRow = styled.div`
         width: 100%;
     }
 `;
+
+const MarketSelect = styled(Select)`
+    width: 285px;
+    height: 3.44rem; // 55px
+    padding: 13px 20px;
+
+    @media (max-width: 611px) {
+        width: 156px;
+        height: 44px;
+    }
+`

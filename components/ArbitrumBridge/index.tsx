@@ -4,7 +4,7 @@ import DirectionSelect from './DirectionSelect';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import styled from 'styled-components';
 import { Button } from '@components/General';
-import { TokenType } from '@libs/types/General';
+import { CommitActionType } from '@libs/types/General';
 import { bridgeReducer, USDC, ETH_ARB, BridgeState } from './state';
 
 // ArbitrumBridge
@@ -34,7 +34,7 @@ export default (() => {
 
                 <Section>
                     <SlideSelect
-                        onClick={(token) => dispatch({ type: 'setSelectedToken', token: token as TokenType })}
+                        onClick={(token) => dispatch({ type: 'setSelectedToken', token: token as CommitActionType })}
                         value={state.selectedToken}
                     >
                         <Option>USDC</Option>

@@ -1,7 +1,7 @@
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { LONG, SHORT } from '@libs/constants';
 import { SideType } from '@libs/types/General';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import React from 'react';
 import { BrowseTableRowData } from '../state';
 
