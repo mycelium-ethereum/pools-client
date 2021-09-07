@@ -11,7 +11,6 @@ import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
-import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 
 
 export default (() => {
@@ -29,8 +28,6 @@ export default (() => {
     const pool = usePool(selectedPool);
 
     const { commit, approve } = usePoolActions();
-
-    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction))
 
     return (
         <>
@@ -106,7 +103,7 @@ export default (() => {
                 </div>
             </InputRow>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === LONG} gasFee={gasFee} />
+            <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
             {!pool.quoteToken.approved ? (
                 <>
