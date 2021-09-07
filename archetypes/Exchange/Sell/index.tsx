@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Input, Select } from '@components/General/Input';
+import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { ExchangeButton, InputContainer, InputRow } from '../Inputs';
 import { usePool } from '@context/PoolContext';
@@ -15,7 +15,13 @@ export default (() => {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
-    const { amount, selectedPool, side, commitAction } = swapState;
+    const {
+        amount,
+        selectedPool,
+        side,
+        commitAction,
+        options: { poolOptions },
+    } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -25,17 +31,24 @@ export default (() => {
         <>
             <StyledInputRow>
                 <span
-                    onClick={() => {
-                        setShowTokenSelect(true);
-                    }}
                 >
                     <Label>Token</Label>
-                    <Select
+                    <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
                         }
-                    ></Select>
+                    >
+                        {poolOptions.map((pool) => (
+                            <SelectOption
+                                key={`pool-dropdown-option-${pool.address}`}
+                                value={pool.address}
+                                selected={selectedPool === pool.address}
+                            >
+                                {pool.name}
+                            </SelectOption>
+                        ))}
+                    </MarketSelect>
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>
@@ -77,3 +90,14 @@ const StyledInputRow = styled(InputRow)`
         width: 100%;
     }
 `;
+
+const MarketSelect = styled(Select)`
+    width: 285px;
+    height: 3.44rem; // 55px
+    padding: 13px 20px;
+
+    @media (max-width: 611px) {
+        width: 156px;
+        height: 44px;
+    }
+`

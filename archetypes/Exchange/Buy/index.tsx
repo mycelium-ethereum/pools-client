@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Select, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
+import { Input, SelectOption, InnerInputText, InputWrapper, Select } from '@components/General/Input';
 import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
@@ -7,7 +7,7 @@ import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
 import { ExchangeButton, InputRow } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
@@ -20,7 +20,6 @@ export default (() => {
         leverage,
         selectedPool,
         side,
-        commitAction,
         amount,
         options: { leverageOptions, poolOptions },
     } = swapState;
@@ -34,7 +33,7 @@ export default (() => {
             <InputRow className="markets">
                 <span>
                     <Label>Market</Label>
-                    <MarketSelect
+                    <Select
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
@@ -49,7 +48,7 @@ export default (() => {
                                 {pool.name}
                             </SelectOption>
                         ))}
-                    </MarketSelect>
+                    </Select>
                 </span>
                 <span>
                     <Label>Side</Label>
@@ -149,17 +148,6 @@ const HelperText = styled.p`
     a {
         text-decoration: underline;
         cursor: pointer;
-    }
-`;
-
-const MarketSelect = styled(Select)`
-    width: 285px;
-    height: 3.44rem; // 55px
-    padding: 13px 20px;
-
-    @media (max-width: 611px) {
-        width: 156px;
-        height: 44px;
     }
 `;
 

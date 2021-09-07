@@ -7,10 +7,7 @@ import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
-import ApproveConnectionModal from '@components/Legal/ApproveConnectionModal';
 import { providers, ethers } from 'ethers';
-
-import Cookies from 'universal-cookie';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -67,8 +64,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
     const [config, setConfig] = useState<Network>(networkConfig[0]);
-    const [showTerms, setShowTerms] = useState<boolean>(false);
-    const [acceptedTerms, acceptTerms] = useState(false);
 
     // Initialize OnboardJS
     useEffect(() => {
@@ -138,15 +133,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     }, []);
 
     useEffect(() => {
-        const cookies = new Cookies();
-        if (acceptedTerms) {
-            cookies.set('acceptedTerms', 'true', { path: '/' });
-            handleConnect();
-            setShowTerms(false);
-        }
-    }, [acceptedTerms]);
-
-    useEffect(() => {
         const signer = provider?.getSigner();
         console.log(signer, 'Signer');
         setSigner(signer);
@@ -197,25 +183,11 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         await onboard?.walletReset();
     };
 
-    const acceptLegalTerms = () => {
-        const cookies = new Cookies();
-        if (cookies.get('acceptedTerms') !== 'true') {
-            setShowTerms(true);
-        } else {
-            setShowTerms(false);
-            acceptTerms(true);
-        }
-        return acceptedTerms;
-    };
-
     const handleConnect = async () => {
         if (onboard) {
             try {
-                const accepted = acceptLegalTerms();
-                if (accepted) {
-                    await onboard?.walletSelect();
-                    await checkIsReady();
-                }
+                await onboard?.walletSelect();
+                await checkIsReady();
             } catch (err) {
                 console.error(err);
             }
@@ -252,12 +224,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             >
                 <Web3Context.Provider value={web3Context}>{children}</Web3Context.Provider>
             </OnboardContext.Provider>
-            <ApproveConnectionModal
-                acceptedTerms={acceptedTerms}
-                show={showTerms}
-                setShow={setShowTerms}
-                acceptTerms={acceptTerms}
-            />
         </>
     );
 };
