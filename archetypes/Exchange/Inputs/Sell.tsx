@@ -29,12 +29,6 @@ export default (() => {
                 <span
                 >
                     <Label>Token</Label>
-                    {/*<Select*/}
-                    {/*    preview={pool.name}*/}
-                    {/*    onChange={(e: any) =>*/}
-                    {/*        swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })*/}
-                    {/*    }*/}
-                    {/*/>*/}
                     <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
