@@ -17,34 +17,35 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <span>My Holdings</span>
                 <span>{/* Empty header for buttons column */}</span>
             </TableHeader>
-            {rows.map((pool, index) => (
-                <TableRow key={index} rowNumber={index}>
-                    <span>{formatTokenName(pool)}</span>
-                    <span>{toApproxCurrency(pool.lastPrice)}</span>
-                    <ColoredChangeNumber number={pool.change24Hours} />
-                    <span>{pool.rebalanceRate.toFixed(2)}%</span>
-                    <span>{pool.APY30Days.toFixed(2)}%</span>
-                    <span>{toApproxCurrency(pool.totalValueLocked)}</span>
-                    <span>{toApproxCurrency(pool.myHoldings)}</span>
-                    <span>
-                        <button
-                            className="py-2 px-5 mx-1 bg-indigo-100 font-bold border-2 rounded-2xl border-indigo-500 uppercase"
-                            onClick={() => onClickBuy(pool.tokenAddress)}
-                        >
-                            Buy
-                        </button>
-                        <button
-                            className={`py-2 px-5 mx-1 bg-indigo-100 font-bold border-2 rounded-2xl border-indigo-500 uppercase ${
-                                pool.myHoldings <= 0 ? 'opacity-50 cursor-not-allowed' : ''
-                            }`}
-                            disabled={pool.myHoldings <= 0}
-                            onClick={() => onClickSell(pool.tokenAddress)}
-                        >
-                            Sell
-                        </button>
-                    </span>
-                </TableRow>
-            ))}
+            {rows.map((pool, index) => {
+                const hasHoldings = pool.myHoldings > 0;
+                return (
+                    <TableRow key={pool.tokenAddress} rowNumber={index}>
+                        <span>{formatTokenName(pool)}</span>
+                        <span>{toApproxCurrency(pool.lastPrice)}</span>
+                        <ColoredChangeNumber number={pool.change24Hours} />
+                        <span>{pool.rebalanceRate.toFixed(2)}%</span>
+                        <span>{pool.APY30Days.toFixed(2)}%</span>
+                        <span>{toApproxCurrency(pool.totalValueLocked)}</span>
+                        <span>{toApproxCurrency(pool.myHoldings)}</span>
+                        <span>
+                            <button
+                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase"
+                                onClick={() => onClickBuy(pool.tokenAddress)}
+                            >
+                                Buy
+                            </button>
+                            <button
+                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={!hasHoldings}
+                                onClick={() => onClickSell(pool.tokenAddress)}
+                            >
+                                Sell
+                            </button>
+                        </span>
+                    </TableRow>
+                );
+            })}
         </Table>
     );
 }) as React.FC<{

@@ -102,11 +102,13 @@ export const Browse: React.FC = () => {
     const sortedFilteredPools = filteredPools.sort(sorter);
 
     const handleBuyToken = (address: string) => {
+        console.log(`buying token with address ${address}`);
         // Trigger buy token UX
     };
 
     const handleSellToken = (address: string) => {
         // Trigger sell token UX
+        console.log(`selling token with address ${address}`);
     };
 
     const SearchButton = (
