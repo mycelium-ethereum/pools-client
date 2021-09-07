@@ -1,6 +1,5 @@
 import { Button } from '@components/General';
 import styled from 'styled-components';
-import { Select } from '@components/General/Input';
 
 export const Label = styled.p`
     color: var(--color-text);
