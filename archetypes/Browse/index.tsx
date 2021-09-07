@@ -16,9 +16,14 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
+import { BURN, LONG, MINT } from '@libs/constants';
+import { useRouter } from 'next/router';
+import { SideType } from '@libs/types/General';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
+    
+    const router = useRouter();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
@@ -27,8 +32,6 @@ export const Browse: React.FC = () => {
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filterModalOpen: false,
     } as BrowseState);
-
-
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {
@@ -93,14 +96,25 @@ export const Browse: React.FC = () => {
     const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
-    const handleBuyToken = (address: string) => {
-        console.log(`buying token with address ${address}`);
-        // Trigger buy token UX
+    const handleBuyToken = (pool: string, side: SideType) => {
+        console.log(`Buying/minting ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+        router.push({
+            pathname: '/',
+            query: {
+                pool: pool, type: MINT, side: side
+            }
+        })
     };
 
-    const handleSellToken = (address: string) => {
+    const handleSellToken = (pool: string, side: SideType) => {
         // Trigger sell token UX
-        console.log(`selling token with address ${address}`);
+        console.log(`Selling/burning ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+        router.push({
+            pathname: '/',
+            query: {
+                pool: pool, type: BURN, side: side
+            }
+        })
     };
 
     const SearchButton = (

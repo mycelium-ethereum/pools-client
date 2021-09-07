@@ -21,6 +21,7 @@ export enum SortByEnum {
 
 export interface BrowseTableRowData {
     address: string;
+    pool: string;
     symbol: string;
     leverage: number;
     side: 'short' | 'long';

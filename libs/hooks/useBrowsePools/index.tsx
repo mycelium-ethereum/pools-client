@@ -16,6 +16,7 @@ export default (() => {
                 rows.push(
                     {
                         address: shortToken.address,
+						pool: pool.address,
                         symbol: shortToken.symbol,
                         leverage: 1,
                         side: 'short',
@@ -26,6 +27,7 @@ export default (() => {
                         myHoldings: shortToken.balance.toNumber()
                     }, {
                         address: longToken.address,
+						pool: pool.address,
                         symbol: longToken.symbol,
                         leverage: 1,
                         side: 'long',

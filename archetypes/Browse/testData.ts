@@ -10,6 +10,7 @@ for (const name of names) {
     for (const leverage of leverages) {
         for (const side of sides) {
             dummyPoolData.push({
+                pool: Math.random().toString(),
                 address: Math.random().toString(),
                 symbol: name,
                 leverage,

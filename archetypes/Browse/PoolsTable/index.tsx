@@ -1,4 +1,6 @@
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { LONG, SHORT } from '@libs/constants';
+import { SideType } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils';
 import React from 'react';
 import { BrowseTableRowData } from '../state';
@@ -29,14 +31,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                         <span>
                             <button
                                 className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase"
-                                onClick={() => onClickBuy(token.address)}
+                                onClick={() => onClickBuy(token.pool, token.side === 'short' ? SHORT : LONG)}
                             >
                                 Buy
                             </button>
                             <button
                                 className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase disabled:opacity-50 disabled:cursor-not-allowed"
                                 disabled={!hasHoldings}
-                                onClick={() => onClickSell(token.address)}
+                                onClick={() => onClickSell(token.pool, token.side === 'short' ? SHORT : LONG)}
                             >
                                 Sell
                             </button>
@@ -48,8 +50,8 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     );
 }) as React.FC<{
     rows: BrowseTableRowData[];
-    onClickBuy: (tokenAddress: string) => void;
-    onClickSell: (tokenAddress: string) => void;
+    onClickBuy: (pool: string, side: SideType) => void;
+    onClickSell: (pool: string, side: SideType) => void;
 }>;
 
 const ColoredChangeNumber = (({ number }) => {
