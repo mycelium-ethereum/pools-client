@@ -11,7 +11,6 @@ import { TransactionStore } from '@context/TransactionContext';
 import { FactoryStore } from '@context/FactoryContext';
 import GlobalStyles from 'styles/GlobalStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
-import { FilterStore } from '@context/FilterContext';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
@@ -62,13 +61,11 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     }}
                 >
                     <FactoryStore>
-                        <FilterStore>
-                            <TransactionStore>
-                                <UsersCommitStore>
-                                    <Component {...pageProps} />
-                                </UsersCommitStore>
-                            </TransactionStore>
-                        </FilterStore>
+                        <TransactionStore>
+                            <UsersCommitStore>
+                                <Component {...pageProps} />
+                            </UsersCommitStore>
+                        </TransactionStore>
                     </FactoryStore>
                 </Web3Store>
             </ToastProvider>

@@ -6,7 +6,7 @@ const EXCHANGE = 0;
 const BROWSE = 1;
 
 // const InvestNav
-export default (() => {
+export default (({ left, right }) => {
     const router = useRouter();
 
     useEffect(() => {
@@ -34,24 +34,32 @@ export default (() => {
 
     return (
         <InvestNav>
-            <Item onClick={(_e) => handleRoute(EXCHANGE)} selected={router.pathname === '/'}>
-                Exchange
-            </Item>
-            <Item onClick={(_e) => handleRoute(BROWSE)} selected={router.pathname === '/browse'}>
-                Browse
-            </Item>
+            <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
+            <div className="flex flex-grow justify-center">
+                <Item onClick={(_e) => handleRoute(EXCHANGE)} selected={router.pathname === '/'}>
+                    Exchange
+                </Item>
+                <Item onClick={(_e) => handleRoute(BROWSE)} selected={router.pathname === '/browse'}>
+                    Browse
+                </Item>
+            </div>
+            <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>
         </InvestNav>
     );
-}) as React.FC;
+}) as React.FC<{
+    left?: JSX.Element;
+    right?: JSX.Element;
+}>;
 
 const InvestNav = styled.div`
+    position: relative;
     background: #eeeef6;
     width: 100%;
     min-height: 60px;
     height: 60px;
     text-align: center;
     display: flex;
-    justify-content: center;
+    // justify-content: space-between;
 `;
 
 const Item = styled.div<{ selected: boolean }>`

@@ -1,6 +1,12 @@
 module.exports = {
     important: true,
-    purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+    purge: [
+        './pages/**/*.{js,ts,jsx,tsx}', 
+        './components/**/*.{js,ts,jsx,tsx}',
+        './archetypes/**/*.{js,ts,jsx,tsx}',
+        // Add more here
+    ],
+
     theme: {
         screeens: {
             sm: { min: '640px', max: '767px' },
@@ -20,6 +26,10 @@ module.exports = {
                 '3xl': '1800px',
             },
         },
+    },
+    variants: {
+        opacity: ['disabled'],
+        cursor: ['disabled'],
     },
     plugins: [],
 };

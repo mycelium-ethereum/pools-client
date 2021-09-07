@@ -1,57 +1,65 @@
-import { Table, TableBody, TableHeader, TableHeading } from '@components/General/Table';
-import { Heading, PoolType } from '@libs/types/General';
+import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { LONG, SHORT } from '@libs/constants';
+import { SideType } from '@libs/types/General';
+import { toApproxCurrency } from '@libs/utils';
 import React from 'react';
-import PoolRows from './PoolRows';
+import { BrowseTableRowData } from '../state';
 
-export default (({ pools }) => {
+export default (({ rows, onClickBuy, onClickSell }) => {
+    console.debug("Browse table rows", rows);
     return (
         <Table>
             <TableHeader>
-                {headings.map((heading, index) => (
-                    <TableHeading key={`pool-heading-row-${index}`} width={heading.width}>
-                        {heading.text}
-                    </TableHeading>
-                ))}
+                <span>Token</span>
+                <span>Last Price</span>
+                <span>24H Change</span>
+                <span>Rebalance Rate</span>
+                <span>TVL</span>
+                <span>My Holdings</span>
+                <span>{/* Empty header for buttons column */}</span>
             </TableHeader>
-            <TableBody>
-                {pools.map((pool) => (
-                    <PoolRows key={`pool-row-${pool.name}`} poolInfo={pool} />
-                ))}
-            </TableBody>
+            {rows.map((token, index) => {
+                const hasHoldings = token.myHoldings > 0;
+                return (
+                    <TableRow key={token.address} rowNumber={index}>
+                        <span>{token.symbol}</span>
+                        <span>{toApproxCurrency(token.lastPrice)}</span>
+                        <ColoredChangeNumber number={token.change24Hours} />
+                        <span>{token.rebalanceRate.toFixed(2)}%</span>
+                        <span>{toApproxCurrency(token.totalValueLocked)}</span>
+                        <span>{toApproxCurrency(token.myHoldings)}</span>
+                        <span>
+                            <button
+                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase"
+                                onClick={() => onClickBuy(token.pool, token.side === 'short' ? SHORT : LONG)}
+                            >
+                                Buy
+                            </button>
+                            <button
+                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                                disabled={!hasHoldings}
+                                onClick={() => onClickSell(token.pool, token.side === 'short' ? SHORT : LONG)}
+                            >
+                                Sell
+                            </button>
+                        </span>
+                    </TableRow>
+                );
+            })}
         </Table>
     );
 }) as React.FC<{
-    pools: PoolType[];
+    rows: BrowseTableRowData[];
+    onClickBuy: (pool: string, side: SideType) => void;
+    onClickSell: (pool: string, side: SideType) => void;
 }>;
 
-// last heading is for mint and burn
-const headings: Heading[] = [
-    {
-        text: 'TOKEN',
-        width: 'auto',
-    },
-    {
-        text: 'LAST PRICE',
-        width: 'auto',
-    },
-    {
-        text: '24H CHANGE',
-        width: 'auto',
-    },
-    {
-        text: 'REBALANCE RATE',
-        width: 'auto',
-    },
-    {
-        text: 'TVL',
-        width: 'auto',
-    },
-    {
-        text: 'MY HOLDINGS',
-        width: 'auto',
-    },
-    {
-        text: '',
-        width: '30%',
-    },
-];
+const ColoredChangeNumber = (({ number }) => {
+    return (
+        <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
+            2,
+        )}`}</span>
+    );
+}) as React.FC<{
+    number: number;
+}>;
