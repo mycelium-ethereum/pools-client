@@ -81,20 +81,15 @@ export const Browse: React.FC = () => {
     // parse the pools rows
     const tokens = useBrowsePools()
 
+    // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: BrowseTableRowData): boolean => {
         switch (state.leverage) {
             case LeverageFilterEnum.All:
                 return true;
             case LeverageFilterEnum.One:
                 return pool.leverage === 1;
-            case LeverageFilterEnum.Two:
-                return pool.leverage === 2;
             case LeverageFilterEnum.Three:
                 return pool.leverage === 3;
-            case LeverageFilterEnum.Four:
-                return pool.leverage === 4;
-            case LeverageFilterEnum.Five:
-                return pool.leverage === 5;
             default:
                 return false;
         }

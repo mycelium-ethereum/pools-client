@@ -1,9 +1,6 @@
 export enum LeverageFilterEnum {
     One = '1x',
-    Two = '2x',
     Three = '3x',
-    Four = '4x',
-    Five = '5x',
     All = 'All',
 }
 
