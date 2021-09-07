@@ -27,9 +27,6 @@ export default (() => {
         <>
             <InputRow>
                 <span
-                // onClick={() => {
-                //     setShowTokenSelect(true);
-                // }}
                 >
                     <Label>Token</Label>
                     {/*<Select*/}
