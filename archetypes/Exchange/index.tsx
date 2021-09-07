@@ -23,6 +23,7 @@ export default (() => {
                 swapDispatch({ type: 'setTokenType', value: parseInt(router.query.type as string) as TokenType });
             }
             if (router.query.side) {
+                console.log("found side", router.query.side)
                 swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
             }
         }
