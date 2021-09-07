@@ -22,7 +22,7 @@ export const watchAsset: (provider: ethers.providers.JsonRpcProvider | null, tok
             options: {
                 type: 'ERC20',
                 address: token.address,
-                symbol: token.name,
+                symbol: token.symbol,
                 decimals: 18,
             },
         })

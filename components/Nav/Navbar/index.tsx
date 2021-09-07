@@ -9,8 +9,9 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown from './CommitDropdown';
+import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
+import AccountBalance from './AccountBalance';
 
 const NavBar: React.FC = styled(({ className }) => {
     return (
@@ -83,6 +84,9 @@ export const NavBarContent = styled(({ className }) => {
 
     const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
 
+    // controls displaying queued commits
+    const [showQueued, setShowQueued] = useState(false);
+
     const ensName = useEnsName(account ?? '');
 
     const linkStyles = 'mx-2 py-2';
@@ -120,9 +124,12 @@ export const NavBarContent = styled(({ className }) => {
                 handleConnect={handleConnect}
             />
 
-            <CommitDropdown />
+            {/* Hide if showing queued */}
+            <AccountBalance show={!showQueued} />
 
-            <ThemeSwitcher />
+            <CommitDropdown show={showQueued} setShowQueued={setShowQueued} />
+
+            {/* <ThemeSwitcher /> */}
 
             <MobileMenu />
 
@@ -149,7 +156,7 @@ export const NavBarContent = styled(({ className }) => {
         padding: 0 1rem;
     }
     @media (max-width: 1127px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links} {
+        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
             display: none;
         }
         ${MobileMenu} {
@@ -159,30 +166,6 @@ export const NavBarContent = styled(({ className }) => {
 `;
 
 export default NavBar;
-
-// const switchNetworks = async () => {
-//     // @ts-ignore
-//     const ethereum = window.ethereum;
-//     try {
-//         await ethereum.request({
-//             method: 'wallet_switchEthereumChain',
-//             params: [{ chainId: '0x66EEB' }], //arbitrum
-//         });
-//     } catch (error) {
-//         // This error code indicates that the chain has not been added to MetaMask.
-//         if (error.code === 4902) {
-//             try {
-//                 await ethereum.request({
-//                     method: 'wallet_addEthereumChain',
-//                     params: [{ chainId: '0x66EEB', rpcUrl: 'https://rinkeby.arbitrum.io/rpc' }],
-//                 });
-//             } catch (addError) {
-//                 // handle "add" error
-//             }
-//         }
-//         // handle other "switch" errors
-//     }
-// };
 
 // const NetworkButton = styled.span`
 //     border: 1px solid #fff;

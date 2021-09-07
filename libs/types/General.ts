@@ -49,6 +49,7 @@ export type PoolType = {
 export type Token = {
     address: string;
     name: string;
+    symbol: string;
     balance: BigNumber;
     approved: boolean;
 };
