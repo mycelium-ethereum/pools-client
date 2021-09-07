@@ -249,6 +249,7 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
 
 export const SelectOption = styled.option`
     padding: 12px 1rem;
+    line-height: 1rem;
     cursor: pointer;
     transition: 0.3s;
 

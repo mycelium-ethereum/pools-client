@@ -4,7 +4,7 @@ const names = ['ETH/USDC', 'ETH/BTC', 'ETH/CAD', 'ETH/AUD'];
 const leverages = [1, 3];
 const sides = ['short', 'long'];
 
-let dummyPoolData: BrowseTableRowData[] = [];
+const dummyPoolData: BrowseTableRowData[] = [];
 
 for (const name of names) {
     for (const leverage of leverages) {

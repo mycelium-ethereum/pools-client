@@ -1,5 +1,13 @@
 import React, { useContext, useReducer } from 'react';
-import { Children, CommitActionType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
+import {
+    Children,
+    CommitActionType,
+    MarketType,
+    LeverageType,
+    CurrencyType,
+    SideType,
+    PoolType,
+} from '@libs/types/General';
 import { MINT, LONG, SHORT } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';

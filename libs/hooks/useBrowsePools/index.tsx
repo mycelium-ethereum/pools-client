@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { BrowseTableRowData } from "@archetypes/Browse/state";
-import { usePools } from "@context/PoolContext";
-import { calcTokenPrice } from "@libs/utils/calcs";
+import { useState, useEffect } from 'react';
+import { BrowseTableRowData } from '@archetypes/Browse/state';
+import { usePools } from '@context/PoolContext';
+import { calcTokenPrice } from '@libs/utils/calcs';
 
 // const useBrowsePools
 export default (() => {
@@ -9,14 +9,14 @@ export default (() => {
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     useEffect(() => {
         if (pools) {
-            const poolValues = Object.values(pools)
+            const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool) => {
                 const { longToken, shortToken } = pool;
                 rows.push(
                     {
                         address: shortToken.address,
-						pool: pool.address,
+                        pool: pool.address,
                         symbol: shortToken.symbol,
                         leverage: 1,
                         side: 'short',
@@ -24,10 +24,11 @@ export default (() => {
                         change24Hours: 0,
                         rebalanceRate: 0,
                         totalValueLocked: pool.shortBalance.toNumber(),
-                        myHoldings: shortToken.balance.toNumber()
-                    }, {
+                        myHoldings: shortToken.balance.toNumber(),
+                    },
+                    {
                         address: longToken.address,
-						pool: pool.address,
+                        pool: pool.address,
                         symbol: longToken.symbol,
                         leverage: 1,
                         side: 'long',
@@ -35,13 +36,12 @@ export default (() => {
                         change24Hours: 0,
                         rebalanceRate: 0,
                         totalValueLocked: pool.longBalance.toNumber(),
-                        myHoldings: longToken.balance.toNumber()
-                    }
-                )
-            })
+                        myHoldings: longToken.balance.toNumber(),
+                    },
+                );
+            });
             setRows(rows);
         }
-
-    }, [pools])
+    }, [pools]);
     return rows;
-})
+}) as () => BrowseTableRowData[];

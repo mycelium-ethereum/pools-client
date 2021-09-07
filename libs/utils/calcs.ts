@@ -49,10 +49,9 @@ export const calcPercentageLossTransfer: (oldPrice: BigNumber, newPrice: BigNumb
  * @param numTokens number of tokens
  * @returns notional value of the tokens
  */
-export const calcNotionalValue: (tokenPrice: BigNumber, numTokens: number) => BigNumber =
-    (tokenPrice, numTokens) => {
-        return tokenPrice.times(numTokens)
-    };
+export const calcNotionalValue: (tokenPrice: BigNumber, numTokens: number) => BigNumber = (tokenPrice, numTokens) => {
+    return tokenPrice.times(numTokens);
+};
 
 /**
  * Calculates the ratio of the old price to the new price

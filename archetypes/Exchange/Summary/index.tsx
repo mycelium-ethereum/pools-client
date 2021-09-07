@@ -7,12 +7,11 @@ import { calcLeverageLossMultiplier, calcNotionalValue, calcTokenPrice } from '@
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 
-
 type SummaryProps = {
     pool: Pool;
     amount: number;
     isLong: boolean;
-}
+};
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
@@ -27,12 +26,8 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 <Token>{token.name}</Token>
                 <Section label="Expected number of tokens">
                     <div>
-                        <span>
-                            {`${new BigNumber(amount).div(tokenPrice ?? 1).toFixed(3)}`}
-                        </span>
-                        <span className="opacity-50">
-                            {` @ ${toApproxCurrency(tokenPrice ?? 1)}`}
-                        </span>
+                        <span>{`${new BigNumber(amount).div(tokenPrice ?? 1).toFixed(3)}`}</span>
+                        <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                     </div>
                 </Section>
                 <Section label="Expected Rebalance Multiplier">
@@ -45,11 +40,13 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
             </Box>
         </StyledHiddenExpand>
     );
-}
+};
 
-export const SellSummary: React.FC<SummaryProps & {
-    gasFee: number
-}> = (({ pool, amount, isLong, gasFee }) => {
+export const SellSummary: React.FC<
+    SummaryProps & {
+        gasFee: number;
+    }
+> = ({ pool, amount, isLong, gasFee }) => {
     const token = isLong ? pool.longToken : pool.shortToken;
     const notional = isLong ? pool.longBalance : pool.shortBalance;
 
@@ -63,17 +60,15 @@ export const SellSummary: React.FC<SummaryProps & {
                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                 </Section>
                 <Section label="Expected Token Price">{`${toApproxCurrency(tokenPrice)}`}</Section>
-                <Section label="Expected Gas Fee">
-                    {`${gasFee} Gwei`}
-                </Section>
+                <Section label="Expected Gas Fee">{`${gasFee} Gwei`}</Section>
                 <Countdown>
                     {'Receive In'}
                     <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
                 </Countdown>
             </Box>
         </StyledHiddenExpand>
-    )
-})
+    );
+};
 
 const Token = styled.h2``;
 

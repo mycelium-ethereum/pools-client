@@ -18,39 +18,35 @@ export default (() => {
     const { commit } = usePoolActions();
     const tokens = usePoolTokens();
 
-    const {
-        amount,
-        side,
-        selectedPool,
-        commitAction,
-    } = swapState;
+    const { amount, side, selectedPool, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
-    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction))
+    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
 
     return (
         <>
             <StyledInputRow>
                 <span>
                     <Label>Token</Label>
-                    <MarketSelect
-                        preview={pool.name}
+                    <Select
+                        preview={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
                         onChange={(e: any) => {
                             const [pool, side] = e.target.value.split('-');
-                            swapDispatch({ type: 'setSelectedPool', value: pool as string })
-                            swapDispatch({ type: 'setSide', value: parseInt(side) })
+                            console.log('Setting pool', pool, side);
+                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                            swapDispatch({ type: 'setSide', value: parseInt(side) });
                         }}
                     >
                         {tokens.map((token) => (
                             <SelectOption
-                                key={`pool-dropdown-option-${pool.address}`}
-                                value={`${pool.address}-${token.side}`}
-                                selected={(selectedPool === pool.address) && (side === token.side)}
+                                key={`pool-dropdown-option-${token.pool}-${token.side}`}
+                                value={`${token.pool}-${token.side}`}
+                                selected={selectedPool === token.pool && side === token.side}
                             >
                                 {token.symbol}
                             </SelectOption>
                         ))}
-                    </MarketSelect>
+                    </Select>
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>
@@ -67,8 +63,8 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
 
-            <ExchangeButton 
-                className="primary" 
+            <ExchangeButton
+                className="primary"
                 disabled={!amount || !selectedPool}
                 onClick={(_e) => {
                     if (!commit) {
@@ -79,7 +75,7 @@ export default (() => {
             >
                 Sell
             </ExchangeButton>
-            
+
             <SelectToken show={showTokenSelect} onClose={() => setShowTokenSelect(false)} />
         </>
     );
@@ -101,14 +97,3 @@ const StyledInputRow = styled(InputRow)`
         width: 100%;
     }
 `;
-
-const MarketSelect = styled(Select)`
-    width: 285px;
-    height: 3.44rem; // 55px
-    padding: 13px 20px;
-
-    @media (max-width: 611px) {
-        width: 156px;
-        height: 44px;
-    }
-`

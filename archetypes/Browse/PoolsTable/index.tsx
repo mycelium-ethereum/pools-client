@@ -6,7 +6,7 @@ import React from 'react';
 import { BrowseTableRowData } from '../state';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    console.debug("Browse table rows", rows);
+    console.debug('Browse table rows', rows);
     return (
         <Table>
             <TableHeader>
