@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
@@ -31,12 +31,16 @@ type HandleAsyncType =
       ) => void)
     | undefined;
 
-interface TransactionContextProps {
+interface TransactionActionsContextProps {
     handleTransaction: HandleTransactionType;
     handleAsync: HandleAsyncType;
 }
+interface TransactionContextProps {
+    pendingCount: number;
+}
 
 export const TransactionContext = createContext<Partial<TransactionContextProps>>({});
+export const TransactionActionsContext = createContext<Partial<TransactionActionsContextProps>>({});
 
 // type Status = 'INITIALIZED' | 'PROCESSING' | 'ERROR' | 'SUCCESS'
 
@@ -49,6 +53,7 @@ export const TransactionContext = createContext<Partial<TransactionContextProps>
  */
 export const TransactionStore: React.FC = ({ children }: Children) => {
     const { addToast, updateToast } = useToasts();
+    const [pendingCount, setPendingCount] = useState(0);
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
@@ -61,6 +66,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 autoDismiss: false,
             },
         );
+        setPendingCount(pendingCount + 1);
         const res = callMethod(...params);
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
@@ -83,6 +89,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 appearance: 'success',
                 autoDismiss: true,
             });
+            setPendingCount(pendingCount - 1);
             onSuccess ? onSuccess(receipt) : null;
         }).catch((error) => {
             console.error('Failed transaction', error);
@@ -92,6 +99,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 appearance: 'error',
                 autoDismiss: true,
             });
+            setPendingCount(pendingCount - 1);
             onError ? onError(error) : null;
         });
     };
@@ -107,6 +115,8 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 autoDismiss: false,
             },
         );
+
+        setPendingCount(pendingCount + 1);
 
         const res = callMethod(...params);
         Promise.resolve(res).then((res) => {
@@ -126,22 +136,37 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 });
                 onSuccess ? onSuccess(res) : null;
             }
+            setPendingCount(pendingCount - 1);
         });
     };
 
     return (
-        <TransactionContext.Provider
+        <TransactionActionsContext.Provider
             value={{
                 handleTransaction,
                 handleAsync,
             }}
         >
-            {children}
-        </TransactionContext.Provider>
+            <TransactionContext.Provider
+                value={{
+                    pendingCount,
+                }}
+            >
+                {children}
+            </TransactionContext.Provider>
+        </TransactionActionsContext.Provider>
     );
 };
 
-export const useTransactionContext: () => Partial<TransactionContextProps> = () => {
+export const useTransactionContext: () => Partial<TransactionActionsContextProps> = () => {
+    const context = useContext(TransactionActionsContext);
+    if (context === undefined) {
+        throw new Error(`useTransactionContext must be called within TransactionContext`);
+    }
+    return context;
+};
+
+export const useTransactionState: () => Partial<TransactionContextProps> = () => {
     const context = useContext(TransactionContext);
     if (context === undefined) {
         throw new Error(`useTransactionContext must be called within TransactionContext`);

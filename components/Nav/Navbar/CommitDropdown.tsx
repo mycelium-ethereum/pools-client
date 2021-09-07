@@ -1,16 +1,24 @@
+import React, { useMemo } from 'react';
 import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { BUYS, SELLS } from '@libs/constants';
 import { CommitsFocus } from '@libs/types/General';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
-import React from 'react';
 import styled from 'styled-components';
 
 // const CommitDropdown
-export default (() => {
+export default (({ setShowQueued, show }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
+
+    useMemo(() => {
+        if (buys + sells > 0) {
+            setShowQueued(true);
+        } else {
+            setShowQueued(false);
+        }
+    }, [buys, sells]);
 
     const handleClick = (focus: CommitsFocus) => {
         if (commitDispatch) {
@@ -21,7 +29,7 @@ export default (() => {
     };
 
     return (
-        <QueuedDropdown preview={`${buys + sells} Queued`}>
+        <QueuedDropdown preview={`${buys + sells} Queued`} show={show}>
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
@@ -33,9 +41,14 @@ export default (() => {
             </Link>
         </QueuedDropdown>
     );
-}) as React.FC;
+}) as React.FC<{
+    setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
+    show: boolean;
+}>;
 
-const QueuedDropdown = styled(Select)`
+export const QueuedDropdown = styled(Select)<{
+    show: boolean;
+}>`
     border: 1px solid #ffffff;
     box-sizing: border-box;
     border-radius: 7px;
@@ -47,6 +60,8 @@ const QueuedDropdown = styled(Select)`
     color: #fff;
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
     border-radius: 6px;
+
+    display: ${(props) => (props.show ? 'block' : 'none')};
 
     // for size of menu
     ${SelectDropdown} {
