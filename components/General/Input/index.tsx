@@ -9,7 +9,6 @@ export const Input = styled.input`
     border: 1px solid #d1d5db;
     box-sizing: border-box;
     border-radius: 7px;
-    box-sizing: border-box;
     padding: 12px 20px;
     height: 3.44rem; // 55px
 
@@ -221,7 +220,6 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
     color: #6b7280;
     cursor: pointer;
     position: relative;
-    box-sizing: border-box;
 
     > .anticon {
         vertical-align: 0;

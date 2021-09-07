@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Input, Select } from '@components/General/Input';
+import { Input, Select, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer } from '.';
+import { ExchangeButton, InputContainer, MarketSelect } from '.';
 import { usePool } from '@context/PoolContext';
 import { LONG } from '@libs/constants';
 import Summary from '../Summary';
@@ -13,7 +13,12 @@ export default (() => {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
-    const { amount, selectedPool, side } = swapState;
+    const {
+        amount,
+        selectedPool,
+        side,
+        options: { poolOptions },
+    } = swapState;
 
     const pool = usePool(selectedPool);
     console.log('Selected address', pool?.address);
@@ -22,17 +27,33 @@ export default (() => {
         <>
             <InputRow>
                 <span
-                    onClick={() => {
-                        setShowTokenSelect(true);
-                    }}
+                // onClick={() => {
+                //     setShowTokenSelect(true);
+                // }}
                 >
                     <Label>Token</Label>
-                    <Select
+                    {/*<Select*/}
+                    {/*    preview={pool.name}*/}
+                    {/*    onChange={(e: any) =>*/}
+                    {/*        swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })*/}
+                    {/*    }*/}
+                    {/*/>*/}
+                    <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
                         }
-                    ></Select>
+                    >
+                        {poolOptions.map((pool) => (
+                            <SelectOption
+                                key={`pool-dropdown-option-${pool.address}`}
+                                value={pool.address}
+                                selected={selectedPool === pool.address}
+                            >
+                                {pool.name}
+                            </SelectOption>
+                        ))}
+                    </MarketSelect>
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>

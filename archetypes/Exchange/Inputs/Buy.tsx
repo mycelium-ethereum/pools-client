@@ -1,11 +1,11 @@
 import React from 'react';
-import { Input, Select, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
+import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
 import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton } from '.';
+import { ExchangeButton, MarketSelect } from '.';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
@@ -144,17 +144,6 @@ const HelperText = styled.p`
     a {
         text-decoration: underline;
         cursor: pointer;
-    }
-`;
-
-const MarketSelect = styled(Select)`
-    width: 285px;
-    height: 3.44rem; // 55px
-    padding: 13px 20px;
-
-    @media (max-width: 611px) {
-        width: 156px;
-        height: 44px;
     }
 `;
 
