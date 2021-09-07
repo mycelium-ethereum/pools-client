@@ -5,12 +5,13 @@ import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton } from '.';
+import { ExchangeButton, InputRow } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { Label } from '@components/Pool';
-import Summary from '../Summary';
+import { BuySummary } from '../Summary';
+
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -19,11 +20,13 @@ export default (() => {
         leverage,
         selectedPool,
         side,
+        commitAction,
         amount,
         options: { leverageOptions, poolOptions },
     } = swapState;
 
     const pool = usePool(selectedPool);
+
     const { commit, approve } = usePoolActions();
 
     return (
@@ -99,7 +102,9 @@ export default (() => {
                     {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
                 </div>
             </InputRow>
-            <Summary pool={pool} isLong={side === LONG} amount={amount} />
+
+            <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
+
             {!pool.quoteToken.approved ? (
                 <>
                     <ExchangeButton
@@ -183,15 +188,6 @@ const StyledSlideSelect = styled(SlideSelect)`
             height: 44px;
             margin: 0;
         }
-    }
-`;
-
-export const InputRow = styled.div`
-    position: relative;
-    margin: 1rem 0;
-    &.markets {
-        display: flex;
-        justify-content: space-between;
     }
 `;
 

@@ -2,11 +2,11 @@ import React, { useEffect, useContext } from 'react';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { SwapContext } from '@context/SwapContext';
 import { MINT, BURN } from '@libs/constants';
-import { SideType, TokenType } from '@libs/types/General';
+import { SideType, CommitActionType } from '@libs/types/General';
 import styled from 'styled-components';
 import Gas from './Gas';
-import Buy from './Inputs/Buy';
-import Sell from './Inputs/Sell';
+import Buy from './Buy';
+import Sell from './Sell';
 import { useRouter } from 'next/router';
 import Divider from '@components/General/Divider';
 
@@ -20,7 +20,7 @@ export default (() => {
                 swapDispatch({ type: 'setSelectedPool', value: router.query.pool as string });
             }
             if (router.query.type) {
-                swapDispatch({ type: 'setTokenType', value: parseInt(router.query.type as string) as TokenType });
+                swapDispatch({ type: 'setCommitActionType', value: parseInt(router.query.type as string) as CommitActionType });
             }
             if (router.query.side) {
                 console.log("found side", router.query.side)
@@ -34,11 +34,11 @@ export default (() => {
             <TradeModal>
                 <Header>
                     <SlideSelect
-                        value={swapState?.tokenType ?? MINT}
+                        value={swapState?.commitAction ?? MINT}
                         onClick={(index, _e) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setTokenType', value: index as SideType });
+                                swapDispatch({ type: 'setCommitActionType', value: index as SideType });
                             }
                         }}
                     >
@@ -51,7 +51,7 @@ export default (() => {
                 <Divider />
 
                 {/** Inputs */}
-                {swapState?.tokenType === BURN ? <Sell /> : <Buy />}
+                {swapState?.commitAction === BURN ? <Sell /> : <Buy />}
             </TradeModal>
         </Content>
     );

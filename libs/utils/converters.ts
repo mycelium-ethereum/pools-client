@@ -1,6 +1,7 @@
-import { CurrencyType, PoolType } from '@libs/types/General';
+import { CommitType, CurrencyType, PoolType, SideType, CommitActionType } from '@libs/types/General';
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
+import { BURN, LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -148,6 +149,12 @@ export const timeTill: (time: number) => {
 export const formatDate: (date: Date) => string = (date) =>
     `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
+/**
+ * Checks if a number is an arbitrarily small number. Returns is an approximated value instead
+ * @param num 
+ * @param currency 
+ * @returns 
+ */
 export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, currency) => {
     const isSmall = num.lt(0.000001); // some arbitrarily small number
     if (currency) {
@@ -211,3 +218,21 @@ export const deconstructNames: (pools: PoolType[]) => {
         settlementOptions,
     };
 };
+
+/**
+ * Converts a side and a token to a commitType
+ * @param side long or short (buy or sell)
+ * @param token mint or burn token 
+ * @returns the corresponding value to commit with
+ */
+export const toCommitType: (side: SideType, token: CommitActionType) => CommitType = (
+    side, token
+) => {
+    if (side === LONG) {
+        if (token === BURN) return LONG_BURN;
+        else return LONG_MINT
+    } else {
+        if (token === BURN) return  SHORT_BURN;
+        else return SHORT_MINT
+    }
+}

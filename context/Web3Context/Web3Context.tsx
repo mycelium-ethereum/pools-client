@@ -83,6 +83,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                     ...onboardConfig,
                     networkId: networkIds ? networkIds[0] : 421611, //Default to arb
                     walletCheck: checks,
+                    darkMode: true,
                     subscriptions: {
                         address: (address) => {
                             console.info(`Changing address: ${address}`);
