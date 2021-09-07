@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useReducer } from 'react';
 import { CurrencyType, MarketType, PoolType, SideType } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
-import { deconstructNames } from '@libs/utils';
+import { deconstructNames } from '@libs/utils/converters';
 
 interface ContextProps {
     filterState: FilterState;

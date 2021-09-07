@@ -1,5 +1,5 @@
 import React, { useContext, useReducer } from 'react';
-import { Children, TokenType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
+import { Children, CommitActionType, MarketType, LeverageType, CurrencyType, SideType, PoolType } from '@libs/types/General';
 import { MINT, LONG, SHORT } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';
@@ -11,7 +11,7 @@ interface ContextProps {
 
 type SwapState = {
     amount: number;
-    tokenType: TokenType;
+    commitAction: CommitActionType;
     selectedPool: string | undefined; // address of selected pool
     side: SideType;
     leverage: LeverageType;
@@ -25,7 +25,7 @@ type SwapState = {
 
 export type SwapAction =
     | { type: 'setAmount'; value: number }
-    | { type: 'setTokenType'; value: TokenType }
+    | { type: 'setCommitActionType'; value: CommitActionType }
     | { type: 'setMarket'; value: MarketType }
     | { type: 'setLeverage'; value: LeverageType }
     | { type: 'setCurrency'; value: CurrencyType }
@@ -35,7 +35,7 @@ export type SwapAction =
 
 export const swapDefaults: SwapState = {
     amount: NaN,
-    tokenType: MINT,
+    commitAction: MINT,
     selectedPool: undefined,
     side: LONG,
     leverage: NaN,
@@ -60,8 +60,8 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
-            case 'setTokenType':
-                return { ...state, tokenType: action.value };
+            case 'setCommitActionType':
+                return { ...state, commitAction: action.value };
             case 'setSide':
                 return { ...state, side: action.value };
             case 'setLeverage':

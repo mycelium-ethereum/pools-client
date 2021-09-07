@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { Heading, QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { usePoolActions } from '@context/PoolContext';

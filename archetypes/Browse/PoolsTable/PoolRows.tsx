@@ -1,6 +1,6 @@
 import React from 'react';
 import { TableCell, TableRow } from '@components/General/Table';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { Button } from '@components/General';
 import styled from 'styled-components';
 import { Pool, PoolType } from '@libs/types/General';

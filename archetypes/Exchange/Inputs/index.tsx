@@ -16,3 +16,12 @@ export const ExchangeButton = styled(Button)`
     margin: 1rem auto;
     width: 100%;
 `;
+
+export const InputRow = styled.div`
+    position: relative;
+    margin: 1rem 0;
+    &.markets {
+        display: flex;
+        justify-content: space-between;
+    }
+`;

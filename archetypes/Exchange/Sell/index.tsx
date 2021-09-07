@@ -2,25 +2,28 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, Select } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer } from '.';
+import { ExchangeButton, InputContainer, InputRow } from '../Inputs';
 import { usePool } from '@context/PoolContext';
 import { LONG } from '@libs/constants';
-import Summary from '../Summary';
 import { Label } from '@components/Pool';
 import SelectToken from '@components/SelectToken';
+import { SellSummary } from '../Summary';
+import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
+import { toCommitType } from '@libs/utils/converters';
 
 export default (() => {
     const [showTokenSelect, setShowTokenSelect] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
-    const { amount, selectedPool, side } = swapState;
+    const { amount, selectedPool, side, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
-    console.log('Selected address', pool?.address);
+
+    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction))
 
     return (
         <>
-            <InputRow>
+            <StyledInputRow>
                 <span
                     onClick={() => {
                         setShowTokenSelect(true);
@@ -45,17 +48,20 @@ export default (() => {
                         min={0}
                     />
                 </InputContainer>
-            </InputRow>
-            <Summary pool={pool} isLong={side === LONG} amount={amount} />
+            </StyledInputRow>
+
+            <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
+
             <ExchangeButton className="primary" disabled={!amount || !selectedPool}>
                 Sell
             </ExchangeButton>
+            
             <SelectToken show={showTokenSelect} onClose={() => setShowTokenSelect(false)} />
         </>
     );
 }) as React.FC;
 
-const InputRow = styled.div`
+const StyledInputRow = styled(InputRow)`
     display: flex;
     justify-content: space-between;
     margin-bottom: 2rem;
