@@ -32,7 +32,7 @@ export default (() => {
             <InputRow className="markets">
                 <span>
                     <Label>Market</Label>
-                    <MarketSelect
+                    <Select
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
@@ -47,7 +47,7 @@ export default (() => {
                                 {pool.name}
                             </SelectOption>
                         ))}
-                    </MarketSelect>
+                    </Select>
                 </span>
                 <span>
                     <Label>Side</Label>
