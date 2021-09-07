@@ -26,7 +26,6 @@ module.exports = ({
         ignoreBuildErrors: true,
     },
 
-
     webpack(config, { isServer }, options) {
         // // Fixes npm packages that depend on `fs` module
         // if (!isServer) {
