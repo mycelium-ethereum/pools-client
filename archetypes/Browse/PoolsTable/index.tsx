@@ -11,7 +11,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <span>Token</span>
                 <span>Last Price</span>
                 <span>24H Change</span>
-                <span>30D Realised APY</span>
+                <span>Rebalance Rate</span>
                 <span>TVL</span>
                 <span>My Holdings</span>
                 <span>{/* Empty header for buttons column */}</span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import styled from 'styled-components';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
@@ -15,49 +15,7 @@ import {
 } from './state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { usePools } from '@context/PoolContext';
-import { calcTokenPrice } from '@libs/utils/calcs';
-
-
-const useBrowsePools = () => {
-    const { pools } = usePools();
-    const [rows, setRows] = useState<BrowseTableRowData[]>([]);
-    useEffect(() => {
-        if (pools) {
-            const poolValues = Object.values(pools)
-            const rows: BrowseTableRowData[] = [];
-            poolValues.forEach((pool) => {
-                const { longToken, shortToken } = pool;
-                rows.push(
-                    {
-                        address: shortToken.address,
-                        symbol: shortToken.symbol,
-                        leverage: 1,
-                        side: 'short',
-                        lastPrice: calcTokenPrice(pool.shortBalance, shortToken.supply).toNumber(),
-                        change24Hours: 0,
-                        rebalanceRate: 0,
-                        totalValueLocked: pool.shortBalance.toNumber(),
-                        myHoldings: shortToken.balance.toNumber()
-                    }, {
-                        address: longToken.address,
-                        symbol: shortToken.symbol,
-                        leverage: 1,
-                        side: 'long',
-                        lastPrice: calcTokenPrice(pool.longBalance, longToken.supply).toNumber(),
-                        change24Hours: 0,
-                        rebalanceRate: 0,
-                        totalValueLocked: pool.longBalance.toNumber(),
-                        myHoldings: longToken.balance.toNumber()
-                    }
-                )
-            })
-            setRows(rows);
-        }
-
-    }, [pools])
-    return rows;
-}
+import useBrowsePools from '@libs/hooks/useBrowsePools';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
