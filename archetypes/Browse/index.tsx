@@ -1,10 +1,9 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import styled from 'styled-components';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
 import { Container } from '@components/General';
-import dummyPoolData from './testData';
 import InvestNav from '@components/Nav/InvestNav';
 import {
     browseReducer,
@@ -16,9 +15,53 @@ import {
 } from './state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { usePools } from '@context/PoolContext';
+import { calcTokenPrice } from '@libs/utils/calcs';
+
+
+const useBrowsePools = () => {
+    const { pools } = usePools();
+    const [rows, setRows] = useState<BrowseTableRowData[]>([]);
+    useEffect(() => {
+        if (pools) {
+            const poolValues = Object.values(pools)
+            const rows: BrowseTableRowData[] = [];
+            poolValues.forEach((pool) => {
+                const { longToken, shortToken } = pool;
+                rows.push(
+                    {
+                        address: shortToken.address,
+                        symbol: shortToken.symbol,
+                        leverage: 1,
+                        side: 'short',
+                        lastPrice: calcTokenPrice(pool.shortBalance, shortToken.supply).toNumber(),
+                        change24Hours: 0,
+                        rebalanceRate: 0,
+                        totalValueLocked: pool.shortBalance.toNumber(),
+                        myHoldings: shortToken.balance.toNumber()
+                    }, {
+                        address: longToken.address,
+                        symbol: shortToken.symbol,
+                        leverage: 1,
+                        side: 'long',
+                        lastPrice: calcTokenPrice(pool.longBalance, longToken.supply).toNumber(),
+                        change24Hours: 0,
+                        rebalanceRate: 0,
+                        totalValueLocked: pool.longBalance.toNumber(),
+                        myHoldings: longToken.balance.toNumber()
+                    }
+                )
+            })
+            setRows(rows);
+        }
+
+    }, [pools])
+    return rows;
+}
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
+
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         leverage: LeverageFilterEnum.All,
@@ -27,18 +70,16 @@ export const Browse: React.FC = () => {
         filterModalOpen: false,
     } as BrowseState);
 
+
+
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {
             dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyHoldings });
         }
     }, [account]);
 
-    const pools = getPoolData();
-
-    function getPoolData() {
-        // Update this to fetch real data
-        return dummyPoolData;
-    }
+    // parse the pools rows
+    const tokens = useBrowsePools()
 
     const leverageFilter = (pool: BrowseTableRowData): boolean => {
         switch (state.leverage) {
@@ -72,34 +113,32 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const searchFilter = (pool: BrowseTableRowData): boolean => {
+    const searchFilter = (token: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(pool.tokenName.toLowerCase().match(searchString));
+        return Boolean(token.symbol.toLowerCase().match(searchString));
     };
 
-    const sorter = (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {
+    const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.Name:
-                return poolA.tokenName.localeCompare(poolB.tokenName);
+                return tokenA.symbol.localeCompare(tokenB.symbol);
             case SortByEnum.Price:
-                return poolB.lastPrice - poolA.lastPrice;
+                return tokenB.lastPrice - tokenA.lastPrice;
             case SortByEnum.Change24Hours:
-                return poolB.change24Hours - poolA.change24Hours;
+                return tokenB.change24Hours - tokenA.change24Hours;
             case SortByEnum.RebalanceRate:
-                return poolB.rebalanceRate - poolA.rebalanceRate;
-            case SortByEnum.APY30Day:
-                return poolB.APY30Days - poolA.APY30Days;
+                return tokenB.rebalanceRate - tokenA.rebalanceRate;
             case SortByEnum.TotalValueLocked:
-                return poolB.totalValueLocked - poolA.totalValueLocked;
+                return tokenB.totalValueLocked - tokenA.totalValueLocked;
             case SortByEnum.MyHoldings:
-                return poolB.myHoldings - poolA.myHoldings;
+                return tokenB.myHoldings - tokenA.myHoldings;
             default:
                 return 0;
         }
     };
 
-    const filteredPools = pools.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
-    const sortedFilteredPools = filteredPools.sort(sorter);
+    const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const handleBuyToken = (address: string) => {
         console.log(`buying token with address ${address}`);
@@ -134,7 +173,7 @@ export const Browse: React.FC = () => {
                         <p className="mb-1 text-gray-500">This is a list of latest transactions.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
-                    <PoolsTable rows={sortedFilteredPools} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
                 </BrowseModal>
             </BrowseContainer>
             <FilterModal state={state} dispatch={dispatch} />

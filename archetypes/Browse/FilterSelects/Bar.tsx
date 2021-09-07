@@ -10,7 +10,7 @@ interface FilterSelectsProps {
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     return (
-        <section className="container ">
+        <section className="container px-0">
             <div className="flex w-full mb-2">
                 <div className="mr-4 flex-grow flex items-end" style={{ maxWidth: '20rem' }}>
                     <SearchInput
