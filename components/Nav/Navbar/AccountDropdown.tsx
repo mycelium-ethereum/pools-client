@@ -33,7 +33,7 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
         <div className={`${className} ${open ? 'open' : ''}`} id="account-dropdown">
             <MainButton>
                 <AccountDropdown
-                    className={!open ? 'show-hover' : ''}
+                    className={`${!account ? 'primary' : ''}`}
                     onClick={() => {
                         if (!!account) {
                             setOpen(true);
@@ -146,8 +146,12 @@ const AccountDropdown = styled.button`
         outline: none;
     }
 
-    &.show-hover:hover {
-        background: var(--color-primary);
+    &.primary {
+        background-color: #3da8f5;
+
+        &:hover {
+            background-color: transparent;
+        }
     }
 `;
 
