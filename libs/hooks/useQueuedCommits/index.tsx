@@ -17,7 +17,9 @@ export default (() => {
         if (pools && Object.keys(pools).length && provider && account) {
             const parsedCommits = [];
             for (const commit of Object.values(commits)) {
-                if (!pools[commit.pool]) continue;
+                if (!pools[commit.pool]) {
+                    continue;
+                }
                 const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
                     pools[commit.pool];
 
@@ -36,7 +38,7 @@ export default (() => {
                     tokenPrice,
                     spent: commit.amount.times(tokenPrice),
                     nextRebalance: lastUpdate.plus(updateInterval),
-                })
+                });
             }
 
             setAllQueuedCommits(parsedCommits);

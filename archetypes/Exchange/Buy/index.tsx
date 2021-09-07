@@ -12,7 +12,6 @@ import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
 
-
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
 
@@ -194,5 +193,16 @@ const Currency = styled.div`
         height: 22px;
         display: inline;
         margin: 0 5px 0 0;
+    }
+`;
+
+const MarketSelect = styled(Select)`
+    width: 285px;
+    height: 3.44rem; // 55px
+    padding: 13px 20px;
+
+    @media (max-width: 611px) {
+        width: 156px;
+        height: 44px;
     }
 `;

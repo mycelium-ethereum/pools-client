@@ -22,7 +22,7 @@ import { SideType } from '@libs/types/General';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
-    
+
     const router = useRouter();
 
     const [state, dispatch] = useReducer(browseReducer, {
@@ -40,7 +40,7 @@ export const Browse: React.FC = () => {
     }, [account]);
 
     // parse the pools rows
-    const tokens = useBrowsePools()
+    const tokens = useBrowsePools();
 
     // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: BrowseTableRowData): boolean => {
@@ -101,9 +101,11 @@ export const Browse: React.FC = () => {
         router.push({
             pathname: '/',
             query: {
-                pool: pool, type: MINT, side: side
-            }
-        })
+                pool: pool,
+                type: MINT,
+                side: side,
+            },
+        });
     };
 
     const handleSellToken = (pool: string, side: SideType) => {
@@ -112,9 +114,11 @@ export const Browse: React.FC = () => {
         router.push({
             pathname: '/',
             query: {
-                pool: pool, type: BURN, side: side
-            }
-        })
+                pool: pool,
+                type: BURN,
+                side: side,
+            },
+        });
     };
 
     const SearchButton = (

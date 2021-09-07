@@ -20,10 +20,13 @@ export default (() => {
                 swapDispatch({ type: 'setSelectedPool', value: router.query.pool as string });
             }
             if (router.query.type) {
-                swapDispatch({ type: 'setCommitActionType', value: parseInt(router.query.type as string) as CommitActionType });
+                swapDispatch({
+                    type: 'setCommitActionType',
+                    value: parseInt(router.query.type as string) as CommitActionType,
+                });
             }
             if (router.query.side) {
-                console.log("found side", router.query.side)
+                console.log('found side', router.query.side);
                 swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
             }
         }
