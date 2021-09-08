@@ -1,5 +1,6 @@
+import React from 'react';
 import { TWModal } from '@components/General/TWModal';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { useReducer } from 'react';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
 
@@ -16,7 +17,9 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
 
     function isConnectBtnEnabled() {
-        if (state.isBridging) return false;
+        if (state.isBridging) {
+            return false;
+        }
         if (state.step === BridgeStepEnum.Collateral) {
             return state.USDCAmount && state.USDCAmount > 0 && state.USDCAmount <= props.USDCBalance;
         } else if (state.step === BridgeStepEnum.Gas) {
@@ -25,7 +28,9 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     }
 
     function handleClickConnect() {
-        if (state.isBridging) return;
+        if (state.isBridging) {
+            return;
+        }
         if (state.step === BridgeStepEnum.Collateral) {
             handleBridgeUSDC();
         } else if (state.step === BridgeStepEnum.Gas) {
@@ -34,11 +39,15 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     }
 
     async function handleBridgeUSDC() {
-        if (!state.USDCAmount) return;
+        if (!state.USDCAmount) {
+            return;
+        }
         dispatch({ type: 'setBridging', status: true });
         try {
             const success = await props.onBridgeUSDC(state.USDCAmount);
-            if (!success) throw Error('Bridge failed');
+            if (!success) {
+                throw Error('Bridge failed');
+            }
             dispatch({ type: 'setStep', step: BridgeStepEnum.Gas });
         } catch (err) {
             // Display error here message if necessary
@@ -48,11 +57,15 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     }
 
     async function handleBridgeETH() {
-        if (!state.ETHAmount) return;
+        if (!state.ETHAmount) {
+            return;
+        }
         dispatch({ type: 'setBridging', status: true });
         try {
             const success = await props.onBridgeETH(state.ETHAmount);
-            if (!success) throw Error('Bridge failed');
+            if (!success) {
+                throw Error('Bridge failed');
+            }
             props.onClose();
             // Wait 1 second for animation to complete
             setTimeout(() => dispatch({ type: 'reset' }), 1000);
@@ -64,12 +77,20 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     }
 
     let collateralErrorMsg: string | null = null;
-    if (state.USDCAmount && state.USDCAmount < 0) collateralErrorMsg = 'Invalid amount';
-    if (state.USDCAmount && state.USDCAmount > props.USDCBalance) collateralErrorMsg = 'Insufficient funds';
+    if (state.USDCAmount && state.USDCAmount < 0) {
+        collateralErrorMsg = 'Invalid amount';
+    }
+    if (state.USDCAmount && state.USDCAmount > props.USDCBalance) {
+        collateralErrorMsg = 'Insufficient funds';
+    }
 
     let gasErrorMsg: string | null = null;
-    if (state.ETHAmount && state.ETHAmount < 0) gasErrorMsg = 'Invalid amount';
-    if (state.ETHAmount && state.ETHAmount > props.ETHBalance) gasErrorMsg = 'Insufficient funds';
+    if (state.ETHAmount && state.ETHAmount < 0) {
+        gasErrorMsg = 'Invalid amount';
+    }
+    if (state.ETHAmount && state.ETHAmount > props.ETHBalance) {
+        gasErrorMsg = 'Insufficient funds';
+    }
 
     return (
         <TWModal open={props.isOpen} onClose={() => props.onClose()}>
@@ -187,7 +208,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         disabled={!isConnectBtnEnabled()}
                         className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
-                        Ok, let's connect
+                        Ok, let&apos;s connect
                     </button>
                 </div>
 

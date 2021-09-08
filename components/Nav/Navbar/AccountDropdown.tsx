@@ -200,10 +200,8 @@ const StyledMenuItem = styled(MenuItem)`
 
 const StyledButton = styled(Button)`
     width: 45%;
-    height: var(--height-extra-small-button);
-    line-height: var(--height-extra-small-button);
+    height: var(--height-small-button);
     font-size: var(--font-size-extra-small);
-    padding: 0;
     color: #3da8f5;
     border: 1px solid #3da8f5;
 

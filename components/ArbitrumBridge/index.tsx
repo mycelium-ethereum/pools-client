@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { ArbitrumBridgeModal } from './Modal';
+import styled from 'styled-components';
+import { Button } from '@components/General';
 
 // ArbitrumBridge
 export default (() => {
@@ -21,9 +23,7 @@ export default (() => {
 
     return (
         <>
-            <button className="text-white underline" onClick={() => setOpen(true)}>
-                Bridge
-            </button>
+            <StyledButton onClick={() => setOpen(true)}>Arbitrum Bridge</StyledButton>
             <ArbitrumBridgeModal
                 isOpen={isOpen}
                 onClose={() => setOpen(false)}
@@ -35,3 +35,14 @@ export default (() => {
         </>
     );
 }) as React.FC;
+
+const StyledButton = styled(Button)`
+    margin: 1rem auto;
+    color: #3da8f5;
+    border: 1px solid #3da8f5;
+
+    &:hover {
+        color: #fff;
+        background: #3da8f5;
+    }
+`;
