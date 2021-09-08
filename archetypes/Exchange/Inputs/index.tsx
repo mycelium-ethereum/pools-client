@@ -1,4 +1,5 @@
 import { Button } from '@components/General';
+import { Select } from '@components/General/Input';
 import styled from 'styled-components';
 
 export const Label = styled.p`
@@ -23,5 +24,16 @@ export const InputRow = styled.div`
     &.markets {
         display: flex;
         justify-content: space-between;
+    }
+`;
+
+export const MarketSelect = styled(Select)`
+    width: 285px;
+    height: 3.44rem; // 55px
+    padding: 13px 20px;
+
+    @media (max-width: 611px) {
+        width: 156px;
+        height: 44px;
     }
 `;

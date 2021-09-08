@@ -1,11 +1,11 @@
 import React from 'react';
-import { Input, SelectOption, InnerInputText, InputWrapper, Select } from '@components/General/Input';
+import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
 import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton, InputRow } from '../Inputs';
+import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
@@ -35,7 +35,7 @@ export default (() => {
             <InputRow className="markets">
                 <span>
                     <Label>Market</Label>
-                    <Select
+                    <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
@@ -50,7 +50,7 @@ export default (() => {
                                 {pool.name}
                             </SelectOption>
                         ))}
-                    </Select>
+                    </MarketSelect>
                 </span>
                 <span>
                     <Label>Side</Label>

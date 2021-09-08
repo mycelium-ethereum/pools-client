@@ -40,7 +40,7 @@ export const MenuItem = styled.div`
         opacity: 0;
     }
     &:not(:first-child) > a:hover {
-        background: var(--color-primary);
+        background: #3da8f5;
     }
     &:last-child {
         padding: 0.5rem 2rem 0 2rem;
