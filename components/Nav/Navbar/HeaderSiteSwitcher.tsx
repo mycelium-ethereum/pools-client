@@ -36,7 +36,7 @@ export default (() => (
                 </a>
             </StyledMenuItem>
             <StyledMenuItem>
-                <StyledMobileSocialLogos />
+                <MobileSocialLogos />
             </StyledMenuItem>
         </Menu>
     </StyledHeaderSiteSwitcher>
@@ -66,17 +66,12 @@ const StyledMenuItem = styled(MenuItem)`
     }
 `;
 
-const StyledMobileSocialLogos = styled(MobileSocialLogos)`
-    width: 60%;
-`;
-
 const StyledHeaderSiteSwitcher = styled.div`
     position: relative;
     display: flex;
     align-items: center;
 
     &:hover {
-        cursor: pointer;
         ${Arrow} {
             transform: rotate(180deg);
         }
@@ -86,6 +81,7 @@ const StyledHeaderSiteSwitcher = styled.div`
         }
         ${MenuItem} {
             opacity: 1;
+            cursor: pointer;
             padding-left: 0;
             &:last-child {
                 cursor: auto;
@@ -103,6 +99,7 @@ const StyledHeaderSiteSwitcher = styled.div`
         }
         ${MenuItem}:nth-child(5) {
             transition: all 400ms ease 750ms;
+            cursor: auto;
         }
     }
 `;
