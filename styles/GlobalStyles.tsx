@@ -53,10 +53,6 @@ export default createGlobalStyle`
         --status-lightblue: #3da8f5;
         --status-orange: #F15025;
         --status-white: #fff;
-
-        --table-darkborder: #00156C;
-        --table-semidarkborder: #000240;
-        --table-lightborder: #002886;
         
         --font-size-extra-small: 12px;
         --font-size-small: 16px;
