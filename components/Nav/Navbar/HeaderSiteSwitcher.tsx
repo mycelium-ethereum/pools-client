@@ -140,6 +140,10 @@ const MenuItem = styled.div`
         transition: all 300ms ease;
     }
 
+    &:last-child {
+        padding-bottom: 1rem;
+    }
+
     > a:hover {
         background: #3da8f5;
     }

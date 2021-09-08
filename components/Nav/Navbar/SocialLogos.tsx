@@ -5,6 +5,7 @@ import DiscourseLogo from '/public/img/socials/discourse-white.svg';
 import TwitterLogo from '/public/img/socials/twitter-white.svg';
 import GitHubLogo from '/public/img/socials/github-white.svg';
 import DiscordLogo from '/public/img/socials/discord-white.svg';
+import Folder from '/public/img/general/folder.svg';
 import Icon from '@ant-design/icons';
 
 const Icons: {
@@ -12,6 +13,11 @@ const Icons: {
     href: string;
     logo: any;
 }[] = [
+    {
+        text: 'Website',
+        href: 'https://tracer.finance',
+        logo: Folder,
+    },
     {
         text: 'Twitter',
         href: 'https://twitter.com/TracerDAO',
