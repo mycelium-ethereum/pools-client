@@ -14,7 +14,7 @@ const Icons: {
 }[] = [
     {
         text: 'Twitter',
-        href: 'https://twitter.com/tracer_finance',
+        href: 'https://twitter.com/TracerDAO',
         logo: TwitterLogo,
     },
     {
@@ -24,12 +24,12 @@ const Icons: {
     },
     {
         text: 'Github',
-        href: 'href="https://github.com/tracer-protocol/',
+        href: 'https://github.com/tracer-protocol/',
         logo: GitHubLogo,
     },
     {
         text: 'Discord',
-        href: 'https://discord.gg/sS7QFWWyYa',
+        href: 'https://discord.gg/7rhrmYkAJs',
         logo: DiscordLogo,
     },
 ];

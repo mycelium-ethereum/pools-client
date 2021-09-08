@@ -40,7 +40,7 @@ export default (() => {
 
             <HiddenBoxMenu>
                 <MenuItem>
-                    <a href="https://tracer.finance" target="_blank" rel="noreferrer noopener">
+                    <a href="/" target="_blank" rel="noreferrer noopener">
                         <StyledIcon component={TracerBox} style={{ color: '#7912FC' }} />
                         <span>
                             <div>Tracer</div>
@@ -58,7 +58,7 @@ export default (() => {
                     </a>
                 </MenuItem>
                 <MenuItem>
-                    <a href="https://tracer.finance/radar" target="_blank" rel="noreferrer noopener">
+                    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer noopener">
                         <StyledIcon component={TracerBox} style={{ color: '#1E5CF5' }} />
                         <span>
                             <div>Tracer</div>
