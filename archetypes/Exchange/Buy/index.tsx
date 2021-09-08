@@ -1,6 +1,6 @@
 import React from 'react';
 import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
-import { Button, Logo } from '@components/General';
+import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
@@ -102,15 +102,14 @@ export default (() => {
                             <Logo ticker={'USDC'} />
                             <span>{`USDC`}</span>
                         </Currency>
-                        <Button
-                            className="primary w-1/3"
-                            height="medium"
+                        <div
+                            className="hover:cursor-pointer hover:underline"
                             onClick={(_e) =>
                                 swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
                             }
                         >
                             Max
-                        </Button>
+                        </div>
                     </InnerInputText>
                 </InputWrapper>
                 <div>
