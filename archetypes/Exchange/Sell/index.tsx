@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Input, Select, SelectOption } from '@components/General/Input';
+import { Input, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, InputRow } from '../Inputs';
+import { ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
 import { Label } from '@components/Pool';
@@ -28,7 +28,7 @@ export default (() => {
             <StyledInputRow>
                 <span>
                     <Label>Token</Label>
-                    <Select
+                    <MarketSelect
                         preview={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
                         onChange={(e: any) => {
                             const [pool, side] = e.target.value.split('-');
@@ -46,7 +46,7 @@ export default (() => {
                                 {token.symbol}
                             </SelectOption>
                         ))}
-                    </Select>
+                    </MarketSelect>
                 </span>
                 <InputContainer>
                     <Label>Amount</Label>
@@ -86,7 +86,7 @@ const StyledInputRow = styled(InputRow)`
     justify-content: space-between;
     margin-bottom: 2rem;
 
-    ${Select} {
+    ${MarketSelect} {
         width: 245px;
         height: 3.44rem; // 55px
         line-height: 3.44rem; // 55px

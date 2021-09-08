@@ -1,11 +1,11 @@
 import React from 'react';
-import { Input, SelectOption, InnerInputText, InputWrapper, Select } from '@components/General/Input';
+import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
 import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton, InputRow } from '../Inputs';
+import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
@@ -32,7 +32,7 @@ export default (() => {
             <InputRow className="markets">
                 <span>
                     <Label>Market</Label>
-                    <Select
+                    <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
                             swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
@@ -47,7 +47,7 @@ export default (() => {
                                 {pool.name}
                             </SelectOption>
                         ))}
-                    </Select>
+                    </MarketSelect>
                 </span>
                 <span>
                     <Label>Side</Label>
@@ -193,16 +193,5 @@ const Currency = styled.div`
         height: 22px;
         display: inline;
         margin: 0 5px 0 0;
-    }
-`;
-
-const MarketSelect = styled(Select)`
-    width: 285px;
-    height: 3.44rem; // 55px
-    padding: 13px 20px;
-
-    @media (max-width: 611px) {
-        width: 156px;
-        height: 44px;
     }
 `;
