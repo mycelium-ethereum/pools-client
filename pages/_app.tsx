@@ -18,10 +18,10 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
         <div>
             <Head>
                 {/** Meta tags */}
-                <title>Tracer | Perpetual Swaps </title>
+                <title>Tracer | Perpetual Pools </title>
                 <meta
                     name="description"
-                    content="Build and trade with Tracer’s Perpetual Swaps and gain leveraged exposure to any market in the world. "
+                    content="Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world."
                 />
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link rel="shortcut icon" type="image/svg" href="/favicon.svg" />
