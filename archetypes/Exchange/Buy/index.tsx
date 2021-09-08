@@ -200,7 +200,7 @@ const Currency = styled.div`
     background: #ffffff;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
     border-radius: 50px;
-    padding: 0px 8px 0px 4px;
+    padding: 0 8px 0 4px;
     margin-right: 0.5rem;
     color: #71717a;
     height: 29px;
