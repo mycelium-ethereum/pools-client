@@ -1,7 +1,6 @@
 import React from 'react';
 import Icon, { CloseOutlined, InfoCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
-import Timer from '@components/Timer';
 // @ts-ignore
 import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
 // @ts-ignore
@@ -109,28 +108,6 @@ const Close = styled(CloseOutlined)`
     cursor: pointer;
 `;
 
-
-const STimer = styled<any>(Timer)`
-    #refetchLoader {
-        animation: countdown-width ${(props) => props.autoDismissTimeout}s linear;
-        background: var(--color-accent);
-        position: absolute;
-        height: 0.25rem;
-        right: 0;
-    }
-`;
-STimer.defaultProps = {
-    autoDismissTimer: 5,
-};
-
-// const Countdown: React.FC<{
-//     autoDismissTimeout: number;
-//     display: boolean;
-// }> = ({ autoDismissTimeout, display }) =>
-//     display ? (
-//         <STimer autoDismissTimeout={Math.floor(autoDismissTimeout / 1000)} />
-//     ) : null;
-
 const Content = styled((props: any) => (
     <div className={`react-toast-notifications__toast__content p-2 ${props.className}`} {...props}>
         {props.children}
@@ -194,34 +171,15 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            {/* {type === PENDING_COMMIT && commitInfo
-                ?   
-                    <>
-                        <ContentWrapper>
-                            <Header
-                                onDismiss={onDismiss}
-                                title={children_[0]}
-                            />
-                            <Content>
-                                <PendingCommit
-                                    {...commitInfo}
-                                />
-                            </Content>
-                        </ContentWrapper>
-                        <Countdown display={autoDismiss} autoDismissTimeout={autoDismissTimeout} />
-                    </> */}
-                {/* :    */}
-                {/* <ContentWrapper> */}
-
-                <Header>
-                    <IconWrap>{appearance.icon}</IconWrap>
-                    {/* title */}
-                    <span>
-                        {children_[0]}
-                    </span>
-                    <Close onClick={onDismiss}/>
-                </Header>
-                <Content>{children_[1]}</Content>
+            <Header>
+                <IconWrap>{appearance.icon}</IconWrap>
+                {/* title */}
+                <span>
+                    {children_[0]}
+                </span>
+                <Close onClick={onDismiss}/>
+            </Header>
+            <Content>{children_[1]}</Content>
         </ToastWrapper>
     );
 };
