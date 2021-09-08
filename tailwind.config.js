@@ -1,5 +1,7 @@
 module.exports = {
     important: true,
+    // lfg
+    mode: 'jit',
     purge: [
         './pages/**/*.{js,ts,jsx,tsx}', 
         './components/**/*.{js,ts,jsx,tsx}',
@@ -22,6 +24,15 @@ module.exports = {
             },
         },
         extend: {
+            colors: {
+                tracer: {
+                    50: '#F0F0FF',
+                    // 100: '#DEDEFF',
+                    // 200: '#A6A6F2',
+                    800: '#0000B0',
+                    900: '#00007A'
+                }
+            },
             screens: {
                 '3xl': '1800px',
             },

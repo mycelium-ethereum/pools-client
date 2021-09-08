@@ -64,12 +64,3 @@ input {
 .page {
     @apply h-screen flex flex-col;
 }
-
-/** Fonts */
-h1 {
-    @apply text-blue-100 font-bold text-2xl py-5;
-}
-
-h4 {
-    @apply text-blue-100 text-base;
-}
