@@ -35,9 +35,8 @@ export default (() => {
         <SiteSwitcher id="site-switcher" className={open ? 'open' : ''}>
             <MainLink onClick={() => setOpen(!open)}>
                 <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_logo.svg" />
+                <Arrow component={ArrowDown} />
             </MainLink>
-
-            <Arrow component={ArrowDown} />
 
             <HiddenBoxMenu>
                 <MenuItem>
@@ -83,9 +82,10 @@ const MainLink = styled.div`
 const Arrow = styled(Icon)`
     height: 8px;
     width: 15px;
+    display: inline;
     transition: all 400ms ease-in-out;
     z-index: 11;
-    vertical-align: 0;
+    vertical-align: -0.3rem;
 `;
 
 const StyledIcon = styled(Icon)`
@@ -99,7 +99,7 @@ const StyledIcon = styled(Icon)`
 `;
 
 const StyledTracerLogo = styled.img`
-    display: block;
+    display: inline;
     height: 1.7rem;
     margin-right: 2rem;
 `;
