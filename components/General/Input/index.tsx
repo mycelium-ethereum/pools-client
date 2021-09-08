@@ -1,4 +1,4 @@
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
@@ -34,30 +34,6 @@ export const Input = styled.input`
         border: none;
         outline: none;
         box-shadow: none;
-    }
-`;
-
-export const SearchBar = styled(({ className, ...props }) => {
-    return (
-        <InputWrapper className={className}>
-            <Input type="text" placeholder="Search" {...props} />
-            <SearchOutlined />
-        </InputWrapper>
-    );
-})`
-    & ${Input} {
-        padding: 12px 14px 12px 32px;
-    }
-
-    & svg {
-        width: 14px;
-        height: 14px;
-        position: absolute;
-        left: 0.8rem;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        vertical-align: 0.125rem;
     }
 `;
 
