@@ -27,7 +27,7 @@ export type APIResult = {
 };
 export type SideType = typeof LONG | typeof SHORT;
 
-export type TokenType = typeof MINT | typeof BURN;
+export type CommitActionType = typeof MINT | typeof BURN;
 
 export type CommitType = typeof SHORT_MINT | typeof SHORT_BURN | typeof LONG_MINT | typeof LONG_BURN;
 
@@ -49,6 +49,7 @@ export type PoolType = {
 export type Token = {
     address: string;
     name: string;
+    symbol: string;
     balance: BigNumber;
     approved: boolean;
 };

@@ -1,17 +1,31 @@
 import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
-import { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
+
+import DiscourseLogo from '/public/img/socials/discourse.svg';
+import TwitterLogo from '/public/img/socials/twitter.svg';
+import GitHubLogo from '/public/img/socials/github.svg';
+import DiscordLogo from '/public/img/socials/discord.svg';
 
 const Footer = styled(({ className }) => {
     return (
-        <FooterContent className={`${className} container`}>
+        <div className={className}>
             <Copyright>&copy; 2021 Tracer DAO</Copyright>
             <Socials>
-                <TwitterOutlined />
-                <GithubOutlined />
+                <SocialIcon href="https://discourse.tracer.finance" target="_blank">
+                    <DiscourseLogo />
+                </SocialIcon>
+                <SocialIcon href="https://twitter.com/TracerDAO" target="_blank">
+                    <TwitterLogo />
+                </SocialIcon>
+                <SocialIcon href="https://github.com/tracer-protocol" target="_blank">
+                    <GitHubLogo />
+                </SocialIcon>
+                <SocialIcon href="https://discord.com/invite/kddBUqDVVb" target="_blank">
+                    <DiscordLogo />
+                </SocialIcon>
             </Socials>
-            <Section>
+            <Items>
                 <Item>
                     <Link href="/privacy-policy">Privacy Policy</Link>
                 </Item>
@@ -22,77 +36,73 @@ const Footer = styled(({ className }) => {
                     <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
                 <Item>
-                    <a onClick={() => window.open('https://docs.tracer.finance', '_blank', 'noopener')}>Docs</a>
+                    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">
+                        Docs
+                    </a>
                 </Item>
                 <Item>
-                    <a
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/perpetual-swaps-faq', '_blank', 'noopener')
-                        }
-                    >
+                    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">
                         FAQs
                     </a>
                 </Item>
                 <Item>
-                    <a
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/trader-tutorials', '_blank', 'noopener')
-                        }
-                    >
+                    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">
                         Tutorials
                     </a>
                 </Item>
-            </Section>
-        </FooterContent>
+            </Items>
+        </div>
     );
 })`
     display: flex;
+    justify-content: space-between;
     color: #27272a;
     margin-top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding-bottom: 1rem;
+    padding: 1rem 2rem;
 
-    @media (max-width: 768px) {
-        padding: 0 0.5rem 1rem 0.5rem;
-`;
-
-const FooterContent = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const Section = styled.div`
-    display: flex;
-    @media (max-width: 1127px) {
-        display: none;
+    @media (max-width: 1024px) {
+        flex-direction: column;
     }
 `;
+
 const Socials = styled.div`
-    margin-right: auto;
-    margin-left: auto;
-    @media (max-width: 1127px) {
-        margin-right: 0;
+    display: flex;
+
+    @media (max-width: 1024px) {
+        margin: 2rem 0 3rem;
     }
-    & svg {
-        display: inline;
-        height: 18px;
-        width: 18px;
-        margin: 0 1rem;
-        color: #27272a;
+`;
+const SocialIcon = styled.a`
+    margin: auto 0.5rem;
+
+    &:hover svg path {
+        transition: 0.3s;
+        fill: #3da8f5;
     }
 `;
 
+const Items = styled.div`
+    display: flex;
+
+    @media (max-width: 1024px) {
+        flex-direction: column;
+    }
+`;
 const Item = styled.div`
     margin-left: 2rem;
-    color: #27272a;
-    display: inline;
+
+    @media (max-width: 1024px) {
+        margin-left: 0;
+        margin-bottom: 1rem;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
 `;
 
 const Copyright = styled.div`
     white-space: nowrap;
-    color: #27272a;
     display: inline;
 `;
 

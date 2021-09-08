@@ -1,42 +1,36 @@
 import React from 'react';
-import Icon, { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-//@ts-ignore
-import DiscordLogo from 'public/img/logos/socials/discord-logo-white.svg';
-//@ts-ignore
-import DiscourseLogo from 'public/img/logos/socials/discourse-logo-white.svg';
+
+import DiscourseLogo from '/public/img/socials/discourse-white.svg';
+import TwitterLogo from '/public/img/socials/twitter-white.svg';
+import GitHubLogo from '/public/img/socials/github-white.svg';
+import DiscordLogo from '/public/img/socials/discord-white.svg';
 
 export default styled((props) => (
     <div {...props}>
-        <a href="https://discourse.tracer.finance/" target="_blank" rel="noreferrer noopener">
-            <Icon className="hover" component={DiscourseLogo} />
-        </a>
-        <a href="https://github.com/tracer-protocol/" target="_blank" rel="noreferrer noopener">
-            <GithubOutlined />
-        </a>
-        <a href="https://discord.gg/sS7QFWWyYa" target="_blank" rel="noreferrer noopener">
-            <Icon className="hover" component={DiscordLogo} />
-        </a>
-        <a href="https://twitter.com/tracer_finance" target="_blank" rel="noreferrer noopener">
-            <TwitterOutlined />
-        </a>
+        <SocialIcon href="https://discourse.tracer.finance/" target="_blank">
+            <DiscourseLogo />
+        </SocialIcon>
+        <SocialIcon href="https://twitter.com/tracer_finance" target="_blank">
+            <TwitterLogo />
+        </SocialIcon>
+        <SocialIcon href="https://github.com/tracer-protocol/" target="_blank">
+            <GitHubLogo />
+        </SocialIcon>
+        <SocialIcon href="https://discord.gg/sS7QFWWyYa" target="_blank">
+            <DiscordLogo />
+        </SocialIcon>
     </div>
 ))`
-    width: 100%;
-    height: 100%;
-    max-width: 38rem;
+    width: 60%;
     display: flex;
-    font-size: 1.5rem;
     justify-content: space-between;
-    align-items: center;
-    > a > .hover {
+    padding-top: 0.5rem;
+`;
+
+const SocialIcon = styled.a`
+    &:hover svg path {
         transition: 0.3s;
-    }
-    > a > .hover:hover,
-    & > *:hover,
-    & > *:focus,
-    & > *:active {
-        color: var(--color-primary);
-        fill: var(--color-primary);
+        fill: #3da8f5;
     }
 `;
