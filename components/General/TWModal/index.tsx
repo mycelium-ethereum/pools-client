@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 
 interface TWModalProps {
     open: boolean;
-    onClose: Function;
+    onClose: () => any;
 }
 
 export const TWModal: React.FC<TWModalProps> = (props) => {
