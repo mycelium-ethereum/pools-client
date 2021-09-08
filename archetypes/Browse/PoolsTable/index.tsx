@@ -11,11 +11,11 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         <Table>
             <TableHeader>
                 <span>Token</span>
-                <span>Last Price</span>
+                <span>Last Price (USDC)</span>
                 <span>24H Change</span>
                 <span>Rebalance Rate</span>
-                <span>TVL</span>
-                <span>My Holdings</span>
+                <span>TVL (USDC)</span>
+                <span>My Holdings (TOKENS/USDC)</span>
                 <span>{/* Empty header for buttons column */}</span>
             </TableHeader>
             {rows.map((token, index) => {
@@ -29,7 +29,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                         <span>{toApproxCurrency(token.totalValueLocked)}</span>
                         <span>
                             <div>
-                                {`${token.myHoldings} tokens`}
+                                {`${token.myHoldings}`}
                             </div>
                             <div className="opacity-50">
                                 {toApproxCurrency(token.myHoldings * token.lastPrice)}
