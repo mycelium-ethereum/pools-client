@@ -27,7 +27,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                         <ColoredChangeNumber number={token.change24Hours} />
                         <span>{token.rebalanceRate.toFixed(2)}%</span>
                         <span>{toApproxCurrency(token.totalValueLocked)}</span>
-                        <span>{toApproxCurrency(token.myHoldings)}</span>
+                        <span>
+                            <div>
+                                {`${token.myHoldings} tokens`}
+                            </div>
+                            <div className="opacity-50">
+                                {toApproxCurrency(token.myHoldings * token.lastPrice)}
+                            </div>
+                        </span>
                         <span>
                             <button
                                 className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase"
