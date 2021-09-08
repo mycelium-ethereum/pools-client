@@ -188,7 +188,6 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
     onChange: React.MouseEventHandler<HTMLDivElement>;
     icon?: AntdIconProps;
 }>`
-    background: #f9fafb;
     border: 1px solid #d1d5db;
     box-sizing: border-box;
     border-radius: 7px;
