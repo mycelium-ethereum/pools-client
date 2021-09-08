@@ -1,9 +1,6 @@
 import React from 'react';
-
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
-
-import styled from 'styled-components';
 
 const SELECTED = 'z-10 bg-tracer-800 text-white ';
 const DISABLED = 'cursor-not-allowed';
@@ -52,7 +49,7 @@ const ComingSoon: React.FC<{
 }> = ({ option, onClick, last }) => {
     return (
         <>
-            <StyledTooltip
+            <ReactSimpleTooltip
                 content={`${option.disabled?.text}`}
                 arrow={6}
                 background="#f9fafb"
@@ -79,13 +76,7 @@ const ComingSoon: React.FC<{
                 >
                     {option.text}
                 </button>
-            </StyledTooltip>
+            </ReactSimpleTooltip>
         </>
     );
 };
-
-const StyledTooltip = styled(ReactSimpleTooltip)`
-    &.show {
-        opacity: 1 !important;
-    }
-`;
