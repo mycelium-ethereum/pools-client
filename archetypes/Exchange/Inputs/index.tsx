@@ -2,15 +2,6 @@ import { Button } from '@components/General';
 import { Select } from '@components/General/Input';
 import styled from 'styled-components';
 
-export const Label = styled.p`
-    color: var(--color-text);
-    margin-bottom: 0.5rem;
-`;
-
-export const InputContainer = styled.div`
-    position: relative;
-`;
-
 export const ExchangeButton = styled(Button)`
     border-radius: 7px;
     height: 3.125rem;

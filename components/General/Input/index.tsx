@@ -1,5 +1,6 @@
 import { DownOutlined } from '@ant-design/icons';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
+import { Children } from '@libs/types/General';
 import React, { useRef } from 'react';
 import styled from 'styled-components';
 
@@ -44,19 +45,13 @@ export const InputWrapper = styled.div`
     }
 `;
 
-export const InnerInputText = styled.div`
-    color: var(--color-primary);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    align-items: center;
-    line-height: 1rem;
-    font-size: 1rem;
-    height: 50%;
-    display: flex;
-    right: 1rem;
-    margin: auto;
-`;
+export const InnerInputText = (({ className, children }) => (
+    <div className={`${className ?? ''} absolute flex m-auto top-0 bottom-0 right-5 h-1/2 text-tracer-800`}>
+        {children}
+    </div>
+)) as React.FC<{
+    className?: string
+} & Children>
 
 export const CheckboxContainer = styled.div`
     display: flex;

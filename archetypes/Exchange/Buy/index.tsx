@@ -1,6 +1,7 @@
 import React from 'react';
-import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
-import { Button, Logo } from '@components/General';
+import { SelectOption, InnerInputText } from '@components/General/Input';
+import { Input as NumericInput } from '@components/General/Input/Numeric';
+import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
@@ -9,7 +10,6 @@ import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
-import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 
@@ -34,7 +34,7 @@ export default (() => {
         <>
             <InputRow className="markets">
                 <span>
-                    <Label>Market</Label>
+                    <p className="mb-2 text-black">Market</p>
                     <MarketSelect
                         preview={pool.name}
                         onChange={(e: any) =>
@@ -53,7 +53,7 @@ export default (() => {
                     </MarketSelect>
                 </span>
                 <span>
-                    <Label>Side</Label>
+                    <p className="mb-2 text-black">Side</p>
                     <StyledSlideSelect
                         className="side"
                         value={side}
@@ -65,7 +65,7 @@ export default (() => {
                 </span>
             </InputRow>
             <InputRow>
-                <Label>Leverage</Label>
+                <p className="mb-2 text-black">Leverage</p>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
@@ -86,33 +86,27 @@ export default (() => {
                 />
             </InputRow>
             <InputRow>
-                <Label>Amount</Label>
-                <InputWrapper>
-                    <Input
+                <p className="mb-2 text-black">Amount</p>
+                <div className="relative p-3 h-14 border rounded border-cool-gray-300 bg-cool-gray-50">
+                    <NumericInput
+                        className="w-full h-full text-2xl font-light text-gray-500 "
                         value={amount}
-                        onChange={(e: any) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
+                        onUserInput={(val) => {
+                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
                         }}
-                        disabled={!selectedPool}
-                        type={'number'}
-                        min={0}
                     />
                     <InnerInputText>
-                        <Currency>
-                            <Logo ticker={'USDC'} />
-                            <span>{`USDC`}</span>
-                        </Currency>
-                        <Button
-                            className="primary w-1/3"
-                            height="medium"
+                        <Currency ticker={'USDC'} />
+                        <div
+                            className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
                                 swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
                             }
                         >
                             Max
-                        </Button>
+                        </div>
                     </InnerInputText>
-                </InputWrapper>
+                </div>
                 <div>
                     {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
                     {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
@@ -196,20 +190,13 @@ const StyledSlideSelect = styled(SlideSelect)`
     }
 `;
 
-const Currency = styled.div`
-    background: #ffffff;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 50px;
-    padding: 0 8px 0 4px;
-    margin-right: 0.5rem;
-    color: #71717a;
-    height: 29px;
-    display: flex;
-    align-items: center;
-    ${Logo} {
-        width: 22px;
-        height: 22px;
-        display: inline;
-        margin: 0 5px 0 0;
-    }
-`;
+const Currency: React.FC<{
+    ticker: string
+}> = (({ ticker }) => (
+    <div className="flex items-center h-auto p-2 mr-2 rounded-xl bg-white text-gray-500">
+        <Logo className="inline mr-2 m-0 w-5 h-5" ticker={ticker} />
+        {ticker}
+    </div>
+
+)) 
+

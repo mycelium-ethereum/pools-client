@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Input, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
+import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
-import { Label } from '@components/Pool';
 import SelectToken from '@components/SelectToken';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
@@ -27,7 +26,7 @@ export default (() => {
         <>
             <StyledInputRow>
                 <span>
-                    <Label>Token</Label>
+                    <p className="mb-2 text-black">Token</p>
                     <MarketSelect
                         preview={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
                         onChange={(e: any) => {
@@ -48,8 +47,8 @@ export default (() => {
                         ))}
                     </MarketSelect>
                 </span>
-                <InputContainer>
-                    <Label>Amount</Label>
+                <div className="relative">
+                    <p className="mb-2 text-black">Amount</p>
                     <Input
                         value={amount}
                         onChange={(e: any) => {
@@ -58,7 +57,7 @@ export default (() => {
                         type={'number'}
                         min={0}
                     />
-                </InputContainer>
+                </div>
             </StyledInputRow>
 
             <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />

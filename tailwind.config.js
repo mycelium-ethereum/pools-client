@@ -31,6 +31,10 @@ module.exports = {
                     // 200: '#A6A6F2',
                     800: '#0000B0',
                     900: '#00007A'
+                },
+                'cool-gray': {
+                    50: '#F9FAFB',
+                    300: '#D1D5DB'
                 }
             },
             screens: {
