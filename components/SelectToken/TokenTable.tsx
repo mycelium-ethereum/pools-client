@@ -3,7 +3,7 @@ import { Heading } from '@libs/types/General';
 import { Table, TableHeader, TableHeading, TableBody, TableRow, TableCell } from '@components/General/Table';
 import { TokenBreakdown } from '@libs/types/General';
 import styled from 'styled-components';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { useSwapContext } from '@context/SwapContext';
 
 // const TokenTable

@@ -149,6 +149,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
     const subscribeToPool = async (pool: string) => {
         if (provider && !poolsState.pools[pool]?.subscribed) {
+            console.debug('Subscribing to pool', pool);
+
             const committerInfo = poolsState.pools[pool].committer;
             const committer = new ethers.Contract(
                 committerInfo.address,
@@ -284,7 +286,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.debug('Commit successful: ', receipt);
+                    console.debug('Successfully submitted commit txn: ', receipt);
                 },
             });
         }

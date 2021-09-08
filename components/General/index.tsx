@@ -21,11 +21,6 @@ export const Container = styled(({ className, children }) => {
     return <div className={`${className} container`}>{children}</div>;
 })``;
 
-export const Box = styled.div`
-    display: flex;
-    padding: 12px;
-`;
-
 export const Card = styled.div`
     background: #011772;
     box-shadow: 0 5px 10px #00000029;

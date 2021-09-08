@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { timeTill } from '@libs/utils';
+import { timeTill } from '@libs/utils/converters';
 import styled from 'styled-components';
 
 /**

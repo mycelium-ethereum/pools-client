@@ -15,6 +15,7 @@ const logos: Record<string, string> = {
     [ARBITRUM]: '/img/logos/currencies/arbitrum.svg',
     [KOVAN]: '/img/logos/currencies/arbitrum.svg',
     ETHERSCAN: '/img/logos/currencies/etherscan.svg',
+    USDC: '/img/logos/currencies/usdc.png',
     DEFAULT: '/img/logos/currencies/tesla.svg',
 };
 
