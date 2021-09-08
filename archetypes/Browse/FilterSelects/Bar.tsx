@@ -1,4 +1,4 @@
-import { DropDown } from '@components/General';
+import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
 import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
@@ -21,7 +21,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 </div>
                 <div className="mr-4">
                     <h3 className="mb-1">Leverage</h3>
-                    <DropDown
+                    <Dropdown
                         value={state.leverage}
                         options={Object.values(LeverageFilterEnum)}
                         onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
@@ -29,7 +29,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 </div>
                 <div>
                     <h3 className="mb-1">Side</h3>
-                    <DropDown
+                    <Dropdown
                         value={state.side}
                         options={Object.values(SideFilterEnum)}
                         onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
@@ -38,7 +38,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div className="flex-grow" />
                 <div>
                     <h3 className="mb-1">Sort</h3>
-                    <DropDown
+                    <Dropdown
                         value={state.sortBy}
                         options={Object.values(SortByEnum)}
                         onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}

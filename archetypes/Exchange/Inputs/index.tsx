@@ -9,15 +9,6 @@ export const ExchangeButton = styled(Button)`
     width: 100%;
 `;
 
-export const InputRow = styled.div`
-    position: relative;
-    margin: 1rem 0;
-    &.markets {
-        display: flex;
-        justify-content: space-between;
-    }
-`;
-
 export const MarketSelect = styled(Select)`
     width: 285px;
     height: 3.44rem; // 55px

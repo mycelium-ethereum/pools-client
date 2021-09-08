@@ -1,19 +1,24 @@
-import React from 'react';
-import { SelectOption, InnerInputText } from '@components/General/Input';
+import React, { useEffect } from 'react';
+import { SelectOption, InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import { Logo } from '@components/General';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
+import { ExchangeButton, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
+import { Currency } from '@components/General/Currency';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
+
+const inputRow = 'relative my-2 ';
+
+/* HELPER FUNCTIONS */
+const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -23,6 +28,7 @@ export default (() => {
         selectedPool,
         side,
         amount,
+        invalidAmount,
         options: { poolOptions },
     } = swapState;
 
@@ -30,9 +36,19 @@ export default (() => {
 
     const { commit, approve } = usePoolActions();
 
+    useEffect(() => {
+        swapDispatch({
+            type: 'setInvalidAmount',
+            value: isInvalidAmount(
+                amount,
+                side === LONG ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber(),
+            ),
+        });
+    }, [amount, pool.longToken.balance, pool.shortToken.balance, side]);
+
     return (
         <>
-            <InputRow className="markets">
+            <div className={`${inputRow} flex justify-between`}>
                 <span>
                     <p className="mb-2 text-black">Market</p>
                     <MarketSelect
@@ -63,8 +79,8 @@ export default (() => {
                         <Option>Short</Option>
                     </StyledSlideSelect>
                 </span>
-            </InputRow>
-            <InputRow>
+            </div>
+            <div className={`${inputRow} `}>
                 <p className="mb-2 text-black">Leverage</p>
                 <TWButtonGroup
                     value={leverage}
@@ -84,12 +100,12 @@ export default (() => {
                         }
                     }}
                 />
-            </InputRow>
-            <InputRow>
+            </div>
+            <div className={`${inputRow} `}>
                 <p className="mb-2 text-black">Amount</p>
-                <div className="relative p-3 h-14 border rounded border-cool-gray-300 bg-cool-gray-50">
+                <InputContainer error={invalidAmount}>
                     <NumericInput
-                        className="w-full h-full text-2xl font-light text-gray-500 "
+                        className="w-full h-full text-xl font-normal "
                         value={amount}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: parseInt(val) });
@@ -106,12 +122,12 @@ export default (() => {
                             Max
                         </div>
                     </InnerInputText>
-                </div>
-                <div>
+                </InputContainer>
+                <div className={invalidAmount ? 'text-red-500 ' : ''}>
                     {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
                     {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
                 </div>
-            </InputRow>
+            </div>
 
             <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
@@ -189,14 +205,3 @@ const StyledSlideSelect = styled(SlideSelect)`
         }
     }
 `;
-
-const Currency: React.FC<{
-    ticker: string
-}> = (({ ticker }) => (
-    <div className="flex items-center h-auto p-2 mr-2 rounded-xl bg-white text-gray-500">
-        <Logo className="inline mr-2 m-0 w-5 h-5" ticker={ticker} />
-        {ticker}
-    </div>
-
-)) 
-
