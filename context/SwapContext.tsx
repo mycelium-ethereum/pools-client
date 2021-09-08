@@ -25,7 +25,6 @@ type SwapState = {
     leverage: LeverageType;
     currency: CurrencyType;
     options: {
-        leverageOptions: LeverageType[];
         sides: SideType[];
         poolOptions: PoolType[];
     };
@@ -41,6 +40,29 @@ export type SwapAction =
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setSide'; value: SideType };
 
+export const LEVERAGE_OPTIONS = [
+    {
+        leverage: 1,
+        disabled: false,
+    },
+    {
+        leverage: 2,
+        disabled: true,
+    },
+    {
+        leverage: 3,
+        disabled: false,
+    },
+    {
+        leverage: 5,
+        disabled: true,
+    },
+    {
+        leverage: 10,
+        disabled: true,
+    },
+];
+
 export const swapDefaults: SwapState = {
     amount: NaN,
     commitAction: MINT,
@@ -49,7 +71,6 @@ export const swapDefaults: SwapState = {
     leverage: NaN,
     currency: 'DAI',
     options: {
-        leverageOptions: [2, 3, 4], // leverage options available to the pool
         sides: [LONG, SHORT], // will always be long and short
         poolOptions: [], // available pools
     },
