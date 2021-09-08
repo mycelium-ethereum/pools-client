@@ -51,30 +51,17 @@ const Footer = styled(({ className }) => {
                     <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
                 <Item>
-                    <a
-                        className="cursor-pointer"
-                        onClick={() => window.open('https://docs.tracer.finance', '_blank', 'noopener')}
-                    >
+                    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">
                         Docs
                     </a>
                 </Item>
                 <Item>
-                    <a
-                        className="cursor-pointer"
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/perpetual-swaps-faq', '_blank', 'noopener')
-                        }
-                    >
+                    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">
                         FAQs
                     </a>
                 </Item>
                 <Item>
-                    <a
-                        className="cursor-pointer"
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/trader-tutorials', '_blank', 'noopener')
-                        }
-                    >
+                    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">
                         Tutorials
                     </a>
                 </Item>

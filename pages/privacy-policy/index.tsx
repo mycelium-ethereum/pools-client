@@ -19,10 +19,12 @@ const PrivacyPolicy: React.FC = styled(({ className }) => {
                     </Text>
                     <Text>
                         This Privacy Policy applies to our services, which include the services we provide on{' '}
-                        <Link href="https://tracer.finance/">https://tracer.finance/</Link> or any other websites,
-                        pages, features, or content we own or operate or when you use related services. If you do not
-                        agree with the terms of this Privacy Policy, do not access or use the services, websites, or any
-                        other aspect of our business.
+                        <a href="https://tracer.finance/" target="_blank" rel="noreferrer">
+                            https://tracer.finance/
+                        </a>{' '}
+                        or any other websites, pages, features, or content we own or operate or when you use related
+                        services. If you do not agree with the terms of this Privacy Policy, do not access or use the
+                        services, websites, or any other aspect of our business.
                     </Text>
                     <Text>
                         By providing personal information to us, you consent to our collection, use and disclosure of
