@@ -30,6 +30,9 @@ module.exports = {
     variants: {
         opacity: ['disabled'],
         cursor: ['disabled'],
+        extend: {
+            borderRadius: ['first', 'last'],
+        }
     },
     plugins: [],
 };

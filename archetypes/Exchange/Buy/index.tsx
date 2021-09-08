@@ -2,7 +2,7 @@ import React from 'react';
 import { Input, SelectOption, InnerInputText, InputWrapper, Select } from '@components/General/Input';
 import { Logo } from '@components/General';
 import styled from 'styled-components';
-import { swapDefaults, useSwapContext, noDispatch } from '@context/SwapContext';
+import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
 import { ExchangeButton, InputRow } from '../Inputs';
@@ -11,6 +11,9 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+
+const NOT_DISABLED_LEVERAGES = [1, 3];
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -20,7 +23,7 @@ export default (() => {
         selectedPool,
         side,
         amount,
-        options: { leverageOptions, poolOptions },
+        options: { poolOptions },
     } = swapState;
 
     const pool = usePool(selectedPool);
@@ -63,15 +66,24 @@ export default (() => {
             </InputRow>
             <InputRow>
                 <Label>Leverage</Label>
-                <StyledSlideSelect
-                    className="leverage"
+                <TWButtonGroup
                     value={leverage}
-                    onClick={(index) => swapDispatch({ type: 'setLeverage', value: index as SideType })}
-                >
-                    {leverageOptions.map((option) => (
-                        <Option key={`leverage-option-${option}`}>{option}x</Option>
-                    ))}
-                </StyledSlideSelect>
+                    options={LEVERAGE_OPTIONS.map((option) => ({
+                        key: option.leverage,
+                        text: `${option.leverage}x`,
+                        disabled: option.disabled
+                            ? {
+                                  text: 'Coming soon',
+                              }
+                            : undefined,
+                    }))}
+                    onClick={(index) => {
+                        // everything else disabled
+                        if (NOT_DISABLED_LEVERAGES.includes(index)) {
+                            swapDispatch({ type: 'setLeverage', value: index as SideType });
+                        }
+                    }}
+                />
             </InputRow>
             <InputRow>
                 <Label>Amount</Label>
@@ -193,16 +205,5 @@ const Currency = styled.div`
         height: 22px;
         display: inline;
         margin: 0 5px 0 0;
-    }
-`;
-
-const MarketSelect = styled(Select)`
-    width: 285px;
-    height: 3.44rem; // 55px
-    padding: 13px 20px;
-
-    @media (max-width: 611px) {
-        width: 156px;
-        height: 44px;
     }
 `;
