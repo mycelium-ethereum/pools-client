@@ -153,7 +153,10 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                 </div>
                             </div>
                             <p className="text-base text-gray-500 my-3">
-                                Balance: {toApproxCurrency(props.USDCBalance)}
+                                Balance:{' '}
+                                {state.USDCAmount
+                                    ? toApproxCurrency(props.USDCBalance - state.USDCAmount)
+                                    : toApproxCurrency(props.USDCBalance)}
                             </p>
                             <p className="text-red-500 text-center">{collateralErrorMsg}</p>
                         </div>
