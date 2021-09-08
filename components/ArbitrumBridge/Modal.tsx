@@ -3,6 +3,8 @@ import { TWModal } from '@components/General/TWModal';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { useReducer } from 'react';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
+import { Logo } from '@components/General';
+import styled from 'styled-components';
 
 interface ArbitrumBridgeModalProps {
     isOpen: boolean;
@@ -138,6 +140,10 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                     }
                                 />
                                 <div className="absolute inset-y-0 right-4 flex items-center">
+                                    <Currency>
+                                        <Logo ticker={'USDC'} />
+                                        <span>{`USDC`}</span>
+                                    </Currency>
                                     <button
                                         className="cursor-pointer text-blue-600"
                                         onClick={() => dispatch({ type: 'setUSDC', amount: props.USDCBalance })}
@@ -260,3 +266,21 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
         </TWModal>
     );
 };
+
+const Currency = styled.div`
+    background: #ffffff;
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+    padding: 0 8px 0 4px;
+    margin-right: 0.5rem;
+    color: #71717a;
+    height: 29px;
+    display: flex;
+    align-items: center;
+    ${Logo} {
+        width: 22px;
+        height: 22px;
+        display: inline;
+        margin: 0 5px 0 0;
+    }
+`;
