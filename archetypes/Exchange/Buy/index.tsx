@@ -52,10 +52,10 @@ export default (() => {
             type: 'setInvalidAmount',
             value: isInvalidAmount(
                 amount,
-                side === LONG ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber(),
+                pool.quoteToken.balance.toNumber()
             ),
         });
-    }, [amount, pool.longToken.balance, pool.shortToken.balance, side]);
+    }, [amount, pool.quoteToken.balance]);
 
     return (
         <>
