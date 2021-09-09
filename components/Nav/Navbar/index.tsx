@@ -9,7 +9,7 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
+import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 
@@ -122,7 +122,7 @@ export const NavBarContent = styled(({ className }) => {
         padding: 0 1rem;
     }
     @media (max-width: 1024px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
+        ${ThemeSwitcher}, ${Links}, ${AccountBalance} {
             display: none;
         }
         ${MobileMenu} {

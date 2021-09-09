@@ -6,8 +6,9 @@ import { Section } from '@components/General';
 import Button from '@components/General/Button';
 import { Menu, MenuItem } from './HeaderDropdown';
 import ArbitrumBridge from '@components/ArbitrumBridge';
+import { classNames } from '@libs/utils/functions';
 
-export default styled(({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
+export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -31,8 +32,8 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
     }, [open]);
 
     return (
-        <div className={`${className} ${open ? 'open' : ''}`} id="account-dropdown">
-            <MainButton>
+        <div className={classNames(`relative items-center hidden lg:flex`, className ?? '')} id="account-dropdown">
+            <div className="z-10">
                 <Button
                     variant="transparent"
                     size="sm"
@@ -46,12 +47,12 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
                         }
                     }}
                 >
-                    <div className="m-auto flex ">
+                    <div className="m-auto flex items-center">
                         <Identicon account={account ?? ''} />
                         <div className="px-2">{buttonContent(account, ensName)}</div>
                     </div>
                 </Button>
-            </MainButton>
+            </div>
 
             <StyledMenu>
                 <StyledMenuItem />
@@ -78,19 +79,16 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
             </StyledMenu>
         </div>
     );
-})<{
+}) as React.FC<{
     account: string | undefined;
     ensName: string;
     onboard: OnboardApi | undefined;
     logout: () => void;
     handleConnect: () => void;
     network: number;
+    className?: string;
     tokenBalance: number;
-}>`
-    position: relative;
-    display: flex;
-    align-items: center;
-`;
+}>;
 
 function networkName(id: any) {
     switch (Number(id)) {
@@ -132,10 +130,6 @@ const buttonContent: (account: string | undefined, ensName: string) => string = 
 };
 
 const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
-const MainButton = styled.div`
-    z-index: 11;
-`;
 
 const StyledMenu = styled(Menu)`
     text-align: center;

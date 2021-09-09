@@ -35,7 +35,7 @@ const NetworkPreview: React.FC<{
     networkName: string;
 }> = ({ networkID, networkName }) => {
     return (
-        <div className={'flex'}>
+        <div className={'flex items-center'}>
             <Logo className="inline w-[20px] h-[22px] my-auto ml-0 mr-2" ticker={networkID} />
             {networkName}
         </div>
