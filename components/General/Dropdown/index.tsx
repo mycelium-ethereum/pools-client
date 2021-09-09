@@ -60,7 +60,7 @@ const SIZE = {
     xs: 'px-2 py-1 text-xs',
     sm: 'px-4 py-2 text-sm',
     default: 'pl-3 pr-2 py-2 text-sm ',
-    lg: 'p-4 text-base',
+    lg: 'p-3 text-base',
     none: 'p-0 text-base',
 };
 

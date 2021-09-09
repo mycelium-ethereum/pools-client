@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import SlideSelect, { Option } from '@components/General/SlideSelect';
+import SlideSelect from '@components/General/SlideSelect';
 import { SwapContext } from '@context/SwapContext';
 import { MINT, BURN } from '@libs/constants';
 import { SideType, CommitActionType } from '@libs/types/General';
@@ -9,6 +9,18 @@ import Buy from './Buy';
 import Sell from './Sell';
 import { useRouter } from 'next/router';
 import Divider from '@components/General/Divider';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+
+const TRADE_OPTIONS = [
+    {
+        key: MINT,
+        text: 'Buy',
+    },
+    {
+        key: BURN,
+        text: 'Sell',
+    },
+];
 
 export default (() => {
     const router = useRouter();
@@ -36,18 +48,17 @@ export default (() => {
         <Content>
             <TradeModal>
                 <Header>
-                    <SlideSelect
+                    <TWButtonGroup
                         value={swapState?.commitAction ?? MINT}
-                        onClick={(index, _e) => {
+                        size={'xl'}
+                        onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setCommitActionType', value: index as SideType });
+                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionType });
                             }
                         }}
-                    >
-                        <Option>Buy</Option>
-                        <Option>Sell</Option>
-                    </SlideSelect>
+                        options={TRADE_OPTIONS}
+                    />
                     <Gas />
                 </Header>
 

@@ -45,7 +45,7 @@ export const InputContainer: React.FC<{
 }> = ({ error, className = '', children }) => (
     <div
         className={classNames(
-            'relative py-4 px-3 border rounded bg-cool-gray-50',
+            'relative py-3 px-3 border rounded bg-cool-gray-50',
             error ? 'border-red-300 text-red-500 ' : 'border-cool-gray-300 text-gray-500 ',
             className,
         )}

@@ -4,11 +4,10 @@ import { Input as NumericInput } from '@components/General/Input/Numeric';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
-import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
+import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
 import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
-import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
@@ -20,6 +19,17 @@ const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
+
+const SIDE_OPTIONS = [
+    {
+        key: LONG,
+        text: 'Long',
+    },
+    {
+        key: SHORT,
+        text: 'Short',
+    },
+];
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -65,14 +75,12 @@ export default (() => {
                 </span>
                 <span>
                     <p className="mb-2 text-black">Side</p>
-                    <StyledSlideSelect
-                        className="side"
+                    <TWButtonGroup
                         value={side}
-                        onClick={(index) => swapDispatch({ type: 'setSide', value: index as SideType })}
-                    >
-                        <Option>Long</Option>
-                        <Option>Short</Option>
-                    </StyledSlideSelect>
+                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
+                        size="lg"
+                        options={SIDE_OPTIONS}
+                    />
                 </span>
             </div>
             <div className={`${inputRow} `}>
@@ -170,33 +178,5 @@ const HelperText = styled.p`
     a {
         text-decoration: underline;
         cursor: pointer;
-    }
-`;
-
-const StyledSlideSelect = styled(SlideSelect)`
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-
-    &.side {
-        width: 180px;
-        height: 3.44rem; // 55px
-    }
-
-    &.leverage {
-        width: 110px;
-        height: 3.44rem; // 55px
-        margin: 0;
-    }
-
-    @media (max-width: 611px) {
-        &.side {
-            width: 156px;
-            height: 44px;
-        }
-
-        &.leverage {
-            height: 44px;
-            margin: 0;
-        }
     }
 `;
