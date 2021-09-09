@@ -66,10 +66,14 @@ export default (() => {
                         className="w-full "
                         placeHolder="Select Pool"
                         size="lg"
-                        options={poolOptions.map((pool) => pool.name)}
+                        options={poolOptions.map((pool) => ({
+                            key: pool.address,
+                            text: pool.name,
+                        }))}
                         value={pool.name}
-                        onSelect={(pool) => {
-                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        onSelect={(selectedPool) => {
+                            console.debug('Setting pool', selectedPool);
+                            swapDispatch({ type: 'setSelectedPool', value: selectedPool as string });
                         }}
                     />
                 </span>
@@ -78,7 +82,7 @@ export default (() => {
                     <TWButtonGroup
                         value={side}
                         onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
-                        size="lg"
+                        size={'lg'}
                         options={SIDE_OPTIONS}
                     />
                 </span>

@@ -37,7 +37,6 @@ export default (() => {
                 });
             }
             if (router.query.side) {
-                console.log('found side', router.query.side);
                 swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
             }
         }

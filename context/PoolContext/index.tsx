@@ -271,16 +271,22 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitType, amount: number) => void = (pool, commitType, amount) => {
+    const commit: (pool: string, commitType: CommitType, amount: number) => Promise<void> = async (
+        pool,
+        commitType,
+        amount,
+    ) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
+        const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         console.debug(`Creating commit. Amount: ${ethers.utils.parseEther(amount.toString())}, Raw amount: ${amount}`);
         if (handleTransaction) {
             handleTransaction(committer.commit, [commitType, ethers.utils.parseEther(amount.toString())], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
@@ -292,21 +298,23 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const uncommit: (pool: string, commitID: number) => void = (pool, commitID) => {
+    const uncommit: (pool: string, commitID: number) => Promise<void> = async (pool, commitID) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
+        const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
             handleTransaction(committer.uncommit, [commitID], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.log(receipt);
+                    console.debug("Successfully uncommitted", receipt);
                     // if (!removeCommit) {
                     //     return;
                     // }
@@ -316,26 +324,28 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const approve: (pool: string) => void = (pool) => {
+    const approve: (pool: string) => Promise<void> = async (pool) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
             PoolToken__factory.abi,
             signer,
         ) as PoolToken;
+        const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
+                    console.debug("Successfully approved token", receipt);
                     poolsDispatch({
                         type: 'setTokenApproved',
                         token: 'quoteToken',
                         pool: pool,
                         value: true,
                     });
-                    console.log(receipt);
                 },
             });
         }
@@ -404,21 +414,3 @@ export const useSpecific: (poolAddress: string | undefined, target: TargetType, 
 
     return value;
 };
-
-// const constructNotification = (pool: Pool, type: CommitType, amount: EthersBigNumber) => {
-//     const amount_ = new BigNumber(amount.toString());
-//     const { shortBalance, longBalance, shortToken, longToken } = pool;
-//     const tokenPrice =
-//         type === SHORT_MINT || type === SHORT_BURN
-//             ? calcTokenPrice(shortBalance, shortToken.supply)
-//             : calcTokenPrice(longBalance, longToken.supply);
-//     const tokenName = type === SHORT_MINT || type === SHORT_BURN ? shortToken.name : longToken.name;
-//     const buttonText = type === SHORT_BURN || type === LONG_BURN ? 'Cancel Sell' : 'Cancel Buy';
-//     console.log(amount_.toNumber(), 'Amount');
-//     return {
-//         amount: amount_,
-//         value: amount_.times(tokenPrice),
-//         tokenName,
-//         buttonText,
-//     };
-// };

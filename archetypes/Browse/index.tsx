@@ -97,7 +97,7 @@ export const Browse: React.FC = () => {
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const handleBuyToken = (pool: string, side: SideType) => {
-        console.log(`Buying/minting ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+        console.debug(`Buying/minting ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {
@@ -109,8 +109,7 @@ export const Browse: React.FC = () => {
     };
 
     const handleSellToken = (pool: string, side: SideType) => {
-        // Trigger sell token UX
-        console.log(`Selling/burning ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+        console.debug(`Selling/burning ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {

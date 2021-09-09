@@ -21,7 +21,6 @@ export const Input = React.memo(
         align?: 'right' | 'left';
     } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
         const enforcer = (nextUserInput: string) => {
-            console.log(nextUserInput);
             if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
                 onUserInput(nextUserInput);
             }

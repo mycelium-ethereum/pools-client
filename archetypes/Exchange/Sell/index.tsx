@@ -31,12 +31,11 @@ export default (() => {
                         className="w-full "
                         placeHolder="Select Token"
                         size="lg"
-                        options={tokens.map((token) => token.symbol)}
+                        options={tokens.map((token) => ({ key: token.symbol }))}
                         value={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
                         onSelect={(option) => {
                             tokens.forEach((token) => {
                                 if (token.symbol === option) {
-                                    console.log('Setting pool', token.pool, token.side);
                                     swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
                                     swapDispatch({ type: 'setSide', value: token.side as SideType });
                                 }
