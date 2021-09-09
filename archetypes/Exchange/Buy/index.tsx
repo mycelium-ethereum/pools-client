@@ -12,6 +12,7 @@ import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -32,8 +33,9 @@ const SIDE_OPTIONS = [
 ];
 
 export default (() => {
+    const { account } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-
     const {
         leverage,
         selectedPool,
@@ -50,12 +52,61 @@ export default (() => {
     useEffect(() => {
         swapDispatch({
             type: 'setInvalidAmount',
-            value: isInvalidAmount(
-                amount,
-                side === LONG ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber(),
-            ),
+            value: isInvalidAmount(amount, pool.quoteToken.balance.toNumber()),
         });
-    }, [amount, pool.longToken.balance, pool.shortToken.balance, side]);
+    }, [amount, pool.quoteToken.balance]);
+
+    const ButtonContent = () => {
+        if (!account) {
+            return (
+                <ExchangeButton
+                    className="primary"
+                    onClick={(_e) => {
+                        handleConnect();
+                    }}
+                >
+                    Connect Wallet
+                </ExchangeButton>
+            );
+        }
+        if (pool.quoteToken.approved) {
+            return (
+                <>
+                    <ExchangeButton
+                        className="primary"
+                        disabled={!selectedPool}
+                        onClick={(_e) => {
+                            if (!approve) {
+                                return;
+                            }
+                            approve(selectedPool ?? '');
+                        }}
+                    >
+                        Unlock USDC
+                    </ExchangeButton>
+                    <HelperText>
+                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
+                        <a>Learn more.</a>
+                    </HelperText>
+                </>
+            );
+        } else {
+            return (
+                <ExchangeButton
+                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
+                    className="primary"
+                    onClick={(_e) => {
+                        if (!commit) {
+                            return;
+                        }
+                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
+                    }}
+                >
+                    {`Ok, let's buy`}
+                </ExchangeButton>
+            );
+        }
+    };
 
     return (
         <>
@@ -138,39 +189,7 @@ export default (() => {
 
             <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
-            {!pool.quoteToken.approved ? (
-                <>
-                    <ExchangeButton
-                        className="primary"
-                        disabled={!selectedPool}
-                        onClick={(_e) => {
-                            if (!approve) {
-                                return;
-                            }
-                            approve(selectedPool ?? '');
-                        }}
-                    >
-                        Unlock USDC
-                    </ExchangeButton>
-                    <HelperText>
-                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
-                        <a>Learn more.</a>
-                    </HelperText>
-                </>
-            ) : (
-                <ExchangeButton
-                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
-                    className="primary"
-                    onClick={(_e) => {
-                        if (!commit) {
-                            return;
-                        }
-                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
-                    }}
-                >
-                    {`Ok, let's buy`}
-                </ExchangeButton>
-            )}
+            {ButtonContent()}
         </>
     );
 }) as React.FC;
