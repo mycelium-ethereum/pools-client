@@ -1,4 +1,4 @@
-import { CommitType, CurrencyType, PoolType, SideType, CommitActionType } from '@libs/types/General';
+import { CommitType, SideType, CommitActionType } from '@libs/types/General';
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
 import { BURN, LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
@@ -170,53 +170,6 @@ export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, 
             return `${num.toNumber().toFixed(4)}`;
         }
     }
-};
-
-/**
- * Deconstructs the pools names and releseases a list of options
- * @param pools list of pool names
- * @requires pools names to follow naming convention
- */
-export const deconstructNames: (pools: PoolType[]) => {
-    leverageOptions: string[];
-    settlementOptions: (CurrencyType | 'All')[];
-} = (pools) => {
-    // Naming convention 1UP-TSLA/USD+aDAI
-    // 2DOWN-TSLA/USD+aDAI
-    // leverageSIDE-base/quote+collateral
-    // collateral === settlement
-
-    const leverageOptions: string[] = ['All'];
-    const settlementOptions: (CurrencyType | 'All')[] = ['All'];
-
-    pools.map((pool) => {
-        // TODO re add filtering
-        console.log('Found pool', pool);
-        // [leverage, _base, quote, collateral]
-        // const name = poolName.replace('+', '-').split('-');
-        // let leverage = name[0];
-        // const quote = name[2];
-        // let collateral = name[3];
-        // // fetch leverage
-        // if (leverage.includes('DOWN')) {
-        //     leverage = leverage.replace('DOWN', '');
-        // } else {
-        //     leverage = leverage.replace('UP', '');
-        // }
-        // // set collateral to quote if its falsey
-        // collateral = !!collateral ? collateral : quote;
-
-        // if (!leverageOptions.includes(leverage)) {
-        //     leverageOptions.push(leverage);
-        // }
-        // if (!settlementOptions.includes(collateral as CurrencyType)) {
-        //     settlementOptions.push(collateral as CurrencyType);
-        // }
-    });
-    return {
-        leverageOptions,
-        settlementOptions,
-    };
 };
 
 /**

@@ -25,7 +25,7 @@ export default ((committerAddress: string, amount: number, commitType: CommitTyp
                 .commit(commitType, ethers.utils.parseEther(amount ? amount.toString() : '0'))
                 .then((gwei) => {
                     const gasFee = parseFloat(ethers.utils.formatUnits(gwei, 'gwei'));
-                    console.log('Fetched gas fee', gasFee);
+                    console.debug('Fetched gas fee', gasFee);
                     setGasFee(gasFee);
                 });
         }

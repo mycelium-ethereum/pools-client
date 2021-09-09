@@ -52,7 +52,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
 
-    console.log(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
+    console.debug(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
     const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([

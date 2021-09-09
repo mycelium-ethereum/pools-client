@@ -72,7 +72,7 @@ export default (() => {
                         }))}
                         value={pool.name}
                         onSelect={(selectedPool) => {
-                            console.log('Setting pool', selectedPool);
+                            console.debug('Setting pool', selectedPool);
                             swapDispatch({ type: 'setSelectedPool', value: selectedPool as string });
                         }}
                     />

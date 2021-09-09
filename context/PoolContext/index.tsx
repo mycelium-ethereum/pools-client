@@ -314,7 +314,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.log(receipt);
+                    console.debug("Successfully uncommitted", receipt);
                     // if (!removeCommit) {
                     //     return;
                     // }
@@ -339,13 +339,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
+                    console.debug("Successfully approved token", receipt);
                     poolsDispatch({
                         type: 'setTokenApproved',
                         token: 'quoteToken',
                         pool: pool,
                         value: true,
                     });
-                    console.log(receipt);
                 },
             });
         }
@@ -414,21 +414,3 @@ export const useSpecific: (poolAddress: string | undefined, target: TargetType, 
 
     return value;
 };
-
-// const constructNotification = (pool: Pool, type: CommitType, amount: EthersBigNumber) => {
-//     const amount_ = new BigNumber(amount.toString());
-//     const { shortBalance, longBalance, shortToken, longToken } = pool;
-//     const tokenPrice =
-//         type === SHORT_MINT || type === SHORT_BURN
-//             ? calcTokenPrice(shortBalance, shortToken.supply)
-//             : calcTokenPrice(longBalance, longToken.supply);
-//     const tokenName = type === SHORT_MINT || type === SHORT_BURN ? shortToken.name : longToken.name;
-//     const buttonText = type === SHORT_BURN || type === LONG_BURN ? 'Cancel Sell' : 'Cancel Buy';
-//     console.log(amount_.toNumber(), 'Amount');
-//     return {
-//         amount: amount_,
-//         value: amount_.times(tokenPrice),
-//         tokenName,
-//         buttonText,
-//     };
-// };
