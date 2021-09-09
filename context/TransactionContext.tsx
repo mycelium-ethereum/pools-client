@@ -60,7 +60,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
         const { statusMessages, onError, onSuccess, afterConfirmation, network = '0' } = options ?? {};
-        
+
         // actually returns a string error in the library
         const toastId = addToast(
             ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],

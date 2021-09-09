@@ -314,7 +314,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.debug("Successfully uncommitted", receipt);
+                    console.debug('Successfully uncommitted', receipt);
                     // if (!removeCommit) {
                     //     return;
                     // }
@@ -339,7 +339,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     error: 'Failed to commit',
                 },
                 onSuccess: async (receipt) => {
-                    console.debug("Successfully approved token", receipt);
+                    console.debug('Successfully approved token', receipt);
                     poolsDispatch({
                         type: 'setTokenApproved',
                         token: 'quoteToken',
