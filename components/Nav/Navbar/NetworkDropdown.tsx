@@ -12,7 +12,12 @@ export default styled(({ className }) => {
     return (
         <Select
             className={className}
-            preview={<NetworkPreview networkID={network.toString()} networkName={networkConfig[network]?.name ?? 'Unknown'} />}
+            preview={
+                <NetworkPreview
+                    networkID={network.toString()}
+                    networkName={networkConfig[network]?.name ?? 'Unknown'}
+                />
+            }
             onChange={(event: any) => {
                 switchNetworks(provider, event.target.value);
             }}
@@ -36,13 +41,13 @@ export default styled(({ className }) => {
 `;
 
 const NetworkPreview: React.FC<{
-    networkID: string,
-    networkName: string
-}> = (({ networkID, networkName }) => {
+    networkID: string;
+    networkName: string;
+}> = ({ networkID, networkName }) => {
     return (
         <div className={'flex'}>
-            <Logo className='inline w-[20px] h-[22px] my-auto ml-0 mr-2' ticker={networkID} />
+            <Logo className="inline w-[20px] h-[22px] my-auto ml-0 mr-2" ticker={networkID} />
             {networkName}
         </div>
     );
-})
+};

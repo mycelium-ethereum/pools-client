@@ -91,23 +91,16 @@ export const Select = styled(({ preview, onChange, className, children }) => {
     };
 
     return (
-        <Button 
+        <Button
             size="sm"
             variant="transparent"
-            ref={ref} 
-            className={`relative w-[160px] ${className}`} 
+            ref={ref}
+            className={`relative w-[160px] ${className}`}
             onClick={handleClick}
         >
             {preview}
-            <DownOutlined 
-                className={classNames(
-                    'inline w-8 h-8 transform',
-                    open ? 'rotate-180' : ''
-                )}
-            />
-            <SelectDropdown className={classNames(
-                open ? 'transform-none opacity-100 ' : ''
-            )}>
+            <DownOutlined className={classNames('inline w-8 h-8 transform', open ? 'rotate-180' : '')} />
+            <SelectDropdown className={classNames(open ? 'transform-none opacity-100 ' : '')}>
                 {children}
             </SelectDropdown>
         </Button>

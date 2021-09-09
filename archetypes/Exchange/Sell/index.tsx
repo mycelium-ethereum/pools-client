@@ -3,7 +3,6 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
 import { SellSummary } from '../Summary';
@@ -11,6 +10,7 @@ import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toCommitType } from '@libs/utils/converters';
 import { SideType } from '@libs/types/General';
+import Button from '@components/General/Button';
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -75,8 +75,9 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
 
-            <ExchangeButton
-                className="primary"
+            <Button
+                variant="primary"
+                size="lg"
                 disabled={!amount || !selectedPool}
                 onClick={(_e) => {
                     if (!commit) {
@@ -86,7 +87,7 @@ export default (() => {
                 }}
             >
                 Sell
-            </ExchangeButton>
+            </Button>
         </>
     );
 }) as React.FC;
