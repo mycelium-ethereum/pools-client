@@ -69,7 +69,10 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 interface DropdownProps {
     value: string;
     placeHolder?: string;
-    options: string[];
+    options: {
+        key: string;
+        text?: string;
+    }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;
     className?: string;
@@ -107,16 +110,16 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
-                            <Menu.Item key={option}>
+                            <Menu.Item key={option.key}>
                                 {({ active }) => (
                                     <button
-                                        onClick={() => onSelect(option)}
+                                        onClick={() => onSelect(option.key)}
                                         className={classNames(
                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
-                                        {option}
+                                        {option?.text ?? option.key}
                                     </button>
                                 )}
                             </Menu.Item>

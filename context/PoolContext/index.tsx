@@ -271,16 +271,22 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitType, amount: number) => void = (pool, commitType, amount) => {
+    const commit: (pool: string, commitType: CommitType, amount: number) => Promise<void> = async (
+        pool,
+        commitType,
+        amount,
+    ) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
+        const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         console.debug(`Creating commit. Amount: ${ethers.utils.parseEther(amount.toString())}, Raw amount: ${amount}`);
         if (handleTransaction) {
             handleTransaction(committer.commit, [commitType, ethers.utils.parseEther(amount.toString())], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
@@ -292,15 +298,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const uncommit: (pool: string, commitID: number) => void = (pool, commitID) => {
+    const uncommit: (pool: string, commitID: number) => Promise<void> = async (pool, commitID) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
+        const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
             handleTransaction(committer.uncommit, [commitID], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
@@ -316,14 +324,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const approve: (pool: string) => void = (pool) => {
+    const approve: (pool: string) => Promise<void> = async (pool) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
             PoolToken__factory.abi,
             signer,
         ) as PoolToken;
+        const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
+                network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
