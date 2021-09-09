@@ -1,17 +1,16 @@
 import React from 'react';
 import { Select, SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
-import styled from 'styled-components';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, KOVAN } from '@libs/constants';
 
-export default styled(({ className }) => {
+export default (() => {
     const { provider, network = '0' } = useWeb3();
     return (
         <Select
-            className={className}
+            className={'my-auto mx-4 hidden lg:block'}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
@@ -26,19 +25,7 @@ export default styled(({ className }) => {
             <SelectOption value={KOVAN}>Kovan</SelectOption>
         </Select>
     );
-})`
-    border: 1px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 7px;
-    background: transparent;
-    margin: auto 1rem;
-    width: 158px;
-    height: 2.625rem;
-
-    & svg {
-        fill: #fff;
-    }
-`;
+}) as React.FC;
 
 const NetworkPreview: React.FC<{
     networkID: string;

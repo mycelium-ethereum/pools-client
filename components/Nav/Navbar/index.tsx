@@ -121,8 +121,8 @@ export const NavBarContent = styled(({ className }) => {
     @media (max-width: 768px) {
         padding: 0 1rem;
     }
-    @media (max-width: 1127px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
+    @media (max-width: 1024px) {
+        ${AccountDropdown}, ${ThemeSwitcher}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
             display: none;
         }
         ${MobileMenu} {
