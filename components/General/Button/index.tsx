@@ -14,11 +14,10 @@ const VARIANT: Record<ButtonVariant, string> = {
     primary:
         'bg-tracer-600 text-white w-full text-high-emphesis hover:bg-tracer-900 disabled:bg-opacity-50 focus:ring focus:ring-tracer-300',
     'primary-light':
-        'bg-tracer-100 border border-tracer-500 text-cool-gray-700 w-full text-high-emphesis hover:bg-tracer-900 disabled:bg-tracer-100 disabled:bg-opacity-80 focus:ring focus:ring-tracer-300',
+        'bg-tracer-100 border border-tracer-500 text-cool-gray-700 w-full text-high-emphesis hover:bg-opacity-50 disabled:bg-tracer-100 disabled:opacity-50',
     transparent:
-        'bg-white bg-opacity-20 border border-white text-white w-fulltext-high-emphesis disabled:bg-opacity-50 focus:ring focus:ring-tracer-300',
+        'bg-white bg-opacity-20 border border-white text-white w-full text-high-emphesis disabled:bg-opacity-50 focus:border-solid',
 };
-
 type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 type ButtonVariant = 'primary' | 'primary-light' | 'transparent' | 'default';
