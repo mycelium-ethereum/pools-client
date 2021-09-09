@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Input, SelectOption } from '@components/General/Input';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
+import { Label, ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
-import { Label } from '@components/Pool';
-import SelectToken from '@components/SelectToken';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toCommitType } from '@libs/utils/converters';
 
 export default (() => {
-    const [showTokenSelect, setShowTokenSelect] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { commit } = usePoolActions();
     const tokens = usePoolTokens();
@@ -75,8 +72,6 @@ export default (() => {
             >
                 Sell
             </ExchangeButton>
-
-            <SelectToken show={showTokenSelect} onClose={() => setShowTokenSelect(false)} />
         </>
     );
 }) as React.FC;

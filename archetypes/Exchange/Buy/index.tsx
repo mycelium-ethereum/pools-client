@@ -5,11 +5,10 @@ import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton, InputRow, MarketSelect } from '../Inputs';
+import { Label, ExchangeButton, InputRow, MarketSelect } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
-import { Label } from '@components/Pool';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 
@@ -97,14 +96,19 @@ export default (() => {
                         type={'number'}
                         min={0}
                     />
-                    <InnerInputText
-                        onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })}
-                    >
+                    <InnerInputText>
                         <Currency>
                             <Logo ticker={'USDC'} />
                             <span>{`USDC`}</span>
                         </Currency>
-                        {`MAX`}
+                        <div
+                            className="hover:cursor-pointer hover:underline"
+                            onClick={(_e) =>
+                                swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
+                            }
+                        >
+                            Max
+                        </div>
                     </InnerInputText>
                 </InputWrapper>
                 <div>
@@ -194,7 +198,7 @@ const Currency = styled.div`
     background: #ffffff;
     box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
     border-radius: 50px;
-    padding: 0px 8px 0px 4px;
+    padding: 0 8px 0 4px;
     margin-right: 0.5rem;
     color: #71717a;
     height: 29px;
