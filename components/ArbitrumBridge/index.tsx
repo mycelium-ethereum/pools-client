@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react';
-import TracerModal from '@components/General/TracerModal';
+import Modal from '@components/General/Modal';
 import DirectionSelect from './DirectionSelect';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import styled from 'styled-components';
@@ -18,11 +18,10 @@ export default (() => {
     return (
         <>
             <a onClick={() => dispatch({ type: 'setOpen', value: true })}>Bridge</a>
-            <TracerModal
+            <Modal
                 title={'Bridge Funds to Arbitrum'}
                 // subTitle={'Tracer runs on Arbitrum'}
                 show={state.open}
-                loading={false}
                 onClose={() => {
                     dispatch({ type: 'setOpen', value: false });
                 }}
@@ -45,7 +44,7 @@ export default (() => {
                 <Section></Section>
 
                 <BridgeButton>{`Bridge ${state.selectedToken === USDC ? 'USDC' : 'ETH'}`}</BridgeButton>
-            </TracerModal>
+            </Modal>
         </>
     );
 }) as React.FC;
