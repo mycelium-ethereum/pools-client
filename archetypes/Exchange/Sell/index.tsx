@@ -27,7 +27,7 @@ export default (() => {
     return (
         <>
             <div className="relative flex justify-between my-2 ">
-                <span className="w-8/12">
+                <span className="w-full md:w-1/2">
                     <p className="mb-2 text-black">Token</p>
                     <Dropdown
                         className="w-full "
@@ -46,9 +46,9 @@ export default (() => {
                         }}
                     />
                 </span>
-                <span>
+                <span className="w-full md:w-56 ml-2">
                     <p className="mb-2 text-black">Amount</p>
-                    <InputContainer className="max-w-24 ml-2 ">
+                    <InputContainer className="w-full ">
                         <Input
                             className="w-full h-full text-xl font-normal "
                             value={amount}

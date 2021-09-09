@@ -56,15 +56,15 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     }
 `;
 
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
-
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
     sm: 'px-4 py-2 text-sm',
     default: 'pl-3 pr-2 py-2 text-sm ',
-    lg: 'px-4 py-4 text-base',
+    lg: 'p-4 text-base',
     none: 'p-0 text-base',
 };
+
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 interface DropdownProps {
     value: string;
@@ -86,9 +86,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
             <Menu.Button
                 className={classNames(
-                    `inline-flex justify-between w-full rounded-md border shadow-sm `,
+                    `inline-flex justify-between w-full rounded-md border `,
                     SIZE[size],
-                    'font-normal border-gray-300 bg-white text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-tracer-50',
+                    'font-normal border-gray-300 bg-gray-50 text-gray-500 hover:bg-white focus:outline-none focus:border-solid hover:ring-1 hover:ring-tracer-50',
                 )}
             >
                 <span className="mr-2">{value === '' ? placeHolder : value}</span>

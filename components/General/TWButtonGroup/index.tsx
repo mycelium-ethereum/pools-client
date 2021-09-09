@@ -3,10 +3,10 @@ import React from 'react';
 import ReactSimpleTooltip from 'react-simple-tooltip';
 
 const SELECTED = 'z-10 bg-tracer-800 text-white ';
-const DISABLED = 'cursor-not-allowed';
+const DISABLED = 'cursor-not-allowed opacity-50';
 const BORDERS = 'first:rounded-l-md last:rounded-r-md';
 const DEFAULT_BUTTON =
-    'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 focus:outline-none';
+    'relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 focus:outline-none focus:border-solid';
 
 type Option = {
     key: number;
@@ -53,7 +53,7 @@ const ComingSoon: React.FC<{
                 content={`${option.disabled?.text}`}
                 arrow={6}
                 background="#f9fafb"
-                border="#f9fafb"
+                border="rgba(209, 213, 219)"
                 color="#000"
                 customCss={{
                     whiteSpace: 'nowrap',

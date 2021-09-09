@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
-import { SelectOption, InnerInputText, InputContainer } from '@components/General/Input';
+import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton, MarketSelect } from '../Inputs';
+import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
+import { Dropdown } from '@components/General/Dropdown';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -49,24 +50,18 @@ export default (() => {
     return (
         <>
             <div className={`${inputRow} flex justify-between`}>
-                <span>
+                <span className="w-60">
                     <p className="mb-2 text-black">Market</p>
-                    <MarketSelect
-                        preview={pool.name}
-                        onChange={(e: any) =>
-                            swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
-                        }
-                    >
-                        {poolOptions.map((pool) => (
-                            <SelectOption
-                                key={`pool-dropdown-option-${pool.address}`}
-                                value={pool.address}
-                                selected={selectedPool === pool.address}
-                            >
-                                {pool.name}
-                            </SelectOption>
-                        ))}
-                    </MarketSelect>
+                    <Dropdown
+                        className="w-full "
+                        placeHolder="Select Pool"
+                        size="lg"
+                        options={poolOptions.map((pool) => pool.name)}
+                        value={pool.name}
+                        onSelect={(pool) => {
+                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        }}
+                    />
                 </span>
                 <span>
                     <p className="mb-2 text-black">Side</p>
@@ -105,7 +100,7 @@ export default (() => {
                 <p className="mb-2 text-black">Amount</p>
                 <InputContainer error={invalidAmount}>
                     <NumericInput
-                        className="w-full h-full text-xl font-normal "
+                        className="w-full h-full text-base font-normal "
                         value={amount}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: parseInt(val) });
