@@ -78,7 +78,7 @@ export const NavBarContent = styled(({ className }) => {
                 </li>
             </Links>
 
-            <NetworkDropdown />
+            <NetworkDropdown show={!!account} />
 
             <AccountDropdown
                 onboard={onboard}
@@ -91,7 +91,7 @@ export const NavBarContent = styled(({ className }) => {
             />
 
             {/* Hide if showing queued */}
-            <AccountBalance show={!showQueued} />
+            <AccountBalance show={!showQueued && !!account} />
 
             <CommitDropdown show={showQueued} setShowQueued={setShowQueued} />
 

@@ -5,12 +5,13 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, KOVAN } from '@libs/constants';
+import { classNames } from '@libs/utils/functions';
 
-export default (() => {
+export default (({ show }) => {
     const { provider, network = '0' } = useWeb3();
     return (
         <Select
-            className={'my-auto mx-4 hidden lg:block'}
+            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4')}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
@@ -25,7 +26,9 @@ export default (() => {
             <SelectOption value={KOVAN}>Kovan</SelectOption>
         </Select>
     );
-}) as React.FC;
+}) as React.FC<{
+    show: boolean;
+}>;
 
 const NetworkPreview: React.FC<{
     networkID: string;
