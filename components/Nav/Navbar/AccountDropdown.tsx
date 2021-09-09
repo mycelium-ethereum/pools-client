@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import dynamic from 'next/dynamic';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { Popover, Transition } from '@headlessui/react';
 import ReactTooltip from 'react-tooltip';
 import { Logo } from '@components/General';
