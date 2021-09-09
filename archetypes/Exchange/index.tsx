@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-import SlideSelect from '@components/General/SlideSelect';
 import { SwapContext } from '@context/SwapContext';
 import { MINT, BURN } from '@libs/constants';
 import { SideType, CommitActionType } from '@libs/types/General';
@@ -45,9 +44,9 @@ export default (() => {
     }, [router]);
 
     return (
-        <Content>
+        <div className="w-full justify-center ">
             <TradeModal>
-                <Header>
+                <div className="flex">
                     <TWButtonGroup
                         value={swapState?.commitAction ?? MINT}
                         size={'xl'}
@@ -60,21 +59,16 @@ export default (() => {
                         options={TRADE_OPTIONS}
                     />
                     <Gas />
-                </Header>
+                </div>
 
-                <Divider />
+                <Divider className="my-8" />
 
                 {/** Inputs */}
                 {swapState?.commitAction === BURN ? <Sell /> : <Buy />}
             </TradeModal>
-        </Content>
+        </div>
     );
 }) as React.FC;
-
-const Content = styled.div`
-    width: 100%;
-    justify-content: center;
-`;
 
 const TradeModal = styled.div`
     background: var(--color-background);
@@ -90,21 +84,5 @@ const TradeModal = styled.div`
         box-shadow: 0;
         margin: 0;
         padding: 2rem 1rem;
-    }
-
-    ${Divider} {
-        margin: 2rem 0;
-    }
-`;
-
-const Header = styled.div`
-    display: flex;
-    ${SlideSelect} {
-        width: 330px;
-        height: 3.125rem;
-        border-radius: 7px;
-        border: none;
-        margin: 0 auto 0 0;
-        background: #f0f0ff;
     }
 `;
