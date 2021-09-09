@@ -133,49 +133,6 @@ export const NavBarContent = styled(({ className }) => {
 
 export default NavBar;
 
-// const NetworkButton = styled.span`
-//     border: 1px solid #fff;
-//     transition: 0.3s;
-//     border-radius: 20px;
-//     padding: 0 10px;
-//     &:hover {
-//         cursor: pointer;
-//         background: #fff;
-//         color: #f15025;
-//     }
-// `;
-
-// type UNProps = {
-//     display: boolean;
-//     className?: string;
-// };
-// const UnknownNetwork: React.FC<UNProps> = styled(({ className }: UNProps) => {
-//     // TODO add an onclick to swap to arbritrum using
-//     // https://docs.metamask.io/guide/rpc-api.html#other-rpc-methods
-//     return (
-//         <div className={className}>
-//             You are connected to the wrong network. Switch to{' '}
-//             <NetworkButton onClick={() => switchNetworks()}>Arbitrum Testnet.</NetworkButton>
-//         </div>
-//     );
-// })`
-//     background: #f15025;
-//     color: var(--color-text);
-//     letter-spacing: -0.36px;
-//     height: 40px;
-//     line-height: 40px;
-//     font-size: var(--font-size-medium);
-//     width: 100%;
-//     position: absolute;
-//     left: 0;
-//     text-align: center;
-//     bottom: ${(props) => (props.display ? '-40px' : '0px')};
-//     opacity: ${(props) => (props.display ? '1' : '0')};
-//     z-index: ${(props) => (props.display ? '2' : '-1')};
-//     transition: ${(props) =>
-//         props.display ? 'bottom 0.3s, opacity 0.3s 0.1s' : 'bottom 0.3s 0.15s, opacity 0.3s, z-index 0.3s 0.3s'};
-// `;
-
 const useEnsName = (account: string) => {
     const [ensName, setEnsName] = useState(account);
     const [ens, setEns] = useState(undefined);

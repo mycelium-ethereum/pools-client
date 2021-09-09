@@ -11,7 +11,7 @@ export default (({ show }) => {
     const { provider, network = '0' } = useWeb3();
     return (
         <Select
-            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4')}
+            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4 w-[165px]')}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
