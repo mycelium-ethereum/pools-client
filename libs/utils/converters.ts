@@ -1,6 +1,7 @@
-import { CurrencyType, PoolType } from '@libs/types/General';
+import { CommitType, SideType, CommitActionType } from '@libs/types/General';
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
+import { BURN, LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -148,6 +149,12 @@ export const timeTill: (time: number) => {
 export const formatDate: (date: Date) => string = (date) =>
     `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 
+/**
+ * Checks if a number is an arbitrarily small number. Returns is an approximated value instead
+ * @param num
+ * @param currency
+ * @returns
+ */
 export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, currency) => {
     const isSmall = num.lt(0.000001); // some arbitrarily small number
     if (currency) {
@@ -166,48 +173,23 @@ export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, 
 };
 
 /**
- * Deconstructs the pools names and releseases a list of options
- * @param pools list of pool names
- * @requires pools names to follow naming convention
+ * Converts a side and a token to a commitType
+ * @param side long or short (buy or sell)
+ * @param token mint or burn token
+ * @returns the corresponding value to commit with
  */
-export const deconstructNames: (pools: PoolType[]) => {
-    leverageOptions: string[];
-    settlementOptions: (CurrencyType | 'All')[];
-} = (pools) => {
-    // Naming convention 1UP-TSLA/USD+aDAI
-    // 2DOWN-TSLA/USD+aDAI
-    // leverageSIDE-base/quote+collateral
-    // collateral === settlement
-
-    const leverageOptions: string[] = ['All'];
-    const settlementOptions: (CurrencyType | 'All')[] = ['All'];
-
-    pools.map((pool) => {
-        // TODO re add filtering
-        console.log('Found pool', pool);
-        // [leverage, _base, quote, collateral]
-        // const name = poolName.replace('+', '-').split('-');
-        // let leverage = name[0];
-        // const quote = name[2];
-        // let collateral = name[3];
-        // // fetch leverage
-        // if (leverage.includes('DOWN')) {
-        //     leverage = leverage.replace('DOWN', '');
-        // } else {
-        //     leverage = leverage.replace('UP', '');
-        // }
-        // // set collateral to quote if its falsey
-        // collateral = !!collateral ? collateral : quote;
-
-        // if (!leverageOptions.includes(leverage)) {
-        //     leverageOptions.push(leverage);
-        // }
-        // if (!settlementOptions.includes(collateral as CurrencyType)) {
-        //     settlementOptions.push(collateral as CurrencyType);
-        // }
-    });
-    return {
-        leverageOptions,
-        settlementOptions,
-    };
+export const toCommitType: (side: SideType, token: CommitActionType) => CommitType = (side, token) => {
+    if (side === LONG) {
+        if (token === BURN) {
+            return LONG_BURN;
+        } else {
+            return LONG_MINT;
+        }
+    } else {
+        if (token === BURN) {
+            return SHORT_BURN;
+        } else {
+            return SHORT_MINT;
+        }
+    }
 };

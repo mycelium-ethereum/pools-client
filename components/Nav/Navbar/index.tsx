@@ -37,43 +37,14 @@ const Links = styled.ul`
     & li {
         display: flex;
         transition: 0.2s;
-        padding: 0 20px;
     }
 
     & li.selected {
-        // color: #37b1f6;
         text-decoration: underline;
     }
 
     & li:hover {
-        color: #37b1f6;
-    }
-
-    & li .trade-toggle {
-        display: none;
-    }
-
-    & li.selected .trade-toggle {
-        display: flex;
-        margin: auto 20px;
-        border: 1px solid var(--color-primary);
-        border-radius: 20px;
-    }
-
-    & li.selected .trade-toggle div {
-        width: 100px;
-        text-align: center;
-        transition: 0.2s;
-
-        &:hover {
-            cursor: pointer;
-        }
-    }
-
-    & li.selected .trade-toggle div.selected {
-        color: var(--color-background);
-        background-color: var(--color-primary);
-        border-radius: 20px;
+        opacity: 0.8;
     }
 `;
 
@@ -89,7 +60,7 @@ export const NavBarContent = styled(({ className }) => {
 
     const ensName = useEnsName(account ?? '');
 
-    const linkStyles = 'mx-2 py-2';
+    const linkStyles = 'mx-2 py-2 px-2';
 
     return (
         <nav className={`${className} container`}>
@@ -97,17 +68,12 @@ export const NavBarContent = styled(({ className }) => {
             <Links>
                 <li className={linkStyles + (route === '' ? ' selected' : '')}>
                     <Link href="/">
-                        <a className="m-auto">Trade</a>
+                        <a className="m-auto">Invest</a>
                     </Link>
                 </li>
                 <li className={linkStyles + (route === 'strategise' ? ' selected' : '')}>
                     <Link href="/">
-                        <a className="m-auto">Strategise</a>
-                    </Link>
-                </li>
-                <li className={linkStyles + (route === 'portfolio' ? ' selected' : '')}>
-                    <Link href="/">
-                        <a className="m-auto">Portfolio</a>
+                        <a className="m-auto">Stake</a>
                     </Link>
                 </li>
             </Links>

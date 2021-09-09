@@ -39,10 +39,11 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
         const fetch = async () => {
             if (contract) {
                 if (network === parseInt(ARBITRUM)) {
+                    // hacky temp solution to rpc limit issues
                     setPools([
                         {
                             name: 'BTC/USDC',
-                            address: '0x6822Df57Df4647A500EE0C9660f1C69EfdbE2bd4',
+                            address: '0x0f25cE0547919e8c4044a07619569732130fdc2B',
                         },
                     ]);
                 } else {

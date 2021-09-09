@@ -27,7 +27,7 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
     switch (action.type) {
         case 'addCommit':
             const { id, pool } = action.commitInfo;
-            console.log('Adding commit', action.commitInfo);
+            console.debug('Adding commit', action.commitInfo);
             return {
                 ...state,
                 commits: {

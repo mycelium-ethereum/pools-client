@@ -11,7 +11,6 @@ import { TransactionStore } from '@context/TransactionContext';
 import { FactoryStore } from '@context/FactoryContext';
 import GlobalStyles from 'styles/GlobalStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
-import { FilterStore } from '@context/FilterContext';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
@@ -19,10 +18,10 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
         <div>
             <Head>
                 {/** Meta tags */}
-                <title>Tracer | Perpetual Swaps </title>
+                <title>Tracer | Perpetual Pools </title>
                 <meta
                     name="description"
-                    content="Build and trade with Tracer’s Perpetual Swaps and gain leveraged exposure to any market in the world. "
+                    content="Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world."
                 />
                 <meta name="viewport" content="width=device-width, user-scalable=no" />
                 <link rel="shortcut icon" type="image/svg" href="/favicon.svg" />
@@ -62,13 +61,11 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     }}
                 >
                     <FactoryStore>
-                        <FilterStore>
-                            <TransactionStore>
-                                <UsersCommitStore>
-                                    <Component {...pageProps} />
-                                </UsersCommitStore>
-                            </TransactionStore>
-                        </FilterStore>
+                        <TransactionStore>
+                            <UsersCommitStore>
+                                <Component {...pageProps} />
+                            </UsersCommitStore>
+                        </TransactionStore>
                     </FactoryStore>
                 </Web3Store>
             </ToastProvider>

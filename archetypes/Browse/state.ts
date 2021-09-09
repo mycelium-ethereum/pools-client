@@ -1,9 +1,6 @@
 export enum LeverageFilterEnum {
     One = '1x',
-    Two = '2x',
     Three = '3x',
-    Four = '4x',
-    Five = '5x',
     All = 'All',
 }
 
@@ -18,19 +15,18 @@ export enum SortByEnum {
     Price = 'Last Price',
     Change24Hours = '24h Change',
     RebalanceRate = 'Rebalance Rate',
-    APY30Day = '30D Realised APY',
     TotalValueLocked = 'TVL',
     MyHoldings = 'My Holdings',
 }
 
 export interface BrowseTableRowData {
-    tokenAddress: string;
-    tokenName: string;
+    address: string;
+    pool: string;
+    symbol: string;
     leverage: number;
     side: 'short' | 'long';
     lastPrice: number;
     change24Hours: number;
-    APY30Days: number;
     rebalanceRate: number;
     totalValueLocked: number;
     myHoldings: number;

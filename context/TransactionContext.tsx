@@ -2,11 +2,13 @@ import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
+import { networkConfig } from './Web3Context/Web3Context.Config';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
     onError?: (error?: Error | Result) => any;
     afterConfirmation?: (hash: string) => any;
+    network?: number; // network number;
     statusMessages?: {
         waiting?: string; // transaction message for when we are waiting for the user to confirm
         error?: string; // transaction message for when the transaction fails
@@ -57,7 +59,8 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess, afterConfirmation } = options ?? {};
+        const { statusMessages, onError, onSuccess, afterConfirmation, network = '0' } = options ?? {};
+
         // actually returns a string error in the library
         const toastId = addToast(
             ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
@@ -83,7 +86,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 content: [
                     'Transaction Successful',
                     statusMessages?.success ?? (
-                        <a href={`https://kovan.etherscan/tx/${receipt.transactionHash}`}>View transaction</a>
+                        <a href={`${networkConfig[network].previewUrl}/${receipt.transactionHash}`}>View transaction</a>
                     ),
                 ],
                 appearance: 'success',

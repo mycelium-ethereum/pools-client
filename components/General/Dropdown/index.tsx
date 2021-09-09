@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined } from '@ant-design/icons';
+import { classNames } from '@libs/utils/functions';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -55,26 +56,47 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     }
 `;
 
-function classNames(...classes: string[]) {
-    return classes.filter(Boolean).join(' ');
-}
+const SIZE = {
+    xs: 'px-2 py-1 text-xs',
+    sm: 'px-4 py-2 text-sm',
+    default: 'pl-3 pr-2 py-2 text-sm ',
+    lg: 'p-3 text-base',
+    none: 'p-0 text-base',
+};
 
-interface DropDownProps {
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
+
+interface DropdownProps {
     value: string;
-    options: string[];
+    placeHolder?: string;
+    options: {
+        key: string;
+        text?: string;
+    }[];
     onSelect: (option: string) => void;
+    size?: ButtonSize;
     className?: string;
 }
-
-export const DropDown: React.FC<DropDownProps> = ({ value, options, onSelect, className }) => {
+export const Dropdown: React.FC<DropdownProps> = ({
+    value,
+    placeHolder = 'Select',
+    options,
+    onSelect,
+    size = 'default',
+    className,
+}) => {
     return (
         <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
-            <div>
-                <Menu.Button className="inline-flex justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-                    {value}
-                    <DownOutlined className="h-5 w-5 ml-2 flex items-center" aria-hidden="true" />
-                </Menu.Button>
-            </div>
+            <Menu.Button
+                className={classNames(
+                    `inline-flex justify-between w-full rounded-md border `,
+                    SIZE[size],
+                    'font-normal border-gray-300 bg-gray-50 text-gray-500 hover:bg-white focus:outline-none focus:border-solid hover:ring-1 hover:ring-tracer-50',
+                )}
+            >
+                <span className="mr-2">{value === '' ? placeHolder : value}</span>
+                <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+            </Menu.Button>
 
             <Transition
                 as={Fragment}
@@ -88,16 +110,16 @@ export const DropDown: React.FC<DropDownProps> = ({ value, options, onSelect, cl
                 <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
-                            <Menu.Item key={option}>
+                            <Menu.Item key={option.key}>
                                 {({ active }) => (
                                     <button
-                                        onClick={() => onSelect(option)}
+                                        onClick={() => onSelect(option.key)}
                                         className={classNames(
                                             active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
-                                        {option}
+                                        {option?.text ?? option.key}
                                     </button>
                                 )}
                             </Menu.Item>

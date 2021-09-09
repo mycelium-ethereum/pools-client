@@ -25,8 +25,9 @@ export const MainTitle = styled.h1`
     display: flex;
     height: 65px;
     width: 100%;
+    color: var(--color-text);
     align-items: center;
-    padding: 0px 16px;
+    padding: 0 16px;
     border: 1px solid #0c3586;
     border-top: unset;
     font-size: var(--font-size-medium);
@@ -47,7 +48,7 @@ export const Title = styled.h2`
     margin-bottom: 8px;
 `;
 export const Text = styled.p`
-    padding: 0px 0px 8px;
+    padding: 0 0 8px;
     font-size: var(--font-size-small);
     max-width: 720px;
 `;

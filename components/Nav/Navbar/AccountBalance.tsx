@@ -6,7 +6,7 @@ import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
 
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 

@@ -52,7 +52,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
 
-    console.log(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
+    console.debug(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
     const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
@@ -122,6 +122,8 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     };
 };
 
+const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');
+
 export const fetchCommits: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
@@ -135,6 +137,14 @@ export const fetchCommits: (
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
     const earliestUnexecuted = await contract?.earliestCommitUnexecuted();
+    if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
+        console.debug('No unexecuted commits');
+        return {
+            pendingLong: new BigNumber(0),
+            pendingShort: new BigNumber(0),
+            allUnexecutedCommits: [],
+        };
+    }
 
     // current blocknumber alchemy has a 2000 block limit
     const minBlockCheck = (await provider.getBlockNumber()) - 1990;

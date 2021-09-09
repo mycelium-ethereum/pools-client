@@ -1,14 +1,25 @@
 import React, { useEffect, useContext } from 'react';
-import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { SwapContext } from '@context/SwapContext';
 import { MINT, BURN } from '@libs/constants';
-import { SideType, TokenType } from '@libs/types/General';
+import { SideType, CommitActionType } from '@libs/types/General';
 import styled from 'styled-components';
 import Gas from './Gas';
-import Buy from './Inputs/Buy';
-import Sell from './Inputs/Sell';
+import Buy from './Buy';
+import Sell from './Sell';
 import { useRouter } from 'next/router';
 import Divider from '@components/General/Divider';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+
+const TRADE_OPTIONS = [
+    {
+        key: MINT,
+        text: 'Buy',
+    },
+    {
+        key: BURN,
+        text: 'Sell',
+    },
+];
 
 export default (() => {
     const router = useRouter();
@@ -20,7 +31,10 @@ export default (() => {
                 swapDispatch({ type: 'setSelectedPool', value: router.query.pool as string });
             }
             if (router.query.type) {
-                swapDispatch({ type: 'setTokenType', value: parseInt(router.query.type as string) as TokenType });
+                swapDispatch({
+                    type: 'setCommitActionType',
+                    value: parseInt(router.query.type as string) as CommitActionType,
+                });
             }
             if (router.query.side) {
                 swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
@@ -29,37 +43,31 @@ export default (() => {
     }, [router]);
 
     return (
-        <Content>
+        <div className="w-full justify-center ">
             <TradeModal>
-                <Header>
-                    <SlideSelect
-                        value={swapState?.tokenType ?? MINT}
-                        onClick={(index, _e) => {
+                <div className="flex">
+                    <TWButtonGroup
+                        value={swapState?.commitAction ?? MINT}
+                        size={'xl'}
+                        onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setTokenType', value: index as SideType });
+                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionType });
                             }
                         }}
-                    >
-                        <Option>Buy</Option>
-                        <Option>Sell</Option>
-                    </SlideSelect>
+                        options={TRADE_OPTIONS}
+                    />
                     <Gas />
-                </Header>
+                </div>
 
-                <Divider />
+                <Divider className="my-8" />
 
                 {/** Inputs */}
-                {swapState?.tokenType === BURN ? <Sell /> : <Buy />}
+                {swapState?.commitAction === BURN ? <Sell /> : <Buy />}
             </TradeModal>
-        </Content>
+        </div>
     );
 }) as React.FC;
-
-const Content = styled.div`
-    width: 100%;
-    justify-content: center;
-`;
 
 const TradeModal = styled.div`
     background: var(--color-background);
@@ -75,21 +83,5 @@ const TradeModal = styled.div`
         box-shadow: 0;
         margin: 0;
         padding: 2rem 1rem;
-    }
-
-    ${Divider} {
-        margin: 2rem 0;
-    }
-`;
-
-const Header = styled.div`
-    display: flex;
-    ${SlideSelect} {
-        width: 330px;
-        height: 3.125rem;
-        border-radius: 7px;
-        border: none;
-        margin: 0 auto 0 0;
-        background: #f0f0ff;
     }
 `;
