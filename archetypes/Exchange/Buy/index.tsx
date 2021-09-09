@@ -13,6 +13,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import Button from '@components/General/Button';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -59,14 +60,15 @@ export default (() => {
     const ButtonContent = () => {
         if (!account) {
             return (
-                <ExchangeButton
-                    className="primary"
+                <Button
+                    size="lg"
+                    variant="primary"
                     onClick={(_e) => {
                         handleConnect();
                     }}
                 >
                     Connect Wallet
-                </ExchangeButton>
+                </Button>
             );
         }
         if (pool.quoteToken.approved) {

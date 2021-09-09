@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { Button, Section } from '@components/General';
+import { Section } from '@components/General';
+import Button from '@components/General/Button';
 import { Menu, MenuItem } from './HeaderDropdown';
 import ArbitrumBridge from '@components/ArbitrumBridge';
 
@@ -32,7 +33,9 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
     return (
         <div className={`${className} ${open ? 'open' : ''}`} id="account-dropdown">
             <MainButton>
-                <AccountDropdown
+                <Button
+                    variant="transparent"
+                    size="sm"
                     className={`${!account ? 'primary' : ''}`}
                     onClick={() => {
                         if (!!account) {
@@ -43,11 +46,11 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
                         }
                     }}
                 >
-                    <div className="m-auto flex text-sm font-bold">
+                    <div className="m-auto flex ">
                         <Identicon account={account ?? ''} />
                         <div className="px-2">{buttonContent(account, ensName)}</div>
                     </div>
-                </AccountDropdown>
+                </Button>
             </MainButton>
 
             <StyledMenu>
@@ -129,31 +132,6 @@ const buttonContent: (account: string | undefined, ensName: string) => string = 
 };
 
 const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
-const AccountDropdown = styled.button`
-    display: flex;
-    width: 160px;
-    height: 40px;
-    transition: 0.2s;
-    padding: 0 10px;
-    margin: auto 10px;
-    border: 1px solid #ffffff;
-    border-radius: 7px;
-    color: #fff;
-    background: transparent;
-
-    &:focus {
-        outline: none;
-    }
-
-    &.primary {
-        background-color: #3da8f5;
-
-        &:hover {
-            background-color: transparent;
-        }
-    }
-`;
 
 const MainButton = styled.div`
     z-index: 11;
