@@ -3,7 +3,7 @@ module.exports = {
     // lfg
     mode: 'jit',
     purge: [
-        './pages/**/*.{js,ts,jsx,tsx}', 
+        './pages/**/*.{js,ts,jsx,tsx}',
         './components/**/*.{js,ts,jsx,tsx}',
         './archetypes/**/*.{js,ts,jsx,tsx}',
         // Add more here
@@ -40,7 +40,11 @@ module.exports = {
         cursor: ['disabled'],
         extend: {
             borderRadius: ['first', 'last'],
-        }
+            backgroundColor: ['active', 'disabled'],
+            cursor: ['disabled'],
+            opacity: ['disabled'],
+            textColor: ['disabled'],
+        },
     },
     plugins: [],
 };
