@@ -21,7 +21,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     const tokenPrice = calcTokenPrice(notional, token.supply);
 
     return (
-        <StyledHiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
+        <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <Token>{token.name}</Token>
                 <Section label="Expected number of tokens">
@@ -38,7 +38,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                     <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
                 </Countdown>
             </Box>
-        </StyledHiddenExpand>
+        </HiddenExpand>
     );
 };
 
@@ -53,7 +53,7 @@ export const SellSummary: React.FC<
     const tokenPrice = calcTokenPrice(notional, token.supply);
 
     return (
-        <StyledHiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
+        <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
                 <Section label="Expected return">
@@ -66,15 +66,11 @@ export const SellSummary: React.FC<
                     <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
                 </Countdown>
             </Box>
-        </StyledHiddenExpand>
+        </HiddenExpand>
     );
 };
 
 const Token = styled.h2``;
-
-const StyledHiddenExpand = styled(HiddenExpand)`
-    overflow: visible;
-`;
 
 const Box = styled.div`
     border: 1px solid #e5e7eb;
