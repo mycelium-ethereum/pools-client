@@ -3,6 +3,7 @@ import { LONG, SHORT } from '@libs/constants';
 import { SideType } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import React from 'react';
+import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
@@ -25,7 +26,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                         <span>{token.symbol}</span>
                         <span>{toApproxCurrency(token.lastPrice)}</span>
                         <ColoredChangeNumber number={token.change24Hours} />
-                        <span>{token.rebalanceRate.toFixed(2)}%</span>
+                        <RebalanceRate rebalanceRate={token.rebalanceRate}></RebalanceRate>
                         <span>{toApproxCurrency(token.totalValueLocked)}</span>
                         <span>
                             <div>{`${token.myHoldings}`}</div>

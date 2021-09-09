@@ -63,6 +63,17 @@ export const calcRatio: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber 
     return newPrice.div(oldPrice);
 };
 
+export const calcSkew: (shortBalance: BigNumber, longBalance: BigNumber) => BigNumber = (shortBalance, longBalance) => {
+    return longBalance.div(shortBalance);
+};
+
+export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber) => BigNumber = (
+    shortBalance,
+    longBalance,
+) => {
+    return longBalance.div(shortBalance).minus(1);
+};
+
 /**
  * Calcualtes the direction of the price movement
  * @param newPrice new pool price based on pool balances
