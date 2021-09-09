@@ -1,18 +1,35 @@
-import React from 'react';
-import { Input, SelectOption, InnerInputText, InputWrapper } from '@components/General/Input';
-import { Logo } from '@components/General';
+import React, { useEffect } from 'react';
+import { InnerInputText, InputContainer } from '@components/General/Input';
+import { Input as NumericInput } from '@components/General/Input/Numeric';
 import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
-import { LONG, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { Label, ExchangeButton, InputRow, MarketSelect } from '../Inputs';
+import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
+import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
-import SlideSelect, { Option } from '@components/General/SlideSelect';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
+import { Currency } from '@components/General/Currency';
+import { Dropdown } from '@components/General/Dropdown';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
+
+const inputRow = 'relative my-2 ';
+
+/* HELPER FUNCTIONS */
+const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
+
+const SIDE_OPTIONS = [
+    {
+        key: LONG,
+        text: 'Long',
+    },
+    {
+        key: SHORT,
+        text: 'Short',
+    },
+];
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -22,6 +39,7 @@ export default (() => {
         selectedPool,
         side,
         amount,
+        invalidAmount,
         options: { poolOptions },
     } = swapState;
 
@@ -29,42 +47,44 @@ export default (() => {
 
     const { commit, approve } = usePoolActions();
 
+    useEffect(() => {
+        swapDispatch({
+            type: 'setInvalidAmount',
+            value: isInvalidAmount(
+                amount,
+                side === LONG ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber(),
+            ),
+        });
+    }, [amount, pool.longToken.balance, pool.shortToken.balance, side]);
+
     return (
         <>
-            <InputRow className="markets">
-                <span>
-                    <Label>Market</Label>
-                    <MarketSelect
-                        preview={pool.name}
-                        onChange={(e: any) =>
-                            swapDispatch({ type: 'setSelectedPool', value: e.target.value as string })
-                        }
-                    >
-                        {poolOptions.map((pool) => (
-                            <SelectOption
-                                key={`pool-dropdown-option-${pool.address}`}
-                                value={pool.address}
-                                selected={selectedPool === pool.address}
-                            >
-                                {pool.name}
-                            </SelectOption>
-                        ))}
-                    </MarketSelect>
+            <div className={`${inputRow} flex justify-between`}>
+                <span className="w-60">
+                    <p className="mb-2 text-black">Market</p>
+                    <Dropdown
+                        className="w-full "
+                        placeHolder="Select Pool"
+                        size="lg"
+                        options={poolOptions.map((pool) => pool.name)}
+                        value={pool.name}
+                        onSelect={(pool) => {
+                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        }}
+                    />
                 </span>
                 <span>
-                    <Label>Side</Label>
-                    <StyledSlideSelect
-                        className="side"
+                    <p className="mb-2 text-black">Side</p>
+                    <TWButtonGroup
                         value={side}
-                        onClick={(index) => swapDispatch({ type: 'setSide', value: index as SideType })}
-                    >
-                        <Option>Long</Option>
-                        <Option>Short</Option>
-                    </StyledSlideSelect>
+                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
+                        size="lg"
+                        options={SIDE_OPTIONS}
+                    />
                 </span>
-            </InputRow>
-            <InputRow>
-                <Label>Leverage</Label>
+            </div>
+            <div className={`${inputRow} `}>
+                <p className="mb-2 text-black">Leverage</p>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
@@ -83,26 +103,21 @@ export default (() => {
                         }
                     }}
                 />
-            </InputRow>
-            <InputRow>
-                <Label>Amount</Label>
-                <InputWrapper>
-                    <Input
+            </div>
+            <div className={`${inputRow} `}>
+                <p className="mb-2 text-black">Amount</p>
+                <InputContainer error={invalidAmount}>
+                    <NumericInput
+                        className="w-full h-full text-base font-normal "
                         value={amount}
-                        onChange={(e: any) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
+                        onUserInput={(val) => {
+                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
                         }}
-                        disabled={!selectedPool}
-                        type={'number'}
-                        min={0}
                     />
                     <InnerInputText>
-                        <Currency>
-                            <Logo ticker={'USDC'} />
-                            <span>{`USDC`}</span>
-                        </Currency>
+                        <Currency ticker={'USDC'} />
                         <div
-                            className="hover:cursor-pointer hover:underline"
+                            className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
                                 swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
                             }
@@ -110,12 +125,12 @@ export default (() => {
                             Max
                         </div>
                     </InnerInputText>
-                </InputWrapper>
-                <div>
+                </InputContainer>
+                <div className={invalidAmount ? 'text-red-500 ' : ''}>
                     {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
                     {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
                 </div>
-            </InputRow>
+            </div>
 
             <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
@@ -163,51 +178,5 @@ const HelperText = styled.p`
     a {
         text-decoration: underline;
         cursor: pointer;
-    }
-`;
-
-const StyledSlideSelect = styled(SlideSelect)`
-    border: 1px solid #d1d5db;
-    background: #f9fafb;
-
-    &.side {
-        width: 180px;
-        height: 3.44rem; // 55px
-    }
-
-    &.leverage {
-        width: 110px;
-        height: 3.44rem; // 55px
-        margin: 0;
-    }
-
-    @media (max-width: 611px) {
-        &.side {
-            width: 156px;
-            height: 44px;
-        }
-
-        &.leverage {
-            height: 44px;
-            margin: 0;
-        }
-    }
-`;
-
-const Currency = styled.div`
-    background: #ffffff;
-    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 50px;
-    padding: 0 8px 0 4px;
-    margin-right: 0.5rem;
-    color: #71717a;
-    height: 29px;
-    display: flex;
-    align-items: center;
-    ${Logo} {
-        width: 22px;
-        height: 22px;
-        display: inline;
-        margin: 0 5px 0 0;
     }
 `;

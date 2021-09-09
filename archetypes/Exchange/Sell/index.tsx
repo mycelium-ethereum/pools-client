@@ -1,14 +1,16 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Input, SelectOption } from '@components/General/Input';
+import { InnerInputText, InputContainer } from '@components/General/Input';
+import { Dropdown } from '@components/General/Dropdown';
+import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { Label, ExchangeButton, InputContainer, InputRow, MarketSelect } from '../Inputs';
+import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toCommitType } from '@libs/utils/converters';
+import { SideType } from '@libs/types/General';
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -22,41 +24,55 @@ export default (() => {
 
     return (
         <>
-            <StyledInputRow>
-                <span>
-                    <Label>Token</Label>
-                    <MarketSelect
-                        preview={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
-                        onChange={(e: any) => {
-                            const [pool, side] = e.target.value.split('-');
-                            console.log('Setting pool', pool, side);
-                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
-                            swapDispatch({ type: 'setSide', value: parseInt(side) });
+            <div className="relative flex justify-between my-2 ">
+                <span className="w-full md:w-1/2">
+                    <p className="mb-2 text-black">Token</p>
+                    <Dropdown
+                        className="w-full "
+                        placeHolder="Select Token"
+                        size="lg"
+                        options={tokens.map((token) => token.symbol)}
+                        value={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
+                        onSelect={(option) => {
+                            tokens.forEach((token) => {
+                                if (token.symbol === option) {
+                                    console.log('Setting pool', token.pool, token.side);
+                                    swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
+                                    swapDispatch({ type: 'setSide', value: token.side as SideType });
+                                }
+                            });
                         }}
-                    >
-                        {tokens.map((token) => (
-                            <SelectOption
-                                key={`pool-dropdown-option-${token.pool}-${token.side}`}
-                                value={`${token.pool}-${token.side}`}
-                                selected={selectedPool === token.pool && side === token.side}
-                            >
-                                {token.symbol}
-                            </SelectOption>
-                        ))}
-                    </MarketSelect>
-                </span>
-                <InputContainer>
-                    <Label>Amount</Label>
-                    <Input
-                        value={amount}
-                        onChange={(e: any) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(e.currentTarget.value) });
-                        }}
-                        type={'number'}
-                        min={0}
                     />
-                </InputContainer>
-            </StyledInputRow>
+                </span>
+                <span className="w-full md:w-56 ml-2">
+                    <p className="mb-2 text-black">Amount</p>
+                    <InputContainer className="w-full ">
+                        <Input
+                            className="w-full h-full text-xl font-normal "
+                            value={amount}
+                            onUserInput={(val) => {
+                                swapDispatch({ type: 'setAmount', value: parseInt(val) });
+                            }}
+                        />
+                        <InnerInputText>
+                            <div
+                                className="m-auto cursor-pointer hover:underline"
+                                onClick={(_e) =>
+                                    swapDispatch({
+                                        type: 'setAmount',
+                                        value:
+                                            side === LONG
+                                                ? pool.longToken.balance.toNumber()
+                                                : pool.shortToken.balance.toNumber(),
+                                    })
+                                }
+                            >
+                                Max
+                            </div>
+                        </InnerInputText>
+                    </InputContainer>
+                </span>
+            </div>
 
             <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
 
@@ -75,20 +91,3 @@ export default (() => {
         </>
     );
 }) as React.FC;
-
-const StyledInputRow = styled(InputRow)`
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 2rem;
-
-    ${MarketSelect} {
-        width: 245px;
-        height: 3.44rem; // 55px
-        line-height: 3.44rem; // 55px
-    }
-
-    ${Input} {
-        max-width: 220px;
-        width: 100%;
-    }
-`;

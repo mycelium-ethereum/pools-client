@@ -19,6 +19,7 @@ interface ContextProps {
 
 type SwapState = {
     amount: number;
+    invalidAmount: boolean;
     commitAction: CommitActionType;
     selectedPool: string | undefined; // address of selected pool
     side: SideType;
@@ -38,6 +39,7 @@ export type SwapAction =
     | { type: 'setCurrency'; value: CurrencyType }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
+    | { type: 'setInvalidAmount'; value: boolean }
     | { type: 'setSide'; value: SideType };
 
 export const LEVERAGE_OPTIONS = [
@@ -65,6 +67,7 @@ export const LEVERAGE_OPTIONS = [
 
 export const swapDefaults: SwapState = {
     amount: NaN,
+    invalidAmount: false,
     commitAction: MINT,
     selectedPool: undefined,
     side: LONG,
@@ -99,6 +102,8 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 return { ...state, currency: action.value };
             case 'setSelectedPool':
                 return { ...state, selectedPool: action.value };
+            case 'setInvalidAmount':
+                return { ...state, invalidAmount: action.value };
             case 'setPoolOptions':
                 return {
                     ...state,

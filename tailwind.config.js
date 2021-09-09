@@ -10,13 +10,6 @@ module.exports = {
     ],
 
     theme: {
-        screeens: {
-            sm: { min: '640px', max: '767px' },
-            md: { min: '768px', max: '1023px' },
-            lg: { min: '1024px', max: '1279px' },
-            xl: { min: '1280px', max: '1600px' },
-            '2xl': { min: '1601px' },
-        },
         container: {
             center: true,
             padding: {
@@ -31,6 +24,10 @@ module.exports = {
                     // 200: '#A6A6F2',
                     800: '#0000B0',
                     900: '#00007A'
+                },
+                'cool-gray': {
+                    50: '#F9FAFB',
+                    300: '#D1D5DB'
                 }
             },
             screens: {

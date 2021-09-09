@@ -82,6 +82,7 @@ const Box = styled.div`
     border-radius: 14px;
     position: relative;
     padding: 1rem 1rem 0.5rem 1rem;
+    margin-top: 2rem;
 
     ${Section}, ${Section} .label {
         color: #374151;
