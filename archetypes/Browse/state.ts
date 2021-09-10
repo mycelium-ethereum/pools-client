@@ -1,7 +1,7 @@
 export enum LeverageFilterEnum {
-    One = '1x',
-    Three = '3x',
     All = 'All',
+    One = '1',
+    Three = '3',
 }
 
 export enum SideFilterEnum {
