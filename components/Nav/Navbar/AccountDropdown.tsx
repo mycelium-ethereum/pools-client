@@ -42,7 +42,7 @@ interface ConnectWalletProps {
 
 const ConnectWalletButton = ({ handleConnect }: ConnectWalletProps) => {
     return (
-        <Button size="xs" variant="transparent" onClick={handleConnect}>
+        <Button size="sm" variant="transparent" onClick={handleConnect}>
             Connect Wallet
         </Button>
     );
@@ -61,7 +61,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
             preview={
                 <>
                     <Identicon account={account} />
-                    <div className="px-2">{accountDescriptionShort(account, ensName)}</div>
+                    <div className="px-2 m-auto">{accountDescriptionShort(account, ensName)}</div>
                 </>
             }
         >
