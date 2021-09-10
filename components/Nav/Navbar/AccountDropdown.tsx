@@ -1,58 +1,52 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
 import styled from 'styled-components';
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
-import {  CopyOutlined, PlusOutlined } from '@ant-design/icons';
+import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { CopyOutlined, PlusOutlined } from '@ant-design/icons';
 import TWPopup from '@components/General/TWPopup';
+import Button from '@components/General/Button';
 
-const ETHERSCAN_URI = "https://etherscan.io";
+const ETHERSCAN_URI = 'https://etherscan.io';
 const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
-
-export default styled(({ account, ensName, logout, handleConnect, network, className }) => {
+export default (({ account, ensName, logout, handleConnect, network, className }) => {
     return (
-            <div className={`${className} relative inline-block text-left`}>
-                {(() => {
-                    if (!!account) {
-                        return (<AccountDropdownButton account={account} ensName={ensName} network={network} logout={logout} />);
-                    } else {
-                        return (<ConnectWalletButton handleConnect={handleConnect}/>);
-                    }
-                })()}
-            </div>
+        <div className={`${className} relative inline-block text-left my-auto`}>
+            {(() => {
+                if (!!account) {
+                    return (
+                        <AccountDropdownButton account={account} ensName={ensName} network={network} logout={logout} />
+                    );
+                } else {
+                    return <ConnectWalletButton handleConnect={handleConnect} />;
+                }
+            })()}
+        </div>
     );
-})<{
+}) as React.FC<{
     account: string | undefined;
     ensName: string;
     onboard: OnboardApi | undefined;
     logout: () => void;
     handleConnect: () => void;
     network: number;
+    className?: string;
     tokenBalance: number;
-}>`
-    position: relative;
-    display: flex;
-    align-items: center;
-    margin: auto 1rem;
-    margin-left: 0.5rem;
-    width: 160px;
-`;
-
-
-const button_className = "inline-flex justify-center w-full rounded-md border-white border-2 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-white hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500";
+}>;
 
 interface ConnectWalletProps {
     handleConnect: () => void;
 }
 
-const ConnectWalletButton = ({handleConnect}: ConnectWalletProps) => {
+const ConnectWalletButton = ({ handleConnect }: ConnectWalletProps) => {
     return (
-        <button onClick={handleConnect} className={button_className}>Connect Wallet</button>
+        <Button size="xs" variant="transparent" onClick={handleConnect}>
+            Connect Wallet
+        </Button>
     );
 };
-
 
 interface AccountDropdownButtonProps {
     account: string;
@@ -61,10 +55,10 @@ interface AccountDropdownButtonProps {
     logout: () => void;
 }
 
-const AccountDropdownButton = ({account, ensName, network, logout}: AccountDropdownButtonProps) => {
+const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDropdownButtonProps) => {
     return (
         <TWPopup
-            preview = {
+            preview={
                 <>
                     <Identicon account={account} />
                     <div className="px-2">{accountDescriptionShort(account, ensName)}</div>
@@ -75,7 +69,7 @@ const AccountDropdownButton = ({account, ensName, network, logout}: AccountDropd
                 <div className="flex px-4 py-2 text-sm">
                     <Identicon account={account} />
                     <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
-                    <ReactSimpleTooltip 
+                    <ReactSimpleTooltip
                         content="Copied"
                         arrow={6}
                         background="#f9fafb"
@@ -93,10 +87,13 @@ const AccountDropdownButton = ({account, ensName, network, logout}: AccountDropd
                         placement="top"
                         zIndex={1}
                     >
-                        <CopyOutlined className="self-center icon" onClick={() => {
-                            /* This requires a secure origin, either HTTPS or localhost. */
-                            // navigator.clipboard.writeText(account);
-                        }}/>
+                        <CopyOutlined
+                            className="self-center icon"
+                            onClick={() => {
+                                /* This requires a secure origin, either HTTPS or localhost. */
+                                // navigator.clipboard.writeText(account);
+                            }}
+                        />
                         <style>{`
                             svg {
                                 vertical-align: 0;
@@ -105,13 +102,13 @@ const AccountDropdownButton = ({account, ensName, network, logout}: AccountDropd
                     </ReactSimpleTooltip>
                 </div>
             </div>
-            
+
             <div className="py-1 px-4 mb-2">
                 <ViewOnEtherscanOption account={account} />
-                <BridgeFundsOption network={network}/>
+                <BridgeFundsOption network={network} />
                 <AddTCROption />
             </div>
-            
+
             <div className="py-1">
                 <div className="flex justify-center content-center w-full">
                     {/* Disconnect Button */}
@@ -127,13 +124,11 @@ const AccountDropdownButton = ({account, ensName, network, logout}: AccountDropd
     );
 };
 
-
 const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
 
 const ViewOnEtherscanOption = styled(({ account, className }) => {
     return (
-        <a className={className} href={`${ETHERSCAN_URI}/address/${account}`} target="_blank" rel="noopener">
+        <a className={className} href={`${ETHERSCAN_URI}/address/${account}`} target="_blank" rel="noopener noreferrer">
             <Logo ticker="ETHERSCAN" />
             <div>View on Etherscan</div>
         </a>
@@ -149,7 +144,6 @@ const ViewOnEtherscanOption = styled(({ account, className }) => {
         margin: auto 0.5rem auto 0;
     }
 `;
-
 
 const BridgeFundsOption = styled(({ network, className }) => {
     return (
@@ -170,17 +164,14 @@ const BridgeFundsOption = styled(({ network, className }) => {
     }
 `;
 
-
-const AddTCROption = styled(({className}) => {
+const AddTCROption = styled(({ className }) => {
     return (
-        <a href={ADD_TCR_TO_WALLET_LINK} target="_blank" rel="noopener" className={className}>
-            <PlusOutlined className="inline-flex self-center" style={{marginLeft: '0.1rem', marginRight: '0.2rem'}} />
+        <a href={ADD_TCR_TO_WALLET_LINK} target="_blank" rel="noopener noreferrer" className={className}>
+            <PlusOutlined className="inline-flex self-center" style={{ marginLeft: '0.1rem', marginRight: '0.2rem' }} />
             <span className="ml-2">Add TCR to wallet</span>
         </a>
     );
 })``;
-
-
 
 const accountDescriptionLong: (account: string, ensName: string) => string = (account, ensName) => {
     if (ensName) {
@@ -193,7 +184,7 @@ const accountDescriptionLong: (account: string, ensName: string) => string = (ac
     } else if (account) {
         return `${account.slice(0, 7)}...${account.slice(36, 40)}`;
     }
-    return "Account";
+    return 'Account';
 };
 
 const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
@@ -207,5 +198,5 @@ const accountDescriptionShort: (account: string, ensName: string) => string = (a
     } else if (account) {
         return `${account.slice(0, 5)}..`;
     }
-    return "Account";
+    return 'Account';
 };

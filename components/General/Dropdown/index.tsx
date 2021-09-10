@@ -64,7 +64,7 @@ const SIZE = {
     none: 'p-0 text-base',
 };
 
-export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
+type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 interface DropdownProps {
     value: string;
