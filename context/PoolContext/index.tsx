@@ -3,6 +3,7 @@ import { Children, CommitType, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useSwapContext } from '@context/SwapContext';
 import { reducer, initialPoolState } from './poolDispatch';
 import { fetchTokenBalances, initPool, fetchCommits } from './helpers';
 import { useMemo } from 'react';
@@ -49,6 +50,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     // const { handleTransaction } = useContext(TransactionContext);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
+    const { swapDispatch } = useSwapContext();
 
     /** If pools changes then re-init them */
     useMemo(() => {
@@ -293,6 +295,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
                 onSuccess: async (receipt) => {
                     console.debug('Successfully submitted commit txn: ', receipt);
+                    swapDispatch?.({ type: 'reset' });
                 },
             });
         }
