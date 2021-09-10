@@ -68,7 +68,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         }
                     }}
                 >
-                    Ok, let&apos;s buy
+                    Ok, let&apos;s {mintOrBurn === 'mint' ? 'buy' : 'sell'}
                 </Button>
             );
         }
