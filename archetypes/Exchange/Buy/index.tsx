@@ -57,7 +57,7 @@ export default (() => {
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
                         className="w-full "
-                        placeHolder="Select Pool"
+                        placeHolder="Select Market"
                         size="lg"
                         options={poolOptions.map((pool) => ({
                             key: pool.address,
@@ -81,12 +81,12 @@ export default (() => {
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Leverage</p>
+                <p className="mb-2 text-black">Power Leverage</p>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
-                        text: `${option.leverage}x`,
+                        text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
                                   text: 'Coming soon',

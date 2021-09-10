@@ -8,7 +8,7 @@ import { LONG } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
-import { toCommitType } from '@libs/utils/converters';
+import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import { SideType } from '@libs/types/General';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 
@@ -41,6 +41,7 @@ export default (() => {
                             });
                         }}
                     />
+                    <p>Last Price: {toApproxCurrency(pool.lastPrice)}</p>
                 </span>
                 <span className="w-full md:w-56 ml-2">
                     <p className="mb-2 text-black">Amount</p>
@@ -69,6 +70,17 @@ export default (() => {
                             </div>
                         </InnerInputText>
                     </InputContainer>
+                    <p>
+                        Available:{' '}
+                        {side === LONG ? pool.longToken.balance.toFixed(2) : pool.shortToken.balance.toFixed(2)} {'>>'}{' '}
+                        {side === LONG
+                            ? isNaN(amount)
+                                ? pool.longToken.balance.toFixed(2)
+                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
+                            : isNaN(amount)
+                            ? pool.shortToken.balance.toFixed(2)
+                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)}
+                    </p>
                 </span>
             </div>
 

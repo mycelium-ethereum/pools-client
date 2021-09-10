@@ -27,7 +27,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-gray-800 font-bold mb-1">Leverage</h4>
+                    <h4 className="text-gray-800 font-bold mb-1">Power Leverage</h4>
                     <Select
                         className="w-1/2"
                         value={state.leverage}
