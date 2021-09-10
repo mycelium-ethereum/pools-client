@@ -70,7 +70,7 @@ export default (() => {
                 </Button>
             );
         }
-        if (pool.quoteToken.approved) {
+        if (!pool.quoteToken.approved) {
             return (
                 <>
                     <Button
@@ -97,7 +97,7 @@ export default (() => {
                 <Button
                     size="lg"
                     variant="primary"
-                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
+                    disabled={!selectedPool || !amount}
                     onClick={(_e) => {
                         if (!commit) {
                             return;
