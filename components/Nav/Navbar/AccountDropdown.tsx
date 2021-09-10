@@ -1,6 +1,7 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
+// @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
