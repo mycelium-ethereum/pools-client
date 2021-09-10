@@ -1,5 +1,5 @@
-import { SHORT } from '@libs/constants';
-import { CreatedCommitType, Pool, SideType } from '@libs/types/General';
+import { SideEnum } from '@libs/constants';
+import { CreatedCommitType, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
@@ -28,7 +28,7 @@ export type PoolAction =
     | { type: 'setSubscribed'; pool: string; value: boolean }
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
-    | { type: 'addToPending'; pool: string; side: SideType; amount: BigNumber }
+    | { type: 'addToPending'; pool: string; side: SideEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | { type: 'resetCommits' }
     | { type: 'setNextRebalance'; nextRebalance: number };
@@ -109,7 +109,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             };
         case 'addToPending':
             const committer = state.pools[action.pool].committer;
-            if (action.side === SHORT) {
+            if (action.side === SideEnum.short) {
                 committer.pendingShort = committer.pendingShort.plus(action.amount);
             } else {
                 committer.pendingLong = committer.pendingLong.plus(action.amount);

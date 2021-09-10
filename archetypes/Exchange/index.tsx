@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { SwapContext } from '@context/SwapContext';
-import { MINT, BURN } from '@libs/constants';
-import { SideType, CommitActionType } from '@libs/types/General';
+import { MINT, BURN, SideEnum } from '@libs/constants';
+import { CommitActionType } from '@libs/types/General';
 import styled from 'styled-components';
 import Gas from './Gas';
 import Buy from './Buy';
@@ -37,7 +37,7 @@ export default (() => {
                 });
             }
             if (router.query.side) {
-                swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
+                swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideEnum });
             }
         }
     }, [router]);

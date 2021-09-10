@@ -5,10 +5,9 @@ import {
     MarketType,
     LeverageType,
     CurrencyType,
-    SideType,
     PoolType,
 } from '@libs/types/General';
-import { MINT, LONG, SHORT } from '@libs/constants';
+import { MINT, SideEnum } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';
 
@@ -22,11 +21,11 @@ type SwapState = {
     invalidAmount: boolean;
     commitAction: CommitActionType;
     selectedPool: string | undefined; // address of selected pool
-    side: SideType;
+    side: SideEnum;
     leverage: LeverageType;
     currency: CurrencyType;
     options: {
-        sides: SideType[];
+        sides: SideEnum[];
         poolOptions: PoolType[];
     };
 };
@@ -40,7 +39,7 @@ export type SwapAction =
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: boolean }
-    | { type: 'setSide'; value: SideType };
+    | { type: 'setSide'; value: SideEnum };
 
 export const LEVERAGE_OPTIONS = [
     {
@@ -70,11 +69,11 @@ export const swapDefaults: SwapState = {
     invalidAmount: false,
     commitAction: MINT,
     selectedPool: undefined,
-    side: LONG,
+    side: SideEnum.long,
     leverage: NaN,
     currency: 'DAI',
     options: {
-        sides: [LONG, SHORT], // will always be long and short
+        sides: [SideEnum.long, SideEnum.short], // will always be long and short
         poolOptions: [], // available pools
     },
 };

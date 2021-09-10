@@ -1,12 +1,14 @@
-import { CommitType, PoolToken, SideType } from '@libs/types/General';
+import { CommitType, PoolToken } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 
 // side types
-export const LONG = 0;
-export const SHORT = 1;
-export const SIDE_MAP: Record<SideType, string> = {
-    [LONG]: 'Long',
-    [SHORT]: 'Short',
+export enum SideEnum {
+    long =  0,
+    short = 1
+}
+export const SIDE_MAP: Record<SideEnum, string> = {
+    [SideEnum.long]: 'Long',
+    [SideEnum.short]: 'Short',
 };
 
 // token types
@@ -35,7 +37,7 @@ export const EMPTY_TOKEN: PoolToken = {
     balance: new BigNumber(0),
     supply: new BigNumber(0),
     approved: false,
-    side: SHORT,
+    side: SideEnum.short,
 };
 
 // networks

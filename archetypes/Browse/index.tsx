@@ -16,9 +16,8 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { BURN, LONG, MINT } from '@libs/constants';
+import { BURN, SideEnum, MINT } from '@libs/constants';
 import { useRouter } from 'next/router';
-import { SideType } from '@libs/types/General';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -96,8 +95,8 @@ export const Browse: React.FC = () => {
     const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
-    const handleBuyToken = (pool: string, side: SideType) => {
-        console.debug(`Buying/minting ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+    const handleBuyToken = (pool: string, side: SideEnum) => {
+        console.debug(`Buying/minting ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {
@@ -108,8 +107,8 @@ export const Browse: React.FC = () => {
         });
     };
 
-    const handleSellToken = (pool: string, side: SideType) => {
-        console.debug(`Selling/burning ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+    const handleSellToken = (pool: string, side: SideEnum) => {
+        console.debug(`Selling/burning ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {

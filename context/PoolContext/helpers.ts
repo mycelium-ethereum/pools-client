@@ -1,4 +1,4 @@
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import { CreatedCommitType, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
@@ -100,7 +100,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
-            side: LONG,
+            side: SideEnum.long,
         },
         shortToken: {
             address: shortToken,
@@ -109,7 +109,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
-            side: SHORT,
+            side: SideEnum.short,
         },
         quoteToken: {
             address: quoteToken,

@@ -1,7 +1,6 @@
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
-import { LONG, SHORT } from '@libs/constants';
-import { SideType } from '@libs/types/General';
+import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
 import React from 'react';
 import RebalanceRate from '../RebalanceRate';
@@ -38,7 +37,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                                 size="sm"
                                 variant="primary-light"
-                                onClick={() => onClickBuy(token.pool, token.side === 'short' ? SHORT : LONG)}
+                                onClick={() => onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
                             >
                                 Buy
                             </Button>
@@ -47,7 +46,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 size="sm"
                                 variant="primary-light"
                                 disabled={!hasHoldings}
-                                onClick={() => onClickSell(token.pool, token.side === 'short' ? SHORT : LONG)}
+                                onClick={() => onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
                             >
                                 Sell
                             </Button>
@@ -59,8 +58,8 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     );
 }) as React.FC<{
     rows: BrowseTableRowData[];
-    onClickBuy: (pool: string, side: SideType) => void;
-    onClickSell: (pool: string, side: SideType) => void;
+    onClickBuy: (pool: string, side: SideEnum) => void;
+    onClickSell: (pool: string, side: SideEnum) => void;
 }>;
 
 const ColoredChangeNumber = (({ number }) => {

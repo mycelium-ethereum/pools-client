@@ -1,5 +1,5 @@
 import React from 'react';
-import { SHORT, LONG, MINT, BURN, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT, BUYS, SELLS } from '@libs/constants';
+import { MINT, BURN, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT, BUYS, SELLS, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
@@ -25,7 +25,7 @@ export type APIResult = {
     message: string;
     data: any;
 };
-export type SideType = typeof LONG | typeof SHORT;
+// export type SideEnum = typeof LONG | typeof SHORT;
 
 export type CommitActionType = typeof MINT | typeof BURN;
 
@@ -60,7 +60,7 @@ export type TokenBreakdown = PoolToken & {
 };
 
 export type PoolToken = Token & {
-    side: SideType;
+    side: SideEnum;
     supply: BigNumber;
 };
 

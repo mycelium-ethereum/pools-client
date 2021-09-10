@@ -1,7 +1,7 @@
-import { CommitType, SideType, CommitActionType } from '@libs/types/General';
+import { CommitType, CommitActionType } from '@libs/types/General';
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
-import { BURN, LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { BURN, SideEnum, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -178,7 +178,7 @@ export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, 
  * @param token mint or burn token
  * @returns the corresponding value to commit with
  */
-export const toCommitType: (side: SideType, token: CommitActionType) => CommitType = (side, token) => {
+export const toCommitType: (side: SideEnum, token: CommitActionType) => CommitType = (side, token) => {
     if (side === LONG) {
         if (token === BURN) {
             return LONG_BURN;

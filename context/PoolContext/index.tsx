@@ -17,7 +17,7 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 
@@ -114,13 +114,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: LONG,
+                            side: SideEnum.long,
                             amount: committerInfo.pendingLong,
                         });
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: SHORT,
+                            side: SideEnum.short,
                             amount: committerInfo.pendingShort,
                         });
 
@@ -250,7 +250,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: SHORT,
+                    side: SideEnum.short,
                     amount: amount_,
                 });
                 break;
@@ -262,7 +262,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: LONG,
+                    side: SideEnum.long,
                     amount: amount_,
                 });
                 break;

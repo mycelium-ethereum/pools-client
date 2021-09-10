@@ -4,12 +4,11 @@ import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
-import { LONG } from '@libs/constants';
+import { SideEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
-import { SideType } from '@libs/types/General';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 
 export default (() => {
@@ -31,12 +30,12 @@ export default (() => {
                         placeHolder="Select Token"
                         size="lg"
                         options={tokens.map((token) => ({ key: token.symbol }))}
-                        value={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
+                        value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                         onSelect={(option) => {
                             tokens.forEach((token) => {
                                 if (token.symbol === option) {
                                     swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
-                                    swapDispatch({ type: 'setSide', value: token.side as SideType });
+                                    swapDispatch({ type: 'setSide', value: token.side as SideEnum });
                                 }
                             });
                         }}
@@ -60,7 +59,7 @@ export default (() => {
                                     swapDispatch({
                                         type: 'setAmount',
                                         value:
-                                            side === LONG
+                                            side === SideEnum.long
                                                 ? pool.longToken.balance.toNumber()
                                                 : pool.shortToken.balance.toNumber(),
                                     })
@@ -72,8 +71,8 @@ export default (() => {
                     </InputContainer>
                     <p>
                         Available:{' '}
-                        {side === LONG ? pool.longToken.balance.toFixed(2) : pool.shortToken.balance.toFixed(2)} {'>>'}{' '}
-                        {side === LONG
+                        {side === SideEnum.long ? pool.longToken.balance.toFixed(2) : pool.shortToken.balance.toFixed(2)} {'>>'}{' '}
+                        {side === SideEnum.long
                             ? isNaN(amount)
                                 ? pool.longToken.balance.toFixed(2)
                                 : (pool.longToken.balance.toNumber() - amount).toFixed(2)
@@ -84,7 +83,7 @@ export default (() => {
                 </span>
             </div>
 
-            <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
+            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
 
             <ExchangeButton mintOrBurn="burn" />
         </>
