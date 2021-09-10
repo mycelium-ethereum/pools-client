@@ -14,6 +14,7 @@ export type Network = {
     hex: string;
     publicRPC: string;
     graphUri: string;
+    id: string;
 };
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
@@ -30,11 +31,12 @@ export const networkConfig: Record<string, Network> = {
         name: 'Unknown',
         contracts: {},
         publicRPC: '',
-        hex: '',
+        hex: '0x0',
+        id: '0',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
     },
     '421611': {
-        name: 'Arbitrum',
+        name: 'Arbitrum Rinkeby',
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
@@ -43,6 +45,22 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         hex: '0x66EEB',
+        id: '421611',
+        publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
+        graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
+    },
+    '42161': {
+        // TODO: fill this out properly
+        name: 'Arbitrum One',
+        previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
+        contracts: {
+            poolFactory: {
+                address: '0x799b73BC2ae5333d90b2A1075295998Da24C58a4',
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0xA4B1',
+        id: '42161',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
     },
@@ -57,6 +75,7 @@ export const networkConfig: Record<string, Network> = {
         },
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
+        id: '42',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
     },
     '1337': {
@@ -68,7 +87,38 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
-        hex: '',
+        hex: '0x539',
+        publicRPC: '',
+        id: '1337',
+        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
+    },
+    '1': {
+        // TODO: fill this out properly
+        name: 'Mainnet',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x1',
+        id: '1',
+        publicRPC: '',
+        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
+    },
+    '4': {
+        // TODO: fill this out properly
+        name: 'Rinkeby',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x4',
+        id: '4',
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
     },

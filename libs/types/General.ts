@@ -116,3 +116,18 @@ export type Heading = {
     text: string;
     width: string; // string width
 };
+
+export type BridgeableAsset = {
+    name: string;
+    ticker: string;
+    address: string | null;
+};
+
+export type BridgeableBalance = {
+    balance: BigNumber;
+    approved: boolean;
+};
+
+export type BridgeableBalances = { [network: string]: { [ticker: string]: BridgeableBalance } };
+
+export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };

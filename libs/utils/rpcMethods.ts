@@ -44,6 +44,7 @@ export const switchNetworks: (
     provider: ethers.providers.JsonRpcProvider | undefined,
     networkID: string,
 ) => Promise<boolean> = async (provider, networkID) => {
+    console.log('SWITCHING NETWORK', networkID, networkConfig);
     const config = networkConfig[networkID];
     try {
         await provider?.send('wallet_switchEthereumChain', [

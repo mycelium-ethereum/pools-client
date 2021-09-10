@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, KOVAN } from '@libs/constants';
+import { ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
 
 export default styled(({ className }) => {
     const { provider, network = '0' } = useWeb3();
@@ -17,7 +17,7 @@ export default styled(({ className }) => {
                 switchNetworks(provider, event.target.value);
             }}
         >
-            <SelectOption value={ARBITRUM}>Arbitrum</SelectOption>
+            <SelectOption value={ARBITRUM_RINKEBY}>Arbitrum</SelectOption>
             <SelectOption value={KOVAN}>Kovan</SelectOption>
         </Select>
     );

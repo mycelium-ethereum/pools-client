@@ -1,5 +1,5 @@
 import React from 'react';
-import { ARBITRUM, KOVAN } from '@libs/constants';
+import { ARBITRUM_RINKEBY, ARBITRUM_ONE, MAINNET, RINKEBY, KOVAN } from '@libs/constants';
 import styled from 'styled-components';
 
 const clearLogos: Record<string, string> = {
@@ -12,7 +12,10 @@ const logos: Record<string, string> = {
     ETH: '/img/logos/currencies/eth.svg',
     TEST1: '/img/logos/currencies/eth.svg',
     LINK: '/img/logos/currencies/link.svg',
-    [ARBITRUM]: '/img/logos/currencies/arbitrum.svg',
+    [ARBITRUM_RINKEBY]: '/img/logos/currencies/arbitrum.svg',
+    [ARBITRUM_ONE]: '/img/logos/currencies/arbitrum.svg',
+    [RINKEBY]: '/img/logos/currencies/arbitrum.svg',
+    [MAINNET]: '/img/logos/currencies/arbitrum.svg',
     [KOVAN]: '/img/logos/currencies/arbitrum.svg',
     ETHERSCAN: '/img/logos/currencies/etherscan.svg',
     DEFAULT: '/img/logos/currencies/tesla.svg',

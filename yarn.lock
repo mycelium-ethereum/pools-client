@@ -4229,7 +4229,7 @@ aproba@^1.1.1:
   resolved "https://registry.yarnpkg.com/aproba/-/aproba-1.2.0.tgz#6802e6264efd18c790a1b0d517f0f2627bf2c94a"
   integrity sha512-Y9J6ZjXtoYh8RnXVCMOU/ttDmk1aBjunq9vO0ta5x85WDQiQfUF9sIPBITdbiiIVcBo03Hi3jMxigBtsddlXRw==
 
-arb-ts@0.0.36, arb-ts@^0.0.36:
+arb-ts@^0.0.36:
   version "0.0.36"
   resolved "https://registry.yarnpkg.com/arb-ts/-/arb-ts-0.0.36.tgz#23a5687148ca8552d43391bda57833a137739a52"
   integrity sha512-wbZ7dOPqFCxtZgLqxoeFbVBNT8Jd93xEvv7C8eQ/7jmLobvFLJ7e0hyMIWad2Bcj3UlQyJPWyW7rxwiCWET0PA==
@@ -8376,7 +8376,7 @@ ethers@^5.0.13, ethers@^5.0.31, ethers@^5.2.0, ethers@^5.4.3:
     "@ethersproject/web" "5.4.0"
     "@ethersproject/wordlists" "5.4.0"
 
-ethers@^5.1.0:
+ethers@^5.1.0, ethers@^5.4.6:
   version "5.4.6"
   resolved "https://registry.yarnpkg.com/ethers/-/ethers-5.4.6.tgz#fe0a023956b5502c947f58e82fbcf9a73e5e75b6"
   integrity sha512-F7LXARyB/Px3AQC6/QKedWZ8eqCkgOLORqL4B/F0Mag/K+qJSFGqsR36EaOZ6fKg3ZonI+pdbhb4A8Knt/43jQ==
@@ -17594,16 +17594,15 @@ toidentifier@1.0.0:
   resolved "https://registry.yarnpkg.com/toidentifier/-/toidentifier-1.0.0.tgz#7e1be3470f1e77948bc43d94a3c8f4d7752ba553"
   integrity sha512-yaOH/Pk/VEhBWWTlhI+qXxDFXlejDGcQipMlyxda9nthulaxLZUNcUqFxokp0vcYnvteJln5FNQDRrxj3YcbVw==
 
-token-bridge-sdk@^0.4.24:
-  version "0.4.24"
-  resolved "https://registry.yarnpkg.com/token-bridge-sdk/-/token-bridge-sdk-0.4.24.tgz#4fabe6d3b711a8542ecb1275cc0a7005346a16f5"
-  integrity sha512-qg56bvaOofaSIvIa9BkWXMQ1hxU9CZ7hI10QrdM+g2tYijNYzEZpScXUYPnZo78b0jhEtEdDSavzHi567fByiA==
+token-bridge-sdk@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/token-bridge-sdk/-/token-bridge-sdk-0.5.0.tgz#c81cf39c1000759a60781710ee00b1afd2e34253"
+  integrity sha512-jOr96wf/xv8vxbIANIWVpbyDjoAgd5WQfD0EfOSrLc87K2LOxOq+JUEKOrG4ophsoHwLNf5tQaUkyMm0vA7PQg==
   dependencies:
-    "@ethersproject/bignumber" "^5.1.1"
     "@rehooks/local-storage" "^2.3.0"
     "@types/lodash.isempty" "^4.4.6"
-    arb-ts "0.0.36"
-    ethers "^5.1.0"
+    arb-ts "^0.0.36"
+    ethers "^5.4.6"
     lodash.clonedeep "^4.5.0"
     lodash.isempty "^4.4.0"
     lodash.isequal "^4.5.0"
