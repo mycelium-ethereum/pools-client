@@ -147,7 +147,7 @@ export default (() => {
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
-                        text: `${option.leverage}x`,
+                        text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
                                   text: 'Coming soon',
