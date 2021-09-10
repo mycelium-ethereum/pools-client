@@ -20,7 +20,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="mr-4">
-                    <h3 className="mb-1">Leverage</h3>
+                    <h3 className="mb-1">Power Leverage</h3>
                     <Dropdown
                         value={state.leverage}
                         options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
