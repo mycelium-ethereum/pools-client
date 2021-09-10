@@ -11,16 +11,73 @@ import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toCommitType } from '@libs/utils/converters';
 import { SideType } from '@libs/types/General';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import styled from 'styled-components';
 
 export default (() => {
+    const { account } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
+
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { commit } = usePoolActions();
+    const { commit, approve } = usePoolActions();
     const tokens = usePoolTokens();
 
     const { amount, side, selectedPool, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
     const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
+
+    const ButtonContent = () => {
+        if (!account) {
+            return (
+                <ExchangeButton
+                    className="primary"
+                    onClick={(_e) => {
+                        handleConnect();
+                    }}
+                >
+                    Connect Wallet
+                </ExchangeButton>
+            );
+        }
+        if (pool.quoteToken.approved) {
+            return (
+                <>
+                    <ExchangeButton
+                        className="primary"
+                        disabled={!selectedPool}
+                        onClick={(_e) => {
+                            if (!approve) {
+                                return;
+                            }
+                            approve(selectedPool ?? '');
+                        }}
+                    >
+                        Unlock USDC
+                    </ExchangeButton>
+                    <HelperText>
+                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
+                        <a>Learn more.</a>
+                    </HelperText>
+                </>
+            );
+        } else {
+            return (
+                <ExchangeButton
+                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
+                    className="primary"
+                    onClick={(_e) => {
+                        if (!commit) {
+                            return;
+                        }
+                        commit(selectedPool ?? '', side === LONG ? LONG_BURN : SHORT_BURN, amount);
+                    }}
+                >
+                    Sell
+                </ExchangeButton>
+            );
+        }
+    };
 
     return (
         <>
@@ -75,18 +132,17 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
 
-            <ExchangeButton
-                className="primary"
-                disabled={!amount || !selectedPool}
-                onClick={(_e) => {
-                    if (!commit) {
-                        return;
-                    }
-                    commit(selectedPool ?? '', side === LONG ? LONG_BURN : SHORT_BURN, amount);
-                }}
-            >
-                Sell
-            </ExchangeButton>
+            {ButtonContent()}
         </>
     );
 }) as React.FC;
+
+const HelperText = styled.p`
+    color: #6b7280;
+    font-size: 14px;
+
+    a {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+`;

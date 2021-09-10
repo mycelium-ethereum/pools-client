@@ -102,7 +102,7 @@ export default (() => {
                         commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
                     }}
                 >
-                    {`Ok, let's buy`}
+                    Ok, let&apos;s buy
                 </ExchangeButton>
             );
         }
