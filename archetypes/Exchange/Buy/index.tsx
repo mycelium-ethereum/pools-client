@@ -118,7 +118,7 @@ export default (() => {
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
                         className="w-full "
-                        placeHolder="Select Pool"
+                        placeHolder="Select Market"
                         size="lg"
                         options={poolOptions.map((pool) => ({
                             key: pool.address,
