@@ -31,29 +31,31 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     return (
         <div className={`${className} ${open ? 'open' : ''}`} ref={main}>
             <div className="body" ref={ref}>
-                {children}
+                <Transition
+                    show={open}
+                    enter="transition-opacity duration-300 delay-100"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    {children}
+                </Transition>
             </div>
         </div>
     );
 })`
-    overflow: hidden;
+    overflow: visible;
     transition: 0.3s ease-in-out;
     height: ${(props) => props.defaultHeight}px;
     margin-bottom: 1rem;
+    margin-top: 2rem;
     border-radius: 7px;
     text-align: left;
     font-size: var(--font-size-small);
     letter-spacing: var(--letter-spacing-small);
     background: var(--color-background);
-
-    & > .body {
-        transition: 0.3s ease-in;
-        opacity: 0;
-    }
-
-    &.open .body {
-        opacity: 1;
-    }
 `;
 
 const SIZE = {
@@ -64,7 +66,7 @@ const SIZE = {
     none: 'p-0 text-base',
 };
 
-type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 interface DropdownProps {
     value: string;
