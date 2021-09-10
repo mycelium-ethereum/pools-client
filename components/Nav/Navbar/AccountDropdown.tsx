@@ -1,91 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import React from 'react';
 import dynamic from 'next/dynamic';
+import styled from 'styled-components';
+import ReactSimpleTooltip from 'react-simple-tooltip';
+import { Logo } from '@components/General';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { Section } from '@components/General';
+import { CopyOutlined, PlusOutlined } from '@ant-design/icons';
+import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
-import { Menu, MenuItem } from './HeaderDropdown';
-import ArbitrumBridge from '@components/ArbitrumBridge';
-import { classNames } from '@libs/utils/functions';
 
-export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
-    const [open, setOpen] = useState(false);
+const ETHERSCAN_URI = 'https://etherscan.io';
+const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
-    useEffect(() => {
-        function handleClickOutside(event: any) {
-            const dropdown = document.getElementById('account-dropdown');
-            if (dropdown) {
-                console.debug('Closing account dropdown');
-                if (!dropdown.contains(event.target)) {
-                    setOpen(false);
-                }
-            }
-        }
-        if (!open) {
-            document.removeEventListener('mousedown', handleClickOutside);
-        } else {
-            document.addEventListener('mousedown', handleClickOutside);
-        }
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, [open]);
-
+export default (({ account, ensName, logout, handleConnect, network, className }) => {
     return (
-        <div
-            className={classNames(
-                `relative items-center hidden lg:flex`,
-                className ?? `${className} ${open ? 'open' : ''}`,
-            )}
-            id="account-dropdown"
-        >
-            <div className="z-50">
-                <Button
-                    variant="transparent"
-                    size="sm"
-                    className={`${!account ? 'primary' : ''}`}
-                    onClick={() => {
-                        if (!!account) {
-                            setOpen(true);
-                        } else {
-                            setOpen(false);
-                            handleConnect();
-                        }
-                    }}
-                >
-                    <div className="m-auto flex items-center">
-                        <Identicon account={account ?? ''} />
-                        <div className="px-2">{buttonContent(account, ensName)}</div>
-                    </div>
-                </Button>
-            </div>
-
-            <StyledMenu>
-                <StyledMenuItem />
-                <StyledMenuItem>
-                    <Section className="p-0" label="Balance">
-                        {`${parseFloat(tokenBalance.toFixed(5))} ETH`}
-                    </Section>
-                    <Section label="Network">{networkName(network)}</Section>
-                </StyledMenuItem>
-                <StyledMenuItem>
-                    <ArbitrumBridge />
-                </StyledMenuItem>
-                <StyledMenuItem className="button-container">
-                    <Button size="xs" onClick={() => onboard?.walletSelect()}>
-                        Switch Wallets
-                    </Button>
-                    <Button
-                        size="xs"
-                        onClick={() => {
-                            setOpen(false);
-                            logout();
-                        }}
-                    >
-                        Logout
-                    </Button>
-                </StyledMenuItem>
-            </StyledMenu>
+        <div className={`${className} relative inline-block text-left my-auto`}>
+            {(() => {
+                if (!!account) {
+                    return (
+                        <AccountDropdownButton account={account} ensName={ensName} network={network} logout={logout} />
+                    );
+                } else {
+                    return <ConnectWalletButton handleConnect={handleConnect} />;
+                }
+            })()}
         </div>
     );
 }) as React.FC<{
@@ -99,31 +36,144 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
     tokenBalance: number;
 }>;
 
-function networkName(id: any) {
-    switch (Number(id)) {
-        case 1:
-            return 'main';
-        case 3:
-            return 'ropsten';
-        case 4:
-            return 'rinkeby';
-        case 5:
-            return 'goerli';
-        case 6:
-            return 'kotti';
-        case 42:
-            return 'kovan';
-        case 421611:
-            return 'arbitrum';
-        default:
-            return 'localhost';
-    }
+interface ConnectWalletProps {
+    handleConnect: () => void;
 }
 
-const buttonContent: (account: string | undefined, ensName: string) => string = (account, ensName) => {
-    if (!account) {
-        return 'Connect Wallet';
+const ConnectWalletButton = ({ handleConnect }: ConnectWalletProps) => {
+    return (
+        <Button size="sm" variant="transparent" onClick={handleConnect}>
+            Connect Wallet
+        </Button>
+    );
+};
+
+interface AccountDropdownButtonProps {
+    account: string;
+    ensName: string;
+    network: number;
+    logout: () => void;
+}
+
+const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDropdownButtonProps) => {
+    return (
+        <TWPopup
+            preview={
+                <>
+                    <Identicon account={account} />
+                    <div className="px-2 m-auto">{accountDescriptionShort(account, ensName)}</div>
+                </>
+            }
+        >
+            <div className="py-1">
+                <div className="flex px-4 py-2 text-sm">
+                    <Identicon account={account} />
+                    <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
+                    <ReactSimpleTooltip
+                        content="Copied"
+                        arrow={6}
+                        background="#f9fafb"
+                        border="rgba(209, 213, 219)"
+                        color="#000"
+                        customCss={{
+                            whiteSpace: 'nowrap',
+                        }}
+                        fadeDuration={300}
+                        fadeEasing="linear"
+                        fixed={false}
+                        fontSize="12px"
+                        padding={8}
+                        radius={6}
+                        placement="top"
+                        zIndex={1}
+                    >
+                        <CopyOutlined
+                            className="self-center icon"
+                            onClick={() => {
+                                /* This requires a secure origin, either HTTPS or localhost. */
+                                // navigator.clipboard.writeText(account);
+                            }}
+                        />
+                        <style>{`
+                            svg {
+                                vertical-align: 0;
+                            }
+                        `}</style>
+                    </ReactSimpleTooltip>
+                </div>
+            </div>
+
+            <div className="py-1 px-4 mb-2">
+                <ViewOnEtherscanOption account={account} />
+                <BridgeFundsOption network={network} />
+                <AddTCROption />
+            </div>
+
+            <div className="py-1">
+                <div className="flex justify-center content-center w-full">
+                    {/* Disconnect Button */}
+                    <button
+                        className="rounded-xl shadow-sm px-4 py-2 m-1 bg-blue-600 text-sm font-medium text-white hover:bg-blue-400 focus:bg-blue-900 focus:ring-indigo-500"
+                        onClick={logout}
+                    >
+                        Disconnect
+                    </button>
+                </div>
+            </div>
+        </TWPopup>
+    );
+};
+
+const Identicon = dynamic(import('./Identicon'), { ssr: false });
+
+const ViewOnEtherscanOption = styled(({ account, className }) => {
+    return (
+        <a className={className} href={`${ETHERSCAN_URI}/address/${account}`} target="_blank" rel="noopener noreferrer">
+            <Logo ticker="ETHERSCAN" />
+            <div>View on Etherscan</div>
+        </a>
+    );
+})`
+    display: flex;
+    line-height: 2.625rem;
+    ${Logo} {
+        display: inline;
+        vertical-align: 0;
+        width: 20px;
+        height: 22px;
+        margin: auto 0.5rem auto 0;
     }
+`;
+
+const BridgeFundsOption = styled(({ network, className }) => {
+    return (
+        <a className={className} href={`#`}>
+            <Logo ticker={network} />
+            <div>Bridge Funds</div>
+        </a>
+    );
+})`
+    display: flex;
+    line-height: 2.625rem;
+    ${Logo} {
+        display: inline;
+        vertical-align: 0;
+        width: 20px;
+        height: 22px;
+        margin: auto 0.5rem auto 0;
+    }
+`;
+
+const AddTCROption = styled(({ className }) => {
+    return (
+        <a href={ADD_TCR_TO_WALLET_LINK} target="_blank" rel="noopener noreferrer" className={className}>
+            <PlusOutlined className="inline-flex self-center" style={{ marginLeft: '0.1rem', marginRight: '0.2rem' }} />
+            <span className="ml-2">Add TCR to wallet</span>
+        </a>
+    );
+})``;
+
+const accountDescriptionLong: (account: string, ensName: string) => string = (account, ensName) => {
     if (ensName) {
         const len = ensName.length;
         if (len > 14) {
@@ -133,48 +183,20 @@ const buttonContent: (account: string | undefined, ensName: string) => string = 
         }
     } else if (account) {
         return `${account.slice(0, 7)}...${account.slice(36, 40)}`;
-    } else {
-        return 'Connect Wallet';
     }
+    return 'Account';
 };
 
-const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
-const StyledMenu = styled(Menu)`
-    text-align: center;
-    padding: 1rem !important;
-    right: -2rem !important;
-    font-size: var(--font-size-small);
-    color: #fff;
-
-    ${Section} > .label {
-        color: #3da8f5;
-    }
-
-    // when parent is open
-    .open & {
-        opacity: 1;
-        transform: none;
-    }
-`;
-const StyledMenuItem = styled(MenuItem)`
-    border-bottom: 1px solid #3da8f5;
-    // when parent is open
-    .open & {
-        opacity: 1;
-        padding-left: 0;
-
-        &:nth-child(2) {
-            transition: all 400ms ease 300ms;
-            padding-top: 0.2rem;
-            padding-bottom: 0.2rem;
+const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
+    if (ensName) {
+        const len = ensName.length;
+        if (len > 14) {
+            return `${ensName.slice(0, 5)}..`;
+        } else {
+            return ensName;
         }
-        &:nth-child(3) {
-            transition: all 400ms ease 450ms;
-        }
-        &:last-child {
-            display: flex;
-            padding: 1rem 0 0 0 !important;
-        }
+    } else if (account) {
+        return `${account.slice(0, 5)}..`;
     }
-`;
+    return 'Account';
+};
