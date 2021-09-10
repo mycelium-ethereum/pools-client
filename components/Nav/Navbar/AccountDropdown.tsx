@@ -32,8 +32,14 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
     }, [open]);
 
     return (
-        <div className={classNames(`relative items-center hidden lg:flex`, className ?? '')} id="account-dropdown">
-            <div className="z-10">
+        <div
+            className={classNames(
+                `relative items-center hidden lg:flex`,
+                className ?? `${className} ${open ? 'open' : ''}`,
+            )}
+            id="account-dropdown"
+        >
+            <div className="z-50">
                 <Button
                     variant="transparent"
                     size="sm"
@@ -66,15 +72,18 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                     <ArbitrumBridge />
                 </StyledMenuItem>
                 <StyledMenuItem className="button-container">
-                    <StyledButton onClick={() => onboard?.walletSelect()}>Switch Wallets</StyledButton>
-                    <StyledButton
+                    <Button size="xs" onClick={() => onboard?.walletSelect()}>
+                        Switch Wallets
+                    </Button>
+                    <Button
+                        size="xs"
                         onClick={() => {
                             setOpen(false);
                             logout();
                         }}
                     >
                         Logout
-                    </StyledButton>
+                    </Button>
                 </StyledMenuItem>
             </StyledMenu>
         </div>
@@ -167,18 +176,5 @@ const StyledMenuItem = styled(MenuItem)`
             display: flex;
             padding: 1rem 0 0 0 !important;
         }
-    }
-`;
-
-const StyledButton = styled(Button)`
-    width: 45%;
-    height: var(--height-small-button);
-    font-size: var(--font-size-extra-small);
-    color: #3da8f5;
-    border: 1px solid #3da8f5;
-
-    &:hover {
-        color: #fff;
-        background: #3da8f5;
     }
 `;

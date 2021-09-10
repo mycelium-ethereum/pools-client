@@ -1,13 +1,5 @@
-import Button from '@components/General/Button';
 import { Select } from '@components/General/Input';
 import styled from 'styled-components';
-
-export const ExchangeButton = styled(Button)`
-    border-radius: 7px;
-    height: 3.125rem;
-    margin: 1rem auto;
-    width: 100%;
-`;
 
 export const MarketSelect = styled(Select)`
     width: 285px;
