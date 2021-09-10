@@ -6,6 +6,7 @@ import { BUYS, SELLS } from '@libs/constants';
 import { CommitsFocus } from '@libs/types/General';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
 
 // const CommitDropdown
 export default (({ setShowQueued, show }) => {
@@ -29,7 +30,11 @@ export default (({ setShowQueued, show }) => {
     };
 
     return (
-        <QueuedDropdown preview={`${buys + sells} Queued`} show={show}>
+        <QueuedDropdown
+            className={classNames('my-auto mx-2 w-[120px] text-left', !show ? 'hidden' : 'hidden lg:block')}
+            preview={`${buys + sells} Queued`}
+            show={true}
+        >
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
@@ -49,28 +54,10 @@ export default (({ setShowQueued, show }) => {
 export const QueuedDropdown = styled(Select)<{
     show: boolean;
 }>`
-    border: 1px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 7px;
-    background: #3da8f5;
-    margin: auto 1rem;
-    width: 158px;
-    height: 2.625rem;
-    line-height: 2.625rem;
-    color: #fff;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-
-    display: ${(props) => (props.show ? 'block' : 'none')};
-
     // for size of menu
     ${SelectDropdown} {
         left: -50px;
         background: #fff;
-    }
-
-    & svg {
-        fill: #fff;
     }
 `;
 
