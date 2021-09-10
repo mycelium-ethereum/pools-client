@@ -4,7 +4,7 @@ import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
-import { Button } from '@components/General';
+import Button from '@components/General/Button';
 
 const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn }) => {
     const { account } = useWeb3();
@@ -19,21 +19,23 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
     const ButtonContent = () => {
         if (!account) {
             return (
-                <StyledButton
-                    className="primary"
+                <Button
+                    size="lg"
+                    variant="primary"
                     onClick={(_e) => {
                         handleConnect();
                     }}
                 >
                     Connect Wallet
-                </StyledButton>
+                </Button>
             );
         }
         if (pool.quoteToken.approved) {
             return (
                 <>
-                    <StyledButton
-                        className="primary"
+                    <Button
+                        size="lg"
+                        variant="primary"
                         disabled={!selectedPool}
                         onClick={(_e) => {
                             if (!approve) {
@@ -43,7 +45,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         }}
                     >
                         Unlock USDC
-                    </StyledButton>
+                    </Button>
                     <HelperText>
                         Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
                         <a>Learn more.</a>
@@ -52,9 +54,10 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
             );
         } else {
             return (
-                <StyledButton
+                <Button
+                    size="lg"
+                    variant="primary"
                     disabled={!selectedPool || !pool.quoteToken.approved || !amount}
-                    className="primary"
                     onClick={(_e) => {
                         if (!commit) {
                             return;
@@ -66,7 +69,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                     }}
                 >
                     Ok, let&apos;s buy
-                </StyledButton>
+                </Button>
             );
         }
     };
@@ -75,13 +78,6 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
 };
 
 export default ExchangeButton;
-
-const StyledButton = styled(Button)`
-    border-radius: 7px;
-    height: 3.125rem;
-    margin: 1rem auto;
-    width: 100%;
-`;
 
 const HelperText = styled.p`
     color: #6b7280;
