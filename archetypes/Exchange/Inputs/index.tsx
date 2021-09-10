@@ -1,4 +1,4 @@
-import { Button } from '@components/General';
+import Button from '@components/General/Button';
 import { Select } from '@components/General/Input';
 import styled from 'styled-components';
 

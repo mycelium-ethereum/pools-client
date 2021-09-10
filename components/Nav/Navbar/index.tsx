@@ -9,7 +9,7 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
+import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 
@@ -78,7 +78,7 @@ export const NavBarContent = styled(({ className }) => {
                 </li>
             </Links>
 
-            <NetworkDropdown />
+            <NetworkDropdown show={!!account} />
 
             <AccountDropdown
                 onboard={onboard}
@@ -91,7 +91,7 @@ export const NavBarContent = styled(({ className }) => {
             />
 
             {/* Hide if showing queued */}
-            <AccountBalance show={!showQueued} />
+            <AccountBalance show={!showQueued && !!account} />
 
             <CommitDropdown show={showQueued} setShowQueued={setShowQueued} />
 
@@ -121,8 +121,8 @@ export const NavBarContent = styled(({ className }) => {
     @media (max-width: 768px) {
         padding: 0 1rem;
     }
-    @media (max-width: 1127px) {
-        ${AccountDropdown}, ${ThemeSwitcher}, ${NetworkDropdown}, ${Links}, ${QueuedDropdown}, ${AccountBalance} {
+    @media (max-width: 1024px) {
+        ${ThemeSwitcher}, ${Links}, ${AccountBalance} {
             display: none;
         }
         ${MobileMenu} {
@@ -132,49 +132,6 @@ export const NavBarContent = styled(({ className }) => {
 `;
 
 export default NavBar;
-
-// const NetworkButton = styled.span`
-//     border: 1px solid #fff;
-//     transition: 0.3s;
-//     border-radius: 20px;
-//     padding: 0 10px;
-//     &:hover {
-//         cursor: pointer;
-//         background: #fff;
-//         color: #f15025;
-//     }
-// `;
-
-// type UNProps = {
-//     display: boolean;
-//     className?: string;
-// };
-// const UnknownNetwork: React.FC<UNProps> = styled(({ className }: UNProps) => {
-//     // TODO add an onclick to swap to arbritrum using
-//     // https://docs.metamask.io/guide/rpc-api.html#other-rpc-methods
-//     return (
-//         <div className={className}>
-//             You are connected to the wrong network. Switch to{' '}
-//             <NetworkButton onClick={() => switchNetworks()}>Arbitrum Testnet.</NetworkButton>
-//         </div>
-//     );
-// })`
-//     background: #f15025;
-//     color: var(--color-text);
-//     letter-spacing: -0.36px;
-//     height: 40px;
-//     line-height: 40px;
-//     font-size: var(--font-size-medium);
-//     width: 100%;
-//     position: absolute;
-//     left: 0;
-//     text-align: center;
-//     bottom: ${(props) => (props.display ? '-40px' : '0px')};
-//     opacity: ${(props) => (props.display ? '1' : '0')};
-//     z-index: ${(props) => (props.display ? '2' : '-1')};
-//     transition: ${(props) =>
-//         props.display ? 'bottom 0.3s, opacity 0.3s 0.1s' : 'bottom 0.3s 0.15s, opacity 0.3s, z-index 0.3s 0.3s'};
-// `;
 
 const useEnsName = (account: string) => {
     const [ensName, setEnsName] = useState(account);
