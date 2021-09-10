@@ -64,6 +64,10 @@ export const calcRatio: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber 
 };
 
 export const calcSkew: (shortBalance: BigNumber, longBalance: BigNumber) => BigNumber = (shortBalance, longBalance) => {
+    // even rebalance rate is 1 so even skew is 2. 
+    // This isnt a fully accurate representation since
+    //  at shortBalance 0 there there will be short incentive to participate
+    if (shortBalance.eq(0)) return new BigNumber(2) 
     return longBalance.div(shortBalance);
 };
 
@@ -71,7 +75,7 @@ export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber
     shortBalance,
     longBalance,
 ) => {
-    return longBalance.div(shortBalance).minus(1);
+    return calcSkew(shortBalance, longBalance).minus(1);
 };
 
 /**
