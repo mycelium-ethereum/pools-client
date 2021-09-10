@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
-import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { usePool, usePoolActions } from '@context/PoolContext';
+import { LONG, SHORT } from '@libs/constants';
+import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import Button from '@components/General/Button';
+import ExchangeButton from '@components/General/Button/ExchangeButton';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -33,8 +31,6 @@ const SIDE_OPTIONS = [
 ];
 
 export default (() => {
-    const { account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const {
         leverage,
@@ -47,69 +43,12 @@ export default (() => {
 
     const pool = usePool(selectedPool);
 
-    const { commit, approve } = usePoolActions();
-
     useEffect(() => {
         swapDispatch({
             type: 'setInvalidAmount',
             value: isInvalidAmount(amount, pool.quoteToken.balance.toNumber()),
         });
     }, [amount, pool.quoteToken.balance]);
-
-    const ButtonContent = () => {
-        if (!account) {
-            return (
-                <Button
-                    size="lg"
-                    variant="primary"
-                    onClick={(_e) => {
-                        handleConnect();
-                    }}
-                >
-                    Connect Wallet
-                </Button>
-            );
-        }
-        if (!pool.quoteToken.approved) {
-            return (
-                <>
-                    <Button
-                        size="lg"
-                        variant="primary"
-                        disabled={!selectedPool}
-                        onClick={(_e) => {
-                            if (!approve) {
-                                return;
-                            }
-                            approve(selectedPool ?? '');
-                        }}
-                    >
-                        Unlock USDC
-                    </Button>
-                    <HelperText>
-                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
-                        <a>Learn more.</a>
-                    </HelperText>
-                </>
-            );
-        } else {
-            return (
-                <Button
-                    size="lg"
-                    variant="primary"
-                    disabled={!selectedPool || !amount}
-                    onClick={(_e) => {
-                        if (!commit) {
-                            return;
-                        }
-                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
-                    }}
-                >
-                    {`Ok, let's buy`}
-                </Button>
-            );
-        }
-    };
 
     return (
         <>
@@ -192,17 +131,7 @@ export default (() => {
 
             <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
-            {ButtonContent()}
+            <ExchangeButton mintOrBurn="mint" />
         </>
     );
 }) as React.FC;
-
-const HelperText = styled.p`
-    color: #6b7280;
-    font-size: 14px;
-
-    a {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-`;
