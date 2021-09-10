@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { Button, Section } from '@components/General';
+import { Section } from '@components/General';
+import Button from '@components/General/Button';
 import { Menu, MenuItem } from './HeaderDropdown';
 import ArbitrumBridge from '@components/ArbitrumBridge';
+import { classNames } from '@libs/utils/functions';
 
-export default styled(({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
+export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -30,9 +32,11 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
     }, [open]);
 
     return (
-        <div className={`${className} ${open ? 'open' : ''}`} id="account-dropdown">
-            <MainButton>
-                <AccountDropdown
+        <div className={classNames(`relative items-center hidden lg:flex`, className ?? '')} id="account-dropdown">
+            <div className="z-10">
+                <Button
+                    variant="transparent"
+                    size="sm"
                     className={`${!account ? 'primary' : ''}`}
                     onClick={() => {
                         if (!!account) {
@@ -43,12 +47,12 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
                         }
                     }}
                 >
-                    <div className="m-auto flex text-sm font-bold">
+                    <div className="m-auto flex items-center">
                         <Identicon account={account ?? ''} />
                         <div className="px-2">{buttonContent(account, ensName)}</div>
                     </div>
-                </AccountDropdown>
-            </MainButton>
+                </Button>
+            </div>
 
             <StyledMenu>
                 <StyledMenuItem />
@@ -75,19 +79,16 @@ export default styled(({ account, onboard, ensName, logout, handleConnect, token
             </StyledMenu>
         </div>
     );
-})<{
+}) as React.FC<{
     account: string | undefined;
     ensName: string;
     onboard: OnboardApi | undefined;
     logout: () => void;
     handleConnect: () => void;
     network: number;
+    className?: string;
     tokenBalance: number;
-}>`
-    position: relative;
-    display: flex;
-    align-items: center;
-`;
+}>;
 
 function networkName(id: any) {
     switch (Number(id)) {
@@ -129,35 +130,6 @@ const buttonContent: (account: string | undefined, ensName: string) => string = 
 };
 
 const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
-const AccountDropdown = styled.button`
-    display: flex;
-    width: 160px;
-    height: 40px;
-    transition: 0.2s;
-    padding: 0 10px;
-    margin: auto 10px;
-    border: 1px solid #ffffff;
-    border-radius: 7px;
-    color: #fff;
-    background: transparent;
-
-    &:focus {
-        outline: none;
-    }
-
-    &.primary {
-        background-color: #3da8f5;
-
-        &:hover {
-            background-color: transparent;
-        }
-    }
-`;
-
-const MainButton = styled.div`
-    z-index: 11;
-`;
 
 const StyledMenu = styled(Menu)`
     text-align: center;

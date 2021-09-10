@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
 import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { ExchangeButton } from '../Inputs';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
@@ -13,6 +12,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import Button from '@components/General/Button';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -59,21 +59,23 @@ export default (() => {
     const ButtonContent = () => {
         if (!account) {
             return (
-                <ExchangeButton
-                    className="primary"
+                <Button
+                    size="lg"
+                    variant="primary"
                     onClick={(_e) => {
                         handleConnect();
                     }}
                 >
                     Connect Wallet
-                </ExchangeButton>
+                </Button>
             );
         }
         if (pool.quoteToken.approved) {
             return (
                 <>
-                    <ExchangeButton
-                        className="primary"
+                    <Button
+                        size="lg"
+                        variant="primary"
                         disabled={!selectedPool}
                         onClick={(_e) => {
                             if (!approve) {
@@ -83,7 +85,7 @@ export default (() => {
                         }}
                     >
                         Unlock USDC
-                    </ExchangeButton>
+                    </Button>
                     <HelperText>
                         Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
                         <a>Learn more.</a>
@@ -92,9 +94,10 @@ export default (() => {
             );
         } else {
             return (
-                <ExchangeButton
+                <Button
+                    size="lg"
+                    variant="primary"
                     disabled={!selectedPool || !pool.quoteToken.approved || !amount}
-                    className="primary"
                     onClick={(_e) => {
                         if (!commit) {
                             return;
@@ -103,7 +106,7 @@ export default (() => {
                     }}
                 >
                     {`Ok, let's buy`}
-                </ExchangeButton>
+                </Button>
             );
         }
     };

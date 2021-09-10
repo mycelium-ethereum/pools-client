@@ -1,3 +1,4 @@
+import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { LONG, SHORT } from '@libs/constants';
 import { SideType } from '@libs/types/General';
@@ -32,19 +33,23 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
                         </span>
                         <span>
-                            <button
-                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase"
+                            <Button
+                                className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                                size="sm"
+                                variant="primary-light"
                                 onClick={() => onClickBuy(token.pool, token.side === 'short' ? SHORT : LONG)}
                             >
                                 Buy
-                            </button>
-                            <button
-                                className="py-2 px-5 mx-1 bg-indigo-100 font-bold ring-2 rounded-2xl ring-indigo-500 uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                            </Button>
+                            <Button
+                                className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                                size="sm"
+                                variant="primary-light"
                                 disabled={!hasHoldings}
                                 onClick={() => onClickSell(token.pool, token.side === 'short' ? SHORT : LONG)}
                             >
                                 Sell
-                            </button>
+                            </Button>
                         </span>
                     </TableRow>
                 );
