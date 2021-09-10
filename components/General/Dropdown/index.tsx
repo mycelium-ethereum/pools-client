@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useRef } from 'react';
 import { Children } from 'libs/types/General';
-import styled from 'styled-components';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined } from '@ant-design/icons';
@@ -14,7 +13,7 @@ type HEProps = {
     open: boolean;
     className?: string;
 } & Children;
-export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, defaultHeight, open }: HEProps) => {
+export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHeight, open }: HEProps) => {
     const main = useRef<HTMLDivElement>(null);
     const { height, ref } = useResizeDetector();
 
@@ -29,7 +28,13 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     }, [open, height]);
 
     return (
-        <div className={`${className} ${open ? 'open' : ''}`} ref={main}>
+        <div
+            className={classNames(
+                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md text-base bg-white',
+                className ?? '',
+            )}
+            ref={main}
+        >
             <div className="body" ref={ref}>
                 <Transition
                     show={open}
@@ -45,18 +50,19 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
             </div>
         </div>
     );
-})`
-    overflow: visible;
-    transition: 0.3s ease-in-out;
-    height: ${(props) => props.defaultHeight}px;
-    margin-bottom: 1rem;
-    margin-top: 2rem;
-    border-radius: 7px;
-    text-align: left;
-    font-size: var(--font-size-small);
-    letter-spacing: var(--letter-spacing-small);
-    background: var(--color-background);
-`;
+};
+// `
+//     overflow: visible;
+//     transition: 0.3s ease-in-out;
+//     height: ${(props) => props.defaultHeight}px;
+//     margin-bottom: 1rem;
+//     margin-top: 2rem;
+//     border-radius: 7px;
+//     text-align: left;
+//     font-size: var(--font-size-small);
+//     letter-spacing: var(--letter-spacing-small);
+//     background: var(--color-background);
+// `;
 
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
