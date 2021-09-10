@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
-import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { Section } from '@components/General';
 import Button from '@components/General/Button';
 import { Menu, MenuItem } from './HeaderDropdown';
 import ArbitrumBridge from '@components/ArbitrumBridge';
 import { classNames } from '@libs/utils/functions';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import useEnsName from '@libs/hooks/useEnsName';
 
-export default (({ account, onboard, ensName, logout, handleConnect, tokenBalance, network, className }) => {
+export default (({ account, className }) => {
+    const { network, ethBalance } = useWeb3();
+    const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
+    const ensName = useEnsName(account ?? '');
+
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -32,7 +37,7 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
     }, [open]);
 
     return (
-        <div className={classNames(`relative items-center hidden lg:flex`, className ?? '')} id="account-dropdown">
+        <div className={classNames(`relative items-center`, className ?? '')} id="account-dropdown">
             <div className="z-10">
                 <Button
                     variant="transparent"
@@ -58,7 +63,7 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                 <StyledMenuItem />
                 <StyledMenuItem>
                     <Section className="p-0" label="Balance">
-                        {`${parseFloat(tokenBalance.toFixed(5))} ETH`}
+                        {`${parseFloat((ethBalance ?? 0).toFixed(5))} ETH`}
                     </Section>
                     <Section label="Network">{networkName(network)}</Section>
                 </StyledMenuItem>
@@ -70,7 +75,7 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
                     <StyledButton
                         onClick={() => {
                             setOpen(false);
-                            logout();
+                            resetOnboard();
                         }}
                     >
                         Logout
@@ -80,14 +85,8 @@ export default (({ account, onboard, ensName, logout, handleConnect, tokenBalanc
         </div>
     );
 }) as React.FC<{
-    account: string | undefined;
-    ensName: string;
-    onboard: OnboardApi | undefined;
-    logout: () => void;
-    handleConnect: () => void;
-    network: number;
+    account: string;
     className?: string;
-    tokenBalance: number;
 }>;
 
 function networkName(id: any) {

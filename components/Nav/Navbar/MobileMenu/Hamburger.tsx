@@ -1,11 +1,11 @@
 import React from 'react';
-import styled from "styled-components";
+import styled from 'styled-components';
 
 // const Hamburger
-export default (styled(({ className, setOpen, open }) => {
-	const handleClick = () => {
-		setOpen(!open)
-	}
+export default styled(({ className, setOpen, open }) => {
+    const handleClick = () => {
+        setOpen(!open);
+    };
     return (
         <div onClick={handleClick} className={`${className} ${open ? 'open' : ''}`}>
             <span />
@@ -106,7 +106,7 @@ export default (styled(({ className, setOpen, open }) => {
         left: calc(50% - 1px);
         top: 12px;
     }
-`) as React.FC<{
-	setOpen: (bool: boolean) => any;
-	open: boolean;
+` as React.FC<{
+    setOpen: (bool: boolean) => any;
+    open: boolean;
 }>;

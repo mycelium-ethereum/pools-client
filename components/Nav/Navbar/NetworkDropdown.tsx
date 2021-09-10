@@ -7,11 +7,11 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, KOVAN } from '@libs/constants';
 import { classNames } from '@libs/utils/functions';
 
-export default (({ show }) => {
+export default (({ hide, className }) => {
     const { provider, network = '0' } = useWeb3();
     return (
         <Select
-            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4 w-[165px]')}
+            className={classNames(hide ? 'hidden' : 'block', className ?? '')}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
@@ -27,7 +27,8 @@ export default (({ show }) => {
         </Select>
     );
 }) as React.FC<{
-    show: boolean;
+    hide?: boolean;
+    className?: string;
 }>;
 
 const NetworkPreview: React.FC<{
@@ -35,7 +36,7 @@ const NetworkPreview: React.FC<{
     networkName: string;
 }> = ({ networkID, networkName }) => {
     return (
-        <div className={'flex items-center'}>
+        <div className={'flex items-center w-full my-auto'}>
             <Logo className="inline w-[20px] h-[22px] my-auto ml-0 mr-2" ticker={networkID} />
             {networkName}
         </div>
