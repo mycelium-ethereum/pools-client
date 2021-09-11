@@ -127,12 +127,11 @@ const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211
 export const fetchCommits: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
-    account: string,
 ) => Promise<{
     pendingLong: BigNumber;
     pendingShort: BigNumber;
     allUnexecutedCommits: CreatedCommitType[];
-}> = async (committer, provider, account) => {
+}> = async (committer, provider) => {
     console.debug('Initialising committer');
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
@@ -167,20 +166,20 @@ export const fetchCommits: (
     let pendingLong = new BigNumber(0);
     let pendingShort = new BigNumber(0);
     const allUnexecutedCommits = [];
-    const accountLower = account.toLowerCase();
 
     for (let i = 0; i < unfilteredCommits.length; i++) {
         const commit = unfilteredCommits[i];
 
         // need to filter out created commits which have since been removed
-        const [deleted, txn] = await Promise.all([
+        const [deleted] = await Promise.all([
             contract?.queryFilter(contract.filters.RemoveCommit(commit.args.commitID)),
             commit.getTransaction(),
         ]);
 
-        if (deleted.length || txn.from.toLowerCase() !== accountLower) {
+        if (deleted.length) {
+            // skip if its been deleted
             continue;
-        } // skip this one
+        }
 
         [pendingShort, pendingLong] = addToPending(pendingShort, pendingLong, {
             amount: commit.args.amount,
