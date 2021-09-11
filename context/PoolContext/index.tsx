@@ -1,5 +1,5 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Children, CommitType, Pool } from '@libs/types/General';
+import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -17,7 +17,7 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 
@@ -26,7 +26,7 @@ interface ContextProps {
 }
 
 interface ActionContextProps {
-    commit: (pool: string, commitType: CommitType, amount: number) => void;
+    commit: (pool: string, commitType: CommitEnum, amount: number) => void;
     approve: (pool: string) => void;
     uncommit: (pool: string, commitID: number) => void;
 }
@@ -114,13 +114,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: LONG,
+                            side: SideEnum.long,
                             amount: committerInfo.pendingLong,
                         });
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: SHORT,
+                            side: SideEnum.short,
                             amount: committerInfo.pendingShort,
                         });
 
@@ -131,7 +131,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     pool: pool.address,
                                     id: commit.args.commitID.toNumber(),
                                     amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
-                                    type: commit.args.commitType as CommitType,
+                                    type: commit.args.commitType as CommitEnum,
                                     txnHash: commit.transactionHash,
                                 },
                             });
@@ -174,14 +174,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 id: id.toNumber(),
                                 pool,
                                 txnHash: txn.hash,
-                                type: type as CommitType,
+                                type: type as CommitEnum,
                                 amount: new BigNumber(ethers.utils.formatEther(amount)),
                             },
                         });
                     }
                 });
 
-                addAmountToPendingPools(pool, type as CommitType, amount);
+                addAmountToPendingPools(pool, type as CommitEnum, amount);
             });
 
             committer.on('ExecuteCommit', (id, amount, type) => {
@@ -235,7 +235,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const addAmountToPendingPools: (pool: string, type: CommitType, amount: EthersBigNumber) => void = (
+    const addAmountToPendingPools: (pool: string, type: CommitEnum, amount: EthersBigNumber) => void = (
         pool,
         type,
         amount,
@@ -243,26 +243,26 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         let amount_ = new BigNumber(ethers.utils.formatEther(amount));
         switch (type) {
             // @ts-ignore
-            case SHORT_BURN:
+            case CommitEnum.short_burn:
                 amount_ = amount_.negated();
             // fall through
-            case SHORT_MINT:
+            case CommitEnum.short_mint:
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: SHORT,
+                    side: SideEnum.short,
                     amount: amount_,
                 });
                 break;
             // @ts-ignore
-            case LONG_BURN:
+            case CommitEnum.long_burn:
                 amount_ = amount_.negated();
             // fall through
-            case LONG_MINT:
+            case CommitEnum.long_mint:
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: LONG,
+                    side: SideEnum.long,
                     amount: amount_,
                 });
                 break;
@@ -271,7 +271,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitType, amount: number) => Promise<void> = async (
+    const commit: (pool: string, commitType: CommitEnum, amount: number) => Promise<void> = async (
         pool,
         commitType,
         amount,

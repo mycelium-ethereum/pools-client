@@ -1,6 +1,6 @@
 import { CreatedCommitType, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
-import { LONG, SHORT } from '.';
+import { SideEnum } from '.';
 
 export const DEFAULT_POOLSTATE: Pool = {
     address: '',
@@ -27,7 +27,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         balance: new BigNumber(0),
         supply: new BigNumber(0),
         approved: false,
-        side: SHORT,
+        side: SideEnum.short,
     },
     longToken: {
         address: '',
@@ -36,7 +36,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         balance: new BigNumber(0),
         supply: new BigNumber(0),
         approved: false,
-        side: LONG,
+        side: SideEnum.long,
     },
     committer: {
         address: '',

@@ -1,4 +1,4 @@
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import { CreatedCommitType, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
@@ -100,7 +100,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
-            side: LONG,
+            side: SideEnum.long,
         },
         shortToken: {
             address: shortToken,
@@ -109,7 +109,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             approved: false,
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
-            side: SHORT,
+            side: SideEnum.short,
         },
         quoteToken: {
             address: quoteToken,
@@ -222,13 +222,13 @@ export const addToPending: (
     },
 ) => [BigNumber, BigNumber] = (pendingShort, pendingLong, commit) => {
     switch (commit.type) {
-        case SHORT_MINT:
+        case CommitEnum.short_mint:
             return [pendingShort.plus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case SHORT_BURN:
+        case CommitEnum.short_burn:
             return [pendingShort.minus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case LONG_MINT:
+        case CommitEnum.long_mint:
             return [pendingShort, pendingLong.plus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
-        case LONG_BURN:
+        case CommitEnum.long_burn:
             return [pendingShort, pendingLong.minus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
         default:
             return [pendingShort, pendingLong];

@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { SHORT_MINT, SHORT_BURN } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
 import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommits } from '@context/UsersCommitContext';
@@ -25,7 +25,7 @@ export default (() => {
 
                 let token, tokenPrice;
 
-                if (commit.type === SHORT_MINT || commit.type === SHORT_BURN) {
+                if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
                     token = shortToken;
                     tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
                 } else {
