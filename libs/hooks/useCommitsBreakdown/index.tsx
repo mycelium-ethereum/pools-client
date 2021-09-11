@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
-import { SHORT_MINT, LONG_MINT } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { useCommits } from '@context/UsersCommitContext';
 
 export default (() => {
@@ -16,7 +16,7 @@ export default (() => {
                 sells = 0,
                 nextUpdate = 0;
             Object.values(commits).map((commit) => {
-                if (commit.type === SHORT_MINT || commit.type === LONG_MINT) {
+                if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
                     buys += 1;
                 } else {
                     sells += 1;
