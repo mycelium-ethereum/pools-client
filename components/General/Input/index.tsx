@@ -130,11 +130,11 @@ export const SelectOption = styled.option`
         border-bottom-left-radius: 7px;
         border-bottom-right-radius: 7px;
     }
-    color: #374151;
-    cursor: pointer;
+    color: ${(props) => (props.disabled ? '' : '#374151')};
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     transition: 0.3s;
 
     &:hover {
-        background: #d1d5db;
+        background: ${(props) => (props.disabled ? '' : '#d1d5db')};
     }
 `;

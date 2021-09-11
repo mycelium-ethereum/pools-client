@@ -1,29 +1,32 @@
 import React from 'react';
 import { Select, SelectOption } from '@components/General/Input';
+
 import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, KOVAN } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { classNames } from '@libs/utils/functions';
 
 export default (({ show }) => {
     const { provider, network = '0' } = useWeb3();
     return (
         <Select
-            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4 w-[165px]')}
+            className={classNames(!show ? 'hidden' : 'hidden lg:block', 'my-auto mx-4 w-[195px]')}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
-                    networkName={networkConfig[network]?.name ?? 'Unknown'}
+                    networkName={networkConfig[network]?.name ?? 'Unsupported'}
                 />
             }
             onChange={(event: any) => {
                 switchNetworks(provider, event.target.value);
             }}
         >
-            <SelectOption value={ARBITRUM}>Arbitrum</SelectOption>
-            <SelectOption value={KOVAN}>Kovan</SelectOption>
+            <SelectOption disabled value={ARBITRUM}>
+                Arbitrum (Coming soon)
+            </SelectOption>
+            <SelectOption value={ARBITRUM_RINKEBY}>Arbitrum Rinkeby</SelectOption>
         </Select>
     );
 }) as React.FC<{
