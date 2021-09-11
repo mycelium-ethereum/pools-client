@@ -1,5 +1,5 @@
 import React from 'react';
-import { CommitEnum, BUYS, SELLS, SideEnum } from '@libs/constants';
+import { CommitEnum, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
@@ -25,8 +25,6 @@ export type APIResult = {
     message: string;
     data: any;
 };
-
-export type CommitsFocus = typeof BUYS | typeof SELLS;
 
 // TODO change this to known markets
 export type MarketType = 'ETH/USDC' | 'ETH/TUSD' | 'BTC/USD' | undefined;
@@ -98,6 +96,7 @@ export type PendingCommitInfo = {
     type: CommitEnum;
     amount: BigNumber;
     txnHash: string;
+    from: string; // user who sent txn
 };
 
 export type QueuedCommit = PendingCommitInfo & {

@@ -7,7 +7,6 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { usePoolActions } from '@context/PoolContext';
-import { BUYS } from '@libs/constants';
 import { Logo } from '@components/General';
 import Button from '@components/General/Button';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
@@ -16,6 +15,7 @@ import { ethers } from 'ethers';
 import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
 import { Popover, Transition } from '@headlessui/react';
+import { CommitsFocusEnum } from '@libs/constants';
 
 // import BigNumber from 'bignumber.js';
 // const testCommits = [
@@ -43,14 +43,14 @@ import { Popover, Transition } from '@headlessui/react';
 // TODO filter buys and sells
 export default (() => {
     const { provider } = useWeb3();
-    const { showCommits = false, focus = BUYS } = useCommits();
+    const { showCommits = false, focus = CommitsFocusEnum.buys } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const { uncommit = () => console.error('uncommit undefined') } = usePoolActions();
-    const commits = usePendingCommits();
+    const commits = usePendingCommits(focus);
 
     return (
         <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
-            <Title>Queued {focus === BUYS ? 'Buys' : 'Sells'}</Title>
+            <Title>Queued {focus === CommitsFocusEnum.buys ? 'Buys' : 'Sells'}</Title>
             <Table>
                 <TableHeader>
                     {headings.map((heading, index) => (
