@@ -15,7 +15,7 @@ export default (({ preview, className, buttonClasses, children }) => {
                     {/* Button */}
                     <Popover.Button className={buttonClasses ?? DEFAULT}>
                         {preview}
-                        <Arrow className="self-center" style={{ transform: open ? 'rotate(180deg)' : '' }} />
+                        <Arrow className="self-center ml-1" style={{ transform: open ? 'rotate(180deg)' : '' }} />
                     </Popover.Button>
 
                     {/* Menu */}
