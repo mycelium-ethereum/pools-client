@@ -15,8 +15,8 @@ import { ethers } from 'ethers';
 import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
 import { Popover, Transition } from '@headlessui/react';
-import { CommitsFocusEnum } from '@libs/constants';
-
+import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
+import { Tooltip } from '@components/General/Tooltip';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 
 // import BigNumber from 'bignumber.js';
@@ -41,13 +41,20 @@ import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 //     }
 // ]
 
-// TODO filter buys and sells
 export default (() => {
     const { provider } = useWeb3();
     const { showCommits = false, focus = CommitsFocusEnum.buys } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const { uncommit = () => console.error('uncommit undefined') } = usePoolActions();
     const commits = usePendingCommits(focus);
+
+    const mintCommits = commits.filter(
+        (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
+    );
+
+    const burnCommits = commits.filter(
+        (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
+    );
 
     return (
         <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
@@ -65,7 +72,7 @@ export default (() => {
                             <span>Next Rebalance</span>
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
-                        {commits.map((commit, index) => (
+                        {mintCommits.map((commit, index) => (
                             <BuyRow
                                 key={`pcr-${index}`}
                                 index={index}
@@ -85,7 +92,7 @@ export default (() => {
                             <span>Next Rebalance</span>
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
-                        {commits.map((commit, index) => (
+                        {burnCommits.map((commit, index) => (
                             <SellRow
                                 key={`pcr-${index}`}
                                 index={index}
@@ -114,7 +121,7 @@ const BuyRow: React.FC<
         uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index }) => {
+> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, locked }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -125,7 +132,16 @@ const BuyRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions token={token} uncommit={uncommit} pool={pool} provider={provider} id={id} txnHash={txnHash} />
+                <Actions
+                    token={token}
+                    uncommit={uncommit}
+                    pool={pool}
+                    provider={provider}
+                    id={id}
+                    txnHash={txnHash}
+                    locked={locked}
+                    lockTooltipText="You can no longer cancel this buy as the front-running interval has been reached."
+                />
             </span>
         </TableRow>
     );
@@ -137,7 +153,7 @@ const SellRow: React.FC<
         uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index }) => {
+> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, locked }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -148,7 +164,16 @@ const SellRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions token={token} uncommit={uncommit} pool={pool} provider={provider} id={id} txnHash={txnHash} />
+                <Actions
+                    token={token}
+                    uncommit={uncommit}
+                    pool={pool}
+                    provider={provider}
+                    id={id}
+                    txnHash={txnHash}
+                    locked={locked}
+                    lockTooltipText="You can no longer cancel this sell as the front-running interval has been reached."
+                />
             </span>
         </TableRow>
     );
@@ -156,21 +181,26 @@ const SellRow: React.FC<
 
 const Actions: React.FC<{
     pool: string;
-    uncommit: (pool: string, commitID: number) => void;
     id: number;
     provider: ethers.providers.JsonRpcProvider | null;
     token: PoolToken;
     txnHash: string;
-}> = ({ uncommit, pool, id, provider, token, txnHash }) => (
+    locked: boolean;
+    lockTooltipText: string;
+    uncommit: (pool: string, commitID: number) => void;
+}> = ({ uncommit, pool, id, provider, token, txnHash, locked, lockTooltipText }) => (
     <>
-        <Button
-            size="xs"
-            variant="primary-light"
-            className="inline rounded-xl my-auto w-[65px] border border-tracer-500 focus:border-solid"
-            onClick={() => uncommit(pool, id)}
-        >
-            Cancel
-        </Button>
+        <Tooltip text={lockTooltipText} placement="left" show={locked}>
+            <Button
+                size="xs"
+                variant="primary-light"
+                className="inline rounded-xl my-auto w-[65px] border border-tracer-500 focus:border-solid"
+                onClick={() => uncommit(pool, id)}
+                disabled={locked}
+            >
+                Cancel
+            </Button>
+        </Tooltip>
         <Popover as="div" className="inline relative ml-2 my-auto">
             {({ open }) => (
                 <>

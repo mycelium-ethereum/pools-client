@@ -26,8 +26,15 @@ export default ((focus) => {
                 ) {
                     continue;
                 }
-                const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
-                    pools[commit.pool];
+                const {
+                    shortToken,
+                    longToken,
+                    shortBalance,
+                    longBalance,
+                    lastUpdate,
+                    updateInterval,
+                    frontRunningInterval,
+                } = pools[commit.pool];
 
                 let token, tokenPrice;
 
@@ -38,11 +45,16 @@ export default ((focus) => {
                     token = longToken;
                     tokenPrice = calcTokenPrice(longBalance, longToken.supply);
                 }
+
+                const nowSeconds = Math.floor(Date.now() / 1000);
+                const lockTime = lastUpdate.plus(updateInterval).minus(frontRunningInterval).toNumber();
+
                 parsedCommits.push({
                     ...commit,
                     token,
                     tokenPrice,
                     nextRebalance: lastUpdate.plus(updateInterval),
+                    locked: nowSeconds > lockTime,
                 });
             }
             setAllQueuedCommits(parsedCommits);
