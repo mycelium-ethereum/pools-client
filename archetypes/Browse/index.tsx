@@ -16,7 +16,7 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { BURN, SideEnum, MINT } from '@libs/constants';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 
 export const Browse: React.FC = () => {
@@ -101,7 +101,7 @@ export const Browse: React.FC = () => {
             pathname: '/',
             query: {
                 pool: pool,
-                type: MINT,
+                type: CommitActionEnum.mint,
                 side: side,
             },
         });
@@ -113,7 +113,7 @@ export const Browse: React.FC = () => {
             pathname: '/',
             query: {
                 pool: pool,
-                type: BURN,
+                type: CommitActionEnum.burn,
                 side: side,
             },
         });
