@@ -74,7 +74,7 @@ export const NavBarContent = styled(({ className }) => {
 
             {/* DESKTOP */}
             <span className="hidden lg:flex ml-auto">
-                <NetworkDropdown hide={!account} className="my-auto mx-4 w-[165px]" />
+                <NetworkDropdown hide={!account} className="relative my-auto mx-4 w-[170px]" />
 
                 <AccountDropdown account={account ?? ''} className="my-auto" />
 

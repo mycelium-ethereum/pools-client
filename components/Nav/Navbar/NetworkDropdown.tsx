@@ -1,33 +1,30 @@
 import React from 'react';
-import { Select, SelectOption } from '@components/General/Input';
-
+import { SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { classNames } from '@libs/utils/functions';
+import TWPopup from '@components/General/TWPopup';
 
-export default (({ hide, className }) => {
+export default (({ className }) => {
     const { provider, network = '0' } = useWeb3();
+
     return (
-        <Select
-            className={classNames(hide ? 'hidden' : 'block', 'my-auto mx-4 w-[195px]', className ?? '')}
+        <TWPopup
+            className={className}
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
                     networkName={networkConfig[network]?.name ?? 'Unsupported'}
                 />
             }
-            onChange={(event: any) => {
-                switchNetworks(provider, event.target.value);
-            }}
         >
             <SelectOption disabled value={ARBITRUM}>
                 Arbitrum (Coming soon)
             </SelectOption>
-            <SelectOption value={ARBITRUM_RINKEBY}>Arbitrum Rinkeby</SelectOption>
-        </Select>
+            <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>Arbitrum Rinkeby</SelectOption>
+        </TWPopup>
     );
 }) as React.FC<{
     hide?: boolean;
