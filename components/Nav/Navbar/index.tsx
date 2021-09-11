@@ -105,7 +105,7 @@ export const NavBarContent = styled(({ className }) => {
     @media (max-width: 768px) {
         padding: 0 1rem;
     }
-    @media (max-width: 1127px) {
+    @media (max-width: 1024px) {
         ${ThemeSwitcher}, ${Links}, ${QueuedDropdown} {
             display: none;
         }
