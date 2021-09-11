@@ -81,8 +81,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (account && provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances
-                updateTokenBalances(pool);
-                updateTokenApprovals(pool);
+                updateTokenBalances(pool).then((updatedTokenBalances) => {
+                    // what till we've fetched token balances before 
+                    // checking approval amounts
+                    if (updatedTokenBalances) {
+                        updateTokenApprovals(pool);
+                    }
+                });
 
                 // fetch commits
                 try {
@@ -127,12 +132,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     }, [account, poolsState.poolsInitialised]);
 
-    const updateTokenBalances: (pool: Pool) => void = (pool) => {
+    const updateTokenBalances: (pool: Pool) => Promise<boolean> = async (pool) => {
         if (!provider || !account) {
-            return;
+            return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
+        return fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
             const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0]));
             const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1]));
             const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2]));
@@ -150,6 +155,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 longTokenBalance,
                 quoteTokenBalance,
             });
+            return true;
+        }).catch((err) => {
+            console.error('Failed to fetch token balances', err)
+            return false;
         });
     };
 
