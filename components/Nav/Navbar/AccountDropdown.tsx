@@ -6,12 +6,15 @@ import styled from 'styled-components';
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
-import { CopyOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+    CopyOutlined,
+    // PlusOutlined
+} from '@ant-design/icons';
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 
 const ETHERSCAN_URI = 'https://etherscan.io';
-const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
+// const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
 export default (({ account, className }) => {
     const { network } = useWeb3();
@@ -111,7 +114,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
             <div className="py-1 px-4 mb-2">
                 <ViewOnEtherscanOption account={account} />
                 <BridgeFundsOption network={network} />
-                <AddTCROption />
+                {/*<AddTCROption />*/}
             </div>
 
             <div className="py-1">
@@ -169,14 +172,14 @@ const BridgeFundsOption = styled(({ network, className }) => {
     }
 `;
 
-const AddTCROption = styled(({ className }) => {
-    return (
-        <a href={ADD_TCR_TO_WALLET_LINK} target="_blank" rel="noopener noreferrer" className={className}>
-            <PlusOutlined className="inline-flex self-center" style={{ marginLeft: '0.1rem', marginRight: '0.2rem' }} />
-            <span className="ml-2">Add TCR to wallet</span>
-        </a>
-    );
-})``;
+// const AddTCROption = styled(({ className }) => {
+//     return (
+//         <a href={ADD_TCR_TO_WALLET_LINK} target="_blank" rel="noopener noreferrer" className={className}>
+//             <PlusOutlined className="inline-flex self-center" style={{ marginLeft: '0.1rem', marginRight: '0.2rem' }} />
+//             <span className="ml-2">Add TCR to wallet</span>
+//         </a>
+//     );
+// })``;
 
 const accountDescriptionLong: (account: string, ensName: string) => string = (account, ensName) => {
     if (ensName) {
