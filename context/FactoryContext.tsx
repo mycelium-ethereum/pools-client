@@ -43,7 +43,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                     setPools([
                         {
                             name: 'BTC/USDC',
-                            address: '0x0f25cE0547919e8c4044a07619569732130fdc2B',
+                            address: '0x544bD86550d9774f686030969B6E72B7538c4F9e',
                         },
                     ]);
                 } else {

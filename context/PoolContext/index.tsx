@@ -1,5 +1,5 @@
 import React, { useContext, useReducer, useState } from 'react';
-import { Children, CommitType, Pool } from '@libs/types/General';
+import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -17,16 +17,20 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
+
+type Options = {
+    onSuccess?: (...args: any) => any;
+};
 
 interface ContextProps {
     pools: Record<string, Pool>;
 }
 
 interface ActionContextProps {
-    commit: (pool: string, commitType: CommitType, amount: number) => void;
+    commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
     uncommit: (pool: string, commitID: number) => void;
 }
@@ -47,7 +51,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
-    // const { handleTransaction } = useContext(TransactionContext);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
     /** If pools changes then re-init them */
@@ -110,30 +113,33 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // fetch commits
                 try {
                     commitDispatch({ type: 'resetCommits' });
-                    fetchCommits(pool.committer.address, provider, account).then((committerInfo) => {
+                    fetchCommits(pool.committer.address, provider).then((committerInfo) => {
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: LONG,
+                            side: SideEnum.long,
                             amount: committerInfo.pendingLong,
                         });
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
-                            side: SHORT,
+                            side: SideEnum.short,
                             amount: committerInfo.pendingShort,
                         });
 
                         committerInfo.allUnexecutedCommits.map((commit) => {
-                            commitDispatch({
-                                type: 'addCommit',
-                                commitInfo: {
-                                    pool: pool.address,
-                                    id: commit.args.commitID.toNumber(),
-                                    amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
-                                    type: commit.args.commitType as CommitType,
-                                    txnHash: commit.transactionHash,
-                                },
+                            commit.getTransaction().then((txn) => {
+                                commitDispatch({
+                                    type: 'addCommit',
+                                    commitInfo: {
+                                        pool: pool.address,
+                                        id: commit.args.commitID.toNumber(),
+                                        amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
+                                        type: commit.args.commitType as CommitEnum,
+                                        from: txn.from,
+                                        txnHash: txn.hash,
+                                    },
+                                });
                             });
                         });
                     });
@@ -173,15 +179,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             commitInfo: {
                                 id: id.toNumber(),
                                 pool,
+                                from: txn.from, // from address
                                 txnHash: txn.hash,
-                                type: type as CommitType,
+                                type: type as CommitEnum,
                                 amount: new BigNumber(ethers.utils.formatEther(amount)),
                             },
                         });
                     }
                 });
 
-                addAmountToPendingPools(pool, type as CommitType, amount);
+                addAmountToPendingPools(pool, type as CommitEnum, amount);
             });
 
             committer.on('ExecuteCommit', (id, amount, type) => {
@@ -235,7 +242,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const addAmountToPendingPools: (pool: string, type: CommitType, amount: EthersBigNumber) => void = (
+    const addAmountToPendingPools: (pool: string, type: CommitEnum, amount: EthersBigNumber) => void = (
         pool,
         type,
         amount,
@@ -243,26 +250,26 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         let amount_ = new BigNumber(ethers.utils.formatEther(amount));
         switch (type) {
             // @ts-ignore
-            case SHORT_BURN:
+            case CommitEnum.short_burn:
                 amount_ = amount_.negated();
             // fall through
-            case SHORT_MINT:
+            case CommitEnum.short_mint:
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: SHORT,
+                    side: SideEnum.short,
                     amount: amount_,
                 });
                 break;
             // @ts-ignore
-            case LONG_BURN:
+            case CommitEnum.long_burn:
                 amount_ = amount_.negated();
             // fall through
-            case LONG_MINT:
+            case CommitEnum.long_mint:
                 poolsDispatch({
                     type: 'addToPending',
                     pool: pool,
-                    side: LONG,
+                    side: SideEnum.long,
                     amount: amount_,
                 });
                 break;
@@ -271,10 +278,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitType, amount: number) => Promise<void> = async (
+    const commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void> = async (
         pool,
         commitType,
         amount,
+        options,
     ) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
@@ -291,8 +299,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
                 },
-                onSuccess: async (receipt) => {
+                onSuccess: (receipt) => {
                     console.debug('Successfully submitted commit txn: ', receipt);
+                    options?.onSuccess ? options.onSuccess(receipt) : null;
                 },
             });
         }
@@ -307,7 +316,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
-            handleTransaction(committer.uncommit, [commitID], {
+            return handleTransaction(committer.uncommit, [commitID], {
                 network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',

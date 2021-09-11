@@ -3,18 +3,16 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
-import { usePool, usePoolActions } from '@context/PoolContext';
-import { LONG, LONG_BURN, SHORT_BURN } from '@libs/constants';
+import { usePool } from '@context/PoolContext';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
-import { toCommitType } from '@libs/utils/converters';
-import { SideType } from '@libs/types/General';
-import Button from '@components/General/Button';
+import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
+import ExchangeButton from '@components/General/Button/ExchangeButton';
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { commit } = usePoolActions();
     const tokens = usePoolTokens();
 
     const { amount, side, selectedPool, commitAction } = swapState;
@@ -32,16 +30,17 @@ export default (() => {
                         placeHolder="Select Token"
                         size="lg"
                         options={tokens.map((token) => ({ key: token.symbol }))}
-                        value={side === LONG ? pool.longToken.symbol : pool.shortToken.symbol}
+                        value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                         onSelect={(option) => {
                             tokens.forEach((token) => {
                                 if (token.symbol === option) {
                                     swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
-                                    swapDispatch({ type: 'setSide', value: token.side as SideType });
+                                    swapDispatch({ type: 'setSide', value: token.side as SideEnum });
                                 }
                             });
                         }}
                     />
+                    <p>Last Price: {toApproxCurrency(pool.lastPrice)}</p>
                 </span>
                 <span className="w-full md:w-56 ml-2">
                     <p className="mb-2 text-black">Amount</p>
@@ -60,7 +59,7 @@ export default (() => {
                                     swapDispatch({
                                         type: 'setAmount',
                                         value:
-                                            side === LONG
+                                            side === SideEnum.long
                                                 ? pool.longToken.balance.toNumber()
                                                 : pool.shortToken.balance.toNumber(),
                                     })
@@ -70,24 +69,26 @@ export default (() => {
                             </div>
                         </InnerInputText>
                     </InputContainer>
+                    <p>
+                        Available:{' '}
+                        {side === SideEnum.long
+                            ? pool.longToken.balance.toFixed(2)
+                            : pool.shortToken.balance.toFixed(2)}{' '}
+                        {'>>'}{' '}
+                        {side === SideEnum.long
+                            ? isNaN(amount)
+                                ? pool.longToken.balance.toFixed(2)
+                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
+                            : isNaN(amount)
+                            ? pool.shortToken.balance.toFixed(2)
+                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)}
+                    </p>
                 </span>
             </div>
 
-            <SellSummary pool={pool} isLong={side === LONG} amount={amount} gasFee={gasFee} />
+            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
 
-            <Button
-                variant="primary"
-                size="lg"
-                disabled={!amount || !selectedPool}
-                onClick={(_e) => {
-                    if (!commit) {
-                        return;
-                    }
-                    commit(selectedPool ?? '', side === LONG ? LONG_BURN : SHORT_BURN, amount);
-                }}
-            >
-                Sell
-            </Button>
+            <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
     );
 }) as React.FC;

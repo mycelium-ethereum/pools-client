@@ -2,8 +2,7 @@ import React, { useMemo } from 'react';
 import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { BUYS, SELLS } from '@libs/constants';
-import { CommitsFocus } from '@libs/types/General';
+import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import styled from 'styled-components';
 import { classNames } from '@libs/utils/functions';
@@ -21,7 +20,7 @@ export default (({ setShowQueued, hide }) => {
         }
     }, [buys, sells]);
 
-    const handleClick = (focus: CommitsFocus) => {
+    const handleClick = (focus: CommitsFocusEnum) => {
         if (commitDispatch) {
             commitDispatch({ type: 'show', focus: focus });
         } else {
@@ -37,10 +36,10 @@ export default (({ setShowQueued, hide }) => {
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
-            <Link onClick={() => handleClick(BUYS)}>
+            <Link onClick={() => handleClick(CommitsFocusEnum.buys)}>
                 <a>{buys} Buys</a>
             </Link>
-            <Link onClick={() => handleClick(SELLS)}>
+            <Link onClick={() => handleClick(CommitsFocusEnum.sells)}>
                 <a>{sells} Sells</a>
             </Link>
         </QueuedDropdown>

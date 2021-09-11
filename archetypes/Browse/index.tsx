@@ -16,9 +16,8 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { BURN, LONG, MINT } from '@libs/constants';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
-import { SideType } from '@libs/types/General';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -96,25 +95,25 @@ export const Browse: React.FC = () => {
     const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
-    const handleBuyToken = (pool: string, side: SideType) => {
-        console.debug(`Buying/minting ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+    const handleBuyToken = (pool: string, side: SideEnum) => {
+        console.debug(`Buying/minting ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {
                 pool: pool,
-                type: MINT,
+                type: CommitActionEnum.mint,
                 side: side,
             },
         });
     };
 
-    const handleSellToken = (pool: string, side: SideType) => {
-        console.debug(`Selling/burning ${side === LONG ? 'long' : 'short'} token from pool ${pool}`);
+    const handleSellToken = (pool: string, side: SideEnum) => {
+        console.debug(`Selling/burning ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
         router.push({
             pathname: '/',
             query: {
                 pool: pool,
-                type: BURN,
+                type: CommitActionEnum.burn,
                 side: side,
             },
         });
@@ -144,6 +143,12 @@ export const Browse: React.FC = () => {
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <p className="mt-1 text-gray-500">
+                        * <b>Price</b> and <b>Rebalance Rate</b> are indicative only. The values displayed are the
+                        estimated <b>Price</b> and <b>Rebalance Rate</b> for the next rebalance, given the queued buys
+                        and sells. The actual <b>Price</b> and <b>Rebalance Rate</b> will be calculated and updated at
+                        the next rebalance in [#m #s].
+                    </p>
                 </BrowseModal>
             </BrowseContainer>
             <FilterModal state={state} dispatch={dispatch} />

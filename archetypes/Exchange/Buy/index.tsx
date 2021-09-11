@@ -1,18 +1,15 @@
 import React, { useEffect } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
-import { SideType } from '@libs/types/General';
-import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
-import { usePool, usePoolActions } from '@context/PoolContext';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
+import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import Button from '@components/General/Button';
+import ExchangeButton from '@components/General/Button/ExchangeButton';
 
 const NOT_DISABLED_LEVERAGES = [1, 3];
 
@@ -23,18 +20,16 @@ const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, b
 
 const SIDE_OPTIONS = [
     {
-        key: LONG,
+        key: SideEnum.long,
         text: 'Long',
     },
     {
-        key: SHORT,
+        key: SideEnum.short,
         text: 'Short',
     },
 ];
 
 export default (() => {
-    const { account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const {
         leverage,
@@ -47,69 +42,12 @@ export default (() => {
 
     const pool = usePool(selectedPool);
 
-    const { commit, approve } = usePoolActions();
-
     useEffect(() => {
         swapDispatch({
             type: 'setInvalidAmount',
             value: isInvalidAmount(amount, pool.quoteToken.balance.toNumber()),
         });
     }, [amount, pool.quoteToken.balance]);
-
-    const ButtonContent = () => {
-        if (!account) {
-            return (
-                <Button
-                    size="lg"
-                    variant="primary"
-                    onClick={(_e) => {
-                        handleConnect();
-                    }}
-                >
-                    Connect Wallet
-                </Button>
-            );
-        }
-        if (pool.quoteToken.approved) {
-            return (
-                <>
-                    <Button
-                        size="lg"
-                        variant="primary"
-                        disabled={!selectedPool}
-                        onClick={(_e) => {
-                            if (!approve) {
-                                return;
-                            }
-                            approve(selectedPool ?? '');
-                        }}
-                    >
-                        Unlock USDC
-                    </Button>
-                    <HelperText>
-                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
-                        <a>Learn more.</a>
-                    </HelperText>
-                </>
-            );
-        } else {
-            return (
-                <Button
-                    size="lg"
-                    variant="primary"
-                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
-                    onClick={(_e) => {
-                        if (!commit) {
-                            return;
-                        }
-                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
-                    }}
-                >
-                    {`Ok, let's buy`}
-                </Button>
-            );
-        }
-    };
 
     return (
         <>
@@ -118,7 +56,7 @@ export default (() => {
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
                         className="w-full "
-                        placeHolder="Select Pool"
+                        placeHolder="Select Market"
                         size="lg"
                         options={poolOptions.map((pool) => ({
                             key: pool.address,
@@ -135,19 +73,19 @@ export default (() => {
                     <p className="mb-2 text-black">Side</p>
                     <TWButtonGroup
                         value={side}
-                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
+                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
                         size={'lg'}
                         options={SIDE_OPTIONS}
                     />
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Leverage</p>
+                <p className="mb-2 text-black">Power Leverage</p>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
-                        text: `${option.leverage}x`,
+                        text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
                                   text: 'Coming soon',
@@ -157,7 +95,7 @@ export default (() => {
                     onClick={(index) => {
                         // everything else disabled
                         if (NOT_DISABLED_LEVERAGES.includes(index)) {
-                            swapDispatch({ type: 'setLeverage', value: index as SideType });
+                            swapDispatch({ type: 'setLeverage', value: index as SideEnum });
                         }
                     }}
                 />
@@ -190,19 +128,9 @@ export default (() => {
                 </div>
             </div>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
+            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
 
-            {ButtonContent()}
+            <ExchangeButton actionType={CommitActionEnum.mint} />
         </>
     );
 }) as React.FC;
-
-const HelperText = styled.p`
-    color: #6b7280;
-    font-size: 14px;
-
-    a {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-`;
