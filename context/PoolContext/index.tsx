@@ -4,7 +4,7 @@ import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { reducer, initialPoolState } from './poolDispatch';
-import { fetchTokenBalances, initPool, fetchCommits } from './helpers';
+import { fetchTokenBalances, initPool, fetchCommits, fetchTokenApprovals } from './helpers';
 import { useMemo } from 'react';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
@@ -81,34 +81,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (account && provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances
-                const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-                fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
-                    console.debug(
-                        'Balances',
-                        ethers.utils.formatEther(balances[0][1]),
-                        ethers.utils.formatEther(balances[1][1]),
-                        ethers.utils.formatEther(balances[2][1]),
-                    );
-                    const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0][0]));
-                    const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1][0]));
-                    const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2][0]));
-                    poolsDispatch({
-                        type: 'setTokenBalances',
-                        pool: pool.address,
-                        shortToken: {
-                            balance: shortTokenBalance,
-                            approved: new BigNumber(ethers.utils.formatEther(balances[0][1])).gte(shortTokenBalance),
-                        },
-                        longToken: {
-                            balance: longTokenBalance,
-                            approved: new BigNumber(ethers.utils.formatEther(balances[1][1])).gte(longTokenBalance),
-                        },
-                        quoteToken: {
-                            balance: quoteTokenBalance,
-                            approved: new BigNumber(ethers.utils.formatEther(balances[2][1])).gte(quoteTokenBalance),
-                        },
-                    });
-                });
+                updateTokenBalances(pool);
+                updateTokenApprovals(pool);
 
                 // fetch commits
                 try {
@@ -152,6 +126,48 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
         }
     }, [account, poolsState.poolsInitialised]);
+
+    const updateTokenBalances: (pool: Pool) => void = (pool) => {
+        if (!provider || !account) {
+            return;
+        }
+        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
+            const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0]));
+            const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1]));
+            const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2]));
+
+            console.debug('Balances', {
+                shortTokenBalance,
+                longTokenBalance,
+                quoteTokenBalance,
+            });
+
+            poolsDispatch({
+                type: 'setTokenBalances',
+                pool: pool.address,
+                shortTokenBalance,
+                longTokenBalance,
+                quoteTokenBalance,
+            });
+        });
+    };
+
+    const updateTokenApprovals: (pool: Pool) => void = (pool) => {
+        if (!provider || !account) {
+            return;
+        }
+        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        fetchTokenApprovals(tokens, provider, account, pool.address).then((approvals) => {
+            poolsDispatch({
+                type: 'setTokenApprovals',
+                pool: pool.address,
+                shortTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[0])),
+                longTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[1])),
+                quoteTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[2])),
+            });
+        });
+    };
 
     const subscribeToPool = async (pool: string) => {
         if (provider && !poolsState.pools[pool]?.subscribed) {
@@ -197,6 +213,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     amount,
                     type,
                 });
+                updateTokenBalances(poolsState.pools[pool]);
                 if (commitDispatch) {
                     commitDispatch({
                         type: 'removeCommit',
@@ -301,6 +318,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
                 onSuccess: (receipt) => {
                     console.debug('Successfully submitted commit txn: ', receipt);
+                    // get and set token balances
+                    updateTokenBalances(poolsState.pools[pool]);
                     options?.onSuccess ? options.onSuccess(receipt) : null;
                 },
             });
@@ -324,10 +343,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
                 onSuccess: async (receipt) => {
                     console.debug('Successfully uncommitted', receipt);
-                    // if (!removeCommit) {
-                    //     return;
-                    // }
-                    // removeCommit(commitID.toNumber());
+                    updateTokenBalances(poolsState.pools[pool]);
                 },
             });
         }
