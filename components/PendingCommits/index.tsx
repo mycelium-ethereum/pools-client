@@ -34,7 +34,7 @@ import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 //             name: '',
 //             symbol: 'test',
 //             balance: new BigNumber(5),
-//             approved: true,
+//             approved: new BigNumber(6),
 //         },
 //         tokenPrice: new BigNumber(30),
 //         nextRebalance: new BigNumber(1),

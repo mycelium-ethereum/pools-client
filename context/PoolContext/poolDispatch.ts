@@ -35,7 +35,7 @@ export type PoolAction =
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setSubscribed'; pool: string; value: boolean }
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
-    | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: boolean }
+    | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'addToPending'; pool: string; side: SideEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | { type: 'resetCommits' }
@@ -88,15 +88,18 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         ...state.pools[action.pool],
                         shortToken: {
                             ...state.pools[action.pool].shortToken,
-                            approved: action.shortTokenAmount.gte(state.pools[action.pool].shortToken.balance),
+                            approvedAmount: action.shortTokenAmount,
+                            // .gte(state.pools[action.pool].shortToken.balance),
                         },
                         longToken: {
                             ...state.pools[action.pool].longToken,
-                            approved: action.longTokenAmount.gte(state.pools[action.pool].longToken.balance),
+                            approvedAmount: action.longTokenAmount,
+                            // gte(state.pools[action.pool].longToken.balance),
                         },
                         quoteToken: {
                             ...state.pools[action.pool].quoteToken,
-                            approved: action.quoteTokenAmount.gte(state.pools[action.pool].quoteToken.balance),
+                            approvedAmount: action.quoteTokenAmount,
+                            // .gte(state.pools[action.pool].quoteToken.balance),
                         },
                     },
                 },
@@ -170,7 +173,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         ...state.pools[action.pool],
                         [action.token]: {
                             ...state.pools[action.pool][action.token],
-                            approved: action.value,
+                            approvedAmount: action.value,
                         },
                     },
                 },

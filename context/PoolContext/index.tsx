@@ -81,13 +81,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (account && provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances
-                updateTokenBalances(pool).then((updatedTokenBalances) => {
-                    // what till we've fetched token balances before 
-                    // checking approval amounts
-                    if (updatedTokenBalances) {
-                        updateTokenApprovals(pool);
-                    }
-                });
+                updateTokenBalances(pool);
+                updateTokenApprovals(pool);
 
                 // fetch commits
                 try {
@@ -132,34 +127,34 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     }, [account, poolsState.poolsInitialised]);
 
-    const updateTokenBalances: (pool: Pool) => Promise<boolean> = async (pool) => {
+    const updateTokenBalances: (pool: Pool) => void = (pool) => {
         if (!provider || !account) {
             return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        return fetchTokenBalances(tokens, provider, account, pool.address).then((balances) => {
-            const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0]));
-            const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1]));
-            const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2]));
+        fetchTokenBalances(tokens, provider, account, pool.address)
+            .then((balances) => {
+                const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0]));
+                const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1]));
+                const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2]));
 
-            console.debug('Balances', {
-                shortTokenBalance,
-                longTokenBalance,
-                quoteTokenBalance,
-            });
+                console.debug('Balances', {
+                    shortTokenBalance,
+                    longTokenBalance,
+                    quoteTokenBalance,
+                });
 
-            poolsDispatch({
-                type: 'setTokenBalances',
-                pool: pool.address,
-                shortTokenBalance,
-                longTokenBalance,
-                quoteTokenBalance,
+                poolsDispatch({
+                    type: 'setTokenBalances',
+                    pool: pool.address,
+                    shortTokenBalance,
+                    longTokenBalance,
+                    quoteTokenBalance,
+                });
+            })
+            .catch((err) => {
+                console.error('Failed to fetch token balances', err);
             });
-            return true;
-        }).catch((err) => {
-            console.error('Failed to fetch token balances', err)
-            return false;
-        });
     };
 
     const updateTokenApprovals: (pool: Pool) => void = (pool) => {
@@ -378,7 +373,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         type: 'setTokenApproved',
                         token: 'quoteToken',
                         pool: pool,
-                        value: true,
+                        value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
             });

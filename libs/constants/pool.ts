@@ -18,7 +18,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         name: '',
         symbol: '',
         balance: new BigNumber(0),
-        approved: false,
+        approvedAmount: new BigNumber(0),
     },
     shortToken: {
         address: '',
@@ -26,7 +26,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
-        approved: false,
+        approvedAmount: new BigNumber(0),
         side: SideEnum.short,
     },
     longToken: {
@@ -35,7 +35,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
-        approved: false,
+        approvedAmount: new BigNumber(0),
         side: SideEnum.long,
     },
     committer: {
