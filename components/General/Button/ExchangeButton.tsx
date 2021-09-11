@@ -30,7 +30,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 </Button>
             );
         }
-        if (!pool.quoteToken.approved) {
+        if (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance)) {
             return (
                 <>
                     <Button
@@ -70,7 +70,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                         }
                         commit(selectedPool ?? '', side_, amount, {
                             onSuccess: () => {
-                                swapDispatch?.({ type: 'reset' });
+                                swapDispatch?.({ type: 'setAmount', value: NaN });
                             },
                         });
                     }}

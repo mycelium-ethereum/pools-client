@@ -46,7 +46,7 @@ export const EMPTY_TOKEN: PoolToken = {
     address: '',
     balance: new BigNumber(0),
     supply: new BigNumber(0),
-    approved: false,
+    approvedAmount: new BigNumber(0),
     side: SideEnum.short,
 };
 

@@ -44,7 +44,7 @@ export type Token = {
     name: string;
     symbol: string;
     balance: BigNumber;
-    approved: boolean;
+    approvedAmount: BigNumber;
 };
 
 export type TokenBreakdown = PoolToken & {

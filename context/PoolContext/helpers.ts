@@ -52,7 +52,9 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
 
-    console.debug(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
+    console.debug(
+        `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
+    );
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
     const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
@@ -97,7 +99,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: longToken,
             name: longTokenName,
             symbol: longTokenSymbol,
-            approved: false,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
             side: SideEnum.long,
@@ -106,7 +108,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: shortToken,
             name: shortTokenName,
             symbol: shortTokenSymbol,
-            approved: false,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
             side: SideEnum.short,
@@ -115,7 +117,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: quoteToken,
             name: quoteTokenName,
             symbol: quoteTokenSymbol,
-            approved: false,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
         subscribed: false,
@@ -203,11 +205,25 @@ export const fetchTokenBalances: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<[EthersBigNumber, EthersBigNumber][]> = (tokens, provider, account, pool) => {
+) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return Promise.all([tokenContract.balanceOf(account), tokenContract.allowance(account, pool)]);
+            return tokenContract.balanceOf(account);
+        }),
+    );
+};
+
+export const fetchTokenApprovals: (
+    tokens: string[],
+    provider: ethers.providers.JsonRpcProvider,
+    account: string,
+    pool: string,
+) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
+    return Promise.all(
+        tokens.map((token) => {
+            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
+            return tokenContract.allowance(account, pool);
         }),
     );
 };
