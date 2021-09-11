@@ -13,7 +13,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <TableHeader>
                 <span>Token</span>
                 <span>Last Price (USDC)</span>
-                <span>24H Change</span>
+                {/*<span>24H Change</span>*/}
                 <span>Rebalance Rate</span>
                 <span>TVL (USDC)</span>
                 <span>My Holdings (TOKENS/USDC)</span>
@@ -25,8 +25,8 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <TableRow key={token.address} rowNumber={index}>
                         <span>{token.symbol}</span>
                         <span>{toApproxCurrency(token.lastPrice)}</span>
-                        <ColoredChangeNumber number={token.change24Hours} />
-                        <RebalanceRate rebalanceRate={token.rebalanceRate}></RebalanceRate>
+                        {/*<ColoredChangeNumber number={token.change24Hours} />*/}
+                        <RebalanceRate rebalanceRate={token.rebalanceRate} />
                         <span>{toApproxCurrency(token.totalValueLocked)}</span>
                         <span>
                             <div>{`${token.myHoldings}`}</div>
@@ -66,12 +66,12 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
 
-const ColoredChangeNumber = (({ number }) => {
-    return (
-        <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
-            2,
-        )}`}</span>
-    );
-}) as React.FC<{
-    number: number;
-}>;
+// const ColoredChangeNumber = (({ number }) => {
+//     return (
+//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
+//             2,
+//         )}`}</span>
+//     );
+// }) as React.FC<{
+//     number: number;
+// }>;
