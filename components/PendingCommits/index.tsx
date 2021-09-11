@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import styled from 'styled-components';
 import { Table, TableBody, TableCell, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { Heading, QueuedCommit } from '@libs/types/General';
@@ -11,11 +11,34 @@ import { BUYS } from '@libs/constants';
 import { Logo } from '@components/General';
 import Button from '@components/General/Button';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { Select, SelectDropdown } from '@components/General/Input';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
+import { Popover, Transition } from '@headlessui/react';
+
+// import BigNumber from 'bignumber.js';
+// const testCommits = [
+//     {
+//         pool: '',
+//         id: 0,
+//         type: 0,
+//         amount: new BigNumber (5),
+//         txnHash: '',
+//         token: {
+//             side: 0,
+//             supply: new BigNumber(5),
+//             address: '',
+//             name: '',
+//             symbol: 'test',
+//             balance: new BigNumber(5),
+//             approved: true,
+//         },
+//         spent: new BigNumber(5),
+//         tokenPrice: new BigNumber(30),
+//         nextRebalance: new BigNumber(1),
+//     }
+// ]
 
 // TODO filter buys and sells
 export default (() => {
@@ -76,20 +99,60 @@ const CommitRow: React.FC<
             <TableCell>
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </TableCell>
-            <TableCell>
-                <Cancel onClick={() => uncommit(pool, id)}>Cancel</Cancel>
-                <StyledSelect icon={<MoreOutlined />}>
-                    <div>
-                        <MenuRow onClick={() => watchAsset(provider, token)}>
-                            <PlusOutlined />
-                            Add token to wallet
-                        </MenuRow>
-                        <MenuRow onClick={() => openEtherscan(txnHash)}>
-                            <Logo ticker={'ETHERSCAN'} />
-                            View on Etherscan
-                        </MenuRow>
-                    </div>
-                </StyledSelect>
+            <TableCell className="flex">
+                <Button
+                    size="xs"
+                    variant="primary-light"
+                    className="inline rounded-xl my-auto w-[65px] border border-tracer-500 focus:border-solid"
+                    onClick={() => uncommit(pool, id)}
+                >
+                    Cancel
+                </Button>
+                <Popover as="div" className="inline relative ml-2 my-auto">
+                    {({ open }) => (
+                        <>
+                            {/* Button */}
+                            <Popover.Button className={'focus:border-none focus:outline-none mb-2'}>
+                                <MoreOutlined
+                                    className="transition"
+                                    style={{
+                                        transform: open ? 'rotate(-90deg)' : '',
+                                    }}
+                                />
+                            </Popover.Button>
+
+                            {/* Menu */}
+                            <Transition
+                                as={Fragment}
+                                enter="transition ease-out duration-100"
+                                enterFrom="transform opacity-0 scale-95"
+                                enterTo="transform opacity-100 scale-100"
+                                leave="transition ease-in duration-75"
+                                leaveFrom="transform opacity-100 scale-100"
+                                leaveTo="transform opacity-0 scale-95"
+                            >
+                                <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
+                                    <div>
+                                        <div
+                                            className="flex text-sm items-center p-2 hover:bg-tracer-50"
+                                            onClick={() => watchAsset(provider, token)}
+                                        >
+                                            <PlusOutlined className="relative inline mr-2 h-[12px]" />
+                                            Add token to wallet
+                                        </div>
+                                        <div
+                                            className="flex text-sm items-center p-2 hover:bg-tracer-50"
+                                            onClick={() => openEtherscan(txnHash)}
+                                        >
+                                            <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
+                                            View on Etherscan
+                                        </div>
+                                    </div>
+                                </Popover.Panel>
+                            </Transition>
+                        </>
+                    )}
+                </Popover>
             </TableCell>
         </StyledTableRow>
     );
@@ -99,66 +162,6 @@ const StyledTableRow = styled(TableRow)`
     ${TableCell}:last-child {
         text-align: right;
     }
-`;
-
-const StyledSelect = styled(Select)`
-    width: 20px;
-    display: inline;
-    padding-left: 0;
-    border: none;
-    background: transparent;
-
-    .anticon {
-        vertical-align: 0;
-        width: 26px;
-    }
-
-    & svg {
-        color: #000;
-        height: 20px;
-        width: 20px;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-    }
-    ${SelectDropdown} {
-        left: -150px;
-    }
-`;
-
-const MenuRow = styled.div`
-    line-height: 14px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.5rem;
-    & svg,
-    ${Logo} {
-        display: inline;
-        position: relative;
-        margin-right: 0.5rem;
-    }
-    & svg {
-        height: 12px;
-    }
-    ${Logo} {
-        width: 18px;
-    }
-    &:hover {
-        background: #d1d5db;
-    }
-`;
-
-const Cancel = styled(Button)`
-    background: #dedeff;
-    display: inline;
-    border: 1px solid #3535dc;
-    box-sizing: border-box;
-    border-radius: 12px;
-    width: 65px;
-    height: 32px;
 `;
 
 // last heading is for buttons

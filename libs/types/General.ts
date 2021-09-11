@@ -1,5 +1,5 @@
 import React from 'react';
-import { SHORT, LONG, MINT, BURN, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT, BUYS, SELLS } from '@libs/constants';
+import { CommitEnum, BUYS, SELLS, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
@@ -25,11 +25,6 @@ export type APIResult = {
     message: string;
     data: any;
 };
-export type SideType = typeof LONG | typeof SHORT;
-
-export type CommitActionType = typeof MINT | typeof BURN;
-
-export type CommitType = typeof SHORT_MINT | typeof SHORT_BURN | typeof LONG_MINT | typeof LONG_BURN;
 
 export type CommitsFocus = typeof BUYS | typeof SELLS;
 
@@ -60,7 +55,7 @@ export type TokenBreakdown = PoolToken & {
 };
 
 export type PoolToken = Token & {
-    side: SideType;
+    side: SideEnum;
     supply: BigNumber;
 };
 
@@ -100,7 +95,7 @@ export type Pool = {
 export type PendingCommitInfo = {
     pool: string;
     id: number;
-    type: CommitType;
+    type: CommitEnum;
     amount: BigNumber;
     txnHash: string;
 };
