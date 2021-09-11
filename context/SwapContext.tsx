@@ -25,7 +25,7 @@ type SwapState = {
 
 export type SwapAction =
     | { type: 'setAmount'; value: number }
-    | { type: 'setCommitActionEnum'; value: CommitActionEnum }
+    | { type: 'setCommitAction'; value: CommitActionEnum }
     | { type: 'setMarket'; value: MarketType }
     | { type: 'setLeverage'; value: LeverageType }
     | { type: 'setCurrency'; value: CurrencyType }
@@ -84,7 +84,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
-            case 'setCommitActionEnum':
+            case 'setCommitAction':
                 return { ...state, commitAction: action.value };
             case 'setSide':
                 return { ...state, side: action.value };
