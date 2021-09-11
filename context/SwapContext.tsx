@@ -1,14 +1,6 @@
 import React, { useContext, useReducer } from 'react';
-import {
-    Children,
-    CommitActionType,
-    MarketType,
-    LeverageType,
-    CurrencyType,
-    SideType,
-    PoolType,
-} from '@libs/types/General';
-import { MINT, LONG, SHORT } from '@libs/constants';
+import { Children, MarketType, LeverageType, CurrencyType, PoolType } from '@libs/types/General';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';
 
@@ -20,27 +12,27 @@ interface ContextProps {
 type SwapState = {
     amount: number;
     invalidAmount: boolean;
-    commitAction: CommitActionType;
+    commitAction: CommitActionEnum;
     selectedPool: string | undefined; // address of selected pool
-    side: SideType;
+    side: SideEnum;
     leverage: LeverageType;
     currency: CurrencyType;
     options: {
-        sides: SideType[];
+        sides: SideEnum[];
         poolOptions: PoolType[];
     };
 };
 
 export type SwapAction =
     | { type: 'setAmount'; value: number }
-    | { type: 'setCommitActionType'; value: CommitActionType }
+    | { type: 'setCommitAction'; value: CommitActionEnum }
     | { type: 'setMarket'; value: MarketType }
     | { type: 'setLeverage'; value: LeverageType }
     | { type: 'setCurrency'; value: CurrencyType }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: boolean }
-    | { type: 'setSide'; value: SideType }
+    | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
 
 export const LEVERAGE_OPTIONS = [
@@ -69,13 +61,13 @@ export const LEVERAGE_OPTIONS = [
 export const swapDefaults: SwapState = {
     amount: NaN,
     invalidAmount: false,
-    commitAction: MINT,
+    commitAction: CommitActionEnum.mint,
     selectedPool: undefined,
-    side: LONG,
+    side: SideEnum.long,
     leverage: NaN,
     currency: 'DAI',
     options: {
-        sides: [LONG, SHORT], // will always be long and short
+        sides: [SideEnum.long, SideEnum.short], // will always be long and short
         poolOptions: [], // available pools
     },
 };
@@ -93,7 +85,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
-            case 'setCommitActionType':
+            case 'setCommitAction':
                 return { ...state, commitAction: action.value };
             case 'setSide':
                 return { ...state, side: action.value };

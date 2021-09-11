@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { ethers } from 'ethers';
-import { CommitType } from '@libs/types/General';
+import { CommitEnum } from '@libs/constants/index';
 import { PoolCommitter__factory, PoolCommitter } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 // const useEstimatedGasFee
-export default ((committerAddress: string, amount: number, commitType: CommitType) => {
+export default ((committerAddress: string, amount: number, commitType: CommitEnum) => {
     const { signer } = useWeb3();
     const [gasFee, setGasFee] = useState(0);
 
@@ -32,4 +32,4 @@ export default ((committerAddress: string, amount: number, commitType: CommitTyp
     }, [committerAddress, commitType, amount, signer]);
 
     return gasFee;
-}) as (committerAddress: string | undefined, amount: number, commitType: CommitType) => number;
+}) as (committerAddress: string | undefined, amount: number, commitType: CommitEnum) => number;

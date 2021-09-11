@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
-import { SideType } from '@libs/types/General';
-import { LONG, SHORT } from '@libs/constants';
+import { SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
@@ -21,11 +20,11 @@ const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, b
 
 const SIDE_OPTIONS = [
     {
-        key: LONG,
+        key: SideEnum.long,
         text: 'Long',
     },
     {
-        key: SHORT,
+        key: SideEnum.short,
         text: 'Short',
     },
 ];
@@ -74,7 +73,7 @@ export default (() => {
                     <p className="mb-2 text-black">Side</p>
                     <TWButtonGroup
                         value={side}
-                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
+                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
                         size={'lg'}
                         options={SIDE_OPTIONS}
                     />
@@ -96,7 +95,7 @@ export default (() => {
                     onClick={(index) => {
                         // everything else disabled
                         if (NOT_DISABLED_LEVERAGES.includes(index)) {
-                            swapDispatch({ type: 'setLeverage', value: index as SideType });
+                            swapDispatch({ type: 'setLeverage', value: index as SideEnum });
                         }
                     }}
                 />
@@ -129,7 +128,7 @@ export default (() => {
                 </div>
             </div>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
+            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
 
             <ExchangeButton mintOrBurn="mint" />
         </>

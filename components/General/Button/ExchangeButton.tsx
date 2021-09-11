@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 
 const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn }) => {
@@ -47,8 +47,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         Unlock USDC
                     </Button>
                     <HelperText>
-                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
-                        <a>Learn more.</a>
+                        Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.
                     </HelperText>
                 </>
             );
@@ -62,9 +61,17 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         if (!commit) {
                             return;
                         } else if (mintOrBurn === 'mint') {
-                            commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
+                            commit(
+                                selectedPool ?? '',
+                                side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint,
+                                amount,
+                            );
                         } else if (mintOrBurn === 'burn') {
-                            commit(selectedPool ?? '', side === LONG ? LONG_BURN : SHORT_BURN, amount);
+                            commit(
+                                selectedPool ?? '',
+                                side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn,
+                                amount,
+                            );
                         }
                     }}
                 >
@@ -82,6 +89,7 @@ export default ExchangeButton;
 const HelperText = styled.p`
     color: #6b7280;
     font-size: 14px;
+    margin-top: 5px;
 
     a {
         text-decoration: underline;
