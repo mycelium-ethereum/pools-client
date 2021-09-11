@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 
 const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn }) => {
@@ -62,9 +62,17 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         if (!commit) {
                             return;
                         } else if (mintOrBurn === 'mint') {
-                            commit(selectedPool ?? '', side === SideEnum.long ? LONG_MINT : SHORT_MINT, amount);
+                            commit(
+                                selectedPool ?? '',
+                                side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint,
+                                amount,
+                            );
                         } else if (mintOrBurn === 'burn') {
-                            commit(selectedPool ?? '', side === SideEnum.long ? LONG_BURN : SHORT_BURN, amount);
+                            commit(
+                                selectedPool ?? '',
+                                side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn,
+                                amount,
+                            );
                         }
                     }}
                 >

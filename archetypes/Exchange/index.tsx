@@ -1,7 +1,6 @@
 import React, { useEffect, useContext } from 'react';
 import { SwapContext } from '@context/SwapContext';
-import { MINT, BURN, SideEnum } from '@libs/constants';
-import { CommitActionType } from '@libs/types/General';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
 import styled from 'styled-components';
 import Gas from './Gas';
 import Buy from './Buy';
@@ -12,11 +11,11 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 
 const TRADE_OPTIONS = [
     {
-        key: MINT,
+        key: CommitActionEnum.mint,
         text: 'Buy',
     },
     {
-        key: BURN,
+        key: CommitActionEnum.burn,
         text: 'Sell',
     },
 ];
@@ -33,7 +32,7 @@ export default (() => {
             if (router.query.type) {
                 swapDispatch({
                     type: 'setCommitActionType',
-                    value: parseInt(router.query.type as string) as CommitActionType,
+                    value: parseInt(router.query.type as string) as CommitActionEnum,
                 });
             }
             if (router.query.side) {
@@ -47,12 +46,12 @@ export default (() => {
             <TradeModal>
                 <div className="flex">
                     <TWButtonGroup
-                        value={swapState?.commitAction ?? MINT}
+                        value={swapState?.commitAction ?? CommitActionEnum.mint}
                         size={'xl'}
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionType });
+                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionEnum });
                             }
                         }}
                         options={TRADE_OPTIONS}
@@ -63,7 +62,7 @@ export default (() => {
                 <Divider className="my-8" />
 
                 {/** Inputs */}
-                {swapState?.commitAction === BURN ? <Sell /> : <Buy />}
+                {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
             </TradeModal>
         </div>
     );

@@ -37,7 +37,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                                 size="sm"
                                 variant="primary-light"
-                                onClick={() => onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                                onClick={() =>
+                                    onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
+                                }
                             >
                                 Buy
                             </Button>
@@ -46,7 +48,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 size="sm"
                                 variant="primary-light"
                                 disabled={!hasHoldings}
-                                onClick={() => onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                                onClick={() =>
+                                    onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
+                                }
                             >
                                 Sell
                             </Button>

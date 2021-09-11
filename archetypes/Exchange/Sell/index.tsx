@@ -71,7 +71,10 @@ export default (() => {
                     </InputContainer>
                     <p>
                         Available:{' '}
-                        {side === SideEnum.long ? pool.longToken.balance.toFixed(2) : pool.shortToken.balance.toFixed(2)} {'>>'}{' '}
+                        {side === SideEnum.long
+                            ? pool.longToken.balance.toFixed(2)
+                            : pool.shortToken.balance.toFixed(2)}{' '}
+                        {'>>'}{' '}
                         {side === SideEnum.long
                             ? isNaN(amount)
                                 ? pool.longToken.balance.toFixed(2)
