@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { LONG, LONG_BURN, LONG_MINT, SHORT_BURN, SHORT_MINT, MINT, BURN } from '@libs/constants';
 import Button from '@components/General/Button';
 
-const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn }) => {
+const ExchangeButton: React.FC<{ mintOrBurn: typeof MINT | typeof BURN }> = ({ mintOrBurn }) => {
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults } = useSwapContext();
@@ -61,14 +61,14 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                     onClick={(_e) => {
                         if (!commit) {
                             return;
-                        } else if (mintOrBurn === 'mint') {
+                        } else if (mintOrBurn === MINT) {
                             commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
-                        } else if (mintOrBurn === 'burn') {
+                        } else if (mintOrBurn === BURN) {
                             commit(selectedPool ?? '', side === LONG ? LONG_BURN : SHORT_BURN, amount);
                         }
                     }}
                 >
-                    Ok, let&apos;s {mintOrBurn === 'mint' ? 'buy' : 'sell'}
+                    Ok, let&apos;s {mintOrBurn === MINT ? 'buy' : 'sell'}
                 </Button>
             );
         }

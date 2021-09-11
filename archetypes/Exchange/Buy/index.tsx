@@ -3,7 +3,7 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
 import { SideType } from '@libs/types/General';
-import { LONG, SHORT } from '@libs/constants';
+import { LONG, SHORT, MINT } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
@@ -131,7 +131,7 @@ export default (() => {
 
             <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
-            <ExchangeButton mintOrBurn="mint" />
+            <ExchangeButton mintOrBurn={MINT} />
         </>
     );
 }) as React.FC;
