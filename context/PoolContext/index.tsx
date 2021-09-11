@@ -110,7 +110,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // fetch commits
                 try {
                     commitDispatch({ type: 'resetCommits' });
-                    fetchCommits(pool.committer.address, provider, account).then((committerInfo) => {
+                    fetchCommits(pool.committer.address, provider).then((committerInfo) => {
                         poolsDispatch({
                             type: 'addToPending',
                             pool: pool.address,
@@ -125,15 +125,18 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
 
                         committerInfo.allUnexecutedCommits.map((commit) => {
-                            commitDispatch({
-                                type: 'addCommit',
-                                commitInfo: {
-                                    pool: pool.address,
-                                    id: commit.args.commitID.toNumber(),
-                                    amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
-                                    type: commit.args.commitType as CommitEnum,
-                                    txnHash: commit.transactionHash,
-                                },
+                            commit.getTransaction().then((txn) => {
+                                commitDispatch({
+                                    type: 'addCommit',
+                                    commitInfo: {
+                                        pool: pool.address,
+                                        id: commit.args.commitID.toNumber(),
+                                        amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
+                                        type: commit.args.commitType as CommitEnum,
+                                        from: txn.from,
+                                        txnHash: txn.hash,
+                                    },
+                                });
                             });
                         });
                     });
@@ -173,6 +176,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             commitInfo: {
                                 id: id.toNumber(),
                                 pool,
+                                from: txn.from, // from address
                                 txnHash: txn.hash,
                                 type: type as CommitEnum,
                                 amount: new BigNumber(ethers.utils.formatEther(amount)),

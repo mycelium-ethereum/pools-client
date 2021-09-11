@@ -11,19 +11,24 @@ export const SIDE_MAP: Record<SideEnum, string> = {
     [SideEnum.short]: 'Short',
 };
 
-// token types
+// Commit actions enum
 export enum CommitActionEnum {
     mint = 0,
     burn = 1,
 }
 
-// token type constants
-
+// Commit type enum
 export enum CommitEnum {
     short_mint = 0,
     short_burn = 1,
     long_mint = 2,
     long_burn = 3,
+}
+
+// Focused on either buys or shorts when viewing pending commits
+export enum CommitsFocusEnum {
+    buys = 0,
+    sells = 1,
 }
 
 export const PENDING_COMMIT = 1;
@@ -48,7 +53,3 @@ export const EMPTY_TOKEN: PoolToken = {
 // networks
 export const ARBITRUM = '421611';
 export const KOVAN = '42';
-
-// Commit context
-export const BUYS = 0;
-export const SELLS = 1;
