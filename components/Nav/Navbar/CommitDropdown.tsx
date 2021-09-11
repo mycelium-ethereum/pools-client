@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { classNames } from '@libs/utils/functions';
 
 // const CommitDropdown
-export default (({ setShowQueued, show }) => {
+export default (({ setShowQueued, hide }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
 
@@ -30,9 +30,8 @@ export default (({ setShowQueued, show }) => {
 
     return (
         <QueuedDropdown
-            className={classNames('my-auto mx-2 w-[120px] text-left', !show ? 'hidden' : 'hidden lg:block')}
+            className={classNames('my-auto mx-2 w-[120px] text-left', hide ? 'hidden' : 'block')}
             preview={`${buys + sells} Queued`}
-            show={true}
         >
             <Header>
                 UP NEXT <TimeLeft targetTime={nextUpdate} />
@@ -47,12 +46,10 @@ export default (({ setShowQueued, show }) => {
     );
 }) as React.FC<{
     setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
-    show: boolean;
+    hide?: boolean;
 }>;
 
-export const QueuedDropdown = styled(Select)<{
-    show: boolean;
-}>`
+export const QueuedDropdown = styled(Select)`
     // for size of menu
     ${SelectDropdown} {
         left: -50px;

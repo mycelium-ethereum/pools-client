@@ -7,15 +7,15 @@ const DEFAULT =
     'inline-flex justify-center w-full rounded-md border-white border shadow-sm px-4 py-2 bg-white bg-opacity-20 text-sm font-medium text-white hover:bg-blue-900 focus:outline-none focus:border-solid';
 
 // const DropdownPopup
-export default (({ preview, buttonClasses, children }) => {
+export default (({ preview, className, buttonClasses, children }) => {
     return (
-        <Popover as="div">
+        <Popover as="div" className={className ?? ''}>
             {({ open }) => (
                 <>
                     {/* Button */}
                     <Popover.Button className={buttonClasses ?? DEFAULT}>
                         {preview}
-                        <Arrow className="self-center" style={{ transform: open ? 'rotate(180deg)' : '' }} />
+                        <Arrow className="self-center ml-1" style={{ transform: open ? 'rotate(180deg)' : '' }} />
                     </Popover.Button>
 
                     {/* Menu */}
@@ -39,6 +39,7 @@ export default (({ preview, buttonClasses, children }) => {
 }) as React.FC<{
     preview: React.ReactNode;
     buttonClasses?: string;
+    className?: string;
 }>;
 
 const Arrow = styled(DownOutlined)`

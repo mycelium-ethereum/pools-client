@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import ThemeSwitcher from './ThemeSwitcher';
-// @ts-ignore
-import ENS, { getEnsAddress } from '@ensdomains/ensjs';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown from './CommitDropdown';
+import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 
@@ -51,14 +49,10 @@ const Links = styled.ul`
 export const NavBarContent = styled(({ className }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
-    const { account, network, ethBalance } = useWeb3();
-
-    const { onboard, resetOnboard, handleConnect } = useWeb3Actions();
+    const { account } = useWeb3();
 
     // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
-
-    const ensName = useEnsName(account ?? '');
 
     const linkStyles = 'mx-2 py-2 px-2';
 
@@ -78,26 +72,20 @@ export const NavBarContent = styled(({ className }) => {
                 {/*</li>*/}
             </Links>
 
-            <NetworkDropdown show={!!account} />
+            {/* DESKTOP */}
+            <span className="hidden lg:flex ml-auto">
+                <NetworkDropdown hide={!account} className="relative my-auto mx-4 whitespace-nowrap" />
 
-            <AccountDropdown
-                onboard={onboard}
-                account={account}
-                ensName={ensName}
-                network={network ?? 0}
-                tokenBalance={ethBalance ?? 0}
-                logout={resetOnboard}
-                handleConnect={handleConnect}
-            />
+                <AccountDropdown account={account ?? ''} className="my-auto" />
 
-            {/* Hide if showing queued */}
-            <AccountBalance show={!showQueued && !!account} />
+                {/* Hide if showing queued */}
+                <AccountBalance hide={showQueued} className="my-auto mx-2" />
 
-            <CommitDropdown show={showQueued} setShowQueued={setShowQueued} />
+                <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
+                {/* <ThemeSwitcher /> */}
+            </span>
 
-            {/* <ThemeSwitcher /> */}
-
-            <MobileMenu />
+            <MobileMenu account={account ?? ''} />
 
             {/** TODO this will need to change to Arbritrum network id */}
             {/* {process.env.NEXT_PUBLIC_DEPLOYMENT !== 'DEVELOPMENT' ? (
@@ -114,52 +102,14 @@ export const NavBarContent = styled(({ className }) => {
     background-repeat: no-repeat;
     background-size: cover;
 
-    ${MobileMenu} {
-        display: none;
-    }
-
     @media (max-width: 768px) {
         padding: 0 1rem;
     }
     @media (max-width: 1024px) {
-        ${ThemeSwitcher}, ${Links}, ${AccountBalance} {
+        ${ThemeSwitcher}, ${Links}, ${QueuedDropdown} {
             display: none;
-        }
-        ${MobileMenu} {
-            display: block;
         }
     }
 `;
 
 export default NavBar;
-
-const useEnsName = (account: string) => {
-    const [ensName, setEnsName] = useState(account);
-    const [ens, setEns] = useState(undefined);
-    const { provider } = useWeb3();
-
-    useEffect(() => {
-        if (provider) {
-            const ens = new ENS({ provider, ensAddress: getEnsAddress('1') });
-            setEns(ens);
-        }
-    }, [provider]);
-
-    useEffect(() => {
-        if (!!ens && !!account) {
-            const getEns = async () => {
-                try {
-                    const name = await (ens as ENS).getName(account);
-                    if (name.name) {
-                        setEnsName(name.name);
-                    }
-                } catch (err) {
-                    console.error('Failed to fetch ens name', err);
-                }
-            };
-            getEns();
-        }
-    }, [ens, account]);
-
-    return ensName;
-};

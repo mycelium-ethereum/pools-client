@@ -1,10 +1,11 @@
 import React from 'react';
 import dynamic from 'next/dynamic';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import useEnsName from '@libs/hooks/useEnsName';
 import styled from 'styled-components';
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
-import { API as OnboardApi } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { CopyOutlined, PlusOutlined } from '@ant-design/icons';
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
@@ -12,13 +13,22 @@ import Button from '@components/General/Button';
 const ETHERSCAN_URI = 'https://etherscan.io';
 const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
-export default (({ account, ensName, logout, handleConnect, network, className }) => {
+export default (({ account, className }) => {
+    const { network } = useWeb3();
+    const { resetOnboard, handleConnect } = useWeb3Actions();
+    const ensName = useEnsName(account ?? '');
+
     return (
-        <div className={`${className} relative inline-block text-left my-auto`}>
+        <div className={`${className} relative inline-block text-left`}>
             {(() => {
                 if (!!account) {
                     return (
-                        <AccountDropdownButton account={account} ensName={ensName} network={network} logout={logout} />
+                        <AccountDropdownButton
+                            account={account}
+                            ensName={ensName}
+                            network={network ?? 0}
+                            logout={resetOnboard}
+                        />
                     );
                 } else {
                     return <ConnectWalletButton handleConnect={handleConnect} />;
@@ -27,14 +37,8 @@ export default (({ account, ensName, logout, handleConnect, network, className }
         </div>
     );
 }) as React.FC<{
-    account: string | undefined;
-    ensName: string;
-    onboard: OnboardApi | undefined;
-    logout: () => void;
-    handleConnect: () => void;
-    network: number;
+    account: string;
     className?: string;
-    tokenBalance: number;
 }>;
 
 interface ConnectWalletProps {
