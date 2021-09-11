@@ -90,6 +90,8 @@ export type Pool = {
     subscribed: boolean;
 };
 
+// for mint the amount is the amount of collateral spent
+// for burn the amount is the amount of tokens
 export type PendingCommitInfo = {
     pool: string;
     id: number;
@@ -101,7 +103,6 @@ export type PendingCommitInfo = {
 
 export type QueuedCommit = PendingCommitInfo & {
     token: PoolToken;
-    spent: BigNumber;
     tokenPrice: BigNumber;
     nextRebalance: BigNumber;
 };

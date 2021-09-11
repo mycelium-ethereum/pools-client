@@ -42,7 +42,6 @@ export default ((focus) => {
                     ...commit,
                     token,
                     tokenPrice,
-                    spent: commit.amount.times(tokenPrice),
                     nextRebalance: lastUpdate.plus(updateInterval),
                 });
             }
