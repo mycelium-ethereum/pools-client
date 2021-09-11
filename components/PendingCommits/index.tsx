@@ -3,6 +3,7 @@ import styled from 'styled-components';
 // import { Table, TableBody, span, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { PoolToken, QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
+import useTimeNow from '@libs/hooks/useTimeNow';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
@@ -121,7 +122,7 @@ const BuyRow: React.FC<
         uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, locked }) => {
+> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, lockTimeSeconds }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -139,7 +140,7 @@ const BuyRow: React.FC<
                     provider={provider}
                     id={id}
                     txnHash={txnHash}
-                    locked={locked}
+                    lockTimeSeconds={lockTimeSeconds}
                     lockTooltipText="You can no longer cancel this buy as the front-running interval has been reached."
                 />
             </span>
@@ -153,7 +154,7 @@ const SellRow: React.FC<
         uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, locked }) => {
+> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, lockTimeSeconds }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -171,7 +172,7 @@ const SellRow: React.FC<
                     provider={provider}
                     id={id}
                     txnHash={txnHash}
-                    locked={locked}
+                    lockTimeSeconds={lockTimeSeconds}
                     lockTooltipText="You can no longer cancel this sell as the front-running interval has been reached."
                 />
             </span>
@@ -185,66 +186,85 @@ const Actions: React.FC<{
     provider: ethers.providers.JsonRpcProvider | null;
     token: PoolToken;
     txnHash: string;
-    locked: boolean;
+    lockTimeSeconds: number;
     lockTooltipText: string;
     uncommit: (pool: string, commitID: number) => void;
-}> = ({ uncommit, pool, id, provider, token, txnHash, locked, lockTooltipText }) => (
-    <>
+}> = ({ uncommit, pool, id, provider, token, txnHash, lockTimeSeconds, lockTooltipText }) => {
+    return (
+        <>
+            <CancelCommitButton
+                lockTimeSeconds={lockTimeSeconds}
+                lockTooltipText={lockTooltipText}
+                onClick={() => uncommit(pool, id)}
+            />
+            <Popover as="div" className="inline relative ml-2 my-auto">
+                {({ open }) => (
+                    <>
+                        {/* Button */}
+                        <Popover.Button className={'focus:border-none focus:outline-none mb-2'}>
+                            <MoreOutlined
+                                className="transition"
+                                style={{
+                                    transform: open ? 'rotate(-90deg)' : '',
+                                }}
+                            />
+                        </Popover.Button>
+
+                        {/* Menu */}
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-out duration-100"
+                            enterFrom="transform opacity-0 scale-95"
+                            enterTo="transform opacity-100 scale-100"
+                            leave="transition ease-in duration-75"
+                            leaveFrom="transform opacity-100 scale-100"
+                            leaveTo="transform opacity-0 scale-95"
+                        >
+                            <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
+                                <div>
+                                    <div
+                                        className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
+                                        onClick={() => watchAsset(provider, token)}
+                                    >
+                                        <PlusOutlined className="relative inline mr-2 h-[12px]" />
+                                        Add token to wallet
+                                    </div>
+                                    <div
+                                        className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
+                                        onClick={() => openEtherscan(txnHash)}
+                                    >
+                                        <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
+                                        View on Etherscan
+                                    </div>
+                                </div>
+                            </Popover.Panel>
+                        </Transition>
+                    </>
+                )}
+            </Popover>
+        </>
+    );
+};
+
+const CancelCommitButton: React.FC<{
+    lockTimeSeconds: number;
+    lockTooltipText: string;
+    onClick: () => void;
+}> = ({ lockTimeSeconds, lockTooltipText, onClick }) => {
+    const { nowSeconds } = useTimeNow();
+    const locked = nowSeconds > lockTimeSeconds;
+
+    return (
         <Tooltip text={lockTooltipText} placement="left" show={locked}>
             <Button
                 size="xs"
                 variant="primary-light"
                 className="inline rounded-xl my-auto w-[65px] border border-tracer-500 focus:border-solid"
-                onClick={() => uncommit(pool, id)}
+                onClick={onClick}
                 disabled={locked}
             >
                 Cancel
             </Button>
         </Tooltip>
-        <Popover as="div" className="inline relative ml-2 my-auto">
-            {({ open }) => (
-                <>
-                    {/* Button */}
-                    <Popover.Button className={'focus:border-none focus:outline-none mb-2'}>
-                        <MoreOutlined
-                            className="transition"
-                            style={{
-                                transform: open ? 'rotate(-90deg)' : '',
-                            }}
-                        />
-                    </Popover.Button>
-
-                    {/* Menu */}
-                    <Transition
-                        as={Fragment}
-                        enter="transition ease-out duration-100"
-                        enterFrom="transform opacity-0 scale-95"
-                        enterTo="transform opacity-100 scale-100"
-                        leave="transition ease-in duration-75"
-                        leaveFrom="transform opacity-100 scale-100"
-                        leaveTo="transform opacity-0 scale-95"
-                    >
-                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
-                            <div>
-                                <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
-                                    onClick={() => watchAsset(provider, token)}
-                                >
-                                    <PlusOutlined className="relative inline mr-2 h-[12px]" />
-                                    Add token to wallet
-                                </div>
-                                <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
-                                    onClick={() => openEtherscan(txnHash)}
-                                >
-                                    <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
-                                    View on Etherscan
-                                </div>
-                            </div>
-                        </Popover.Panel>
-                    </Transition>
-                </>
-            )}
-        </Popover>
-    </>
-);
+    );
+};

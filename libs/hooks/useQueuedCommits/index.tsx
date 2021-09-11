@@ -46,15 +46,15 @@ export default ((focus) => {
                     tokenPrice = calcTokenPrice(longBalance, longToken.supply);
                 }
 
-                const nowSeconds = Math.floor(Date.now() / 1000);
-                const lockTime = lastUpdate.plus(updateInterval).minus(frontRunningInterval).toNumber();
+                // timestamp for when commit can no longer be cancelled
+                const lockTimeSeconds = lastUpdate.plus(updateInterval).minus(frontRunningInterval).toNumber();
 
                 parsedCommits.push({
                     ...commit,
                     token,
                     tokenPrice,
                     nextRebalance: lastUpdate.plus(updateInterval),
-                    locked: nowSeconds > lockTime,
+                    lockTimeSeconds,
                 });
             }
             setAllQueuedCommits(parsedCommits);
