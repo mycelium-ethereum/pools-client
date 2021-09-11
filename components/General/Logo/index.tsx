@@ -27,7 +27,7 @@ interface LProps {
 }
 
 export const Logo = styled(({ className, ticker, clear }: LProps) => {
-    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['TSLA']} alt="logo" />;
+    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']} alt="logo" />;
 })<LProps>`
     width: 30px;
     margin: 5px 0;

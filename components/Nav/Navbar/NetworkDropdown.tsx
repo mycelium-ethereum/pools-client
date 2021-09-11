@@ -5,7 +5,7 @@ import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { classNames } from '@libs/utils/functions';
 
 export default (({ show }) => {
@@ -16,7 +16,7 @@ export default (({ show }) => {
             preview={
                 <NetworkPreview
                     networkID={network.toString()}
-                    networkName={networkConfig[network]?.name ?? 'Unknown'}
+                    networkName={networkConfig[network]?.name ?? 'Unsupported'}
                 />
             }
             onChange={(event: any) => {
@@ -27,7 +27,6 @@ export default (({ show }) => {
                 Arbitrum (Coming soon)
             </SelectOption>
             <SelectOption value={ARBITRUM_RINKEBY}>Arbitrum Rinkeby</SelectOption>
-            <SelectOption value={KOVAN}>Kovan</SelectOption>
         </Select>
     );
 }) as React.FC<{
