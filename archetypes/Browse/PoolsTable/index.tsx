@@ -12,7 +12,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         <Table>
             <TableHeader>
                 <span>Token</span>
-                <span>Last Price (USDC)</span>
+                <span>PRICE (USDC) *</span>
                 {/*<span>24H Change</span>*/}
                 <span>Rebalance Rate</span>
                 <span>TVL (USDC)</span>
