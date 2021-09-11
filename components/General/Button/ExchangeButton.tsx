@@ -3,13 +3,13 @@ import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, CommitEnum } from '@libs/constants';
+import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 
-const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn }) => {
+const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
-    const { swapState = swapDefaults } = useSwapContext();
+    const { swapState = swapDefaults, swapDispatch } = useSwapContext();
     const { selectedPool, side, amount } = swapState;
 
     const pool = usePool(selectedPool);
@@ -58,24 +58,24 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                     variant="primary"
                     disabled={!selectedPool || !amount}
                     onClick={(_e) => {
+                        let side_;
                         if (!commit) {
                             return;
-                        } else if (mintOrBurn === 'mint') {
-                            commit(
-                                selectedPool ?? '',
-                                side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint,
-                                amount,
-                            );
-                        } else if (mintOrBurn === 'burn') {
-                            commit(
-                                selectedPool ?? '',
-                                side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn,
-                                amount,
-                            );
                         }
+                        if (actionType === CommitActionEnum.mint) {
+                            side_ = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
+                        } else {
+                            // actionType === CommitActionEnum.burn
+                            side_ = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
+                        }
+                        commit(selectedPool ?? '', side_, amount, {
+                            onSuccess: () => {
+                                swapDispatch?.({ type: 'reset' });
+                            },
+                        });
                     }}
                 >
-                    Ok, let&apos;s {mintOrBurn === 'mint' ? 'buy' : 'sell'}
+                    Ok, let&apos;s {actionType === CommitActionEnum.mint ? 'buy' : 'sell'}
                 </Button>
             );
         }

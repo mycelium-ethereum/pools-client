@@ -18,14 +18,14 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <SwapStore>
-                <PoolStore>
-                    <NavBar />
-                    <InvestNav />
+            <PoolStore>
+                <NavBar />
+                <InvestNav />
+                <SwapStore>
                     <Exchange />
-                    <PendingCommits />
-                </PoolStore>
-            </SwapStore>
+                </SwapStore>
+                <PendingCommits />
+            </PoolStore>
             <Footer />
         </Page>
     );

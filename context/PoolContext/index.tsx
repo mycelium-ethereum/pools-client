@@ -3,7 +3,6 @@ import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { useSwapContext } from '@context/SwapContext';
 import { reducer, initialPoolState } from './poolDispatch';
 import { fetchTokenBalances, initPool, fetchCommits } from './helpers';
 import { useMemo } from 'react';
@@ -22,12 +21,16 @@ import { SideEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 
+type Options = {
+    onSuccess?: (...args: any) => any;
+};
+
 interface ContextProps {
     pools: Record<string, Pool>;
 }
 
 interface ActionContextProps {
-    commit: (pool: string, commitType: CommitEnum, amount: number) => void;
+    commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
     uncommit: (pool: string, commitID: number) => void;
 }
@@ -48,9 +51,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
-    // const { handleTransaction } = useContext(TransactionContext);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
-    const { swapDispatch } = useSwapContext();
 
     /** If pools changes then re-init them */
     useMemo(() => {
@@ -277,10 +278,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitEnum, amount: number) => Promise<void> = async (
+    const commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void> = async (
         pool,
         commitType,
         amount,
+        options,
     ) => {
         const committerAddress = poolsState.pools[pool].committer.address;
         if (!committerAddress) {
@@ -297,9 +299,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     waiting: 'Submitting commit',
                     error: 'Failed to commit',
                 },
-                onSuccess: async (receipt) => {
+                onSuccess: (receipt) => {
                     console.debug('Successfully submitted commit txn: ', receipt);
-                    swapDispatch?.({ type: 'reset' });
+                    options?.onSuccess ? options.onSuccess(receipt) : null;
                 },
             });
         }
@@ -314,7 +316,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
         if (handleTransaction) {
-            handleTransaction(committer.uncommit, [commitID], {
+            return handleTransaction(committer.uncommit, [commitID], {
                 network: network,
                 statusMessages: {
                     waiting: 'Submitting commit',

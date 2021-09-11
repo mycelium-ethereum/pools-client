@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
-import { SideEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
@@ -130,7 +130,7 @@ export default (() => {
 
             <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
 
-            <ExchangeButton mintOrBurn="mint" />
+            <ExchangeButton actionType={CommitActionEnum.mint} />
         </>
     );
 }) as React.FC;

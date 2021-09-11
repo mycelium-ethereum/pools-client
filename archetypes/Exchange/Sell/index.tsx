@@ -4,7 +4,7 @@ import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
-import { SideEnum } from '@libs/constants';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
@@ -88,7 +88,7 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
 
-            <ExchangeButton mintOrBurn="burn" />
+            <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
     );
 }) as React.FC;
