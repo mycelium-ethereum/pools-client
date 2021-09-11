@@ -12,9 +12,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         <Table>
             <TableHeader>
                 <span>Token</span>
-                <span>Last Price (USDC)</span>
+                <span>PRICE (USDC) *</span>
                 {/*<span>24H Change</span>*/}
-                <span>Rebalance Rate</span>
+                <span>REBALANCE RATE *</span>
                 <span>TVL (USDC)</span>
                 <span>My Holdings (TOKENS/USDC)</span>
                 <span>{/* Empty header for buttons column */}</span>
