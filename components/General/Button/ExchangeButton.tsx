@@ -47,7 +47,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         Unlock USDC
                     </Button>
                     <HelperText>
-                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
+                        Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.{' '}
                         <a>Learn more.</a>
                     </HelperText>
                 </>
