@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
 import { CommitEnum } from '@libs/constants';
 import { useCommits } from '@context/UsersCommitContext';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 export default (() => {
+    const { account = '' } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools = {} } = usePools();
     const [buys, setBuys] = useState<number>(0);
@@ -15,7 +17,11 @@ export default (() => {
             let buys = 0,
                 sells = 0,
                 nextUpdate = 0;
+            const accountLower = account.toLowerCase();
             Object.values(commits).map((commit) => {
+                if (commit.from.toLowerCase() !== accountLower) {
+                    return;
+                }
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
                     buys += 1;
                 } else {
@@ -30,7 +36,7 @@ export default (() => {
             setSells(sells);
             setNextUpdate(nextUpdate);
         }
-    }, [commits, pools]);
+    }, [commits, pools, account]);
 
     return {
         buys,

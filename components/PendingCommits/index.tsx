@@ -197,14 +197,14 @@ const Actions: React.FC<{
                         <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
                             <div>
                                 <div
-                                    className="flex text-sm items-center p-2 hover:bg-tracer-50"
+                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
                                     onClick={() => watchAsset(provider, token)}
                                 >
                                     <PlusOutlined className="relative inline mr-2 h-[12px]" />
                                     Add token to wallet
                                 </div>
                                 <div
-                                    className="flex text-sm items-center p-2 hover:bg-tracer-50"
+                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
                                     onClick={() => openEtherscan(txnHash)}
                                 >
                                     <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
