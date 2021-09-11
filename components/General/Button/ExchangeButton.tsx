@@ -47,8 +47,7 @@ const ExchangeButton: React.FC<{ mintOrBurn: 'mint' | 'burn' }> = ({ mintOrBurn 
                         Unlock USDC
                     </Button>
                     <HelperText>
-                        Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.{' '}
-                        <a>Learn more.</a>
+                        Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.
                     </HelperText>
                 </>
             );
@@ -90,6 +89,7 @@ export default ExchangeButton;
 const HelperText = styled.p`
     color: #6b7280;
     font-size: 14px;
+    margin-top: 5px;
 
     a {
         text-decoration: underline;
