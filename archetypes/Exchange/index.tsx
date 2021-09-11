@@ -31,7 +31,7 @@ export default (() => {
             }
             if (router.query.type) {
                 swapDispatch({
-                    type: 'setCommitActionType',
+                    type: 'setCommitAction',
                     value: parseInt(router.query.type as string) as CommitActionEnum,
                 });
             }
@@ -51,7 +51,7 @@ export default (() => {
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionEnum });
+                                swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
                             }
                         }}
                         options={TRADE_OPTIONS}
