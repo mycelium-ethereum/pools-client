@@ -4,7 +4,7 @@ import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
-import { ARBITRUM } from '@libs/constants';
+import { ARBITRUM_RINKEBY } from '@libs/constants';
 
 interface ContextProps {
     pools: PoolType[];
@@ -38,7 +38,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         const fetch = async () => {
             if (contract) {
-                if (network === parseInt(ARBITRUM)) {
+                if (network === parseInt(ARBITRUM_RINKEBY)) {
                     // hacky temp solution to rpc limit issues
                     setPools([
                         {
