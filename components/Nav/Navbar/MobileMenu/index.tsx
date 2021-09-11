@@ -6,8 +6,21 @@ import { classNames } from '@libs/utils/functions';
 import NetworkDropdown from '../NetworkDropdown';
 import AccountDropdown from '../AccountDropdown';
 
+import Invest from '@public/img/general/invest.svg';
+import Stake from '@public/img/general/stake.svg';
+import Icon from '@ant-design/icons';
+import { useRouter } from 'next/router';
+
 export default (({ account, className }) => {
     const [open, setOpen] = useState(false);
+    const router = useRouter();
+
+    const handleRoute = (route: string) => {
+        router.push({
+            pathname: route,
+        });
+        setOpen(false);
+    };
 
     return (
         <div className={classNames(`relative m-auto mr-0 overflow-hidden lg:hidden`, className ?? '')}>
@@ -36,8 +49,16 @@ export default (({ account, className }) => {
                             >
                                 <div className="w-screen md">
                                     <div className="h-full flex flex-col p-6 bg-tracer-900 overflow-y-scroll">
-                                        <AccountDropdown account={account} />
-                                        <NetworkDropdown className="w-full my-4" />
+                                        <AccountDropdown account={account} className="my-4" />
+                                        <NetworkDropdown className="w-full my-4 relative text-center" />
+                                        <div className="text-white mt-2" onClick={() => handleRoute('/')}>
+                                            <Icon className="text-xl mr-2 align-bottom" component={Invest} />
+                                            Invest
+                                        </div>
+                                        <div className="text-white mt-2" onClick={() => handleRoute('stake')}>
+                                            <Icon className="text-xl mr-2 align-bottom" component={Stake} />
+                                            Stake
+                                        </div>
                                     </div>
                                 </div>
                             </Transition.Child>

@@ -23,7 +23,9 @@ export default (({ className }) => {
             <SelectOption disabled value={ARBITRUM}>
                 Arbitrum (Coming soon)
             </SelectOption>
-            <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>Arbitrum Rinkeby</SelectOption>
+            <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>
+                Arbitrum Rinkeby
+            </SelectOption>
         </TWPopup>
     );
 }) as React.FC<{

@@ -17,13 +17,18 @@ export default (({ account, className }) => {
     const { network } = useWeb3();
     const { resetOnboard, handleConnect } = useWeb3Actions();
     const ensName = useEnsName(account ?? '');
-    
+
     return (
-        <div className={`${className} relative inline-block text-left my-auto`}>
+        <div className={`${className} relative inline-block text-left`}>
             {(() => {
                 if (!!account) {
                     return (
-                        <AccountDropdownButton account={account} ensName={ensName} network={network ?? 0} logout={resetOnboard} />
+                        <AccountDropdownButton
+                            account={account}
+                            ensName={ensName}
+                            network={network ?? 0}
+                            logout={resetOnboard}
+                        />
                     );
                 } else {
                     return <ConnectWalletButton handleConnect={handleConnect} />;
