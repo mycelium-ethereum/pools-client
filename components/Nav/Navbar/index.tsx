@@ -71,11 +71,11 @@ export const NavBarContent = styled(({ className }) => {
                         <a className="m-auto">Invest</a>
                     </Link>
                 </li>
-                <li className={linkStyles + (route === 'strategise' ? ' selected' : '')}>
-                    <Link href="/">
-                        <a className="m-auto">Stake</a>
-                    </Link>
-                </li>
+                {/*<li className={linkStyles + (route === 'strategise' ? ' selected' : '')}>*/}
+                {/*    <Link href="/">*/}
+                {/*        <a className="m-auto">Stake</a>*/}
+                {/*    </Link>*/}
+                {/*</li>*/}
             </Links>
 
             <NetworkDropdown show={!!account} />
