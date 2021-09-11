@@ -32,7 +32,8 @@ export type SwapAction =
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: boolean }
-    | { type: 'setSide'; value: SideEnum };
+    | { type: 'setSide'; value: SideEnum }
+    | { type: 'reset' };
 
 export const LEVERAGE_OPTIONS = [
     {
@@ -103,6 +104,11 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                         ...state.options,
                         poolOptions: action.options,
                     },
+                };
+            case 'reset':
+                return {
+                    ...swapDefaults,
+                    commitAction: state.commitAction,
                 };
             default:
                 throw new Error('Unexpected action');
