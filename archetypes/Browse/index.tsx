@@ -143,12 +143,6 @@ export const Browse: React.FC = () => {
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
-                    <p className="mt-1 text-gray-500">
-                        * <b>Price</b> and <b>Rebalance Rate</b> are indicative only. The values displayed are the
-                        estimated <b>Price</b> and <b>Rebalance Rate</b> for the next rebalance, given the queued buys
-                        and sells. The actual <b>Price</b> and <b>Rebalance Rate</b> will be calculated and updated at
-                        the next rebalance.
-                    </p>
                 </BrowseModal>
             </BrowseContainer>
             <FilterModal state={state} dispatch={dispatch} />

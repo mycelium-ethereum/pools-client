@@ -19,10 +19,10 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <Table>
                 <TableHeader>
                     <span>Token</span>
-                    <span>PRICE (USDC) *</span>
+                    <span>Last price (USDC)</span>
                     {/*<span>24H Change</span>*/}
                     <span className="flex">
-                        REBALANCE RATE *&nbsp;
+                        Last rebalance rate&nbsp;
                         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
                             <QuestionMark />
                         </span>
