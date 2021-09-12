@@ -20,6 +20,8 @@ import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
 import { Tooltip } from '@components/General/Tooltip';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 
+import Close from '/public/img/general/close-black.svg';
+
 // import BigNumber from 'bignumber.js';
 // const testCommits = [
 //     {
@@ -59,9 +61,14 @@ export default (() => {
 
     return (
         <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
-            <h1 className="text-bold font-size[30px] text-cool-gray-900">
-                {`Queued ${focus === CommitsFocusEnum.buys ? 'Buys' : 'Sells'}`}
-            </h1>
+            <div className="flex justify-between">
+                <h1 className="text-bold font-size[30px] text-cool-gray-900">
+                    {`Queued ${focus === CommitsFocusEnum.buys ? 'Buys' : 'Sells'}`}
+                </h1>
+                <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
+                    <Close />
+                </div>
+            </div>
             <Table>
                 {focus === CommitsFocusEnum.buys ? (
                     <>
