@@ -40,7 +40,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
                             <span>{toApproxCurrency(token.totalValueLocked)}</span>
                             <span>
-                                <div>{`${token.myHoldings}`}</div>
+                                <div>{`${token.myHoldings.toFixed(2)}`}</div>
                                 <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
                             </span>
                             <span>
