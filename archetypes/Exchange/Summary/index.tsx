@@ -30,7 +30,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                         <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                     </div>
                 </Section>
-                <Section label="Expected Rebalance Multiplier">
+                <Section label="Rebalance Rate">
                     {`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}
                 </Section>
                 <Countdown>
