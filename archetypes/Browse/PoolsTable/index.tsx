@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
+import TimeLeft from '@components/TimeLeft';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
@@ -26,6 +27,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <QuestionMark />
                         </span>
                     </span>
+                    <span>Next Rebalance</span>
                     <span>TVL (USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
                     <span>{/* Empty header for buttons column */}</span>
@@ -37,7 +39,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <span>{token.symbol}</span>
                             <span>{toApproxCurrency(token.lastPrice)}</span>
                             {/*<ColoredChangeNumber number={token.change24Hours} />*/}
+
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
+                            <TimeLeft targetTime={token.nextRebalance} />
                             <span>{toApproxCurrency(token.totalValueLocked)}</span>
                             <span>
                                 <div>{`${token.myHoldings}`}</div>
