@@ -16,7 +16,28 @@ const NOT_DISABLED_LEVERAGES = [1, 3];
 const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
+const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean; message?: string } = (
+    amount,
+    balance,
+) => {
+    if (amount > balance) {
+        return {
+            message: undefined,
+            isInvalid: true,
+        };
+    }
+    if (amount < 1000) {
+        return {
+            // TODO get the minimum amount and unit dynamically
+            message: 'The minimum order size is $1,000.00',
+            isInvalid: true,
+        };
+    }
+    return {
+        message: undefined,
+        isInvalid: false,
+    };
+};
 
 const SIDE_OPTIONS = [
     {
@@ -43,9 +64,11 @@ export default (() => {
     const pool = usePool(selectedPool);
 
     useEffect(() => {
+        const invalidAmount = isInvalidAmount(amount, pool.quoteToken.balance.toNumber());
+
         swapDispatch({
             type: 'setInvalidAmount',
-            value: isInvalidAmount(amount, pool.quoteToken.balance.toNumber()),
+            value: invalidAmount,
         });
     }, [amount, pool.quoteToken.balance]);
 
@@ -102,7 +125,7 @@ export default (() => {
             </div>
             <div className={`${inputRow} `}>
                 <p className="mb-2 text-black">Amount</p>
-                <InputContainer error={invalidAmount}>
+                <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
                         value={amount}
@@ -122,9 +145,16 @@ export default (() => {
                         </div>
                     </InnerInputText>
                 </InputContainer>
-                <div className={invalidAmount ? 'text-red-500 ' : ''}>
-                    {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
-                    {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+
+                <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                    {invalidAmount.isInvalid && invalidAmount.message ? (
+                        invalidAmount.message
+                    ) : (
+                        <>
+                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
+                            {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                        </>
+                    )}
                 </div>
             </div>
 

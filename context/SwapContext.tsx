@@ -11,7 +11,10 @@ interface ContextProps {
 
 type SwapState = {
     amount: number;
-    invalidAmount: boolean;
+    invalidAmount: {
+        message?: string;
+        isInvalid: boolean;
+    };
     commitAction: CommitActionEnum;
     selectedPool: string | undefined; // address of selected pool
     side: SideEnum;
@@ -31,7 +34,7 @@ export type SwapAction =
     | { type: 'setCurrency'; value: CurrencyType }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
-    | { type: 'setInvalidAmount'; value: boolean }
+    | { type: 'setInvalidAmount'; value: { message: string; isInvalid: boolean } }
     | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
 
@@ -60,7 +63,10 @@ export const LEVERAGE_OPTIONS = [
 
 export const swapDefaults: SwapState = {
     amount: NaN,
-    invalidAmount: false,
+    invalidAmount: {
+        message: undefined,
+        isInvalid: false,
+    },
     commitAction: CommitActionEnum.mint,
     selectedPool: undefined,
     side: SideEnum.long,
