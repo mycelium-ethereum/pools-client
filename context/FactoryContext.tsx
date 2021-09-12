@@ -28,7 +28,7 @@ const ARBITRUM_POOLS = [
         name: 'ETH/USDC',
         address: '0xf69FCE9ad0d3Fc50adbcD12F4165B6709AEc6368',
     },
-]
+];
 interface ContextProps {
     pools: PoolType[];
 }
