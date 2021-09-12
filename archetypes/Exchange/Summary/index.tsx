@@ -3,7 +3,12 @@ import { HiddenExpand, Section } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcLeverageLossMultiplier, calcNotionalValue, calcTokenPrice } from '@libs/utils/calcs';
+import {
+    // calcLeverageLossMultiplier,
+    calcNotionalValue,
+    calcRebalanceRate,
+    calcTokenPrice,
+} from '@libs/utils/calcs';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 
@@ -30,8 +35,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                         <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                     </div>
                 </Section>
+                {/*<Section label="Expected Rebalance Multiplier">*/}
                 <Section label="Rebalance Rate">
-                    {`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}
+                    {/*{`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}*/}
+                    {`${calcRebalanceRate(pool.shortBalance, pool.longBalance).toFixed(3)}`}
                 </Section>
                 <Countdown>
                     {'Receive In'}
