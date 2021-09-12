@@ -25,6 +25,7 @@ export const UsersCommitStore: React.FC = ({ children }: Children) => {
             value={{
                 commits: state.commits,
                 showCommits: state.showCommits,
+                focus: state.focus,
             }}
         >
             <CommitActionsContext.Provider

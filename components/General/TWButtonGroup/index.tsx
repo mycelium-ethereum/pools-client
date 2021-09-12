@@ -1,6 +1,6 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
-import { DisabledTooltip } from '../DisabledTooltip';
+import { Tooltip } from '../Tooltip';
 const SELECTED = {
     tracer: 'z-10 bg-tracer-500 text-white border-none focus:border-none ',
     default: 'z-10 bg-tracer-800 text-white border-none focus:border-none ',
@@ -35,7 +35,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
         <span className="relative z-0 inline-flex shadow-sm">
             {options.map((option, index) =>
                 option.disabled ? (
-                    <DisabledTooltip text={option.disabled.text}>
+                    <Tooltip text={option.disabled.text}>
                         <button
                             type="button"
                             data-tip
@@ -49,7 +49,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         >
                             {option.text}
                         </button>
-                    </DisabledTooltip>
+                    </Tooltip>
                 ) : (
                     <button
                         type="button"

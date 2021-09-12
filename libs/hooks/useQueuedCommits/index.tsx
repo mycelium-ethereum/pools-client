@@ -26,8 +26,15 @@ export default ((focus) => {
                 ) {
                     continue;
                 }
-                const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
-                    pools[commit.pool];
+                const {
+                    shortToken,
+                    longToken,
+                    shortBalance,
+                    longBalance,
+                    lastUpdate,
+                    updateInterval,
+                    frontRunningInterval,
+                } = pools[commit.pool];
 
                 let token, tokenPrice;
 
@@ -38,11 +45,16 @@ export default ((focus) => {
                     token = longToken;
                     tokenPrice = calcTokenPrice(longBalance, longToken.supply);
                 }
+
+                // timestamp for when commit can no longer be cancelled
+                const lockTimeSeconds = lastUpdate.plus(updateInterval).minus(frontRunningInterval).toNumber();
+
                 parsedCommits.push({
                     ...commit,
                     token,
                     tokenPrice,
                     nextRebalance: lastUpdate.plus(updateInterval),
+                    lockTimeSeconds,
                 });
             }
             setAllQueuedCommits(parsedCommits);

@@ -6,6 +6,7 @@ import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import styled from 'styled-components';
 import { classNames } from '@libs/utils/functions';
+import { Tooltip } from '@components/General/Tooltip';
 
 // const CommitDropdown
 export default (({ setShowQueued, hide }) => {
@@ -34,7 +35,10 @@ export default (({ setShowQueued, hide }) => {
             preview={`${buys + sells} Queued`}
         >
             <Header>
-                UP NEXT <TimeLeft targetTime={nextUpdate} />
+                <Tooltip placement="left" text="Time until buys/sells are processed">
+                    UP NEXT
+                </Tooltip>
+                <TimeLeft targetTime={nextUpdate} />
             </Header>
             <Link onClick={() => handleClick(CommitsFocusEnum.buys)}>
                 <a>{buys} Buys</a>
