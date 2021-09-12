@@ -130,6 +130,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setLastUpdate':
+            console.log('SETTING LAST UPDATE');
             return {
                 ...state,
                 pools: {

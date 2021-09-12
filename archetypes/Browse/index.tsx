@@ -147,7 +147,7 @@ export const Browse: React.FC = () => {
                         * <b>Price</b> and <b>Rebalance Rate</b> are indicative only. The values displayed are the
                         estimated <b>Price</b> and <b>Rebalance Rate</b> for the next rebalance, given the queued buys
                         and sells. The actual <b>Price</b> and <b>Rebalance Rate</b> will be calculated and updated at
-                        the next rebalance in [#m #s].
+                        the next rebalance.
                     </p>
                 </BrowseModal>
             </BrowseContainer>

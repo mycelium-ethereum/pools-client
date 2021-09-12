@@ -8,10 +8,13 @@ export default (() => {
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     useEffect(() => {
+        console.log('useBrowsePools detected pools change');
         if (pools) {
+            console.log('updating pools in useBrowsePools');
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool) => {
+                console.log(`last update for pool ${pool.name}: ${pool.lastUpdate.toString()}`);
                 const { longToken, shortToken } = pool;
                 rows.push(
                     {
@@ -23,6 +26,7 @@ export default (() => {
                         lastPrice: calcTokenPrice(pool.shortBalance, shortToken.supply).toNumber(),
                         change24Hours: 0,
                         rebalanceRate: calcRebalanceRate(pool.shortBalance, pool.longBalance).toNumber(),
+                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
                     },
@@ -35,6 +39,7 @@ export default (() => {
                         lastPrice: calcTokenPrice(pool.longBalance, longToken.supply).toNumber(),
                         change24Hours: 0,
                         rebalanceRate: calcRebalanceRate(pool.shortBalance, pool.longBalance).toNumber(),
+                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),
                     },

@@ -249,8 +249,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             poolInstance.on('CompletedUpkeep', () => {
                 console.debug('Completed upkeep');
+                console.log('Completed upkeep');
                 poolInstance.lastPriceTimestamp().then((lastUpdate) => {
                     console.debug('Last update', lastUpdate.toNumber());
+                    console.log('Last update', lastUpdate.toNumber());
                     poolsDispatch({
                         type: 'setLastUpdate',
                         pool: poolInstance.address,
