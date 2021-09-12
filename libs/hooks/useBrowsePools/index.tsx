@@ -8,13 +8,10 @@ export default (() => {
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     useEffect(() => {
-        console.log('useBrowsePools detected pools change');
         if (pools) {
-            console.log('updating pools in useBrowsePools');
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool) => {
-                console.log(`last update for pool ${pool.name}: ${pool.lastUpdate.toString()}`);
                 const { longToken, shortToken } = pool;
                 rows.push(
                     {
