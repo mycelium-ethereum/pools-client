@@ -32,7 +32,7 @@ export default (({ setShowQueued, hide }) => {
 
     return (
         <TWPopup
-            className={classNames('my-auto mx-2 w-[120px] text-left relative', !hide ? 'hidden' : 'block')}
+            className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
             preview={`${buys + sells} Queued`}
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
