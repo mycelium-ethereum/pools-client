@@ -9,7 +9,6 @@ import { usePools } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
-import { classNames } from '@libs/utils/functions';
 
 // This is to dispaly the quoteToken balance in the top right of the screen
 // It is expected that not every pool will have the same quoteToken so this
@@ -29,11 +28,11 @@ const useBalance = () => {
     return balance;
 };
 
-export default (({ hide, className }) => {
+export default styled(({ className }) => {
     const { pendingCount = 0 } = useTransactionState();
     const balance = useBalance();
     return (
-        <div className={classNames('text-white', hide ? 'hidden' : 'block', className ?? '')}>
+        <div className={className}>
             {pendingCount > 0 ? (
                 <span>
                     <StyledIcon component={TracerLoading} />
@@ -44,10 +43,11 @@ export default (({ hide, className }) => {
             )}
         </div>
     );
-}) as React.FC<{
-    hide?: boolean;
-    className?: string;
-}>;
+})`
+    margin: auto 0 auto 0.5rem;
+    color: #fff;
+    display: ${(props) => (props.show ? 'block' : 'none')};
+`;
 
 const StyledIcon = styled(Icon)`
     color: #fff;

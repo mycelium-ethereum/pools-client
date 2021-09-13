@@ -1,6 +1,7 @@
 import React, { useEffect, useContext } from 'react';
 import { SwapContext } from '@context/SwapContext';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { MINT, BURN } from '@libs/constants';
+import { SideType, CommitActionType } from '@libs/types/General';
 import styled from 'styled-components';
 import Gas from './Gas';
 import Buy from './Buy';
@@ -11,11 +12,11 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 
 const TRADE_OPTIONS = [
     {
-        key: CommitActionEnum.mint,
+        key: MINT,
         text: 'Buy',
     },
     {
-        key: CommitActionEnum.burn,
+        key: BURN,
         text: 'Sell',
     },
 ];
@@ -31,12 +32,13 @@ export default (() => {
             }
             if (router.query.type) {
                 swapDispatch({
-                    type: 'setCommitAction',
-                    value: parseInt(router.query.type as string) as CommitActionEnum,
+                    type: 'setCommitActionType',
+                    value: parseInt(router.query.type as string) as CommitActionType,
                 });
             }
             if (router.query.side) {
-                swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideEnum });
+                console.log('found side', router.query.side);
+                swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideType });
             }
         }
     }, [router]);
@@ -46,13 +48,12 @@ export default (() => {
             <TradeModal>
                 <div className="flex">
                     <TWButtonGroup
-                        value={swapState?.commitAction ?? CommitActionEnum.mint}
+                        value={swapState?.commitAction ?? MINT}
                         size={'xl'}
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
-                                swapDispatch({ type: 'setLeverage', value: 1 });
-                                swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
+                                swapDispatch({ type: 'setCommitActionType', value: val as CommitActionType });
                             }
                         }}
                         options={TRADE_OPTIONS}
@@ -63,7 +64,7 @@ export default (() => {
                 <Divider className="my-8" />
 
                 {/** Inputs */}
-                {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
+                {swapState?.commitAction === BURN ? <Sell /> : <Buy />}
             </TradeModal>
         </div>
     );

@@ -1,55 +1,67 @@
-export enum BridgeStepEnum {
-    Collateral,
-    Gas,
-}
+export const ETH_ARB = 0;
+export const ARB_ETH = 1;
 
-export interface BridgeState {
-    step: BridgeStepEnum;
-    USDCAmount?: number;
-    ETHAmount?: number;
-    isBridging: boolean;
-}
+export type Direction = typeof ETH_ARB | typeof ARB_ETH;
+
+export const USDC = 0;
+export const ETH = 1;
+export const TOKEN_MAP = {
+    [USDC]: {
+        name: 'USDC',
+        address: '',
+    },
+    [ETH]: {
+        name: 'ETH',
+        address: '',
+    },
+};
+
+export type BridgeCommitActionType = typeof USDC | typeof ETH;
+export type BridgeState = {
+    amount: number;
+    open: boolean;
+    selectedToken: BridgeCommitActionType;
+    direction: Direction;
+};
 
 export type BridgeAction =
-    | { type: 'setStep'; step: BridgeStepEnum }
-    | { type: 'setUSDC'; amount: number | undefined }
-    | { type: 'setETH'; amount: number | undefined }
-    | { type: 'setBridging'; status: boolean }
-    | { type: 'reset' };
-
-export const DefaultBridgeState: BridgeState = {
-    step: BridgeStepEnum.Collateral,
-    isBridging: false,
-};
+    | { type: 'setAmount'; amount: number }
+    | { type: 'setSelectedToken'; token: BridgeCommitActionType }
+    | { type: 'setDirection'; direction: Direction }
+    | { type: 'setOpen'; value: boolean }
+    | { type: 'setLoading'; loading: boolean };
 
 export const bridgeReducer: (state: BridgeState, action: BridgeAction) => BridgeState = (state, action) => {
     switch (action.type) {
-        case 'setStep': {
+        case 'setAmount': {
             return {
                 ...state,
-                step: action.step,
+                amount: action.amount,
             };
         }
-        case 'setUSDC': {
+        case 'setSelectedToken': {
             return {
                 ...state,
-                USDCAmount: action.amount,
+                selectedToken: action.token,
             };
         }
-        case 'setETH': {
+        case 'setDirection': {
             return {
                 ...state,
-                ETHAmount: action.amount,
+                direction: action.direction,
             };
         }
-        case 'setBridging': {
+        case 'setLoading': {
             return {
                 ...state,
-                isBridging: action.status,
+                loading: action.loading,
             };
         }
-        case 'reset': {
-            return DefaultBridgeState;
+        case 'setOpen': {
+            return {
+                ...state,
+                open: action.value,
+            };
         }
         default:
             throw new Error('Unexpected action');

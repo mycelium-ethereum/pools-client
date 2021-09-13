@@ -2,14 +2,13 @@ import React, { useMemo } from 'react';
 import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { CommitsFocusEnum } from '@libs/constants';
+import { BUYS, SELLS } from '@libs/constants';
+import { CommitsFocus } from '@libs/types/General';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import styled from 'styled-components';
-import { classNames } from '@libs/utils/functions';
-import { Tooltip } from '@components/General/Tooltip';
 
 // const CommitDropdown
-export default (({ setShowQueued, hide }) => {
+export default (({ setShowQueued, show }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
 
@@ -21,7 +20,7 @@ export default (({ setShowQueued, hide }) => {
         }
     }, [buys, sells]);
 
-    const handleClick = (focus: CommitsFocusEnum) => {
+    const handleClick = (focus: CommitsFocus) => {
         if (commitDispatch) {
             commitDispatch({ type: 'show', focus: focus });
         } else {
@@ -30,34 +29,48 @@ export default (({ setShowQueued, hide }) => {
     };
 
     return (
-        <QueuedDropdown
-            className={classNames('my-auto mx-2 w-[120px] text-left', hide ? 'hidden' : 'block')}
-            preview={`${buys + sells} Queued`}
-        >
+        <QueuedDropdown preview={`${buys + sells} Queued`} show={show}>
             <Header>
-                <Tooltip placement="left" text="Time until buys/sells are processed">
-                    UP NEXT
-                </Tooltip>
-                <TimeLeft targetTime={nextUpdate} />
+                UP NEXT <TimeLeft targetTime={nextUpdate} />
             </Header>
-            <Link onClick={() => handleClick(CommitsFocusEnum.buys)}>
+            <Link onClick={() => handleClick(BUYS)}>
                 <a>{buys} Buys</a>
             </Link>
-            <Link onClick={() => handleClick(CommitsFocusEnum.sells)}>
+            <Link onClick={() => handleClick(SELLS)}>
                 <a>{sells} Sells</a>
             </Link>
         </QueuedDropdown>
     );
 }) as React.FC<{
     setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
-    hide?: boolean;
+    show: boolean;
 }>;
 
-export const QueuedDropdown = styled(Select)`
+export const QueuedDropdown = styled(Select)<{
+    show: boolean;
+}>`
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 7px;
+    background: #3da8f5;
+    margin: auto 1rem;
+    width: 158px;
+    height: 2.625rem;
+    line-height: 2.625rem;
+    color: #fff;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+
+    display: ${(props) => (props.show ? 'block' : 'none')};
+
     // for size of menu
     ${SelectDropdown} {
         left: -50px;
         background: #fff;
+    }
+
+    & svg {
+        fill: #fff;
     }
 `;
 

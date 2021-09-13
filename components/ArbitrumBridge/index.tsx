@@ -1,48 +1,54 @@
-import React, { useState } from 'react';
-import { ArbitrumBridgeModal } from './Modal';
+import React, { useReducer } from 'react';
+import Modal from '@components/General/Modal';
+import DirectionSelect from './DirectionSelect';
+import SlideSelect, { Option } from '@components/General/SlideSelect';
 import styled from 'styled-components';
-import Button from '@components/General/Button';
+import { Button } from '@components/General';
+import { CommitActionType } from '@libs/types/General';
+import { bridgeReducer, USDC, ETH_ARB, BridgeState } from './state';
 
 // ArbitrumBridge
 export default (() => {
-    const [isOpen, setOpen] = useState(false);
-
-    // TODO: Replace these with actual values & bridging functions
-    const ETHBalance = 3.14159;
-    const USDCBalance = 4000;
-
-    const onBridgeETH = (amount: number) => {
-        console.log(`Bridging ${amount} ETH...`);
-        return new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 1000));
-    };
-
-    const onBridgeUSDC = (amount: number) => {
-        console.log(`Bridging ${amount} USDC...`);
-        return new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 1000));
-    };
-
+    const [state, dispatch] = useReducer(bridgeReducer, {
+        amount: 0,
+        selectedToken: USDC,
+        open: true,
+        direction: ETH_ARB,
+    } as BridgeState);
     return (
         <>
-            <StyledButton onClick={() => setOpen(true)}>Arbitrum Bridge</StyledButton>
-            <ArbitrumBridgeModal
-                isOpen={isOpen}
-                onClose={() => setOpen(false)}
-                ETHBalance={ETHBalance}
-                USDCBalance={USDCBalance}
-                onBridgeETH={onBridgeETH}
-                onBridgeUSDC={onBridgeUSDC}
-            />
+            <a onClick={() => dispatch({ type: 'setOpen', value: true })}>Bridge</a>
+            <Modal
+                title={'Bridge Funds to Arbitrum'}
+                // subTitle={'Tracer runs on Arbitrum'}
+                show={state.open}
+                onClose={() => {
+                    dispatch({ type: 'setOpen', value: false });
+                }}
+            >
+                <DirectionSelect
+                    direction={state.direction}
+                    setDirection={(direction) => dispatch({ type: 'setDirection', direction: direction })}
+                />
+
+                <Section>
+                    <SlideSelect
+                        onClick={(token) => dispatch({ type: 'setSelectedToken', token: token as CommitActionType })}
+                        value={state.selectedToken}
+                    >
+                        <Option>USDC</Option>
+                        <Option>ETH</Option>
+                    </SlideSelect>
+                </Section>
+
+                <Section></Section>
+
+                <BridgeButton>{`Bridge ${state.selectedToken === USDC ? 'USDC' : 'ETH'}`}</BridgeButton>
+            </Modal>
         </>
     );
 }) as React.FC;
 
-const StyledButton = styled(Button)`
-    margin: 1rem auto;
-    color: #3da8f5;
-    border: 1px solid #3da8f5;
+const Section = styled.div``;
 
-    &:hover {
-        color: #fff;
-        background: #3da8f5;
-    }
-`;
+const BridgeButton = styled(Button)``;

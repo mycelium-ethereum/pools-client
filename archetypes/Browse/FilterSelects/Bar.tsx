@@ -20,10 +20,10 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="mr-4">
-                    <h3 className="mb-1">Power Leverage</h3>
+                    <h3 className="mb-1">Leverage</h3>
                     <Dropdown
                         value={state.leverage}
-                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
+                        options={Object.values(LeverageFilterEnum)}
                         onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
                     />
                 </div>
@@ -31,7 +31,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <h3 className="mb-1">Side</h3>
                     <Dropdown
                         value={state.side}
-                        options={Object.values(SideFilterEnum).map((key) => ({ key }))}
+                        options={Object.values(SideFilterEnum)}
                         onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
                     />
                 </div>
@@ -40,7 +40,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <h3 className="mb-1">Sort</h3>
                     <Dropdown
                         value={state.sortBy}
-                        options={Object.values(SortByEnum).map((key) => ({ key: key }))}
+                        options={Object.values(SortByEnum)}
                         onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
                     />
                 </div>

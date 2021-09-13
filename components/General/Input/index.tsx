@@ -1,9 +1,9 @@
 import { DownOutlined } from '@ant-design/icons';
+import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 import { Children } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
-import Button from '../Button';
 
 export const Input = styled.input`
     color: #000;
@@ -79,32 +79,38 @@ export const SelectDropdown = styled.div`
     z-index: 10;
 `;
 
-export const Select = styled(({ preview, onChange, className, children }) => {
-    const ref = useRef<HTMLButtonElement>(null);
-    const [open, setOpen] = useState(false);
+export const Select = styled(({ preview, onChange, icon, className, children }) => {
+    const ref = useRef<HTMLDivElement>(null);
 
     const handleClick = (e: any) => {
         if (e.target.value) {
             onChange(e);
         }
-        setOpen(!open);
+        ref?.current?.classList?.toggle('open');
     };
 
     return (
-        <Button size="sm" variant="transparent" ref={ref} className={`relative ${className}`} onClick={handleClick}>
+        <div ref={ref} className={className} onClick={handleClick}>
             {preview}
-            <DownOutlined className={classNames('inline w-8 h-8 transform', open ? 'rotate-180' : '')} />
-            <SelectDropdown className={classNames(open ? 'transform-none opacity-100 ' : '')}>
-                {children}
-            </SelectDropdown>
-        </Button>
+            {icon ? icon : <DownOutlined />}
+            <SelectDropdown>{children}</SelectDropdown>
+        </div>
     );
 })<{
     preview: React.ReactNode;
     onChange: React.MouseEventHandler<HTMLDivElement>;
+    icon?: AntdIconProps;
 }>`
+    border: 1px solid #d1d5db;
+    box-sizing: border-box;
+    border-radius: 7px;
+    padding-left: 1rem;
+    color: #6b7280;
+    cursor: pointer;
+    position: relative;
+
     > .anticon {
-        vertical-align: 0.125rem;
+        vertical-align: 0;
     }
 
     & svg {
@@ -117,24 +123,25 @@ export const Select = styled(({ preview, onChange, className, children }) => {
         transition: 0.3s;
         transform: rotate(0);
     }
+
+    &.open {
+        ${SelectDropdown} {
+            transform: none;
+            opacity: 1;
+        }
+        & svg {
+            transform: rotate(180deg);
+        }
+    }
 `;
 
 export const SelectOption = styled.option`
     padding: 12px 1rem;
     line-height: 1rem;
-    &:first-child {
-        border-top-left-radius: 7px;
-        border-top-right-radius: 7px;
-    }
-    &:last-child {
-        border-bottom-left-radius: 7px;
-        border-bottom-right-radius: 7px;
-    }
-    color: ${(props) => (props.disabled ? '' : '#374151')};
-    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
+    cursor: pointer;
     transition: 0.3s;
 
     &:hover {
-        background: ${(props) => (props.disabled ? '' : '#d1d5db')};
+        background: #d1d5db;
     }
 `;

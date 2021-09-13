@@ -1,5 +1,5 @@
 import React from 'react';
-import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
+import { ARBITRUM, KOVAN } from '@libs/constants';
 import styled from 'styled-components';
 
 const clearLogos: Record<string, string> = {
@@ -13,7 +13,6 @@ const logos: Record<string, string> = {
     TEST1: '/img/logos/currencies/eth.svg',
     LINK: '/img/logos/currencies/link.svg',
     [ARBITRUM]: '/img/logos/currencies/arbitrum.svg',
-    [ARBITRUM_RINKEBY]: '/img/logos/currencies/arbitrum.svg',
     [KOVAN]: '/img/logos/currencies/arbitrum.svg',
     ETHERSCAN: '/img/logos/currencies/etherscan.svg',
     USDC: '/img/logos/currencies/usdc.png',
@@ -27,7 +26,7 @@ interface LProps {
 }
 
 export const Logo = styled(({ className, ticker, clear }: LProps) => {
-    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']} alt="logo" />;
+    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['TSLA']} alt="logo" />;
 })<LProps>`
     width: 30px;
     margin: 5px 0;

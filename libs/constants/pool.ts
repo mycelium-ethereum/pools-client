@@ -1,6 +1,6 @@
 import { CreatedCommitType, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
-import { SideEnum } from '.';
+import { LONG, SHORT } from '.';
 
 export const DEFAULT_POOLSTATE: Pool = {
     address: '',
@@ -9,7 +9,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     updateInterval: new BigNumber(0),
     lastUpdate: new BigNumber(0),
     shortBalance: new BigNumber(0),
-    leverage: 0,
+    leverage: new BigNumber(0),
     longBalance: new BigNumber(0),
     oraclePrice: new BigNumber(0),
     frontRunningInterval: new BigNumber(0),
@@ -18,7 +18,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         name: '',
         symbol: '',
         balance: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
+        approved: false,
     },
     shortToken: {
         address: '',
@@ -26,8 +26,8 @@ export const DEFAULT_POOLSTATE: Pool = {
         symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
-        side: SideEnum.short,
+        approved: false,
+        side: SHORT,
     },
     longToken: {
         address: '',
@@ -35,15 +35,14 @@ export const DEFAULT_POOLSTATE: Pool = {
         symbol: '',
         balance: new BigNumber(0),
         supply: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
-        side: SideEnum.long,
+        approved: false,
+        side: LONG,
     },
     committer: {
         address: '',
         pendingLong: new BigNumber(0),
         pendingShort: new BigNumber(0),
         allUnexecutedCommits: [] as CreatedCommitType[],
-        minimumCommitSize: new BigNumber(1000),
     },
     subscribed: false,
 };

@@ -1,46 +1,56 @@
 import React from 'react';
-import { SelectOption } from '@components/General/Input';
+import { Select, SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
+import styled from 'styled-components';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import TWPopup from '@components/General/TWPopup';
+import { ARBITRUM, KOVAN } from '@libs/constants';
 
-export default (({ className }) => {
+export default styled(({ className }) => {
     const { provider, network = '0' } = useWeb3();
-
     return (
-        <TWPopup
+        <Select
             className={className}
-            preview={
-                <NetworkPreview
-                    networkID={network.toString()}
-                    networkName={networkConfig[network]?.name ?? 'Unsupported'}
-                />
-            }
+            preview={<NetworkPreview networkID={network} networkName={networkConfig[network]?.name ?? 'Unknown'} />}
+            onChange={(event: any) => {
+                switchNetworks(provider, event.target.value);
+            }}
         >
-            <SelectOption disabled value={ARBITRUM}>
-                Arbitrum (Coming soon)
-            </SelectOption>
-            <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>
-                Arbitrum Rinkeby
-            </SelectOption>
-        </TWPopup>
+            <SelectOption value={ARBITRUM}>Arbitrum</SelectOption>
+            <SelectOption value={KOVAN}>Kovan</SelectOption>
+        </Select>
     );
-}) as React.FC<{
-    hide?: boolean;
-    className?: string;
-}>;
+})`
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    border-radius: 7px;
+    background: transparent;
+    margin: auto 1rem;
+    width: 158px;
+    height: 2.625rem;
 
-const NetworkPreview: React.FC<{
-    networkID: string;
-    networkName: string;
-}> = ({ networkID, networkName }) => {
+    & svg {
+        fill: #fff;
+    }
+`;
+
+const NetworkPreview = styled(({ networkID, networkName, className }) => {
     return (
-        <div className={'flex items-center w-full my-auto'}>
-            <Logo className="inline w-[20px] h-[22px] my-auto ml-0 mr-2" ticker={networkID} />
+        <div className={className}>
+            <Logo ticker={networkID} />
             {networkName}
         </div>
     );
-};
+})`
+    color: #fff;
+    display: flex;
+    line-height: 2.625rem;
+    ${Logo} {
+        display: inline;
+        vertical-align: 0;
+        width: 20px;
+        height: 22px;
+        margin: auto 0.5rem auto 0;
+    }
+`;

@@ -89,7 +89,7 @@ const Arrow = styled(Icon)`
 `;
 
 const StyledIcon = styled(Icon)`
-    height: 41px;
+    height: 41x;
     width: 41px;
     margin-right: 1rem;
     svg {
@@ -128,7 +128,7 @@ const MenuItem = styled.div`
     margin-bottom: 1rem;
     cursor: pointer;
 
-    // initially hide itself
+    // initailly hide itself
     opacity: 0;
     padding-left: 2rem;
 

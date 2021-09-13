@@ -35,21 +35,21 @@ const Footer = styled(({ className }) => {
                 <Item>
                     <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">*/}
-                {/*        Docs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">*/}
-                {/*        FAQs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">*/}
-                {/*        Tutorials*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
+                <Item>
+                    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">
+                        Docs
+                    </a>
+                </Item>
+                <Item>
+                    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">
+                        FAQs
+                    </a>
+                </Item>
+                <Item>
+                    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">
+                        Tutorials
+                    </a>
+                </Item>
             </Items>
         </div>
     );

@@ -1,16 +1,28 @@
 import React, { createContext, useContext } from 'react';
-import { Children, PendingCommitInfo } from '@libs/types/General';
+import { Children, CommitsFocus, PendingCommitInfo } from '@libs/types/General';
 import { useReducer } from 'react';
 import { CommitAction, initialCommitState, reducer } from './commitDispatch';
-import { CommitsFocusEnum } from '@libs/constants';
+
 interface CommitActionsProps {
     commitDispatch: React.Dispatch<CommitAction>;
 }
+
 interface CommitContextProps {
     commits: Record<string, PendingCommitInfo>;
     showCommits: boolean;
-    focus: CommitsFocusEnum;
+    focus: CommitsFocus;
 }
+// type AddCommit = (id: number, commitInfo: PendingCommitInfo) => void;
+// interface CommitContextProps {
+//     addCommit: AddCommit;
+//     removeCommit: (id: number) => void;
+//     updatePoolInfo: (
+//         id: number,
+//         info: {
+//             lastUpdate: BigNumber;
+//         },
+//     ) => void;
+// }
 
 export const CommitContext = createContext<Partial<CommitContextProps>>({});
 export const CommitActionsContext = createContext<Partial<CommitActionsProps>>({});
@@ -25,7 +37,6 @@ export const UsersCommitStore: React.FC = ({ children }: Children) => {
             value={{
                 commits: state.commits,
                 showCommits: state.showCommits,
-                focus: state.focus,
             }}
         >
             <CommitActionsContext.Provider

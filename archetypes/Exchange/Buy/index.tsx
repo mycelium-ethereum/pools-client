@@ -1,72 +1,61 @@
 import React, { useEffect } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
+import styled from 'styled-components';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
-import { usePool } from '@context/PoolContext';
+import { SideType } from '@libs/types/General';
+import { LONG, SHORT, LONG_MINT, SHORT_MINT } from '@libs/constants';
+import { ExchangeButton } from '../Inputs';
+import { usePool, usePoolActions } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
-import ExchangeButton from '@components/General/Button/ExchangeButton';
+
+const NOT_DISABLED_LEVERAGES = [1, 3];
 
 const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (
-    amount: number,
-    balance: number,
-    minimumCommitSize: number,
-) => { isInvalid: boolean; message?: string } = (amount, balance, minimumCommitSize) => {
-    if (amount > balance) {
-        return {
-            message: undefined,
-            isInvalid: true,
-        };
-    }
-
-    if (amount < minimumCommitSize) {
-        return {
-            message: `The minimum order size is ${toApproxCurrency(minimumCommitSize)}`,
-            isInvalid: true,
-        };
-    }
-    return {
-        message: undefined,
-        isInvalid: false,
-    };
-};
+const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
 
 const SIDE_OPTIONS = [
     {
-        key: SideEnum.long,
+        key: LONG,
         text: 'Long',
     },
     {
-        key: SideEnum.short,
+        key: SHORT,
         text: 'Short',
     },
 ];
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
+
+    const {
+        leverage,
+        selectedPool,
+        side,
+        amount,
+        invalidAmount,
+        options: { poolOptions },
+    } = swapState;
 
     const pool = usePool(selectedPool);
 
-    useEffect(() => {
-        const invalidAmount = isInvalidAmount(
-            amount,
-            pool.quoteToken.balance.toNumber(),
-            pool.committer.minimumCommitSize.toNumber(),
-        );
+    const { commit, approve } = usePoolActions();
 
+    useEffect(() => {
         swapDispatch({
             type: 'setInvalidAmount',
-            value: invalidAmount,
+            value: isInvalidAmount(
+                amount,
+                side === LONG ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber(),
+            ),
         });
-    }, [amount, pool.quoteToken.balance]);
+    }, [amount, pool.longToken.balance, pool.shortToken.balance, side]);
 
     return (
         <>
@@ -75,16 +64,12 @@ export default (() => {
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
                         className="w-full "
-                        placeHolder="Select Market"
+                        placeHolder="Select Pool"
                         size="lg"
-                        options={Object.keys(markets).map((market) => ({
-                            key: market,
-                            text: market,
-                        }))}
-                        value={market}
-                        onSelect={(selectedMarket) => {
-                            console.debug('Setting market', selectedMarket);
-                            swapDispatch({ type: 'setMarket', value: selectedMarket as string });
+                        options={poolOptions.map((pool) => pool.name)}
+                        value={pool.name}
+                        onSelect={(pool) => {
+                            swapDispatch({ type: 'setSelectedPool', value: pool as string });
                         }}
                     />
                 </span>
@@ -92,19 +77,19 @@ export default (() => {
                     <p className="mb-2 text-black">Side</p>
                     <TWButtonGroup
                         value={side}
-                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
-                        size={'lg'}
+                        onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideType })}
+                        size="lg"
                         options={SIDE_OPTIONS}
                     />
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Power Leverage</p>
+                <p className="mb-2 text-black">Leverage</p>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
-                        text: `${option.leverage}`,
+                        text: `${option.leverage}x`,
                         disabled: option.disabled
                             ? {
                                   text: 'Coming soon',
@@ -112,13 +97,16 @@ export default (() => {
                             : undefined,
                     }))}
                     onClick={(index) => {
-                        swapDispatch({ type: 'setLeverage', value: index });
+                        // everything else disabled
+                        if (NOT_DISABLED_LEVERAGES.includes(index)) {
+                            swapDispatch({ type: 'setLeverage', value: index as SideType });
+                        }
                     }}
                 />
             </div>
             <div className={`${inputRow} `}>
                 <p className="mb-2 text-black">Amount</p>
-                <InputContainer error={invalidAmount.isInvalid}>
+                <InputContainer error={invalidAmount}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
                         value={amount}
@@ -138,22 +126,57 @@ export default (() => {
                         </div>
                     </InnerInputText>
                 </InputContainer>
-
-                <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
-                    {invalidAmount.isInvalid && invalidAmount.message ? (
-                        invalidAmount.message
-                    ) : (
-                        <>
-                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
-                            {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
-                        </>
-                    )}
+                <div className={invalidAmount ? 'text-red-500 ' : ''}>
+                    {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
+                    {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
                 </div>
             </div>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
+            <BuySummary pool={pool} amount={amount} isLong={side === LONG} />
 
-            <ExchangeButton actionType={CommitActionEnum.mint} />
+            {!pool.quoteToken.approved ? (
+                <>
+                    <ExchangeButton
+                        className="primary"
+                        disabled={!selectedPool}
+                        onClick={(_e) => {
+                            if (!approve) {
+                                return;
+                            }
+                            approve(selectedPool ?? '');
+                        }}
+                    >
+                        Unlock USDC
+                    </ExchangeButton>
+                    <HelperText>
+                        Unlock DAI to start investing with Tracer. This is a one-time transaction for each pool.{' '}
+                        <a>Learn more.</a>
+                    </HelperText>
+                </>
+            ) : (
+                <ExchangeButton
+                    disabled={!selectedPool || !pool.quoteToken.approved || !amount}
+                    className="primary"
+                    onClick={(_e) => {
+                        if (!commit) {
+                            return;
+                        }
+                        commit(selectedPool ?? '', side === LONG ? LONG_MINT : SHORT_MINT, amount);
+                    }}
+                >
+                    {`Ok, let's buy`}
+                </ExchangeButton>
+            )}
         </>
     );
 }) as React.FC;
+
+const HelperText = styled.p`
+    color: #6b7280;
+    font-size: 14px;
+
+    a {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+`;

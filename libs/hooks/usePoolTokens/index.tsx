@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
+import { SideType } from '@libs/types/General';
 import { usePools } from '@context/PoolContext';
-import { SideEnum } from '@libs/constants';
+import { SHORT, LONG } from '@libs/constants';
 
 type TokenRow = {
-    side: SideEnum;
-    leverage: number;
+    side: SideType;
     pool: string;
     symbol: string;
 };
@@ -20,15 +20,13 @@ export default (() => {
                 tokens.push(
                     {
                         symbol: pool.shortToken.symbol,
-                        side: SideEnum.short,
+                        side: SHORT,
                         pool: pool.address,
-                        leverage: pool.leverage,
                     },
                     {
                         symbol: pool.longToken.symbol,
-                        side: SideEnum.long,
+                        side: LONG,
                         pool: pool.address,
-                        leverage: pool.leverage,
                     },
                 );
             });
