@@ -34,17 +34,30 @@ export const networkConfig: Record<string, Network> = {
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
     },
     '421611': {
-        name: 'Arbitrum',
+        name: 'Arbitrum Rinkeby',
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
-                address: '0x9cEbd5bc34B8F00A19258F731ddB061BA75A1f63',
+                address: '0xd51F77C5945dD39a8ec87cAc7E02d85E7e5e182e',
                 abi: PoolFactory__factory.abi,
             },
         },
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
+    },
+    '42161': {
+        name: 'Arbitrum',
+        previewUrl: 'https://explorer.arbitrum.io/#',
+        contracts: {
+            poolFactory: {
+                address: 'TODO',
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0xA4B1',
+        publicRPC: 'TODO',
+        graphUri: 'TODO',
     },
     '42': {
         name: 'Kovan',

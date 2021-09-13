@@ -1,9 +1,14 @@
 import React from 'react';
-import { HiddenExpand, Section } from '@components/General';
+import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcLeverageLossMultiplier, calcNotionalValue, calcTokenPrice } from '@libs/utils/calcs';
+import {
+    // calcLeverageLossMultiplier,
+    calcNotionalValue,
+    calcRebalanceRate,
+    calcTokenPrice,
+} from '@libs/utils/calcs';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 
@@ -23,15 +28,20 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     return (
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
-                <Token>{token.name}</Token>
+                <h2>
+                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                    {token.name}
+                </h2>
                 <Section label="Expected number of tokens">
                     <div>
                         <span>{`${new BigNumber(amount).div(tokenPrice ?? 1).toFixed(3)}`}</span>
                         <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                     </div>
                 </Section>
-                <Section label="Expected Rebalance Multiplier">
-                    {`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}
+                {/*<Section label="Expected Rebalance Multiplier">*/}
+                <Section label="Rebalance Rate">
+                    {/*{`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}*/}
+                    {`${calcRebalanceRate(pool.shortBalance, pool.longBalance).toFixed(3)}`}
                 </Section>
                 <Countdown>
                     {'Receive In'}
@@ -55,7 +65,10 @@ export const SellSummary: React.FC<
     return (
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
-                <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
+                <h2>
+                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                    {token.name}
+                </h2>
                 <Section label="Expected return">
                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                 </Section>
@@ -70,15 +83,12 @@ export const SellSummary: React.FC<
     );
 };
 
-const Token = styled.h2``;
-
 const Box = styled.div`
     border: 1px solid #e5e7eb;
     box-sizing: border-box;
     border-radius: 14px;
     position: relative;
     padding: 1rem 1rem 0.5rem 1rem;
-    margin-top: 2rem;
 
     ${Section}, ${Section} .label {
         color: #374151;

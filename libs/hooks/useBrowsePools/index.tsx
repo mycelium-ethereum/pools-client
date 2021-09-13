@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowseTableRowData } from '@archetypes/Browse/state';
 import { usePools } from '@context/PoolContext';
-import { calcTokenPrice } from '@libs/utils/calcs';
+import { calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
 
 // const useBrowsePools
 export default (() => {
@@ -22,7 +22,8 @@ export default (() => {
                         side: 'short',
                         lastPrice: calcTokenPrice(pool.shortBalance, shortToken.supply).toNumber(),
                         change24Hours: 0,
-                        rebalanceRate: 0,
+                        rebalanceRate: calcRebalanceRate(pool.shortBalance, pool.longBalance).toNumber(),
+                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
                     },
@@ -34,7 +35,8 @@ export default (() => {
                         side: 'long',
                         lastPrice: calcTokenPrice(pool.longBalance, longToken.supply).toNumber(),
                         change24Hours: 0,
-                        rebalanceRate: 0,
+                        rebalanceRate: calcRebalanceRate(pool.shortBalance, pool.longBalance).toNumber(),
+                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),
                     },

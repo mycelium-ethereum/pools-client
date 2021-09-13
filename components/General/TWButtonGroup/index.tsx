@@ -1,9 +1,6 @@
-import { Children } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
-// @ts-ignore
-import ReactSimpleTooltip from 'react-simple-tooltip';
-
+import { Tooltip } from '../Tooltip';
 const SELECTED = {
     tracer: 'z-10 bg-tracer-500 text-white border-none focus:border-none ',
     default: 'z-10 bg-tracer-800 text-white border-none focus:border-none ',
@@ -38,7 +35,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
         <span className="relative z-0 inline-flex shadow-sm">
             {options.map((option, index) =>
                 option.disabled ? (
-                    <DisabledTooltip text={option.disabled.text}>
+                    <Tooltip text={option.disabled.text}>
                         <button
                             type="button"
                             data-tip
@@ -52,7 +49,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         >
                             {option.text}
                         </button>
-                    </DisabledTooltip>
+                    </Tooltip>
                 ) : (
                     <button
                         type="button"
@@ -72,34 +69,3 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
     options: Option[];
     value: number; // key
 }>;
-
-const DisabledTooltip: React.FC<
-    {
-        text: React.ReactNode;
-    } & Children
-> = ({ text, children }) => {
-    return (
-        <>
-            <ReactSimpleTooltip
-                content={`${text}`}
-                arrow={6}
-                background="#f9fafb"
-                border="rgba(209, 213, 219)"
-                color="#000"
-                customCss={{
-                    whiteSpace: 'nowrap',
-                }}
-                fadeDuration={300}
-                fadeEasing="linear"
-                fixed={false}
-                fontSize="12px"
-                padding={8}
-                radius={6}
-                placement="top"
-                zIndex={1}
-            >
-                {children}
-            </ReactSimpleTooltip>
-        </>
-    );
-};

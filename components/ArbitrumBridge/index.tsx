@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ArbitrumBridgeModal } from './Modal';
 import styled from 'styled-components';
-import { Button } from '@components/General';
+import Button from '@components/General/Button';
 
 // ArbitrumBridge
 export default (() => {

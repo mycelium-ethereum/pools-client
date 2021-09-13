@@ -1,14 +1,16 @@
 import React, { useMemo } from 'react';
-import { Select, SelectDropdown } from '@components/General/Input';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { BUYS, SELLS } from '@libs/constants';
-import { CommitsFocus } from '@libs/types/General';
+import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
-import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
+import { Tooltip } from '@components/General/Tooltip';
+import TWPopup from '@components/General/TWPopup';
+
+const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
 // const CommitDropdown
-export default (({ setShowQueued, show }) => {
+export default (({ setShowQueued, hide }) => {
     const { commitDispatch } = useCommitActions();
     const { buys, sells, nextUpdate } = useCommitsBreakdown();
 
@@ -20,7 +22,7 @@ export default (({ setShowQueued, show }) => {
         }
     }, [buys, sells]);
 
-    const handleClick = (focus: CommitsFocus) => {
+    const handleClick = (focus: CommitsFocusEnum) => {
         if (commitDispatch) {
             commitDispatch({ type: 'show', focus: focus });
         } else {
@@ -29,78 +31,28 @@ export default (({ setShowQueued, show }) => {
     };
 
     return (
-        <QueuedDropdown preview={`${buys + sells} Queued`} show={show}>
-            <Header>
-                UP NEXT <TimeLeft targetTime={nextUpdate} />
-            </Header>
-            <Link onClick={() => handleClick(BUYS)}>
+        <TWPopup
+            className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
+            preview={`${buys + sells} Queued`}
+        >
+            <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
+                <Tooltip placement="left" text="Time until buys/sells are processed ">
+                    <div className="uppercase mr-2">Up Next</div>
+                </Tooltip>
+                <TimeLeft
+                    className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
+                    targetTime={nextUpdate}
+                />
+            </div>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.buys)}>
                 <a>{buys} Buys</a>
-            </Link>
-            <Link onClick={() => handleClick(SELLS)}>
+            </div>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.sells)}>
                 <a>{sells} Sells</a>
-            </Link>
-        </QueuedDropdown>
+            </div>
+        </TWPopup>
     );
 }) as React.FC<{
     setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
-    show: boolean;
+    hide?: boolean;
 }>;
-
-export const QueuedDropdown = styled(Select)<{
-    show: boolean;
-}>`
-    border: 1px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 7px;
-    background: #3da8f5;
-    margin: auto 1rem;
-    width: 158px;
-    height: 2.625rem;
-    line-height: 2.625rem;
-    color: #fff;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-
-    display: ${(props) => (props.show ? 'block' : 'none')};
-
-    // for size of menu
-    ${SelectDropdown} {
-        left: -50px;
-        background: #fff;
-    }
-
-    & svg {
-        fill: #fff;
-    }
-`;
-
-const Link = styled.div`
-    margin: 0.8rem 1rem;
-    color: #3da8f5;
-    cursor: pointer;
-    line-height: normal;
-    &:hover {
-        text-decoration: underline;
-    }
-`;
-
-const Header = styled.div`
-    border-bottom: 1px solid #f3f4f6;
-    padding: 0.5rem 1rem;
-    color: #3f3f46;
-    display: flex;
-    font-size: 14px;
-    font-weight: 600;
-    align-items: center;
-    line-height: normal;
-    height: 4rem;
-    ${TimeLeft} {
-        background: #fafafa;
-        color: #6b7280;
-        border: 1px solid #e4e4e7;
-        box-sizing: border-box;
-        border-radius: 6px;
-        padding: 2px 8px;
-        margin: auto;
-    }
-`;

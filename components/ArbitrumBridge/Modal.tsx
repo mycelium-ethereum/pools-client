@@ -199,14 +199,16 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
 
                 <div className="flex w-full justify-center">
                     <div
-                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
+                        className={`rounded-full cursor-pointer bg-blue-800 w-3 h-3 m-2 ${
                             state.step === BridgeStepEnum.Collateral ? 'ring' : ''
                         }`}
+                        onClick={() => dispatch({ type: 'setStep', step: BridgeStepEnum.Collateral })}
                     />
                     <div
-                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
+                        className={`rounded-full cursor-pointer bg-blue-800 w-3 h-3 m-2 ${
                             state.step === BridgeStepEnum.Gas ? 'ring' : ''
                         }`}
+                        onClick={() => handleClickConnect()}
                     />
                 </div>
 
