@@ -103,7 +103,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             pendingLong: new BigNumber(0),
             pendingShort: new BigNumber(0),
             allUnexecutedCommits: [],
-            minimumCommitSize,
+            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,
