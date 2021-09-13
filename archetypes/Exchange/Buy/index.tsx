@@ -11,7 +11,7 @@ import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 
-const NOT_DISABLED_LEVERAGES = [1, 3];
+// const NOT_DISABLED_LEVERAGES = [1, 3];
 
 const inputRow = 'relative my-2 ';
 
@@ -37,7 +37,8 @@ export default (() => {
         side,
         amount,
         invalidAmount,
-        options: { poolOptions },
+        market,
+        markets,
     } = swapState;
 
     const pool = usePool(selectedPool);
@@ -58,14 +59,14 @@ export default (() => {
                         className="w-full "
                         placeHolder="Select Market"
                         size="lg"
-                        options={poolOptions.map((pool) => ({
-                            key: pool.address,
-                            text: pool.name,
+                        options={Object.keys(markets).map((market) => ({
+                            key: market,
+                            text: market,
                         }))}
-                        value={pool.name}
-                        onSelect={(selectedPool) => {
-                            console.debug('Setting pool', selectedPool);
-                            swapDispatch({ type: 'setSelectedPool', value: selectedPool as string });
+                        value={market}
+                        onSelect={(selectedMarket) => {
+                            console.debug('Setting market', selectedMarket );
+                            swapDispatch({ type: 'setMarket', value: selectedMarket as string });
                         }}
                     />
                 </span>
@@ -93,10 +94,7 @@ export default (() => {
                             : undefined,
                     }))}
                     onClick={(index) => {
-                        // everything else disabled
-                        if (NOT_DISABLED_LEVERAGES.includes(index)) {
-                            swapDispatch({ type: 'setLeverage', value: index as SideEnum });
-                        }
+                        swapDispatch({ type: 'setLeverage', value: index });
                     }}
                 />
             </div>

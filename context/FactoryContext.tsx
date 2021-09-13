@@ -10,22 +10,22 @@ import { ARBITRUM_RINKEBY } from '@libs/constants';
 const ARBITRUM_POOLS = [
     {
         // 1x
-        name: 'BTC/USDC',
+        name: '1-BTC/USDC',
         address: '0xC42778b0248d4630b7a792dDDEa2Af5094639e9B',
     },
     {
         // 3x
-        name: 'BTC/USDC',
+        name: '3-BTC/USDC',
         address: '0xFBa3aa7c015efdB16F74355Dad5Ba671aAF5741c',
     },
     {
         // 1x
-        name: 'ETH/USDC',
+        name: '1-ETH/USDC',
         address: '0x92cf8251ff07Ceee503dBF34352d799cC197746a',
     },
     {
         // 3x
-        name: 'ETH/USDC',
+        name: '3-ETH/USDC',
         address: '0xf69FCE9ad0d3Fc50adbcD12F4165B6709AEc6368',
     },
 ];
