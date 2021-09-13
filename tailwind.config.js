@@ -3,7 +3,7 @@ module.exports = {
     // lfg
     mode: 'jit',
     purge: [
-        './pages/**/*.{js,ts,jsx,tsx}',
+        './pages/**/*.{js,ts,jsx,tsx}', 
         './components/**/*.{js,ts,jsx,tsx}',
         './archetypes/**/*.{js,ts,jsx,tsx}',
         // Add more here
@@ -20,18 +20,14 @@ module.exports = {
             colors: {
                 tracer: {
                     50: '#F0F0FF',
-                    100: '#DEDEFF',
+                    // 100: '#DEDEFF',
                     // 200: '#A6A6F2',
-                    500: '#3535DC',
-                    600: '#2A2AC7',
                     800: '#0000B0',
                     900: '#00007A'
                 },
                 'cool-gray': {
                     50: '#F9FAFB',
-                    300: '#D1D5DB',
-                    700: '#374151',
-                    900: '#111928'
+                    300: '#D1D5DB'
                 }
             },
             screens: {
@@ -44,11 +40,7 @@ module.exports = {
         cursor: ['disabled'],
         extend: {
             borderRadius: ['first', 'last'],
-            backgroundColor: ['active', 'disabled'],
-            cursor: ['disabled'],
-            opacity: ['disabled'],
-            textColor: ['disabled'],
-        },
+        }
     },
     plugins: [],
 };
