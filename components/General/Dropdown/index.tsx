@@ -4,6 +4,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
+import { Logo } from 'components/General/Logo';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -80,6 +81,7 @@ interface DropdownProps {
     options: {
         key: string;
         text?: string;
+        ticker?: string;
     }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;
@@ -127,6 +129,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
+                                        {option?.ticker ? (<Logo ticker={option.ticker} className='inline w-[20px] mr-2' />) : ("")}
                                         {option?.text ?? option.key}
                                     </button>
                                 )}
