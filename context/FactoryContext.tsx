@@ -11,22 +11,22 @@ const ARBITRUM_POOLS = [
     {
         // 1x
         name: '1-BTC/USDC',
-        address: '0xC42778b0248d4630b7a792dDDEa2Af5094639e9B',
+        address: '0xE8186114E071A516C735a822F0B01875bd796671',
     },
     {
         // 3x
         name: '3-BTC/USDC',
-        address: '0xFBa3aa7c015efdB16F74355Dad5Ba671aAF5741c',
+        address: '0x1e4c6b7e3a24b6197a5236e632D2E74cDC42cEaE',
     },
     {
         // 1x
         name: '1-ETH/USDC',
-        address: '0x92cf8251ff07Ceee503dBF34352d799cC197746a',
+        address: '0x7735325DB7744e1f4327cC3fFF41cFc8A190B7A2',
     },
     {
         // 3x
         name: '3-ETH/USDC',
-        address: '0xf69FCE9ad0d3Fc50adbcD12F4165B6709AEc6368',
+        address: '0x377F606c10454a0c65dAb1B1b413baa038Aa5681',
     },
 ];
 interface ContextProps {
