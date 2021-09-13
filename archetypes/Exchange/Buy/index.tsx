@@ -59,8 +59,7 @@ export default (() => {
         const invalidAmount = isInvalidAmount(
             amount,
             pool.quoteToken.balance.toNumber(),
-            // TODO use dynamic decimals
-            pool.committer.minimumCommitSize.div(10 ** 18).toNumber(),
+            pool.committer.minimumCommitSize.div(10 ** (pool.quoteToken?.decimals || 18)).toNumber(),
         );
 
         swapDispatch({

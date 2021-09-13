@@ -73,9 +73,10 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     // fetch quote token info
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const [quoteTokenName, quoteTokenSymbol] = await Promise.all([
+    const [quoteTokenName, quoteTokenSymbol, quoteTokenDecimals] = await Promise.all([
         quoteTokenInstance.name(),
         quoteTokenInstance.symbol(),
+        quoteTokenInstance.decimals(),
     ]);
 
     // fetch minimum commit size
@@ -129,6 +130,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: quoteToken,
             name: quoteTokenName,
             symbol: quoteTokenSymbol,
+            decimals: quoteTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
