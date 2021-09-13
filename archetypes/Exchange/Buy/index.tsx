@@ -16,20 +16,21 @@ const NOT_DISABLED_LEVERAGES = [1, 3];
 const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean; message?: string } = (
-    amount,
-    balance,
-) => {
+const isInvalidAmount: (
+    amount: number,
+    balance: number,
+    minimumCommitSize: number,
+) => { isInvalid: boolean; message?: string } = (amount, balance, minimumCommitSize) => {
     if (amount > balance) {
         return {
             message: undefined,
             isInvalid: true,
         };
     }
-    if (amount < 1000) {
+
+    if (amount < minimumCommitSize) {
         return {
-            // TODO get the minimum amount and unit dynamically
-            message: 'The minimum order size is $1,000.00',
+            message: `The minimum order size is ${toApproxCurrency(minimumCommitSize)}`,
             isInvalid: true,
         };
     }
@@ -64,7 +65,11 @@ export default (() => {
     const pool = usePool(selectedPool);
 
     useEffect(() => {
-        const invalidAmount = isInvalidAmount(amount, pool.quoteToken.balance.toNumber());
+        const invalidAmount = isInvalidAmount(
+            amount,
+            pool.quoteToken.balance.toNumber(),
+            pool.committer.minimumCommitSize.toNumber(),
+        );
 
         swapDispatch({
             type: 'setInvalidAmount',

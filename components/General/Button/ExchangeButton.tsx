@@ -56,9 +56,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 <Button
                     size="lg"
                     variant="primary"
-                    disabled={
-                        !selectedPool || !amount || (actionType === CommitActionEnum.mint && invalidAmount.isInvalid)
-                    }
+                    disabled={!selectedPool || !amount || invalidAmount.isInvalid}
                     onClick={(_e) => {
                         let side_;
                         if (!commit) {
