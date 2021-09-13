@@ -9,7 +9,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     updateInterval: new BigNumber(0),
     lastUpdate: new BigNumber(0),
     shortBalance: new BigNumber(0),
-    leverage: new BigNumber(0),
+    leverage: 0,
     longBalance: new BigNumber(0),
     oraclePrice: new BigNumber(0),
     frontRunningInterval: new BigNumber(0),
