@@ -31,9 +31,9 @@ const isInvalidAmount: (
     // need to sell an amount of tokens worth minimumCommitSize or more
     const minimumTokens = new BigNumber(minimumCommitSize).div(tokenPrice);
 
-    if (amount < minimumCommitSize) {
+    if (minimumTokens.gt(amount)) {
         return {
-            message: `The minimum order size is ${minimumTokens.toFixed(6)} (${toApproxCurrency(minimumCommitSize)})`,
+            message: `The minimum order size is ${minimumTokens.toFixed()} (${toApproxCurrency(minimumCommitSize)})`,
             isInvalid: true,
         };
     }
