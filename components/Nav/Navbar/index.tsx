@@ -7,7 +7,7 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown, { QueuedDropdown } from './CommitDropdown';
+import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 
@@ -86,11 +86,6 @@ export const NavBarContent = styled(({ className }) => {
             </span>
 
             <MobileMenu account={account ?? ''} />
-
-            {/** TODO this will need to change to Arbritrum network id */}
-            {/* {process.env.NEXT_PUBLIC_DEPLOYMENT !== 'DEVELOPMENT' ? (
-                <UnknownNetwork display={network !== 421611 && !!network} />
-            ) : null} */}
         </nav>
     );
 })`
@@ -106,7 +101,7 @@ export const NavBarContent = styled(({ className }) => {
         padding: 0 1rem;
     }
     @media (max-width: 1024px) {
-        ${ThemeSwitcher}, ${Links}, ${QueuedDropdown} {
+        ${ThemeSwitcher}, ${Links} {
             display: none;
         }
     }

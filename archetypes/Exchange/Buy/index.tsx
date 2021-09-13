@@ -29,15 +29,7 @@ const SIDE_OPTIONS = [
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const {
-        leverage,
-        selectedPool,
-        side,
-        amount,
-        invalidAmount,
-        market,
-        markets,
-    } = swapState;
+    const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -63,7 +55,7 @@ export default (() => {
                         }))}
                         value={market}
                         onSelect={(selectedMarket) => {
-                            console.debug('Setting market', selectedMarket );
+                            console.debug('Setting market', selectedMarket);
                             swapDispatch({ type: 'setMarket', value: selectedMarket as string });
                         }}
                     />

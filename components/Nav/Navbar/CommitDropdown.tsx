@@ -7,7 +7,7 @@ import { classNames } from '@libs/utils/functions';
 import { Tooltip } from '@components/General/Tooltip';
 import TWPopup from '@components/General/TWPopup';
 
-const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 '
+const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
 // const CommitDropdown
 export default (({ setShowQueued, hide }) => {
@@ -37,11 +37,12 @@ export default (({ setShowQueued, hide }) => {
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
                 <Tooltip placement="left" text="Time until buys/sells are processed ">
-                    <div className="uppercase mr-2">
-                        Up Next
-                    </div>
+                    <div className="uppercase mr-2">Up Next</div>
                 </Tooltip>
-                <TimeLeft className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200" targetTime={nextUpdate} />
+                <TimeLeft
+                    className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
+                    targetTime={nextUpdate}
+                />
             </div>
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.buys)}>
                 <a>{buys} Buys</a>
