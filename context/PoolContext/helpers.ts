@@ -58,24 +58,27 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
-    const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
+    const [shortTokenName, shortTokenSymbol, shortTokenSupply, shortTokenDecimals] = await Promise.all([
         shortTokenInstance.name(),
         shortTokenInstance.symbol(),
         shortTokenInstance.totalSupply(),
+        shortTokenInstance.decimals(),
     ]);
 
     const longTokenInstance = new ethers.Contract(longToken, TestToken__factory.abi, provider) as PoolToken;
-    const [longTokenName, longTokenSymbol, longTokenSupply] = await Promise.all([
+    const [longTokenName, longTokenSymbol, longTokenSupply, longTokenDecimals] = await Promise.all([
         longTokenInstance.name(),
         longTokenInstance.symbol(),
         longTokenInstance.totalSupply(),
+        longTokenInstance.decimals(),
     ]);
 
     // fetch quote token info
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const [quoteTokenName, quoteTokenSymbol] = await Promise.all([
+    const [quoteTokenName, quoteTokenSymbol, quoteTokenDecimals] = await Promise.all([
         quoteTokenInstance.name(),
         quoteTokenInstance.symbol(),
+        quoteTokenInstance.decimals(),
     ]);
 
     // fetch minimum commit size
@@ -111,6 +114,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: longToken,
             name: longTokenName,
             symbol: longTokenSymbol,
+            decimals: longTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
@@ -120,6 +124,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: shortToken,
             name: shortTokenName,
             symbol: shortTokenSymbol,
+            decimals: shortTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
@@ -129,6 +134,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: quoteToken,
             name: quoteTokenName,
             symbol: quoteTokenSymbol,
+            decimals: quoteTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },

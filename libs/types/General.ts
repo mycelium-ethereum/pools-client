@@ -38,6 +38,7 @@ export type Token = {
     symbol: string;
     balance: BigNumber;
     approvedAmount: BigNumber;
+    decimals: number;
 };
 
 export type TokenBreakdown = PoolToken & {
