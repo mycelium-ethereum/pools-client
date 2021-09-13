@@ -4,6 +4,7 @@ import { SideEnum } from '@libs/constants';
 
 type TokenRow = {
     side: SideEnum;
+    leverage: number;
     pool: string;
     symbol: string;
 };
@@ -21,11 +22,13 @@ export default (() => {
                         symbol: pool.shortToken.symbol,
                         side: SideEnum.short,
                         pool: pool.address,
+                        leverage: pool.leverage
                     },
                     {
                         symbol: pool.longToken.symbol,
                         side: SideEnum.long,
                         pool: pool.address,
+                        leverage: pool.leverage
                     },
                 );
             });

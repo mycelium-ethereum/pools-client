@@ -55,6 +55,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     console.debug(
         `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
     );
+
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
     const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
@@ -78,6 +79,8 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     ]);
 
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
+    // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
+    const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
@@ -94,7 +97,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             allUnexecutedCommits: [],
         },
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
-        leverage: new BigNumber(2),
+        leverage: leverage,
         longToken: {
             address: longToken,
             name: longTokenName,

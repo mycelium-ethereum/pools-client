@@ -51,6 +51,7 @@ export default (() => {
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: NaN });
+                                swapDispatch({ type: 'setLeverage', value: 1 })
                                 swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
                             }
                         }}
