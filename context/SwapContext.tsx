@@ -153,7 +153,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     const [swapState, swapDispatch] = useReducer(reducer, initialState);
 
-    // handles setting routed values
+    // handles the setting of routed values
     useEffect(() => {
         if (swapDispatch) {
             if (router.query.pool) {
