@@ -50,7 +50,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         contract.leverageAmount(),
     ]);
 
-    const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
+    const [frontRunningInterval, keeper] = await Promise.all([contract.frontRunningInterval(), contract.keeper()]);
 
     console.debug(
         `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
@@ -96,6 +96,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             pendingShort: new BigNumber(0),
             allUnexecutedCommits: [],
         },
+        keeper,
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,
         longToken: {
@@ -161,41 +162,24 @@ export const fetchCommits: (
 
     console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit);
 
-    const unfilteredCommits = await contract?.queryFilter(
+    const allUnexecutedCommits = (await contract?.queryFilter(
         contract.filters.CreateCommit(),
         Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
-    );
+    )) as CreatedCommitType[];
 
-    console.debug('All commits unfiltered', unfilteredCommits);
+    console.debug('All commits unfiltered', allUnexecutedCommits);
 
     let pendingLong = new BigNumber(0);
     let pendingShort = new BigNumber(0);
-    const allUnexecutedCommits = [];
 
-    for (let i = 0; i < unfilteredCommits.length; i++) {
-        const commit = unfilteredCommits[i];
-
-        // need to filter out created commits which have since been removed
-        const [deleted] = await Promise.all([
-            contract?.queryFilter(contract.filters.RemoveCommit(commit.args.commitID)),
-            commit.getTransaction(),
-        ]);
-
-        if (deleted.length) {
-            // skip if its been deleted
-            continue;
-        }
-
+    allUnexecutedCommits.forEach((commit) => {
         [pendingShort, pendingLong] = addToPending(pendingShort, pendingLong, {
             amount: commit.args.amount,
             type: commit.args.commitType,
         });
-        allUnexecutedCommits.push(commit);
-    }
-
-    console.debug('All commits filtered', allUnexecutedCommits);
-
+    });
     console.debug(`Pending commit amounts. Long: ${pendingLong.toNumber()}, short: ${pendingShort.toNumber()}`);
+
     return {
         pendingLong,
         pendingShort,
