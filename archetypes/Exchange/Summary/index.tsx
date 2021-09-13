@@ -56,7 +56,7 @@ export const SellSummary: React.FC<
     SummaryProps & {
         gasFee: number;
     }
-> = ({ pool, amount, isLong, gasFee }) => {
+> = ({ pool, amount, isLong }) => {
     const token = isLong ? pool.longToken : pool.shortToken;
     const notional = isLong ? pool.longBalance : pool.shortBalance;
 
@@ -66,14 +66,12 @@ export const SellSummary: React.FC<
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <h2>
-                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                    {token.name}
+                    <Logo className="inline w-6 mr-2" ticker="USDC" />
+                    USDC
                 </h2>
                 <Section label="Expected return">
                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                 </Section>
-                <Section label="Expected Token Price">{`${toApproxCurrency(tokenPrice)}`}</Section>
-                <Section label="Expected Gas Fee">{`${gasFee} Gwei`}</Section>
                 <Countdown>
                     {'Receive In'}
                     <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
