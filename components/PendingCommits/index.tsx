@@ -3,13 +3,10 @@ import styled from 'styled-components';
 // import { Table, TableBody, span, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { PoolToken, QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
-import useTimeNow from '@libs/hooks/useTimeNow';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { usePoolActions } from '@context/PoolContext';
 import { Logo } from '@components/General';
-import Button from '@components/General/Button';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
@@ -17,7 +14,6 @@ import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
 import { Popover, Transition } from '@headlessui/react';
 import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
-import { Tooltip } from '@components/General/Tooltip';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 
 import Close from '/public/img/general/close-black.svg';
@@ -48,7 +44,6 @@ export default (() => {
     const { provider } = useWeb3();
     const { showCommits = false, focus = CommitsFocusEnum.buys } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
-    const { uncommit = () => console.error('uncommit undefined') } = usePoolActions();
     const commits = usePendingCommits(focus);
 
     const mintCommits = commits.filter(
@@ -81,13 +76,7 @@ export default (() => {
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <BuyRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                uncommit={uncommit}
-                                {...commit}
-                            />
+                            <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 ) : (
@@ -101,13 +90,7 @@ export default (() => {
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <SellRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                uncommit={uncommit}
-                                {...commit}
-                            />
+                            <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 )}
@@ -126,10 +109,9 @@ const PendingCommitsModal = styled(Modal)`
 const BuyRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, lockTimeSeconds }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -140,16 +122,7 @@ const BuyRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions
-                    token={token}
-                    uncommit={uncommit}
-                    pool={pool}
-                    provider={provider}
-                    id={id}
-                    txnHash={txnHash}
-                    lockTimeSeconds={lockTimeSeconds}
-                    lockTooltipText="You can no longer cancel this buy as the front-running interval has been reached."
-                />
+                <Actions token={token} provider={provider} txnHash={txnHash} />
             </span>
         </TableRow>
     );
@@ -158,10 +131,9 @@ const BuyRow: React.FC<
 const SellRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        uncommit: (pool: string, commitID: number) => void;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, uncommit, index, lockTimeSeconds }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -172,38 +144,19 @@ const SellRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions
-                    token={token}
-                    uncommit={uncommit}
-                    pool={pool}
-                    provider={provider}
-                    id={id}
-                    txnHash={txnHash}
-                    lockTimeSeconds={lockTimeSeconds}
-                    lockTooltipText="You can no longer cancel this sell as the front-running interval has been reached."
-                />
+                <Actions token={token} provider={provider} txnHash={txnHash} />
             </span>
         </TableRow>
     );
 };
 
 const Actions: React.FC<{
-    pool: string;
-    id: number;
     provider: ethers.providers.JsonRpcProvider | null;
     token: PoolToken;
     txnHash: string;
-    lockTimeSeconds: number;
-    lockTooltipText: string;
-    uncommit: (pool: string, commitID: number) => void;
-}> = ({ uncommit, pool, id, provider, token, txnHash, lockTimeSeconds, lockTooltipText }) => {
+}> = ({ provider, token, txnHash }) => {
     return (
         <>
-            <CancelCommitButton
-                lockTimeSeconds={lockTimeSeconds}
-                lockTooltipText={lockTooltipText}
-                onClick={() => uncommit(pool, id)}
-            />
             <Popover as="div" className="inline relative ml-2 my-auto">
                 {({ open }) => (
                     <>
@@ -250,28 +203,5 @@ const Actions: React.FC<{
                 )}
             </Popover>
         </>
-    );
-};
-
-const CancelCommitButton: React.FC<{
-    lockTimeSeconds: number;
-    lockTooltipText: string;
-    onClick: () => void;
-}> = ({ lockTimeSeconds, lockTooltipText, onClick }) => {
-    const { nowSeconds } = useTimeNow();
-    const locked = nowSeconds > lockTimeSeconds;
-
-    return (
-        <Tooltip text={lockTooltipText} placement="left" show={locked}>
-            <Button
-                size="xs"
-                variant="primary-light"
-                className="inline rounded-xl my-auto w-[65px] border border-tracer-500 focus:border-solid"
-                onClick={onClick}
-                disabled={locked}
-            >
-                Cancel
-            </Button>
-        </Tooltip>
     );
 };
