@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import StakeSLP from '@archetypes/Stake/StakeSLP';
+import StakePool from '@archetypes/Stake/StakePool';
 import { StakePoolStore } from '@context/StakeContext';
 import { useRouter } from 'next/router';
 
@@ -17,7 +17,7 @@ export default (() => {
         <Page className={`page`}>
             <StakePoolStore>
                 <NavBar />
-                <StakeSLP />
+                <StakePool />
             </StakePoolStore>
             <Footer />
         </Page>

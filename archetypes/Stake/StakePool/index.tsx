@@ -4,42 +4,41 @@ import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import InvestNav from '@components/Nav/InvestNav';
-import {
-    browseReducer,
-    BrowseState,
-    FarmTableRowData,
-    LeverageFilterEnum,
-    SideFilterEnum,
-    SortByEnum,
-} from '../state';
+import { browseReducer, BrowseState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
-import { useRouter } from 'next/router';
+import FarmNav from '@components/Nav/FarmNav';
 
 export default (() => {
     const { account } = useWeb3();
-
-    const router = useRouter();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
-        sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
+        sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
     } as BrowseState);
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {
-            dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyHoldings });
+            dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyStaked });
         }
     }, [account]);
 
     // parse the pools rows
-    const tokens = useBrowsePools();
+    const farms: FarmTableRowData[] = [
+        {
+            farm: '1L-ETH/USDC',
+            tokenSymbol: '1L-ETH/USDC',
+            leverage: 1,
+            side: 'long',
+            apy: 0,
+            tvl: 0,
+            myStaked: 0,
+            myRewards: 0,
+        },
+    ];
 
     // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: FarmTableRowData): boolean => {
@@ -68,55 +67,39 @@ export default (() => {
         }
     };
 
-    const searchFilter = (token: FarmTableRowData): boolean => {
+    const searchFilter = (farm: FarmTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(token.symbol.toLowerCase().match(searchString));
+        return Boolean(farm.tokenSymbol.toLowerCase().match(searchString));
     };
 
-    const sorter = (tokenA: FarmTableRowData, tokenB: FarmTableRowData): number => {
+    const sorter = (farmA: FarmTableRowData, farmB: FarmTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.Name:
-                return tokenA.symbol.localeCompare(tokenB.symbol);
-            case SortByEnum.Price:
-                return tokenB.lastPrice - tokenA.lastPrice;
-            case SortByEnum.Change24Hours:
-                return tokenB.change24Hours - tokenA.change24Hours;
-            case SortByEnum.RebalanceRate:
-                return tokenB.rebalanceRate - tokenA.rebalanceRate;
+                return farmA.tokenSymbol.localeCompare(farmB.tokenSymbol);
             case SortByEnum.TotalValueLocked:
-                return tokenB.totalValueLocked - tokenA.totalValueLocked;
-            case SortByEnum.MyHoldings:
-                return tokenB.myHoldings - tokenA.myHoldings;
+                return farmB.apy - farmA.apy;
+            case SortByEnum.MyRewards:
+                return farmB.myRewards - farmA.myRewards;
+            case SortByEnum.MyStaked:
+                return farmB.myStaked - farmA.myStaked;
             default:
                 return 0;
         }
     };
 
-    const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
-    const sortedFilteredTokens = filteredTokens.sort(sorter);
+    const filteredTokens = farms.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const sortedFilteredFarms = filteredTokens.sort(sorter);
 
-    const handleBuyToken = (pool: string, side: SideEnum) => {
-        console.debug(`Buying/minting ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
-        router.push({
-            pathname: '/',
-            query: {
-                pool: pool,
-                type: CommitActionEnum.mint,
-                side: side,
-            },
-        });
+    const handleClaim = () => {
+        console.debug('Claiming...');
     };
 
-    const handleSellToken = (pool: string, side: SideEnum) => {
-        console.debug(`Selling/burning ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}`);
-        router.push({
-            pathname: '/',
-            query: {
-                pool: pool,
-                type: CommitActionEnum.burn,
-                side: side,
-            },
-        });
+    const handleStake = () => {
+        console.debug('Staking...');
+    };
+
+    const handleUnstake = () => {
+        console.debug('Unstaking...');
     };
 
     const SearchButton = (
@@ -134,39 +117,28 @@ export default (() => {
 
     return (
         <>
-            <InvestNav left={SearchButton} right={FilterButton} />
-            <BrowseContainer>
+            <FarmNav left={SearchButton} right={FilterButton} />
+            <Container className="mt-0 md:mt-[100px]">
                 <BrowseModal>
                     <section className="hidden md:block">
-                        <Title>Pool Tokens</Title>
-                        <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
+                        <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">
+                            Pool Token Farms
+                        </h1>
+                        <p className="mb-1 text-gray-500">Stake Pool Tokens and earn TCR.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
-                    <FarmsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <FarmsTable
+                        rows={sortedFilteredFarms}
+                        onClickClaim={handleClaim}
+                        onClickUnstake={handleStake}
+                        onClickStake={handleUnstake}
+                    />
                 </BrowseModal>
-            </BrowseContainer>
+            </Container>
             <FilterModal state={state} dispatch={dispatch} />
         </>
     );
-});
-
-const Title = styled.h1`
-    @media (max-width: 768px) {
-        display: none;
-    }
-    font-style: normal;
-    font-weight: bold;
-    font-size: 30px;
-    color: #111928;
-    padding-bottom: 0.8rem;
-`;
-
-const BrowseContainer = styled(Container)`
-    @media (max-width: 768px) {
-        margin-top: 0;
-    }
-    margin-top: 100px;
-`;
+}) as React.FC;
 
 const BrowseModal = styled.div`
     @media (max-width: 768px) {

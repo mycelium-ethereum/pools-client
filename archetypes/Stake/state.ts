@@ -12,25 +12,21 @@ export enum SideFilterEnum {
 
 export enum SortByEnum {
     Name = 'Token',
-    Price = 'Last Price',
-    Change24Hours = '24h Change',
-    RebalanceRate = 'Rebalance Rate',
+    APY = 'APY',
     TotalValueLocked = 'TVL',
-    MyHoldings = 'My Holdings',
+    MyStaked = 'My Staked',
+    MyRewards = 'My Rewards',
 }
 
 export interface FarmTableRowData {
-    address: string;
-    pool: string;
-    symbol: string;
+    farm: string;
+    tokenSymbol: string;
     leverage: number;
-    side: 'short' | 'long';
-    lastPrice: number;
-    change24Hours: number;
-    rebalanceRate: number;
-    totalValueLocked: number;
-    myHoldings: number;
-    nextRebalance: number;
+    side: 'long' | 'short';
+    apy: number;
+    tvl: number;
+    myStaked: number;
+    myRewards: number;
 }
 
 export interface BrowseState {

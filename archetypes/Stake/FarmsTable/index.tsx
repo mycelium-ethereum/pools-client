@@ -1,77 +1,66 @@
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
-import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
 import React, { useState } from 'react';
-import RebalanceRate from '../RebalanceRate';
-import { BrowseTableRowData } from '../state';
+import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
-import TimeLeft from '@components/TimeLeft';
-
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
-export default (({ rows, onClickBuy, onClickSell }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     console.debug('Browse table rows', rows);
     const [showModal, setShowModal] = useState(false);
     return (
         <>
             <Table>
-                <TableHeader>
-                    <span>Token</span>
-                    <span>Last price (USDC)</span>
-                    {/*<span>24H Change</span>*/}
-                    <span className="flex">
-                        Last rebalance rate&nbsp;
-                        <span className="cursor-pointer" onClick={() => setShowModal(true)}>
-                            <QuestionMark />
-                        </span>
-                    </span>
-                    <span>Next Rebalance</span>
+                <TableHeader className="uppercase">
+                    <span>Farm</span>
+                    <span>APY</span>
                     <span>TVL (USDC)</span>
+                    <span>My Staked (TOKENS/USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
                     <span>{/* Empty header for buttons column */}</span>
                 </TableHeader>
-                {rows.map((token, index) => {
-                    const hasHoldings = token.myHoldings > 0;
+                {rows.map((farm, index) => {
                     return (
-                        <TableRow key={token.address} rowNumber={index}>
+                        <TableRow key={farm.farm} rowNumber={index}>
                             <span>
-                                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                {token.symbol}
+                                <Logo
+                                    className="inline w-[25px] mr-2"
+                                    ticker={tokenSymbolToLogoTicker(farm.tokenSymbol)}
+                                />
+                                {farm.tokenSymbol}
                             </span>
-                            <span>{toApproxCurrency(token.lastPrice)}</span>
-                            {/*<ColoredChangeNumber number={token.change24Hours} />*/}
-
-                            <RebalanceRate rebalanceRate={token.rebalanceRate} />
-                            <TimeLeft targetTime={token.nextRebalance} />
-                            <span>{toApproxCurrency(token.totalValueLocked)}</span>
-                            <span>
-                                <div>{`${token.myHoldings.toFixed(2)}`}</div>
-                                <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
-                            </span>
+                            <span>{farm.apy}%</span>
+                            <span>{toApproxCurrency(farm.tvl)}</span>
+                            <span>{toApproxCurrency(farm.myStaked)}</span>
+                            <span>{toApproxCurrency(farm.myRewards)}</span>
                             <span>
                                 <Button
-                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() =>
-                                        onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
-                                    }
+                                    onClick={() => onClickStake()}
                                 >
-                                    Buy
+                                    Stake
                                 </Button>
                                 <Button
-                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 px-2 w-[90px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    disabled={!hasHoldings}
-                                    onClick={() =>
-                                        onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
-                                    }
+                                    // disabled={!hasHoldings}
+                                    onClick={() => onClickUnstake()}
                                 >
-                                    Sell
+                                    Unstake
+                                </Button>
+                                <Button
+                                    className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
+                                    size="sm"
+                                    variant="primary-light"
+                                    // disabled={!hasHoldings}
+                                    onClick={() => onClickClaim()}
+                                >
+                                    Claim
                                 </Button>
                             </span>
                         </TableRow>
@@ -112,9 +101,10 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         </>
     );
 }) as React.FC<{
-    rows: BrowseTableRowData[];
-    onClickBuy: (pool: string, side: SideEnum) => void;
-    onClickSell: (pool: string, side: SideEnum) => void;
+    rows: FarmTableRowData[];
+    onClickStake: () => void;
+    onClickUnstake: () => void;
+    onClickClaim: () => void;
 }>;
 
 // const ColoredChangeNumber = (({ number }) => {
