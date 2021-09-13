@@ -1,13 +1,18 @@
 import React, { useContext, useReducer } from 'react';
-import { Children, MarketType, LeverageType, CurrencyType, PoolType } from '@libs/types/General';
+import { Children, PoolType } from '@libs/types/General';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
 import { useEffect } from 'react';
+import { useWeb3 } from './Web3Context/Web3Context';
 
 interface ContextProps {
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }
+
+// the key here is the leverage amount
+// this allows access through Markets[selectedMarket][selectedLeverage]
+type Market = Record<string, PoolType>;
 
 type SwapState = {
     amount: number;
@@ -16,22 +21,25 @@ type SwapState = {
         isInvalid: boolean;
     };
     commitAction: CommitActionEnum;
-    selectedPool: string | undefined; // address of selected pool
+
+    // address of selected pool
+    selectedPool: string | undefined;
+
+    leverage: number;
+
     side: SideEnum;
-    leverage: LeverageType;
-    currency: CurrencyType;
-    options: {
-        sides: SideEnum[];
-        poolOptions: PoolType[];
-    };
+
+    // selected market name
+    market: string;
+    markets: Record<string, Market>;
 };
 
 export type SwapAction =
     | { type: 'setAmount'; value: number }
     | { type: 'setCommitAction'; value: CommitActionEnum }
-    | { type: 'setMarket'; value: MarketType }
-    | { type: 'setLeverage'; value: LeverageType }
-    | { type: 'setCurrency'; value: CurrencyType }
+    | { type: 'setMarket'; value: string }
+    | { type: 'setMarkets'; markets: Record<string, Market> }
+    | { type: 'setLeverage'; value: number }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: { message: string; isInvalid: boolean } }
@@ -71,11 +79,8 @@ export const swapDefaults: SwapState = {
     selectedPool: undefined,
     side: SideEnum.long,
     leverage: NaN,
-    currency: 'DAI',
-    options: {
-        sides: [SideEnum.long, SideEnum.short], // will always be long and short
-        poolOptions: [], // available pools
-    },
+    market: '',
+    markets: {},
 };
 
 export const SwapContext = React.createContext<Partial<ContextProps>>({});
@@ -85,9 +90,11 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
  */
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const { pools } = useContext(FactoryContext);
+    const { network } = useWeb3();
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
+        let pool;
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
@@ -96,20 +103,34 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setSide':
                 return { ...state, side: action.value };
             case 'setLeverage':
-                return { ...state, leverage: action.value };
-            case 'setCurrency':
-                return { ...state, currency: action.value };
+                console.debug(`Setting leverage: ${action.value}`);
+                pool = state.markets?.[state.market]?.[action.value]?.address;
+                console.debug(`Setting pool: ${pool?.slice()}`);
+                return {
+                    ...state,
+                    leverage: action.value,
+                    selectedPool: pool,
+                };
             case 'setSelectedPool':
                 return { ...state, selectedPool: action.value };
             case 'setInvalidAmount':
                 return { ...state, invalidAmount: action.value };
-            case 'setPoolOptions':
+            case 'setMarket':
+                console.debug(`Setting market: ${action.value}`);
+                const leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
+                pool = state.markets?.[action.value]?.[leverage]?.address;
+                console.debug(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
-                    options: {
-                        ...state.options,
-                        poolOptions: action.options,
-                    },
+                    market: action.value,
+                    selectedPool: pool,
+                    // set leverage if its not already
+                    leverage: leverage,
+                };
+            case 'setMarkets':
+                return {
+                    ...state,
+                    markets: action.markets,
                 };
             case 'reset':
                 return {
@@ -125,12 +146,31 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     useEffect(() => {
         if (pools?.length) {
+            const markets: Record<string, Market> = {};
+            pools.forEach((pool) => {
+                const [leverage, marketName] = pool.name.split('-');
+                // hopefully valid pool name
+                if (marketName) {
+                    if (!markets[marketName]) {
+                        markets[marketName] = {};
+                    }
+                    markets[marketName][parseInt(leverage)] = pool;
+                }
+            });
             swapDispatch({
-                type: 'setPoolOptions',
-                options: pools,
+                type: 'setMarkets',
+                markets,
             });
         }
     }, [pools]);
+
+    useEffect(() => {
+        if (network) {
+            swapDispatch({
+                type: 'reset',
+            });
+        }
+    }, [network]);
 
     return (
         <SwapContext.Provider

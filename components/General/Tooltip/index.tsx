@@ -3,13 +3,14 @@ import React from 'react';
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 
+// default behaviour is to show
 export const Tooltip: React.FC<
     {
         text: React.ReactNode;
         placement?: string;
         show?: boolean;
     } & Children
-> = ({ text, placement, children, show }) => {
+> = ({ text, placement, children, show = true }) => {
     return (
         <>
             {show ? (

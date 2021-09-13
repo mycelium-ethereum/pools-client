@@ -18,6 +18,7 @@ export default (({ rebalanceRate }) => {
             <span className="text-green-500">{long}</span>
             <span className={classNames(rebalanceRate <= 1 ? 'text-green-500' : 'text-red-500')}>|</span>
             <span className="text-red-500">{short}</span>
+            <span> {rebalanceRate.toFixed(3)}</span>
         </div>
     );
 }) as React.FC<{

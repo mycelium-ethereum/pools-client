@@ -6,6 +6,29 @@ import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
 import { ARBITRUM_RINKEBY } from '@libs/constants';
 
+// this is a temp hack to fix fetching pools > 2000 blocks from currentBlock
+const ARBITRUM_POOLS = [
+    {
+        // 1x
+        name: '1-BTC/USDC',
+        address: '0xC42778b0248d4630b7a792dDDEa2Af5094639e9B',
+    },
+    {
+        // 3x
+        name: '3-BTC/USDC',
+        address: '0xFBa3aa7c015efdB16F74355Dad5Ba671aAF5741c',
+    },
+    {
+        // 1x
+        name: '1-ETH/USDC',
+        address: '0x92cf8251ff07Ceee503dBF34352d799cC197746a',
+    },
+    {
+        // 3x
+        name: '3-ETH/USDC',
+        address: '0xf69FCE9ad0d3Fc50adbcD12F4165B6709AEc6368',
+    },
+];
 interface ContextProps {
     pools: PoolType[];
 }
@@ -40,12 +63,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
             if (contract) {
                 if (network === parseInt(ARBITRUM_RINKEBY)) {
                     // hacky temp solution to rpc limit issues
-                    setPools([
-                        {
-                            name: 'BTC/USDC',
-                            address: '0x544bD86550d9774f686030969B6E72B7538c4F9e',
-                        },
-                    ]);
+                    setPools(ARBITRUM_POOLS);
                 } else {
                     const createdMarkets = contract.filters.DeployPool();
                     const allEvents = await contract?.queryFilter(createdMarkets);

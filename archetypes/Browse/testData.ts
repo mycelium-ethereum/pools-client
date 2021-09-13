@@ -20,6 +20,7 @@ for (const name of names) {
                 rebalanceRate: Math.random() * 20,
                 totalValueLocked: Math.random() * 10 ** 8,
                 myHoldings: Math.random() > 0.5 ? Math.random() * 1000 : 0,
+                nextRebalance: Math.floor(Date.now() / 1000) + 1000 * 60 * 5, // 5 minutes from now
             });
         }
     }

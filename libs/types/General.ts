@@ -26,14 +26,7 @@ export type APIResult = {
     data: any;
 };
 
-// TODO change this to known markets
-export type MarketType = 'ETH/USDC' | 'ETH/TUSD' | 'BTC/USD' | undefined;
-
-// TODO change this to known currencies
-export type CurrencyType = 'DAI' | 'USDC';
-
-export type LeverageType = number;
-
+// name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {
     name: string;
     address: string;
@@ -81,7 +74,7 @@ export type Pool = {
     lastUpdate: BigNumber;
     lastPrice: BigNumber;
     shortBalance: BigNumber;
-    leverage: BigNumber;
+    leverage: number;
     longBalance: BigNumber;
     oraclePrice: BigNumber;
     quoteToken: Token;

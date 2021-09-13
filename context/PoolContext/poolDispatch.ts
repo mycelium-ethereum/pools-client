@@ -16,7 +16,6 @@ export const initialPoolState: PoolState = {
 
 export type PoolAction =
     | { type: 'setPool'; key: string; pool: Pool }
-    | { type: 'setSelectedPool'; pool: string }
     | {
           type: 'setTokenBalances';
           pool: string;
@@ -177,11 +176,6 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         },
                     },
                 },
-            };
-        case 'setSelectedPool':
-            return {
-                ...state,
-                selectedPool: action.pool,
             };
         default:
             throw new Error('Unexpected action');

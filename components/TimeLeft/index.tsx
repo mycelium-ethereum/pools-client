@@ -7,7 +7,7 @@ import styled from 'styled-components';
  * @param targetTime time you want to countdown till in seconds
  *
  */
-export default styled(({ targetTime, className }) => {
+export default styled(({ targetTime, className, hideHours, hideMinutes, hideSeconds }) => {
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
@@ -52,7 +52,11 @@ export default styled(({ targetTime, className }) => {
 
     return (
         <>
-            <span className={className}>{`${hours}h ${minutes}m ${seconds}s`}</span>
+            <span className={className}>
+                {!hideHours ? `${hours}h ` : ''}
+                {!hideMinutes ? `${minutes}m ` : ''}
+                {!hideSeconds ? `${seconds}s` : ''}
+            </span>
         </>
     );
 })<{
