@@ -88,24 +88,24 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <br />
                 <div>
                     The <b>Rebalancing Rate</b> is function of collateral skew in the pool. It can result in a polarised
-                    leverage effect at rebalancing. The Rebalancing Rate is calculated as (long side collateral/short side
+                    leverage effect at rebalance. The Rebalancing Rate is calculated as (long side collateral/short side
                     collateral) - 1.
                 </div>
                 <br />
                 <div>
                     If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and short
-                    side of the pool. At rebalancing, the winning side gains are neither amplified or reduced.
+                    side of the pool. At rebalance, the winning side gains are neither amplified or reduced.
                 </div>
                 <br />
                 <div>
                     If the <b>Rebalancing Rate {'>'} 0</b>, there is more collateral held in the long side of the pool. At
-                    rebalancing, the short side&apos;s gains are effectively amplified relative to their losses.
+                    rebalance, the short side&apos;s gains are effectively amplified relative to their losses.
                     Conversely, the long side&apos;s gains are effectively reduced.
                 </div>
                 <br />
                 <div>
                     If the <b>Rebalancing Rate {'<'} 0</b>, there is more collateral held in the short side of the pool.
-                    At rebalancing, the short side&apos;s gains are effectively reduced relative to their losses.
+                    At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
             </Modal>
