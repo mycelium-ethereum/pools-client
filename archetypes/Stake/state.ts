@@ -1,7 +1,7 @@
 export enum LeverageFilterEnum {
-    One = '1x',
-    Three = '3x',
     All = 'All',
+    One = '1',
+    Three = '3',
 }
 
 export enum SideFilterEnum {
@@ -19,30 +19,22 @@ export enum SortByEnum {
     MyHoldings = 'My Holdings',
 }
 
-export enum MarketFilterEnum {
-    BTCUSDC = 'BTCUSDC',
-    ETHUSDC = 'ETHUSDC',
-    All = 'All',
-}
-
-export interface BrowseTableRowData {
-    //address: Key | null | undefined;
-    // address: Key | null | undefined;
-    farm: string;
-    APY: number;
-    TVL: number;
-    myStaked: number;
-    myRewards: number;
-    // lastPrice: number;
-    // change24Hours: number;
-    // rebalanceRate: number;
-    // totalValueLocked: number;
-    // myHoldings: number;
+export interface FarmTableRowData {
+    address: string;
+    pool: string;
+    symbol: string;
+    leverage: number;
+    side: 'short' | 'long';
+    lastPrice: number;
+    change24Hours: number;
+    rebalanceRate: number;
+    totalValueLocked: number;
+    myHoldings: number;
+    nextRebalance: number;
 }
 
 export interface BrowseState {
     search: string;
-    market: MarketFilterEnum;
     leverage: LeverageFilterEnum;
     side: SideFilterEnum;
     sortBy: SortByEnum;
@@ -52,18 +44,12 @@ export interface BrowseState {
 export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
-    | { type: 'setMarket'; market: MarketFilterEnum }
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setModalOpen'; open: boolean }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
     switch (action.type) {
-        case 'setMarket':
-            return {
-                ...state,
-                market: action.market,
-            };
         case 'setLeverage':
             return {
                 ...state,
@@ -93,4 +79,3 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
             throw new Error('Unexpected action');
     }
 };
-//TODO: Add market filter enum

@@ -1,7 +1,7 @@
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
-import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum, MarketFilterEnum } from '../state';
+import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -20,18 +20,10 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="mr-4">
-                    <h3 className="mb-1">Market</h3>
-                    <Dropdown
-                        value={state.market}
-                        options={Object.values(MarketFilterEnum)}
-                        onSelect={(val) => dispatch({ type: 'setMarket', market: val as MarketFilterEnum })}
-                    />
-                </div>
-                <div className="mr-4">
-                    <h3 className="mb-1">Leverage</h3>
+                    <h3 className="mb-1">Power Leverage</h3>
                     <Dropdown
                         value={state.leverage}
-                        options={Object.values(LeverageFilterEnum)}
+                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
                         onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
                     />
                 </div>
@@ -39,7 +31,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <h3 className="mb-1">Side</h3>
                     <Dropdown
                         value={state.side}
-                        options={Object.values(SideFilterEnum)}
+                        options={Object.values(SideFilterEnum).map((key) => ({ key }))}
                         onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
                     />
                 </div>
@@ -48,7 +40,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <h3 className="mb-1">Sort</h3>
                     <Dropdown
                         value={state.sortBy}
-                        options={Object.values(SortByEnum)}
+                        options={Object.values(SortByEnum).map((key) => ({ key: key }))}
                         onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
                     />
                 </div>

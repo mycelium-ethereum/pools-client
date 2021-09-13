@@ -2,10 +2,9 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-//import { StakeSLP } from '@archetypes/StakeSLPTokens';
+import StakeSLP  from '@archetypes/Stake/StakeSLP';
 import { StakePoolStore } from '@context/StakeContext';
 import { useRouter } from 'next/router';
-import { StakeSLP } from '@archetypes/StakeSLPTokens';
 
 export default (() => {
     const router = useRouter();
