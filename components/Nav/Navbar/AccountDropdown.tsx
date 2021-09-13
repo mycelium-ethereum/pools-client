@@ -1,5 +1,4 @@
 import React from 'react';
-import dynamic from 'next/dynamic';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useEnsName from '@libs/hooks/useEnsName';
 
@@ -74,17 +73,17 @@ const AccountDropdownButton = ({
         <TWPopup
             preview={
                 <>
-                    <Identicon account={account} />
+                    <WalletIcon />
                     <div className="px-2 m-auto">{accountDescriptionShort(account, ensName)}</div>
                 </>
             }
         >
             <div className="py-1">
-                <div className="flex px-4 py-2 text-sm">
-                    <Identicon account={account} />
+                <div className="flex px-4 py-2 text-sm w-[180px]">
+                    <WalletIcon />
                     <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
                     <ReactSimpleTooltip
-                        content="Copied"
+                        content="Copy"
                         arrow={6}
                         background="#f9fafb"
                         border="rgba(209, 213, 219)"
@@ -138,8 +137,6 @@ const AccountDropdownButton = ({
     );
 };
 
-const Identicon = dynamic(import('./Identicon'), { ssr: false });
-
 const ViewOnEtherscanOption: React.FC<{
     account: string;
     className?: string;
@@ -154,6 +151,20 @@ const ViewOnEtherscanOption: React.FC<{
             <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker="ETHERSCAN" />
             <div className="text-sm">View on Etherscan</div>
         </a>
+    );
+};
+
+const WalletIcon: React.FC<{
+    className?: string;
+}> = ({ className }) => {
+    const { wallet } = useWeb3();
+
+    return (
+        <img
+            className={classNames(className ?? '', "inline text-lg h-[20px] my-auto")}
+            src={wallet?.icons.iconSrc}
+            alt={wallet?.name ?? ""}
+        />
     );
 };
 
