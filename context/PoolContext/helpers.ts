@@ -78,6 +78,14 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         quoteTokenInstance.symbol(),
     ]);
 
+    // fetch minimum commit size
+    const poolCommitterInstance = new ethers.Contract(
+        poolCommitter,
+        PoolCommitter__factory.abi,
+        provider,
+    ) as PoolCommitter;
+    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
+
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
     const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
@@ -95,6 +103,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             pendingLong: new BigNumber(0),
             pendingShort: new BigNumber(0),
             allUnexecutedCommits: [],
+            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,

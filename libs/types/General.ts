@@ -55,6 +55,7 @@ export type Committer = {
     pendingLong: BigNumber;
     pendingShort: BigNumber;
     allUnexecutedCommits: CreatedCommitType[];
+    minimumCommitSize: BigNumber;
 };
 
 export type CreatedCommitType = TypedEvent<

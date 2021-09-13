@@ -43,6 +43,7 @@ export const DEFAULT_POOLSTATE: Pool = {
         pendingLong: new BigNumber(0),
         pendingShort: new BigNumber(0),
         allUnexecutedCommits: [] as CreatedCommitType[],
+        minimumCommitSize: new BigNumber(1000),
     },
     subscribed: false,
 };

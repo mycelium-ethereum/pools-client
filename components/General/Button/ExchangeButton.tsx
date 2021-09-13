@@ -10,7 +10,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch } = useSwapContext();
-    const { selectedPool, side, amount } = swapState;
+    const { selectedPool, side, amount, invalidAmount } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -56,7 +56,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 <Button
                     size="lg"
                     variant="primary"
-                    disabled={!selectedPool || !amount}
+                    disabled={!selectedPool || !amount || invalidAmount.isInvalid}
                     onClick={(_e) => {
                         let side_;
                         if (!commit) {

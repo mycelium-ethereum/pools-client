@@ -14,7 +14,29 @@ import ExchangeButton from '@components/General/Button/ExchangeButton';
 const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: number, balance: number) => boolean = (amount, balance) => amount > balance;
+const isInvalidAmount: (
+    amount: number,
+    balance: number,
+    minimumCommitSize: number,
+) => { isInvalid: boolean; message?: string } = (amount, balance, minimumCommitSize) => {
+    if (amount > balance) {
+        return {
+            message: undefined,
+            isInvalid: true,
+        };
+    }
+
+    if (amount < minimumCommitSize) {
+        return {
+            message: `The minimum order size is ${toApproxCurrency(minimumCommitSize)}`,
+            isInvalid: true,
+        };
+    }
+    return {
+        message: undefined,
+        isInvalid: false,
+    };
+};
 
 const SIDE_OPTIONS = [
     {
@@ -29,22 +51,20 @@ const SIDE_OPTIONS = [
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const {
-        leverage,
-        selectedPool,
-        side,
-        amount,
-        invalidAmount,
-        market,
-        markets,
-    } = swapState;
+    const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
 
     const pool = usePool(selectedPool);
 
     useEffect(() => {
+        const invalidAmount = isInvalidAmount(
+            amount,
+            pool.quoteToken.balance.toNumber(),
+            pool.committer.minimumCommitSize.toNumber(),
+        );
+
         swapDispatch({
             type: 'setInvalidAmount',
-            value: isInvalidAmount(amount, pool.quoteToken.balance.toNumber()),
+            value: invalidAmount,
         });
     }, [amount, pool.quoteToken.balance]);
 
@@ -63,7 +83,7 @@ export default (() => {
                         }))}
                         value={market}
                         onSelect={(selectedMarket) => {
-                            console.debug('Setting market', selectedMarket );
+                            console.debug('Setting market', selectedMarket);
                             swapDispatch({ type: 'setMarket', value: selectedMarket as string });
                         }}
                     />
@@ -98,7 +118,7 @@ export default (() => {
             </div>
             <div className={`${inputRow} `}>
                 <p className="mb-2 text-black">Amount</p>
-                <InputContainer error={invalidAmount}>
+                <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
                         value={amount}
@@ -118,9 +138,16 @@ export default (() => {
                         </div>
                     </InnerInputText>
                 </InputContainer>
-                <div className={invalidAmount ? 'text-red-500 ' : ''}>
-                    {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
-                    {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+
+                <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                    {invalidAmount.isInvalid && invalidAmount.message ? (
+                        invalidAmount.message
+                    ) : (
+                        <>
+                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
+                            {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                        </>
+                    )}
                 </div>
             </div>
 
