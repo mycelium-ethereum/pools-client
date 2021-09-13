@@ -10,10 +10,10 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
 import {
-    LeveragedPool,
-    LeveragedPool__factory,
     PoolCommitter,
     PoolCommitter__factory,
+    PoolKeeper,
+    PoolKeeper__factory,
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
@@ -177,7 +177,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && !poolsState.pools[pool]?.subscribed) {
             console.debug('Subscribing to pool', pool);
 
-            const committerInfo = poolsState.pools[pool].committer;
+            const { committer: committerInfo, keeper } = poolsState.pools[pool];
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
@@ -245,16 +245,24 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug('Failed to execute commit');
             });
 
-            const poolInstance = new ethers.Contract(pool, LeveragedPool__factory.abi, provider) as LeveragedPool;
+            const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
-            poolInstance.on('CompletedUpkeep', () => {
-                console.debug('Completed upkeep');
-                poolInstance.lastPriceTimestamp().then((lastUpdate) => {
-                    console.debug('Last update', lastUpdate.toNumber());
+            keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (startPrice, endPrice, log) => {
+                console.debug(`
+                    Completed upkeep. 
+                    Old price: ${ethers.utils.formatEther(startPrice)}
+                    New price: ${ethers.utils.formatEther(endPrice)}
+                `);
+                log.getTransaction().then((txn) => {
+                    // txn.timestamp should be the the ne lastUpdate price
+                    // this saves creating a poolInstance. If txn.timestamp cant be found then
+                    // Date.now should be roughly the new update time
+                    const timestamp = txn?.timestamp ?? Date.now();
+                    console.debug(`New lastupdated: ${txn?.timestamp}`);
                     poolsDispatch({
                         type: 'setLastUpdate',
-                        pool: poolInstance.address,
-                        value: new BigNumber(lastUpdate.toString()),
+                        pool: pool,
+                        value: new BigNumber(timestamp.toString()),
                     });
                 });
             });
