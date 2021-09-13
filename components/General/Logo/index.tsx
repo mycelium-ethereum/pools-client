@@ -5,11 +5,11 @@ import styled from 'styled-components';
 type ShortLongToken = 'ETH_L' | 'BTC_S' | 'ETH_L' | 'BTC_S' | 'DEFAULT';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
-export const tokenNameToLogoTicker: (tokenName: string) => ShortLongToken = (tokenName) => {
-    if (!tokenName) {
+export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = (tokenSymbol) => {
+    if (!tokenSymbol) {
         return 'DEFAULT';
     }
-    const [leverageSide, name] = tokenName.split('-');
+    const [leverageSide, name] = tokenSymbol.split('-');
     const side = leverageSide.slice(-1);
     const asset = name.split('/')[0];
     console.log(`Constructed token ${asset}_${side}`);

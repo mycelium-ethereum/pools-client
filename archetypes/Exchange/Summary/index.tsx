@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiddenExpand, Logo, Section, tokenNameToLogoTicker } from '@components/General';
+import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -29,7 +29,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <h2>
-                    <Logo className="inline w-6 mr-2" ticker={tokenNameToLogoTicker(token.name)} />
+                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                     {token.name}
                 </h2>
                 <Section label="Expected number of tokens">
@@ -66,7 +66,7 @@ export const SellSummary: React.FC<
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
                 <h2>
-                    <Logo className="inline w-6 mr-2" ticker={tokenNameToLogoTicker(token.name)} />
+                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                     {token.name}
                 </h2>
                 <Section label="Expected return">

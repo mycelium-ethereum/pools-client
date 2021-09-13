@@ -10,7 +10,7 @@ import TimeLeft from '@components/TimeLeft';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
-import { Logo, tokenNameToLogoTicker } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     console.debug('Browse table rows', rows);
@@ -38,7 +38,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     return (
                         <TableRow key={token.address} rowNumber={index}>
                             <span>
-                                <Logo className="inline w-[25px] mr-2" ticker={tokenNameToLogoTicker(token.symbol)} />
+                                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                                 {token.symbol}
                             </span>
                             <span>{toApproxCurrency(token.lastPrice)}</span>
