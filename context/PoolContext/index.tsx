@@ -32,7 +32,6 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
-    uncommit: (pool: string, commitID: number) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -338,29 +337,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const uncommit: (pool: string, commitID: number) => Promise<void> = async (pool, commitID) => {
-        const committerAddress = poolsState.pools[pool].committer.address;
-        if (!committerAddress) {
-            console.error('Committer address undefined when trying to mint');
-            // TODO handle error
-        }
-        const network = await signer?.getChainId();
-        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
-        if (handleTransaction) {
-            return handleTransaction(committer.uncommit, [commitID], {
-                network: network,
-                statusMessages: {
-                    waiting: 'Submitting commit',
-                    error: 'Failed to commit',
-                },
-                onSuccess: async (receipt) => {
-                    console.debug('Successfully uncommitted', receipt);
-                    updateTokenBalances(poolsState.pools[pool]);
-                },
-            });
-        }
-    };
-
     const approve: (pool: string) => Promise<void> = async (pool) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
@@ -398,7 +374,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
-                    uncommit,
                 }}
             >
                 {children}
