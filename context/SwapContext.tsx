@@ -88,6 +88,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
+        let pool;
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
@@ -97,7 +98,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 return { ...state, side: action.value };
             case 'setLeverage':
                 console.debug(`Setting leverage: ${action.value}`)
-                let pool = state.markets?.[state.market]?.[action.value]?.address;
+                pool = state.markets?.[state.market]?.[action.value]?.address;
                 console.debug(`Setting pool: ${pool?.slice()}`)
                 return {
                     ...state, 
