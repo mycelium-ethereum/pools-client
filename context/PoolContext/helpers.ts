@@ -79,12 +79,10 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     ]);
 
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
-    const poolName = await contract.poolName();
-    // fix since the fetched leverage is in IEEE 128 bit
-    const leverage = parseInt(poolName.split('-')?.[0] ?? 1);
+    // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
+    const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
     return {
         ...pool,
-        name: poolName,
         updateInterval: new BigNumber(updateInterval.toString()),
         lastUpdate: new BigNumber(lastUpdate.toString()),
         lastPrice: new BigNumber(0),

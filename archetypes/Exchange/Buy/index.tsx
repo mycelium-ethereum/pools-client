@@ -11,8 +11,6 @@ import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 
-// const NOT_DISABLED_LEVERAGES = [1, 3];
-
 const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
