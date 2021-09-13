@@ -27,7 +27,7 @@ export default (() => {
                 } else {
                     sells += 1;
                 }
-                const newMin = pools[commit.pool].updateInterval.plus(pools[commit.pool].updateInterval).toNumber();
+                const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
                 if (newMin < nextUpdate) {
                     nextUpdate = newMin; // set new min
                 }
