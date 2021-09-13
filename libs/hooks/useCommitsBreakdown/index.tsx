@@ -27,9 +27,11 @@ export default (() => {
                 } else {
                     sells += 1;
                 }
-                const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
-                if (newMin < nextUpdate || nextUpdate === 0) {
-                    nextUpdate = newMin; // set new min
+                if (pools[commit.pool]) {
+                    const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
+                    if (newMin < nextUpdate || nextUpdate === 0) {
+                        nextUpdate = newMin; // set new min
+                    }
                 }
             });
             setBuys(buys);
