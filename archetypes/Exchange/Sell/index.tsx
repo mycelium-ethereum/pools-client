@@ -59,8 +59,9 @@ export default (() => {
             const balance = isLong ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber();
             const token = isLong ? pool.longToken : pool.shortToken;
             const notional = isLong ? pool.longBalance : pool.shortBalance;
+            const amountPending = isLong ? pool.committer.pendingLong : pool.committer.pendingShort;
 
-            const tokenPrice = calcTokenPrice(notional, token.supply);
+            const tokenPrice = calcTokenPrice(notional, token.supply.plus(amountPending));
 
             const invalidAmount = isInvalidAmount(
                 amount,
