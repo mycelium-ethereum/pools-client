@@ -156,7 +156,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             });
             swapDispatch({
                 type: 'setMarkets',
-                markets: markets,
+                markets,
             });
         }
     }, [pools]);
