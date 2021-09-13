@@ -1,5 +1,5 @@
 import React from 'react';
-import { HiddenExpand, Section } from '@components/General';
+import { HiddenExpand, Logo, Section, tokenNameToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -28,7 +28,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     return (
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
-                <Token>{token.name}</Token>
+                <h2>
+                    <Logo className="inline w-6 mr-2" ticker={tokenNameToLogoTicker(token.name)} />
+                    {token.name}
+                </h2>
                 <Section label="Expected number of tokens">
                     <div>
                         <span>{`${new BigNumber(amount).div(tokenPrice ?? 1).toFixed(3)}`}</span>
@@ -62,7 +65,10 @@ export const SellSummary: React.FC<
     return (
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
             <Box>
-                <Token>{isLong ? pool.longToken.name : pool.shortToken.name}</Token>
+                <h2>
+                    <Logo className="inline w-6 mr-2" ticker={tokenNameToLogoTicker(token.name)} />
+                    {token.name}
+                </h2>
                 <Section label="Expected return">
                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                 </Section>
@@ -76,8 +82,6 @@ export const SellSummary: React.FC<
         </HiddenExpand>
     );
 };
-
-const Token = styled.h2``;
 
 const Box = styled.div`
     border: 1px solid #e5e7eb;

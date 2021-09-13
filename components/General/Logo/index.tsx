@@ -2,6 +2,20 @@ import React from 'react';
 import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
 import styled from 'styled-components';
 
+type ShortLongToken = 'ETH_L' | 'BTC_S' | 'ETH_L' | 'BTC_S' | 'DEFAULT';
+// this doesnt actually enforce anything but helpful to understand what it is expecting
+// @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
+export const tokenNameToLogoTicker: (tokenName: string) => ShortLongToken = (tokenName) => {
+    if (!tokenName) {
+        return 'DEFAULT';
+    }
+    const [leverageSide, name] = tokenName.split('-');
+    const side = leverageSide.slice(-1);
+    const asset = name.split('/')[0];
+    console.log(`Constructed token ${asset}_${side}`);
+    return `${asset}_${side}` as ShortLongToken;
+};
+
 const clearLogos: Record<string, string> = {
     ETH: '/img/logos/currencies/eth_clear.svg',
     TEST1: '/img/logos/currencies/eth_clear.svg',
@@ -18,6 +32,10 @@ const logos: Record<string, string> = {
     ETHERSCAN: '/img/logos/currencies/etherscan.svg',
     USDC: '/img/logos/currencies/usdc.png',
     DEFAULT: '/img/logos/currencies/tesla.svg',
+    ETH_L: '/img/logos/currencies/eth_long.svg',
+    BTC_L: '/img/logos/currencies/btc_long.svg',
+    ETH_S: '/img/logos/currencies/eth_short.svg',
+    BTC_S: '/img/logos/currencies/btc_short.svg',
 };
 
 interface LProps {
