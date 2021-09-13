@@ -3,13 +3,10 @@ import styled from 'styled-components';
 // import { Table, TableBody, span, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { PoolToken, QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
-import useTimeNow from '@libs/hooks/useTimeNow';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { usePoolActions } from '@context/PoolContext';
 import { Logo } from '@components/General';
-import Button from '@components/General/Button';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
@@ -17,7 +14,6 @@ import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
 import { Popover, Transition } from '@headlessui/react';
 import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
-import { Tooltip } from '@components/General/Tooltip';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 
 import Close from '/public/img/general/close-black.svg';
@@ -115,7 +111,7 @@ const BuyRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, index, lockTimeSeconds }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -126,15 +122,7 @@ const BuyRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions
-                    token={token}
-                    pool={pool}
-                    provider={provider}
-                    id={id}
-                    txnHash={txnHash}
-                    lockTimeSeconds={lockTimeSeconds}
-                    lockTooltipText="You can no longer cancel this buy as the front-running interval has been reached."
-                />
+                <Actions token={token} provider={provider} txnHash={txnHash} />
             </span>
         </TableRow>
     );
@@ -145,7 +133,7 @@ const SellRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, pool, id, txnHash, tokenPrice, amount, nextRebalance, provider, index, lockTimeSeconds }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -156,29 +144,17 @@ const SellRow: React.FC<
                 <TimeLeft targetTime={nextRebalance.toNumber()} />
             </span>
             <span className="flex text-right">
-                <Actions
-                    token={token}
-                    pool={pool}
-                    provider={provider}
-                    id={id}
-                    txnHash={txnHash}
-                    lockTimeSeconds={lockTimeSeconds}
-                    lockTooltipText="You can no longer cancel this sell as the front-running interval has been reached."
-                />
+                <Actions token={token} provider={provider} txnHash={txnHash} />
             </span>
         </TableRow>
     );
 };
 
 const Actions: React.FC<{
-    pool: string;
-    id: number;
     provider: ethers.providers.JsonRpcProvider | null;
     token: PoolToken;
     txnHash: string;
-    lockTimeSeconds: number;
-    lockTooltipText: string;
-}> = ({ pool, id, provider, token, txnHash, lockTimeSeconds, lockTooltipText }) => {
+}> = ({ provider, token, txnHash }) => {
     return (
         <>
             <Popover as="div" className="inline relative ml-2 my-auto">
