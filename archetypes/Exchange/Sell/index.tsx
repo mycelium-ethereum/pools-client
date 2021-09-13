@@ -65,7 +65,7 @@ export default (() => {
             const invalidAmount = isInvalidAmount(
                 amount,
                 balance,
-                pool.committer.minimumCommitSize.toNumber(),
+                pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals).toNumber(),
                 tokenPrice,
             );
 

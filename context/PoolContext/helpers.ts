@@ -50,7 +50,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         contract.leverageAmount(),
     ]);
 
-    const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
+    const [frontRunningInterval, keeper] = await Promise.all([contract.frontRunningInterval(), contract.keeper()]);
 
     console.debug(
         `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
@@ -58,24 +58,27 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
-    const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
+    const [shortTokenName, shortTokenSymbol, shortTokenSupply, shortTokenDecimals] = await Promise.all([
         shortTokenInstance.name(),
         shortTokenInstance.symbol(),
         shortTokenInstance.totalSupply(),
+        shortTokenInstance.decimals(),
     ]);
 
     const longTokenInstance = new ethers.Contract(longToken, TestToken__factory.abi, provider) as PoolToken;
-    const [longTokenName, longTokenSymbol, longTokenSupply] = await Promise.all([
+    const [longTokenName, longTokenSymbol, longTokenSupply, longTokenDecimals] = await Promise.all([
         longTokenInstance.name(),
         longTokenInstance.symbol(),
         longTokenInstance.totalSupply(),
+        longTokenInstance.decimals(),
     ]);
 
     // fetch quote token info
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const [quoteTokenName, quoteTokenSymbol] = await Promise.all([
+    const [quoteTokenName, quoteTokenSymbol, quoteTokenDecimals] = await Promise.all([
         quoteTokenInstance.name(),
         quoteTokenInstance.symbol(),
+        quoteTokenInstance.decimals(),
     ]);
 
     // fetch minimum commit size
@@ -105,12 +108,14 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             allUnexecutedCommits: [],
             minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
+        keeper,
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,
         longToken: {
             address: longToken,
             name: longTokenName,
             symbol: longTokenSymbol,
+            decimals: longTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
@@ -120,6 +125,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: shortToken,
             name: shortTokenName,
             symbol: shortTokenSymbol,
+            decimals: shortTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
@@ -129,6 +135,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             address: quoteToken,
             name: quoteTokenName,
             symbol: quoteTokenSymbol,
+            decimals: quoteTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
@@ -170,41 +177,24 @@ export const fetchCommits: (
 
     console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit);
 
-    const unfilteredCommits = await contract?.queryFilter(
+    const allUnexecutedCommits = (await contract?.queryFilter(
         contract.filters.CreateCommit(),
         Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
-    );
+    )) as CreatedCommitType[];
 
-    console.debug('All commits unfiltered', unfilteredCommits);
+    console.debug('All commits unfiltered', allUnexecutedCommits);
 
     let pendingLong = new BigNumber(0);
     let pendingShort = new BigNumber(0);
-    const allUnexecutedCommits = [];
 
-    for (let i = 0; i < unfilteredCommits.length; i++) {
-        const commit = unfilteredCommits[i];
-
-        // need to filter out created commits which have since been removed
-        const [deleted] = await Promise.all([
-            contract?.queryFilter(contract.filters.RemoveCommit(commit.args.commitID)),
-            commit.getTransaction(),
-        ]);
-
-        if (deleted.length) {
-            // skip if its been deleted
-            continue;
-        }
-
+    allUnexecutedCommits.forEach((commit) => {
         [pendingShort, pendingLong] = addToPending(pendingShort, pendingLong, {
             amount: commit.args.amount,
             type: commit.args.commitType,
         });
-        allUnexecutedCommits.push(commit);
-    }
-
-    console.debug('All commits filtered', allUnexecutedCommits);
-
+    });
     console.debug(`Pending commit amounts. Long: ${pendingLong.toNumber()}, short: ${pendingShort.toNumber()}`);
+
     return {
         pendingLong,
         pendingShort,

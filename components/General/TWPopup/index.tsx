@@ -28,7 +28,7 @@ export default (({ preview, className, buttonClasses, children }) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
+                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                             {children}
                         </Popover.Panel>
                     </Transition>
