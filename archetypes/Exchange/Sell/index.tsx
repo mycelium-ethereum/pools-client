@@ -85,15 +85,12 @@ export default (() => {
                     className="w-full"
                     placeHolder="Select Token"
                     size="lg"
-                    options={tokens.map((token) => ({ key: token.symbol }))}
+                    options={tokens.map((token) => ({ key: `${token.pool}-${token.side}`, text: token.symbol }))}
                     value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                     onSelect={(option) => {
-                        tokens.forEach((token) => {
-                            if (token.symbol === option) {
-                                swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
-                                swapDispatch({ type: 'setSide', value: token.side as SideEnum });
-                            }
-                        });
+                        const [pool, side] = option.split('-')
+                        swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
                 <p className="mb-2">Last Price: {toApproxCurrency(pool.lastPrice)}</p>

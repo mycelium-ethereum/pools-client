@@ -83,8 +83,7 @@ export default (() => {
                         }))}
                         value={market}
                         onSelect={(selectedMarket) => {
-                            console.debug('Setting market', selectedMarket);
-                            swapDispatch({ type: 'setMarket', value: selectedMarket as string });
+                            swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
                         }}
                     />
                 </span>

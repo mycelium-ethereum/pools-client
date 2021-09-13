@@ -1,7 +1,8 @@
-import React, { useContext, useReducer, useMemo } from 'react';
+import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import { Children, PoolType } from '@libs/types/General';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
-import { FactoryContext } from './FactoryContext';
+import { useRouter } from 'next/router';
+import { usePools } from './PoolContext';
 
 interface ContextProps {
     swapState: SwapState;
@@ -36,6 +37,7 @@ export type SwapAction =
     | { type: 'setAmount'; value: number }
     | { type: 'setCommitAction'; value: CommitActionEnum }
     | { type: 'setMarket'; value: string }
+    | { type: 'setPoolFromMarket'; market: string }
     | { type: 'setMarkets'; markets: Record<string, Market> }
     | { type: 'setLeverage'; value: number }
     | { type: 'setSelectedPool'; value: string }
@@ -87,11 +89,13 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
  * Wrapper store for the swap page state
  */
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
-    const { pools } = useContext(FactoryContext);
+    const router = useRouter();
+    const { pools = {}, poolsInitialised } = usePools();
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
         let pool;
+        let leverage;
         switch (action.type) {
             case 'setAmount':
                 return { ...state, amount: action.value };
@@ -113,13 +117,21 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setInvalidAmount':
                 return { ...state, invalidAmount: action.value };
             case 'setMarket':
-                console.debug(`Setting market: ${action.value}`);
-                const leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
-                pool = state.markets?.[action.value]?.[leverage]?.address;
-                console.debug(`Setting pool: ${pool?.slice()}`);
+                leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
                 return {
                     ...state,
                     market: action.value,
+                    // set leverage if its not already
+                    leverage: leverage,
+                };
+            case 'setPoolFromMarket':
+                console.debug(`Setting market: ${action.market}`);
+                leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
+                pool = state.markets?.[action.market]?.[leverage]?.address;
+                console.debug(`Setting pool: ${pool?.slice()}`);
+                return {
+                    ...state,
+                    market: action.market,
                     selectedPool: pool,
                     // set leverage if its not already
                     leverage: leverage,
@@ -141,10 +153,29 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     const [swapState, swapDispatch] = useReducer(reducer, initialState);
 
+    // handles setting routed values
+    useEffect(() => {
+        if (swapDispatch) {
+            if (router.query.pool) {
+                swapDispatch({ type: 'setSelectedPool', value: router.query.pool as string });
+            }
+            if (router.query.type) {
+                swapDispatch({
+                    type: 'setCommitAction',
+                    value: parseInt(router.query.type as string) as CommitActionEnum,
+                });
+            }
+            if (router.query.side) {
+                swapDispatch({ type: 'setSide', value: parseInt(router.query.side as string) as SideEnum });
+            }
+        }
+    }, [router]);
+
+    // sets the markets after the pools have been initialised
     useMemo(() => {
-        if (pools?.length) {
+        if (poolsInitialised && Object.keys(pools)?.length) {
             const markets: Record<string, Market> = {};
-            pools.forEach((pool) => {
+            Object.values(pools).forEach((pool) => {
                 const [leverage, marketName] = pool.name.split('-');
                 // hopefully valid pool name
                 if (marketName) {
@@ -159,7 +190,20 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 markets,
             });
         }
-    }, [pools]);
+    }, [poolsInitialised]);
+
+    // sets the market after pools have been initialised and the route set
+    useEffect(() => {
+        if (poolsInitialised && router.query.pool) {
+            // the selectedPool will already be set from the above useEffect
+            if (pools[router.query.pool as string]) {
+                swapDispatch({
+                    type: 'setMarket',
+                    value: pools[router.query.pool as string].name,
+                });
+            }
+        }
+    }, [poolsInitialised, router]);
 
     return (
         <SwapContext.Provider
