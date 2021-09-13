@@ -2,7 +2,7 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useEnsName from '@libs/hooks/useEnsName';
-import styled from 'styled-components';
+
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons';
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
+import { classNames } from '@libs/utils/functions';
 
 const ETHERSCAN_URI = 'https://etherscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
@@ -139,24 +140,22 @@ const AccountDropdownButton = ({
 
 const Identicon = dynamic(import('./Identicon'), { ssr: false });
 
-const ViewOnEtherscanOption = styled(({ account, className }) => {
+const ViewOnEtherscanOption: React.FC<{
+    account: string;
+    className?: string;
+}> = ({ account, className }) => {
     return (
-        <a className={className} href={`${ETHERSCAN_URI}/address/${account}`} target="_blank" rel="noopener noreferrer">
-            <Logo ticker="ETHERSCAN" />
-            <div>View on Etherscan</div>
+        <a
+            className={classNames(className ?? '', 'flex')}
+            href={`${ETHERSCAN_URI}/address/${account}`}
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker="ETHERSCAN" />
+            <div className="text-sm">View on Etherscan</div>
         </a>
     );
-})`
-    display: flex;
-    line-height: 2.625rem;
-    ${Logo} {
-        display: inline;
-        vertical-align: 0;
-        width: 20px;
-        height: 22px;
-        margin: auto 0.5rem auto 0;
-    }
-`;
+};
 
 // const BridgeFundsOption = styled(({ network, className }) => {
 //     return (

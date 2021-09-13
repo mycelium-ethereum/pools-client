@@ -82,6 +82,7 @@ export type Pool = {
     shortToken: PoolToken;
     longToken: PoolToken;
     committer: Committer;
+    keeper: string;
     subscribed: boolean;
 };
 
