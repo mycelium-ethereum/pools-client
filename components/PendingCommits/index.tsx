@@ -111,7 +111,18 @@ const BuyRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index, frontRunningInterval, updateInterval }) => {
+> = ({
+    token,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+}) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -119,7 +130,7 @@ const BuyRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{amount.toNumber()}</span>
             <span>
-                {nextRebalance.toNumber() - Date.now() / 1000 < frontRunningInterval.toNumber() ? (
+                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
                     <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
                     <TimeLeft targetTime={nextRebalance.toNumber()} />
@@ -137,7 +148,18 @@ const SellRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index, frontRunningInterval, updateInterval }) => {
+> = ({
+    token,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+}) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -145,7 +167,7 @@ const SellRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
             <span>
-                {nextRebalance.toNumber() - Date.now() / 1000 < frontRunningInterval.toNumber() ? (
+                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
                     <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
                     <TimeLeft targetTime={nextRebalance.toNumber()} />

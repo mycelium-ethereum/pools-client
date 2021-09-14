@@ -43,12 +43,12 @@ export default styled(({ className, setOpen, open }) => {
     }
 
     span:nth-child(odd) {
-        left: 0px;
+        left: 0;
     }
 
     span:nth-child(1),
     & span:nth-child(2) {
-        top: 0px;
+        top: 0;
     }
 
     span:nth-child(3),

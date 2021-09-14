@@ -95,6 +95,7 @@ export type PendingCommitInfo = {
     amount: BigNumber;
     txnHash: string;
     from: string; // user who sent txn
+    created: number; // created timestamp of the given commit
 };
 
 export type QueuedCommit = PendingCommitInfo & {
