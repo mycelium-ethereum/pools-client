@@ -100,7 +100,9 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className="mb-2">Last Price: {toApproxCurrency(pool.lastPrice)}</p>
+                <p className="mb-2">
+                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
+                </p>
             </div>
             <div className="w-full">
                 <p className="mb-2 text-black">Amount</p>

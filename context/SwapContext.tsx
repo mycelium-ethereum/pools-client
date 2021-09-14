@@ -200,7 +200,8 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 const { leverage, name } = pools[router.query.pool as string];
                 swapDispatch({
                     type: 'setMarket',
-                    value: name,
+                    // eg 3-BTC/USDC -> BTC/USDC
+                    value: name.split('-')[1],
                 });
                 swapDispatch({
                     type: 'setLeverage',
