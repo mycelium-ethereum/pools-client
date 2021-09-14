@@ -55,10 +55,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                         </div>
                     </Section>
                     <Section label="Expected rebalancing rate">
-                        {`${calcRebalanceRate(
-                            balancesAfter.shortBalance,
-                            balancesAfter.longBalance,
-                        ).toFixed(3)}`}
+                        {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
                 </Transition>
                 <Countdown>

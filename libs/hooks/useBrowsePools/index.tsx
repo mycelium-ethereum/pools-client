@@ -21,7 +21,10 @@ export default (() => {
                         leverage: pool.leverage,
                         side: 'short',
                         lastPrice: calcTokenPrice(pool.nextShortBalance, shortToken.supply).toNumber(),
-                        rebalanceRate: calcRebalanceRate(pool.nextShortBalance.plus(pool.committer.pendingShort), pool.nextLongBalance.plus(pool.committer.pendingLong)).toNumber(),
+                        rebalanceRate: calcRebalanceRate(
+                            pool.nextShortBalance.plus(pool.committer.pendingShort),
+                            pool.nextLongBalance.plus(pool.committer.pendingLong),
+                        ).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
@@ -33,7 +36,10 @@ export default (() => {
                         leverage: pool.leverage,
                         side: 'long',
                         lastPrice: calcTokenPrice(pool.nextLongBalance, longToken.supply).toNumber(),
-                        rebalanceRate: calcRebalanceRate(pool.nextShortBalance.plus(pool.committer.pendingShort), pool.nextLongBalance.plus(pool.committer.pendingLong)).toNumber(),
+                        rebalanceRate: calcRebalanceRate(
+                            pool.nextShortBalance.plus(pool.committer.pendingShort),
+                            pool.nextLongBalance.plus(pool.committer.pendingLong),
+                        ).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),
