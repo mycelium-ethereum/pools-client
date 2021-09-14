@@ -197,9 +197,14 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         if (poolsInitialised && router.query.pool) {
             // the selectedPool will already be set from the above useEffect
             if (pools[router.query.pool as string]) {
+                const { leverage, name } = pools[router.query.pool as string];
                 swapDispatch({
                     type: 'setMarket',
-                    value: pools[router.query.pool as string].name,
+                    value: name
+                });
+                swapDispatch({
+                    type: 'setLeverage',
+                    value: leverage
                 });
             }
         }
