@@ -85,7 +85,7 @@ export default (() => {
                     className="w-full"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
-                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol
+                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
                     )}
                     size="lg"
                     options={tokens.map((token) => ({
@@ -95,7 +95,7 @@ export default (() => {
                     }))}
                     value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                     onSelect={(option) => {
-                        const [pool, side] = option.split('-')
+                        const [pool, side] = option.split('-');
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}

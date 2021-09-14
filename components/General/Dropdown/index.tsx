@@ -95,10 +95,9 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 )}
             >
                 <span className="mr-2">
-                    {placeHolderIcon  && value !== ''
-                        ? <Logo ticker={placeHolderIcon} className="inline w-[20px] mr-2" />
-                        : null
-                    }
+                    {placeHolderIcon && value !== '' ? (
+                        <Logo ticker={placeHolderIcon} className="inline w-[20px] mr-2" />
+                    ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
                 <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
