@@ -382,6 +382,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             } = calcNextValueTransfer(
                 lastPrice, oraclePrice, new BigNumber(leverage), longBalance, shortBalance
             )
+            console.debug('Calculated value transfer', {
+                shortValueTransfer: shortValueTransfer.toNumber(),
+                longValueTransfer: longValueTransfer.toNumber(),
+                lastPrice: lastPrice.toNumber(),
+                newPrice: oraclePrice.toNumber()
+            })
             poolsDispatch({
                 type: 'setNextPoolBalances', pool: pool.address, longValueTransfer, shortValueTransfer 
             })

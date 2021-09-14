@@ -20,10 +20,10 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <Table>
                 <TableHeader>
                     <span>Token</span>
-                    <span>Last price (USDC)</span>
+                    <span>Price (USDC)</span>
                     {/*<span>24H Change</span>*/}
                     <span className="flex">
-                        Last rebalancing rate&nbsp;
+                        Rebalancing rate&nbsp;
                         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
                             <QuestionMark />
                         </span>
@@ -78,6 +78,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     );
                 })}
             </Table>
+            <p className="mt-2 text-sm text-cool-gray-900">
+                * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are indicative only. The values displayed are the estimated <strong>Price</strong> and <strong>Rebalancing Rate</strong> the next rebalance, given the queued buys and sells and estimated value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token will be calculated and updated at the next rebalalance.
+            </p>
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>

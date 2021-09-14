@@ -21,7 +21,7 @@ type SummaryProps = {
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
     const token = isLong ? pool.longToken : pool.shortToken;
-    const notional = isLong ? pool.longBalance : pool.shortBalance;
+    const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
 
     const tokenPrice = calcTokenPrice(notional, token.supply);
 
@@ -41,7 +41,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 {/*<Section label="Expected Rebalance Multiplier">*/}
                 <Section label="Rebalancing Rate">
                     {/*{`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}*/}
-                    {`${calcRebalanceRate(pool.shortBalance, pool.longBalance).toFixed(3)}`}
+                    {`${calcRebalanceRate(pool.nextShortBalance, pool.nextLongBalance).toFixed(3)}`}
                 </Section>
                 <Countdown>
                     {'Receive In'}

@@ -98,7 +98,6 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         provider,
     ) as PoolKeeper;
 
-    // this price is stored as wei^2 for some reason dont ask me ask the sc devs
     const lastPrice = await keeperInstance.executionPrice(pool.address)
 
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
@@ -108,7 +107,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
         lastUpdate: new BigNumber(lastUpdate.toString()),
-        lastPrice: new BigNumber(ethers.utils.formatUnits(lastPrice, EthersBigNumber.from(36))),
+        lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
         shortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
         longBalance: new BigNumber(ethers.utils.formatEther(longBalance)),
         nextShortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
