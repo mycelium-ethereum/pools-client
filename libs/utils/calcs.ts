@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 
 const UP = 1;
 const DOWN = 2;
-const NO_CHANGE = 3
+const NO_CHANGE = 3;
 
 /**
  * Calculate the losing pool multiplier
@@ -90,11 +90,13 @@ export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber
 export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber = (oldPrice, newPrice) => {
     // newPrice.div(oldPrice);
     const priceRatio = calcRatio(oldPrice, newPrice);
-    if (priceRatio.gt(1)) { // number go up
+    if (priceRatio.gt(1)) {
+        // number go up
         return new BigNumber(UP);
     } else if (priceRatio.eq(1)) {
         return new BigNumber(NO_CHANGE);
-    } else { // priceRatio.lt(1)
+    } else {
+        // priceRatio.lt(1)
         return new BigNumber(DOWN);
     }
 };
@@ -124,7 +126,7 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
  * @param longBalance quote balance of the long pool in USD
  * @param shortBalance quote balance of the short pool in USD
  *
- * returns an object containing longValueTransfer and shortValueTransfer 
+ * returns an object containing longValueTransfer and shortValueTransfer
  */
 export const calcNextValueTransfer: (
     oldPrice: BigNumber,
@@ -132,10 +134,10 @@ export const calcNextValueTransfer: (
     leverage: BigNumber,
     longBalance: BigNumber,
     shortBalance: BigNumber,
-) => ({
-    longValueTransfer: BigNumber,
-    shortValueTransfer: BigNumber
-}) = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
+) => {
+    longValueTransfer: BigNumber;
+    shortValueTransfer: BigNumber;
+} = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
     const direction = calcDirection(oldPrice, newPrice);
     const percentageLossTransfer = calcPercentageLossTransfer(oldPrice, newPrice, leverage);
     let gain: BigNumber;
@@ -143,20 +145,20 @@ export const calcNextValueTransfer: (
         // long wins
         gain = percentageLossTransfer.times(shortBalance);
         // long gains and short loses longs gain
-        return ({
-            longValueTransfer: gain, 
-            shortValueTransfer: gain.negated()
-        });
+        return {
+            longValueTransfer: gain,
+            shortValueTransfer: gain.negated(),
+        };
     } else if (direction.eq(DOWN)) {
         // short wins
         gain = percentageLossTransfer.times(longBalance);
-        return ({
-            longValueTransfer: gain.negated(), 
-            shortValueTransfer: gain
-        });
+        return {
+            longValueTransfer: gain.negated(),
+            shortValueTransfer: gain,
+        };
     } // else no value transfer
-    return ({
-        longValueTransfer: new BigNumber(0), 
-        shortValueTransfer: new BigNumber(0)
-    })
+    return {
+        longValueTransfer: new BigNumber(0),
+        shortValueTransfer: new BigNumber(0),
+    };
 };

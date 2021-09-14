@@ -103,7 +103,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             amount: committerInfo.pendingShort,
                         });
 
-                        setExpectedPrice(pool)
+                        setExpectedPrice(pool);
 
                         committerInfo.allUnexecutedCommits.map((commit) => {
                             commit.getTransaction().then((txn) => {
@@ -371,28 +371,30 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
     const setExpectedPrice = (pool: Pool) => {
         const { lastPrice, leverage, longBalance, shortBalance } = pool;
-        const leveragedPool = new ethers.Contract(
-            pool.address, LeveragedPool__factory.abi, provider
-        ) as LeveragedPool;
+        const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
         leveragedPool.getOraclePrice().then((price) => {
-            const oraclePrice = new BigNumber(ethers.utils.formatEther(price))
-            const {
-                shortValueTransfer,
-                longValueTransfer
-            } = calcNextValueTransfer(
-                lastPrice, oraclePrice, new BigNumber(leverage), longBalance, shortBalance
-            )
+            const oraclePrice = new BigNumber(ethers.utils.formatEther(price));
+            const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
+                lastPrice,
+                oraclePrice,
+                new BigNumber(leverage),
+                longBalance,
+                shortBalance,
+            );
             console.debug('Calculated value transfer', {
                 shortValueTransfer: shortValueTransfer.toNumber(),
                 longValueTransfer: longValueTransfer.toNumber(),
                 lastPrice: lastPrice.toNumber(),
-                newPrice: oraclePrice.toNumber()
-            })
+                newPrice: oraclePrice.toNumber(),
+            });
             poolsDispatch({
-                type: 'setNextPoolBalances', pool: pool.address, longValueTransfer, shortValueTransfer 
-            })
-        })
-    }
+                type: 'setNextPoolBalances',
+                pool: pool.address,
+                nextLongBalance: longBalance.plus(longValueTransfer),
+                nextShortBalance: shortBalance.plus(shortValueTransfer),
+            });
+        });
+    };
 
     return (
         <PoolsContext.Provider

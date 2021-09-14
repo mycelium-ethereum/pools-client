@@ -91,14 +91,10 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     ) as PoolCommitter;
     const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
 
-    // fetch last keeper price 
-    const keeperInstance = new ethers.Contract(
-        keeper,
-        PoolKeeper__factory.abi,
-        provider,
-    ) as PoolKeeper;
+    // fetch last keeper price
+    const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
-    const lastPrice = await keeperInstance.executionPrice(pool.address)
+    const lastPrice = await keeperInstance.executionPrice(pool.address);
 
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name

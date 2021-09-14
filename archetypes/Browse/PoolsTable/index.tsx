@@ -79,7 +79,11 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 })}
             </Table>
             <p className="mt-2 text-sm text-cool-gray-900">
-                * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are indicative only. The values displayed are the estimated <strong>Price</strong> and <strong>Rebalancing Rate</strong> the next rebalance, given the queued buys and sells and estimated value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token will be calculated and updated at the next rebalalance.
+                * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
+                indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
+                <strong>Rebalancing Rate</strong> the next rebalance, given the queued buys and sells and estimated
+                value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
+                will be calculated and updated at the next rebalalance.
             </p>
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
@@ -96,13 +100,13 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 </div>
                 <br />
                 <div>
-                    If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and short
-                    side of the pool. At rebalance, the winning side gains are neither amplified or reduced.
+                    If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and
+                    short side of the pool. At rebalance, the winning side gains are neither amplified or reduced.
                 </div>
                 <br />
                 <div>
-                    If the <b>Rebalancing Rate {'>'} 0</b>, there is more collateral held in the long side of the pool. At
-                    rebalance, the short side&apos;s gains are effectively amplified relative to their losses.
+                    If the <b>Rebalancing Rate {'>'} 0</b>, there is more collateral held in the long side of the pool.
+                    At rebalance, the short side&apos;s gains are effectively amplified relative to their losses.
                     Conversely, the long side&apos;s gains are effectively reduced.
                 </div>
                 <br />
