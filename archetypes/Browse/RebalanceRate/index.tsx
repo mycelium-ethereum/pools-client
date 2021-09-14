@@ -12,7 +12,7 @@ const MAX_CHARS = 10;
  * Rebalance rate is good for longs if it is less than 1 and good for shorts if its greater than 1
  */
 export default (({ rebalanceRate }) => {
-    console.log("Rebalance rate", rebalanceRate)
+    console.log('Rebalance rate', rebalanceRate);
     const [long, short] = formatEachSide(rebalanceRate);
     return (
         <div>
