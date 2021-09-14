@@ -1,3 +1,6 @@
+import { ethers } from 'ethers';
+import { Farm } from '@libs/types/Staking';
+
 export enum LeverageFilterEnum {
     All = 'All',
     One = '1',
@@ -20,13 +23,14 @@ export enum SortByEnum {
 
 export interface FarmTableRowData {
     farm: string;
-    tokenSymbol: string;
+    name: string;
     leverage: number;
     side: 'long' | 'short';
     apy: number;
     tvl: number;
     myStaked: number;
     myRewards: number;
+    availableToStake: ethers.BigNumber;
 }
 
 export interface StakeState {
@@ -37,6 +41,8 @@ export interface StakeState {
     stakeModalOpen: boolean;
     filterModalOpen: boolean;
     amount: number;
+    selectedFarm: Farm;
+    invalidAmount: { isInvalid: boolean; message?: string };
 }
 
 export type StakeAction =
@@ -45,8 +51,9 @@ export type StakeAction =
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
     | { type: 'setStakeModalOpen'; open: boolean }
-    | { type: 'setSelectedFarm'; farm: FarmTableRowData }
+    | { type: 'setSelectedFarm'; farm: Farm }
     | { type: 'setAmount'; amount: number }
+    | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
@@ -82,6 +89,7 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
                 stakeModalOpen: action.open,
             };
         case 'setSelectedFarm':
+            console.log('SETTING SELECTED FARM', action.farm);
             return {
                 ...state,
                 selectedFarm: action.farm,
@@ -90,6 +98,11 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
             return {
                 ...state,
                 amount: action.amount,
+            };
+        case 'setInvalidAmount':
+            return {
+                ...state,
+                invalidAmount: action.value,
             };
         default:
             throw new Error('Unexpected action');

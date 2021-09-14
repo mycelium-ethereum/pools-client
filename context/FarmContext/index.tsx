@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { Farm } from '@libs/types/Staking';
 import { StakingRewards } from '@libs/staking/typechain';
 import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+import BigNumber from 'bignumber.js';
 
 interface ContextProps {
     farms: { [address: string]: Farm };
@@ -21,7 +22,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     const fetchFarms = useCallback(async () => {
         if (provider && config && account) {
-            for (const { address, abi, name } of config.farms) {
+            for (const { address, abi } of config.farms) {
                 const contract = new ethers.Contract(address, abi, provider).connect(account) as StakingRewards;
 
                 const [myStaked, stakingToken, rewardPerToken, myRewards] = await Promise.all([
@@ -32,18 +33,28 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 ]);
 
                 const stakingTokenContract = new ethers.Contract(stakingToken, ERC20__factory.abi, provider) as ERC20;
+                const [stakingTokenName, stakingTokenDecimals, availableToStake] = await Promise.all([
+                    stakingTokenContract.name(),
+                    stakingTokenContract.decimals(),
+                    stakingTokenContract.balanceOf(account),
+                ]);
+
+                console.log('got the staking token name', stakingTokenName);
 
                 setFarms((previousFarms) => ({
                     ...previousFarms,
                     [address]: {
-                        name,
+                        name: stakingTokenName,
                         address,
                         contract,
                         stakingToken: stakingTokenContract,
-                        myStaked,
-                        myRewards,
-                        apy: rewardPerToken,
-                        tvl: ethers.BigNumber.from(0),
+                        stakingTokenDecimals,
+                        // availableToStake is already formatted for decimals
+                        availableToStake: new BigNumber(availableToStake.toString()).div(10 ** stakingTokenDecimals),
+                        myStaked: new BigNumber(myStaked.toString()),
+                        myRewards: new BigNumber(myRewards.toString()),
+                        apy: new BigNumber(rewardPerToken.toString()),
+                        tvl: new BigNumber(0),
                     },
                 }));
             }

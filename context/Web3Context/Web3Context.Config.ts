@@ -13,9 +13,9 @@ export type Network = {
         };
     };
     farms: {
-        name: string;
         address: string;
         abi: ethers.ContractInterface;
+        isPoolToken: boolean;
     }[];
     hex: string;
     publicRPC: string;
@@ -51,14 +51,14 @@ export const networkConfig: Record<string, Network> = {
         },
         farms: [
             {
-                name: 'Test Farm 1',
-                address: '0xEFf698348296c84E7E016F1E52A23E85d6B91cc9',
+                address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
                 abi: StakingRewards__factory.abi,
+                isPoolToken: true,
             },
             {
-                name: 'Test Farm 2',
-                address: '0x8CC2446A84e72Bb039A57032B49ECB946aD38c8e',
+                address: '0x6213c21518EF9d4875d9C41F7ad8d16B4f986cB2',
                 abi: StakingRewards__factory.abi,
+                isPoolToken: true,
             },
         ],
         hex: '0x66EEB',

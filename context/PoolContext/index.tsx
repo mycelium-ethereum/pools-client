@@ -248,7 +248,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (startPrice, endPrice, log) => {
                 console.debug(`
-                    Completed upkeep. 
+                    Completed upkeep.
                     Old price: ${ethers.utils.formatEther(startPrice)}
                     New price: ${ethers.utils.formatEther(endPrice)}
                 `);

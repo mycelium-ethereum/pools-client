@@ -25,22 +25,20 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                     return (
                         <TableRow key={farm.farm} rowNumber={index}>
                             <span>
-                                <Logo
-                                    className="inline w-[25px] mr-2"
-                                    ticker={tokenSymbolToLogoTicker(farm.tokenSymbol)}
-                                />
-                                {farm.tokenSymbol}
+                                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                                {farm.name}
                             </span>
                             <span>{farm.apy}%</span>
                             <span>{toApproxCurrency(farm.tvl)}</span>
                             <span>{toApproxCurrency(farm.myStaked)}</span>
-                            <span>{toApproxCurrency(farm.myRewards)}</span>
+                            {/* <span>{toApproxCurrency(farm.myRewards)}</span> */}
+                            <span>{farm.availableToStake.toString()}</span>
                             <span>
                                 <Button
                                     className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => onClickStake(farm)}
+                                    onClick={() => onClickStake(farm.farm)}
                                 >
                                     Stake
                                 </Button>
@@ -102,7 +100,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     );
 }) as React.FC<{
     rows: FarmTableRowData[];
-    onClickStake: (farm: FarmTableRowData) => void;
+    onClickStake: (farmAddress: string) => void;
     onClickUnstake: () => void;
     onClickClaim: () => void;
 }>;

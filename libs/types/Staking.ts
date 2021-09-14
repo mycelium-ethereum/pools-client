@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 
@@ -7,8 +7,10 @@ export type Farm = {
     address: string;
     contract: StakingRewards;
     stakingToken: ERC20;
-    apy: ethers.BigNumber;
-    tvl: ethers.BigNumber;
-    myStaked: ethers.BigNumber;
-    myRewards: ethers.BigNumber;
+    stakingTokenDecimals: number;
+    apy: BigNumber;
+    tvl: BigNumber;
+    myStaked: BigNumber;
+    myRewards: BigNumber;
+    availableToStake: BigNumber;
 };

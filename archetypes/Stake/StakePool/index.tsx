@@ -1,4 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
+import BigNumber from 'bignumber.js';
 import { useFarms } from '@context/FarmContext';
 import styled from 'styled-components';
 import FilterBar from '../FilterSelects/Bar';
@@ -8,22 +9,25 @@ import { Container } from '@components/General';
 import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 
 export default (() => {
     const { account } = useWeb3();
+    const { handleTransaction } = useTransactionContext();
     const { farms } = useFarms();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
-        farm: farm.name,
-        tokenSymbol: `1L-BTC/USDC`,
+        farm: farm.address,
+        name: farm.name,
         leverage: 1,
         side: 'long',
         apy: farm.apy.toNumber(),
         tvl: farm.tvl.toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
+        availableToStake: farm.availableToStake,
     }));
 
     console.log('FARMS', farms);
@@ -36,6 +40,7 @@ export default (() => {
         filterModalOpen: false,
         stakeModalOpen: false,
         amount: NaN,
+        invalidAmount: { isInvalid: false },
     } as StakeState);
 
     useEffect(() => {
@@ -73,13 +78,13 @@ export default (() => {
 
     const searchFilter = (farm: FarmTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(farm.tokenSymbol.toLowerCase().match(searchString));
+        return Boolean(farm.name.toLowerCase().match(searchString));
     };
 
     const sorter = (farmA: FarmTableRowData, farmB: FarmTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.Name:
-                return farmA.tokenSymbol.localeCompare(farmB.tokenSymbol);
+                return farmA.name.localeCompare(farmB.name);
             case SortByEnum.TotalValueLocked:
                 return farmB.apy - farmA.apy;
             case SortByEnum.MyRewards:
@@ -98,20 +103,33 @@ export default (() => {
         console.debug('Claiming...');
     };
 
-    const handleStake = (farm: FarmTableRowData) => {
+    const handleStake = (farmAddress: string) => {
         dispatch({
             type: 'setSelectedFarm',
-            farm: farm,
+            farm: farms[farmAddress],
         });
         dispatch({
             type: 'setStakeModalOpen',
             open: true,
         });
-        console.debug('Staking...');
     };
 
     const handleUnstake = () => {
         console.debug('Unstaking...');
+    };
+
+    const stake = (farmAddress: string, amount: number) => {
+        const farm = farms[farmAddress];
+        const { contract, stakingTokenDecimals } = farm;
+        console.debug(
+            `staking ${new BigNumber(amount)
+                .times(10 ** stakingTokenDecimals)
+                .toString()} in contract at ${farmAddress}`,
+        );
+
+        if (handleTransaction) {
+            handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
+        }
     };
 
     const SearchButton = (
@@ -148,7 +166,7 @@ export default (() => {
                 </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
-            <StakeModal state={state} dispatch={dispatch} />
+            <StakeModal state={state} dispatch={dispatch} onStake={stake} />
         </>
     );
 }) as React.FC;
