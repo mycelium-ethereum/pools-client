@@ -38,6 +38,7 @@ export type PoolAction =
     | { type: 'addToPending'; pool: string; side: SideEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | { type: 'resetCommits' }
+    | { type: 'setNextPoolBalances'; pool: string; longValueTransfer: BigNumber; shortValueTransfer: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
@@ -55,6 +56,19 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 ...state,
                 pools: {},
                 poolsInitialised: false,
+            };
+        case 'setNextPoolBalances':
+            const { longBalance, shortBalance } = state.pools[action.pool];
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        nextLongBalance: longBalance.plus(action.longValueTransfer),
+                        nextShortBalance: shortBalance.plus(action.shortValueTransfer)
+                    }
+                }
             };
         case 'setTokenBalances':
             return {

@@ -10,6 +10,8 @@ import {
     LeveragedPool,
     PoolToken,
     TestToken,
+    PoolKeeper__factory,
+    PoolKeeper,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
@@ -89,6 +91,16 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
     ) as PoolCommitter;
     const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
 
+    // fetch last keeper price 
+    const keeperInstance = new ethers.Contract(
+        keeper,
+        PoolKeeper__factory.abi,
+        provider,
+    ) as PoolKeeper;
+
+    // this price is stored as wei^2 for some reason dont ask me ask the sc devs
+    const lastPrice = await keeperInstance.executionPrice(pool.address)
+
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
     const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
@@ -96,9 +108,11 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
         lastUpdate: new BigNumber(lastUpdate.toString()),
-        lastPrice: new BigNumber(0),
+        lastPrice: new BigNumber(ethers.utils.formatUnits(lastPrice, EthersBigNumber.from(36))),
         shortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
         longBalance: new BigNumber(ethers.utils.formatEther(longBalance)),
+        nextShortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
+        nextLongBalance: new BigNumber(ethers.utils.formatEther(longBalance)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
         frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
         committer: {
