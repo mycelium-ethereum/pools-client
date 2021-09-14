@@ -1,9 +1,7 @@
-import React, { useContext, useReducer } from 'react';
+import React, { useContext, useReducer, useMemo } from 'react';
 import { Children, PoolType } from '@libs/types/General';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { FactoryContext } from './FactoryContext';
-import { useEffect } from 'react';
-import { useWeb3 } from './Web3Context/Web3Context';
 
 interface ContextProps {
     swapState: SwapState;
@@ -90,7 +88,6 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
  */
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const { pools } = useContext(FactoryContext);
-    const { network } = useWeb3();
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
@@ -144,7 +141,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     const [swapState, swapDispatch] = useReducer(reducer, initialState);
 
-    useEffect(() => {
+    useMemo(() => {
         if (pools?.length) {
             const markets: Record<string, Market> = {};
             pools.forEach((pool) => {
@@ -163,14 +160,6 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             });
         }
     }, [pools]);
-
-    useEffect(() => {
-        if (network) {
-            swapDispatch({
-                type: 'reset',
-            });
-        }
-    }, [network]);
 
     return (
         <SwapContext.Provider
