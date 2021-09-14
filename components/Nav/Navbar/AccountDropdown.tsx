@@ -161,9 +161,9 @@ const WalletIcon: React.FC<{
 
     return (
         <img
-            className={classNames(className ?? '', "inline text-lg h-[20px] my-auto")}
+            className={classNames(className ?? '', 'inline text-lg h-[20px] my-auto')}
             src={wallet?.icons.iconSrc}
-            alt={wallet?.name ?? ""}
+            alt={wallet?.name ?? ''}
         />
     );
 };

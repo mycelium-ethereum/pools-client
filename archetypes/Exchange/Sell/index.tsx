@@ -13,6 +13,7 @@ import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import { calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import { tokenSymbolToLogoTicker } from '@components/General';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -76,29 +77,18 @@ export default (() => {
         }
     }, [side, amount, pool.longToken.balance, pool.shortToken.balance]);
 
-
-    const token_symbol_to_ticker: (s: string) => string | undefined = (symbol: string) => {
-        let match = symbol.match(/([LS])-((?:BTC)|(?:ETH))/);
-        console.log(match);
-        if (match != null) {
-            let [_, long_or_short, currency] = match;
-            // Rearrange the string to match Components/General/Logo/logos.
-            let ticket = `${currency}_${long_or_short}`;
-            return ticket;
-        }
-        return undefined;
-    };
-
     return (
         <>
-            {/* <div className="relative flex flew-row y-2 "> */}
             <div className="w-full">
                 <p className="mb-2 text-black">Token</p>
                 <Dropdown
                     className="w-full"
                     placeHolder="Select Token"
                     size="lg"
-                    options={tokens.map((token) => ({ key: token.symbol, ticker: token_symbol_to_ticker(token.symbol) }))}
+                    options={tokens.map((token) => ({
+                        key: token.symbol,
+                        ticker: tokenSymbolToLogoTicker(token.symbol),
+                    }))}
                     value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                     onSelect={(option) => {
                         tokens.forEach((token) => {
@@ -163,7 +153,6 @@ export default (() => {
                     )}
                 </p>
             </div>
-            {/* </div> */}
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
 

@@ -52,18 +52,6 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
         </div>
     );
 };
-// `
-//     overflow: visible;
-//     transition: 0.3s ease-in-out;
-//     height: ${(props) => props.defaultHeight}px;
-//     margin-bottom: 1rem;
-//     margin-top: 2rem;
-//     border-radius: 7px;
-//     text-align: left;
-//     font-size: var(--font-size-small);
-//     letter-spacing: var(--letter-spacing-small);
-//     background: var(--color-background);
-// `;
 
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
@@ -129,7 +117,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
-                                        {option?.ticker ? (<Logo ticker={option.ticker} className='inline w-[20px] mr-2' />) : ("")}
+                                        {option?.ticker ? (
+                                            <Logo ticker={option.ticker} className="inline w-[20px] mr-2" />
+                                        ) : (
+                                            ''
+                                        )}
                                         {option?.text ?? option.key}
                                     </button>
                                 )}
