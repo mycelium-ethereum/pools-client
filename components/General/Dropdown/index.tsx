@@ -66,6 +66,7 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 interface DropdownProps {
     value: string;
     placeHolder?: string;
+    placeHolderIcon?: string;
     options: {
         key: string;
         text?: string;
@@ -80,6 +81,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     placeHolder = 'Select',
     options,
     onSelect,
+    placeHolderIcon,
     size = 'default',
     className,
 }) => {
@@ -92,7 +94,13 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     'font-normal border-gray-300 bg-gray-50 text-gray-500 hover:bg-white focus:outline-none focus:border-solid hover:ring-1 hover:ring-tracer-50',
                 )}
             >
-                <span className="mr-2">{value === '' ? placeHolder : value}</span>
+                <span className="mr-2">
+                    {placeHolderIcon  && value !== ''
+                        ? <Logo ticker={placeHolderIcon} className="inline w-[20px] mr-2" />
+                        : null
+                    }
+                    {value === '' ? placeHolder : value}
+                </span>
                 <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
             </Menu.Button>
 

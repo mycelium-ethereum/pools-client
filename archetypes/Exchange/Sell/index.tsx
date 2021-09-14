@@ -84,9 +84,12 @@ export default (() => {
                 <Dropdown
                     className="w-full"
                     placeHolder="Select Token"
+                    placeHolderIcon={tokenSymbolToLogoTicker(
+                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol
+                    )}
                     size="lg"
                     options={tokens.map((token) => ({
-                        key: `${token.symbol}-${token.side}`,
+                        key: `${token.pool}-${token.side}`,
                         text: token.symbol,
                         ticker: tokenSymbolToLogoTicker(token.symbol),
                     }))}
