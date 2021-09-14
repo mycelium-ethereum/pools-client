@@ -27,7 +27,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <QuestionMark />
                         </span>
                     </span>
-                    <span>Next Rebalancing</span>
+                    <span>Next Rebalancing Event</span>
                     <span>TVL (USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
                     <span>{/* Empty header for buttons column */}</span>
