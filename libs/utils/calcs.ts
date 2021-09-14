@@ -151,7 +151,7 @@ export const calcNextValueTransfer: (
         };
     } else if (direction.eq(DOWN)) {
         // short wins
-        gain = percentageLossTransfer.times(longBalance);
+        gain = percentageLossTransfer.times(longBalance).abs();
         return {
             longValueTransfer: gain.negated(),
             shortValueTransfer: gain,
