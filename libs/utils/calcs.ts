@@ -124,8 +124,7 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
  * @param longBalance quote balance of the long pool in USD
  * @param shortBalance quote balance of the short pool in USD
  *
- * returns an array of length 2 representing [longGain/loss, shortGain/loss]
- *  This is more readable in my opinion than returning a gain as well as a direction
+ * returns an object containing longValueTransfer and shortValueTransfer 
  */
 export const calcNextValueTransfer: (
     oldPrice: BigNumber,
