@@ -48,7 +48,6 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                     </div>
                 </Section>
                 <Section label="Expected rebalancing rate">
-                    {/*{`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}*/}
                     {`${calcRebalanceRate(
                         balancesAfterAmount.shortBalance.plus(shortValueTransfer),
                         balancesAfterAmount.longBalance.plus(longValueTransfer),
