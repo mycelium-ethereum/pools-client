@@ -97,12 +97,15 @@ export type PendingCommitInfo = {
     amount: BigNumber;
     txnHash: string;
     from: string; // user who sent txn
+    created: number; // created timestamp of the given commit
 };
 
 export type QueuedCommit = PendingCommitInfo & {
     token: PoolToken;
     tokenPrice: BigNumber;
     nextRebalance: BigNumber;
+    frontRunningInterval: BigNumber;
+    updateInterval: BigNumber;
 };
 
 // table heading initialiser

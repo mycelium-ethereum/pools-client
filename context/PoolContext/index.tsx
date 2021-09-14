@@ -117,6 +117,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         type: commit.args.commitType as CommitEnum,
                                         from: txn.from,
                                         txnHash: txn.hash,
+                                        created: Date.now() / 1000,
                                     },
                                 });
                             });
@@ -208,6 +209,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 txnHash: txn.hash,
                                 type: type as CommitEnum,
                                 amount: new BigNumber(ethers.utils.formatEther(amount)),
+                                created: Date.now() / 1000,
                             },
                         });
                     }
