@@ -16,12 +16,12 @@ export default (() => {
                 tokens.push(
                     {
                         ...pool.shortToken,
-                        tokenPrice: calcTokenPrice(pool.shortBalance, pool.shortToken.supply),
+                        tokenPrice: calcTokenPrice(pool.nextShortBalance, pool.shortToken.supply),
                         pool: pool.address,
                     },
                     {
                         ...pool.longToken,
-                        tokenPrice: calcTokenPrice(pool.longBalance, pool.longToken.supply),
+                        tokenPrice: calcTokenPrice(pool.nextLongBalance, pool.longToken.supply),
                         pool: pool.address,
                     },
                 );
