@@ -85,7 +85,7 @@ export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber
  * Calcualtes the direction of the price movement
  * @param newPrice new pool price based on pool balances
  * @param oldPrice old pool price based on pool balances
- * @return DOWN if oldPrice > newPrice, 0 if newPrice = oldPrice, or 1 if newPrice > oldPrice
+ * @return DOWN (2) if oldPrice > newPrice, NO_CHANGE (3) if newPrice = oldPrice, or UP (1) if newPrice > oldPrice
  */
 export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber = (oldPrice, newPrice) => {
     // newPrice.div(oldPrice);
