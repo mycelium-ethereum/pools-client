@@ -1,8 +1,8 @@
-import { classNames, escapeRegExp } from '@libs/utils/functions';
+import { classNames } from '@libs/utils/functions';
 
 import React from 'react';
 
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
+// const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 
 const defaultClassName = 'p-0 text-2xl bg-transparent';
 
@@ -20,19 +20,13 @@ export const Input = React.memo(
         fontSize?: string;
         align?: 'right' | 'left';
     } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
-        const enforcer = (nextUserInput: string) => {
-            if (nextUserInput === '' || inputRegex.test(escapeRegExp(nextUserInput))) {
-                onUserInput(nextUserInput);
-            }
-        };
-
         return (
             <input
                 {...rest}
                 value={value}
                 onChange={(event) => {
-                    // replace commas with periods, because uniswap exclusively uses period as the decimal separator
-                    enforcer(event.target.value.replace(/,/g, '.'));
+                    // replace commas with periods
+                    onUserInput(event.target.value.replace(/,/g, '.'));
                 }}
                 // universal input options
                 inputMode="decimal"
