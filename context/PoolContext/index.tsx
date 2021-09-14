@@ -27,6 +27,7 @@ type Options = {
 
 interface ContextProps {
     pools: Record<string, Pool>;
+    poolsInitialised: boolean;
 }
 
 interface ActionContextProps {
@@ -368,6 +369,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         <PoolsContext.Provider
             value={{
                 pools: poolsState.pools,
+                poolsInitialised: poolsState.poolsInitialised,
             }}
         >
             <PoolsActionsContext.Provider
