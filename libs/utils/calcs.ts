@@ -141,6 +141,7 @@ export const calcNextValueTransfer: (
     const direction = calcDirection(oldPrice, newPrice);
     const percentageLossTransfer = calcPercentageLossTransfer(oldPrice, newPrice, leverage);
     let gain: BigNumber;
+    
     if (direction.eq(UP)) {
         // long wins
         gain = percentageLossTransfer.times(shortBalance);

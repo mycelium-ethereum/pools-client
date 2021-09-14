@@ -19,10 +19,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <Table>
                 <TableHeader>
                     <span>Token</span>
-                    <span>Price (USDC)</span>
-                    {/*<span>24H Change</span>*/}
+                    <span>{'Last price (USDC) *' }</span>
                     <span className="flex">
-                        Rebalancing rate&nbsp;
+                        {'Last rebalancing rate * '}
                         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
                             <QuestionMark />
                         </span>
@@ -41,7 +40,6 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 {token.symbol}
                             </span>
                             <span>{toApproxCurrency(token.lastPrice)}</span>
-                            {/*<ColoredChangeNumber number={token.change24Hours} />*/}
 
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
                             <TimeLeft targetTime={token.nextRebalance} />
@@ -122,13 +120,3 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
-
-// const ColoredChangeNumber = (({ number }) => {
-//     return (
-//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
-//             2,
-//         )}`}</span>
-//     );
-// }) as React.FC<{
-//     number: number;
-// }>;
