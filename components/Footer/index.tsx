@@ -1,5 +1,4 @@
 import React from 'react';
-import Link from 'next/link';
 import styled from 'styled-components';
 
 import DiscourseLogo from '/public/img/socials/discourse.svg';
@@ -27,13 +26,33 @@ const Footer = styled(({ className }) => {
             </Socials>
             <Items>
                 <Item>
-                    <Link href="/privacy-policy">Privacy Policy</Link>
+                    <a href="/privacy-policy" target="_blank">
+                        Privacy Policy
+                    </a>
                 </Item>
                 <Item>
-                    <Link href="/terms-of-use">Terms of Use</Link>
+                    <a href="/terms-of-use" target="_blank">
+                        Terms of Use
+                    </a>
                 </Item>
                 <Item>
-                    <Link href="/disclaimer">Disclaimer</Link>
+                    <a href="/disclaimer" target="_blank">
+                        Disclaimer
+                    </a>
+                </Item>
+                <Item>
+                    <a
+                        href="https://gateway.pinata.cloud/ipfs/QmS161WXV2bEAWUtdecfS5FYPmHQZdhNnjVFAwQ5FTX3og"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Participation Agreement
+                    </a>
+                </Item>
+                <Item>
+                    <a href="/security-audit.pdf" target="_blank">
+                        Security Audit
+                    </a>
                 </Item>
                 {/*<Item>*/}
                 {/*    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">*/}
