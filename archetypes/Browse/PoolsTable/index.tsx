@@ -13,7 +13,6 @@ import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    console.debug('Browse table rows', rows);
     const [showModal, setShowModal] = useState(false);
     return (
         <>
@@ -28,7 +27,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <QuestionMark />
                         </span>
                     </span>
-                    <span>Next Rebalancing</span>
+                    <span>Next Rebalancing Event</span>
                     <span>TVL (USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
                     <span>{/* Empty header for buttons column */}</span>
