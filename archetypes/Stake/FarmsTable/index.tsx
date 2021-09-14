@@ -1,15 +1,15 @@
+import React, { useState } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
-import React, { useState } from 'react';
 import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
-    console.debug('Browse table rows', rows);
     const [showModal, setShowModal] = useState(false);
+
     return (
         <>
             <Table>
@@ -40,7 +40,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                                     className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => onClickStake()}
+                                    onClick={() => onClickStake(farm)}
                                 >
                                     Stake
                                 </Button>
@@ -102,17 +102,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     );
 }) as React.FC<{
     rows: FarmTableRowData[];
-    onClickStake: () => void;
+    onClickStake: (farm: FarmTableRowData) => void;
     onClickUnstake: () => void;
     onClickClaim: () => void;
 }>;
-
-// const ColoredChangeNumber = (({ number }) => {
-//     return (
-//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
-//             2,
-//         )}`}</span>
-//     );
-// }) as React.FC<{
-//     number: number;
-// }>;

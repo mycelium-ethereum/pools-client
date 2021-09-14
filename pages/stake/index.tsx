@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import StakePool from '@archetypes/Stake/StakePool';
-import { StakePoolStore } from '@context/StakeContext';
+import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 
 export default (() => {
@@ -15,11 +15,11 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <StakePoolStore>
+            <FarmStore>
                 <NavBar />
                 <StakePool />
-            </StakePoolStore>
-            <Footer />
+                <Footer />
+            </FarmStore>
         </Page>
     );
 }) as React.FC;

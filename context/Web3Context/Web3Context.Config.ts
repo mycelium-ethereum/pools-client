@@ -1,4 +1,5 @@
 import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
 
@@ -11,6 +12,11 @@ export type Network = {
             abi: ethers.ContractInterface;
         };
     };
+    farms: {
+        name: string;
+        address: string;
+        abi: ethers.ContractInterface;
+    }[];
     hex: string;
     publicRPC: string;
     graphUri: string;
@@ -29,6 +35,7 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: '',
         name: 'Unknown',
         contracts: {},
+        farms: [],
         publicRPC: '',
         hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
@@ -42,6 +49,18 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [
+            {
+                name: 'Test Farm 1',
+                address: '0xEFf698348296c84E7E016F1E52A23E85d6B91cc9',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                name: 'Test Farm 2',
+                address: '0x8CC2446A84e72Bb039A57032B49ECB946aD38c8e',
+                abi: StakingRewards__factory.abi,
+            },
+        ],
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
@@ -55,6 +74,7 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [],
         hex: '0xA4B1',
         publicRPC: 'TODO',
         graphUri: 'TODO',
@@ -68,6 +88,7 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [],
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
@@ -82,6 +103,7 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         hex: '',
+        farms: [],
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
     },

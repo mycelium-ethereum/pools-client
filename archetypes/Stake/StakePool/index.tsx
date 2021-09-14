@@ -1,44 +1,48 @@
 import React, { useEffect, useReducer } from 'react';
+import { useFarms } from '@context/FarmContext';
 import styled from 'styled-components';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import { browseReducer, BrowseState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import FarmNav from '@components/Nav/FarmNav';
+import StakeModal from '../StakeModal';
 
 export default (() => {
     const { account } = useWeb3();
+    const { farms } = useFarms();
 
-    const [state, dispatch] = useReducer(browseReducer, {
+    const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
+        farm: farm.name,
+        tokenSymbol: `1L-BTC/USDC`,
+        leverage: 1,
+        side: 'long',
+        apy: farm.apy.toNumber(),
+        tvl: farm.tvl.toNumber(),
+        myStaked: farm.myStaked.toNumber(),
+        myRewards: farm.myRewards.toNumber(),
+    }));
+
+    console.log('FARMS', farms);
+
+    const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
-    } as BrowseState);
+        stakeModalOpen: false,
+        amount: NaN,
+    } as StakeState);
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {
             dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyStaked });
         }
     }, [account]);
-
-    // parse the pools rows
-    const farms: FarmTableRowData[] = [
-        {
-            farm: '1L-ETH/USDC',
-            tokenSymbol: '1L-ETH/USDC',
-            leverage: 1,
-            side: 'long',
-            apy: 0,
-            tvl: 0,
-            myStaked: 0,
-            myRewards: 0,
-        },
-    ];
 
     // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: FarmTableRowData): boolean => {
@@ -87,14 +91,22 @@ export default (() => {
         }
     };
 
-    const filteredTokens = farms.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = farmTableRows.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredFarms = filteredTokens.sort(sorter);
 
     const handleClaim = () => {
         console.debug('Claiming...');
     };
 
-    const handleStake = () => {
+    const handleStake = (farm: FarmTableRowData) => {
+        dispatch({
+            type: 'setSelectedFarm',
+            farm: farm,
+        });
+        dispatch({
+            type: 'setStakeModalOpen',
+            open: true,
+        });
         console.debug('Staking...');
     };
 
@@ -105,13 +117,13 @@ export default (() => {
     const SearchButton = (
         <SearchOutlined
             className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
+            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
         />
     );
     const FilterButton = (
         <FilterFilled
             className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
+            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
         />
     );
 
@@ -119,7 +131,7 @@ export default (() => {
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
             <Container className="mt-0 md:mt-[100px]">
-                <BrowseModal>
+                <FarmContainer>
                     <section className="hidden md:block">
                         <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">
                             Pool Token Farms
@@ -130,17 +142,18 @@ export default (() => {
                     <FarmsTable
                         rows={sortedFilteredFarms}
                         onClickClaim={handleClaim}
-                        onClickUnstake={handleStake}
-                        onClickStake={handleUnstake}
+                        onClickUnstake={handleUnstake}
+                        onClickStake={handleStake}
                     />
-                </BrowseModal>
+                </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
+            <StakeModal state={state} dispatch={dispatch} />
         </>
     );
 }) as React.FC;
 
-const BrowseModal = styled.div`
+const FarmContainer = styled.div`
     @media (max-width: 768px) {
         padding: 0;
     }

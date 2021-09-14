@@ -29,22 +29,27 @@ export interface FarmTableRowData {
     myRewards: number;
 }
 
-export interface BrowseState {
+export interface StakeState {
     search: string;
     leverage: LeverageFilterEnum;
     side: SideFilterEnum;
     sortBy: SortByEnum;
+    stakeModalOpen: boolean;
     filterModalOpen: boolean;
+    amount: number;
 }
 
-export type BrowseAction =
+export type StakeAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
     | { type: 'setSide'; side: SideFilterEnum }
-    | { type: 'setModalOpen'; open: boolean }
+    | { type: 'setFilterModalOpen'; open: boolean }
+    | { type: 'setStakeModalOpen'; open: boolean }
+    | { type: 'setSelectedFarm'; farm: FarmTableRowData }
+    | { type: 'setAmount'; amount: number }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
-export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
+export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
     switch (action.type) {
         case 'setLeverage':
             return {
@@ -66,10 +71,25 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 sortBy: action.sortBy,
             };
-        case 'setModalOpen':
+        case 'setFilterModalOpen':
             return {
                 ...state,
                 filterModalOpen: action.open,
+            };
+        case 'setStakeModalOpen':
+            return {
+                ...state,
+                stakeModalOpen: action.open,
+            };
+        case 'setSelectedFarm':
+            return {
+                ...state,
+                selectedFarm: action.farm,
+            };
+        case 'setAmount':
+            return {
+                ...state,
+                amount: action.amount,
             };
         default:
             throw new Error('Unexpected action');

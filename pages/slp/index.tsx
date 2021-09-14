@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import StakeSLP from '@archetypes/Stake/StakeSLP';
-import { StakePoolStore } from '@context/StakeContext';
+import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 
 export default (() => {
@@ -15,10 +15,10 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <StakePoolStore>
+            <FarmStore>
                 <NavBar />
                 <StakeSLP />
-            </StakePoolStore>
+            </FarmStore>
             <Footer />
         </Page>
     );
