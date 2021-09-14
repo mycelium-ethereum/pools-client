@@ -35,6 +35,11 @@ const Footer = styled(({ className }) => {
                 <Item>
                     <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
+                <Item>
+                    <a href="/security-audit.pdf" target="_blank">
+                        Security Audit
+                    </a>
+                </Item>
                 {/*<Item>*/}
                 {/*    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">*/}
                 {/*        Docs*/}
