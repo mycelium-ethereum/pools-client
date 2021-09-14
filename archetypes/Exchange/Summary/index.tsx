@@ -3,7 +3,7 @@ import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@component
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcNextValueTransfer, calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
+import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 import { Transition } from '@headlessui/react';
@@ -23,18 +23,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     const tokenPrice = calcTokenPrice(notional, token.supply);
     const amountBN = new BigNumber(amount);
 
-    const balancesAfterAmount = {
-        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0),
-        shortBalance: pool.nextLongBalance.plus(isLong ? 0 : amountBN),
+    const balancesAfter = {
+        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0).plus(pool.committer.pendingLong),
+        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amountBN).plus(pool.committer.pendingShort),
     };
-
-    const { longValueTransfer, shortValueTransfer } = calcNextValueTransfer(
-        pool.lastPrice,
-        pool.oraclePrice,
-        new BigNumber(pool.leverage),
-        balancesAfterAmount.longBalance,
-        balancesAfterAmount.shortBalance,
-    );
 
     return (
         <HiddenExpand
@@ -64,8 +56,8 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                     </Section>
                     <Section label="Expected rebalancing rate">
                         {`${calcRebalanceRate(
-                            balancesAfterAmount.shortBalance.plus(shortValueTransfer),
-                            balancesAfterAmount.longBalance.plus(longValueTransfer),
+                            balancesAfter.shortBalance,
+                            balancesAfter.longBalance,
                         ).toFixed(3)}`}
                     </Section>
                 </Transition>
