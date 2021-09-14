@@ -13,7 +13,6 @@ import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    console.debug('Browse table rows', rows);
     const [showModal, setShowModal] = useState(false);
     return (
         <>
