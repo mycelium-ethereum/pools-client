@@ -79,8 +79,6 @@ export const Browse: React.FC = () => {
                 return tokenA.symbol.localeCompare(tokenB.symbol);
             case SortByEnum.Price:
                 return tokenB.lastPrice - tokenA.lastPrice;
-            case SortByEnum.Change24Hours:
-                return tokenB.change24Hours - tokenA.change24Hours;
             case SortByEnum.RebalanceRate:
                 return tokenB.rebalanceRate - tokenA.rebalanceRate;
             case SortByEnum.TotalValueLocked:
