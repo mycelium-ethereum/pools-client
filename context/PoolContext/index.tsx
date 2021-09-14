@@ -376,10 +376,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         ) as LeveragedPool;
         leveragedPool.getOraclePrice().then((price) => {
             const oraclePrice = new BigNumber(ethers.utils.formatEther(price))
-            console.log(`Setting expected price`, {
-                oraclePrice,
-                lastPrice
-            })
             const {
                 shortValueTransfer,
                 longValueTransfer

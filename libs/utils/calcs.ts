@@ -138,15 +138,11 @@ export const calcNextValueTransfer: (
     shortValueTransfer: BigNumber
 }) = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
     const direction = calcDirection(oldPrice, newPrice);
-    console.log(direction, "Direction")
-    console.log(longBalance, shortBalance, 'blanace')
     const percentageLossTransfer = calcPercentageLossTransfer(oldPrice, newPrice, leverage);
-    console.log(percentageLossTransfer.toNumber(), "percentage loss")
     let gain: BigNumber;
     if (direction.eq(UP)) {
         // long wins
         gain = percentageLossTransfer.times(shortBalance);
-        console.log(gain.toNumber(), "Gain up")
         // long gains and short loses longs gain
         return ({
             longValueTransfer: gain, 
@@ -155,7 +151,6 @@ export const calcNextValueTransfer: (
     } else if (direction.eq(DOWN)) {
         // short wins
         gain = percentageLossTransfer.times(longBalance);
-        console.log(gain.toNumber(), "Gain down")
         return ({
             longValueTransfer: gain.negated(), 
             shortValueTransfer: gain
