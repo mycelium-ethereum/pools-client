@@ -92,7 +92,7 @@ export default (() => {
                     }))}
                     value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                     onSelect={(option) => {
-                        const [pool, side] = option.split('-')
+                        const [pool, side] = option.split('-');
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
@@ -106,7 +106,7 @@ export default (() => {
                         className="w-full h-full text-xl font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
+                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>

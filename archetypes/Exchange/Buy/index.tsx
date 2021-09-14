@@ -122,7 +122,7 @@ export default (() => {
                         className="w-full h-full text-base font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
+                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>
