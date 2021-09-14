@@ -19,6 +19,7 @@ export default (({ rebalanceRate }) => {
             <span className="text-green-500">{long}</span>
             <span className={classNames(rebalanceRate <= 1 ? 'text-green-500' : 'text-red-500')}>|</span>
             <span className="text-red-500">{short}</span>
+            <span> {rebalanceRate.toFixed(3)}</span>
         </div>
     );
 }) as React.FC<{
@@ -39,7 +40,6 @@ const formatEachSide: (rebalanceRate: number) => [string, string] = (rebalanceRa
         lhs = Math.min(Math.floor(Math.abs(rebalanceRate) / INCREMENT) + Math.floor(MAX_CHARS / 2), MAX_CHARS - 1);
         rhs = MAX_CHARS - lhs;
     }
-    console.log(lhs, rhs);
 
     return ['>'.repeat(lhs), '<'.repeat(rhs)];
 };

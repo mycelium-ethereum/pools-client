@@ -1,22 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
-export default styled(({ className }) => {
-    const [open, setOpen] = useState(false);
-
+// const Hamburger
+export default styled(({ className, setOpen, open }) => {
+    const handleClick = () => {
+        setOpen(!open);
+    };
     return (
-        <div className={className}>
-            <Hamburger open={open} setOpen={setOpen} />
-        </div>
-    );
-})`
-    margin: auto 0 auto auto;
-    overflow: hidden;
-`;
-
-const Hamburger = styled(({ className, setOpen, open }) => {
-    return (
-        <div onClick={(_e) => setOpen(!open)} className={`${className} ${open ? 'open' : ''}`}>
+        <div onClick={handleClick} className={`${className} ${open ? 'open' : ''}`}>
             <span />
             <span />
             <span />
@@ -115,4 +106,7 @@ const Hamburger = styled(({ className, setOpen, open }) => {
         left: calc(50% - 1px);
         top: 12px;
     }
-`;
+` as React.FC<{
+    setOpen: (bool: boolean) => any;
+    open: boolean;
+}>;

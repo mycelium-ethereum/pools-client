@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useRef } from 'react';
 import { Children } from 'libs/types/General';
-import styled from 'styled-components';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
+import { Logo } from 'components/General/Logo';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -14,7 +14,7 @@ type HEProps = {
     open: boolean;
     className?: string;
 } & Children;
-export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, defaultHeight, open }: HEProps) => {
+export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHeight, open }: HEProps) => {
     const main = useRef<HTMLDivElement>(null);
     const { height, ref } = useResizeDetector();
 
@@ -29,32 +29,29 @@ export const HiddenExpand: React.FC<HEProps> = styled(({ className, children, de
     }, [open, height]);
 
     return (
-        <div className={`${className} ${open ? 'open' : ''}`} ref={main}>
+        <div
+            className={classNames(
+                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md text-base bg-white',
+                className ?? '',
+            )}
+            ref={main}
+        >
             <div className="body" ref={ref}>
-                {children}
+                <Transition
+                    show={open}
+                    enter="transition-opacity duration-300 delay-100"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-opacity duration-300"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                >
+                    {children}
+                </Transition>
             </div>
         </div>
     );
-})`
-    overflow: hidden;
-    transition: 0.3s ease-in-out;
-    height: ${(props) => props.defaultHeight}px;
-    margin-bottom: 1rem;
-    border-radius: 7px;
-    text-align: left;
-    font-size: var(--font-size-small);
-    letter-spacing: var(--letter-spacing-small);
-    background: var(--color-background);
-
-    & > .body {
-        transition: 0.3s ease-in;
-        opacity: 0;
-    }
-
-    &.open .body {
-        opacity: 1;
-    }
-`;
+};
 
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
@@ -64,7 +61,7 @@ const SIZE = {
     none: 'p-0 text-base',
 };
 
-type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
+export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 interface DropdownProps {
     value: string;
@@ -72,6 +69,7 @@ interface DropdownProps {
     options: {
         key: string;
         text?: string;
+        ticker?: string;
     }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;
@@ -119,6 +117,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
+                                        {option?.ticker ? (
+                                            <Logo ticker={option.ticker} className="inline w-[20px] mr-2" />
+                                        ) : (
+                                            ''
+                                        )}
                                         {option?.text ?? option.key}
                                     </button>
                                 )}

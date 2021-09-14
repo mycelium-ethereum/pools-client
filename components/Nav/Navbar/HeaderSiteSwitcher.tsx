@@ -49,7 +49,7 @@ export default (() => {
                     </a>
                 </MenuItem>
                 <MenuItem>
-                    <a href="https://gov.tracer.finance" target="_blank" rel="noreferrer noopener">
+                    <a href="https://vote.tracer.finance" target="_blank" rel="noreferrer noopener">
                         <StyledIcon component={TracerBox} style={{ color: '#1AAA8D' }} />
                         <span>
                             <div>Tracer</div>

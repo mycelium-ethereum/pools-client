@@ -1,4 +1,4 @@
-import { LONG, LONG_BURN, LONG_MINT, SHORT, SHORT_BURN, SHORT_MINT } from '@libs/constants';
+import { SideEnum, CommitEnum } from '@libs/constants';
 import { CreatedCommitType, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
@@ -50,32 +50,48 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         contract.leverageAmount(),
     ]);
 
-    const [frontRunningInterval] = await Promise.all([contract.frontRunningInterval()]);
+    const [frontRunningInterval, keeper] = await Promise.all([contract.frontRunningInterval(), contract.keeper()]);
 
-    console.debug(updateInterval, lastUpdate.toNumber(), frontRunningInterval, 'Values');
+    console.debug(
+        `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
+    );
+
     // fetch short and long tokeninfo
     const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
-    const [shortTokenName, shortTokenSymbol, shortTokenSupply] = await Promise.all([
+    const [shortTokenName, shortTokenSymbol, shortTokenSupply, shortTokenDecimals] = await Promise.all([
         shortTokenInstance.name(),
         shortTokenInstance.symbol(),
         shortTokenInstance.totalSupply(),
+        shortTokenInstance.decimals(),
     ]);
 
     const longTokenInstance = new ethers.Contract(longToken, TestToken__factory.abi, provider) as PoolToken;
-    const [longTokenName, longTokenSymbol, longTokenSupply] = await Promise.all([
+    const [longTokenName, longTokenSymbol, longTokenSupply, longTokenDecimals] = await Promise.all([
         longTokenInstance.name(),
         longTokenInstance.symbol(),
         longTokenInstance.totalSupply(),
+        longTokenInstance.decimals(),
     ]);
 
     // fetch quote token info
     const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const [quoteTokenName, quoteTokenSymbol] = await Promise.all([
+    const [quoteTokenName, quoteTokenSymbol, quoteTokenDecimals] = await Promise.all([
         quoteTokenInstance.name(),
         quoteTokenInstance.symbol(),
+        quoteTokenInstance.decimals(),
     ]);
 
+    // fetch minimum commit size
+    const poolCommitterInstance = new ethers.Contract(
+        poolCommitter,
+        PoolCommitter__factory.abi,
+        provider,
+    ) as PoolCommitter;
+    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
+
     console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
+    // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
+    const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
@@ -90,32 +106,37 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             pendingLong: new BigNumber(0),
             pendingShort: new BigNumber(0),
             allUnexecutedCommits: [],
+            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
+        keeper,
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
-        leverage: new BigNumber(2),
+        leverage: leverage,
         longToken: {
             address: longToken,
             name: longTokenName,
             symbol: longTokenSymbol,
-            approved: false,
+            decimals: longTokenDecimals,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
-            side: LONG,
+            side: SideEnum.long,
         },
         shortToken: {
             address: shortToken,
             name: shortTokenName,
             symbol: shortTokenSymbol,
-            approved: false,
+            decimals: shortTokenDecimals,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
-            side: SHORT,
+            side: SideEnum.short,
         },
         quoteToken: {
             address: quoteToken,
             name: quoteTokenName,
             symbol: quoteTokenSymbol,
-            approved: false,
+            decimals: quoteTokenDecimals,
+            approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
         subscribed: false,
@@ -127,12 +148,11 @@ const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211
 export const fetchCommits: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
-    account: string,
 ) => Promise<{
     pendingLong: BigNumber;
     pendingShort: BigNumber;
     allUnexecutedCommits: CreatedCommitType[];
-}> = async (committer, provider, account) => {
+}> = async (committer, provider) => {
     console.debug('Initialising committer');
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
@@ -157,41 +177,24 @@ export const fetchCommits: (
 
     console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit);
 
-    const unfilteredCommits = await contract?.queryFilter(
+    const allUnexecutedCommits = (await contract?.queryFilter(
         contract.filters.CreateCommit(),
         Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
-    );
+    )) as CreatedCommitType[];
 
-    console.debug('All commits unfiltered', unfilteredCommits);
+    console.debug('All commits unfiltered', allUnexecutedCommits);
 
     let pendingLong = new BigNumber(0);
     let pendingShort = new BigNumber(0);
-    const allUnexecutedCommits = [];
-    const accountLower = account.toLowerCase();
 
-    for (let i = 0; i < unfilteredCommits.length; i++) {
-        const commit = unfilteredCommits[i];
-
-        // need to filter out created commits which have since been removed
-        const [deleted, txn] = await Promise.all([
-            contract?.queryFilter(contract.filters.RemoveCommit(commit.args.commitID)),
-            commit.getTransaction(),
-        ]);
-
-        if (deleted.length || txn.from.toLowerCase() !== accountLower) {
-            continue;
-        } // skip this one
-
+    allUnexecutedCommits.forEach((commit) => {
         [pendingShort, pendingLong] = addToPending(pendingShort, pendingLong, {
             amount: commit.args.amount,
             type: commit.args.commitType,
         });
-        allUnexecutedCommits.push(commit);
-    }
-
-    console.debug('All commits filtered', allUnexecutedCommits);
-
+    });
     console.debug(`Pending commit amounts. Long: ${pendingLong.toNumber()}, short: ${pendingShort.toNumber()}`);
+
     return {
         pendingLong,
         pendingShort,
@@ -204,11 +207,25 @@ export const fetchTokenBalances: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<[EthersBigNumber, EthersBigNumber][]> = (tokens, provider, account, pool) => {
+) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return Promise.all([tokenContract.balanceOf(account), tokenContract.allowance(account, pool)]);
+            return tokenContract.balanceOf(account);
+        }),
+    );
+};
+
+export const fetchTokenApprovals: (
+    tokens: string[],
+    provider: ethers.providers.JsonRpcProvider,
+    account: string,
+    pool: string,
+) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
+    return Promise.all(
+        tokens.map((token) => {
+            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
+            return tokenContract.allowance(account, pool);
         }),
     );
 };
@@ -222,13 +239,13 @@ export const addToPending: (
     },
 ) => [BigNumber, BigNumber] = (pendingShort, pendingLong, commit) => {
     switch (commit.type) {
-        case SHORT_MINT:
+        case CommitEnum.short_mint:
             return [pendingShort.plus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case SHORT_BURN:
+        case CommitEnum.short_burn:
             return [pendingShort.minus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case LONG_MINT:
+        case CommitEnum.long_mint:
             return [pendingShort, pendingLong.plus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
-        case LONG_BURN:
+        case CommitEnum.long_burn:
             return [pendingShort, pendingLong.minus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
         default:
             return [pendingShort, pendingLong];

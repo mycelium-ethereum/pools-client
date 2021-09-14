@@ -5,9 +5,9 @@ export enum LeverageFilterEnum {
 }
 
 export enum SideFilterEnum {
+    All = 'All',
     Short = 'Short',
     Long = 'Long',
-    All = 'All',
 }
 
 export enum SortByEnum {
@@ -30,6 +30,7 @@ export interface BrowseTableRowData {
     rebalanceRate: number;
     totalValueLocked: number;
     myHoldings: number;
+    nextRebalance: number;
 }
 
 export interface BrowseState {
