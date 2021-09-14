@@ -119,12 +119,10 @@ const BuyRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{amount.toNumber()}</span>
             <span>
-                {nextRebalance.toNumber() - new Date().getTime() < frontRunningInterval.toNumber() ? (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber() - new Date().getTime() + updateInterval.toNumber()}
-                    />
+                {nextRebalance.toNumber() - Date.now() / 1000 < frontRunningInterval.toNumber() ? (
+                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber() - new Date().getTime()} />
+                    <TimeLeft targetTime={nextRebalance.toNumber()} />
                 )}
             </span>
             <span className="flex text-right">
@@ -147,12 +145,10 @@ const SellRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
             <span>
-                {nextRebalance.toNumber() - new Date().getTime() < frontRunningInterval.toNumber() ? (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber() - new Date().getTime() + updateInterval.toNumber()}
-                    />
+                {nextRebalance.toNumber() - Date.now() / 1000 < frontRunningInterval.toNumber() ? (
+                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber() - new Date().getTime()} />
+                    <TimeLeft targetTime={nextRebalance.toNumber()} />
                 )}
             </span>
             <span className="flex text-right">
