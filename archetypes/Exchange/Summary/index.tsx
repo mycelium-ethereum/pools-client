@@ -3,12 +3,7 @@ import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@component
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import {
-    // calcLeverageLossMultiplier,
-    calcNotionalValue,
-    calcRebalanceRate,
-    calcTokenPrice,
-} from '@libs/utils/calcs';
+import { calcNextValueTransfer, calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 
@@ -21,9 +16,23 @@ type SummaryProps = {
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
     const token = isLong ? pool.longToken : pool.shortToken;
-    const notional = isLong ? pool.longBalance : pool.shortBalance;
+    const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
 
     const tokenPrice = calcTokenPrice(notional, token.supply);
+    const amountBN = new BigNumber(amount);
+
+    const balancesAfterAmount = {
+        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0),
+        shortBalance: pool.nextLongBalance.plus(isLong ? 0 : amountBN),
+    };
+
+    const { longValueTransfer, shortValueTransfer } = calcNextValueTransfer(
+        pool.lastPrice,
+        pool.oraclePrice,
+        new BigNumber(pool.leverage),
+        balancesAfterAmount.longBalance,
+        balancesAfterAmount.shortBalance,
+    );
 
     return (
         <HiddenExpand defaultHeight={0} open={!!pool.name && !!amount}>
@@ -34,14 +43,15 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 </h2>
                 <Section label="Expected number of tokens">
                     <div>
-                        <span>{`${new BigNumber(amount).div(tokenPrice ?? 1).toFixed(3)}`}</span>
+                        <span>{`${amountBN.div(tokenPrice ?? 1).toFixed(3)}`}</span>
                         <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                     </div>
                 </Section>
-                {/*<Section label="Expected Rebalance Multiplier">*/}
-                <Section label="Rebalancing Rate">
-                    {/*{`${calcLeverageLossMultiplier(pool.oraclePrice, pool.oraclePrice, pool.leverage).toFixed(3)}`}*/}
-                    {`${calcRebalanceRate(pool.shortBalance, pool.longBalance).toFixed(3)}`}
+                <Section label="Expected rebalancing rate">
+                    {`${calcRebalanceRate(
+                        balancesAfterAmount.shortBalance.plus(shortValueTransfer),
+                        balancesAfterAmount.longBalance.plus(longValueTransfer),
+                    ).toFixed(3)}`}
                 </Section>
                 <Countdown>
                     {'Receive In'}

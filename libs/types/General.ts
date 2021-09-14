@@ -75,8 +75,10 @@ export type Pool = {
     lastUpdate: BigNumber;
     lastPrice: BigNumber;
     shortBalance: BigNumber;
-    leverage: number;
     longBalance: BigNumber;
+    nextShortBalance: BigNumber;
+    nextLongBalance: BigNumber;
+    leverage: number;
     oraclePrice: BigNumber;
     quoteToken: Token;
     shortToken: PoolToken;
