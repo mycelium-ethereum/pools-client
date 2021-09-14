@@ -5,9 +5,9 @@ export enum LeverageFilterEnum {
 }
 
 export enum SideFilterEnum {
+    All = 'All',
     Short = 'Short',
     Long = 'Long',
-    All = 'All',
 }
 
 export enum SortByEnum {
