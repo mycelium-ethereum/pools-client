@@ -14,32 +14,33 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch }) => {
 
     return (
         <TWModal open={state.stakeModalOpen} onClose={() => dispatch({ type: 'setStakeModalOpen', open: false })}>
-            <div className="w-full">
-                <p className="mb-2 text-black">Amount</p>
-                <InputContainer className="w-full ">
-                    <Input
-                        className="w-full h-full text-xl font-normal "
-                        value={amount}
-                        type="number"
-                        onUserInput={(val) => {
-                            dispatch({ type: 'setAmount', amount: parseInt(val) });
-                        }}
-                    />
-                    <InnerInputText>
-                        <div
-                            className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) =>
-                                dispatch({
-                                    type: 'setAmount',
-                                    amount: 10000, // TODO use actual use balance here
-                                })
-                            }
-                        >
-                            Max
-                        </div>
-                    </InnerInputText>
-                </InputContainer>
-                {/* <p className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+            <div className="p-6">
+                <div className="w-full">
+                    <p className="mb-2 text-black">Amount</p>
+                    <InputContainer className="w-full ">
+                        <Input
+                            className="w-full h-full text-xl font-normal "
+                            value={amount}
+                            type="number"
+                            onUserInput={(val) => {
+                                dispatch({ type: 'setAmount', amount: parseInt(val) });
+                            }}
+                        />
+                        <InnerInputText>
+                            <div
+                                className="m-auto cursor-pointer hover:underline"
+                                onClick={(_e) =>
+                                    dispatch({
+                                        type: 'setAmount',
+                                        amount: 10000, // TODO use actual use balance here
+                                    })
+                                }
+                            >
+                                Max
+                            </div>
+                        </InnerInputText>
+                    </InputContainer>
+                    {/* <p className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
                     {invalidAmount.isInvalid && invalidAmount.message ? (
                         invalidAmount.message
                     ) : (
@@ -62,6 +63,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch }) => {
                         </>
                     )}
                 </p> */}
+                </div>
             </div>
         </TWModal>
     );
