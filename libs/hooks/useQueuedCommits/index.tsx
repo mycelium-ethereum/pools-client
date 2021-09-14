@@ -44,6 +44,8 @@ export default ((focus) => {
                     token,
                     tokenPrice,
                     nextRebalance: lastUpdate.plus(updateInterval),
+                    frontRunningInterval: pools[commit.pool].frontRunningInterval,
+                    updateInterval: updateInterval,
                 });
             }
             setAllQueuedCommits(parsedCommits);

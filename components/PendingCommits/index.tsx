@@ -72,7 +72,7 @@ export default (() => {
                             <span>Spend (USDC)</span>
                             <span>Token Price (USDC)</span>
                             <span>Amount (Tokens)</span>
-                            <span>Next Rebalance</span>
+                            <span>Receive in</span>
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
@@ -86,7 +86,7 @@ export default (() => {
                             <span>Sold (USDC)</span>
                             <span>Price* (Token)</span>
                             <span>Return (USDC)</span>
-                            <span>Next Rebalance</span>
+                            <span>Sell in</span>
                             <span>{/* Empty header for buttons column */}</span>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
@@ -111,7 +111,7 @@ const BuyRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index, frontRunningInterval, updateInterval }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -119,7 +119,13 @@ const BuyRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{amount.toNumber()}</span>
             <span>
-                <TimeLeft targetTime={nextRebalance.toNumber()} />
+                {nextRebalance.toNumber() - new Date().getTime() < frontRunningInterval.toNumber() ? (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber() - new Date().getTime() + updateInterval.toNumber()}
+                    />
+                ) : (
+                    <TimeLeft targetTime={nextRebalance.toNumber() - new Date().getTime()} />
+                )}
             </span>
             <span className="flex text-right">
                 <Actions token={token} provider={provider} txnHash={txnHash} />
@@ -133,7 +139,7 @@ const SellRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index }) => {
+> = ({ token, txnHash, tokenPrice, amount, nextRebalance, provider, index, frontRunningInterval, updateInterval }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>{token.name}</span>
@@ -141,7 +147,13 @@ const SellRow: React.FC<
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
             <span>
-                <TimeLeft targetTime={nextRebalance.toNumber()} />
+                {nextRebalance.toNumber() - new Date().getTime() < frontRunningInterval.toNumber() ? (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber() - new Date().getTime() + updateInterval.toNumber()}
+                    />
+                ) : (
+                    <TimeLeft targetTime={nextRebalance.toNumber() - new Date().getTime()} />
+                )}
             </span>
             <span className="flex text-right">
                 <Actions token={token} provider={provider} txnHash={txnHash} />

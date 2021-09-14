@@ -101,6 +101,8 @@ export type QueuedCommit = PendingCommitInfo & {
     token: PoolToken;
     tokenPrice: BigNumber;
     nextRebalance: BigNumber;
+    frontRunningInterval: BigNumber;
+    updateInterval: BigNumber;
 };
 
 // table heading initialiser
