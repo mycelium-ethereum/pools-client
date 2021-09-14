@@ -101,7 +101,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <br />
                 <div>
                     If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and
-                    short side of the pool. At rebalance, the winning side gains are neither amplified or reduced.
+                    short side of the pool. At rebalance, the winning side's gains are neither amplified or reduced.
                 </div>
                 <br />
                 <div>
