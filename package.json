@@ -20,7 +20,6 @@
         "react-resize-detector": "^6.7.4",
         "react-simple-tooltip": "^2.6.3",
         "react-toast-notifications": "^2.4.0",
-        "react-tooltip": "^4.2.21",
         "styled-components": "^5.2.1",
         "universal-cookie": "^4.0.4"
     },
