@@ -121,7 +121,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             ) : (
                                 <>
                                     {`Available: ${stakeModalBalance?.toFixed(6)}`}
-                                    {!!amount ? ` > ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
+                                    {!!amount ? ` >>> ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
                                 </>
                             )}
                         </div>
