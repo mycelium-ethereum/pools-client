@@ -179,7 +179,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
                     break;
                 case CommitEnum.long_burn:
-                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
+                    committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
                     break;
                 case CommitEnum.long_mint:
                     committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
