@@ -41,7 +41,7 @@ export interface StakeState {
     sortBy: SortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
     filterModalOpen: boolean;
-    amount: number;
+    amount: BigNumber;
     selectedFarm: string;
     invalidAmount: { isInvalid: boolean; message?: string };
     stakeModalBalance: BigNumber;
@@ -55,7 +55,7 @@ export type StakeAction =
     | { type: 'setStakeModalState'; state: StakeState['stakeModalState'] }
     | { type: 'setStakeModalBalance'; balance: StakeState['stakeModalBalance'] }
     | { type: 'setSelectedFarm'; farm: string }
-    | { type: 'setAmount'; amount: number }
+    | { type: 'setAmount'; amount: BigNumber }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
     | { type: 'setSortBy'; sortBy: SortByEnum }
     | { type: 'reset' };
@@ -119,7 +119,7 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
                     message: undefined,
                     isInvalid: false,
                 },
-                amount: 0,
+                amount: new BigNumber(0),
                 stakeModalState: 'closed',
             };
         default:

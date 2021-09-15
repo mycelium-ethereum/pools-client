@@ -38,7 +38,7 @@ export default (({ title, subTitle, farms }) => {
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
         stakeModalState: 'closed',
-        amount: NaN,
+        amount: new BigNumber(0),
         invalidAmount: { isInvalid: false },
     } as StakeState);
 
@@ -117,7 +117,7 @@ export default (({ title, subTitle, farms }) => {
         console.debug('Unstaking...');
     };
 
-    const stake = (farmAddress: string, amount: number) => {
+    const stake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
         const { contract, stakingTokenDecimals } = farm;
         console.debug(

@@ -48,7 +48,7 @@ export default (() => {
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
         stakeModalState: 'closed',
-        amount: NaN,
+        amount: new BigNumber(0),
         invalidAmount: { isInvalid: false },
     } as StakeState);
 
@@ -119,7 +119,7 @@ export default (() => {
         });
         dispatch({
             type: 'setAmount',
-            amount: NaN,
+            amount: new BigNumber(0),
         });
         dispatch({
             type: 'setStakeModalState',
@@ -138,7 +138,7 @@ export default (() => {
         });
         dispatch({
             type: 'setAmount',
-            amount: NaN,
+            amount: new BigNumber(0),
         });
         dispatch({
             type: 'setStakeModalState',
@@ -157,7 +157,7 @@ export default (() => {
         });
         dispatch({
             type: 'setAmount',
-            amount: farms[farmAddress].myRewards.toNumber(),
+            amount: farms[farmAddress].myRewards,
         });
         dispatch({
             type: 'setStakeModalState',
@@ -165,17 +165,13 @@ export default (() => {
         });
     };
 
-    const stake = (farmAddress: string, amount: number) => {
+    const stake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
         const { contract, stakingTokenDecimals } = farm;
-        console.debug(
-            `staking ${new BigNumber(amount)
-                .times(10 ** stakingTokenDecimals)
-                .toString()} in contract at ${farmAddress}`,
-        );
+        console.debug(`staking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
-            handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toFixed()], {
+            handleTransaction(contract.stake, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
                 onSuccess: () => {
                     refreshFarm(farmAddress);
                     dispatch({
@@ -186,18 +182,15 @@ export default (() => {
         }
     };
 
-    const unstake = (farmAddress: string, amount: number) => {
+    const unstake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
         const { contract, stakingTokenDecimals } = farm;
-        console.debug(
-            `staking ${new BigNumber(amount)
-                .times(10 ** stakingTokenDecimals)
-                .toString()} in contract at ${farmAddress}`,
-        );
+        console.debug(`unstaking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
-            handleTransaction(contract.withdraw, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toFixed()], {
+            handleTransaction(contract.withdraw, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
                 onSuccess: () => {
+                    console.log('UNSTAKE ON SUCCESS');
                     refreshFarm(farmAddress);
                     dispatch({
                         type: 'reset',
@@ -285,8 +278,8 @@ export default (() => {
 const StakeModalWithState: React.FC<{
     state: StakeState;
     approve: (farmAddress: string) => void;
-    stake: (farmAddress: string, amount: number) => void;
-    unstake: (farmAddress: string, amount: number) => void;
+    stake: (farmAddress: string, amount: BigNumber) => void;
+    unstake: (farmAddress: string, amount: BigNumber) => void;
     claim: (farmAddress: string) => void;
     dispatch: React.Dispatch<StakeAction>;
 }> = ({ state, approve, stake, unstake, claim, dispatch }) => {

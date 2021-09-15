@@ -14,18 +14,18 @@ import { useFarms } from '@context/FarmContext';
 interface StakeModalProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
-    onStake: (farmAddress: string, amount: number) => void;
+    onStake: (farmAddress: string, amount: BigNumber) => void;
     onApprove: (farmAddress: string) => void;
     title: string;
     btnLabel: string;
 }
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean; message?: string } = (
+const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => { isInvalid: boolean; message?: string } = (
     amount,
     balance,
 ) => {
-    if (amount > balance) {
+    if (amount.gt(balance)) {
         return {
             message: undefined,
             isInvalid: true,
@@ -48,7 +48,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
 
     useEffect(() => {
         if (farm) {
-            const invalidAmount = isInvalidAmount(amount, stakeModalBalance.toNumber());
+            const invalidAmount = isInvalidAmount(amount, stakeModalBalance);
 
             dispatch({
                 type: 'setInvalidAmount',
@@ -86,8 +86,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             <NumericInput
                                 disabled={!isApproved}
                                 className="w-full h-full text-base font-normal "
-                                value={amount}
-                                onUserInput={(val) => dispatch({ type: 'setAmount', amount: parseFloat(val) })}
+                                value={amount.toFixed()}
+                                onUserInput={(val) => dispatch({ type: 'setAmount', amount: new BigNumber(val || 0) })}
                             />
                             <InnerInputText>
                                 <Currency
@@ -104,7 +104,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                     onClick={(_e) =>
                                         dispatch({
                                             type: 'setAmount',
-                                            amount: Number(stakeModalBalance.toFixed(6)),
+                                            amount: stakeModalBalance,
                                         })
                                     }
                                 >
@@ -134,7 +134,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             className="mt-8"
                             size="lg"
                             variant="primary"
-                            disabled={!amount || stakeModalBalance.eq(0) || invalidAmount.isInvalid}
+                            disabled={amount.eq(0) || stakeModalBalance.eq(0) || invalidAmount.isInvalid}
                             onClick={(_e) => onStake(farm.address, amount)}
                         >
                             {btnLabel}
