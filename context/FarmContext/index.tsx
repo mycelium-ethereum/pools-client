@@ -8,21 +8,23 @@ import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contract
 import BigNumber from 'bignumber.js';
 
 interface ContextProps {
-    farms: { [address: string]: Farm };
+    poolFarms: { [address: string]: Farm };
+    slpFarms: { [address: string]: Farm };
 }
 
-export const FarmContext = React.createContext<ContextProps>({ farms: {} });
+export const FarmContext = React.createContext<ContextProps>({ poolFarms: {}, slpFarms: {} });
 
 /**
  * Wrapper store for the FarmContext.
  */
 export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, config, account } = useWeb3();
-    const [farms, setFarms] = useState<ContextProps['farms']>({});
+    const [poolFarms, setPoolFarms] = useState<ContextProps['poolFarms']>({});
+    const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
 
     const fetchFarms = useCallback(async () => {
         if (provider && config && account) {
-            for (const { address, abi } of config.farms) {
+            for (const { address, abi, isPoolToken } of config.farms) {
                 const contract = new ethers.Contract(address, abi, provider).connect(account) as StakingRewards;
 
                 const [myStaked, stakingToken, rewardPerToken, myRewards] = await Promise.all([
@@ -41,22 +43,31 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
                 console.log('got the staking token name', stakingTokenName);
 
-                setFarms((previousFarms) => ({
-                    ...previousFarms,
-                    [address]: {
-                        name: stakingTokenName,
-                        address,
-                        contract,
-                        stakingToken: stakingTokenContract,
-                        stakingTokenDecimals,
-                        // availableToStake is already formatted for decimals
-                        availableToStake: new BigNumber(availableToStake.toString()).div(10 ** stakingTokenDecimals),
-                        myStaked: new BigNumber(myStaked.toString()),
-                        myRewards: new BigNumber(myRewards.toString()),
-                        apy: new BigNumber(rewardPerToken.toString()),
-                        tvl: new BigNumber(0),
-                    },
-                }));
+                const updatedFarm = {
+                    name: stakingTokenName,
+                    address,
+                    contract,
+                    stakingToken: stakingTokenContract,
+                    stakingTokenDecimals,
+                    // availableToStake is already formatted for decimals
+                    availableToStake: new BigNumber(availableToStake.toString()).div(10 ** stakingTokenDecimals),
+                    myStaked: new BigNumber(myStaked.toString()),
+                    myRewards: new BigNumber(myRewards.toString()),
+                    apy: new BigNumber(rewardPerToken.toString()),
+                    tvl: new BigNumber(0),
+                };
+
+                if (isPoolToken) {
+                    setPoolFarms((previousPoolFarms) => ({
+                        ...previousPoolFarms,
+                        [address]: updatedFarm,
+                    }));
+                } else {
+                    setSlpFarms((previousSlpFarms) => ({
+                        ...previousSlpFarms,
+                        [address]: updatedFarm,
+                    }));
+                }
             }
         }
     }, [provider, config, account]);
@@ -74,7 +85,8 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     return (
         <FarmContext.Provider
             value={{
-                farms,
+                poolFarms,
+                slpFarms,
             }}
         >
             {children}

@@ -16,7 +16,7 @@ import StakeModal from '../StakeModal';
 export default (() => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
-    const { farms } = useFarms();
+    const { poolFarms: farms } = useFarms();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
         farm: farm.address,
