@@ -35,30 +35,28 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                             <span>{farm.availableToStake.toString()}</span>
                             <span>
                                 <Button
-                                    className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
                                     onClick={() => onClickStake(farm.farm)}
                                 >
-                                    Stake
+                                    STAKE
                                 </Button>
                                 <Button
-                                    className="mx-1 px-2 w-[90px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    // disabled={!hasHoldings}
                                     onClick={() => onClickUnstake()}
                                 >
-                                    Unstake
+                                    UNSTAKE
                                 </Button>
                                 <Button
-                                    className="mx-1 px-2 w-[70px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    // disabled={!hasHoldings}
                                     onClick={() => onClickClaim()}
                                 >
-                                    Claim
+                                    CLAIM
                                 </Button>
                             </span>
                         </TableRow>

@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { Farm } from '@libs/types/Staking';
 
 export enum LeverageFilterEnum {
@@ -30,7 +30,7 @@ export interface FarmTableRowData {
     tvl: number;
     myStaked: number;
     myRewards: number;
-    availableToStake: ethers.BigNumber;
+    availableToStake: BigNumber;
 }
 
 export interface StakeState {

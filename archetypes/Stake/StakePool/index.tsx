@@ -166,7 +166,7 @@ export default (() => {
                 </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
-            <StakeModal state={state} dispatch={dispatch} onStake={stake} />
+            <StakeModal state={state} dispatch={dispatch} onStake={stake} title="Stake Pool Tokens" btnLabel="Stake" />
         </>
     );
 }) as React.FC;
