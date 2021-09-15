@@ -30,7 +30,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     const refreshFarm = async (farmAddress: string) => {
         console.log('REFRESHING FARM', farmAddress);
-
+        
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
         const { stakingToken, isPoolToken, stakingTokenDecimals } = farm;
         if (account && farm) {
@@ -43,7 +43,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
             if (isPoolToken) {
                 setPoolFarms((previousPoolFarms) => ({
-                    ...previousPoolFarms,
+                    ...poolFarms,
                     [farmAddress]: {
                         ...previousPoolFarms[farmAddress],
                         stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
