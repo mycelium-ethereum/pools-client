@@ -62,7 +62,7 @@ export default (() => {
 
     useEffect(() => {
         if (
-            localStorage.getItem('onboard.selectedWallet') !== '' &&
+            localStorage.getItem('onboard.selectedWallet') !== undefined &&
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
@@ -186,7 +186,16 @@ export default (() => {
                     gas. It’s worth noting that there is a 7 day wait to withdraw your funds back to Ethereum Mainnet.
                     <br />
                     <br />
-                    If you have any questions, please contact us.
+                    If you have any questions, please{' '}
+                    <a
+                        className="text-tracer-400 underline"
+                        href="https://discord.gg/QU9qgCN368"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        contact us
+                    </a>
+                    .
                 </div>
                 <br />
                 <Button size="lg" variant="primary">
