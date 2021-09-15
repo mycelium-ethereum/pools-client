@@ -29,11 +29,12 @@ export default (() => {
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
         farm: farm.address,
+        tokenAddress: farm.stakingToken.address,
         name: farm.name,
         leverage: 1,
         side: 'long',
         apy: farm.apy.toNumber(),
-        tvl: farm.totalStaked.times(1).toNumber(),
+        totalStaked: farm.totalStaked.toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
         stakingTokenBalance: farm.stakingTokenBalance,

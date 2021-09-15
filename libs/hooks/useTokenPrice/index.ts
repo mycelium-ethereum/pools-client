@@ -1,17 +1,20 @@
-import { usePool } from "@context/PoolContext";
-import { BigNumber } from "@ethersproject/bignumber";
-import { calcTokenPrice } from "@libs/utils/calcs";
-import { useMemo, useState } from "hoist-non-react-statics/node_modules/@types/react";
-import usePoolTokenMap from "../usePoolTokenMap"
+import { usePool } from '@context/PoolContext';
+import { BigNumber } from 'bignumber.js';
+import { calcTokenPrice } from '@libs/utils/calcs';
+import { useMemo } from 'react';
+import usePoolTokenMap from '../usePoolTokenMap';
 
+export default ((tokenAddress) => {
+    const tokenMap = usePoolTokenMap();
+    const poolAddress = useMemo(() => tokenMap[tokenAddress], [tokenMap, tokenAddress]);
+    const pool = usePool(poolAddress);
 
-export default ((tokenAddress, isLong) => {
-	const tokenMap = usePoolTokenMap();
-	const poolAddress = useMemo(() => tokenMap[tokenAddress], [tokenMap, tokenAddress])
-	const pool = usePool(poolAddress)
-	const [tokenPrice, setTokenPrice] = useState(new BigNumber(1));
+    const isLong = useMemo(
+        () => (tokenAddress === pool.longToken.address ? pool.longToken.address : pool.shortToken.address),
+        [tokenAddress, pool],
+    );
 
-	const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
 
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -23,10 +26,5 @@ export default ((tokenAddress, isLong) => {
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
-	useMemo(() => {
-		setTokenPrice(
-			calcTokenPrice(notional, token.supply.plus(pendingBurns))
-		)
-	}, [notional, token, pendingBurns])
-	return tokenPrice
-}) as (token: string, isLong: boolean) => BigNumber
+    return useMemo(() => calcTokenPrice(notional, token.supply.plus(pendingBurns)), [notional, token, pendingBurns]);
+}) as (token: string) => BigNumber;

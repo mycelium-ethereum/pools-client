@@ -22,11 +22,12 @@ export enum SortByEnum {
 
 export interface FarmTableRowData {
     farm: string;
+    tokenAddress: string;
     name: string;
     leverage: number;
     side: 'long' | 'short';
     apy: number;
-    tvl: number;
+    totalStaked: number;
     myStaked: number;
     myRewards: number;
     stakingTokenBalance: BigNumber;
