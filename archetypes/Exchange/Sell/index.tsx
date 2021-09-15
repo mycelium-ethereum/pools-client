@@ -138,22 +138,24 @@ export default (() => {
                     ) : (
                         <>
                             {`Available: `}
-                            {`${side === SideEnum.long
-                                ? pool.longToken.balance.toFixed(2)
-                                : pool.shortToken.balance.toFixed(2)} `}
-                            {!!amount
-                                ? <span className="opacity-80">
+                            {`${
+                                side === SideEnum.long
+                                    ? pool.longToken.balance.toFixed(2)
+                                    : pool.shortToken.balance.toFixed(2)
+                            } `}
+                            {!!amount ? (
+                                <span className="opacity-80">
                                     {`>>> ${
-                                      side === SideEnum.long
-                                          ? isNaN(amount)
-                                              ? pool.longToken.balance.toFixed(2)
-                                              : (pool.longToken.balance.toNumber() - amount).toFixed(2)
-                                          : isNaN(amount)
-                                          ? pool.shortToken.balance.toFixed(2)
-                                          : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
+                                        side === SideEnum.long
+                                            ? isNaN(amount)
+                                                ? pool.longToken.balance.toFixed(2)
+                                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
+                                            : isNaN(amount)
+                                            ? pool.shortToken.balance.toFixed(2)
+                                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
                                     }`}
-                                  </span>
-                                : null}
+                                </span>
+                            ) : null}
                         </>
                     )}
                 </p>
