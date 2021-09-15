@@ -14,6 +14,7 @@ import Modal from '@components/General/Modal';
 
 import Close from '/public/img/general/close-black.svg';
 import Button from '@components/General/Button';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 const inputRow = 'relative my-2 ';
 
@@ -54,6 +55,7 @@ const SIDE_OPTIONS = [
 ];
 
 export default (() => {
+    const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
@@ -62,13 +64,14 @@ export default (() => {
 
     useEffect(() => {
         if (
-            localStorage.getItem('onboard.selectedWallet') !== undefined &&
+            (localStorage.getItem('onboard.selectedWallet') === 'MetaMask' ||
+                localStorage.getItem('onboard.selectedWallet') === 'Torus') &&
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
             localStorage.setItem('showBridgeFunds', 'true');
         }
-    }, []);
+    }, [account]);
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
