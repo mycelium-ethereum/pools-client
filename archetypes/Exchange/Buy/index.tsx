@@ -145,11 +145,11 @@ export default (() => {
                         invalidAmount.message
                     ) : (
                         <>
-                            <span className={`${!!pool.name ? 'block' : 'hidden'}`}>
+                            <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
-                            </span>
-                            <span className="opacity-80">
-                                {!!amount ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                                <span className="opacity-80">
+                                    {!!amount ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                                </span>
                             </span>
                         </>
                     )}
