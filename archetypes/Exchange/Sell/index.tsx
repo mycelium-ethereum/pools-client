@@ -108,9 +108,7 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(
-                    !!pool.address ? 'block' : 'hidden'
-                )}>
+                <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
                     Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
                 </p>
             </div>
