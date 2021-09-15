@@ -35,7 +35,7 @@ const logos: Record<string, string> = {
     BTC_L: '/img/logos/currencies/btc_long.svg',
     ETH_S: '/img/logos/currencies/eth_short.svg',
     BTC_S: '/img/logos/currencies/btc_short.svg',
-    ETH: '/img/logos/currencies/eth2.svg',
+    ETH: '/img/logos/currencies/eth.svg',
     BTC: '/img/logos/currencies/btc.svg',
 };
 
