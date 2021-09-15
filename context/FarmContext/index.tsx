@@ -30,7 +30,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     const refreshFarm = async (farmAddress: string) => {
         console.log('REFRESHING FARM', farmAddress);
-        
+
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
         const { stakingToken, isPoolToken, stakingTokenDecimals } = farm;
         if (account && farm) {
@@ -77,13 +77,19 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
                 const stakingTokenContract = new ethers.Contract(stakingToken, ERC20__factory.abi, signer) as ERC20;
 
-                const [stakingTokenName, stakingTokenDecimals, stakingTokenBalance, stakingTokenAllowance] =
-                    await Promise.all([
-                        stakingTokenContract.name(),
-                        stakingTokenContract.decimals(),
-                        stakingTokenContract.balanceOf(account),
-                        stakingTokenContract.allowance(account, address),
-                    ]);
+                const [
+                    stakingTokenName,
+                    stakingTokenDecimals,
+                    stakingTokenBalance,
+                    stakingTokenAllowance,
+                    totalStaked,
+                ] = await Promise.all([
+                    stakingTokenContract.name(),
+                    stakingTokenContract.decimals(),
+                    stakingTokenContract.balanceOf(account),
+                    stakingTokenContract.allowance(account, address),
+                    stakingTokenContract.totalSupply(),
+                ]);
 
                 console.log('got the staking token name', stakingTokenName);
 
@@ -93,6 +99,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     name: stakingTokenName,
                     address,
                     contract,
+                    totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
                     stakingToken: stakingTokenContract,
                     stakingTokenDecimals,
                     stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
@@ -100,7 +107,6 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
                     myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
                     apy: new BigNumber(rewardPerToken.toString()).div(decimalMultiplier),
-                    tvl: new BigNumber(0),
                     isPoolToken,
                 };
 

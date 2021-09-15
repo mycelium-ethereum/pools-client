@@ -26,7 +26,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
-    const tokenPrice = useMemo(() => calcTokenPrice(notional, token.supply.plus(pendingBurns)), [notional, token, pendingBurns]);
+    const tokenPrice = useMemo(
+        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+        [notional, token, pendingBurns],
+    );
 
     const amountBN = new BigNumber(amount);
 

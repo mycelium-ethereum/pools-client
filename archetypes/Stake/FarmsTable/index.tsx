@@ -6,6 +6,7 @@ import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
+import useTokenPrice from '@libs/hooks/useTokenPrice';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     const [showModal, setShowModal] = useState(false);
@@ -23,43 +24,13 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                 </TableHeader>
                 {rows.map((farm, index) => {
                     return (
-                        <TableRow key={farm.farm} rowNumber={index}>
-                            <span>
-                                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
-                                {farm.name}
-                            </span>
-                            <span>{farm.apy}%</span>
-                            <span>{toApproxCurrency(farm.tvl)}</span>
-                            <span>{toApproxCurrency(farm.myStaked)}</span>
-                            {/* <span>{toApproxCurrency(farm.myRewards)}</span> */}
-                            <span>{farm.stakingTokenBalance?.toString()}</span>
-                            <span>
-                                <Button
-                                    className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    onClick={() => onClickStake(farm.farm)}
-                                >
-                                    STAKE
-                                </Button>
-                                <Button
-                                    className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    onClick={() => onClickUnstake(farm.farm)}
-                                >
-                                    UNSTAKE
-                                </Button>
-                                <Button
-                                    className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    onClick={() => onClickClaim(farm.farm)}
-                                >
-                                    CLAIM
-                                </Button>
-                            </span>
-                        </TableRow>
+                        <PoolRow
+                            farm={farm}
+                            index={index}
+                            onClickClaim={onClickClaim}
+                            onClickStake={onClickStake}
+                            onClickUnstake={onClickUnstake}
+                        />
                     );
                 })}
             </Table>
@@ -102,3 +73,61 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
 }>;
+
+const PoolRow: React.FC<{
+    farm: FarmTableRowData;
+    index: number;
+    onClickStake: (farmAddress: string) => void;
+    onClickUnstake: (farmAddress: string) => void;
+    onClickClaim: (farmAddress: string) => void;
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
+    const tokenPrice = useTokenPrice(farm.tokenAddress);
+    return (
+        <TableRow key={farm.farm} rowNumber={index}>
+            <span>
+                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                {farm.name}
+            </span>
+            <span>{farm.apy.toFixed(2)}%</span>
+            <span>
+                <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
+            </span>
+            <span>
+                <span>{farm.myStaked.toFixed(2)}</span>
+                {' / '}
+                <span>{toApproxCurrency(tokenPrice.times(farm.myStaked))}</span>
+            </span>
+            <span>
+                <span>{farm.stakingTokenBalance.toFixed(2)}</span>
+                {' / '}
+                <span>{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</span>
+            </span>
+            <span>
+                <Button
+                    className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
+                    size="sm"
+                    variant="primary-light"
+                    onClick={() => onClickStake(farm.farm)}
+                >
+                    STAKE
+                </Button>
+                <Button
+                    className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
+                    size="sm"
+                    variant="primary-light"
+                    onClick={() => onClickUnstake(farm.farm)}
+                >
+                    UNSTAKE
+                </Button>
+                <Button
+                    className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
+                    size="sm"
+                    variant="primary-light"
+                    onClick={() => onClickClaim(farm.farm)}
+                >
+                    CLAIM
+                </Button>
+            </span>
+        </TableRow>
+    );
+};
