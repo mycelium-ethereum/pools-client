@@ -1,5 +1,6 @@
 import { SideEnum, CommitEnum } from '@libs/constants';
 import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
+import { getDecimals } from '@libs/utils/converters';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -103,12 +104,12 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
         lastUpdate: new BigNumber(lastUpdate.toString()),
-        lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
-        shortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
-        longBalance: new BigNumber(ethers.utils.formatEther(longBalance)),
-        nextShortBalance: new BigNumber(ethers.utils.formatEther(shortBalance)),
-        nextLongBalance: new BigNumber(ethers.utils.formatEther(longBalance)),
-        oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
+        lastPrice: new BigNumber(ethers.utils.formatUnits(lastPrice, quoteTokenDecimals)),
+        shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
+        longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
+        nextShortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
+        nextLongBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
+        oraclePrice: new BigNumber(ethers.utils.formatUnits(oraclePrice, quoteTokenDecimals)),
         frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
         committer: {
             address: poolCommitter,
@@ -133,7 +134,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             decimals: longTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
-            supply: new BigNumber(ethers.utils.formatEther(longTokenSupply)),
+            supply: new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)),
             side: SideEnum.long,
         },
         shortToken: {
@@ -143,7 +144,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             decimals: shortTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
-            supply: new BigNumber(ethers.utils.formatEther(shortTokenSupply)),
+            supply: new BigNumber(ethers.utils.formatUnits(shortTokenSupply, quoteTokenDecimals)),
             side: SideEnum.short,
         },
         quoteToken: {
@@ -163,11 +164,12 @@ const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211
 export const fetchCommits: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
+    quoteTokenDecimals: number,
 ) => Promise<{
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
     allUnexecutedCommits: CreatedCommitType[];
-}> = async (committer, provider) => {
+}> = async (committer, provider, quoteTokenDecimals) => {
     console.debug('Initialising committer');
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
@@ -216,7 +218,8 @@ export const fetchCommits: (
     };
 
     allUnexecutedCommits.forEach((commit) => {
-        const amount = new BigNumber(ethers.utils.formatEther(commit.args.amount));
+        const decimals = getDecimals(commit.args.commitType, quoteTokenDecimals);
+        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals));
         switch (commit.args.commitType) {
             case CommitEnum.short_mint:
                 pendingShort.mint = pendingShort.mint.plus(amount);
@@ -249,11 +252,11 @@ export const fetchTokenBalances: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
+) => Promise<[EthersBigNumber, number][]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.balanceOf(account);
+            return Promise.all([tokenContract.balanceOf(account), tokenContract.decimals()]);
         }),
     );
 };
@@ -263,11 +266,11 @@ export const fetchTokenApprovals: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
+) => Promise<[EthersBigNumber, number][]> = (tokens, provider, account, pool) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.allowance(account, pool);
+            return Promise.all([tokenContract.allowance(account, pool), tokenContract.decimals()]);
         }),
     );
 };

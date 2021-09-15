@@ -72,6 +72,12 @@ export const toApproxCurrency: (num_: BigNumber | number, precision?: number) =>
     });
 };
 
+const ERC20_CLONEABLE = 18;
+
+export const getDecimals = (type: CommitEnum, qutoeTokenDecimals: number) => {
+    return type === CommitEnum.long_mint || type === CommitEnum.short_mint ? qutoeTokenDecimals : ERC20_CLONEABLE;
+};
+
 /**
  * Gets the position text based on an account balance
  * @param balance base balance
