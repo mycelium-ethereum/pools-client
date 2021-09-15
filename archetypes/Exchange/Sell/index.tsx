@@ -14,6 +14,7 @@ import { calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { tokenSymbolToLogoTicker } from '@components/General';
+import { classNames } from '@libs/utils/functions';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -86,7 +87,7 @@ export default (() => {
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full mb-2">
                 <p className="mb-2 text-black">Token</p>
                 <Dropdown
                     className="w-full"
@@ -107,8 +108,10 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className="mb-2">
-                    Expected Price: {toApproxCurrency(calcTokenPrice(notional, token.supply.plus(pendingBurns)))}
+                <p className={classNames(
+                    !!pool.address ? 'block' : 'hidden'
+                )}>
+                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
                 </p>
             </div>
             <div className="w-full">
