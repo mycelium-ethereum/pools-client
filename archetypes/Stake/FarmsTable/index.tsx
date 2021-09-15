@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -7,6 +8,9 @@ import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import useTokenPrice from '@libs/hooks/useTokenPrice';
+
+// TODO: use an actual price
+const TCR_PRICE = new BigNumber('0.10');
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     const [showModal, setShowModal] = useState(false);
@@ -25,6 +29,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                 {rows.map((farm, index) => {
                     return (
                         <PoolRow
+                            key={`${farm}-${index}`}
                             farm={farm}
                             index={index}
                             onClickClaim={onClickClaim}
@@ -82,13 +87,14 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     const tokenPrice = useTokenPrice(farm.tokenAddress);
+
     return (
         <TableRow key={farm.farm} rowNumber={index}>
             <span>
                 <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                 {farm.name}
             </span>
-            <span>{farm.apy.toFixed(2)}%</span>
+            <span>{farm.rewardsPerYear.times(TCR_PRICE).div(tokenPrice.times(farm.totalStaked)).toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>

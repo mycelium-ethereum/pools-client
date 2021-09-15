@@ -66,11 +66,12 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
             for (const { address, abi, isPoolToken } of config.farms) {
                 const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
-                const [myStaked, stakingToken, rewardPerToken, myRewards] = await Promise.all([
+                const [myStaked, stakingToken, rewardPerToken, myRewards, rewardsPerWeek] = await Promise.all([
                     contract.balanceOf(account),
                     contract.stakingToken(),
                     contract.rewardPerToken(),
                     contract.rewards(account),
+                    contract.getRewardForDuration(),
                 ]);
 
                 const stakingTokenContract = new ethers.Contract(stakingToken, ERC20__factory.abi, signer) as ERC20;
@@ -105,6 +106,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
                     myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
                     apy: new BigNumber(rewardPerToken.toString()).div(decimalMultiplier),
+                    rewardsPerYear: new BigNumber(rewardsPerWeek.toString()).div(decimalMultiplier).times(52),
                     isPoolToken,
                 };
 

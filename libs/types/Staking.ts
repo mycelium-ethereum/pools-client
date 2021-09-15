@@ -15,5 +15,6 @@ export type Farm = {
     myRewards: BigNumber;
     stakingTokenBalance: BigNumber;
     stakingTokenAllowance: BigNumber;
+    rewardsPerYear: BigNumber;
     isPoolToken: boolean;
 };

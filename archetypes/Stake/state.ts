@@ -31,6 +31,7 @@ export interface FarmTableRowData {
     myStaked: number;
     myRewards: number;
     stakingTokenBalance: BigNumber;
+    rewardsPerYear: BigNumber;
 }
 
 export interface StakeState {

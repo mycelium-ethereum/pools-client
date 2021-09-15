@@ -38,6 +38,7 @@ export default (() => {
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
         stakingTokenBalance: farm.stakingTokenBalance,
+        rewardsPerYear: farm.rewardsPerYear,
     }));
 
     const [state, dispatch] = useReducer(stakeReducer, {
