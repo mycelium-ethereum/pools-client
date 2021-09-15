@@ -21,7 +21,7 @@ export default (({ className }) => {
                 <NetworkPreview
                     networkID={network.toString()}
                     networkName={networkConfig[network]?.name ?? 'Unsupported Network'}
-                    unsupported={!!networkConfig[network]}
+                    supported={!!networkConfig[network]}
                 />
             }
         >
@@ -41,11 +41,11 @@ export default (({ className }) => {
 const NetworkPreview: React.FC<{
     networkID: string;
     networkName: string;
-    unsupported: boolean;
-}> = ({ networkID, networkName, unsupported }) => {
+    supported: boolean;
+}> = ({ networkID, networkName, supported }) => {
     return (
         <div className={'flex items-center w-full my-auto'}>
-            {unsupported ? (
+            {supported ? (
                 <Logo className={'inline w-[20px] h-[22px] my-auto ml-0 mr-2'} ticker={networkID} />
             ) : (
                 <Icon

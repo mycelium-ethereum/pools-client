@@ -15,7 +15,7 @@ import Modal, { ModalInner } from '@components/General/Modal';
 import { Popover, Transition } from '@headlessui/react';
 import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
-
+import { tokenSymbolToLogoTicker } from '@components/General';
 import Close from '/public/img/general/close-black.svg';
 
 // import BigNumber from 'bignumber.js';
@@ -125,7 +125,10 @@ const BuyRow: React.FC<
 }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
-            <span>{token.name}</span>
+            <span>
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                {token.name}
+            </span>
             <span>{toApproxCurrency(amount)}</span>
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{amount.toNumber()}</span>
@@ -162,7 +165,10 @@ const SellRow: React.FC<
 }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
-            <span>{token.name}</span>
+            <span>
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                {token.name}
+            </span>
             <span>{amount.toFixed(2)}</span>
             <span>{toApproxCurrency(tokenPrice)}</span>
             <span>{toApproxCurrency(amount.times(tokenPrice))}</span>

@@ -1,5 +1,5 @@
 import { SideEnum, CommitEnum } from '@libs/constants';
-import { CreatedCommitType, Pool, PoolType } from '@libs/types/General';
+import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -112,8 +112,14 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
         committer: {
             address: poolCommitter,
-            pendingLong: new BigNumber(0),
-            pendingShort: new BigNumber(0),
+            pendingLong: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+            pendingShort: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
             allUnexecutedCommits: [],
             minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
@@ -158,8 +164,8 @@ export const fetchCommits: (
     committer: string,
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
-    pendingLong: BigNumber;
-    pendingShort: BigNumber;
+    pendingLong: PendingAmounts;
+    pendingShort: PendingAmounts;
     allUnexecutedCommits: CreatedCommitType[];
 }> = async (committer, provider) => {
     console.debug('Initialising committer');
@@ -169,8 +175,14 @@ export const fetchCommits: (
     if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
         console.debug('No unexecuted commits');
         return {
-            pendingLong: new BigNumber(0),
-            pendingShort: new BigNumber(0),
+            pendingLong: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+            pendingShort: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
             allUnexecutedCommits: [],
         };
     }
@@ -193,16 +205,37 @@ export const fetchCommits: (
 
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
-    let pendingLong = new BigNumber(0);
-    let pendingShort = new BigNumber(0);
+    const pendingLong: PendingAmounts = {
+        mint: new BigNumber(0),
+        burn: new BigNumber(0),
+    };
+
+    const pendingShort: PendingAmounts = {
+        mint: new BigNumber(0),
+        burn: new BigNumber(0),
+    };
 
     allUnexecutedCommits.forEach((commit) => {
-        [pendingShort, pendingLong] = addToPending(pendingShort, pendingLong, {
-            amount: commit.args.amount,
-            type: commit.args.commitType,
-        });
+        const amount = new BigNumber(ethers.utils.formatEther(commit.args.amount));
+        switch (commit.args.commitType) {
+            case CommitEnum.short_mint:
+                pendingShort.mint = pendingShort.mint.plus(amount);
+                break;
+            case CommitEnum.short_burn:
+                pendingShort.burn = pendingShort.burn.plus(amount);
+                break;
+            case CommitEnum.long_mint:
+                pendingLong.mint = pendingLong.mint.plus(amount);
+                break;
+            case CommitEnum.long_burn:
+                pendingLong.burn = pendingLong.burn.plus(amount);
+                break;
+            default:
+            // do nothing
+        }
     });
-    console.debug(`Pending commit amounts. Long: ${pendingLong.toNumber()}, short: ${pendingShort.toNumber()}`);
+    console.debug(`Pending Long`, pendingLong);
+    console.debug(`Pending Short`, pendingShort);
 
     return {
         pendingLong,
@@ -237,26 +270,4 @@ export const fetchTokenApprovals: (
             return tokenContract.allowance(account, pool);
         }),
     );
-};
-
-export const addToPending: (
-    pendingShort: BigNumber,
-    pendingLong: BigNumber,
-    commit: {
-        amount: EthersBigNumber;
-        type: number;
-    },
-) => [BigNumber, BigNumber] = (pendingShort, pendingLong, commit) => {
-    switch (commit.type) {
-        case CommitEnum.short_mint:
-            return [pendingShort.plus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case CommitEnum.short_burn:
-            return [pendingShort.minus(new BigNumber(ethers.utils.formatEther(commit.amount))), pendingLong];
-        case CommitEnum.long_mint:
-            return [pendingShort, pendingLong.plus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
-        case CommitEnum.long_burn:
-            return [pendingShort, pendingLong.minus(new BigNumber(ethers.utils.formatEther(commit.amount)))];
-        default:
-            return [pendingShort, pendingLong];
-    }
 };
