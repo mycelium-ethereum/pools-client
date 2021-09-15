@@ -73,7 +73,12 @@ export const toApproxCurrency: (num_: BigNumber | number, precision?: number) =>
 };
 
 const ERC20_CLONEABLE = 18;
-
+/**
+ * Gets the quote token decimals relative to a commit amount
+ * @param type type of commit
+ * @param qutoeTokenDecimals 
+ * @returns quote token decimals to format commit amount
+ */
 export const getDecimals = (type: CommitEnum, qutoeTokenDecimals: number) => {
     return type === CommitEnum.long_mint || type === CommitEnum.short_mint ? qutoeTokenDecimals : ERC20_CLONEABLE;
 };
