@@ -45,7 +45,7 @@ const NetworkPreview: React.FC<{
 }> = ({ networkID, networkName, unsupported }) => {
     return (
         <div className={'flex items-center w-full my-auto'}>
-            {unsupported ? (
+            {supported ? (
                 <Logo className={'inline w-[20px] h-[22px] my-auto ml-0 mr-2'} ticker={networkID} />
             ) : (
                 <Icon
