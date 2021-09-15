@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import StakePool from '@archetypes/Stake/StakePool';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
+import StakePool from '@archetypes/Stake/StakePool';
 
 export default (() => {
     const router = useRouter();
