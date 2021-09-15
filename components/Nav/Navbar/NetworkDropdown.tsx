@@ -21,7 +21,7 @@ export default (({ className }) => {
                 <NetworkPreview
                     networkID={network.toString()}
                     networkName={networkConfig[network]?.name ?? 'Unsupported Network'}
-                    unsupported={!!networkConfig[network]}
+                    supported={!!networkConfig[network]}
                 />
             }
         >
