@@ -140,7 +140,7 @@ const SellRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>
-            <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
                 {token.name}
             </span>
             <span>{amount.toFixed(2)}</span>
