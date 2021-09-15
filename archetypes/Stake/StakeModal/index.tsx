@@ -37,13 +37,13 @@ const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean
 };
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
-    const { amount, selectedFarm, invalidAmount } = state;
+    const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
 
     useEffect(() => {
         if (selectedFarm) {
-            console.log('AVAILABLE TO STAKE', selectedFarm.stakingTokenBalance.toString());
+            console.log('AVAILABLE TO STAKE', stakeModalBalance.toString());
 
-            const invalidAmount = isInvalidAmount(amount, selectedFarm.stakingTokenBalance.toNumber());
+            const invalidAmount = isInvalidAmount(amount, stakeModalBalance.toNumber());
 
             dispatch({
                 type: 'setInvalidAmount',
@@ -54,7 +54,13 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
 
     console.log('SELECTED FARM', selectedFarm);
 
-    const isApproved = useMemo(() => selectedFarm?.stakingTokenAllowance.gt(0), [selectedFarm]);
+    const isApproved = useMemo(() => {
+        return (
+            state.stakeModalState === 'claim' ||
+            state.stakeModalState === 'unstake' ||
+            selectedFarm?.stakingTokenAllowance.gt(0)
+        );
+    }, [selectedFarm, state.stakeModalState]);
 
     return (
         <TWModal
@@ -76,7 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                     <p className="mb-4 mt-6 text-black font-semibold">Amount</p>
                     <InputContainer error={false /* invalidAmount.isInvalid */}>
                         <NumericInput
-                            disabled={!isApproved}
+                            disabled={!isApproved || state.stakeModalState === 'claim'}
                             className="w-full h-full text-base font-normal "
                             value={amount}
                             onUserInput={(val) => dispatch({ type: 'setAmount', amount: parseFloat(val) })}
@@ -89,14 +95,14 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             />
                             <div
                                 className={
-                                    isApproved
-                                        ? 'm-auto cursor-pointer hover:underline'
-                                        : 'm-auto cursor-disabled text-gray-800'
+                                    !isApproved || state.stakeModalState === 'claim'
+                                        ? 'm-auto cursor-disabled text-gray-800'
+                                        : 'm-auto cursor-pointer hover:underline'
                                 }
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
-                                        amount: selectedFarm.stakingTokenBalance.toNumber(), // TODO use actual use balance here
+                                        amount: stakeModalBalance.toNumber(), // TODO use actual use balance here
                                     })
                                 }
                             >
@@ -110,8 +116,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 invalidAmount.message
                             ) : (
                                 <>
-                                    {`Available: ${selectedFarm?.stakingTokenBalance.toFixed(6)}`}
-                                    {!!amount ? ` > ${selectedFarm?.stakingTokenBalance.minus(amount).toFixed(6)}` : ''}
+                                    {`Available: ${stakeModalBalance?.toFixed(6)}`}
+                                    {!!amount ? ` > ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
                                 </>
                             )}
                         </div>
