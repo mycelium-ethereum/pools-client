@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
@@ -10,6 +10,10 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import Modal from '@components/General/Modal';
+
+import Close from '/public/img/general/close-black.svg';
+import Button from '@components/General/Button';
 
 const inputRow = 'relative my-2 ';
 
@@ -52,8 +56,19 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
+    const [showModal, setShowModal] = useState(false);
 
     const pool = usePool(selectedPool);
+
+    useEffect(() => {
+        if (
+            localStorage.getItem('onboard.selectedWallet') !== '' &&
+            localStorage.getItem('showBridgeFunds') !== 'true'
+        ) {
+            setShowModal(true);
+            localStorage.setItem('showBridgeFunds', 'true');
+        }
+    }, []);
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
@@ -157,6 +172,29 @@ export default (() => {
             <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
+
+            <Modal show={showModal} onClose={() => setShowModal(false)}>
+                <div className="flex justify-between">
+                    <div className="text-xl">Bridge Funds to Arbitrum</div>
+                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                        <Close />
+                    </div>
+                </div>
+                <br />
+                <div>
+                    Tracer runs on Arbitrum mainnet. Be sure to bridge <b>USDC</b> for collateral, and <b>ETH</b> for
+                    gas. It’s worth noting that there is a 7 day wait to withdraw your funds back to Ethereum Mainnet.
+                    <br />
+                    <br />
+                    If you have any questions, please contact us.
+                </div>
+                <br />
+                <Button size="lg" variant="primary">
+                    <a href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
+                        Launch Arbitrum Bridge
+                    </a>
+                </Button>
+            </Modal>
         </>
     );
 }) as React.FC;
