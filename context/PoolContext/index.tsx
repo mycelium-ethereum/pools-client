@@ -6,7 +6,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { reducer, initialPoolState } from './poolDispatch';
 import { fetchTokenBalances, initPool, fetchCommits, fetchTokenApprovals } from './helpers';
 import { useMemo } from 'react';
-import { ethers, BigNumber as EthersBigNumber } from 'ethers';
+import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
 import {
@@ -19,7 +19,7 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { SideEnum, CommitEnum } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
@@ -92,16 +92,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     commitDispatch({ type: 'resetCommits' });
                     fetchCommits(pool.committer.address, provider).then((committerInfo) => {
                         poolsDispatch({
-                            type: 'addToPending',
+                            type: 'setPendingAmounts',
                             pool: pool.address,
-                            side: SideEnum.long,
-                            amount: committerInfo.pendingLong,
-                        });
-                        poolsDispatch({
-                            type: 'addToPending',
-                            pool: pool.address,
-                            side: SideEnum.short,
-                            amount: committerInfo.pendingShort,
+                            pendingLong: committerInfo.pendingLong,
+                            pendingShort: committerInfo.pendingShort,
                         });
 
                         setExpectedPrice(pool);
@@ -215,7 +209,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     }
                 });
 
-                addAmountToPendingPools(pool, type as CommitEnum, amount);
+                const amount_ = new BigNumber(ethers.utils.formatEther(amount));
+                poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
             });
 
             committer.on('ExecuteCommit', (id, amount, type) => {
@@ -275,42 +270,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
 
             poolsDispatch({ type: 'setSubscribed', pool: pool, value: true });
-        }
-    };
-
-    const addAmountToPendingPools: (pool: string, type: CommitEnum, amount: EthersBigNumber) => void = (
-        pool,
-        type,
-        amount,
-    ) => {
-        let amount_ = new BigNumber(ethers.utils.formatEther(amount));
-        switch (type) {
-            // @ts-ignore
-            case CommitEnum.short_burn:
-                amount_ = amount_.negated();
-            // fall through
-            case CommitEnum.short_mint:
-                poolsDispatch({
-                    type: 'addToPending',
-                    pool: pool,
-                    side: SideEnum.short,
-                    amount: amount_,
-                });
-                break;
-            // @ts-ignore
-            case CommitEnum.long_burn:
-                amount_ = amount_.negated();
-            // fall through
-            case CommitEnum.long_mint:
-                poolsDispatch({
-                    type: 'addToPending',
-                    pool: pool,
-                    side: SideEnum.long,
-                    amount: amount_,
-                });
-                break;
-            default:
-                break;
         }
     };
 

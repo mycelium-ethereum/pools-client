@@ -51,10 +51,14 @@ export type PoolToken = Token & {
     supply: BigNumber;
 };
 
+export type PendingAmounts = {
+    mint: BigNumber; // amount of USDC pending in commit
+    burn: BigNumber; // amount of tokens burned in commits
+};
 export type Committer = {
     address: string;
-    pendingLong: BigNumber;
-    pendingShort: BigNumber;
+    pendingLong: PendingAmounts;
+    pendingShort: PendingAmounts;
     allUnexecutedCommits: CreatedCommitType[];
     minimumCommitSize: BigNumber;
 };

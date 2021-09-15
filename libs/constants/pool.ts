@@ -46,8 +46,14 @@ export const DEFAULT_POOLSTATE: Pool = {
     },
     committer: {
         address: '',
-        pendingLong: new BigNumber(0),
-        pendingShort: new BigNumber(0),
+        pendingLong: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
+        },
+        pendingShort: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
+        },
         allUnexecutedCommits: [] as CreatedCommitType[],
         minimumCommitSize: new BigNumber(1000),
     },
