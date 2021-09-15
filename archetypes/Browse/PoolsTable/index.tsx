@@ -68,7 +68,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                         onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
                                     }
                                 >
-                                    UNSTAKE
+                                    SELL
                                 </Button>
                             </span>
                         </TableRow>

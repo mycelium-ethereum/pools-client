@@ -118,6 +118,10 @@ export default (() => {
             balance: farms[farmAddress].stakingTokenBalance,
         });
         dispatch({
+            type: 'setAmount',
+            amount: NaN,
+        });
+        dispatch({
             type: 'setStakeModalState',
             state: 'stake',
         });
@@ -131,6 +135,10 @@ export default (() => {
         dispatch({
             type: 'setStakeModalBalance',
             balance: farms[farmAddress].myStaked,
+        });
+        dispatch({
+            type: 'setAmount',
+            amount: NaN,
         });
         dispatch({
             type: 'setStakeModalState',
