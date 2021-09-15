@@ -29,8 +29,6 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
 
     const refreshFarm = async (farmAddress: string) => {
-        console.log('REFRESHING FARM', farmAddress);
-        
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
         const { stakingToken, isPoolToken, stakingTokenDecimals } = farm;
         if (account && farm) {

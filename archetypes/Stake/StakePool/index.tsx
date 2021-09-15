@@ -165,7 +165,14 @@ export default (() => {
         );
 
         if (handleTransaction) {
-            handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
+            handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()], {
+                onSuccess: () => {
+                    refreshFarm(farmAddress);
+                    dispatch({
+                        type: 'reset',
+                    });
+                },
+            });
         }
     };
 
@@ -179,7 +186,14 @@ export default (() => {
         );
 
         if (handleTransaction) {
-            handleTransaction(contract.withdraw, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
+            handleTransaction(contract.withdraw, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()], {
+                onSuccess: () => {
+                    refreshFarm(farmAddress);
+                    dispatch({
+                        type: 'reset',
+                    });
+                },
+            });
         }
     };
 
@@ -188,7 +202,14 @@ export default (() => {
         const { contract } = farm;
 
         if (handleTransaction) {
-            handleTransaction(contract.getReward, []);
+            handleTransaction(contract.getReward, [], {
+                onSuccess: () => {
+                    refreshFarm(farmAddress);
+                    dispatch({
+                        type: 'reset',
+                    });
+                },
+            });
         }
     };
 

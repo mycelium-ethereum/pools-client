@@ -55,7 +55,8 @@ export type StakeAction =
     | { type: 'setSelectedFarm'; farm: string }
     | { type: 'setAmount'; amount: number }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
-    | { type: 'setSortBy'; sortBy: SortByEnum };
+    | { type: 'setSortBy'; sortBy: SortByEnum }
+    | { type: 'reset' };
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
     switch (action.type) {
@@ -108,6 +109,16 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
             return {
                 ...state,
                 invalidAmount: action.value,
+            };
+        case 'reset':
+            return {
+                ...state,
+                invalidAmount: {
+                    message: undefined,
+                    isInvalid: false,
+                },
+                amount: 0,
+                stakeModalState: 'closed',
             };
         default:
             throw new Error('Unexpected action');

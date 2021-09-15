@@ -41,7 +41,10 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
     const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
     const { poolFarms, slpFarms } = useFarms();
 
-    const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
+    const farm = useMemo(
+        () => console.log('farm changed') || poolFarms[selectedFarm] || slpFarms[selectedFarm],
+        [selectedFarm, poolFarms, slpFarms],
+    );
 
     useEffect(() => {
         if (farm) {
