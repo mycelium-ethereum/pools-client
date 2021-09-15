@@ -101,6 +101,41 @@ export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNum
     }
 };
 
+// function getWithdrawAmountOnBurn(
+//         uint256 tokenSupply,
+//         uint256 amountIn,
+//         uint256 balance,
+//         uint256 shadowBalance
+//     ) external pure returns (uint256) {
+//         require(amountIn > 0, "Invalid amount");
+
+//         // Catch the divide by zero error.
+//         if (balance == 0 || tokenSupply + shadowBalance == 0) {
+//             return amountIn;
+//         }
+//         bytes16 numerator = ABDKMathQuad.mul(ABDKMathQuad.fromUInt(balance), ABDKMathQuad.fromUInt(amountIn));
+//         return ABDKMathQuad.toUInt(ABDKMathQuad.div(numerator, ABDKMathQuad.fromUInt(tokenSupply + shadowBalance)));
+//     }
+
+/**
+ * Calc minimum amount in to sell
+ * @param totalSupply total token supply
+ * @param tokenBalance token balance
+ * @param minimumCommitSize 
+ * @param pendingCommits accumulative commit amounts
+ * @returns Minimum amount in
+ */
+export const calcMinAmountIn: (
+    totalSupply: BigNumber,
+    tokenBalance: BigNumber,
+    minimumCommitSize: BigNumber,
+    pendingCommits: BigNumber,
+) => BigNumber = (totalSupply, tokenBalance, minimumCommitSize, pendingCommits) => {
+    // minumumCommitSize = (balance * amountIn) / tokenSupply + shadowPool
+    // (minimumCommitSize * (tokenSupply + shadowPool)) / balance
+    return minimumCommitSize.times(totalSupply.plus(pendingCommits)).div(tokenBalance.minus(minimumCommitSize));
+};
+
 /**
  * Calculate the pool tokens price
  * Since totalQuoteValue will generally be in USD the returned amount

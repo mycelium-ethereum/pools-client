@@ -10,7 +10,7 @@ import { SellSummary } from '../Summary';
 import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
-import { calcTokenPrice } from '@libs/utils/calcs';
+import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { tokenSymbolToLogoTicker } from '@components/General';
@@ -20,9 +20,9 @@ import { classNames } from '@libs/utils/functions';
 const isInvalidAmount: (
     amount: number,
     balance: number,
-    minimumCommitSize: number,
+    minimumTokens: BigNumber,
     tokenPrice: BigNumber,
-) => { isInvalid: boolean; message?: string } = (amount, balance, minimumCommitSize, tokenPrice) => {
+) => { isInvalid: boolean; message?: string } = (amount, balance, minimumTokens, tokenPrice) => {
     if (amount > balance) {
         return {
             message: undefined,
@@ -31,11 +31,11 @@ const isInvalidAmount: (
     }
 
     // need to sell an amount of tokens worth minimumCommitSize or more
-    const minimumTokens = new BigNumber(minimumCommitSize).div(tokenPrice);
-
     if (minimumTokens.gt(amount)) {
         return {
-            message: `The minimum order size is ${minimumTokens.toFixed(8)} (${toApproxCurrency(minimumCommitSize)})`,
+            message: `The minimum order size is ${minimumTokens.toFixed(2)} (${toApproxCurrency(
+                minimumTokens.times(tokenPrice),
+            )})`,
             isInvalid: true,
         };
     }
@@ -67,23 +67,24 @@ export default (() => {
 
     useEffect(() => {
         if (pool) {
-            const balance = isLong ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber();
+            const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
+            const minimumTokens = calcMinAmountIn(
+                token.supply.plus(pendingBurns),
+                notional,
+                minimumCommitSize,
+                pendingBurns,
+            );
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const invalidAmount = isInvalidAmount(
-                amount,
-                balance,
-                pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals).toNumber(),
-                tokenPrice,
-            );
+            const invalidAmount = isInvalidAmount(amount, notional.toNumber(), minimumTokens, tokenPrice);
 
             swapDispatch({
                 type: 'setInvalidAmount',
                 value: invalidAmount,
             });
         }
-    }, [side, amount, pool.longToken.balance, pool.shortToken.balance]);
+    }, [side, amount, notional, token, pendingBurns]);
 
     return (
         <>
@@ -108,9 +109,7 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(
-                    !!pool.address ? 'block' : 'hidden'
-                )}>
+                <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
                     Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
                 </p>
             </div>
