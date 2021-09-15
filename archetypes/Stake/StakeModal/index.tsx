@@ -61,7 +61,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title
                     <Gas />
                     <div
                         className="w-3 h-3 ml-4 cursor-pointer"
-                        onClick={() => () => dispatch({ type: 'setStakeModalOpen', open: false })}
+                        onClick={() => dispatch({ type: 'setStakeModalOpen', open: false })}
                     >
                         <Close />
                     </div>
