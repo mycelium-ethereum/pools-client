@@ -55,7 +55,6 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
             <GlobalStyles />
             <ToastProvider components={{ Toast: Notification }}>
                 <Web3Store
-                    networkIds={[42, 421611]}
                     onboardConfig={{
                         hideBranding: true,
                         walletSelect: {

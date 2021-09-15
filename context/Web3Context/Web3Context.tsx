@@ -16,7 +16,6 @@ export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
 type Web3ContextProps = {
     cacheWalletSelection?: boolean;
-    checkNetwork?: boolean;
     children: React.ReactNode;
     networkIds?: number[];
     onboardConfig?: OnboardConfig;
@@ -54,7 +53,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     onboardConfig,
     networkIds,
     cacheWalletSelection = true,
-    checkNetwork = (networkIds && networkIds.length > 0) || false,
 }) => {
     const errorToastID = React.useRef<string>('');
     const { addToast, updateToast } = useToasts();
@@ -74,9 +72,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     useEffect(() => {
         const initializeOnboard = async () => {
             const checks = [{ checkName: 'accounts' }, { checkName: 'connect' }];
-            if (networkIds && checkNetwork) {
-                checks.push({ checkName: 'network' });
-            }
 
             try {
                 const onboard = Onboard({
