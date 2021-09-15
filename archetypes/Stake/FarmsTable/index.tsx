@@ -32,7 +32,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                             <span>{toApproxCurrency(farm.tvl)}</span>
                             <span>{toApproxCurrency(farm.myStaked)}</span>
                             {/* <span>{toApproxCurrency(farm.myRewards)}</span> */}
-                            <span>{farm.stakingTokenBalance.toString()}</span>
+                            <span>{farm.stakingTokenBalance?.toString()}</span>
                             <span>
                                 <Button
                                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
