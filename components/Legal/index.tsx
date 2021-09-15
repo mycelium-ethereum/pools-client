@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import NavBar from '@components/Nav';
 import Footer from '@components/Footer';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export const LegalPageLayout: React.FC = ({ children }) => {
     const route = useRouter().pathname;
@@ -14,13 +15,13 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                     <ContentWrapper>
                         <NavMainTitle>Legal</NavMainTitle>
                         <NavTitle className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
-                            <a href="/privacy-policy">Privacy Policy</a>
+                            <Link href="/privacy-policy">Privacy Policy</Link>
                         </NavTitle>
                         <NavTitle className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
-                            <a href="/terms-of-use">Terms of Use</a>
+                            <Link href="/terms-of-use">Terms of Use</Link>
                         </NavTitle>
                         <NavTitle className={`${route === '/disclaimer' ? 'selected' : ''}`}>
-                            <a href="/disclaimer">Disclaimer</a>
+                            <Link href="/disclaimer">Disclaimer</Link>
                         </NavTitle>
                     </ContentWrapper>
                 </LeftPanel>
@@ -39,7 +40,6 @@ const LeftPanel = styled.div`
     width: 20%;
     display: flex;
     flex-direction: column;
-    border: 1px solid #0c3586;
 
     @media (max-width: 1024px) {
         display: none;
@@ -50,7 +50,6 @@ const RightPanel = styled.div`
     width: 80%;
     display: flex;
     flex-direction: column;
-    border: 1px solid #0c3586;
 
     a {
         color: var(--color-secondary);
