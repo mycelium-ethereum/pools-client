@@ -1,7 +1,7 @@
 import Button from '@components/General/Button';
 import { toApproxCurrency } from '@libs/utils/converters';
 import React from 'react';
-import { BrowseTableRowData } from '../state';
+import { BrowseTableRowData } from '../../Browse/state';
 import Modal from '@components/General/Modal';
 import Gas from '@archetypes/Exchange/Gas';
 import { InnerInputText, InputContainer } from '@components/General/Input';

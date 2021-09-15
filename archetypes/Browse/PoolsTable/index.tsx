@@ -7,24 +7,12 @@ import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import TimeLeft from '@components/TimeLeft';
-import Gas from '@archetypes/Exchange/Gas';
-import { InnerInputText, InputContainer } from '@components/General/Input';
-import { Input as NumericInput } from '@components/General/Input/Numeric';
-
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { Currency } from '@components/General/Currency';
-import { usePool } from '@context/PoolContext';
-import { swapDefaults, useSwapContext } from '@context/SwapContext';
-import ClaimModal from './ClaimModal';
 
-export default (({ rows }) => {
+export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
-    const [showModalStakeToken, setShowModalStakeToken] = useState(false);
-    const [showModalUnstakeToken, setShowModalUnstakeToken] = useState(false);
-    const [showModalClaimReward, setShowModalClaimReward] = useState(false);
-    const [selectedToken, setSelectedToken] = useState<BrowseTableRowData>();
 
     return (
         <>
@@ -44,6 +32,7 @@ export default (({ rows }) => {
                     <span>{/* Empty header for buttons column */}</span>
                 </TableHeader>
                 {rows.map((token, index) => {
+                    const hasHoldings = token.myHoldings > 0;
                     return (
                         <TableRow key={token.address} rowNumber={index}>
                             <span>
@@ -61,37 +50,25 @@ export default (({ rows }) => {
                             </span>
                             <span>
                                 <Button
-                                    className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => {
-                                        setSelectedToken(token);
-                                        setShowModalStakeToken(true);
-                                    }}
+                                    onClick={() =>
+                                        onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
+                                    }
                                 >
-                                    STAKE
+                                    Buy
                                 </Button>
                                 <Button
-                                    className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
+                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => {
-                                        setSelectedToken(token);
-                                        setShowModalUnstakeToken(true);
-                                    }}
+                                    disabled={!hasHoldings}
+                                    onClick={() =>
+                                        onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
+                                    }
                                 >
                                     UNSTAKE
-                                </Button>
-                                <Button
-                                    className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    onClick={() => {
-                                        setSelectedToken(token);
-                                        setShowModalClaimReward(true);
-                                    }}
-                                >
-                                    CLAIM
                                 </Button>
                             </span>
                         </TableRow>
@@ -136,34 +113,6 @@ export default (({ rows }) => {
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
             </Modal>
-            {selectedToken !== undefined ? (
-                <>
-                    <TokenModal
-                        title="Stake Pool Tokens"
-                        btnLabel="Stake"
-                        token={selectedToken}
-                        showModal={showModalStakeToken}
-                        setShowModal={setShowModalStakeToken}
-                        onClick={() => {}}
-                    />
-                    <TokenModal
-                        title="Unstake Pool Tokens"
-                        btnLabel="Unstake"
-                        token={selectedToken}
-                        showModal={showModalUnstakeToken}
-                        setShowModal={setShowModalUnstakeToken}
-                        onClick={() => {}}
-                    />
-                    <ClaimModal
-                        token={selectedToken}
-                        showModal={showModalClaimReward}
-                        setShowModal={setShowModalClaimReward}
-                        onClick={() => {}}
-                    />
-                </>
-            ) : (
-                ''
-            )}
         </>
     );
 }) as React.FC<{
@@ -181,91 +130,3 @@ export default (({ rows }) => {
 // }) as React.FC<{
 //     number: number;
 // }>;
-
-const TokenModal = (({ token, title, btnLabel, onClick, showModal, setShowModal }) => {
-    const hasHoldings = token.myHoldings > 0;
-
-    const {
-        swapState = swapDefaults,
-        // swapDispatch
-    } = useSwapContext();
-    const {
-        selectedPool,
-        // side,
-        amount,
-        // invalidAmount
-    } = swapState;
-
-    const pool = usePool(selectedPool);
-
-    return (
-        <>
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
-                <div className="flex justify-between">
-                    <div className="text-2xl">{title}</div>
-                    <Gas />
-                    <div className="w-3 h-3 ml-4 cursor-pointer self-center" onClick={() => setShowModal(false)}>
-                        <Close />
-                    </div>
-                </div>
-                <p className="mb-4 mt-6 text-black font-semibold">Amount</p>
-                <InputContainer error={false /* invalidAmount.isInvalid */}>
-                    <NumericInput
-                        className="w-full h-full text-base font-normal "
-                        value={amount}
-                        onUserInput={(val) => {
-                            console.log(val);
-                            // TODO:
-                            // e.g. swapDispatch({ type: 'setAmount', value: parseFloat(val) });
-                        }}
-                    />
-                    <InnerInputText>
-                        <Currency
-                            label={token.symbol}
-                            ticker={tokenSymbolToLogoTicker(token.symbol)}
-                            className="shadow-md"
-                        />
-                        <div
-                            className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) =>
-                                // TODO:
-                                // e.g. swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
-                                null
-                            }
-                        >
-                            Max
-                        </div>
-                    </InnerInputText>
-                </InputContainer>
-                {/* TODO:  */}
-                <div className={(false /* invalidAmount.isInvalid */ ? 'text-red-500 ' : '') + 'mt-4 mb-12'}>
-                    {false /* invalidAmount.isInvalid */ && '' /* invalidAmount.message */ ? (
-                        '' /* invalidAmount.message */
-                    ) : (
-                        <>
-                            {/* TODO: this probably isn't correct */}
-                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
-                            {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
-                        </>
-                    )}
-                </div>
-                <Button
-                    size="lg"
-                    variant="primary"
-                    // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
-                    disabled={!hasHoldings}
-                    onClick={(_e) => onClick()}
-                >
-                    {btnLabel}
-                </Button>
-            </Modal>
-        </>
-    );
-}) as React.FC<{
-    token: BrowseTableRowData;
-    title: string;
-    btnLabel: string;
-    showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-    onClick: () => void;
-}>;
