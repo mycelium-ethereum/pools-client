@@ -32,6 +32,7 @@ const useBalance = () => {
 export default (({ hide, className }) => {
     const { pendingCount = 0 } = useTransactionState();
     const balance = useBalance();
+
     return (
         <div className={classNames('text-white', hide ? 'hidden' : 'block', className ?? '')}>
             {pendingCount > 0 ? (

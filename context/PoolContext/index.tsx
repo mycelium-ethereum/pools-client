@@ -23,6 +23,7 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
+import { getDecimals } from '@libs/utils/converters';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -90,7 +91,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // fetch commits
                 try {
                     commitDispatch({ type: 'resetCommits' });
-                    fetchCommits(pool.committer.address, provider).then((committerInfo) => {
+                    fetchCommits(pool.committer.address, provider, pool.quoteToken.decimals).then((committerInfo) => {
                         poolsDispatch({
                             type: 'setPendingAmounts',
                             pool: pool.address,
@@ -101,13 +102,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         setExpectedPrice(pool);
 
                         committerInfo.allUnexecutedCommits.map((commit) => {
+                            const decimals = getDecimals(commit.args.commitType, pool.quoteToken.decimals);
                             commit.getTransaction().then((txn) => {
                                 commitDispatch({
                                     type: 'addCommit',
                                     commitInfo: {
                                         pool: pool.address,
                                         id: commit.args.commitID.toNumber(),
-                                        amount: new BigNumber(ethers.utils.formatEther(commit.args.amount)),
+                                        amount: new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals)),
                                         type: commit.args.commitType as CommitEnum,
                                         from: txn.from,
                                         txnHash: txn.hash,
@@ -132,11 +134,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        const decimals = pool.quoteToken.decimals;
         fetchTokenBalances(tokens, provider, account, pool.address)
             .then((balances) => {
-                const shortTokenBalance = new BigNumber(ethers.utils.formatEther(balances[0]));
-                const longTokenBalance = new BigNumber(ethers.utils.formatEther(balances[1]));
-                const quoteTokenBalance = new BigNumber(ethers.utils.formatEther(balances[2]));
+                const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
+                const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
+                const quoteTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
 
                 console.debug('Balances', {
                     shortTokenBalance,
@@ -162,13 +165,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             return;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        const decimals = pool.quoteToken.decimals;
         fetchTokenApprovals(tokens, provider, account, pool.address).then((approvals) => {
             poolsDispatch({
                 type: 'setTokenApprovals',
                 pool: pool.address,
-                shortTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[0])),
-                longTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[1])),
-                quoteTokenAmount: new BigNumber(ethers.utils.formatEther(approvals[2])),
+                shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
+                longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
+                quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
             });
         });
     };
@@ -192,6 +196,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     type,
                 });
 
+                const decimals = getDecimals(type, poolsState.pools[pool].quoteToken.decimals);
+
                 log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                     if (commitDispatch) {
                         commitDispatch({
@@ -202,14 +208,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 from: txn.from, // from address
                                 txnHash: txn.hash,
                                 type: type as CommitEnum,
-                                amount: new BigNumber(ethers.utils.formatEther(amount)),
+                                amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
                                 created: Date.now() / 1000,
                             },
                         });
                     }
                 });
 
-                const amount_ = new BigNumber(ethers.utils.formatEther(amount));
+                const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
                 poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
             });
 
@@ -280,27 +286,37 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         options,
     ) => {
         const committerAddress = poolsState.pools[pool].committer.address;
+        const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
         const network = await signer?.getChainId();
         const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
-        console.debug(`Creating commit. Amount: ${ethers.utils.parseEther(amount.toString())}, Raw amount: ${amount}`);
+        console.debug(
+            `Creating commit. Amount: ${ethers.utils.parseUnits(
+                amount.toString(),
+                quoteTokenDecimals,
+            )}, Raw amount: ${amount}`,
+        );
         if (handleTransaction) {
-            handleTransaction(committer.commit, [commitType, ethers.utils.parseEther(amount.toString())], {
-                network: network,
-                statusMessages: {
-                    waiting: 'Submitting commit',
-                    error: 'Failed to commit',
+            handleTransaction(
+                committer.commit,
+                [commitType, ethers.utils.parseUnits(amount.toString(), quoteTokenDecimals)],
+                {
+                    network: network,
+                    statusMessages: {
+                        waiting: 'Submitting commit',
+                        error: 'Failed to commit',
+                    },
+                    onSuccess: (receipt) => {
+                        console.debug('Successfully submitted commit txn: ', receipt);
+                        // get and set token balances
+                        updateTokenBalances(poolsState.pools[pool]);
+                        options?.onSuccess ? options.onSuccess(receipt) : null;
+                    },
                 },
-                onSuccess: (receipt) => {
-                    console.debug('Successfully submitted commit txn: ', receipt);
-                    // get and set token balances
-                    updateTokenBalances(poolsState.pools[pool]);
-                    options?.onSuccess ? options.onSuccess(receipt) : null;
-                },
-            });
+            );
         }
     };
 
@@ -334,6 +350,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const setExpectedPrice = (pool: Pool) => {
         const { lastPrice, leverage, longBalance, shortBalance } = pool;
         const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
+
         leveragedPool.getOraclePrice().then((price) => {
             const oraclePrice = new BigNumber(ethers.utils.formatEther(price));
             const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
