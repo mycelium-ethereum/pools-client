@@ -41,7 +41,7 @@ export default (({ className }) => {
 const NetworkPreview: React.FC<{
     networkID: string;
     networkName: string;
-    unsupported: boolean;
+    supported: boolean;
 }> = ({ networkID, networkName, unsupported }) => {
     return (
         <div className={'flex items-center w-full my-auto'}>
