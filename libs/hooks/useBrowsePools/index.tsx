@@ -13,6 +13,10 @@ export default (() => {
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool) => {
                 const { longToken, shortToken } = pool;
+                const {
+                    pendingLong: { burn: pendingLongBurn },
+                    pendingShort: { burn: pendingShortBurn },
+                } = pool.committer;
                 rows.push(
                     {
                         address: shortToken.address,
@@ -20,10 +24,13 @@ export default (() => {
                         symbol: shortToken.symbol,
                         leverage: pool.leverage,
                         side: 'short',
-                        lastPrice: calcTokenPrice(pool.nextShortBalance, shortToken.supply).toNumber(),
+                        lastPrice: calcTokenPrice(
+                            pool.nextShortBalance,
+                            shortToken.supply.plus(pendingShortBurn),
+                        ).toNumber(),
                         rebalanceRate: calcRebalanceRate(
-                            pool.nextShortBalance.plus(pool.committer.pendingShort),
-                            pool.nextLongBalance.plus(pool.committer.pendingLong),
+                            pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
+                            pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
                         ).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
@@ -35,10 +42,13 @@ export default (() => {
                         symbol: longToken.symbol,
                         leverage: pool.leverage,
                         side: 'long',
-                        lastPrice: calcTokenPrice(pool.nextLongBalance, longToken.supply).toNumber(),
+                        lastPrice: calcTokenPrice(
+                            pool.nextLongBalance,
+                            longToken.supply.plus(pendingLongBurn),
+                        ).toNumber(),
                         rebalanceRate: calcRebalanceRate(
-                            pool.nextShortBalance.plus(pool.committer.pendingShort),
-                            pool.nextLongBalance.plus(pool.committer.pendingLong),
+                            pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
+                            pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
                         ).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),

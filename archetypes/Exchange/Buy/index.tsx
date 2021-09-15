@@ -76,9 +76,11 @@ export default (() => {
                     <Dropdown
                         className="w-full "
                         placeHolder="Select Market"
+                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0]}
                         size="lg"
                         options={Object.keys(markets).map((market) => ({
                             key: market,
+                            ticker: market.split('/')[0],
                             text: market,
                         }))}
                         value={market}
@@ -143,8 +145,10 @@ export default (() => {
                         invalidAmount.message
                     ) : (
                         <>
-                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)}`}
-                            {!!amount ? ` > ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                            {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
+                            <span className="opacity-80">
+                                {!!amount ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                            </span>
                         </>
                     )}
                 </div>

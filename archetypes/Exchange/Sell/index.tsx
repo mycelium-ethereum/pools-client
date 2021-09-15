@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
@@ -14,6 +14,7 @@ import { calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { tokenSymbolToLogoTicker } from '@components/General';
+import { classNames } from '@libs/utils/functions';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -53,15 +54,22 @@ export default (() => {
     const pool = usePool(selectedPool);
     const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
 
+    const isLong = side === SideEnum.long;
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const notional = useMemo(
+        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
+        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    );
+    const pendingBurns = useMemo(
+        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
+        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+    );
+
     useEffect(() => {
         if (pool) {
-            const isLong = side === SideEnum.long;
-
             const balance = isLong ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber();
-            const token = isLong ? pool.longToken : pool.shortToken;
-            const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
 
-            const tokenPrice = calcTokenPrice(notional, token.supply);
+            const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
             const invalidAmount = isInvalidAmount(
                 amount,
@@ -79,7 +87,7 @@ export default (() => {
 
     return (
         <>
-            <div className="w-full">
+            <div className="w-full mb-2">
                 <p className="mb-2 text-black">Token</p>
                 <Dropdown
                     className="w-full"
@@ -100,7 +108,9 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className="mb-2">
+                <p className={classNames(
+                    !!pool.address ? 'block' : 'hidden'
+                )}>
                     Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
                 </p>
             </div>
@@ -137,21 +147,25 @@ export default (() => {
                         invalidAmount.message
                     ) : (
                         <>
-                            Available:{' '}
-                            {side === SideEnum.long
-                                ? pool.longToken.balance.toFixed(2)
-                                : pool.shortToken.balance.toFixed(2)}{' '}
-                            {!!amount
-                                ? `> ${
-                                      side === SideEnum.long
-                                          ? isNaN(amount)
-                                              ? pool.longToken.balance.toFixed(2)
-                                              : (pool.longToken.balance.toNumber() - amount).toFixed(2)
-                                          : isNaN(amount)
-                                          ? pool.shortToken.balance.toFixed(2)
-                                          : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
-                                  }`
-                                : null}
+                            {`Available: `}
+                            {`${
+                                side === SideEnum.long
+                                    ? pool.longToken.balance.toFixed(2)
+                                    : pool.shortToken.balance.toFixed(2)
+                            } `}
+                            {!!amount ? (
+                                <span className="opacity-80">
+                                    {`>>> ${
+                                        side === SideEnum.long
+                                            ? isNaN(amount)
+                                                ? pool.longToken.balance.toFixed(2)
+                                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
+                                            : isNaN(amount)
+                                            ? pool.shortToken.balance.toFixed(2)
+                                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
+                                    }`}
+                                </span>
+                            ) : null}
                         </>
                     )}
                 </p>

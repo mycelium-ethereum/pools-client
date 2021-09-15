@@ -32,7 +32,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                             <span>{toApproxCurrency(farm.tvl)}</span>
                             <span>{toApproxCurrency(farm.myStaked)}</span>
                             {/* <span>{toApproxCurrency(farm.myRewards)}</span> */}
-                            <span>{farm.stakingTokenBalance.toFixed(3)}</span>
+                            <span>{farm.stakingTokenBalance?.toFixed(3)}</span>
                             <span>
                                 <Button
                                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
@@ -46,7 +46,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                                     className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => onClickUnstake()}
+                                    onClick={() => onClickUnstake(farm.farm)}
                                 >
                                     UNSTAKE
                                 </Button>
@@ -54,7 +54,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                                     className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
                                     size="sm"
                                     variant="primary-light"
-                                    onClick={() => onClickClaim()}
+                                    onClick={() => onClickClaim(farm.farm)}
                                 >
                                     CLAIM
                                 </Button>
@@ -99,6 +99,6 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
 }) as React.FC<{
     rows: FarmTableRowData[];
     onClickStake: (farmAddress: string) => void;
-    onClickUnstake: () => void;
-    onClickClaim: () => void;
+    onClickUnstake: (farmAddress: string) => void;
+    onClickClaim: (farmAddress: string) => void;
 }>;
