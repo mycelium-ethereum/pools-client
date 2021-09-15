@@ -26,7 +26,7 @@ export default (({ title, subTitle, farms }) => {
         tvl: farm.tvl.toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
-        availableToStake: farm.availableToStake,
+        stakingTokenBalance: farm.stakingTokenBalance,
     }));
 
     console.log('FARMS', farms);
@@ -37,7 +37,7 @@ export default (({ title, subTitle, farms }) => {
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
-        stakeModalOpen: false,
+        stakeModalState: 'closed',
         amount: NaN,
         invalidAmount: { isInvalid: false },
     } as StakeState);
@@ -105,11 +105,11 @@ export default (({ title, subTitle, farms }) => {
     const handleStake = (farmAddress: string) => {
         dispatch({
             type: 'setSelectedFarm',
-            farm: farms[farmAddress],
+            farm: farmAddress,
         });
         dispatch({
-            type: 'setStakeModalOpen',
-            open: true,
+            type: 'setStakeModalState',
+            state: 'stake',
         });
     };
 
@@ -163,7 +163,14 @@ export default (({ title, subTitle, farms }) => {
                 </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
-            <StakeModal state={state} dispatch={dispatch} onStake={stake} title={title} btnLabel="Stake" />
+            <StakeModal
+                onApprove={(farmAddress: string) => console.log(farmAddress)}
+                state={state}
+                dispatch={dispatch}
+                onStake={stake}
+                title={title}
+                btnLabel="Stake"
+            />
         </>
     );
 }) as React.FC<{

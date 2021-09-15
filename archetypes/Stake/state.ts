@@ -38,7 +38,6 @@ export interface StakeState {
     side: SideFilterEnum;
     sortBy: SortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
-    stakeModalOpen: boolean;
     filterModalOpen: boolean;
     amount: number;
     selectedFarm: string;
