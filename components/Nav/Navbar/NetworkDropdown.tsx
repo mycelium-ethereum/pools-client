@@ -25,8 +25,8 @@ export default (({ className }) => {
                 />
             }
         >
-            <SelectOption disabled value={ARBITRUM}>
-                Arbitrum (Coming soon)
+            <SelectOption value={ARBITRUM} onClick={() => switchNetworks(provider, ARBITRUM)}>
+                Arbitrum
             </SelectOption>
             <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>
                 Arbitrum Rinkeby

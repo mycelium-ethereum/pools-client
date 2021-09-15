@@ -10,7 +10,7 @@ import { Network, networkConfig } from './Web3Context.Config';
 import { providers, ethers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
-import { ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM } from '@libs/constants';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -76,7 +76,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             try {
                 const onboard = Onboard({
                     ...onboardConfig,
-                    networkId: networkIds ? networkIds[0] : 421611, //Default to arb
+                    networkId: networkIds ? networkIds[0] : parseInt(ARBITRUM), //Default to arb
                     walletCheck: checks,
                     subscriptions: {
                         address: (address) => {
@@ -178,14 +178,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                             <a
                                 className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
                                 onClick={() => {
-                                    switchNetworks(provider, ARBITRUM_RINKEBY);
+                                    switchNetworks(provider, ARBITRUM);
                                 }}
                             >
                                 Switch to Arbitrum Mainnet
                             </a>
                             <br />
                             <a
-                                href="https://developer.offchainlabs.com/docs/user_quickstart"
+                                href="https://medium.com/stakingbits/guide-to-arbitrum-and-setting-up-metamask-for-arbitrum-543e513cdd8b"
                                 target="_blank"
                                 rel="noreferrer noopner"
                                 className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"

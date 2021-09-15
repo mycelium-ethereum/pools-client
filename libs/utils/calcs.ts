@@ -69,7 +69,7 @@ export const calcSkew: (shortBalance: BigNumber, longBalance: BigNumber) => BigN
     // This isnt a fully accurate representation since
     //  at shortBalance 0 there there will be short incentive to participate
     if (shortBalance.eq(0)) {
-        return new BigNumber(2);
+        return new BigNumber(1);
     }
     return longBalance.div(shortBalance);
 };
@@ -121,7 +121,7 @@ export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNum
  * Calc minimum amount in to sell
  * @param totalSupply total token supply
  * @param tokenBalance token balance
- * @param minimumCommitSize 
+ * @param minimumCommitSize
  * @param pendingCommits accumulative commit amounts
  * @returns Minimum amount in
  */
