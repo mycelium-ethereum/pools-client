@@ -2,7 +2,6 @@ import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
 import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
-//import { LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 
 interface FilterSelectsProps {
     state: StakeState;

@@ -12,5 +12,7 @@ export type Farm = {
     tvl: BigNumber;
     myStaked: BigNumber;
     myRewards: BigNumber;
-    availableToStake: BigNumber;
+    stakingTokenBalance: BigNumber;
+    stakingTokenAllowance: BigNumber;
+    isPoolToken: boolean;
 };

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { Farm } from '@libs/types/Staking';
 
 export enum LeverageFilterEnum {
     All = 'All',
@@ -30,7 +29,7 @@ export interface FarmTableRowData {
     tvl: number;
     myStaked: number;
     myRewards: number;
-    availableToStake: BigNumber;
+    stakingTokenBalance: BigNumber;
 }
 
 export interface StakeState {
@@ -38,10 +37,11 @@ export interface StakeState {
     leverage: LeverageFilterEnum;
     side: SideFilterEnum;
     sortBy: SortByEnum;
+    stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
     stakeModalOpen: boolean;
     filterModalOpen: boolean;
     amount: number;
-    selectedFarm: Farm;
+    selectedFarm: string;
     invalidAmount: { isInvalid: boolean; message?: string };
 }
 
@@ -50,8 +50,8 @@ export type StakeAction =
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
-    | { type: 'setStakeModalOpen'; open: boolean }
-    | { type: 'setSelectedFarm'; farm: Farm }
+    | { type: 'setStakeModalState'; state: StakeState['stakeModalState'] }
+    | { type: 'setSelectedFarm'; farm: string }
     | { type: 'setAmount'; amount: number }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
     | { type: 'setSortBy'; sortBy: SortByEnum };
@@ -83,13 +83,12 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
                 ...state,
                 filterModalOpen: action.open,
             };
-        case 'setStakeModalOpen':
+        case 'setStakeModalState':
             return {
                 ...state,
-                stakeModalOpen: action.open,
+                stakeModalState: action.state,
             };
         case 'setSelectedFarm':
-            console.log('SETTING SELECTED FARM', action.farm);
             return {
                 ...state,
                 selectedFarm: action.farm,
