@@ -6,6 +6,7 @@ import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
+import { MAX_SOL_UINT } from '@libs/constants';
 import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -16,7 +17,7 @@ import StakeModal from '../StakeModal';
 export default (() => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
-    const { poolFarms: farms } = useFarms();
+    const { poolFarms: farms, refreshFarm } = useFarms();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
         farm: farm.address,
@@ -27,10 +28,8 @@ export default (() => {
         tvl: farm.tvl.toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
-        availableToStake: farm.availableToStake,
+        stakingTokenBalance: farm.stakingTokenBalance,
     }));
-
-    console.log('FARMS', farms);
 
     const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
@@ -38,7 +37,7 @@ export default (() => {
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         filterModalOpen: false,
-        stakeModalOpen: false,
+        stakeModalState: 'closed',
         amount: NaN,
         invalidAmount: { isInvalid: false },
     } as StakeState);
@@ -109,8 +108,8 @@ export default (() => {
             farm: farms[farmAddress],
         });
         dispatch({
-            type: 'setStakeModalOpen',
-            open: true,
+            type: 'setStakeModalState',
+            state: 'stake',
         });
     };
 
@@ -129,6 +128,20 @@ export default (() => {
 
         if (handleTransaction) {
             handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
+        }
+    };
+
+    const approve = (farmAddress: string) => {
+        const farm = farms[farmAddress];
+        const { stakingToken } = farm;
+
+        if (handleTransaction) {
+            console.log(stakingToken);
+            handleTransaction(stakingToken.approve, [farmAddress, MAX_SOL_UINT.toString()], {
+                onSuccess: () => {
+                    refreshFarm(farmAddress);
+                },
+            });
         }
     };
 
@@ -166,7 +179,15 @@ export default (() => {
                 </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
-            <StakeModal state={state} dispatch={dispatch} onStake={stake} title="Stake Pool Tokens" btnLabel="Stake" />
+            {state.stakeModalOpen}
+            <StakeModal
+                state={state}
+                dispatch={dispatch}
+                onStake={stake}
+                onApprove={approve}
+                title="Stake Pool Tokens"
+                btnLabel="Stake"
+            />
         </>
     );
 }) as React.FC;

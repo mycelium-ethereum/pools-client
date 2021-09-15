@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import Button from '@components/General/Button';
 import Gas from '@archetypes/Exchange/Gas';
@@ -13,6 +13,7 @@ interface StakeModalProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
     onStake: (farmAddress: string, amount: number) => void;
+    onApprove: (farmAddress: string) => void;
     title: string;
     btnLabel: string;
 }
@@ -35,14 +36,14 @@ const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean
     };
 };
 
-const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title, btnLabel }) => {
+const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
     const { amount, selectedFarm, invalidAmount } = state;
 
     useEffect(() => {
         if (selectedFarm) {
-            console.log('AVAILABLE TO STAKE', selectedFarm.availableToStake.toString());
+            console.log('AVAILABLE TO STAKE', selectedFarm.stakingTokenBalance.toString());
 
-            const invalidAmount = isInvalidAmount(amount, selectedFarm.availableToStake.toNumber());
+            const invalidAmount = isInvalidAmount(amount, selectedFarm.stakingTokenBalance.toNumber());
 
             dispatch({
                 type: 'setInvalidAmount',
@@ -53,15 +54,20 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title
 
     console.log('SELECTED FARM', selectedFarm);
 
+    const isApproved = useMemo(() => selectedFarm?.stakingTokenAllowance.gt(0), [selectedFarm]);
+
     return (
-        <TWModal open={state.stakeModalOpen} onClose={() => dispatch({ type: 'setStakeModalOpen', open: false })}>
+        <TWModal
+            open={state.stakeModalState !== 'closed'}
+            onClose={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
+        >
             <div className="p-6">
                 <div className="flex justify-between">
                     <StakeModalHeader>{title || 'Stake Pool Tokens'}</StakeModalHeader>
                     <Gas />
                     <div
                         className="w-3 h-3 ml-4 cursor-pointer"
-                        onClick={() => dispatch({ type: 'setStakeModalOpen', open: false })}
+                        onClick={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
                     >
                         <Close />
                     </div>
@@ -70,6 +76,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title
                     <p className="mb-4 mt-6 text-black font-semibold">Amount</p>
                     <InputContainer error={false /* invalidAmount.isInvalid */}>
                         <NumericInput
+                            disabled={!isApproved}
                             className="w-full h-full text-base font-normal "
                             value={amount}
                             onUserInput={(val) => dispatch({ type: 'setAmount', amount: parseFloat(val) })}
@@ -81,11 +88,15 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title
                                 className="shadow-md"
                             />
                             <div
-                                className="m-auto cursor-pointer hover:underline"
+                                className={
+                                    isApproved
+                                        ? 'm-auto cursor-pointer hover:underline'
+                                        : 'm-auto cursor-disabled text-gray-800'
+                                }
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
-                                        amount: selectedFarm.availableToStake.toNumber(), // TODO use actual use balance here
+                                        amount: selectedFarm.stakingTokenBalance.toNumber(), // TODO use actual use balance here
                                     })
                                 }
                             >
@@ -93,25 +104,41 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, title
                             </div>
                         </InnerInputText>
                     </InputContainer>
-                    <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
-                        {invalidAmount.isInvalid && invalidAmount.message ? (
-                            invalidAmount.message
-                        ) : (
-                            <>
-                                {`Available: ${selectedFarm?.availableToStake.toFixed(6)}`}
-                                {!!amount ? ` > ${selectedFarm?.availableToStake.minus(amount).toFixed(6)}` : ''}
-                            </>
-                        )}
-                    </div>
-                    <Button
-                        className="mt-8"
-                        size="lg"
-                        variant="primary"
-                        // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
-                        onClick={(_e) => onStake(selectedFarm.address, amount)}
-                    >
-                        {btnLabel}
-                    </Button>
+                    {isApproved ? (
+                        <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                            {invalidAmount.isInvalid && invalidAmount.message ? (
+                                invalidAmount.message
+                            ) : (
+                                <>
+                                    {`Available: ${selectedFarm?.stakingTokenBalance.toFixed(6)}`}
+                                    {!!amount ? ` > ${selectedFarm?.stakingTokenBalance.minus(amount).toFixed(6)}` : ''}
+                                </>
+                            )}
+                        </div>
+                    ) : (
+                        <div>Token approval required</div>
+                    )}
+                    {isApproved ? (
+                        <Button
+                            className="mt-8"
+                            size="lg"
+                            variant="primary"
+                            // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
+                            onClick={(_e) => onStake(selectedFarm.address, amount)}
+                        >
+                            {btnLabel}
+                        </Button>
+                    ) : (
+                        <Button
+                            className="mt-8"
+                            size="lg"
+                            variant="primary"
+                            // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
+                            onClick={(_e) => onApprove(selectedFarm.address)}
+                        >
+                            Approve
+                        </Button>
+                    )}
                 </div>
             </div>
         </TWModal>
