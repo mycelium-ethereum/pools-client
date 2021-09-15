@@ -38,7 +38,7 @@ const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean
 };
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
-    const { amount, selectedFarm, invalidAmount } = state;
+    const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
     const { poolFarms, slpFarms } = useFarms();
 
     const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
@@ -58,7 +58,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
 
     console.log('SELECTED FARM', farm);
 
-    const isApproved = useMemo(() => farm?.stakingTokenAllowance.gt(0), [farm]);
+    const isApproved = useMemo(() => {
+        return state.stakeModalState === 'claim' || state.stakeModalState === 'unstake' || stakeModalBalance.gt(0);
+    }, [selectedFarm, state.stakeModalState]);
 
     return (
         <TWModal
@@ -80,7 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                     <p className="mb-4 mt-6 text-black font-semibold">Amount</p>
                     <InputContainer error={false /* invalidAmount.isInvalid */}>
                         <NumericInput
-                            disabled={!isApproved}
+                            disabled={!isApproved || state.stakeModalState === 'claim'}
                             className="w-full h-full text-base font-normal "
                             value={amount}
                             onUserInput={(val) => dispatch({ type: 'setAmount', amount: parseFloat(val) })}
@@ -93,14 +95,14 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             />
                             <div
                                 className={
-                                    isApproved
-                                        ? 'm-auto cursor-pointer hover:underline'
-                                        : 'm-auto cursor-disabled text-gray-800'
+                                    !isApproved || state.stakeModalState === 'claim'
+                                        ? 'm-auto cursor-disabled text-gray-800'
+                                        : 'm-auto cursor-pointer hover:underline'
                                 }
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
-                                        amount: farm.stakingTokenBalance.toNumber(), // TODO use actual use balance here
+                                        amount: stakeModalBalance.toNumber(), // TODO use actual use balance here
                                     })
                                 }
                             >
@@ -114,8 +116,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 invalidAmount.message
                             ) : (
                                 <>
-                                    {`Available: ${farm?.stakingTokenBalance.toFixed(6)}`}
-                                    {!!amount ? ` > ${farm?.stakingTokenBalance.minus(amount).toFixed(6)}` : ''}
+                                    {`Available: ${stakeModalBalance?.toFixed(6)}`}
+                                    {!!amount ? ` > ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
                                 </>
                             )}
                         </div>
