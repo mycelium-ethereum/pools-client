@@ -1,11 +1,12 @@
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
-import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+//import { LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 
 interface FilterSelectsProps {
-    state: BrowseState;
-    dispatch: React.Dispatch<BrowseAction>;
+    state: StakeState;
+    dispatch: React.Dispatch<StakeAction>;
 }
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
