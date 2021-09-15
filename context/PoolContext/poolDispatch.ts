@@ -1,5 +1,5 @@
-import { SideEnum } from '@libs/constants';
-import { CreatedCommitType, Pool } from '@libs/types/General';
+import { CommitEnum } from '@libs/constants';
+import { CreatedCommitType, PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
@@ -35,7 +35,8 @@ export type PoolAction =
     | { type: 'setSubscribed'; pool: string; value: boolean }
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
-    | { type: 'addToPending'; pool: string; side: SideEnum; amount: BigNumber }
+    | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
+    | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | { type: 'resetCommits' }
     | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
@@ -152,12 +153,39 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     },
                 },
             };
+        case 'setPendingAmounts':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        committer: {
+                            ...state.pools[action.pool].committer,
+                            pendingLong: action.pendingLong,
+                            pendingShort: action.pendingShort,
+                        },
+                    },
+                },
+            };
+
         case 'addToPending':
             const committer = state.pools[action.pool].committer;
-            if (action.side === SideEnum.short) {
-                committer.pendingShort = committer.pendingShort.plus(action.amount);
-            } else {
-                committer.pendingLong = committer.pendingLong.plus(action.amount);
+            switch (action.commitType) {
+                case CommitEnum.short_burn:
+                    committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
+                    break;
+                case CommitEnum.short_mint:
+                    committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
+                    break;
+                case CommitEnum.long_burn:
+                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
+                    break;
+                case CommitEnum.long_mint:
+                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
+                    break;
+                default:
+                    break;
             }
             return {
                 ...state,

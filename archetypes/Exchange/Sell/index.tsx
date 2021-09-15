@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
@@ -53,15 +53,22 @@ export default (() => {
     const pool = usePool(selectedPool);
     const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
 
+    const isLong = side === SideEnum.long;
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const notional = useMemo(
+        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
+        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    );
+    const pendingBurns = useMemo(
+        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
+        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+    );
+
     useEffect(() => {
         if (pool) {
-            const isLong = side === SideEnum.long;
-
             const balance = isLong ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber();
-            const token = isLong ? pool.longToken : pool.shortToken;
-            const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
 
-            const tokenPrice = calcTokenPrice(notional, token.supply);
+            const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
             const invalidAmount = isInvalidAmount(
                 amount,
@@ -101,7 +108,7 @@ export default (() => {
                     }}
                 />
                 <p className="mb-2">
-                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
+                    Expected Price: {toApproxCurrency(calcTokenPrice(notional, token.supply.plus(pendingBurns)))}
                 </p>
             </div>
             <div className="w-full">

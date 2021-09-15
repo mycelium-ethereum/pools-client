@@ -26,17 +26,27 @@ export default ((focus) => {
                 ) {
                     continue;
                 }
-                const { shortToken, longToken, nextShortBalance, nextLongBalance, lastUpdate, updateInterval } =
-                    pools[commit.pool];
+                const {
+                    shortToken,
+                    longToken,
+                    nextShortBalance,
+                    nextLongBalance,
+                    lastUpdate,
+                    updateInterval,
+                    committer: {
+                        pendingLong: { burn: pendingLongBurn },
+                        pendingShort: { burn: pendingShortBurn },
+                    },
+                } = pools[commit.pool];
 
                 let token, tokenPrice;
 
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
                     token = shortToken;
-                    tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply);
+                    tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
                 } else {
                     token = longToken;
-                    tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply);
+                    tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
                 }
 
                 parsedCommits.push({

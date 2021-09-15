@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
@@ -17,15 +17,22 @@ type SummaryProps = {
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
-    const token = isLong ? pool.longToken : pool.shortToken;
-    const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const notional = useMemo(
+        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
+        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    );
+    const pendingBurns = useMemo(
+        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
+        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+    );
+    const tokenPrice = useMemo(() => calcTokenPrice(notional, token.supply.plus(pendingBurns)), [notional, token]);
 
-    const tokenPrice = calcTokenPrice(notional, token.supply);
     const amountBN = new BigNumber(amount);
 
     const balancesAfter = {
-        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0).plus(pool.committer.pendingLong),
-        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amountBN).plus(pool.committer.pendingShort),
+        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0).plus(pool.committer.pendingLong.mint),
+        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amountBN).plus(pool.committer.pendingShort.mint),
     };
 
     return (
