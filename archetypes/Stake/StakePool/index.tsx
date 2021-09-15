@@ -25,7 +25,7 @@ export default (() => {
         leverage: 1,
         side: 'long',
         apy: farm.apy.toNumber(),
-        tvl: farm.tvl.toNumber(),
+        tvl: farm.totalStaked.times(1).toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
         stakingTokenBalance: farm.stakingTokenBalance,

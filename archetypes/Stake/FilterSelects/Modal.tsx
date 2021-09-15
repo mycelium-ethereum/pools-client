@@ -2,20 +2,20 @@ import React from 'react';
 import { SearchInput } from '@components/General/SearchInput';
 import { Select } from '@components/General/Select';
 import { TWModal } from '@components/General/TWModal';
-import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 
 interface FilterModalProps {
-    state: BrowseState;
-    dispatch: React.Dispatch<BrowseAction>;
+    state: StakeState;
+    dispatch: React.Dispatch<StakeAction>;
 }
 
 const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
     return (
-        <TWModal open={state.filterModalOpen} onClose={() => dispatch({ type: 'setModalOpen', open: false })}>
+        <TWModal open={state.filterModalOpen} onClose={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
             <div className="p-6">
                 <div className="flex justify-between items-center">
                     <h3 className="text-xl">Filter Data</h3>
-                    <button className="text-xl" onClick={() => dispatch({ type: 'setModalOpen', open: false })}>
+                    <button className="text-xl" onClick={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
                         &times;
                     </button>
                 </div>
@@ -56,7 +56,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                 <div className="mt-5">
                     <button
                         className="w-full px-4 py-3 bg-indigo-800 rounded text-white"
-                        onClick={() => dispatch({ type: 'setModalOpen', open: false })}
+                        onClick={() => dispatch({ type: 'setFilterModalOpen', open: false })}
                     >
                         Okay
                     </button>

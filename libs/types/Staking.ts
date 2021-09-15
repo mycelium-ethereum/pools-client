@@ -9,7 +9,8 @@ export type Farm = {
     stakingToken: ERC20;
     stakingTokenDecimals: number;
     apy: BigNumber;
-    tvl: BigNumber;
+    totalStaked: BigNumber;
+    // tvl: BigNumber;
     myStaked: BigNumber;
     myRewards: BigNumber;
     stakingTokenBalance: BigNumber;

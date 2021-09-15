@@ -5,6 +5,7 @@ import Footer from '@components/Footer';
 import StakePool from '@archetypes/Stake/StakePool';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
+import { PoolStore } from '@context/PoolContext';
 
 export default (() => {
     const router = useRouter();
@@ -15,11 +16,13 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <FarmStore>
-                <NavBar />
-                <StakePool />
-                <Footer />
-            </FarmStore>
+            <PoolStore>
+                <FarmStore>
+                    <NavBar />
+                    <StakePool />
+                    <Footer />
+                </FarmStore>
+            </PoolStore>
         </Page>
     );
 }) as React.FC;

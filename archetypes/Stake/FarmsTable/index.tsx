@@ -28,11 +28,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                                 <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                                 {farm.name}
                             </span>
-                            <span>{farm.apy}%</span>
+                            <span>{farm.apy.toFixed(2)}%</span>
                             <span>{toApproxCurrency(farm.tvl)}</span>
                             <span>{toApproxCurrency(farm.myStaked)}</span>
                             {/* <span>{toApproxCurrency(farm.myRewards)}</span> */}
-                            <span>{farm.stakingTokenBalance.toString()}</span>
+                            <span>{farm.stakingTokenBalance.toFixed(3)}</span>
                             <span>
                                 <Button
                                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "

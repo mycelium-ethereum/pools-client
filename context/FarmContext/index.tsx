@@ -6,6 +6,7 @@ import { Farm } from '@libs/types/Staking';
 import { StakingRewards } from '@libs/staking/typechain';
 import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
+import usePoolTokenMap from '@libs/hooks/usePoolTokenMap';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -27,6 +28,8 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     const { signer, config, account } = useWeb3();
     const [poolFarms, setPoolFarms] = useState<ContextProps['poolFarms']>({});
     const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
+
+    const tokensMap = usePoolTokenMap()
 
     const refreshFarm = async (farmAddress: string) => {
         console.log('REFRESHING FARM', farmAddress);
@@ -77,12 +80,19 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
                 const stakingTokenContract = new ethers.Contract(stakingToken, ERC20__factory.abi, signer) as ERC20;
 
-                const [stakingTokenName, stakingTokenDecimals, stakingTokenBalance, stakingTokenAllowance] =
+                const [
+                    stakingTokenName, 
+                    stakingTokenDecimals, 
+                    stakingTokenBalance, 
+                    stakingTokenAllowance,
+                    totalStaked
+                ] =
                     await Promise.all([
                         stakingTokenContract.name(),
                         stakingTokenContract.decimals(),
                         stakingTokenContract.balanceOf(account),
                         stakingTokenContract.allowance(account, address),
+                        stakingTokenContract.totalSupply(),
                     ]);
 
                 console.log('got the staking token name', stakingTokenName);
@@ -93,6 +103,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     name: stakingTokenName,
                     address,
                     contract,
+                    totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
                     stakingToken: stakingTokenContract,
                     stakingTokenDecimals,
                     stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
@@ -100,7 +111,6 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
                     myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
                     apy: new BigNumber(rewardPerToken.toString()).div(decimalMultiplier),
-                    tvl: new BigNumber(0),
                     isPoolToken,
                 };
 
