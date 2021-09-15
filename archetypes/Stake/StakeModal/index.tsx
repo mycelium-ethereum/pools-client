@@ -104,7 +104,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                     onClick={(_e) =>
                                         dispatch({
                                             type: 'setAmount',
-                                            amount: stakeModalBalance.toNumber(), // TODO use actual use balance here
+                                            amount: Number(stakeModalBalance.toFixed(6)),
                                         })
                                     }
                                 >
