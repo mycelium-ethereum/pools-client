@@ -22,7 +22,7 @@ const clearLogos: Record<string, string> = {
 
 const logos: Record<string, string> = {
     TSLA: '/img/logos/currencies/tesla.svg',
-    ETH: '/img/logos/currencies/eth.svg',
+    //ETH: '/img/logos/currencies/eth.svg', note: old Eth SVG
     TEST1: '/img/logos/currencies/eth.svg',
     LINK: '/img/logos/currencies/link.svg',
     [ARBITRUM]: '/img/logos/currencies/arbitrum.svg',
@@ -35,6 +35,8 @@ const logos: Record<string, string> = {
     BTC_L: '/img/logos/currencies/btc_long.svg',
     ETH_S: '/img/logos/currencies/eth_short.svg',
     BTC_S: '/img/logos/currencies/btc_short.svg',
+    ETH: '/img/logos/currencies/eth2.svg',
+    BTC: '/img/logos/currencies/btc.svg',
 };
 
 interface LProps {

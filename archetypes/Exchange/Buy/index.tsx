@@ -76,9 +76,11 @@ export default (() => {
                     <Dropdown
                         className="w-full "
                         placeHolder="Select Market"
+                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0]}
                         size="lg"
                         options={Object.keys(markets).map((market) => ({
                             key: market,
+                            ticker: market.split('/')[0],
                             text: market,
                         }))}
                         value={market}
