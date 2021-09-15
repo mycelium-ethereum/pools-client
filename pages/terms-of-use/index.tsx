@@ -1,5 +1,6 @@
 import React from 'react';
-import { MainTitle, Subtitle, Title, Paragraph, List, ListItem, LegalPageLayout } from '@components/Legal';
+import { LegalPageLayout, MainTitle, Title, Subtitle, Paragraph, List, ListItem } from '@components/Legal';
+
 const Terms: React.FC = () => {
     return (
         <LegalPageLayout>

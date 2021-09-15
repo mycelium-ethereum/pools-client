@@ -1,5 +1,5 @@
 import React from 'react';
-import { Title, Paragraph, List, ListItem, LegalPageLayout, MainTitle } from '@components/Legal';
+import { LegalPageLayout, MainTitle, Title, Paragraph, List, ListItem } from '@components/Legal';
 
 const PrivacyPolicy: React.FC = () => {
     return (

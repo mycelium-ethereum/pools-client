@@ -60,7 +60,7 @@ const ContentWrapper = styled.div`
 
 const NavMainTitle = styled.div`
     font-size: 30px;
-    padding: 20px 0 10px;
+    padding: 40px 0 10px;
 `;
 
 const NavTitle = styled.div`
@@ -77,7 +77,7 @@ const NavTitle = styled.div`
 export const MainTitle = styled.div`
     font-size: 30px;
     font-weight: 500;
-    padding: 20px 0;
+    padding: 40px 0 20px;
 `;
 
 export const Title = styled.div`
@@ -86,8 +86,8 @@ export const Title = styled.div`
 `;
 
 export const Subtitle = styled.div`
-    color: var(--color-secondary);
-    padding: 5px 0;
+    font-weight: bold;
+    padding-bottom: 15px;
 `;
 
 export const Paragraph = styled.div`
