@@ -42,7 +42,7 @@ const NetworkPreview: React.FC<{
     networkID: string;
     networkName: string;
     supported: boolean;
-}> = ({ networkID, networkName, unsupported }) => {
+}> = ({ networkID, networkName, supported }) => {
     return (
         <div className={'flex items-center w-full my-auto'}>
             {supported ? (
