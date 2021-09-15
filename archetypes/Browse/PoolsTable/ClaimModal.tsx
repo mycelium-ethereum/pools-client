@@ -15,8 +15,16 @@ import { swapDefaults, useSwapContext } from '@context/SwapContext';
 export default (({ token, onClick, showModal, setShowModal }) => {
     const hasHoldings = token.myHoldings > 0;
 
-    const { swapState = swapDefaults, swapDispatch } = useSwapContext();
-    const { selectedPool, side, amount, invalidAmount } = swapState;
+    const {
+        swapState = swapDefaults,
+        // swapDispatch
+    } = useSwapContext();
+    const {
+        selectedPool,
+        // side,
+        // invalidAmount
+        amount,
+    } = swapState;
     const pool = usePool(selectedPool);
 
     return (
@@ -35,13 +43,14 @@ export default (({ token, onClick, showModal, setShowModal }) => {
                         className="w-full h-full text-base font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            // TODO: 
+                            console.log(val);
+                            // TODO:
                             // e.g. swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>
                         {/* TODO: No Tracer Token Label, add one inplace of TSLA */}
-                        <Currency label={"TRC"} ticker={"TSLA"} className="shadow-md" />
+                        <Currency label={'TRC'} ticker={'TSLA'} className="shadow-md" />
                         <div
                             className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
@@ -55,9 +64,9 @@ export default (({ token, onClick, showModal, setShowModal }) => {
                     </InnerInputText>
                 </InputContainer>
                 {/* TODO:  */}
-                <div className={ (false /* invalidAmount.isInvalid */ ? 'text-red-500 ' : '') + 'mt-4 mb-12'}>
-                    { false /* invalidAmount.isInvalid */ &&  ""/* invalidAmount.message */ ? (
-                            ""/* invalidAmount.message */
+                <div className={(false /* invalidAmount.isInvalid */ ? 'text-red-500 ' : '') + 'mt-4 mb-12'}>
+                    {false /* invalidAmount.isInvalid */ && '' /* invalidAmount.message */ ? (
+                        '' /* invalidAmount.message */
                     ) : (
                         <>
                             {/* TODO: this probably isn't correct */}
@@ -78,11 +87,9 @@ export default (({ token, onClick, showModal, setShowModal }) => {
             </Modal>
         </>
     );
-
 }) as React.FC<{
     token: BrowseTableRowData;
-    showModal: Boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
-    ;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     onClick: () => void;
 }>;

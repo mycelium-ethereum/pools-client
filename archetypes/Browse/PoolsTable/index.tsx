@@ -19,7 +19,6 @@ import { usePool } from '@context/PoolContext';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import ClaimModal from './ClaimModal';
 
-
 export default (({ rows }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
     const [showModalStakeToken, setShowModalStakeToken] = useState(false);
@@ -145,7 +144,7 @@ export default (({ rows }) => {
                         token={selectedToken}
                         showModal={showModalStakeToken}
                         setShowModal={setShowModalStakeToken}
-                        onClick={()=>{}}
+                        onClick={() => {}}
                     />
                     <TokenModal
                         title="Unstake Pool Tokens"
@@ -153,16 +152,18 @@ export default (({ rows }) => {
                         token={selectedToken}
                         showModal={showModalUnstakeToken}
                         setShowModal={setShowModalUnstakeToken}
-                        onClick={()=>{}}
+                        onClick={() => {}}
                     />
                     <ClaimModal
                         token={selectedToken}
                         showModal={showModalClaimReward}
                         setShowModal={setShowModalClaimReward}
-                        onClick={()=>{}}
+                        onClick={() => {}}
                     />
                 </>
-            ) : "" }
+            ) : (
+                ''
+            )}
         </>
     );
 }) as React.FC<{
@@ -181,12 +182,20 @@ export default (({ rows }) => {
 //     number: number;
 // }>;
 
-
 const TokenModal = (({ token, title, btnLabel, onClick, showModal, setShowModal }) => {
     const hasHoldings = token.myHoldings > 0;
 
-    const { swapState = swapDefaults, swapDispatch } = useSwapContext();
-    const { selectedPool, side, amount, invalidAmount } = swapState;
+    const {
+        swapState = swapDefaults,
+        // swapDispatch
+    } = useSwapContext();
+    const {
+        selectedPool,
+        // side,
+        amount,
+        // invalidAmount
+    } = swapState;
+
     const pool = usePool(selectedPool);
 
     return (
@@ -205,12 +214,17 @@ const TokenModal = (({ token, title, btnLabel, onClick, showModal, setShowModal 
                         className="w-full h-full text-base font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            // TODO: 
+                            console.log(val);
+                            // TODO:
                             // e.g. swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>
-                        <Currency label={token.symbol} ticker={tokenSymbolToLogoTicker(token.symbol)} className="shadow-md" />
+                        <Currency
+                            label={token.symbol}
+                            ticker={tokenSymbolToLogoTicker(token.symbol)}
+                            className="shadow-md"
+                        />
                         <div
                             className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
@@ -224,9 +238,9 @@ const TokenModal = (({ token, title, btnLabel, onClick, showModal, setShowModal 
                     </InnerInputText>
                 </InputContainer>
                 {/* TODO:  */}
-                <div className={ (false /* invalidAmount.isInvalid */ ? 'text-red-500 ' : '') + 'mt-4 mb-12'}>
-                    { false /* invalidAmount.isInvalid */ &&  ""/* invalidAmount.message */ ? (
-                            ""/* invalidAmount.message */
+                <div className={(false /* invalidAmount.isInvalid */ ? 'text-red-500 ' : '') + 'mt-4 mb-12'}>
+                    {false /* invalidAmount.isInvalid */ && '' /* invalidAmount.message */ ? (
+                        '' /* invalidAmount.message */
                     ) : (
                         <>
                             {/* TODO: this probably isn't correct */}
@@ -247,13 +261,11 @@ const TokenModal = (({ token, title, btnLabel, onClick, showModal, setShowModal 
             </Modal>
         </>
     );
-
 }) as React.FC<{
     token: BrowseTableRowData;
-    title: String;
-    btnLabel: String;
-    showModal: Boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
-    ;
+    title: string;
+    btnLabel: string;
+    showModal: boolean;
+    setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
     onClick: () => void;
 }>;
