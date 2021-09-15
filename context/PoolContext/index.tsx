@@ -10,6 +10,8 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
 import {
+    LeveragedPool,
+    LeveragedPool__factory,
     PoolCommitter,
     PoolCommitter__factory,
     PoolKeeper,
@@ -20,6 +22,7 @@ import {
 import { SideEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
+import { calcNextValueTransfer } from '@libs/utils/calcs';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -27,6 +30,7 @@ type Options = {
 
 interface ContextProps {
     pools: Record<string, Pool>;
+    poolsInitialised: boolean;
 }
 
 interface ActionContextProps {
@@ -100,6 +104,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             amount: committerInfo.pendingShort,
                         });
 
+                        setExpectedPrice(pool);
+
                         committerInfo.allUnexecutedCommits.map((commit) => {
                             commit.getTransaction().then((txn) => {
                                 commitDispatch({
@@ -111,6 +117,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         type: commit.args.commitType as CommitEnum,
                                         from: txn.from,
                                         txnHash: txn.hash,
+                                        created: Date.now() / 1000,
                                     },
                                 });
                             });
@@ -202,6 +209,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 txnHash: txn.hash,
                                 type: type as CommitEnum,
                                 amount: new BigNumber(ethers.utils.formatEther(amount)),
+                                created: Date.now() / 1000,
                             },
                         });
                     }
@@ -364,10 +372,38 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
+    const setExpectedPrice = (pool: Pool) => {
+        const { lastPrice, leverage, longBalance, shortBalance } = pool;
+        const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
+        leveragedPool.getOraclePrice().then((price) => {
+            const oraclePrice = new BigNumber(ethers.utils.formatEther(price));
+            const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
+                lastPrice,
+                oraclePrice,
+                new BigNumber(leverage),
+                longBalance,
+                shortBalance,
+            );
+            console.debug('Calculated value transfer', {
+                shortValueTransfer: shortValueTransfer.toNumber(),
+                longValueTransfer: longValueTransfer.toNumber(),
+                lastPrice: lastPrice.toNumber(),
+                newPrice: oraclePrice.toNumber(),
+            });
+            poolsDispatch({
+                type: 'setNextPoolBalances',
+                pool: pool.address,
+                nextLongBalance: longBalance.plus(longValueTransfer),
+                nextShortBalance: shortBalance.plus(shortValueTransfer),
+            });
+        });
+    };
+
     return (
         <PoolsContext.Provider
             value={{
                 pools: poolsState.pools,
+                poolsInitialised: poolsState.poolsInitialised,
             }}
         >
             <PoolsActionsContext.Provider

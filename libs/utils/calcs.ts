@@ -1,7 +1,8 @@
 import { BigNumber } from 'bignumber.js';
 
-const UP = -1;
-const DOWN = 0;
+const UP = 1;
+const DOWN = 2;
+const NO_CHANGE = 3;
 
 /**
  * Calculate the losing pool multiplier
@@ -84,16 +85,19 @@ export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber
  * Calcualtes the direction of the price movement
  * @param newPrice new pool price based on pool balances
  * @param oldPrice old pool price based on pool balances
- * @return -1 if oldPrice > newPrice, 0 if newPrice = oldPrice, or 1 if newPrice > oldPrice
+ * @return DOWN (2) if oldPrice > newPrice, NO_CHANGE (3) if newPrice = oldPrice, or UP (1) if newPrice > oldPrice
  */
 export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber = (oldPrice, newPrice) => {
+    // newPrice.div(oldPrice);
     const priceRatio = calcRatio(oldPrice, newPrice);
-    if (priceRatio.lt(1)) {
-        return new BigNumber(-1);
-    } else if (priceRatio.eq(0)) {
-        return new BigNumber(0);
+    if (priceRatio.gt(1)) {
+        // number go up
+        return new BigNumber(UP);
+    } else if (priceRatio.eq(1)) {
+        return new BigNumber(NO_CHANGE);
     } else {
-        return new BigNumber(1);
+        // priceRatio.lt(1)
+        return new BigNumber(DOWN);
     }
 };
 
@@ -106,8 +110,9 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
     totalQuoteValue,
     tokenSupply,
 ) => {
+    // if supply is 0 priceRatio is 1/1
     if (tokenSupply.eq(0)) {
-        return new BigNumber(0);
+        return new BigNumber(1);
     }
     return totalQuoteValue.div(tokenSupply);
 };
@@ -121,8 +126,7 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
  * @param longBalance quote balance of the long pool in USD
  * @param shortBalance quote balance of the short pool in USD
  *
- * returns an array of length 2 representing [longGain/loss, shortGain/loss]
- *  This is more readable in my opinion than returning a gain as well as a direction
+ * returns an object containing longValueTransfer and shortValueTransfer
  */
 export const calcNextValueTransfer: (
     oldPrice: BigNumber,
@@ -130,19 +134,32 @@ export const calcNextValueTransfer: (
     leverage: BigNumber,
     longBalance: BigNumber,
     shortBalance: BigNumber,
-) => [BigNumber, BigNumber] = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
+) => {
+    longValueTransfer: BigNumber;
+    shortValueTransfer: BigNumber;
+} = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
     const direction = calcDirection(oldPrice, newPrice);
     const percentageLossTransfer = calcPercentageLossTransfer(oldPrice, newPrice, leverage);
-    let gain;
+    let gain: BigNumber;
+    
     if (direction.eq(UP)) {
         // long wins
         gain = percentageLossTransfer.times(shortBalance);
         // long gains and short loses longs gain
-        return [gain, gain.negated()];
+        return {
+            longValueTransfer: gain,
+            shortValueTransfer: gain.negated(),
+        };
     } else if (direction.eq(DOWN)) {
         // short wins
-        gain = percentageLossTransfer.times(longBalance);
-        return [gain.negated(), gain];
+        gain = percentageLossTransfer.times(longBalance).abs();
+        return {
+            longValueTransfer: gain.negated(),
+            shortValueTransfer: gain,
+        };
     } // else no value transfer
-    return [new BigNumber(0), new BigNumber(0)];
+    return {
+        longValueTransfer: new BigNumber(0),
+        shortValueTransfer: new BigNumber(0),
+    };
 };

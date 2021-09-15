@@ -26,17 +26,17 @@ export default ((focus) => {
                 ) {
                     continue;
                 }
-                const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
+                const { shortToken, longToken, nextShortBalance, nextLongBalance, lastUpdate, updateInterval } =
                     pools[commit.pool];
 
                 let token, tokenPrice;
 
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
                     token = shortToken;
-                    tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
+                    tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply);
                 } else {
                     token = longToken;
-                    tokenPrice = calcTokenPrice(longBalance, longToken.supply);
+                    tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply);
                 }
 
                 parsedCommits.push({
@@ -44,6 +44,8 @@ export default ((focus) => {
                     token,
                     tokenPrice,
                     nextRebalance: lastUpdate.plus(updateInterval),
+                    frontRunningInterval: pools[commit.pool].frontRunningInterval,
+                    updateInterval: updateInterval,
                 });
             }
             setAllQueuedCommits(parsedCommits);

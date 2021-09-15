@@ -13,6 +13,7 @@ import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import { calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import { tokenSymbolToLogoTicker } from '@components/General';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -58,7 +59,7 @@ export default (() => {
 
             const balance = isLong ? pool.longToken.balance.toNumber() : pool.shortToken.balance.toNumber();
             const token = isLong ? pool.longToken : pool.shortToken;
-            const notional = isLong ? pool.longBalance : pool.shortBalance;
+            const notional = isLong ? pool.nextLongBalance : pool.nextShortBalance;
 
             const tokenPrice = calcTokenPrice(notional, token.supply);
 
@@ -78,25 +79,30 @@ export default (() => {
 
     return (
         <>
-            {/* <div className="relative flex flew-row y-2 "> */}
             <div className="w-full">
                 <p className="mb-2 text-black">Token</p>
                 <Dropdown
                     className="w-full"
                     placeHolder="Select Token"
+                    placeHolderIcon={tokenSymbolToLogoTicker(
+                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
+                    )}
                     size="lg"
-                    options={tokens.map((token) => ({ key: token.symbol }))}
+                    options={tokens.map((token) => ({
+                        key: `${token.pool}-${token.side}`,
+                        text: token.symbol,
+                        ticker: tokenSymbolToLogoTicker(token.symbol),
+                    }))}
                     value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
                     onSelect={(option) => {
-                        tokens.forEach((token) => {
-                            if (token.symbol === option) {
-                                swapDispatch({ type: 'setSelectedPool', value: token.pool as string });
-                                swapDispatch({ type: 'setSide', value: token.side as SideEnum });
-                            }
-                        });
+                        const [pool, side] = option.split('-');
+                        swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className="mb-2">Last Price: {toApproxCurrency(pool.lastPrice)}</p>
+                <p className="mb-2">
+                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
+                </p>
             </div>
             <div className="w-full">
                 <p className="mb-2 text-black">Amount</p>
@@ -105,7 +111,7 @@ export default (() => {
                         className="w-full h-full text-xl font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
+                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>
@@ -150,7 +156,6 @@ export default (() => {
                     )}
                 </p>
             </div>
-            {/* </div> */}
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
 

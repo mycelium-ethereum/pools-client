@@ -12,6 +12,7 @@ const MAX_CHARS = 10;
  * Rebalance rate is good for longs if it is less than 1 and good for shorts if its greater than 1
  */
 export default (({ rebalanceRate }) => {
+    console.log('Rebalance rate', rebalanceRate);
     const [long, short] = formatEachSide(rebalanceRate);
     return (
         <div>
@@ -26,18 +27,17 @@ export default (({ rebalanceRate }) => {
 }>;
 
 const formatEachSide: (rebalanceRate: number) => [string, string] = (rebalanceRate) => {
-    const zeroed = rebalanceRate - 1;
     let rhs = 5,
         lhs = 5;
-    if (zeroed > 0) {
+    if (rebalanceRate > 0) {
         // short in favour
         // we want to limit the amount of RHS < we display
         // but save atleast 1 char for the other side
-        rhs = Math.min(Math.floor(zeroed / INCREMENT + Math.floor(MAX_CHARS / 2)), MAX_CHARS - 1);
+        rhs = Math.min(Math.floor(rebalanceRate / INCREMENT + Math.floor(MAX_CHARS / 2)), MAX_CHARS - 1);
         lhs = MAX_CHARS - rhs;
-    } else if (zeroed < 0) {
+    } else if (rebalanceRate < 0) {
         // long in favour
-        lhs = Math.min(Math.floor(Math.abs(zeroed) / INCREMENT) + Math.floor(MAX_CHARS / 2), MAX_CHARS - 1);
+        lhs = Math.min(Math.floor(Math.abs(rebalanceRate) / INCREMENT) + Math.floor(MAX_CHARS / 2), MAX_CHARS - 1);
         rhs = MAX_CHARS - lhs;
     }
 

@@ -5,6 +5,7 @@ import Footer from '@components/Footer';
 import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
+import PendingCommits from '@components/PendingCommits';
 
 export default (() => {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default (() => {
             <PoolStore>
                 <NavBar />
                 <Browse />
+                <PendingCommits />
             </PoolStore>
             <Footer />
         </Page>

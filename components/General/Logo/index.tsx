@@ -12,7 +12,6 @@ export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = 
     const [leverageSide, name] = tokenSymbol.split('-');
     const side = leverageSide.slice(-1);
     const asset = name.split('/')[0];
-    console.log(`Constructed token ${asset}_${side}`);
     return `${asset}_${side}` as ShortLongToken;
 };
 

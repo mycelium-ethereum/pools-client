@@ -83,8 +83,7 @@ export default (() => {
                         }))}
                         value={market}
                         onSelect={(selectedMarket) => {
-                            console.debug('Setting market', selectedMarket);
-                            swapDispatch({ type: 'setMarket', value: selectedMarket as string });
+                            swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
                         }}
                     />
                 </span>
@@ -123,7 +122,7 @@ export default (() => {
                         className="w-full h-full text-base font-normal "
                         value={amount}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseInt(val) });
+                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
                         }}
                     />
                     <InnerInputText>
