@@ -1,7 +1,7 @@
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
-import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum, MarketFilterEnum } from '../state';
 interface FilterSelectsProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
@@ -21,9 +21,9 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div className="mr-4">
                     <h3 className="mb-1">Market</h3>
                     <Dropdown
-                        value={state.leverage}
-                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
+                        value={state.market}
+                        options={Object.values(MarketFilterEnum).map((key) => ({ key }))}
+                        onSelect={(val) => dispatch({ type: 'setMarket', market: val as MarketFilterEnum })}
                     />
                 </div>
                 <div className="mr-4">

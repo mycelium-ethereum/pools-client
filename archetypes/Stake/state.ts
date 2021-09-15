@@ -5,6 +5,11 @@ export enum LeverageFilterEnum {
     One = '1',
     Three = '3',
 }
+export enum MarketFilterEnum {
+    All = 'All',
+    BTCUSD = 'BTC/USD',
+    ETHUSD = 'ETH/USD',
+}
 
 export enum SideFilterEnum {
     Short = 'Short',
@@ -35,6 +40,7 @@ export interface FarmTableRowData {
 export interface StakeState {
     search: string;
     leverage: LeverageFilterEnum;
+    market: MarketFilterEnum;
     side: SideFilterEnum;
     sortBy: SortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
@@ -46,6 +52,7 @@ export interface StakeState {
 
 export type StakeAction =
     | { type: 'setSearch'; search: string }
+    | { type: 'setMarket'; market: MarketFilterEnum }
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
@@ -57,6 +64,11 @@ export type StakeAction =
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
     switch (action.type) {
+        case 'setMarket':
+            return {
+                ...state,
+                market: action.market,
+            };
         case 'setLeverage':
             return {
                 ...state,

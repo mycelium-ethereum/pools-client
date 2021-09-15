@@ -5,7 +5,7 @@ import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum, MarketFilterEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
@@ -33,6 +33,7 @@ export default (({ title, subTitle, farms }) => {
 
     const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
+        market: MarketFilterEnum.All,
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
