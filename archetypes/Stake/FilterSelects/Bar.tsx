@@ -43,14 +43,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="flex-grow" />
-                <div>
+                {/* <div>
                     <h3 className="mb-1">Sort</h3>
                     <Dropdown
                         value={state.sortBy}
                         options={Object.values(SortByEnum).map((key) => ({ key: key }))}
                         onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
                     />
-                </div>
+                </div> */}
             </div>
         </section>
     );

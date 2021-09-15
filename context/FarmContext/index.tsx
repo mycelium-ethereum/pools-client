@@ -96,8 +96,6 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     stakingTokenContract.totalSupply(),
                 ]);
 
-                console.log('got the staking token name', stakingTokenName);
-
                 const decimalMultiplier = 10 ** stakingTokenDecimals;
 
                 const updatedFarm = {
