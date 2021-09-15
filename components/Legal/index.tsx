@@ -40,6 +40,10 @@ const LeftPanel = styled.div`
     display: flex;
     flex-direction: column;
     border: 1px solid #0c3586;
+
+    @media (max-width: 1024px) {
+        display: none;
+    }
 `;
 
 const RightPanel = styled.div`
@@ -51,6 +55,11 @@ const RightPanel = styled.div`
     a {
         color: var(--color-secondary);
         text-decoration: underline;
+    }
+
+    @media (max-width: 1024px) {
+        width: 100%;
+        padding: 0 20px;
     }
 `;
 
