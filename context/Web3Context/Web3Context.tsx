@@ -8,6 +8,9 @@ import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onbo
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
 import { providers, ethers } from 'ethers';
+import { useToasts } from 'react-toast-notifications';
+import { switchNetworks } from '@libs/utils/rpcMethods';
+import { ARBITRUM_RINKEBY } from '@libs/constants';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -53,6 +56,8 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     cacheWalletSelection = true,
     checkNetwork = (networkIds && networkIds.length > 0) || false,
 }) => {
+    const errorToastID = React.useRef<string>('');
+    const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(undefined);
@@ -165,6 +170,54 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             setProvider(provider);
         }
     }, [wallet]);
+
+    // unsupported network popup
+    useEffect(() => {
+        if (!networkConfig[network ?? -1] && provider) {
+            // ignore if we are already showing the error
+            if (!errorToastID.current) {
+                const toastId = addToast(
+                    [
+                        'Unsupported Network',
+                        <span key="unsupported-network-content">
+                            <a
+                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                onClick={() => {
+                                    switchNetworks(provider, ARBITRUM_RINKEBY);
+                                }}
+                            >
+                                Switch to Arbitrum Mainnet
+                            </a>
+                            <br />
+                            <a
+                                href="https://developer.offchainlabs.com/docs/user_quickstart"
+                                target="_blank"
+                                rel="noreferrer noopner"
+                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                            >
+                                Learn more here
+                            </a>
+                        </span>,
+                    ],
+                    {
+                        appearance: 'error',
+                        autoDismiss: false,
+                    },
+                );
+                // @ts-ignore
+                errorToastID.current = toastId;
+            }
+        } else {
+            if (errorToastID.current) {
+                updateToast(errorToastID.current as unknown as string, {
+                    content: 'Switched Network',
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+                errorToastID.current = '';
+            }
+        }
+    }, [network]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();

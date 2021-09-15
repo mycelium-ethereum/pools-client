@@ -12,6 +12,7 @@ import Warning from 'public/img/general/warning.svg';
 import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
+import { classNames } from '@libs/utils/functions';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -109,22 +110,23 @@ const Close = styled(CloseOutlined)`
 `;
 
 const Content = styled((props: any) => (
-    <div className={`react-toast-notifications__toast__content p-2 ${props.className}`} {...props}>
+    <div className={classNames(
+            `react-toast-notifications__toast__content`,
+            props.className,
+        )}
+        {...props}>
         {props.children}
     </div>
 ))`
     flex-grow: 1;
     font-size: var(--font-size-medium);
     line-height: 1.4;
-    min-height: 40px;
     width: 100%;
+    margin-top: 0.5rem;
 
     word-break: break-word;
-    color: var(--color-primary);
-    color: #374151;
     font-size: 1rem;
-
-
+    color: #3DA8F5;
 `;
 
 type HProps = {
@@ -140,13 +142,6 @@ type HProps = {
     type?: typeof PENDING_COMMIT;
     commitInfo?: PendingCommitInfo;
 };
-
-
-const Header = styled.div`
-    color: #111928;
-    font-size: 1.2rem;
-
-`
 
 const Hashie: React.FC<HProps | any> = ({
     transitionDuration,
@@ -171,14 +166,14 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <Header>
+            <div className="text-cool-gray-900 text-xl">
                 <IconWrap>{appearance.icon}</IconWrap>
                 {/* title */}
                 <span>
                     {children_[0]}
                 </span>
                 <Close onClick={onDismiss}/>
-            </Header>
+            </div>
             <Content>{children_[1]}</Content>
         </ToastWrapper>
     );
