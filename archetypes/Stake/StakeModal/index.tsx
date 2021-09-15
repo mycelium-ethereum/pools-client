@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import Button from '@components/General/Button';
 import Gas from '@archetypes/Exchange/Gas';
@@ -43,7 +44,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
 
     const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
 
-    const { stakingTokenAllowance } = farm;
+    const stakingTokenAllowance = farm ? farm.stakingTokenAllowance : new BigNumber(0);
 
     useEffect(() => {
         if (farm) {
