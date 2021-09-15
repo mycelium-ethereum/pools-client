@@ -100,10 +100,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
-                {options.length 
-                    ? <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                    : <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                }
+                {options.length ? (
+                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                ) : (
+                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                )}
             </Menu.Button>
 
             <Transition
