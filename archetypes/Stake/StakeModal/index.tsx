@@ -43,6 +43,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
 
     const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
 
+    const { stakingTokenAllowance } = farm;
+
     useEffect(() => {
         if (farm) {
             const invalidAmount = isInvalidAmount(amount, stakeModalBalance.toNumber());
@@ -55,8 +57,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
     }, [amount, farm]);
 
     const isApproved = useMemo(() => {
-        return state.stakeModalState === 'claim' || state.stakeModalState === 'unstake' || stakeModalBalance?.gt(0);
-    }, [selectedFarm, state.stakeModalState]);
+        return state.stakeModalState === 'claim' || state.stakeModalState === 'unstake' || stakingTokenAllowance?.gt(0);
+    }, [selectedFarm, state.stakeModalState, farm]);
 
     return (
         <TWModal
