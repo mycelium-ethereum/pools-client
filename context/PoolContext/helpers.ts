@@ -253,11 +253,11 @@ export const fetchTokenBalances: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<[EthersBigNumber, number][]> = (tokens, provider, account) => {
+) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return Promise.all([tokenContract.balanceOf(account), tokenContract.decimals()]);
+            return tokenContract.balanceOf(account);
         }),
     );
 };
@@ -267,11 +267,11 @@ export const fetchTokenApprovals: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     pool: string,
-) => Promise<[EthersBigNumber, number][]> = (tokens, provider, account, pool) => {
+) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return Promise.all([tokenContract.allowance(account, pool), tokenContract.decimals()]);
+            return tokenContract.allowance(account, pool);
         }),
     );
 };

@@ -134,11 +134,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        const decimals = pool.quoteToken.decimals;
         fetchTokenBalances(tokens, provider, account, pool.address)
             .then((balances) => {
-                const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0][0], balances[0][1]));
-                const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1][0], balances[1][1]));
-                const quoteTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2][0], balances[2][1]));
+                const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
+                const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
+                const quoteTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
 
                 console.debug('Balances', {
                     shortTokenBalance,
@@ -164,13 +165,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             return;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
+        const decimals = pool.quoteToken.decimals;
         fetchTokenApprovals(tokens, provider, account, pool.address).then((approvals) => {
             poolsDispatch({
                 type: 'setTokenApprovals',
                 pool: pool.address,
-                shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0][0], approvals[0][1])),
-                longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1][0], approvals[1][1])),
-                quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2][0], approvals[2][1])),
+                shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
+                longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
+                quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
             });
         });
     };
