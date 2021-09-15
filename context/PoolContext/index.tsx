@@ -254,11 +254,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
             keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (startPrice, endPrice, log) => {
-                const decimals = poolsState.pools[pool].quoteToken.decimals;
                 console.debug(`
                     Completed upkeep. 
-                    Old price: ${ethers.utils.formatUnits(startPrice, decimals)}
-                    New price: ${ethers.utils.formatUnits(endPrice, decimals)}
+                    Old price: ${ethers.utils.formatEther(startPrice)}
+                    New price: ${ethers.utils.formatEther(endPrice)}
                 `);
                 log.getTransaction().then((txn) => {
                     // txn.timestamp should be the the ne lastUpdate price
@@ -351,7 +350,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
 
         leveragedPool.getOraclePrice().then((price) => {
-            const oraclePrice = new BigNumber(ethers.utils.formatUnits(price, pool.quoteToken.decimals));
+            const oraclePrice = new BigNumber(ethers.utils.formatEther(price));
             const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
                 lastPrice,
                 oraclePrice,
