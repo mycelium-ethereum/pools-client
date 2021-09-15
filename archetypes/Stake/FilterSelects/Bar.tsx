@@ -18,14 +18,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         onChange={(search) => dispatch({ type: 'setSearch', search })}
                     />
                 </div>
-                <div className="mr-4">
+                {/* <div className="mr-4">
                     <h3 className="mb-1">Market</h3>
                     <Dropdown
                         value={state.leverage}
                         options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
                         onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
                     />
-                </div>
+                </div> */}
                 <div className="mr-4">
                     <h3 className="mb-1">Leverage</h3>
                     <Dropdown

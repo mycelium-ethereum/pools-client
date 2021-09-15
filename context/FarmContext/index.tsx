@@ -32,9 +32,11 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
         const { stakingToken, isPoolToken, stakingTokenDecimals } = farm;
         if (account && farm) {
-            const [stakingTokenBalance, stakingTokenAllowance] = await Promise.all([
+            const [stakingTokenBalance, stakingTokenAllowance, myStaked, myRewards] = await Promise.all([
                 stakingToken.balanceOf(account),
                 stakingToken.allowance(account, farmAddress),
+                farm.contract.balanceOf(account),
+                farm.contract.rewards(account),
             ]);
 
             const decimalMultiplier = 10 ** stakingTokenDecimals;
@@ -46,6 +48,8 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                         ...previousPoolFarms[farmAddress],
                         stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
                         stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(decimalMultiplier),
+                        myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
+                        myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
                     },
                 }));
             } else {
@@ -55,6 +59,8 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                         ...previousSlpFarms[farmAddress],
                         stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
                         stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(decimalMultiplier),
+                        myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
+                        myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
                     },
                 }));
             }

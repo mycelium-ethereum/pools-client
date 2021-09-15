@@ -23,10 +23,12 @@ export default (({ title, subTitle, farms }) => {
         leverage: 1,
         side: 'long',
         apy: farm.apy.toNumber(),
-        tvl: farm.tvl.toNumber(),
         myStaked: farm.myStaked.toNumber(),
         myRewards: farm.myRewards.toNumber(),
         stakingTokenBalance: farm.stakingTokenBalance,
+        tokenAddress: farm.stakingToken.address,
+        totalStaked: farm.totalStaked.toNumber(),
+        rewardsPerYear: farm.rewardsPerYear,
     }));
 
     console.log('FARMS', farms);
