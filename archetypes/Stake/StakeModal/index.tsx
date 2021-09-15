@@ -9,6 +9,7 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { StakeAction, StakeState } from '../state';
+import { useFarms } from '@context/FarmContext';
 interface StakeModalProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
@@ -38,23 +39,26 @@ const isInvalidAmount: (amount: number, balance: number) => { isInvalid: boolean
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
     const { amount, selectedFarm, invalidAmount } = state;
+    const { poolFarms, slpFarms } = useFarms();
+
+    const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
 
     useEffect(() => {
-        if (selectedFarm) {
-            console.log('AVAILABLE TO STAKE', selectedFarm.stakingTokenBalance.toString());
+        if (farm) {
+            console.log('AVAILABLE TO STAKE', farm.stakingTokenBalance.toString());
 
-            const invalidAmount = isInvalidAmount(amount, selectedFarm.stakingTokenBalance.toNumber());
+            const invalidAmount = isInvalidAmount(amount, farm.stakingTokenBalance.toNumber());
 
             dispatch({
                 type: 'setInvalidAmount',
                 value: invalidAmount,
             });
         }
-    }, [amount, selectedFarm]);
+    }, [amount, farm]);
 
-    console.log('SELECTED FARM', selectedFarm);
+    console.log('SELECTED FARM', farm);
 
-    const isApproved = useMemo(() => selectedFarm?.stakingTokenAllowance.gt(0), [selectedFarm]);
+    const isApproved = useMemo(() => farm?.stakingTokenAllowance.gt(0), [farm]);
 
     return (
         <TWModal
@@ -83,8 +87,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         />
                         <InnerInputText>
                             <Currency
-                                label={selectedFarm?.name}
-                                ticker={tokenSymbolToLogoTicker(selectedFarm?.name)}
+                                label={farm?.name}
+                                ticker={tokenSymbolToLogoTicker(farm?.name)}
                                 className="shadow-md"
                             />
                             <div
@@ -96,7 +100,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
-                                        amount: selectedFarm.stakingTokenBalance.toNumber(), // TODO use actual use balance here
+                                        amount: farm.stakingTokenBalance.toNumber(), // TODO use actual use balance here
                                     })
                                 }
                             >
@@ -110,8 +114,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 invalidAmount.message
                             ) : (
                                 <>
-                                    {`Available: ${selectedFarm?.stakingTokenBalance.toFixed(6)}`}
-                                    {!!amount ? ` > ${selectedFarm?.stakingTokenBalance.minus(amount).toFixed(6)}` : ''}
+                                    {`Available: ${farm?.stakingTokenBalance.toFixed(6)}`}
+                                    {!!amount ? ` > ${farm?.stakingTokenBalance.minus(amount).toFixed(6)}` : ''}
                                 </>
                             )}
                         </div>
@@ -124,7 +128,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             size="lg"
                             variant="primary"
                             // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
-                            onClick={(_e) => onStake(selectedFarm.address, amount)}
+                            onClick={(_e) => onStake(farm.address, amount)}
                         >
                             {btnLabel}
                         </Button>
@@ -134,7 +138,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             size="lg"
                             variant="primary"
                             // disabled={!selectedPool || !amount || invalidAmount.isInvalid}
-                            onClick={(_e) => onApprove(selectedFarm.address)}
+                            onClick={(_e) => onApprove(farm.address)}
                         >
                             Approve
                         </Button>

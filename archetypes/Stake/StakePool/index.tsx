@@ -105,7 +105,7 @@ export default (() => {
     const handleStake = (farmAddress: string) => {
         dispatch({
             type: 'setSelectedFarm',
-            farm: farms[farmAddress],
+            farm: farmAddress,
         });
         dispatch({
             type: 'setStakeModalState',
@@ -127,7 +127,19 @@ export default (() => {
         );
 
         if (handleTransaction) {
-            handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
+            handleTransaction(
+                contract.stake, 
+                [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()],
+                {
+                    onSuccess: () => {
+                        refreshFarm(farmAddress);
+                        dispatch({
+                            type: 'setAmount',
+                            amount: NaN
+                        })
+                    },
+                }
+            );
         }
     };
 

@@ -1,5 +1,4 @@
 import BigNumber from 'bignumber.js';
-import { Farm } from '@libs/types/Staking';
 
 export enum LeverageFilterEnum {
     All = 'All',
@@ -42,7 +41,7 @@ export interface StakeState {
     stakeModalOpen: boolean;
     filterModalOpen: boolean;
     amount: number;
-    selectedFarm: Farm;
+    selectedFarm: string;
     invalidAmount: { isInvalid: boolean; message?: string };
 }
 
@@ -52,7 +51,7 @@ export type StakeAction =
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
     | { type: 'setStakeModalState'; state: StakeState['stakeModalState'] }
-    | { type: 'setSelectedFarm'; farm: Farm }
+    | { type: 'setSelectedFarm'; farm: string }
     | { type: 'setAmount'; amount: number }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
     | { type: 'setSortBy'; sortBy: SortByEnum };
