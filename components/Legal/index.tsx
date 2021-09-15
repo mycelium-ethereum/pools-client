@@ -50,6 +50,7 @@ const RightPanel = styled.div`
 
     a {
         color: var(--color-secondary);
+        text-decoration: underline;
     }
 `;
 
@@ -84,6 +85,11 @@ export const Title = styled.div`
     padding: 15px 0;
 `;
 
+export const Subtitle = styled.div`
+    color: var(--color-secondary);
+    padding: 5px 0;
+`;
+
 export const Paragraph = styled.div`
     padding: 5px 0;
     max-width: 800px;
@@ -108,14 +114,6 @@ export const BodyText = styled.div`
     a {
         color: var(--color-secondary);
     }
-`;
-
-export const SubHeading = styled.span`
-    display: block;
-    font-size: var(--font-size-small);
-    color: var(--color-secondary);
-    max-width: 800px;
-    margin-bottom: 8px;
 `;
 
 export const List = styled.ul`

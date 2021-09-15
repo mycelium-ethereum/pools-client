@@ -3,7 +3,7 @@ import NavBar from '@components/Nav';
 import styled from 'styled-components';
 import Footer from '@components/Footer';
 import Link from 'next/link';
-import { GeneralContainer, BodyText, MainTitle, SubHeading, Title, Paragraph } from '@components/Legal';
+import { GeneralContainer, BodyText, MainTitle, Subtitle, Title, Paragraph } from '@components/Legal';
 
 const Disclaimer: React.FC = styled(({ className }) => {
     return (
@@ -12,7 +12,7 @@ const Disclaimer: React.FC = styled(({ className }) => {
             <GeneralContainer className={'container'}>
                 <MainTitle>Tracer Protocol Disclaimer</MainTitle>
                 <BodyText>
-                    <SubHeading>Last Updated on July 7, 2021</SubHeading>
+                    <Subtitle>Last Updated on July 7, 2021</Subtitle>
                     <Paragraph>
                         Your use of a smart contract governed by Tracer DAO, including Tracer Perpetual Swaps, ({'"'}
                         Tracer protocol{'"'}) involves various risks, including, but not limited to, the risks outlined
