@@ -5,7 +5,7 @@ import { LeveragedPool, LeveragedPool__factory } from '@tracer-protocol/perpetua
 import { ethers } from 'ethers';
 
 // const usePoolTokenMap
-export default () => {
+export default (): Record<string, string> => {
     const { provider } = useWeb3();
     const { pools } = usePools();
     const [tokenMap, setTokenMap] = useState<Record<string, string>>({});

@@ -121,7 +121,7 @@ export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNum
  * Calc minimum amount in to sell
  * @param totalSupply total token supply
  * @param tokenBalance token balance
- * @param minimumCommitSize 
+ * @param minimumCommitSize
  * @param pendingCommits accumulative commit amounts
  * @returns Minimum amount in
  */

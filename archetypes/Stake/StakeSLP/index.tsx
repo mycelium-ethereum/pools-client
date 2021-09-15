@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React from 'react';
 
 import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
