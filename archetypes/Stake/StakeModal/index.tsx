@@ -54,8 +54,6 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
         }
     }, [amount, farm]);
 
-    console.log('SELECTED FARM', farm);
-
     const isApproved = useMemo(() => {
         return state.stakeModalState === 'claim' || state.stakeModalState === 'unstake' || stakeModalBalance?.gt(0);
     }, [selectedFarm, state.stakeModalState]);

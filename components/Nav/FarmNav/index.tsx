@@ -40,7 +40,7 @@ export default (({ left, right }) => {
                 <Item onClick={(_e) => handleRoute(STAKE)} selected={router.pathname === '/stake'}>
                     Stake Pool
                 </Item>
-                <Item onClick={(_e) => console.log('coming soon')} selected={router.pathname === '/slp'}>
+                <Item onClick={(_e) => console.debug('coming soon')} selected={router.pathname === '/slp'}>
                     <Tooltip text="Coming soon" placement="bottom">
                         Stake SLP
                     </Tooltip>

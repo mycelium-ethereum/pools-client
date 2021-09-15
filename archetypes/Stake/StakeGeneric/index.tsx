@@ -31,8 +31,6 @@ export default (({ title, subTitle, farms }) => {
         rewardsPerYear: farm.rewardsPerYear,
     }));
 
-    console.log('FARMS', farms);
-
     const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
         leverage: LeverageFilterEnum.All,
@@ -166,7 +164,7 @@ export default (({ title, subTitle, farms }) => {
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
             <StakeModal
-                onApprove={(farmAddress: string) => console.log(farmAddress)}
+                onApprove={(farmAddress: string) => console.debug(farmAddress)}
                 state={state}
                 dispatch={dispatch}
                 onStake={stake}

@@ -228,7 +228,6 @@ export default (() => {
         const { stakingToken } = farm;
 
         if (handleTransaction) {
-            console.log(stakingToken);
             handleTransaction(stakingToken.approve, [farmAddress, MAX_SOL_UINT.toString()], {
                 onSuccess: () => {
                     refreshFarm(farmAddress);

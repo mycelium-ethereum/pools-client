@@ -12,7 +12,6 @@ export default (): Record<string, string> => {
 
     useMemo(() => {
         if (pools && provider) {
-            console.log('Fetching tokens');
             Promise.all(
                 Object.keys(pools).map((pool) => {
                     const poolContract = new ethers.Contract(
