@@ -1,31 +1,21 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
-import { useFarms } from '@context/FarmContext';
 import styled from 'styled-components';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import { MAX_SOL_UINT } from '@libs/constants';
-import {
-    stakeReducer,
-    StakeAction,
-    StakeState,
-    FarmTableRowData,
-    LeverageFilterEnum,
-    SideFilterEnum,
-    SortByEnum,
-} from '../state';
+import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
+import { Farm } from '@libs/types/Staking';
 
-export default (() => {
+export default (({ title, subTitle, farms }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
-    const { poolFarms: farms, refreshFarm } = useFarms();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
         farm: farm.address,
@@ -38,6 +28,8 @@ export default (() => {
         myRewards: farm.myRewards.toNumber(),
         stakingTokenBalance: farm.stakingTokenBalance,
     }));
+
+    console.log('FARMS', farms);
 
     const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
@@ -106,14 +98,14 @@ export default (() => {
     const filteredTokens = farmTableRows.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredFarms = filteredTokens.sort(sorter);
 
+    const handleClaim = () => {
+        console.debug('Claiming...');
+    };
+
     const handleStake = (farmAddress: string) => {
         dispatch({
             type: 'setSelectedFarm',
             farm: farmAddress,
-        });
-        dispatch({
-            type: 'setStakeModalBalance',
-            balance: farms[farmAddress].stakingTokenBalance,
         });
         dispatch({
             type: 'setStakeModalState',
@@ -121,38 +113,8 @@ export default (() => {
         });
     };
 
-    const handleUnstake = (farmAddress: string) => {
-        dispatch({
-            type: 'setSelectedFarm',
-            farm: farmAddress,
-        });
-        dispatch({
-            type: 'setStakeModalBalance',
-            balance: farms[farmAddress].myStaked,
-        });
-        dispatch({
-            type: 'setStakeModalState',
-            state: 'unstake',
-        });
-    };
-
-    const handleClaim = (farmAddress: string) => {
-        dispatch({
-            type: 'setSelectedFarm',
-            farm: farmAddress,
-        });
-        dispatch({
-            type: 'setStakeModalBalance',
-            balance: farms[farmAddress].myRewards,
-        });
-        dispatch({
-            type: 'setAmount',
-            amount: farms[farmAddress].myRewards.toNumber(),
-        });
-        dispatch({
-            type: 'setStakeModalState',
-            state: 'claim',
-        });
+    const handleUnstake = () => {
+        console.debug('Unstaking...');
     };
 
     const stake = (farmAddress: string, amount: number) => {
@@ -166,43 +128,6 @@ export default (() => {
 
         if (handleTransaction) {
             handleTransaction(contract.stake, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
-        }
-    };
-
-    const unstake = (farmAddress: string, amount: number) => {
-        const farm = farms[farmAddress];
-        const { contract, stakingTokenDecimals } = farm;
-        console.debug(
-            `staking ${new BigNumber(amount)
-                .times(10 ** stakingTokenDecimals)
-                .toString()} in contract at ${farmAddress}`,
-        );
-
-        if (handleTransaction) {
-            handleTransaction(contract.withdraw, [new BigNumber(amount).times(10 ** stakingTokenDecimals).toString()]);
-        }
-    };
-
-    const claim = (farmAddress: string) => {
-        const farm = farms[farmAddress];
-        const { contract } = farm;
-
-        if (handleTransaction) {
-            handleTransaction(contract.getReward, []);
-        }
-    };
-
-    const approve = (farmAddress: string) => {
-        const farm = farms[farmAddress];
-        const { stakingToken } = farm;
-
-        if (handleTransaction) {
-            console.log(stakingToken);
-            handleTransaction(stakingToken.approve, [farmAddress, MAX_SOL_UINT.toString()], {
-                onSuccess: () => {
-                    refreshFarm(farmAddress);
-                },
-            });
         }
     };
 
@@ -225,10 +150,8 @@ export default (() => {
             <Container className="mt-0 md:mt-[100px]">
                 <FarmContainer>
                     <section className="hidden md:block">
-                        <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">
-                            Pool Token Farms
-                        </h1>
-                        <p className="mb-1 text-gray-500">Stake Pool Tokens and earn TCR.</p>
+                        <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">{title}</h1>
+                        <p className="mb-1 text-gray-500">{subTitle}</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <FarmsTable
@@ -240,65 +163,21 @@ export default (() => {
                 </FarmContainer>
             </Container>
             <FilterModal state={state} dispatch={dispatch} />
-            <StakeModalWithState
+            <StakeModal
+                onApprove={(farmAddress: string) => console.log(farmAddress)}
                 state={state}
                 dispatch={dispatch}
-                approve={approve}
-                stake={stake}
-                unstake={unstake}
-                claim={claim}
+                onStake={stake}
+                title={title}
+                btnLabel="Stake"
             />
         </>
     );
-}) as React.FC;
-
-const StakeModalWithState: React.FC<{
-    state: StakeState;
-    approve: (farmAddress: string) => void;
-    stake: (farmAddress: string, amount: number) => void;
-    unstake: (farmAddress: string, amount: number) => void;
-    claim: (farmAddress: string) => void;
-    dispatch: React.Dispatch<StakeAction>;
-}> = ({ state, approve, stake, unstake, claim, dispatch }) => {
-    switch (state.stakeModalState) {
-        case 'stake':
-            return (
-                <StakeModal
-                    state={state}
-                    dispatch={dispatch}
-                    onStake={stake}
-                    onApprove={approve}
-                    title="Stake Pool Tokens"
-                    btnLabel="Stake"
-                />
-            );
-        case 'unstake':
-            return (
-                <StakeModal
-                    state={state}
-                    dispatch={dispatch}
-                    onStake={unstake}
-                    onApprove={approve}
-                    title="Unstake Pool Tokens"
-                    btnLabel="Unstake"
-                />
-            );
-        case 'claim':
-            return (
-                <StakeModal
-                    state={state}
-                    dispatch={dispatch}
-                    onStake={claim}
-                    onApprove={approve}
-                    title="Claim Pool Tokens Rewards"
-                    btnLabel="Claim"
-                />
-            );
-        case 'closed':
-        default:
-            return null;
-    }
-};
+}) as React.FC<{
+    title: string;
+    subTitle: string;
+    farms: Record<string, Farm>;
+}>;
 
 const FarmContainer = styled.div`
     @media (max-width: 768px) {
