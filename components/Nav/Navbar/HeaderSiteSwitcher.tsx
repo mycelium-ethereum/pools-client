@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 // @ts-ignore
-import ArrowDown from '@public/img/general/caret_down.svg';
+import ArrowDown from '@public/img/general/caret-down-white.svg';
 import Icon from '@ant-design/icons';
 
 // @ts-ignore
