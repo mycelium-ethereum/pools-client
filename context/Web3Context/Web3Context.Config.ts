@@ -1,4 +1,5 @@
 import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
 
@@ -11,6 +12,11 @@ export type Network = {
             abi: ethers.ContractInterface;
         };
     };
+    farms: {
+        address: string;
+        abi: ethers.ContractInterface;
+        isPoolToken: boolean;
+    }[];
     hex: string;
     publicRPC: string;
     graphUri: string;
@@ -29,6 +35,7 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: '',
         name: 'Unknown',
         contracts: {},
+        farms: [],
         publicRPC: '',
         hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
@@ -42,6 +49,18 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [
+            {
+                address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0x6213c21518EF9d4875d9C41F7ad8d16B4f986cB2',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+        ],
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
@@ -55,6 +74,48 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [
+            {
+                address: '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0xD04dDCAEca6bf283A430Cb9E847CEEd5Da419Fa0',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0xEb05e160D3C1990719aa25d74294783fE4e3D3Ef',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0xeA4FF5ED11F93AA0Ce7744B1D40093f52eA1cda8',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0xA18413dC5506A91138e0604C283E36B021b8849B',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0x9769F208239C740cC40E9CB3427c34513213B83f',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0x07cCcDC913bCbab246fC6E38E81b0C53AaB3De9b',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+            {
+                address: '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC',
+                abi: StakingRewards__factory.abi,
+                isPoolToken: true,
+            },
+        ],
         hex: '0xA4B1',
         publicRPC: 'https://arb1.arbitrum.io/rpc',
         graphUri: 'TODO',
@@ -68,6 +129,7 @@ export const networkConfig: Record<string, Network> = {
                 abi: PoolFactory__factory.abi,
             },
         },
+        farms: [],
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
@@ -82,6 +144,7 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         hex: '',
+        farms: [],
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
     },

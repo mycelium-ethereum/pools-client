@@ -18,7 +18,7 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    const [showModal, setShowModal] = useState(false);
+    const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
     const { provider } = useWeb3();
     return (
         <>
@@ -28,7 +28,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
                         {'Rebalancing rate * '}
-                        <span className="cursor-pointer ml-1" onClick={() => setShowModal(true)}>
+                        <span className="cursor-pointer ml-1" onClick={() => setShowModalRebalanceRate(true)}>
                             <QuestionMark />
                         </span>
                     </span>
@@ -101,10 +101,10 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <Modal show={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
                         <Close />
                     </div>
                 </div>
@@ -139,3 +139,13 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
+
+// const ColoredChangeNumber = (({ number }) => {
+//     return (
+//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
+//             2,
+//         )}`}</span>
+//     );
+// }) as React.FC<{
+//     number: number;
+// }>;

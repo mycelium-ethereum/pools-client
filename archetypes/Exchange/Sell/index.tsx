@@ -56,7 +56,7 @@ const isInvalidAmount: (
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const tokens = usePoolTokens();
+    const { tokens } = usePoolTokens();
 
     const { amount, side, selectedPool, commitAction, invalidAmount } = swapState;
 
@@ -136,7 +136,7 @@ export default (() => {
                     />
                     <InnerInputText>
                         {token.symbol ? (
-                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} text={token.symbol} />
+                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} label={token.symbol} />
                         ) : null}
                         <div
                             className="m-auto cursor-pointer hover:underline"

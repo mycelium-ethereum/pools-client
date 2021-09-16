@@ -1,4 +1,4 @@
-import { SideEnum, CommitEnum } from '@libs/constants';
+import { SideEnum, CommitEnum, MAX_SOL_UINT } from '@libs/constants';
 import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
@@ -157,8 +157,6 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         subscribed: false,
     };
 };
-
-const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');
 
 export const fetchCommits: (
     committer: string,
