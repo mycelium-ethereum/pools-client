@@ -167,7 +167,7 @@ export default (() => {
 
             <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
 
-            <FeeNote pool={pool} isBuy={true} />
+            <FeeNote pool={pool} isMint={true} />
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
         </>
