@@ -15,6 +15,7 @@ import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close-black.svg';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 // import BigNumber from 'bignumber.js';
 // const testCommits = [
@@ -138,7 +139,10 @@ const BuyRow: React.FC<
                 )}
             </span>
             <span className="flex text-right">
-                <Actions token={token} provider={provider} arbiscanTarget={txnHash} />
+                <Actions token={token} provider={provider} arbiscanTarget={{
+                    type: ArbiscanEnum.txn,
+                    target: txnHash
+                }} />
             </span>
         </TableRow>
     );
@@ -178,7 +182,10 @@ const SellRow: React.FC<
                 )}
             </span>
             <span className="flex text-right">
-                <Actions token={token} provider={provider} arbiscanTarget={txnHash} />
+                <Actions token={token} provider={provider} arbiscanTarget={{
+                    type: ArbiscanEnum.txn,
+                    target: txnHash
+                }} />
             </span>
         </TableRow>
     );
