@@ -139,10 +139,14 @@ const BuyRow: React.FC<
                 )}
             </span>
             <span className="flex text-right">
-                <Actions token={token} provider={provider} arbiscanTarget={{
-                    type: ArbiscanEnum.txn,
-                    target: txnHash
-                }} />
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
             </span>
         </TableRow>
     );
@@ -182,10 +186,14 @@ const SellRow: React.FC<
                 )}
             </span>
             <span className="flex text-right">
-                <Actions token={token} provider={provider} arbiscanTarget={{
-                    type: ArbiscanEnum.txn,
-                    target: txnHash
-                }} />
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
             </span>
         </TableRow>
     );

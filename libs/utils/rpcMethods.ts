@@ -1,6 +1,8 @@
+import { tokenSymbolToLogoTicker } from '@components/General';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ethers } from 'ethers';
 
+const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';
 /**
  * Adds a token asset to the users wallet watch
  * @param provider ethereum provider
@@ -18,6 +20,7 @@ export const watchAsset: (
     if (!provider) {
         return new Promise(() => false);
     }
+
     return provider
         ?.send('wallet_watchAsset', {
             // @ts-ignore
@@ -27,6 +30,7 @@ export const watchAsset: (
                 address: token.address,
                 symbol: token.symbol,
                 decimals: token.decimals,
+                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
             },
         })
         .then((success) => {
