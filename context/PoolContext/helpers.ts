@@ -83,6 +83,15 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         quoteTokenInstance.decimals(),
     ]);
 
+    console.log(
+        'LONG TOKEN SUPPLY',
+        new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)).toString(),
+    );
+    console.log(
+        'SHORT TOKEN SUPPLY',
+        new BigNumber(ethers.utils.formatUnits(shortTokenSupply, quoteTokenDecimals)).toString(),
+    );
+
     // fetch minimum commit size
     const poolCommitterInstance = new ethers.Contract(
         poolCommitter,
@@ -133,7 +142,9 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             decimals: longTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
-            supply: new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)),
+            // supply: new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)),
+            // supply: new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)),
+            supply: new BigNumber(longTokenSupply.toString()),
             side: SideEnum.long,
         },
         shortToken: {
@@ -143,7 +154,8 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             decimals: shortTokenDecimals,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
-            supply: new BigNumber(ethers.utils.formatUnits(shortTokenSupply, quoteTokenDecimals)),
+            // supply: new BigNumber(ethers.utils.formatUnits(shortTokenSupply, quoteTokenDecimals)),
+            supply: new BigNumber(shortTokenSupply.toString()),
             side: SideEnum.short,
         },
         quoteToken: {

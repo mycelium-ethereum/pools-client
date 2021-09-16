@@ -26,5 +26,11 @@ export default ((tokenAddress) => {
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
-    return useMemo(() => calcTokenPrice(notional, token.supply.plus(pendingBurns)), [notional, token, pendingBurns]);
-}) as (token: string) => BigNumber;
+    return {
+        price: useMemo(
+            () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+            [notional, token, pendingBurns],
+        ),
+        supply: useMemo(() => token.supply, [notional, token, pendingBurns]),
+    };
+}) as (token: string) => { price: BigNumber; supply: BigNumber };

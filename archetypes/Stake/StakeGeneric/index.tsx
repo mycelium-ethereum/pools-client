@@ -48,7 +48,7 @@ export default (({
             name: farm.name,
             leverage: poolToken?.leverage,
             side: poolToken?.side,
-            apy: farm.apy.toNumber(),
+            apr: farm.apr.toNumber(),
             totalStaked: farm.totalStaked.toNumber(),
             myStaked: farm.myStaked.toNumber(),
             myRewards: farm.myRewards.toNumber(),

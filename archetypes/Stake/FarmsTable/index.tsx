@@ -90,9 +90,13 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-    const tokenPrice = farm.isPoolToken ? useTokenPrice(farm.tokenAddress) : new BigNumber(1);
+    const { price: tokenPrice, supply } = farm.isPoolToken
+        ? useTokenPrice(farm.tokenAddress)
+        : { price: new BigNumber(1), supply: new BigNumber(1) };
+
+    console.log('APR SUPPLY', supply);
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
-    const aprDenominator = tokenPrice.times(farm.totalStaked);
+    const aprDenominator = tokenPrice.times(supply);
 
     // console.log(farm.rewardsPerYear.toNumber(), "Rewards per year")
     // console.log(TCR_PRICE.toNumber(), "Tcr price")
