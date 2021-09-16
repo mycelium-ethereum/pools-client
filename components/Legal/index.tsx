@@ -11,15 +11,18 @@ export const LegalPageLayout: React.FC = ({ children }) => {
     return (
         <>
             <NavBar />
-            <TWPopup 
+            <TWPopup
                 className={'mt-4 ml-6 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
-                buttonClasses={'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'}
+                buttonClasses={
+                    'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'
+                }
                 preview={
-                route === '/privacy-policy'
-                    ? 'Privacy Policy'
-                    : route === '/terms-of-use'
-                    ? 'Terms of Use'
-                    : 'Disclaimer'}
+                    route === '/privacy-policy'
+                        ? 'Privacy Policy'
+                        : route === '/terms-of-use'
+                        ? 'Terms of Use'
+                        : 'Disclaimer'
+                }
             >
                 <div className="w-full p-3 text-right">
                     <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
