@@ -27,7 +27,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>Token</span>
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
-                        {'Rebalancing rate * '}
+                        {'Expected Rebalancing rate * '}
                         <span className="cursor-pointer ml-1" onClick={() => setShowModalRebalanceRate(true)}>
                             <QuestionMark />
                         </span>
