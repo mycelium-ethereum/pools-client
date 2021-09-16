@@ -97,10 +97,9 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     const lastPrice = await keeperInstance.executionPrice(pool.address);
 
-    console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
+    console.debug('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
     const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
-    console.log(ethers.utils.formatEther(lastPrice), 'last price');
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
