@@ -31,8 +31,8 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
     return (
         <div
             className={classNames(
-                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md text-base bg-white',
                 className ?? '',
+                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md bg-white',
             )}
             ref={main}
         >
