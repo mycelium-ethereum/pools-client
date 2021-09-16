@@ -1,6 +1,5 @@
 import { SideEnum, CommitEnum, MAX_SOL_UINT } from '@libs/constants';
 import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
-import { getDecimals } from '@libs/utils/converters';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -97,10 +96,9 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     const lastPrice = await keeperInstance.executionPrice(pool.address);
 
-    console.log('Leverage still whack', new BigNumber(leverageAmount).toNumber());
+    console.debug('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
     const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
-    console.log(ethers.utils.formatEther(lastPrice), 'last price');
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),
@@ -217,8 +215,7 @@ export const fetchCommits: (
     };
 
     allUnexecutedCommits.forEach((commit) => {
-        const decimals = getDecimals(commit.args.commitType, quoteTokenDecimals);
-        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals));
+        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, quoteTokenDecimals));
         switch (commit.args.commitType) {
             case CommitEnum.short_mint:
                 pendingShort.mint = pendingShort.mint.plus(amount);
@@ -236,6 +233,7 @@ export const fetchCommits: (
             // do nothing
         }
     });
+
     console.debug(`Pending Long`, pendingLong);
     console.debug(`Pending Short`, pendingShort);
 

@@ -20,6 +20,7 @@ export enum SortByEnum {
 
 export interface BrowseTableRowData {
     address: string;
+    decimals: number;
     pool: string;
     symbol: string;
     leverage: number;

@@ -28,8 +28,8 @@ export enum CommitEnum {
 
 // Focused on either buys or shorts when viewing pending commits
 export enum CommitsFocusEnum {
-    buys = 0,
-    sells = 1,
+    mints = 0,
+    burns = 1,
 }
 
 export const PENDING_COMMIT = 1;

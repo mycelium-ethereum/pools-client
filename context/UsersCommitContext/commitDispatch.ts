@@ -12,7 +12,7 @@ export const initialCommitState: CommitsState = {
     commits: {},
     updateCommits: false,
     showCommits: false,
-    focus: CommitsFocusEnum.buys,
+    focus: CommitsFocusEnum.mints,
 };
 
 export type CommitAction =
