@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import useEnsName from '@libs/hooks/useEnsName';
 
+import useEnsName from '@libs/hooks/useEnsName';
 // @ts-ignore
 import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
@@ -63,12 +64,7 @@ interface AccountDropdownButtonProps {
     logout: () => void;
 }
 
-const AccountDropdownButton = ({
-    account,
-    ensName,
-    // network,
-    logout,
-}: AccountDropdownButtonProps) => {
+const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDropdownButtonProps) => {
     return (
         <TWPopup
             preview={
@@ -118,7 +114,7 @@ const AccountDropdownButton = ({
 
             <div className="py-1 px-4 mb-2">
                 <ViewOnEtherscanOption account={account} />
-                {/*<BridgeFundsOption network={network} />*/}
+                <BridgeFundsOption network={network} />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -168,24 +164,25 @@ const WalletIcon: React.FC<{
     );
 };
 
-// const BridgeFundsOption = styled(({ network, className }) => {
-//     return (
-//         <a className={className} href={`#`}>
-//             <Logo ticker={network} />
-//             <div>Bridge Funds</div>
-//         </a>
-//     );
-// })`
-//     display: flex;
-//     line-height: 2.625rem;
-//     ${Logo} {
-//         display: inline;
-//         vertical-align: 0;
-//         width: 20px;
-//         height: 22px;
-//         margin: auto 0.5rem auto 0;
-//     }
-// `;
+const BridgeFundsOption = styled(({ network, className }) => {
+    return (
+        <a className={className} href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
+            <Logo ticker={network} />
+            <div className="text-sm">Bridge Funds</div>
+        </a>
+    );
+})`
+    display: flex;
+    margin-top: 15px;
+
+    ${Logo} {
+        display: inline;
+        vertical-align: 0;
+        width: 20px;
+        height: 22px;
+        margin: auto 0.5rem auto 0;
+    }
+`;
 
 // const AddTCROption = styled(({ className }) => {
 //     return (
