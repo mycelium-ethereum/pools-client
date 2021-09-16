@@ -11,12 +11,12 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
-import Modal from '@components/General/Modal';
 import FeeNote from '@archetypes/Exchange/FeeNote';
-
-import Close from '/public/img/general/close-black.svg';
 import Button from '@components/General/Button';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { TWModal } from '@components/General/TWModal';
+
+import Close from '/public/img/general/close-black.svg';
 
 const inputRow = 'relative my-2 ';
 
@@ -189,7 +189,7 @@ export default (() => {
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-xl">Bridge Funds to Arbitrum</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
@@ -221,7 +221,7 @@ export default (() => {
                 >
                     Launch Arbitrum Bridge
                 </Button>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC;
