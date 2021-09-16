@@ -2801,10 +2801,10 @@
     memory-cache "^0.2.0"
     web3-utils "^1.4.0"
 
-"@tracer-protocol/onboard@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.0.0.tgz#76d4a65095ecea6cbefee790e5fa1ae33b7afb9e"
-  integrity sha512-cmH9nTHWTp0X4/JV15k3uYspOZOjZ8It25LEXVJ/zTTOtQj2x12t0kJ/6E2/0AOiHDVtNRGTfWFf4TlWn+cR6w==
+"@tracer-protocol/onboard@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.0.3.tgz#5ca309cad8f6c1ad43940d12a60bfb1a95cce926"
+  integrity sha512-zKWT5KaTakrxc07AMuJkYkS6+wGgnk2X4SF2PhNcPTShNqdJZOB1gArQ0V/Ilcl+9Uns5tbBa0BDplynmkCjbw==
   dependencies:
     "@cvbb/eth-keyring" "^1.1.0"
     "@ethereumjs/common" "^2.0.0"

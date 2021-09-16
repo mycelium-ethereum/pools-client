@@ -50,7 +50,10 @@ export const calcPercentageLossTransfer: (oldPrice: BigNumber, newPrice: BigNumb
  * @param numTokens number of tokens
  * @returns notional value of the tokens
  */
-export const calcNotionalValue: (tokenPrice: BigNumber, numTokens: number) => BigNumber = (tokenPrice, numTokens) => {
+export const calcNotionalValue: (tokenPrice: BigNumber, numTokens: BigNumber) => BigNumber = (
+    tokenPrice,
+    numTokens,
+) => {
     return tokenPrice.times(numTokens);
 };
 
@@ -69,7 +72,7 @@ export const calcSkew: (shortBalance: BigNumber, longBalance: BigNumber) => BigN
     // This isnt a fully accurate representation since
     //  at shortBalance 0 there there will be short incentive to participate
     if (shortBalance.eq(0)) {
-        return new BigNumber(2);
+        return new BigNumber(1);
     }
     return longBalance.div(shortBalance);
 };

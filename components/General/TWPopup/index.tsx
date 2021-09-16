@@ -4,7 +4,7 @@ import { DownOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 
 const DEFAULT =
-    'inline-flex justify-center w-full rounded-md border-white border shadow-sm px-4 py-2 bg-white bg-opacity-20 text-sm font-medium text-white hover:bg-blue-900 focus:outline-none focus:border-solid';
+    'inline-flex justify-center w-full rounded-md border-white border shadow-sm px-4 py-2 bg-white bg-opacity-20 text-sm font-medium text-white whitespace-nowrap hover:bg-blue-900 focus:outline-none focus:border-solid';
 
 // const DropdownPopup
 export default (({ preview, className, buttonClasses, children }) => {
