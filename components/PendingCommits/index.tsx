@@ -65,7 +65,7 @@ export default (() => {
                 </div>
             </div>
             <Table>
-                {focus === CommitsFocusEnum.buys ? (
+                {focus === CommitsFocusEnum.mints ? (
                     <>
                         <TableHeader>
                             <span>Token</span>
