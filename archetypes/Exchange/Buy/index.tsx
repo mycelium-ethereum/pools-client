@@ -201,10 +201,12 @@ export default (() => {
                     .
                 </div>
                 <br />
-                <Button size="lg" variant="primary">
-                    <a href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
-                        Launch Arbitrum Bridge
-                    </a>
+                <Button
+                    size="lg"
+                    variant="primary"
+                    onClick={() => window.open('https://bridge.arbitrum.io', '_blank', 'noopener')}
+                >
+                    Launch Arbitrum Bridge
                 </Button>
             </Modal>
         </>
