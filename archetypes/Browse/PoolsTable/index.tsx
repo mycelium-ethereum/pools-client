@@ -62,7 +62,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                         onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
                                     }
                                 >
-                                    Buy
+                                    Mint
                                 </Button>
                                 <Button
                                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
@@ -73,7 +73,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                         onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
                                     }
                                 >
-                                    Sell
+                                    Burn
                                 </Button>
                                 <Actions
                                     provider={provider as ethers.providers.JsonRpcProvider}
@@ -95,7 +95,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <p className="mt-2 text-sm text-cool-gray-900">
                 * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
                 indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
-                <strong>Rebalancing Rate</strong> the next rebalance, given the queued buys and sells and estimated
+                <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
