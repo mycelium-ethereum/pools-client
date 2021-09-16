@@ -135,7 +135,7 @@ export default (() => {
                     />
                     <InnerInputText>
                         {token.symbol ? (
-                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} text={token.symbol} />
+                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} label={token.symbol} />
                         ) : null}
                         <div
                             className="m-auto cursor-pointer hover:underline"
