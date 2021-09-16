@@ -23,7 +23,6 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
-import { getDecimals } from '@libs/utils/converters';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -87,6 +86,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // get and set token balances
                 updateTokenBalances(pool);
                 updateTokenApprovals(pool);
+                const decimals = pool.quoteToken.decimals;
 
                 // fetch commits
                 try {
@@ -102,7 +102,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         setExpectedPrice(pool);
 
                         committerInfo.allUnexecutedCommits.map((commit) => {
-                            const decimals = getDecimals(commit.args.commitType, pool.quoteToken.decimals);
                             commit.getTransaction().then((txn) => {
                                 commitDispatch({
                                     type: 'addCommit',
@@ -196,7 +195,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     type,
                 });
 
-                const decimals = getDecimals(type, poolsState.pools[pool].quoteToken.decimals);
+                const decimals = poolsState.pools[pool].quoteToken.decimals;
 
                 log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                     if (commitDispatch) {
