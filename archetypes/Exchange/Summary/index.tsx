@@ -40,7 +40,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         <HiddenExpand
             defaultHeight={0}
             open={!!pool.name}
-            className={classNames('border-2xl border', !!pool.name ? 'border-cool-gray-200' : 'border-transparent')}
+            className={classNames(
+                'border-2xl border text-base',
+                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+            )}
         >
             <Box>
                 <h2>
@@ -89,7 +92,10 @@ export const SellSummary: React.FC<
         <HiddenExpand
             defaultHeight={0}
             open={!!pool.name}
-            className={classNames('border-2x border', !!pool.name ? 'border-cool-gray-200' : 'border-transparent')}
+            className={classNames(
+                'border-2x border text-base',
+                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+            )}
         >
             <Box>
                 <h2>
