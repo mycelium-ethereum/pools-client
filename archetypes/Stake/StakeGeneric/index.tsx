@@ -351,7 +351,7 @@ const StakeModalWithState: React.FC<{
                     dispatch={dispatch}
                     onStake={claim}
                     onApprove={approve}
-                    title={`Claim ${tokenType} Tokens Reward`}
+                    title={`Claim ${tokenType} Token Rewards`}
                     btnLabel="Claim"
                 />
             );
