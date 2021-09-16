@@ -1,5 +1,6 @@
 import { PoolToken } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
 // side types
 export enum SideEnum {
@@ -27,8 +28,8 @@ export enum CommitEnum {
 
 // Focused on either buys or shorts when viewing pending commits
 export enum CommitsFocusEnum {
-    buys = 0,
-    sells = 1,
+    mints = 0,
+    burns = 1,
 }
 
 export const PENDING_COMMIT = 1;
@@ -55,3 +56,5 @@ export const EMPTY_TOKEN: PoolToken = {
 export const ARBITRUM_RINKEBY = '421611';
 export const ARBITRUM = '42161';
 export const KOVAN = '42';
+
+export const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');

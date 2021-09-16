@@ -7,13 +7,19 @@ import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import TimeLeft from '@components/TimeLeft';
+import Actions from '@components/TokenActions';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { ethers } from 'ethers';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import Loading from '@components/General/Loading';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    const [showModal, setShowModal] = useState(false);
+    const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
+    const { provider } = useWeb3();
     return (
         <>
             <Table>
@@ -22,7 +28,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
                         {'Rebalancing rate * '}
-                        <span className="cursor-pointer ml-1" onClick={() => setShowModal(true)}>
+                        <span className="cursor-pointer ml-1" onClick={() => setShowModalRebalanceRate(true)}>
                             <QuestionMark />
                         </span>
                     </span>
@@ -57,7 +63,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                         onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
                                     }
                                 >
-                                    Buy
+                                    Mint
                                 </Button>
                                 <Button
                                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
@@ -68,24 +74,37 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                         onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
                                     }
                                 >
-                                    Sell
+                                    Burn
                                 </Button>
+                                <Actions
+                                    provider={provider as ethers.providers.JsonRpcProvider}
+                                    token={{
+                                        address: token.address,
+                                        decimals: token.decimals,
+                                        symbol: token.symbol,
+                                    }}
+                                    arbiscanTarget={{
+                                        type: ArbiscanEnum.token,
+                                        target: token.address,
+                                    }}
+                                />
                             </span>
                         </TableRow>
                     );
                 })}
             </Table>
+            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             <p className="mt-2 text-sm text-cool-gray-900">
                 * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
                 indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
-                <strong>Rebalancing Rate</strong> the next rebalance, given the queued buys and sells and estimated
+                <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <Modal show={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
                         <Close />
                     </div>
                 </div>
@@ -120,3 +139,13 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
+
+// const ColoredChangeNumber = (({ number }) => {
+//     return (
+//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
+//             2,
+//         )}`}</span>
+//     );
+// }) as React.FC<{
+//     number: number;
+// }>;

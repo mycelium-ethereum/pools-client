@@ -13,17 +13,26 @@ import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
+import FeeNote from '@archetypes/Exchange/FeeNote';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
-    amount: number,
-    balance: number,
+    amount: BigNumber,
+    balance: BigNumber,
     minimumTokens: BigNumber,
     tokenPrice: BigNumber,
 ) => { isInvalid: boolean; message?: string } = (amount, balance, minimumTokens, tokenPrice) => {
-    if (amount > balance) {
+    if (amount.eq(0)) {
+        return {
+            message: undefined,
+            isInvalid: false,
+        };
+    }
+
+    if (amount.gt(balance)) {
         return {
             message: undefined,
             isInvalid: true,
@@ -47,7 +56,7 @@ const isInvalidAmount: (
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const tokens = usePoolTokens();
+    const { tokens } = usePoolTokens();
 
     const { amount, side, selectedPool, commitAction, invalidAmount } = swapState;
 
@@ -77,7 +86,9 @@ export default (() => {
             );
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const invalidAmount = isInvalidAmount(amount, notional.toNumber(), minimumTokens, tokenPrice);
+            const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+
+            const invalidAmount = isInvalidAmount(amount, currentBalance, minimumTokens, tokenPrice);
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -117,23 +128,23 @@ export default (() => {
                 <p className="mb-2 text-black">Amount</p>
                 <InputContainer className="w-full ">
                     <Input
-                        className="w-full h-full text-xl font-normal "
-                        value={amount}
+                        className="w-full h-full text-xl font-normal text-base"
+                        value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
+                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
                         }}
                     />
                     <InnerInputText>
+                        {token.symbol ? (
+                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} label={token.symbol} />
+                        ) : null}
                         <div
                             className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
                                 !!selectedPool &&
                                 swapDispatch({
                                     type: 'setAmount',
-                                    value:
-                                        side === SideEnum.long
-                                            ? pool.longToken.balance.toNumber()
-                                            : pool.shortToken.balance.toNumber(),
+                                    value: side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance,
                                 })
                             }
                         >
@@ -152,16 +163,16 @@ export default (() => {
                                     ? pool.longToken.balance.toFixed(2)
                                     : pool.shortToken.balance.toFixed(2)
                             } `}
-                            {!!amount ? (
+                            {amount.gt(0) ? (
                                 <span className="opacity-80">
                                     {`>>> ${
                                         side === SideEnum.long
-                                            ? isNaN(amount)
+                                            ? amount.eq(0)
                                                 ? pool.longToken.balance.toFixed(2)
-                                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
-                                            : isNaN(amount)
+                                                : pool.longToken.balance.minus(amount).toFixed(2)
+                                            : amount.eq(0)
                                             ? pool.shortToken.balance.toFixed(2)
-                                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
+                                            : pool.shortToken.balance.minus(amount).toFixed(2)
                                     }`}
                                 </span>
                             ) : null}
@@ -171,6 +182,8 @@ export default (() => {
             </div>
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
+
+            <FeeNote pool={pool} isMint={false} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>

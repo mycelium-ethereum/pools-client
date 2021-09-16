@@ -36,6 +36,7 @@ const logos: Record<string, string> = {
     BTC_S: '/img/logos/currencies/btc_short.svg',
     ETH: '/img/logos/currencies/eth.svg',
     BTC: '/img/logos/currencies/btc.svg',
+    SUSHI: '/img/logos/currencies/sushi.svg',
 };
 
 interface LProps {

@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef } from 'react';
 import { Children } from 'libs/types/General';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo } from 'components/General/Logo';
 
@@ -31,8 +31,8 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
     return (
         <div
             className={classNames(
-                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md text-base bg-white',
                 className ?? '',
+                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md bg-white',
             )}
             ref={main}
         >
@@ -100,7 +100,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
-                <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                {options.length ? (
+                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                ) : (
+                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                )}
             </Menu.Button>
 
             <Transition

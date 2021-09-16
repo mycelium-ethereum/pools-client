@@ -1,8 +1,9 @@
+import { classNames } from '@libs/utils/functions';
 import React from 'react';
 
-export const Table: React.FC = ({ children }) => {
+export const Table: React.FC<{ className?: string }> = ({ className, children }) => {
     return (
-        <div className="flex flex-col overflow-hidden h-full">
+        <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
             <div className="overflow-x-scroll h-full">
                 <div className="py-2 align-middle inline-block min-w-full">
                     <div className="shadow border-b border-gray-200 sm:rounded-lg">
@@ -14,9 +15,9 @@ export const Table: React.FC = ({ children }) => {
     );
 };
 
-export const TableHeader: React.FC = ({ children }) => {
+export const TableHeader: React.FC<{ className?: string }> = ({ children, className }) => {
     return (
-        <thead className="bg-gray-50">
+        <thead className={classNames('bg-gray-50', className ?? '')}>
             <tr>
                 {React.Children.map(children, (child, index) => (
                     <th

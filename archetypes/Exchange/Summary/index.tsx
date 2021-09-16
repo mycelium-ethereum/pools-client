@@ -11,7 +11,7 @@ import { classNames } from '@libs/utils/functions';
 
 type SummaryProps = {
     pool: Pool;
-    amount: number;
+    amount: BigNumber;
     isLong: boolean;
 };
 
@@ -31,18 +31,19 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         [notional, token, pendingBurns],
     );
 
-    const amountBN = new BigNumber(amount);
-
     const balancesAfter = {
-        longBalance: pool.nextLongBalance.plus(isLong ? amountBN : 0).plus(pool.committer.pendingLong.mint),
-        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amountBN).plus(pool.committer.pendingShort.mint),
+        longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
+        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
     };
 
     return (
         <HiddenExpand
             defaultHeight={0}
             open={!!pool.name}
-            className={classNames('border-2xl border', !!pool.name ? 'border-cool-gray-200' : 'border-transparent')}
+            className={classNames(
+                'border-2xl border text-base',
+                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+            )}
         >
             <Box>
                 <h2>
@@ -60,7 +61,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 >
                     <Section label="Expected number of tokens">
                         <div>
-                            <span>{`${amountBN.div(tokenPrice ?? 1).toFixed(3)}`}</span>
+                            <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
@@ -91,7 +92,10 @@ export const SellSummary: React.FC<
         <HiddenExpand
             defaultHeight={0}
             open={!!pool.name}
-            className={classNames('border-2x border', !!pool.name ? 'border-cool-gray-200' : 'border-transparent')}
+            className={classNames(
+                'border-2x border text-base',
+                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+            )}
         >
             <Box>
                 <h2>
