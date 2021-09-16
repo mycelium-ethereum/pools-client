@@ -87,6 +87,10 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     const tokenPrice = useTokenPrice(farm.tokenAddress);
+    const apyNumerator = farm.rewardsPerYear.times(TCR_PRICE);
+    const apyDenominator = tokenPrice.times(farm.totalStaked);
+
+    const apy = apyDenominator.gt(0) ? apyNumerator.div(apyDenominator) : new BigNumber(0);
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
@@ -94,7 +98,7 @@ const PoolRow: React.FC<{
                 <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                 {farm.name}
             </span>
-            <span>{farm.rewardsPerYear.times(TCR_PRICE).div(tokenPrice.times(farm.totalStaked)).toFixed(2)}%</span>
+            <span>{apy.toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>
