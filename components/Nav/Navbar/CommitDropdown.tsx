@@ -12,15 +12,15 @@ const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hov
 // const CommitDropdown
 export default (({ setShowQueued, hide }) => {
     const { commitDispatch } = useCommitActions();
-    const { buys, sells, nextUpdate } = useCommitsBreakdown();
+    const { mints, burns, nextUpdate } = useCommitsBreakdown();
 
     useMemo(() => {
-        if (buys + sells > 0) {
+        if (mints + burns > 0) {
             setShowQueued(true);
         } else {
             setShowQueued(false);
         }
-    }, [buys, sells]);
+    }, [mints, burns]);
 
     const handleClick = (focus: CommitsFocusEnum) => {
         if (commitDispatch) {
@@ -33,7 +33,7 @@ export default (({ setShowQueued, hide }) => {
     return (
         <TWPopup
             className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
-            preview={`${buys + sells} Queued`}
+            preview={`${mints + burns} Queued`}
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
                 <Tooltip placement="left" text="Time until mints/burns are processed ">
@@ -44,11 +44,11 @@ export default (({ setShowQueued, hide }) => {
                     targetTime={nextUpdate}
                 />
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.buys)}>
-                <a>{buys} Mints</a>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.mints)}>
+                <a>{mints} Mints</a>
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.sells)}>
-                <a>{sells} Burns</a>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.burns)}>
+                <a>{burns} Burns</a>
             </div>
         </TWPopup>
     );

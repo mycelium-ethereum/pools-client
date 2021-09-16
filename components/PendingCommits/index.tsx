@@ -42,7 +42,7 @@ import Close from '/public/img/general/close-black.svg';
 
 export default (() => {
     const { provider } = useWeb3();
-    const { showCommits = false, focus = CommitsFocusEnum.buys } = useCommits();
+    const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const commits = usePendingCommits(focus);
 
@@ -58,7 +58,7 @@ export default (() => {
         <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
                 <h1 className="text-bold font-size[30px] text-cool-gray-900">
-                    {`Queued ${focus === CommitsFocusEnum.buys ? 'Mints' : 'Burns'}`}
+                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
                     <Close />
