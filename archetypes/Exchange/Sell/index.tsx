@@ -13,6 +13,7 @@ import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 
@@ -126,13 +127,16 @@ export default (() => {
                 <p className="mb-2 text-black">Amount</p>
                 <InputContainer className="w-full ">
                     <Input
-                        className="w-full h-full text-xl font-normal "
+                        className="w-full h-full text-xl font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
                         }}
                     />
                     <InnerInputText>
+                        {token.symbol ? (
+                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} text={token.symbol} />
+                        ) : null}
                         <div
                             className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
