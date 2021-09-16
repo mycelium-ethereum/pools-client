@@ -15,6 +15,7 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import Loading from '@components/General/Loading';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
@@ -92,6 +93,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     );
                 })}
             </Table>
+            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             <p className="mt-2 text-sm text-cool-gray-900">
                 * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
                 indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
