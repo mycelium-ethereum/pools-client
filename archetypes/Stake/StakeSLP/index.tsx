@@ -4,7 +4,7 @@ import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
 
 export default (() => {
-    const { slpFarms, refreshFarm } = useFarms();
+    const { slpFarms, refreshFarm, fetchingFarms } = useFarms();
     return (
         <>
             <StakeGeneric
@@ -13,6 +13,7 @@ export default (() => {
                 subTitle="Stake SLP Tokens and earn TCR."
                 tokenType="SLP"
                 refreshFarm={refreshFarm}
+                fetchingFarms={fetchingFarms}
                 farms={slpFarms}
                 hideLeverageFilter
                 hideSideFilter
