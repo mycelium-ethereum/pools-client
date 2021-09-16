@@ -8,11 +8,12 @@ import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import useTokenPrice from '@libs/hooks/useTokenPrice';
+import Loading from '@components/General/Loading';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
 
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -20,7 +21,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
             <Table>
                 <TableHeader className="uppercase">
                     <span>Strategy</span>
-                    <span>APY</span>
+                    <span>APR</span>
                     <span>TVL (USDC)</span>
                     <span>My Staked (TOKENS/USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
@@ -39,6 +40,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
                     );
                 })}
             </Table>
+            {fetchingFarms ? <Loading className="w-10 mx-auto my-8" /> : null}
             <Modal show={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalance Rate</div>
@@ -77,6 +79,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
+    fetchingFarms: boolean;
 }>;
 
 const PoolRow: React.FC<{
@@ -98,7 +101,7 @@ const PoolRow: React.FC<{
                 <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                 {farm.name}
             </span>
-            <span>{apy.toFixed(2)}%</span>
+            <span>{apy.times(100).toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>

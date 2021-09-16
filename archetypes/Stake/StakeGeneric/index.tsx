@@ -24,7 +24,17 @@ import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo } from '@components/General/Logo';
 
-export default (({ logo, tokenType, title, subTitle, farms, refreshFarm, hideLeverageFilter, hideSideFilter }) => {
+export default (({
+    logo,
+    tokenType,
+    title,
+    subTitle,
+    farms,
+    refreshFarm,
+    hideLeverageFilter,
+    hideSideFilter,
+    fetchingFarms,
+}) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { tokenMap } = usePoolTokens();
@@ -271,6 +281,7 @@ export default (({ logo, tokenType, title, subTitle, farms, refreshFarm, hideLev
                     </section>
                     <FarmsTable
                         rows={sortedFilteredFarms}
+                        fetchingFarms={fetchingFarms}
                         onClickClaim={handleClaim}
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
@@ -298,6 +309,7 @@ export default (({ logo, tokenType, title, subTitle, farms, refreshFarm, hideLev
     refreshFarm: (farmAddress: string) => void;
     hideLeverageFilter?: boolean;
     hideSideFilter?: boolean;
+    fetchingFarms: boolean;
 }>;
 
 const StakeModalWithState: React.FC<{

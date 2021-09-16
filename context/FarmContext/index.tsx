@@ -151,6 +151,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 }
                 setPoolFarms(poolFarms);
                 setSlpFarms(slpFarms);
+                setFetchingFarms(false);
             }
         },
         [signer, config, account],
