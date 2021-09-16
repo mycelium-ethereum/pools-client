@@ -86,7 +86,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             <NumericInput
                                 disabled={!isApproved}
                                 className="w-full h-full text-base font-normal "
-                                value={amount.toFixed()}
+                                value={amount.eq(0) ? '' : amount.toFixed()}
                                 onUserInput={(val) => dispatch({ type: 'setAmount', amount: new BigNumber(val || 0) })}
                             />
                             <InnerInputText>
