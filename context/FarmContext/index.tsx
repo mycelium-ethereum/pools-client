@@ -129,12 +129,12 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
                         const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
                         const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
-
+                        // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
                         const updatedFarm = {
                             name: stakingTokenName,
                             address,
                             contract,
-                            totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
+                            totalStaked: new BigNumber(ethers.utils.formatUnits(totalStaked, stakingTokenDecimals)),
                             stakingToken: stakingToken,
                             stakingTokenDecimals,
                             stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
@@ -145,7 +145,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                             ),
                             myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
                             myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
-                            apy: new BigNumber(rewardPerToken.toString()).div(rewardsDecimalMultiplier),
+                            apr: new BigNumber(rewardPerToken.toString()).div(rewardsDecimalMultiplier),
                             rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
                                 .div(rewardsDecimalMultiplier)
                                 .times(52),

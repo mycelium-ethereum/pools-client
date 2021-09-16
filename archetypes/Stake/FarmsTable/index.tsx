@@ -89,11 +89,17 @@ const PoolRow: React.FC<{
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
+    // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
     const tokenPrice = farm.isPoolToken ? useTokenPrice(farm.tokenAddress) : new BigNumber(1);
-    const apyNumerator = farm.rewardsPerYear.times(TCR_PRICE);
-    const apyDenominator = tokenPrice.times(farm.totalStaked);
+    const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
+    const aprDenominator = tokenPrice.times(farm.totalStaked);
 
-    const apy = apyDenominator.gt(0) ? apyNumerator.div(apyDenominator) : new BigNumber(0);
+    // console.log(farm.rewardsPerYear.toNumber(), "Rewards per year")
+    // console.log(TCR_PRICE.toNumber(), "Tcr price")
+    // console.log(tokenPrice.toNumber(), "Token price")
+    // console.log(farm.totalStaked, "Total staked")
+
+    const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
@@ -101,7 +107,7 @@ const PoolRow: React.FC<{
                 <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                 {farm.name}
             </span>
-            <span>{apy.times(100).toFixed(2)}%</span>
+            <span>{apr.times(100).toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>

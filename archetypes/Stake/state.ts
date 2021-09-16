@@ -15,7 +15,7 @@ export enum SideFilterEnum {
 
 export enum SortByEnum {
     Name = 'Token',
-    // APY = 'APY',
+    // apr = 'apr',
     TotalValueLocked = 'TVL',
     MyStaked = 'My Staked',
     MyRewards = 'My Rewards',
@@ -27,7 +27,7 @@ export interface FarmTableRowData {
     name: string;
     leverage?: number;
     side?: SideEnum;
-    apy: number;
+    apr: number;
     totalStaked: number;
     myStaked: number;
     myRewards: number;
