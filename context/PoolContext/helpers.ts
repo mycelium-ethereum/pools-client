@@ -1,6 +1,5 @@
 import { SideEnum, CommitEnum } from '@libs/constants';
 import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
-import { getDecimals } from '@libs/utils/converters';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -219,8 +218,7 @@ export const fetchCommits: (
     };
 
     allUnexecutedCommits.forEach((commit) => {
-        const decimals = getDecimals(commit.args.commitType, quoteTokenDecimals);
-        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals));
+        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, quoteTokenDecimals));
         switch (commit.args.commitType) {
             case CommitEnum.short_mint:
                 pendingShort.mint = pendingShort.mint.plus(amount);
@@ -238,6 +236,7 @@ export const fetchCommits: (
             // do nothing
         }
     });
+
     console.debug(`Pending Long`, pendingLong);
     console.debug(`Pending Short`, pendingShort);
 

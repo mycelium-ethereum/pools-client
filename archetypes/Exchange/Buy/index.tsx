@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
@@ -15,18 +16,25 @@ const inputRow = 'relative my-2 ';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
-    amount: number,
-    balance: number,
-    minimumCommitSize: number,
+    amount: BigNumber,
+    balance: BigNumber,
+    minimumCommitSize: BigNumber,
 ) => { isInvalid: boolean; message?: string } = (amount, balance, minimumCommitSize) => {
-    if (amount > balance) {
+    if (amount.eq(0)) {
+        return {
+            message: undefined,
+            isInvalid: false,
+        };
+    }
+
+    if (amount.gt(balance)) {
         return {
             message: undefined,
             isInvalid: true,
         };
     }
 
-    if (amount < minimumCommitSize) {
+    if (amount.lt(minimumCommitSize)) {
         return {
             message: `The minimum order size is ${toApproxCurrency(minimumCommitSize)}`,
             isInvalid: true,
@@ -58,8 +66,8 @@ export default (() => {
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
             amount,
-            pool.quoteToken.balance.toNumber(),
-            pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals).toNumber(),
+            pool.quoteToken.balance,
+            pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals),
         );
 
         swapDispatch({
@@ -122,18 +130,16 @@ export default (() => {
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
-                        value={amount}
+                        value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
+                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
                         }}
                     />
                     <InnerInputText>
                         <Currency ticker={'USDC'} />
                         <div
                             className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) =>
-                                swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toNumber() })
-                            }
+                            onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance })}
                         >
                             Max
                         </div>
@@ -148,7 +154,9 @@ export default (() => {
                             <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
-                                    {!!amount ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                                    {!amount.eq(0)
+                                        ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}`
+                                        : ''}
                                 </span>
                             </span>
                         </>

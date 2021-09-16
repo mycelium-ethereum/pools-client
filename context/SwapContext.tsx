@@ -1,4 +1,5 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
+import BigNumber from 'bignumber.js';
 import { Children, PoolType } from '@libs/types/General';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
@@ -14,7 +15,7 @@ interface ContextProps {
 type Market = Record<string, PoolType>;
 
 type SwapState = {
-    amount: number;
+    amount: BigNumber;
     invalidAmount: {
         message?: string;
         isInvalid: boolean;
@@ -34,7 +35,7 @@ type SwapState = {
 };
 
 export type SwapAction =
-    | { type: 'setAmount'; value: number }
+    | { type: 'setAmount'; value: BigNumber }
     | { type: 'setCommitAction'; value: CommitActionEnum }
     | { type: 'setMarket'; value: string }
     | { type: 'setPoolFromMarket'; market: string }
@@ -70,7 +71,7 @@ export const LEVERAGE_OPTIONS = [
 ];
 
 export const swapDefaults: SwapState = {
-    amount: NaN,
+    amount: new BigNumber(0),
     invalidAmount: {
         message: undefined,
         isInvalid: false,
