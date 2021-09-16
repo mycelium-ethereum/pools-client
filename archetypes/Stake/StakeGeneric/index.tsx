@@ -112,7 +112,7 @@ export default (({
             case SortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
             case SortByEnum.TotalValueLocked:
-                return farmB.apy - farmA.apy;
+                return farmB.apr - farmA.apr;
             case SortByEnum.MyRewards:
                 return farmB.myRewards - farmA.myRewards;
             case SortByEnum.MyStaked:
