@@ -22,8 +22,9 @@ import usePoolTokens from '@libs/hooks/usePoolTokens';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
+import { Logo } from '@components/General/Logo';
 
-export default (({ tokenType, title, subTitle, farms, refreshFarm, hideLeverageFilter, hideSideFilter }) => {
+export default (({ logo, tokenType, title, subTitle, farms, refreshFarm, hideLeverageFilter, hideSideFilter }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { tokenMap } = usePoolTokens();
@@ -254,7 +255,12 @@ export default (({ tokenType, title, subTitle, farms, refreshFarm, hideLeverageF
             <Container className="mt-0 md:mt-[100px]">
                 <FarmContainer>
                     <section className="hidden md:block">
-                        <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">{title}</h1>
+                    <span className="align-items: inline-flex ">
+                            {!!logo ? <Logo ticker={logo} className="pb-0 pr-1" /> : null}
+                            <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-cool-gray-900 sm:none flex-wrap: wrap;">
+                                {title}
+                            </h1>
+                        </span>
                         <p className="mb-1 text-gray-500">{subTitle}</p>
                         <FilterBar
                             hideLeverageFilter={hideLeverageFilter}
@@ -284,6 +290,7 @@ export default (({ tokenType, title, subTitle, farms, refreshFarm, hideLeverageF
         </>
     );
 }) as React.FC<{
+    logo: string;
     title: string;
     subTitle: string;
     tokenType: string;
