@@ -12,12 +12,14 @@ interface ContextProps {
     poolFarms: FarmsLookup;
     slpFarms: FarmsLookup;
     refreshFarm: (farmAddress: string) => void;
+    fetchingFarms: boolean;
 }
 
 export const FarmContext = React.createContext<ContextProps>({
     poolFarms: {},
     slpFarms: {},
     refreshFarm: () => console.error('default FarmContext.refreshFarm'),
+    fetchingFarms: false,
 });
 
 /**
