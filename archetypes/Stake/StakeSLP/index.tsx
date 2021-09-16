@@ -8,7 +8,8 @@ export default (() => {
     return (
         <>
             <StakeGeneric
-                title="Stake SLP Tokens"
+                logo="SUSHI"
+                title="SLP Token Strategies"
                 subTitle="Stake SLP Tokens and earn TCR."
                 tokenType="SLP"
                 refreshFarm={refreshFarm}

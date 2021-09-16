@@ -8,6 +8,7 @@ export default (() => {
     return (
         <>
             <StakeGeneric
+                logo=""
                 title="Stake Pool Tokens"
                 subTitle="Stake Pool Tokens and earn TCR."
                 tokenType="Pool"

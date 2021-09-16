@@ -19,7 +19,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim }) => {
         <>
             <Table>
                 <TableHeader className="uppercase">
-                    <span>Farm</span>
+                    <span>Strategy</span>
                     <span>APY</span>
                     <span>TVL (USDC)</span>
                     <span>My Staked (TOKENS/USDC)</span>
