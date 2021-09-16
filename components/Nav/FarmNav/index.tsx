@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Tooltip } from '@components/General/Tooltip';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
@@ -40,10 +39,8 @@ export default (({ left, right }) => {
                 <Item onClick={(_e) => handleRoute(STAKE)} selected={router.pathname === '/stake'}>
                     Stake Pool
                 </Item>
-                <Item onClick={(_e) => console.debug('coming soon')} selected={router.pathname === '/slp'}>
-                    <Tooltip text="Coming soon" placement="bottom">
-                        Stake SLP
-                    </Tooltip>
+                <Item onClick={(_e) => handleRoute(SLP)} selected={router.pathname === '/slp'}>
+                    Stake SLP
                 </Item>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>
