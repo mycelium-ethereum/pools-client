@@ -27,6 +27,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     const { signer, config, account } = useWeb3();
     const [poolFarms, setPoolFarms] = useState<ContextProps['poolFarms']>({});
     const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
+    const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
 
     const refreshFarm = async (farmAddress: string) => {
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
@@ -71,6 +72,9 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
         if (signer && config && account) {
             setPoolFarms({});
             setSlpFarms({});
+            setFetchingFarms(true);
+            const poolFarms: FarmsLookup = {};
+            const slpFarms: FarmsLookup = {};
             for (const { address, abi, isPoolToken } of config.farms) {
                 const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
@@ -125,17 +129,13 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 };
 
                 if (isPoolToken) {
-                    setPoolFarms((previousPoolFarms) => ({
-                        ...previousPoolFarms,
-                        [address]: updatedFarm,
-                    }));
+                    poolFarms[address] = updatedFarm;
                 } else {
-                    setSlpFarms((previousSlpFarms) => ({
-                        ...previousSlpFarms,
-                        [address]: updatedFarm,
-                    }));
+                    slpFarms[address] = updatedFarm;
                 }
             }
+            setPoolFarms(poolFarms);
+            setSlpFarms(slpFarms);
         }
     }, [signer, config, account]);
 
@@ -155,6 +155,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 poolFarms,
                 slpFarms,
                 refreshFarm,
+                fetchingFarms,
             }}
         >
             {children}
