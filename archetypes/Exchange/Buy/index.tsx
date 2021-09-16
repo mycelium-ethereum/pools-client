@@ -153,9 +153,11 @@ export default (() => {
                         <>
                             <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
-                            </span>
-                            <span className="opacity-80">
-                                {!amount.eq(0) ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}` : ''}
+                                <span className="opacity-80">
+                                    {!amount.eq(0)
+                                        ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}`
+                                        : ''}
+                                </span>
                             </span>
                         </>
                     )}
