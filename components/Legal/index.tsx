@@ -11,31 +11,33 @@ export const LegalPageLayout: React.FC = ({ children }) => {
     return (
         <>
             <NavBar />
-            <TWPopup
-                className={'mt-4 ml-6 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
-                buttonClasses={
-                    'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'
-                }
-                preview={
-                    route === '/privacy-policy'
-                        ? 'Privacy Policy'
-                        : route === '/terms-of-use'
-                        ? 'Terms of Use'
-                        : 'Disclaimer'
-                }
-            >
-                <div className="w-full p-3 text-right">
-                    <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
-                        <Link href="/privacy-policy">Privacy Policy</Link>
-                    </MenuItem>
-                    <MenuItem className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
-                        <Link href="/terms-of-use">Terms of Use</Link>
-                    </MenuItem>
-                    <MenuItem className={`${route === '/disclaimer' ? 'selected' : ''}`}>
-                        <Link href="/disclaimer">Disclaimer</Link>
-                    </MenuItem>
-                </div>
-            </TWPopup>
+            <div className="container">
+                <TWPopup
+                    className={'mt-6 ml-4 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
+                    buttonClasses={
+                        'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'
+                    }
+                    preview={
+                        route === '/privacy-policy'
+                            ? 'Privacy Policy'
+                            : route === '/terms-of-use'
+                            ? 'Terms of Use'
+                            : 'Disclaimer'
+                    }
+                >
+                    <div className="p-3">
+                        <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
+                            <Link href="/privacy-policy">Privacy Policy</Link>
+                        </MenuItem>
+                        <MenuItem className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
+                            <Link href="/terms-of-use">Terms of Use</Link>
+                        </MenuItem>
+                        <MenuItem className={`${route === '/disclaimer' ? 'selected' : ''}`}>
+                            <Link href="/disclaimer">Disclaimer</Link>
+                        </MenuItem>
+                    </div>
+                </TWPopup>
+            </div>
             <LayoutWrapper className="container flex">
                 <LeftPanel>
                     <ContentWrapper>
