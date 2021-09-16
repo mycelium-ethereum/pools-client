@@ -81,72 +81,84 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 const poolFarms: FarmsLookup = {};
                 const slpFarms: FarmsLookup = {};
                 for (const { address, abi, isPoolToken } of config.farms) {
-                    const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
+                    try {
+                        const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
-                    const [
-                        myStaked,
-                        stakingTokenAddress,
-                        rewardPerToken,
-                        myRewards,
-                        rewardsPerWeek,
-                        rewardsTokenAddress,
-                    ] = await Promise.all([
-                        contract.balanceOf(account),
-                        contract.stakingToken(),
-                        contract.rewardPerToken(),
-                        contract.earned(account),
-                        contract.getRewardForDuration(),
-                        contract.rewardsToken(),
-                    ]);
+                        const [
+                            myStaked,
+                            stakingTokenAddress,
+                            rewardPerToken,
+                            myRewards,
+                            rewardsPerWeek,
+                            rewardsTokenAddress,
+                        ] = await Promise.all([
+                            contract.balanceOf(account),
+                            contract.stakingToken(),
+                            contract.rewardPerToken(),
+                            contract.earned(account),
+                            contract.getRewardForDuration(),
+                            contract.rewardsToken(),
+                        ]);
 
-                    const stakingToken = new ethers.Contract(stakingTokenAddress, ERC20__factory.abi, signer) as ERC20;
-                    const rewardsToken = new ethers.Contract(rewardsTokenAddress, ERC20__factory.abi, signer) as ERC20;
+                        const stakingToken = new ethers.Contract(
+                            stakingTokenAddress,
+                            ERC20__factory.abi,
+                            signer,
+                        ) as ERC20;
+                        const rewardsToken = new ethers.Contract(
+                            rewardsTokenAddress,
+                            ERC20__factory.abi,
+                            signer,
+                        ) as ERC20;
 
-                    const [
-                        stakingTokenName,
-                        stakingTokenDecimals,
-                        stakingTokenBalance,
-                        stakingTokenAllowance,
-                        totalStaked,
-                        rewardsTokenDecimals,
-                    ] = await Promise.all([
-                        stakingToken.name(),
-                        stakingToken.decimals(),
-                        stakingToken.balanceOf(account),
-                        stakingToken.allowance(account, address),
-                        stakingToken.totalSupply(),
-                        rewardsToken.decimals(),
-                    ]);
+                        const [
+                            stakingTokenName,
+                            stakingTokenDecimals,
+                            stakingTokenBalance,
+                            stakingTokenAllowance,
+                            totalStaked,
+                            rewardsTokenDecimals,
+                        ] = await Promise.all([
+                            stakingToken.name(),
+                            stakingToken.decimals(),
+                            stakingToken.balanceOf(account),
+                            stakingToken.allowance(account, address),
+                            stakingToken.totalSupply(),
+                            rewardsToken.decimals(),
+                        ]);
 
-                    const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
-                    const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
+                        const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
+                        const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
 
-                    const updatedFarm = {
-                        name: stakingTokenName,
-                        address,
-                        contract,
-                        totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
-                        stakingToken: stakingToken,
-                        stakingTokenDecimals,
-                        stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
-                            stakingDecimalMultiplier,
-                        ),
-                        stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
-                            stakingDecimalMultiplier,
-                        ),
-                        myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
-                        myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
-                        apy: new BigNumber(rewardPerToken.toString()).div(rewardsDecimalMultiplier),
-                        rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
-                            .div(rewardsDecimalMultiplier)
-                            .times(52),
-                        isPoolToken,
-                    };
+                        const updatedFarm = {
+                            name: stakingTokenName,
+                            address,
+                            contract,
+                            totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
+                            stakingToken: stakingToken,
+                            stakingTokenDecimals,
+                            stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
+                                stakingDecimalMultiplier,
+                            ),
+                            stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
+                                stakingDecimalMultiplier,
+                            ),
+                            myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
+                            myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
+                            apy: new BigNumber(rewardPerToken.toString()).div(rewardsDecimalMultiplier),
+                            rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
+                                .div(rewardsDecimalMultiplier)
+                                .times(52),
+                            isPoolToken,
+                        };
 
-                    if (isPoolToken) {
-                        poolFarms[address] = updatedFarm;
-                    } else {
-                        slpFarms[address] = updatedFarm;
+                        if (isPoolToken) {
+                            poolFarms[address] = updatedFarm;
+                        } else {
+                            slpFarms[address] = updatedFarm;
+                        }
+                    } catch (error) {
+                        console.error('failed fetching farm with address: ', address);
                     }
                 }
                 setPoolFarms(poolFarms);

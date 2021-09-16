@@ -89,7 +89,7 @@ const PoolRow: React.FC<{
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
-    const tokenPrice = useTokenPrice(farm.tokenAddress);
+    const tokenPrice = farm.isPoolToken ? useTokenPrice(farm.tokenAddress) : new BigNumber(1);
     const apyNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const apyDenominator = tokenPrice.times(farm.totalStaked);
 

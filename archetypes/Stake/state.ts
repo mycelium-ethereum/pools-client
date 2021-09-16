@@ -33,6 +33,7 @@ export interface FarmTableRowData {
     myRewards: number;
     stakingTokenBalance: BigNumber;
     rewardsPerYear: BigNumber;
+    isPoolToken: boolean;
 }
 
 export interface StakeState {
