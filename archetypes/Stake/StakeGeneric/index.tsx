@@ -48,7 +48,7 @@ export default (({
             name: farm.name,
             leverage: poolToken?.leverage,
             side: poolToken?.side,
-            apy: farm.apy.toNumber(),
+            apr: farm.apr.toNumber(),
             totalStaked: farm.totalStaked.toNumber(),
             myStaked: farm.myStaked.toNumber(),
             myRewards: farm.myRewards.toNumber(),
@@ -112,7 +112,7 @@ export default (({
             case SortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
             case SortByEnum.TotalValueLocked:
-                return farmB.apy - farmA.apy;
+                return farmB.apr - farmA.apr;
             case SortByEnum.MyRewards:
                 return farmB.myRewards - farmA.myRewards;
             case SortByEnum.MyStaked:
