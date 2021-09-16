@@ -5,15 +5,24 @@ import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import { stakeReducer, StakeState, FarmTableRowData, LeverageFilterEnum, SideFilterEnum, SortByEnum, MarketFilterEnum } from '../state';
+import {
+    stakeReducer,
+    StakeState,
+    FarmTableRowData,
+    LeverageFilterEnum,
+    SideFilterEnum,
+    SortByEnum,
+    MarketFilterEnum,
+} from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
+import { Logo } from '@components/General/Logo';
 
-export default (({ title, subTitle, farms }) => {
+export default (({ logo, title, subTitle, farms }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
 
@@ -151,7 +160,12 @@ export default (({ title, subTitle, farms }) => {
             <Container className="mt-0 md:mt-[100px]">
                 <FarmContainer>
                     <section className="hidden md:block">
-                        <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">{title}</h1>
+                        <span className="align-items: inline-flex flex-wrap: wrap;">
+                            {!!logo ? <Logo ticker={logo} className="pb-1 pr-1" /> : null}
+                            <h1 className="mx-0 font-bold pb-0 text-3xl text-cool-gray-900 sm:none flex-wrap: wrap;">
+                                {title}
+                            </h1>
+                        </span>
                         <p className="mb-1 text-gray-500">{subTitle}</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
@@ -175,6 +189,7 @@ export default (({ title, subTitle, farms }) => {
         </>
     );
 }) as React.FC<{
+    logo: string;
     title: string;
     subTitle: string;
     farms: Record<string, Farm>;

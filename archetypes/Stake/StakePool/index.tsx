@@ -7,10 +7,11 @@ export default (() => {
     return (
         <>
             <StakeGeneric
-                title="Stake Pool Tokens"
+                logo=""
+                title="Pool Token Strategies"
                 subTitle="Stake Pool Tokens and earn TCR."
                 farms={farms}
-            ></StakeGeneric>
+            />
         </>
     );
 }) as React.FC;
