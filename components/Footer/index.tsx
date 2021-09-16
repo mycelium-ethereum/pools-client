@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import DiscourseLogo from '/public/img/socials/discourse.svg';
 import TwitterLogo from '/public/img/socials/twitter.svg';
@@ -26,19 +27,13 @@ const Footer = styled(({ className }) => {
             </Socials>
             <Items>
                 <Item>
-                    <a href="/privacy-policy" target="_blank">
-                        Privacy Policy
-                    </a>
+                    <Link href="/privacy-policy">Privacy Policy</Link>
                 </Item>
                 <Item>
-                    <a href="/terms-of-use" target="_blank">
-                        Terms of Use
-                    </a>
+                    <Link href="/terms-of-use">Terms of Use</Link>
                 </Item>
                 <Item>
-                    <a href="/disclaimer" target="_blank">
-                        Disclaimer
-                    </a>
+                    <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
                 <Item>
                     <a
