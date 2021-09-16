@@ -130,7 +130,7 @@ export default (() => {
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
-                        value={amount.toFixed()}
+                        value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
                         }}
