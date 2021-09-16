@@ -20,6 +20,7 @@ export default (() => {
                 rows.push(
                     {
                         address: shortToken.address,
+                        decimals: shortToken.decimals,
                         pool: pool.address,
                         symbol: shortToken.symbol,
                         leverage: pool.leverage,
@@ -38,6 +39,7 @@ export default (() => {
                     },
                     {
                         address: longToken.address,
+                        decimals: longToken.decimals,
                         pool: pool.address,
                         symbol: longToken.symbol,
                         leverage: pool.leverage,

@@ -7,13 +7,18 @@ import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import TimeLeft from '@components/TimeLeft';
+import Actions from '@components/TokenActions';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { ethers } from 'ethers';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModal, setShowModal] = useState(false);
+    const { provider } = useWeb3();
     return (
         <>
             <Table>
@@ -70,6 +75,18 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                                 >
                                     Sell
                                 </Button>
+                                <Actions
+                                    provider={provider as ethers.providers.JsonRpcProvider}
+                                    token={{
+                                        address: token.address,
+                                        decimals: token.decimals,
+                                        symbol: token.symbol,
+                                    }}
+                                    arbiscanTarget={{
+                                        type: ArbiscanEnum.token,
+                                        target: token.address,
+                                    }}
+                                />
                             </span>
                         </TableRow>
                     );
