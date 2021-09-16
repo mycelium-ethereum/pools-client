@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
-import { Container } from '@components/General';
 import InvestNav from '@components/Nav/InvestNav';
 import {
     browseReducer,
@@ -133,7 +132,7 @@ export const Browse: React.FC = () => {
     return (
         <>
             <InvestNav left={SearchButton} right={FilterButton} />
-            <BrowseContainer>
+            <div className="container mt-0 md:mt-20">
                 <BrowseModal>
                     <section className="hidden md:block">
                         <Title>Pool Tokens</Title>
@@ -142,7 +141,7 @@ export const Browse: React.FC = () => {
                     </section>
                     <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
                 </BrowseModal>
-            </BrowseContainer>
+            </div>
             <FilterModal state={state} dispatch={dispatch} />
         </>
     );
@@ -157,13 +156,6 @@ const Title = styled.h1`
     font-size: 30px;
     color: #111928;
     padding-bottom: 0.8rem;
-`;
-
-const BrowseContainer = styled(Container)`
-    @media (max-width: 768px) {
-        margin-top: 0;
-    }
-    margin-top: 100px;
 `;
 
 const BrowseModal = styled.div`
