@@ -236,7 +236,7 @@ export const fetchCommits: (
             // do nothing
         }
     });
-    
+
     console.debug(`Pending Long`, pendingLong);
     console.debug(`Pending Short`, pendingShort);
 

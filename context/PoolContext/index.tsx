@@ -86,7 +86,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // get and set token balances
                 updateTokenBalances(pool);
                 updateTokenApprovals(pool);
-                const decimals = pool.quoteToken.decimals
+                const decimals = pool.quoteToken.decimals;
 
                 // fetch commits
                 try {
@@ -195,7 +195,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     type,
                 });
 
-                const decimals = poolsState.pools[pool].quoteToken.decimals
+                const decimals = poolsState.pools[pool].quoteToken.decimals;
 
                 log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                     if (commitDispatch) {
