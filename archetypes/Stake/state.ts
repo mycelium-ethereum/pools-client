@@ -30,7 +30,7 @@ export interface FarmTableRowData {
     apr: number;
     totalStaked: number;
     myStaked: number;
-    myRewards: number;
+    myRewards: BigNumber;
     stakingTokenBalance: BigNumber;
     rewardsPerYear: BigNumber;
     isPoolToken: boolean;

@@ -25,6 +25,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     <span>TVL (USDC)</span>
                     <span>My Staked (TOKENS/USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
+                    <span>My Rewards (TCR)</span>
                     <span>{/* Empty header for buttons column */}</span>
                 </TableHeader>
                 {rows.map((farm, index) => {
@@ -121,6 +122,9 @@ const PoolRow: React.FC<{
                 <span>{farm.stakingTokenBalance.toFixed(2)}</span>
                 {' / '}
                 <span>{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</span>
+            </span>
+            <span>
+                <span>{farm.myRewards.toFixed(6)}</span>
             </span>
             <span>
                 <Button
