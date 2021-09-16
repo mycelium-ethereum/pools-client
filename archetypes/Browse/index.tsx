@@ -1,5 +1,4 @@
 import React, { useEffect, useReducer } from 'react';
-import styled from 'styled-components';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
@@ -133,37 +132,16 @@ export const Browse: React.FC = () => {
         <>
             <InvestNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-20">
-                <BrowseModal>
+                <div className="p-0 md:py-20 md:px-16 mb-4 shadow-xl rounded-3xl">
                     <section className="hidden md:block">
-                        <Title>Pool Tokens</Title>
+                        <h1 className="font-bold text-3xl mb-2 text-cool-gray-900 hidden md:block">Pool Tokens</h1>
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
-                </BrowseModal>
+                </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />
         </>
     );
 };
-
-const Title = styled.h1`
-    @media (max-width: 768px) {
-        display: none;
-    }
-    font-style: normal;
-    font-weight: bold;
-    font-size: 30px;
-    color: #111928;
-    padding-bottom: 0.8rem;
-`;
-
-const BrowseModal = styled.div`
-    @media (max-width: 768px) {
-        padding: 0;
-    }
-    background: var(--color-background);
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-    padding: 48px 32px;
-`;
