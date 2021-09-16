@@ -9,12 +9,14 @@ import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 // import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
-import { toApproxCurrency, 
-    // toCommitType 
+import {
+    toApproxCurrency,
+    // toCommitType
 } from '@libs/utils/converters';
-import { 
-    // calcMinAmountIn, 
-    calcTokenPrice } from '@libs/utils/calcs';
+import {
+    // calcMinAmountIn,
+    calcTokenPrice,
+} from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { tokenSymbolToLogoTicker } from '@components/General';
@@ -26,9 +28,11 @@ const isInvalidAmount: (
     balance: number,
     // minimumTokens: BigNumber,
     // tokenPrice: BigNumber,
-) => { isInvalid: boolean; message?: string } = (amount, balance, 
+) => { isInvalid: boolean; message?: string } = (
+    amount,
+    balance,
     // minimumTokens, tokenPrice
-    ) => {
+) => {
     if (amount > balance) {
         return {
             message: undefined,
@@ -55,9 +59,13 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const tokens = usePoolTokens();
 
-    const { amount, side, selectedPool,
+    const {
+        amount,
+        side,
+        selectedPool,
         //  commitAction,
-          invalidAmount } = swapState;
+        invalidAmount,
+    } = swapState;
 
     const pool = usePool(selectedPool);
     // const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
@@ -85,7 +93,7 @@ export default (() => {
             // );
             // const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const invalidAmount = isInvalidAmount(amount, notional.toNumber())
+            const invalidAmount = isInvalidAmount(amount, token.balance.toNumber());
             // , minimumTokens, tokenPrice
             // );
 
@@ -180,9 +188,12 @@ export default (() => {
                 </p>
             </div>
 
-            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} 
-                // gasFee={gasFee} 
-                />
+            <SellSummary
+                pool={pool}
+                isLong={side === SideEnum.long}
+                amount={amount}
+                // gasFee={gasFee}
+            />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
