@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import BigNumber from 'bignumber.js';
 import { SwapContext } from '@context/SwapContext';
 import { CommitActionEnum } from '@libs/constants';
 import styled from 'styled-components';
@@ -31,7 +32,7 @@ export default (() => {
                         size={'xl'}
                         onClick={(val) => {
                             if (swapDispatch) {
-                                swapDispatch({ type: 'setAmount', value: NaN });
+                                swapDispatch({ type: 'setAmount', value: new BigNumber(0) });
                                 swapDispatch({ type: 'setLeverage', value: 1 });
                                 swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
                             }
