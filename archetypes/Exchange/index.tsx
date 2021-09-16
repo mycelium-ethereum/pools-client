@@ -11,11 +11,11 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 const TRADE_OPTIONS = [
     {
         key: CommitActionEnum.mint,
-        text: 'Buy',
+        text: 'Mint',
     },
     {
         key: CommitActionEnum.burn,
-        text: 'Sell',
+        text: 'Burn',
     },
 ];
 

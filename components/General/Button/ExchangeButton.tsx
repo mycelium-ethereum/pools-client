@@ -75,7 +75,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                         });
                     }}
                 >
-                    Ok, let&apos;s {actionType === CommitActionEnum.mint ? 'buy' : 'sell'}
+                    Ok, let&apos;s {actionType === CommitActionEnum.mint ? 'mint' : 'burn'}
                 </Button>
             );
         }

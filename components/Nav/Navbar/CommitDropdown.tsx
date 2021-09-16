@@ -36,7 +36,7 @@ export default (({ setShowQueued, hide }) => {
             preview={`${buys + sells} Queued`}
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
-                <Tooltip placement="left" text="Time until buys/sells are processed ">
+                <Tooltip placement="left" text="Time until mints/burns are processed ">
                     <div className="uppercase mr-2">Up Next</div>
                 </Tooltip>
                 <TimeLeft
@@ -45,10 +45,10 @@ export default (({ setShowQueued, hide }) => {
                 />
             </div>
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.buys)}>
-                <a>{buys} Buys</a>
+                <a>{buys} Mints</a>
             </div>
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.sells)}>
-                <a>{sells} Sells</a>
+                <a>{sells} Burns</a>
             </div>
         </TWPopup>
     );
