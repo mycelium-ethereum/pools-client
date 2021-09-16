@@ -131,7 +131,7 @@ const BuyRow: React.FC<
             </span>
             <span>{toApproxCurrency(amount)}</span>
             <span>{toApproxCurrency(tokenPrice)}</span>
-            <span>{amount.toNumber()}</span>
+            <span>{amount.div(tokenPrice).toFixed()}</span>
             <span>
                 {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
                     <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
