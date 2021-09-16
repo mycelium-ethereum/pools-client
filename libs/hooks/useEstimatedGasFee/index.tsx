@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { CommitEnum } from '@libs/constants/index';
 import { PoolCommitter__factory, PoolCommitter } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 // const useEstimatedGasFee
-export default ((committerAddress: string, amount: number, commitType: CommitEnum) => {
+export default ((committerAddress: string, amount: BigNumber, commitType: CommitEnum) => {
     const { signer } = useWeb3();
     const [gasFee, setGasFee] = useState(0);
 
@@ -14,7 +15,7 @@ export default ((committerAddress: string, amount: number, commitType: CommitEnu
             console.error('Committer address undefined when trying to estimate gas price');
         } else if (!signer) {
             console.error('Provider undefined when trying to estimate gas price');
-        } else if (!amount) {
+        } else if (amount.eq(0)) {
         } else {
             const committer = new ethers.Contract(
                 committerAddress,
@@ -32,4 +33,4 @@ export default ((committerAddress: string, amount: number, commitType: CommitEnu
     }, [committerAddress, commitType, amount, signer]);
 
     return gasFee;
-}) as (committerAddress: string | undefined, amount: number, commitType: CommitEnum) => number;
+}) as (committerAddress: string | undefined, amount: BigNumber, commitType: CommitEnum) => number;

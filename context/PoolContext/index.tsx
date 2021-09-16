@@ -35,7 +35,7 @@ interface ContextProps {
 }
 
 interface ActionContextProps {
-    commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void>;
+    commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
 }
 
@@ -257,7 +257,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (startPrice, endPrice, log) => {
                 console.debug(`
-                    Completed upkeep. 
+                    Completed upkeep.
                     Old price: ${ethers.utils.formatEther(startPrice)}
                     New price: ${ethers.utils.formatEther(endPrice)}
                 `);
@@ -279,46 +279,46 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commit: (pool: string, commitType: CommitEnum, amount: number, options?: Options) => Promise<void> = async (
-        pool,
-        commitType,
-        amount,
-        options,
-    ) => {
-        const committerAddress = poolsState.pools[pool].committer.address;
-        const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
-        if (!committerAddress) {
-            console.error('Committer address undefined when trying to mint');
-            // TODO handle error
-        }
-        const network = await signer?.getChainId();
-        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
-        console.debug(
-            `Creating commit. Amount: ${ethers.utils.parseUnits(
-                amount.toString(),
-                quoteTokenDecimals,
-            )}, Raw amount: ${amount}`,
-        );
-        if (handleTransaction) {
-            handleTransaction(
-                committer.commit,
-                [commitType, ethers.utils.parseUnits(amount.toString(), quoteTokenDecimals)],
-                {
-                    network: network,
-                    statusMessages: {
-                        waiting: 'Submitting commit',
-                        error: 'Failed to commit',
-                    },
-                    onSuccess: (receipt) => {
-                        console.debug('Successfully submitted commit txn: ', receipt);
-                        // get and set token balances
-                        updateTokenBalances(poolsState.pools[pool]);
-                        options?.onSuccess ? options.onSuccess(receipt) : null;
-                    },
-                },
+    const commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void> =
+        async (pool, commitType, amount, options) => {
+            const committerAddress = poolsState.pools[pool].committer.address;
+            const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
+            if (!committerAddress) {
+                console.error('Committer address undefined when trying to mint');
+                // TODO handle error
+            }
+            const network = await signer?.getChainId();
+            const committer = new ethers.Contract(
+                committerAddress,
+                PoolCommitter__factory.abi,
+                signer,
+            ) as PoolCommitter;
+            console.debug(
+                `Creating commit. Amount: ${ethers.utils.parseUnits(
+                    amount.toFixed(),
+                    quoteTokenDecimals,
+                )}, Raw amount: ${amount.toFixed()}`,
             );
-        }
-    };
+            if (handleTransaction) {
+                handleTransaction(
+                    committer.commit,
+                    [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
+                    {
+                        network: network,
+                        statusMessages: {
+                            waiting: 'Submitting commit',
+                            error: 'Failed to commit',
+                        },
+                        onSuccess: (receipt) => {
+                            console.debug('Successfully submitted commit txn: ', receipt);
+                            // get and set token balances
+                            updateTokenBalances(poolsState.pools[pool]);
+                            options?.onSuccess ? options.onSuccess(receipt) : null;
+                        },
+                    },
+                );
+            }
+        };
 
     const approve: (pool: string) => Promise<void> = async (pool) => {
         const token = new ethers.Contract(
@@ -361,10 +361,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 shortBalance,
             );
             console.debug('Calculated value transfer', {
-                shortValueTransfer: shortValueTransfer.toNumber(),
-                longValueTransfer: longValueTransfer.toNumber(),
-                lastPrice: lastPrice.toNumber(),
-                newPrice: oraclePrice.toNumber(),
+                shortValueTransfer: shortValueTransfer.toFixed(),
+                longValueTransfer: longValueTransfer.toFixed(),
+                lastPrice: lastPrice.toFixed(),
+                newPrice: oraclePrice.toFixed(),
             });
             poolsDispatch({
                 type: 'setNextPoolBalances',

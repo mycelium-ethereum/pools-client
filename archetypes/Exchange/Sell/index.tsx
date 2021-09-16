@@ -18,12 +18,19 @@ import { classNames } from '@libs/utils/functions';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
-    amount: number,
-    balance: number,
+    amount: BigNumber,
+    balance: BigNumber,
     minimumTokens: BigNumber,
     tokenPrice: BigNumber,
 ) => { isInvalid: boolean; message?: string } = (amount, balance, minimumTokens, tokenPrice) => {
-    if (amount > balance) {
+    if (amount.eq(0)) {
+        return {
+            message: undefined,
+            isInvalid: false,
+        };
+    }
+
+    if (amount.gt(balance)) {
         return {
             message: undefined,
             isInvalid: true,
@@ -77,7 +84,9 @@ export default (() => {
             );
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const invalidAmount = isInvalidAmount(amount, notional.toNumber(), minimumTokens, tokenPrice);
+            const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+
+            const invalidAmount = isInvalidAmount(amount, currentBalance, minimumTokens, tokenPrice);
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -118,9 +127,9 @@ export default (() => {
                 <InputContainer className="w-full ">
                     <Input
                         className="w-full h-full text-xl font-normal "
-                        value={amount}
+                        value={amount.toFixed()}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: parseFloat(val) });
+                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
                         }}
                     />
                     <InnerInputText>
@@ -130,10 +139,7 @@ export default (() => {
                                 !!selectedPool &&
                                 swapDispatch({
                                     type: 'setAmount',
-                                    value:
-                                        side === SideEnum.long
-                                            ? pool.longToken.balance.toNumber()
-                                            : pool.shortToken.balance.toNumber(),
+                                    value: side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance,
                                 })
                             }
                         >
@@ -152,16 +158,16 @@ export default (() => {
                                     ? pool.longToken.balance.toFixed(2)
                                     : pool.shortToken.balance.toFixed(2)
                             } `}
-                            {!!amount ? (
+                            {amount.gt(0) ? (
                                 <span className="opacity-80">
                                     {`>>> ${
                                         side === SideEnum.long
-                                            ? isNaN(amount)
+                                            ? amount.eq(0)
                                                 ? pool.longToken.balance.toFixed(2)
-                                                : (pool.longToken.balance.toNumber() - amount).toFixed(2)
-                                            : isNaN(amount)
+                                                : pool.longToken.balance.minus(amount).toFixed(2)
+                                            : amount.eq(0)
                                             ? pool.shortToken.balance.toFixed(2)
-                                            : (pool.shortToken.balance.toNumber() - amount).toFixed(2)
+                                            : pool.shortToken.balance.minus(amount).toFixed(2)
                                     }`}
                                 </span>
                             ) : null}
