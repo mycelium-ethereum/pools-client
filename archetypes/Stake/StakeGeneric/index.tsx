@@ -51,7 +51,7 @@ export default (({
             apr: farm.apr.toNumber(),
             totalStaked: farm.totalStaked.toNumber(),
             myStaked: farm.myStaked.toNumber(),
-            myRewards: farm.myRewards.toNumber(),
+            myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
             isPoolToken: farm.isPoolToken,
@@ -114,7 +114,7 @@ export default (({
             case SortByEnum.TotalValueLocked:
                 return farmB.apr - farmA.apr;
             case SortByEnum.MyRewards:
-                return farmB.myRewards - farmA.myRewards;
+                return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:
                 return farmB.myStaked - farmA.myStaked;
             default:
