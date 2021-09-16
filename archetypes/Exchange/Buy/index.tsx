@@ -11,6 +11,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Currency } from '@components/General/Currency';
 import { Dropdown } from '@components/General/Dropdown';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+import FeeNote from "@archetypes/Exchange/FeeNote";
 
 const inputRow = 'relative my-2 ';
 
@@ -165,6 +166,8 @@ export default (() => {
             </div>
 
             <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
+
+            <FeeNote pool={pool} isBuy={true} />
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
         </>

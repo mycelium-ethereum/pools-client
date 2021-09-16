@@ -16,6 +16,7 @@ import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
+import FeeNote from '@archetypes/Exchange/FeeNote';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -181,6 +182,8 @@ export default (() => {
             </div>
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
+
+            <FeeNote pool={pool} isBuy={false} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
