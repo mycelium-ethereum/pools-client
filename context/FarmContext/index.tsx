@@ -72,15 +72,18 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
             for (const { address, abi, isPoolToken } of config.farms) {
                 const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
-                const [myStaked, stakingToken, rewardPerToken, myRewards, rewardsPerWeek] = await Promise.all([
-                    contract.balanceOf(account),
-                    contract.stakingToken(),
-                    contract.rewardPerToken(),
-                    contract.rewards(account),
-                    contract.getRewardForDuration(),
-                ]);
+                const [myStaked, stakingTokenAddress, rewardPerToken, myRewards, rewardsPerWeek, rewardsTokenAddress] =
+                    await Promise.all([
+                        contract.balanceOf(account),
+                        contract.stakingToken(),
+                        contract.rewardPerToken(),
+                        contract.rewards(account),
+                        contract.getRewardForDuration(),
+                        contract.rewardsToken(),
+                    ]);
 
-                const stakingTokenContract = new ethers.Contract(stakingToken, ERC20__factory.abi, signer) as ERC20;
+                const stakingToken = new ethers.Contract(stakingTokenAddress, ERC20__factory.abi, signer) as ERC20;
+                const rewardsToken = new ethers.Contract(rewardsTokenAddress, ERC20__factory.abi, signer) as ERC20;
 
                 const [
                     stakingTokenName,
@@ -88,29 +91,34 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     stakingTokenBalance,
                     stakingTokenAllowance,
                     totalStaked,
+                    rewardsTokenDecimals,
                 ] = await Promise.all([
-                    stakingTokenContract.name(),
-                    stakingTokenContract.decimals(),
-                    stakingTokenContract.balanceOf(account),
-                    stakingTokenContract.allowance(account, address),
-                    stakingTokenContract.totalSupply(),
+                    stakingToken.name(),
+                    stakingToken.decimals(),
+                    stakingToken.balanceOf(account),
+                    stakingToken.allowance(account, address),
+                    stakingToken.totalSupply(),
+                    rewardsToken.decimals(),
                 ]);
 
-                const decimalMultiplier = 10 ** stakingTokenDecimals;
+                const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
+                const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
 
                 const updatedFarm = {
                     name: stakingTokenName,
                     address,
                     contract,
                     totalStaked: new BigNumber(ethers.utils.formatEther(totalStaked)),
-                    stakingToken: stakingTokenContract,
+                    stakingToken: stakingToken,
                     stakingTokenDecimals,
-                    stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
-                    stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(decimalMultiplier),
-                    myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
-                    myRewards: new BigNumber(myRewards.toString()).div(decimalMultiplier),
-                    apy: new BigNumber(rewardPerToken.toString()).div(decimalMultiplier),
-                    rewardsPerYear: new BigNumber(rewardsPerWeek.toString()).div(decimalMultiplier).times(52),
+                    stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(stakingDecimalMultiplier),
+                    stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
+                        stakingDecimalMultiplier,
+                    ),
+                    myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
+                    myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
+                    apy: new BigNumber(rewardPerToken.toString()).div(rewardsDecimalMultiplier),
+                    rewardsPerYear: new BigNumber(rewardsPerWeek.toString()).div(rewardsDecimalMultiplier).times(52),
                     isPoolToken,
                 };
 

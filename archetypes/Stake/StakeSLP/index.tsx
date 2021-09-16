@@ -13,6 +13,8 @@ export default (() => {
                 tokenType="SLP"
                 refreshFarm={refreshFarm}
                 farms={slpFarms}
+                hideLeverageFilter
+                hideSideFilter
             ></StakeGeneric>
         </>
     );

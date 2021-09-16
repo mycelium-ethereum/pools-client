@@ -1,13 +1,15 @@
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
-import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum } from '../state';
+import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 interface FilterSelectsProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
+    hideLeverageFilter?: boolean;
+    hideSideFilter?: boolean;
 }
 
-const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
+const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeverageFilter, hideSideFilter }) => {
     return (
         <section className="container px-0">
             <div className="flex w-full mb-2">
@@ -18,39 +20,35 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         onChange={(search) => dispatch({ type: 'setSearch', search })}
                     />
                 </div>
-                {/* <div className="mr-4">
-                    <h3 className="mb-1">Market</h3>
-                    <Dropdown
-                        value={state.leverage}
-                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
-                    />
-                </div> */}
-                <div className="mr-4">
-                    <h3 className="mb-1">Leverage</h3>
-                    <Dropdown
-                        value={state.leverage}
-                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
-                    />
-                </div>
-                <div>
-                    <h3 className="mb-1">Side</h3>
-                    <Dropdown
-                        value={state.side}
-                        options={Object.values(SideFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
-                    />
-                </div>
+                {!hideLeverageFilter ? (
+                    <div className="mr-4">
+                        <h3 className="mb-1">Leverage</h3>
+                        <Dropdown
+                            value={state.leverage}
+                            options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
+                            onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
+                        />
+                    </div>
+                ) : null}
+                {!hideSideFilter ? (
+                    <div>
+                        <h3 className="mb-1">Side</h3>
+                        <Dropdown
+                            value={state.side}
+                            options={Object.values(SideFilterEnum).map((key) => ({ key }))}
+                            onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
+                        />
+                    </div>
+                ) : null}
                 <div className="flex-grow" />
-                {/* <div>
+                <div>
                     <h3 className="mb-1">Sort</h3>
                     <Dropdown
                         value={state.sortBy}
                         options={Object.values(SortByEnum).map((key) => ({ key: key }))}
                         onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
                     />
-                </div> */}
+                </div>
             </div>
         </section>
     );

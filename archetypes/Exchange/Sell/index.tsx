@@ -55,7 +55,7 @@ const isInvalidAmount: (
 
 export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const tokens = usePoolTokens();
+    const { tokens } = usePoolTokens();
 
     const { amount, side, selectedPool, commitAction, invalidAmount } = swapState;
 

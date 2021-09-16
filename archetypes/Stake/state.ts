@@ -1,3 +1,4 @@
+import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 
 export enum LeverageFilterEnum {
@@ -14,7 +15,7 @@ export enum SideFilterEnum {
 
 export enum SortByEnum {
     Name = 'Token',
-    APY = 'APY',
+    // APY = 'APY',
     TotalValueLocked = 'TVL',
     MyStaked = 'My Staked',
     MyRewards = 'My Rewards',
@@ -24,8 +25,8 @@ export interface FarmTableRowData {
     farm: string;
     tokenAddress: string;
     name: string;
-    leverage: number;
-    side: 'long' | 'short';
+    leverage?: number;
+    side?: SideEnum;
     apy: number;
     totalStaked: number;
     myStaked: number;

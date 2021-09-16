@@ -5,7 +5,7 @@ import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
 import { Container } from '@components/General';
-import { MAX_SOL_UINT } from '@libs/constants';
+import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
 import {
     stakeReducer,
     StakeAction,
@@ -18,27 +18,34 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
+import usePoolTokens from '@libs/hooks/usePoolTokens';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 
-export default (({ tokenType, title, subTitle, farms, refreshFarm }) => {
+export default (({ tokenType, title, subTitle, farms, refreshFarm, hideLeverageFilter, hideSideFilter }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
+    const { tokenMap } = usePoolTokens();
 
-    const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => ({
-        farm: farm.address,
-        tokenAddress: farm.stakingToken.address,
-        name: farm.name,
-        leverage: 1,
-        side: 'long',
-        apy: farm.apy.toNumber(),
-        totalStaked: farm.totalStaked.toNumber(),
-        myStaked: farm.myStaked.toNumber(),
-        myRewards: farm.myRewards.toNumber(),
-        stakingTokenBalance: farm.stakingTokenBalance,
-        rewardsPerYear: farm.rewardsPerYear,
-    }));
+    const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
+        const poolToken = farm.isPoolToken ? tokenMap[farm.stakingToken.address] : null;
+
+        return {
+            farm: farm.address,
+            tokenAddress: farm.stakingToken.address,
+            name: farm.name,
+            leverage: poolToken?.leverage,
+            side: poolToken?.side,
+            apy: farm.apy.toNumber(),
+            totalStaked: farm.totalStaked.toNumber(),
+            myStaked: farm.myStaked.toNumber(),
+            myRewards: farm.myRewards.toNumber(),
+            stakingTokenBalance: farm.stakingTokenBalance,
+            rewardsPerYear: farm.rewardsPerYear,
+            isPoolToken: farm.isPoolToken,
+        };
+    });
 
     const [state, dispatch] = useReducer(stakeReducer, {
         search: '',
@@ -76,9 +83,9 @@ export default (({ tokenType, title, subTitle, farms, refreshFarm }) => {
             case SideFilterEnum.All:
                 return true;
             case SideFilterEnum.Long:
-                return pool.side === 'long';
+                return pool.side === SideEnum.long;
             case SideFilterEnum.Short:
-                return pool.side === 'short';
+                return pool.side === SideEnum.short;
             default:
                 return false;
         }
@@ -249,7 +256,12 @@ export default (({ tokenType, title, subTitle, farms, refreshFarm }) => {
                     <section className="hidden md:block">
                         <h1 className="font-bold pb-4 text-3xl text-cool-gray-900 sm:none md:block">{title}</h1>
                         <p className="mb-1 text-gray-500">{subTitle}</p>
-                        <FilterBar state={state} dispatch={dispatch} />
+                        <FilterBar
+                            hideLeverageFilter={hideLeverageFilter}
+                            hideSideFilter={hideSideFilter}
+                            state={state}
+                            dispatch={dispatch}
+                        />
                     </section>
                     <FarmsTable
                         rows={sortedFilteredFarms}
@@ -277,6 +289,8 @@ export default (({ tokenType, title, subTitle, farms, refreshFarm }) => {
     tokenType: string;
     farms: Record<string, Farm>;
     refreshFarm: (farmAddress: string) => void;
+    hideLeverageFilter?: boolean;
+    hideSideFilter?: boolean;
 }>;
 
 const StakeModalWithState: React.FC<{
