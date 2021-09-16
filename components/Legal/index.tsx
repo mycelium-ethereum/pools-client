@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import NavBar from '@components/Nav';
 import Footer from '@components/Footer';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
-import ArrowDown from '@public/img/general/caret-down-black.svg';
-import Icon from '@ant-design/icons';
+import TWPopup from '@components/General/TWPopup';
 
 export const LegalPageLayout: React.FC = ({ children }) => {
     const route = useRouter().pathname;
-    const [open, setOpen] = useState(false);
     return (
         <>
             <NavBar />
-            <Dropdown onClick={() => setOpen(!open)}>
-                {route === '/privacy-policy'
+            <TWPopup 
+                className={'mt-4 ml-6 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
+                buttonClasses={'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'}
+                preview={
+                route === '/privacy-policy'
                     ? 'Privacy Policy'
                     : route === '/terms-of-use'
                     ? 'Terms of Use'
                     : 'Disclaimer'}
-                <Arrow component={ArrowDown} />
-                <HiddenMenu className={`${open ? 'show' : ''}`}>
+            >
+                <div className="w-full p-3 text-right">
                     <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
                         <Link href="/privacy-policy">Privacy Policy</Link>
                     </MenuItem>
@@ -31,8 +31,8 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                     <MenuItem className={`${route === '/disclaimer' ? 'selected' : ''}`}>
                         <Link href="/disclaimer">Disclaimer</Link>
                     </MenuItem>
-                </HiddenMenu>
-            </Dropdown>
+                </div>
+            </TWPopup>
             <LayoutWrapper className="container flex">
                 <LeftPanel>
                     <ContentWrapper>
@@ -59,54 +59,12 @@ export const LegalPageLayout: React.FC = ({ children }) => {
 
 const LayoutWrapper = styled.div``;
 
-const Dropdown = styled.div`
-    position: relative;
-    display: none;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: 500;
-    margin: 30px 0 0 20px;
-    width: fit-content;
-    background-color: #fafafa;
-    padding: 10px 20px;
-    border-radius: 10px;
-
-    @media (max-width: 1024px) {
-        display: flex;
-    }
-`;
-
-const Arrow = styled(Icon)`
-    margin: auto 10px;
-    height: 8px;
-    width: 15px;
-`;
-
-const HiddenMenu = styled.div`
-    position: absolute;
-    width: 250px;
-    height: fit-content;
-    border-radius: 7px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
-    top: 60px;
-    left: 0;
-    padding: 10px 0 10px 20px;
-    transform-origin: top left;
-    transform: scale(0.7, 0);
-    transition: all 500ms ease-in-out;
-    opacity: 0;
-    background-color: white;
-
-    &.show {
-        opacity: 1;
-        transform: none;
-    }
-`;
 const MenuItem = styled.div`
     font-size: 16px;
     font-weight: normal;
     color: gray;
     cursor: pointer;
+    margin-left: auto;
     padding: 5px 0;
 
     &.selected {
