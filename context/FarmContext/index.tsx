@@ -123,7 +123,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                             stakingToken.decimals(),
                             stakingToken.balanceOf(account),
                             stakingToken.allowance(account, address),
-                            stakingToken.totalSupply(),
+                            contract.totalSupply(),
                             rewardsToken.decimals(),
                         ]);
 
