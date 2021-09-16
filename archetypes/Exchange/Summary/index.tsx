@@ -79,7 +79,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
 
 export const SellSummary: React.FC<
     SummaryProps & {
-        gasFee: number;
+        // gasFee: number;
     }
 > = ({ pool, amount, isLong }) => {
     const token = isLong ? pool.longToken : pool.shortToken;
