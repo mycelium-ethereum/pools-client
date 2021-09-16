@@ -4,31 +4,57 @@ import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
-import { ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 
 // this is a temp hack to fix fetching pools > 2000 blocks from currentBlock
-const ARBITRUM_POOLS = [
-    {
-        // 1x
-        name: '1-BTC/USDC',
-        address: '0xE8186114E071A516C735a822F0B01875bd796671',
-    },
-    {
-        // 3x
-        name: '3-BTC/USDC',
-        address: '0x1e4c6b7e3a24b6197a5236e632D2E74cDC42cEaE',
-    },
-    {
-        // 1x
-        name: '1-ETH/USDC',
-        address: '0x7735325DB7744e1f4327cC3fFF41cFc8A190B7A2',
-    },
-    {
-        // 3x
-        name: '3-ETH/USDC',
-        address: '0x377F606c10454a0c65dAb1B1b413baa038Aa5681',
-    },
-];
+type ArbitrumNetwork = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
+
+const POOLS: Record<ArbitrumNetwork, any> = {
+    [ARBITRUM_RINKEBY]: [
+        {
+            // 1x
+            name: '1-BTC/USDC',
+            address: '0xE8186114E071A516C735a822F0B01875bd796671',
+        },
+        {
+            // 3x
+            name: '3-BTC/USDC',
+            address: '0x1e4c6b7e3a24b6197a5236e632D2E74cDC42cEaE',
+        },
+        {
+            // 1x
+            name: '1-ETH/USDC',
+            address: '0x7735325DB7744e1f4327cC3fFF41cFc8A190B7A2',
+        },
+        {
+            // 3x
+            name: '3-ETH/USDC',
+            address: '0x377F606c10454a0c65dAb1B1b413baa038Aa5681',
+        },
+    ],
+    [ARBITRUM]: [
+        {
+            // 1x
+            name: '1-BTC/USDC',
+            address: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
+        },
+        {
+            // 3x
+            name: '3-BTC/USDC',
+            address: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
+        },
+        {
+            // 1x
+            name: '1-ETH/USDC',
+            address: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
+        },
+        {
+            // 3x
+            name: '3-ETH/USDC',
+            address: '0x54114e9e1eEf979070091186D7102805819e916B',
+        },
+    ],
+};
 interface ContextProps {
     pools: PoolType[];
 }
@@ -61,9 +87,9 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         const fetch = async () => {
             if (contract) {
-                if (network === parseInt(ARBITRUM_RINKEBY)) {
+                if (POOLS[network as unknown as ArbitrumNetwork]) {
                     // hacky temp solution to rpc limit issues
-                    setPools(ARBITRUM_POOLS);
+                    setPools(POOLS[network as unknown as ArbitrumNetwork]);
                 } else {
                     const createdMarkets = contract.filters.DeployPool();
                     const allEvents = await contract?.queryFilter(createdMarkets);

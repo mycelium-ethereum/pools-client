@@ -21,7 +21,7 @@ export default ((focus) => {
                 if (
                     !pools[commit.pool] || // pools doesnt exist
                     commit.from.toLowerCase() !== accountLower || // not committed by connected account
-                    (focus === CommitsFocusEnum.buys &&
+                    (focus === CommitsFocusEnum.mints &&
                         (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
                 ) {
                     continue;

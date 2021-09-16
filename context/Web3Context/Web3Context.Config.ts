@@ -51,12 +51,12 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: 'https://explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
-                address: 'TODO',
+                address: '0x98C58c1cEb01E198F8356763d5CbA8EB7b11e4E2',
                 abi: PoolFactory__factory.abi,
             },
         },
         hex: '0xA4B1',
-        publicRPC: 'TODO',
+        publicRPC: 'https://arb1.arbitrum.io/rpc',
         graphUri: 'TODO',
     },
     '42': {

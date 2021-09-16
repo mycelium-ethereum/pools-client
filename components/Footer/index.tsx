@@ -79,7 +79,7 @@ const Footer = styled(({ className }) => {
     margin-top: auto;
     padding: 1rem 2rem;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
         flex-direction: column;
     }
 `;
@@ -87,7 +87,7 @@ const Footer = styled(({ className }) => {
 const Socials = styled.div`
     display: flex;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
         margin: 2rem 0 3rem;
     }
 `;
@@ -103,14 +103,14 @@ const SocialIcon = styled.a`
 const Items = styled.div`
     display: flex;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
         flex-direction: column;
     }
 `;
 const Item = styled.div`
     margin-left: 2rem;
 
-    @media (max-width: 1024px) {
+    @media (max-width: 1100px) {
         margin-left: 0;
         margin-bottom: 1rem;
 
