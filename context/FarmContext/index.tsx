@@ -69,6 +69,8 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     const fetchFarms = useCallback(async () => {
         if (signer && config && account) {
+            setPoolFarms({});
+            setSlpFarms({});
             for (const { address, abi, isPoolToken } of config.farms) {
                 const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
