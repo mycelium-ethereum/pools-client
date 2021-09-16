@@ -255,7 +255,7 @@ export default (({ logo, tokenType, title, subTitle, farms, refreshFarm, hideLev
             <Container className="mt-0 md:mt-[100px]">
                 <FarmContainer>
                     <section className="hidden md:block">
-                    <span className="align-items: inline-flex ">
+                        <span className="align-items: inline-flex ">
                             {!!logo ? <Logo ticker={logo} className="pb-0 pr-1" /> : null}
                             <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-cool-gray-900 sm:none flex-wrap: wrap;">
                                 {title}
