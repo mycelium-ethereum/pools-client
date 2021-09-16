@@ -51,7 +51,7 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: 'https://explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
-                address: '0xAAc9f23D2d4AB7D1E28cd8C9e37C8e1Cb4BA9D96',
+                address: '0x98C58c1cEb01E198F8356763d5CbA8EB7b11e4E2',
                 abi: PoolFactory__factory.abi,
             },
         },
