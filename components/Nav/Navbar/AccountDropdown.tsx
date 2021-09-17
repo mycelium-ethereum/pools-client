@@ -77,7 +77,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                 <div className="flex px-4 py-2 text-sm w-[180px]">
                     <WalletIcon />
                     <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
-                    <TooltipSelector tooltip={{ key: 'Copy' }}>
+                    <TooltipSelector tooltip={{ content: <>Copy</> }}>
                         <CopyOutlined
                             className="self-center icon"
                             onClick={() => {

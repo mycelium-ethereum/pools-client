@@ -17,7 +17,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
-import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Lock from '/public/img/general/lock.svg';
 
@@ -55,7 +55,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
                             <span className="flex">
                                 {nextRebalance - Date.now() / 1000 < frontRunningInterval ? (
-                                    <TooltipSelector tooltip={{ key: 'lock' }}>
+                                    <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
                                         <Lock className="mr-2" />
                                     </TooltipSelector>
                                 ) : null}

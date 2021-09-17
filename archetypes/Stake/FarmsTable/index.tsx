@@ -128,6 +128,7 @@ const PoolRow: React.FC<{
             </span>
             <span>
                 <Button
+                    disabled={farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
@@ -136,6 +137,7 @@ const PoolRow: React.FC<{
                     STAKE
                 </Button>
                 <Button
+                    disabled={farm.myStaked === 0}
                     className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
@@ -144,6 +146,7 @@ const PoolRow: React.FC<{
                     UNSTAKE
                 </Button>
                 <Button
+                    disabled={farm.myRewards.eq(0)}
                     className="mx-1 w-[76px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"

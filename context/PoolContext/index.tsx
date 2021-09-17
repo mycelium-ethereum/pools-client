@@ -47,7 +47,7 @@ export const PoolsActionsContext = React.createContext<Partial<ActionContextProp
 export const SelectedPoolContext = React.createContext<Partial<SelectedPoolContextProps>>({});
 
 /**
- * Wrapper store for the swap page state
+ * Wrapper store for all pools information
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { pools } = useContext(FactoryContext);
@@ -56,9 +56,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
-    /** If pools changes then re-init them */
+    // if the pools from the factory change, re-init them
     useMemo(() => {
-        // if pools from factory change
         if (pools && provider) {
             poolsDispatch({ type: 'resetPools' });
             Promise.all(pools.map((pool) => initPool(pool, provider)))
@@ -78,10 +77,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     }, [provider, pools]);
 
-    // if the account or provider changes update the account balances for each pool
-    // as well as the pending user commits
+    // fetch all pending commits
     useEffect(() => {
-        if (account && provider && poolsState.poolsInitialised) {
+        if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances
                 updateTokenBalances(pool);
@@ -90,7 +88,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                 // fetch commits
                 try {
-                    commitDispatch({ type: 'resetCommits' });
                     fetchCommits(pool.committer.address, provider, pool.quoteToken.decimals).then((committerInfo) => {
                         poolsDispatch({
                             type: 'setPendingAmounts',
@@ -126,8 +123,20 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 subscribeToPool(pool.address);
             });
         }
-    }, [account, poolsState.poolsInitialised]);
+    }, [provider, poolsState.poolsInitialised]);
 
+    // update token balances and approvals when address changes
+    useEffect(() => {
+        if (provider && account && poolsState.poolsInitialised) {
+            Object.values(poolsState.pools).map((pool) => {
+                // get and set token balances and approvals for each pool
+                updateTokenBalances(pool);
+                updateTokenApprovals(pool);
+            });
+        }
+    }, [provider, account, poolsState.poolsInitialised]);
+
+    // get and set token balances
     const updateTokenBalances: (pool: Pool) => void = (pool) => {
         if (!provider || !account) {
             return false;
@@ -159,6 +168,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
     };
 
+    // get and set approvals
     const updateTokenApprovals: (pool: Pool) => void = (pool) => {
         if (!provider || !account) {
             return;
@@ -176,6 +186,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         });
     };
 
+    // subscribe to pool events
     const subscribeToPool = async (pool: string) => {
         if (provider && !poolsState.pools[pool]?.subscribed) {
             console.debug('Subscribing to pool', pool);
@@ -278,6 +289,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
+    /**
+     * Commit to a pool
+     * @param pool pool address to commit to
+     * @param commitType int corresponsing to commitType
+     * @param amount amount to commit
+     * @param options handleTransaction options
+     */
     const commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void> =
         async (pool, commitType, amount, options) => {
             const committerAddress = poolsState.pools[pool].committer.address;
@@ -319,6 +337,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             }
         };
 
+    /**
+     * Approve pool to spend quote token
+     * @param pool address to approve
+     */
     const approve: (pool: string) => Promise<void> = async (pool) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
@@ -346,6 +368,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
+    /**
+     * Sets the expected price after value transfer
+     * @param pool address of pool
+     */
     const setExpectedPrice = (pool: Pool) => {
         const { lastPrice, leverage, longBalance, shortBalance } = pool;
         const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
