@@ -51,7 +51,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                     {token.name}
                 </h2>
                 <Transition
-                    show={!!amount}
+                    show={!amount.eq(0)}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -103,7 +103,7 @@ export const SellSummary: React.FC<
                     USDC
                 </h2>
                 <Transition
-                    show={!!amount}
+                    show={!amount.eq(0)}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
