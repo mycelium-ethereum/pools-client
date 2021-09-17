@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
 
-import { Tooltip } from '@components/General/Tooltip';
 const STAKE = 0;
 const SLP = 1;
 
@@ -41,9 +41,7 @@ export default (({ left, right }) => {
                     Stake Pool
                 </Item>
                 <Item onClick={(_e) => console.debug('coming soon')} selected={router.pathname === '/slp'}>
-                    <Tooltip text="Coming soon" placement="bottom">
-                        Stake SLP
-                    </Tooltip>
+                    <TooltipSelector tooltip={{ key: 'Coming soon' }}>Stake SLP</TooltipSelector>
                 </Item>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>
