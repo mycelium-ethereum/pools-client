@@ -9,8 +9,8 @@ export default ((tokenAddress) => {
     const poolAddress = useMemo(() => tokenMap[tokenAddress], [tokenMap, tokenAddress]);
     const pool = usePool(poolAddress);
 
-    const isLong = useMemo(
-        () => (tokenAddress === pool.longToken.address ? pool.longToken.address : pool.shortToken.address),
+    const isLong: boolean = useMemo(
+        () => tokenAddress.toLowerCase() === pool.longToken.address.toLowerCase(),
         [tokenAddress, pool],
     );
 
