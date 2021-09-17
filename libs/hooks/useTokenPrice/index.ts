@@ -10,7 +10,7 @@ export default ((tokenAddress) => {
     const pool = usePool(poolAddress);
 
     const isLong = useMemo(
-        () => (tokenAddress === pool.longToken.address ? pool.longToken.address : pool.shortToken.address),
+        () => (tokenAddress.toLowerCase() === pool.longToken.address.toLowerCase()),
         [tokenAddress, pool],
     );
 
@@ -28,7 +28,7 @@ export default ((tokenAddress) => {
 
     return {
         price: useMemo(
-            () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+            () => calcTokenPrice(notional, token.supply),
             [notional, token, pendingBurns],
         ),
         supply: useMemo(() => token.supply, [notional, token, pendingBurns]),
