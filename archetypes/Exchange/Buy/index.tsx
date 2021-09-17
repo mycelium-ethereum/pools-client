@@ -135,7 +135,7 @@ export default (() => {
                         text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
-                                  text: 'Coming soon',
+                                  content: 'Coming soon',
                               }
                             : undefined,
                     }))}
