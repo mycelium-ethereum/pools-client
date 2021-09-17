@@ -1,6 +1,6 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
-import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 const SELECTED = {
     tracer: 'z-10 bg-tracer-500 text-white border-none focus:border-none ',
     default: 'z-10 bg-tracer-800 text-white border-none focus:border-none ',
@@ -22,7 +22,7 @@ type Option = {
     text: string;
     color?: '';
     disabled?: {
-        content: React.ReactNode;
+        optionKey: TooltipKeys;
     };
 };
 
@@ -35,7 +35,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
         <span className="relative z-0 inline-flex shadow-sm">
             {options.map((option, index) =>
                 option.disabled ? (
-                    <TooltipSelector tooltip={{ key: option.disabled.content }}>
+                    <TooltipSelector tooltip={{ key: option.disabled.optionKey }}>
                         <button
                             type="button"
                             data-tip

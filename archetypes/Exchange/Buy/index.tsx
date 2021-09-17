@@ -15,6 +15,7 @@ import FeeNote from '@archetypes/Exchange/FeeNote';
 import Button from '@components/General/Button';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
+import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Close from '/public/img/general/close-black.svg';
 
@@ -117,7 +118,7 @@ export default (() => {
                     />
                 </span>
                 <span>
-                    <p className="mb-2 text-black">Side {pool.frontRunningInterval.toNumber()}</p>
+                    <p className="mb-2 text-black">Side</p>
                     <TWButtonGroup
                         value={side}
                         onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
@@ -135,7 +136,7 @@ export default (() => {
                         text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
-                                  content: 'Coming soon',
+                                  optionKey: TooltipKeys.ComingSoon,
                               }
                             : undefined,
                     }))}

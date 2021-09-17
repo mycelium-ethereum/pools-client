@@ -36,7 +36,7 @@ export default (({ setShowQueued, hide }) => {
             preview={`${mints + burns} Queued`}
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
-                <TooltipSelector tooltip={{ key: 'Time until mints/burns are processed' }}>
+                <TooltipSelector tooltip={{ content: <>Time until mints/burns are processed</> }}>
                     <div className="uppercase mr-2">Up Next</div>
                 </TooltipSelector>
                 <TimeLeft

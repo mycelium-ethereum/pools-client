@@ -1,17 +1,26 @@
 import React from 'react';
-import { StyledTooltip, LockTip } from '../';
+import { StyledTooltip, LockTip, ComingSoonTip } from '../';
+
+export enum TooltipKeys {
+    ComingSoon = 'coming-soon',
+    Lock = 'Lock',
+}
 
 export type TooltipSelectorProps = {
-    key: string | React.ReactNode;
+    key?: TooltipKeys;
+    content?: React.ReactNode;
 };
 
 const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip, children }) => {
     switch (tooltip.key) {
-        case 'lock':
+        case 'coming-soon':
+            return <ComingSoonTip>{children}</ComingSoonTip>;
+
+        case 'Lock':
             return <LockTip>{children}</LockTip>;
 
         default:
-            return <StyledTooltip title={tooltip.key}>{children}</StyledTooltip>;
+            return <StyledTooltip title={tooltip.content}>{children}</StyledTooltip>;
     }
 };
 

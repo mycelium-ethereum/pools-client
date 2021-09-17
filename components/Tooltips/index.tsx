@@ -10,9 +10,14 @@ export const StyledTooltip = styled(Tooltip)`
     }
 `;
 
+export const ComingSoonTip: React.FC = ({ children }) => {
+    const Content = <>Coming soon</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const LockTip: React.FC = ({ children }) => {
     const Content = (
-        <p>
+        <>
             Front-running interval reached. You can no longer mint or burn this round.{' '}
             <a
                 onClick={() =>
@@ -25,7 +30,7 @@ export const LockTip: React.FC = ({ children }) => {
             >
                 Learn more.
             </a>
-        </p>
+        </>
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
