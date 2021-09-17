@@ -13,10 +13,10 @@ export type TooltipSelectorProps = {
 
 const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip, children }) => {
     switch (tooltip.key) {
-        case 'coming-soon':
+        case TooltipKeys.ComingSoon:
             return <ComingSoonTip>{children}</ComingSoonTip>;
 
-        case 'Lock':
+        case TooltipKeys.Lock:
             return <LockTip>{children}</LockTip>;
 
         default:
