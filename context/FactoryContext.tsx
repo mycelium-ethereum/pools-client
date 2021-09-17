@@ -14,22 +14,22 @@ const POOLS: Record<ArbitrumNetwork, any> = {
         {
             // 1x
             name: '1-BTC/USDC',
-            address: '0xE8186114E071A516C735a822F0B01875bd796671',
+            address: '0x1b9A08Bd1b976fd91a355625509FbFcbbF34fb20',
         },
         {
             // 3x
             name: '3-BTC/USDC',
-            address: '0x1e4c6b7e3a24b6197a5236e632D2E74cDC42cEaE',
+            address: '0xd0983C3E9E4Af753E6e74D741a39c3053b06dFcf',
         },
         {
             // 1x
             name: '1-ETH/USDC',
-            address: '0x7735325DB7744e1f4327cC3fFF41cFc8A190B7A2',
+            address: '0x34eE510e1d51904C50d9CD03199dE5147A4E15eD',
         },
         {
             // 3x
             name: '3-ETH/USDC',
-            address: '0x377F606c10454a0c65dAb1B1b413baa038Aa5681',
+            address: '0xe3cAD84c29775399a25c6Ff040FE141b4eD10047',
         },
     ],
     [ARBITRUM]: [
