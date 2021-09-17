@@ -45,7 +45,7 @@ export const networkConfig: Record<string, Network> = {
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
-                address: '0xd51F77C5945dD39a8ec87cAc7E02d85E7e5e182e',
+                address: '0x69D044eCf45500882FdA0A796744231b1Fb5eFD5',
                 abi: PoolFactory__factory.abi,
             },
         },
