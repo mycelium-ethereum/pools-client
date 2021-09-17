@@ -62,7 +62,7 @@ export const NavBarContent = styled(({ className }) => {
             <Links>
                 <li className={linkStyles + (route === '' ? ' selected' : '')}>
                     <Link href="/">
-                        <a className="m-auto">Invest</a>
+                        <a className="m-auto">Trade</a>
                     </Link>
                 </li>
                 <li className={linkStyles + (route === 'stake' ? ' selected' : '')}>

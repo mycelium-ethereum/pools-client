@@ -53,7 +53,7 @@ export default (({ account, className }) => {
                                         <NetworkDropdown className="w-full my-4 relative text-center" />
                                         <div className="text-white mt-2" onClick={() => handleRoute('/')}>
                                             <Icon className="text-xl mr-2 align-bottom" component={Invest} />
-                                            Invest
+                                            Trade
                                         </div>
                                         <div className="text-white mt-2" onClick={() => handleRoute('stake')}>
                                             <Icon className="text-xl mr-2 align-bottom" component={Stake} />
