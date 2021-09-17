@@ -29,8 +29,10 @@ export interface BrowseTableRowData {
     rebalanceRate: number;
     totalValueLocked: number;
     myHoldings: number;
-    nextRebalance: number;
-    frontRunning: number;
+    rebalanceInfo: {
+        nextRebalance: number;
+        frontRunningInterval: number;
+    };
 }
 
 export interface BrowseState {

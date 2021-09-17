@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
-import TimeLeft from '@components/TimeLeft';
+import { TimeLeft } from '@components/TimeLeft';
+
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -133,9 +134,9 @@ const BuyRow: React.FC<
             <span>{amount.div(tokenPrice).toFixed()}</span>
             <span>
                 {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
+                    <TimeLeft nextRebalance={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
+                    <TimeLeft nextRebalance={nextRebalance.toNumber()} />
                 )}
             </span>
             <span className="flex text-right">
@@ -180,9 +181,9 @@ const SellRow: React.FC<
             <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
             <span>
                 {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
+                    <TimeLeft nextRebalance={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
+                    <TimeLeft nextRebalance={nextRebalance.toNumber()} />
                 )}
             </span>
             <span className="flex text-right">

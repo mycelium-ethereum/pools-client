@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
-import TimeLeft from '@components/TimeLeft';
+import { TimeLeft } from '@components/TimeLeft';
+
 import { useCommitActions } from '@context/UsersCommitContext';
 import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
@@ -41,7 +42,7 @@ export default (({ setShowQueued, hide }) => {
                 </TooltipSelector>
                 <TimeLeft
                     className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
-                    targetTime={nextUpdate}
+                    nextRebalance={nextUpdate}
                 />
             </div>
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.mints)}>

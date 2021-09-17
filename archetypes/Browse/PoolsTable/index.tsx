@@ -6,7 +6,8 @@ import React, { useState } from 'react';
 import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
-import TimeLeft from '@components/TimeLeft';
+import { TimeLeft } from '@components/TimeLeft';
+
 import Actions from '@components/TokenActions';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
@@ -42,6 +43,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 </TableHeader>
                 {rows.map((token, index) => {
                     const hasHoldings = token.myHoldings > 0;
+                    const { nextRebalance, frontRunningInterval } = token.rebalanceInfo;
                     return (
                         <TableRow key={token.address} rowNumber={index}>
                             <span>
@@ -52,12 +54,12 @@ export default (({ rows, onClickBuy, onClickSell }) => {
 
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
                             <span className="flex">
-                                {token.nextRebalance - Date.now() / 1000 < token.frontRunning ? (
+                                {nextRebalance - Date.now() / 1000 < frontRunningInterval ? (
                                     <TooltipSelector tooltip={{ key: 'lock' }}>
                                         <Lock className="mr-2" />
                                     </TooltipSelector>
                                 ) : null}
-                                <TimeLeft targetTime={token.nextRebalance} />
+                                <TimeLeft nextRebalance={nextRebalance} />
                             </span>
                             <span>{toApproxCurrency(token.totalValueLocked)}</span>
                             <span>

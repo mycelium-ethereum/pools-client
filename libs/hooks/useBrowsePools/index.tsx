@@ -33,10 +33,12 @@ export default (() => {
                             pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
                             pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
                         ).toNumber(),
-                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
+                        rebalanceInfo: {
+                            nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
+                            frontRunningInterval: pool.frontRunningInterval.toNumber(),
+                        },
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
-                        frontRunning: pool.frontRunningInterval.toNumber(),
                     },
                     {
                         address: longToken.address,
@@ -53,10 +55,12 @@ export default (() => {
                             pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
                             pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
                         ).toNumber(),
-                        nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
+                        rebalanceInfo: {
+                            nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
+                            frontRunningInterval: pool.frontRunningInterval.toNumber(),
+                        },
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),
-                        frontRunning: pool.frontRunningInterval.toNumber(),
                     },
                 );
             });

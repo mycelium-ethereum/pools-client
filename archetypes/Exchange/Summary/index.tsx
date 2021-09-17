@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
-import TimeLeft from '@components/TimeLeft';
+import { ReceiveIn } from '@components/TimeLeft';
+
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
@@ -14,6 +15,8 @@ type SummaryProps = {
     amount: BigNumber;
     isLong: boolean;
 };
+
+const timeLeft = 'inline ml-2 px-1 bg-gray-50 border border-gray-200 rounded text-cool-gray-500';
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
@@ -71,7 +74,12 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 </Transition>
                 <Countdown>
                     {'Receive In'}
-                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
+                    <ReceiveIn
+                        className={timeLeft}
+                        updateInterval={pool.updateInterval.toNumber()}
+                        frontRunningInterval={pool.frontRunningInterval.toNumber()}
+                        nextRebalance={pool.lastUpdate.plus(pool.updateInterval).toNumber()}
+                    />
                 </Countdown>
             </Box>
         </HiddenExpand>
@@ -117,7 +125,12 @@ export const SellSummary: React.FC<
                 </Transition>
                 <Countdown>
                     {'Receive In'}
-                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
+                    <ReceiveIn
+                        className={timeLeft}
+                        updateInterval={pool.updateInterval.toNumber()}
+                        frontRunningInterval={pool.frontRunningInterval.toNumber()}
+                        nextRebalance={pool.lastUpdate.plus(pool.updateInterval).toNumber()}
+                    />
                 </Countdown>
             </Box>
         </HiddenExpand>
@@ -143,14 +156,4 @@ const Countdown = styled.div`
     font-size: 1rem;
     z-index: 2;
     padding 0 5px;
-
-    ${TimeLeft} {
-        display: inline;
-        background: #FAFAFA;
-        border: 1px solid #E4E4E7;
-        margin-left: 5px;
-        padding: 0 5px;
-        border-radius: 10px;
-        color: #6B7280;
-    }
 `;
