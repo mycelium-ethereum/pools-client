@@ -83,10 +83,19 @@ export const SellSummary: React.FC<
         gasFee: number;
     }
 > = ({ pool, amount, isLong }) => {
-    const token = isLong ? pool.longToken : pool.shortToken;
-    const notional = isLong ? pool.longBalance : pool.shortBalance;
-
-    const tokenPrice = calcTokenPrice(notional, token.supply);
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const notional = useMemo(
+        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
+        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    );
+    const pendingBurns = useMemo(
+        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
+        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+    );
+    const tokenPrice = useMemo(
+        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+        [notional, token, pendingBurns],
+    );
 
     return (
         <HiddenExpand

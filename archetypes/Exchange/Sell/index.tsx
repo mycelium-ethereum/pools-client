@@ -128,7 +128,7 @@ export default (() => {
                 <p className="mb-2 text-black">Amount</p>
                 <InputContainer className="w-full ">
                     <Input
-                        className="w-full h-full text-xl font-normal text-base"
+                        className="w-full h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
