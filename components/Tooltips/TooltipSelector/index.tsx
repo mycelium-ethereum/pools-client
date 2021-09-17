@@ -2,7 +2,7 @@ import React from 'react';
 import { StyledTooltip, LockTip } from '../';
 
 export type TooltipSelectorProps = {
-    key: 'lock';
+    key: string | React.ReactNode;
 };
 
 const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip, children }) => {
@@ -11,7 +11,7 @@ const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip,
             return <LockTip>{children}</LockTip>;
 
         default:
-            return <StyledTooltip>{children}</StyledTooltip>;
+            return <StyledTooltip title={tooltip.key}>{children}</StyledTooltip>;
     }
 };
 
