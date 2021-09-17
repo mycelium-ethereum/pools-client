@@ -59,7 +59,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
-    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/dT1PNFTKLLfSdqR1jWModJajw-3Z6Akd'));
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
+        new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/dT1PNFTKLLfSdqR1jWModJajw-3Z6Akd'),
+    );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
