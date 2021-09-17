@@ -4,8 +4,8 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import { classNames } from '@libs/utils/functions';
-import { Tooltip } from '@components/General/Tooltip';
 import TWPopup from '@components/General/TWPopup';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
 
 const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
@@ -36,9 +36,9 @@ export default (({ setShowQueued, hide }) => {
             preview={`${mints + burns} Queued`}
         >
             <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
-                <Tooltip placement="left" text="Time until mints/burns are processed ">
+                <TooltipSelector tooltip={{ content: <>Time until mints/burns are processed</> }}>
                     <div className="uppercase mr-2">Up Next</div>
-                </Tooltip>
+                </TooltipSelector>
                 <TimeLeft
                     className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
                     targetTime={nextUpdate}
