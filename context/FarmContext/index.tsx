@@ -30,7 +30,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     const [poolFarms, setPoolFarms] = useState<ContextProps['poolFarms']>({});
     const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
-    const [farmsInitialised, setFarmsInitialised] = useState<boolean>(false);
+    const [farmsInitialised, setFarmsInitialised] = useState(false);
 
     const refreshFarm = async (farmAddress: string) => {
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
@@ -84,13 +84,13 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 try {
                     const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
 
-                    let myStaked = ethers.BigNumber.from(0);
-                    let myRewards = ethers.BigNumber.from(0);
-                    if (account) {
-                        const res = await Promise.all([contract.balanceOf(account), contract.earned(account)]);
-                        myStaked = res[0];
-                        myRewards = res[1];
-                    }
+                    const myStaked = ethers.BigNumber.from(0);
+                    const myRewards = ethers.BigNumber.from(0);
+                    // if (account) {
+                    //     const res = await Promise.all([contract.balanceOf(account), contract.earned(account)]);
+                    //     myStaked = res[0];
+                    //     myRewards = res[1];
+                    // }
 
                     const [stakingTokenAddress, rewardPerToken, rewardsPerWeek, rewardsTokenAddress] =
                         await Promise.all([
@@ -160,19 +160,23 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                         slpFarms[address] = updatedFarm;
                     }
                 } catch (error) {
-                    console.error(`failed fetching farm with address: ${address}`, error);
+                    console.error(`Failed fetching farm with address: ${address}`, error);
                 }
             }
-            setPoolFarms(poolFarms);
-            setSlpFarms(slpFarms);
-            setFetchingFarms(false);
-            setFarmsInitialised(true);
+            if (!farmsInitialised) {
+                console.debug('Setting Farms');
+                setPoolFarms(poolFarms);
+                setSlpFarms(slpFarms);
+                setFetchingFarms(false);
+                setFarmsInitialised(true);
+            }
         }
     };
 
     // if config changes reset farms
     // config will change on network change
     useEffect(() => {
+        console.debug('Resetting all farms');
         setPoolFarms({});
         setSlpFarms({});
         setFetchingFarms(true);
@@ -181,21 +185,24 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     // fetch farms if provider changes
     // only fetch if farms have not been initialised farmsIntialised
+    // and we are in fetching mode
     useEffect(() => {
-        if (!farmsInitialised) {
+        if (!farmsInitialised && fetchingFarms) {
+            console.debug('Fetching all farms');
             fetchFarms();
         }
-    }, [provider, farmsInitialised]);
+    }, [config, provider]);
 
     // fetch farms on account change
     // or after the farms have been initiliased
     useEffect(() => {
         if (config && farmsInitialised) {
             for (const { address } of config.farms) {
+                console.log('Refreshing farm', address);
                 refreshFarm(address);
             }
         }
-    }, [account, farmsInitialised]);
+    }, [config, account, farmsInitialised]);
 
     return (
         <FarmContext.Provider
