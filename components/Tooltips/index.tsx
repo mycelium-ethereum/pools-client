@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Tooltip from 'antd/lib/tooltip';
-import { Children } from 'libs/types/General';
 
 export const StyledTooltip = styled(Tooltip)`
     color: inherit;
@@ -11,12 +10,8 @@ export const StyledTooltip = styled(Tooltip)`
     }
 `;
 
-type TooltipProps = {
-    className?: string;
-} & Children;
-
-export const LockTip: React.FC<TooltipProps> = ({ className, children }: TooltipProps) => {
-    const tooltip = (
+export const LockTip: React.FC = ({ children }) => {
+    const Content = (
         <p>
             Front-running interval reached. You can no longer mint or burn this round.{' '}
             <a
@@ -32,9 +27,5 @@ export const LockTip: React.FC<TooltipProps> = ({ className, children }: Tooltip
             </a>
         </p>
     );
-    return (
-        <StyledTooltip className={className} title={tooltip}>
-            {children}
-        </StyledTooltip>
-    );
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
