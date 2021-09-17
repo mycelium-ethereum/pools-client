@@ -45,7 +45,7 @@ const Footer = styled(({ className }) => {
                     </a>
                 </Item>
                 <Item>
-                    <a href="/security-audit.pdf" target="_blank">
+                    <a href="https://tracer.finance/radar/sigma-prime-audit-response/" target="_blank" rel="noreferrer">
                         Security Audit
                     </a>
                 </Item>
