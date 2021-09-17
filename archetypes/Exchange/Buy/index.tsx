@@ -117,7 +117,7 @@ export default (() => {
                     />
                 </span>
                 <span>
-                    <p className="mb-2 text-black">Side</p>
+                    <p className="mb-2 text-black">Side {pool.frontRunningInterval.toNumber()}</p>
                     <TWButtonGroup
                         value={side}
                         onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}

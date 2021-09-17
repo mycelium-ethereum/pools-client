@@ -16,6 +16,9 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
+
+import Lock from '/public/img/general/lock.svg';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
@@ -48,7 +51,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             <span>{toApproxCurrency(token.lastPrice)}</span>
 
                             <RebalanceRate rebalanceRate={token.rebalanceRate} />
-                            <TimeLeft targetTime={token.nextRebalance} />
+                            <span className="flex">
+                                {token.nextRebalance - Date.now() / 1000 < token.frontRunning ? (
+                                    <TooltipSelector tooltip={{ key: 'lock' }}>
+                                        <Lock className="mr-2" />
+                                    </TooltipSelector>
+                                ) : null}
+                                <TimeLeft targetTime={token.nextRebalance} />
+                            </span>
                             <span>{toApproxCurrency(token.totalValueLocked)}</span>
                             <span>
                                 <div>{`${token.myHoldings.toFixed(2)}`}</div>
