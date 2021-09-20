@@ -4,6 +4,7 @@ import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
     pools: Record<string, Pool>;
+    subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
     poolsInitialised: boolean;
 };
@@ -12,6 +13,7 @@ export const initialPoolState: PoolState = {
     pools: {},
     selectedPool: undefined,
     poolsInitialised: false,
+    subscriptions: {},
 };
 
 export type PoolAction =
@@ -32,7 +34,7 @@ export type PoolAction =
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
-    | { type: 'setSubscribed'; pool: string; value: boolean }
+    | { type: 'setSubscribed'; contract: string; value: boolean }
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
@@ -57,6 +59,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 ...state,
                 pools: {},
                 poolsInitialised: false,
+                subscriptions: {},
             };
         case 'setNextPoolBalances':
             return {
@@ -120,12 +123,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
         case 'setSubscribed':
             return {
                 ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        subscribed: action.value,
-                    },
+                subscriptions: {
+                    ...state.subscriptions,
+                    [action.contract]: action.value,
                 },
             };
         case 'setUnexecutedCommits':
