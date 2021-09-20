@@ -61,12 +61,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
     // if the pools from the factory change, re-init them
     useMemo(() => {
+        let mounted = true;
         if (pools && provider) {
             poolsDispatch({ type: 'resetPools' });
             hasSetPools.current = false;
             Promise.all(pools.map((pool) => initPool(pool, provider)))
                 .then((res) => {
-                    if (!hasSetPools.current) {
+                    if (!hasSetPools.current && mounted) {
                         res.forEach((pool) => {
                             poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
                         });
@@ -79,8 +80,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 })
                 .catch((err) => {
                     console.error('Failed to initialise pools', err);
-                    poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                    if (mounted) {
+                        poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                    }
                 });
+        }
+        return () => {
+            mounted = false
         }
     }, [provider, pools]);
 
