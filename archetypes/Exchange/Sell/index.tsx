@@ -74,6 +74,11 @@ export default (() => {
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
+    const tokenPrice = useMemo(
+        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+        [notional, token, pendingBurns],
+    );
+
     useEffect(() => {
         if (pool) {
             const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
@@ -121,7 +126,7 @@ export default (() => {
                     }}
                 />
                 <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
-                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
+                    Expected Price: {toApproxCurrency(tokenPrice)}
                 </p>
             </div>
             <div className="w-full">
