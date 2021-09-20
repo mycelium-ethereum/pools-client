@@ -1,4 +1,4 @@
-import React, { useContext, useReducer, useState } from 'react';
+import React, { useContext, useReducer, useRef, useState } from 'react';
 import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useEffect } from 'react';
@@ -56,24 +56,37 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
+    // ref to assist in the ensuring that the pools are not getting set twice
+    const hasSetPools = useRef(false);
+
     // if the pools from the factory change, re-init them
     useMemo(() => {
+        let mounted = true;
         if (pools && provider) {
             poolsDispatch({ type: 'resetPools' });
+            hasSetPools.current = false;
             Promise.all(pools.map((pool) => initPool(pool, provider)))
                 .then((res) => {
-                    res.forEach((pool) => {
-                        poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
-                    });
-                    if (res.length) {
-                        // if pools exist
-                        poolsDispatch({ type: 'setPoolsInitialised', value: true });
+                    if (!hasSetPools.current && mounted) {
+                        res.forEach((pool) => {
+                            poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
+                        });
+                        if (res.length) {
+                            // if pools exist
+                            poolsDispatch({ type: 'setPoolsInitialised', value: true });
+                            hasSetPools.current = true;
+                        }
                     }
                 })
                 .catch((err) => {
                     console.error('Failed to initialise pools', err);
-                    poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                    if (mounted) {
+                        poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                    }
                 });
+        }
+        return () => {
+            mounted = false
         }
     }, [provider, pools]);
 
