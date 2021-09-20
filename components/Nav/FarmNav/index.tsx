@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 const STAKE = 0;
 const SLP = 1;

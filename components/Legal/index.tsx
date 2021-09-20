@@ -4,12 +4,40 @@ import NavBar from '@components/Nav';
 import Footer from '@components/Footer';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import TWPopup from '@components/General/TWPopup';
 
 export const LegalPageLayout: React.FC = ({ children }) => {
     const route = useRouter().pathname;
     return (
         <>
             <NavBar />
+            <div className="container">
+                <TWPopup
+                    className={'mt-6 ml-4 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
+                    buttonClasses={
+                        'w-full p-3 bg-gray-50 whitespace-nowrap border-none text-black rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'
+                    }
+                    preview={
+                        route === '/privacy-policy'
+                            ? 'Privacy Policy'
+                            : route === '/terms-of-use'
+                            ? 'Terms of Use'
+                            : 'Disclaimer'
+                    }
+                >
+                    <div className="p-3">
+                        <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
+                            <Link href="/privacy-policy">Privacy Policy</Link>
+                        </MenuItem>
+                        <MenuItem className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
+                            <Link href="/terms-of-use">Terms of Use</Link>
+                        </MenuItem>
+                        <MenuItem className={`${route === '/disclaimer' ? 'selected' : ''}`}>
+                            <Link href="/disclaimer">Disclaimer</Link>
+                        </MenuItem>
+                    </div>
+                </TWPopup>
+            </div>
             <LayoutWrapper className="container flex">
                 <LeftPanel>
                     <ContentWrapper>
@@ -35,6 +63,20 @@ export const LegalPageLayout: React.FC = ({ children }) => {
 };
 
 const LayoutWrapper = styled.div``;
+
+const MenuItem = styled.div`
+    font-size: 16px;
+    font-weight: normal;
+    color: gray;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 5px 0;
+
+    &.selected {
+        color: black;
+        font-weight: 500;
+    }
+`;
 
 const LeftPanel = styled.div`
     width: 20%;

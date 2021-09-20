@@ -39,7 +39,7 @@ type Web3Context = {
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
-    provider?: providers.Web3Provider;
+    provider?: providers.JsonRpcProvider;
 };
 
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
@@ -58,15 +58,17 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(undefined);
-    const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
+    const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
+        new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/dT1PNFTKLLfSdqR1jWModJajw-3Z6Akd'),
+    );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[0]);
+    const [config, setConfig] = useState<Network>(networkConfig[ARBITRUM]);
 
     // Initialize OnboardJS
     useEffect(() => {

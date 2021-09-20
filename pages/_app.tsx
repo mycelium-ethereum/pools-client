@@ -4,6 +4,7 @@ process.traceDeprecation = true;
 import React, { useEffect } from 'react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
+import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastProvider } from 'react-toast-notifications';
 import { Notification } from '@components/General/Notification';

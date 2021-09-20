@@ -3,8 +3,6 @@ import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
 import useEnsName from '@libs/hooks/useEnsName';
-// @ts-ignore
-import ReactSimpleTooltip from 'react-simple-tooltip';
 import { Logo } from '@components/General';
 import {
     CopyOutlined,
@@ -13,6 +11,7 @@ import {
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
 
 const ETHERSCAN_URI = 'https://etherscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
@@ -78,24 +77,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                 <div className="flex px-4 py-2 text-sm w-[180px]">
                     <WalletIcon />
                     <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
-                    <ReactSimpleTooltip
-                        content="Copy"
-                        arrow={6}
-                        background="#f9fafb"
-                        border="rgba(209, 213, 219)"
-                        color="#000"
-                        customCss={{
-                            whiteSpace: 'nowrap',
-                        }}
-                        fadeDuration={300}
-                        fadeEasing="linear"
-                        fixed={false}
-                        fontSize="12px"
-                        padding={8}
-                        radius={6}
-                        placement="top"
-                        zIndex={1}
-                    >
+                    <TooltipSelector tooltip={{ content: <>Copy</> }}>
                         <CopyOutlined
                             className="self-center icon"
                             onClick={() => {
@@ -108,7 +90,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                                 vertical-align: 0;
                             }
                         `}</style>
-                    </ReactSimpleTooltip>
+                    </TooltipSelector>
                 </div>
             </div>
 
