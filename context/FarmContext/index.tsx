@@ -114,7 +114,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
             nonPoolTokenUSDCPath,
         );
 
-        const nonPoolTokenUSDCPrice = new BigNumber(_nonPoolTokenUSDCPrice.toString()).div(10 ** 6);
+        const nonPoolTokenUSDCPrice = new BigNumber(_nonPoolTokenUSDCPrice.toString());
 
         // pool tokens get a hardcoded price of 0 USDC
         // this is because we can't use useTokenPrice hooks from within this context
