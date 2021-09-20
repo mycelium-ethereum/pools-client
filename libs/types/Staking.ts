@@ -29,7 +29,7 @@ export type Farm = {
         token0: SlpPairTokenDetails;
         token1: SlpPairTokenDetails;
     };
-    poolTokenDetails?: {
+    poolDetails?: {
         poolTokenPrice: BigNumber;
     };
 };

@@ -52,7 +52,11 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         contract.leverageAmount(),
     ]);
 
-    const [frontRunningInterval, keeper] = await Promise.all([contract.frontRunningInterval(), contract.keeper()]);
+    const [frontRunningInterval, keeper, name] = await Promise.all([
+        contract.frontRunningInterval(),
+        contract.keeper(),
+        contract.poolName(),
+    ]);
 
     console.debug(
         `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
@@ -98,7 +102,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
     console.debug('Leverage still whack', new BigNumber(leverageAmount).toNumber());
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
-    const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
+    const leverage = parseInt(name.split('-')?.[0] ?? 1);
     return {
         ...pool,
         updateInterval: new BigNumber(updateInterval.toString()),

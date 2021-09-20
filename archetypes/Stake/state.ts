@@ -22,7 +22,7 @@ export enum SortByEnum {
     MyRewards = 'My Rewards',
 }
 
-export interface FarmTableRowData {
+export type FarmTableRowData = {
     farm: string;
     tokenAddress: string;
     name: string;
@@ -34,12 +34,11 @@ export interface FarmTableRowData {
     stakingTokenBalance: BigNumber;
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
-    slpDetails?: Farm['slpDetails'];
-    poolTokenDetails?: {
+    poolDetails?: {
         poolTokenPrice: BigNumber;
     };
-}
-
+    slpDetails?: Farm['slpDetails'];
+};
 export interface StakeState {
     search: string;
     leverage: LeverageFilterEnum;

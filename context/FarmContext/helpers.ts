@@ -29,8 +29,7 @@ export const fetchTokenPrice: (
     );
 
     const nextLongBalance = poolInfo.longBalance.plus(longValueTransfer);
-    const nextShortBalance = poolInfo.longBalance.plus(shortValueTransfer);
-
+    const nextShortBalance = poolInfo.shortBalance.plus(shortValueTransfer);
     const committerInfo = await fetchCommits(poolInfo.committer.address, provider, poolInfo.quoteToken.decimals);
 
     return tokenAddresses.map((tokenAddress) => {

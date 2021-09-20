@@ -17,7 +17,7 @@ export default (() => {
     return (
         <Page className={`page`}>
             <NavBar />
-            <FarmStore>
+            <FarmStore farmContext="poolFarms">
                 <StakePool />
             </FarmStore>
             <Footer />

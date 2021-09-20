@@ -10,10 +10,10 @@ import {
     stakeReducer,
     StakeAction,
     StakeState,
-    FarmTableRowData,
     LeverageFilterEnum,
     SideFilterEnum,
     SortByEnum,
+    FarmTableRowData,
 } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -40,7 +40,7 @@ export default (({
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const poolToken = farm?.poolTokenDetails ? tokenMap[farm.stakingToken.address] : null;
+        const poolToken = farm?.poolDetails ? tokenMap[farm.stakingToken.address] : null;
 
         return {
             farm: farm.address,
@@ -55,7 +55,7 @@ export default (({
             rewardsPerYear: farm.rewardsPerYear,
             stakingTokenSupply: farm.stakingTokenSupply,
             slpDetails: farm.slpDetails,
-            poolTokenDetails: farm.poolTokenDetails,
+            poolDetails: farm.poolDetails,
         };
     });
 

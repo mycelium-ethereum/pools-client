@@ -90,12 +90,11 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-
     const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
-        if (!farm.slpDetails) {
+        if (!farm?.slpDetails) {
             return new BigNumber(0);
         }
-        const { token0, token1 } = farm.slpDetails;
+        const { token0, token1 } = farm?.slpDetails;
 
         const token0USDCPrice = token0.usdcPrice;
         const token1USDCPrice = token1.usdcPrice;
@@ -111,12 +110,13 @@ const PoolRow: React.FC<{
 
         return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
     };
-    console.log(farm.poolTokenDetails?.poolTokenPrice, 'Woooo');
 
     const tokenPrice = useMemo(
-        () => (farm.poolTokenDetails ? farm.poolTokenDetails.poolTokenPrice : calculateSlpTokenPrice(farm)),
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calculateSlpTokenPrice(farm)),
         [farm],
     );
+
+    console.log('Pool token price', tokenPrice);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
@@ -133,7 +133,7 @@ const PoolRow: React.FC<{
             <span>
                 <Logo
                     className="inline w-[25px] mr-2"
-                    ticker={farm.poolTokenDetails ? tokenSymbolToLogoTicker(farm.name) : ''}
+                    ticker={farm.poolDetails ? tokenSymbolToLogoTicker(farm.name) : ''}
                 />
                 {farm.name}
             </span>
