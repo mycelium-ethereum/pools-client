@@ -9,10 +9,14 @@ export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = 
     if (!tokenSymbol) {
         return 'DEFAULT';
     }
-    const [leverageSide, name] = tokenSymbol.split('-');
-    const side = leverageSide.slice(-1);
-    const asset = name.split('/')[0];
-    return `${asset}_${side}` as ShortLongToken;
+    try {
+        const [leverageSide, name] = tokenSymbol.split('-');
+        const side = leverageSide.slice(-1);
+        const asset = name.split('/')[0];
+        return `${asset}_${side}` as ShortLongToken;
+    } catch (error) {
+        return 'DEFAULT';
+    }
 };
 
 const clearLogos: Record<string, string> = {

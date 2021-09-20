@@ -91,7 +91,29 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-    const { price: tokenPrice } = farm.isPoolToken ? useTokenPrice(farm.tokenAddress) : { price: new BigNumber(1) };
+
+    const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
+        if (!farm.slpDetails) {
+            return new BigNumber(0);
+        }
+        const { token0, token1 } = farm.slpDetails;
+
+        const token0USDCPrice = token0.isPoolToken ? useTokenPrice(token0.address) : token0.usdcPrice;
+        const token1USDCPrice = token1.isPoolToken ? useTokenPrice(token1.address) : token1.usdcPrice;
+
+        const token0USDCValue = token0USDCPrice.times(token0.reserves);
+        const token1USDCValue = token1USDCPrice.times(token1.reserves);
+
+        const slpPoolCombinedUSDCValue = token0USDCValue.plus(token1USDCValue);
+
+        if (farm.stakingTokenSupply.eq(0)) {
+            return new BigNumber(0);
+        }
+
+        return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
+    };
+
+    const tokenPrice = farm.isPoolTokenFarm ? useTokenPrice(farm.tokenAddress) : calculateSlpTokenPrice(farm);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
@@ -106,7 +128,10 @@ const PoolRow: React.FC<{
     return (
         <TableRow key={farm.farm} rowNumber={index}>
             <span>
-                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                <Logo
+                    className="inline w-[25px] mr-2"
+                    ticker={farm.isPoolTokenFarm ? tokenSymbolToLogoTicker(farm.name) : ''}
+                />
                 {farm.name}
             </span>
             <span>{apr.times(100).toFixed(2)}%</span>

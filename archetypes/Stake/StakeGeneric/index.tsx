@@ -40,7 +40,7 @@ export default (({
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const poolToken = farm.isPoolToken ? tokenMap[farm.stakingToken.address] : null;
+        const poolToken = farm.isPoolTokenFarm ? tokenMap[farm.stakingToken.address] : null;
 
         return {
             farm: farm.address,
@@ -48,13 +48,14 @@ export default (({
             name: farm.name,
             leverage: poolToken?.leverage,
             side: poolToken?.side,
-            apr: farm.apr.toNumber(),
             totalStaked: farm.totalStaked.toNumber(),
             myStaked: farm.myStaked.toNumber(),
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
-            isPoolToken: farm.isPoolToken,
+            isPoolTokenFarm: farm.isPoolTokenFarm,
+            stakingTokenSupply: farm.stakingTokenSupply,
+            slpDetails: farm.slpDetails,
         };
     });
 
@@ -111,8 +112,9 @@ export default (({
         switch (state.sortBy) {
             case SortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
-            case SortByEnum.TotalValueLocked:
-                return farmB.apr - farmA.apr;
+            // case SortByEnum.TotalValueLocked:
+            // TODO fix this, tvl is calculated using tokenPrice so tricky to get in here
+            //     return farmB.apr - farmA.apr;
             case SortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:
