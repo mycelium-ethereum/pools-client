@@ -15,7 +15,6 @@ export default (() => {
                 refreshFarm={refreshFarm}
                 fetchingFarms={fetchingFarms}
                 farms={slpFarms}
-                hideLeverageFilter
                 hideSideFilter
             ></StakeGeneric>
         </>

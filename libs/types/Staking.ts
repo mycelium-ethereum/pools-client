@@ -2,9 +2,9 @@ import BigNumber from 'bignumber.js';
 import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 
-type SlpPairTokenDetails = {
+export type SlpPairTokenDetails = {
     address: string;
-    name: string;
+    symbol: string;
     isPoolToken: boolean;
     reserves: BigNumber;
     usdcPrice: BigNumber;

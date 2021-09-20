@@ -92,10 +92,12 @@ const PoolRow: React.FC<{
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
 
-    const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
+    // although this is wasteful, we must always call hooks the same number of times between renders
+    const calculateTokenPrice = (farm: FarmTableRowData) => {
         if (!farm.slpDetails) {
             return new BigNumber(0);
         }
+
         const { token0, token1 } = farm.slpDetails;
 
         const token0USDCPrice = token0.isPoolToken ? useTokenPrice(token0.address) : token0.usdcPrice;
@@ -113,25 +115,40 @@ const PoolRow: React.FC<{
         return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
     };
 
-    const tokenPrice = farm.isPoolTokenFarm ? useTokenPrice(farm.tokenAddress) : calculateSlpTokenPrice(farm);
+    const tokenPrice = calculateTokenPrice(farm);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
 
-    // console.log(farm.rewardsPerYear.toNumber(), "Rewards per year")
-    // console.log(TCR_PRICE.toNumber(), "Tcr price")
-    // console.log(tokenPrice.toNumber(), "Token price")
-    // console.log(farm.totalStaked, "Total staked")
-
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+
+    const { slpDetails } = farm;
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
             <span>
-                <Logo
-                    className="inline w-[25px] mr-2"
-                    ticker={farm.isPoolTokenFarm ? tokenSymbolToLogoTicker(farm.name) : ''}
-                />
+                {farm.isPoolTokenFarm ? (
+                    <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                ) : (
+                    <>
+                        <Logo
+                            className="inline w-[25px] mr-2"
+                            ticker={tokenSymbolToLogoTicker(
+                                (slpDetails?.token0?.isPoolToken
+                                    ? slpDetails?.token0?.symbol
+                                    : slpDetails?.token1?.symbol) || '',
+                            )}
+                        />
+                        <Logo
+                            className="inline w-[25px] mr-2"
+                            ticker={tokenSymbolToLogoTicker(
+                                (slpDetails?.token0?.isPoolToken
+                                    ? slpDetails?.token1?.symbol
+                                    : slpDetails?.token0?.symbol) || '',
+                            )}
+                        />
+                    </>
+                )}
                 {farm.name}
             </span>
             <span>{apr.times(100).toFixed(2)}%</span>

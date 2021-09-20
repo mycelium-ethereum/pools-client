@@ -5,7 +5,7 @@ import styled from 'styled-components';
 type ShortLongToken = 'ETH_L' | 'BTC_S' | 'ETH_L' | 'BTC_S' | 'DEFAULT';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
-export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = (tokenSymbol) => {
+export const tokenSymbolToLogoTicker: (tokenSymbol: string) => string = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
     }
@@ -15,7 +15,7 @@ export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = 
         const asset = name.split('/')[0];
         return `${asset}_${side}` as ShortLongToken;
     } catch (error) {
-        return 'DEFAULT';
+        return tokenSymbol || 'DEFAULT';
     }
 };
 
@@ -39,7 +39,9 @@ const logos: Record<string, string> = {
     ETH_S: '/img/logos/currencies/eth_short.svg',
     BTC_S: '/img/logos/currencies/btc_short.svg',
     ETH: '/img/logos/currencies/eth.svg',
+    WETH: '/img/logos/currencies/eth.svg',
     BTC: '/img/logos/currencies/btc.svg',
+    WBTC: '/img/logos/currencies/btc.svg',
     SUSHI: '/img/logos/currencies/sushi.svg',
 };
 

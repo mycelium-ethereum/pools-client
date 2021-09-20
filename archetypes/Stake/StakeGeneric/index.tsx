@@ -24,6 +24,28 @@ import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo } from '@components/General/Logo';
 
+const getFilterFieldsFromFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
+    if (!farm.slpDetails) {
+        return {};
+    }
+    const firstFoundPoolToken = farm.slpDetails.token0.isPoolToken ? farm.slpDetails.token0 : farm.slpDetails.token1;
+
+    // pool tokens have format <leverage><side>-<market>
+    // first character is leverage (1, 3)
+    const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
+    // since all sushi pools contain the short token, we check for the presence of the long token in the pair
+    // if long pool token is one of the tokens in the sushi pair, use long side
+    // second character is the side (S, L)
+    const poolContainsLongToken =
+        farm.slpDetails.token0.symbol.slice(1, 2).startsWith('L') ||
+        farm.slpDetails.token1.symbol.slice(1, 2).startsWith('L');
+
+    return {
+        leverage,
+        side: poolContainsLongToken ? SideEnum.long : SideEnum.short,
+    };
+};
+
 export default (({
     logo,
     tokenType,
@@ -40,14 +62,19 @@ export default (({
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const poolToken = farm.isPoolTokenFarm ? tokenMap[farm.stakingToken.address] : null;
+        const filterFields = farm.isPoolTokenFarm
+            ? {
+                  leverage: tokenMap[farm.stakingToken.address]?.leverage,
+                  side: tokenMap[farm.stakingToken.address]?.side,
+              }
+            : getFilterFieldsFromFarm(farm);
 
         return {
             farm: farm.address,
             tokenAddress: farm.stakingToken.address,
             name: farm.name,
-            leverage: poolToken?.leverage,
-            side: poolToken?.side,
+            leverage: filterFields?.leverage,
+            side: filterFields?.side,
             totalStaked: farm.totalStaked.toNumber(),
             myStaked: farm.myStaked.toNumber(),
             myRewards: farm.myRewards,
