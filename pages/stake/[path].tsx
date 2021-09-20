@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useMemo } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { FarmStore } from '@context/FarmContext';
@@ -7,30 +6,22 @@ import { useRouter } from 'next/router';
 import { PoolStore } from '@context/PoolContext';
 import StakePool from '@archetypes/Stake/StakePool';
 import PendingCommits from '@components/PendingCommits';
+import StakeSLP from '@archetypes/Stake/StakeSLP';
 
 export default (() => {
     const router = useRouter();
-
-    useEffect(() => {
-        router.prefetch('/stake');
-    }, []);
+    const path = useMemo(() => router.asPath.split('/')[2], [router.asPath]);
 
     return (
-        <Page className={`page`}>
+        <div className={`page relative`}>
             <PoolStore>
                 <FarmStore>
                     <NavBar />
-                    <StakePool />
-                    <Footer />
+                    {path === 'pool' ? <StakePool /> : <StakeSLP />}
                 </FarmStore>
+                <Footer />
                 <PendingCommits />
             </PoolStore>
-        </Page>
+        </div>
     );
 }) as React.FC;
-
-const Page = styled.div`
-    position: relative;
-    background: var(--color-background);
-`;
-//still to do: stake context + archetypes -> fills out the table

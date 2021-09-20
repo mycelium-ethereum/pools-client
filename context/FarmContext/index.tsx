@@ -109,6 +109,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
         const nonPoolTokenUSDCPath = config.knownNonPoolTokenPricePaths[nonPoolTokenAddress];
 
+        // get the token price
         const [_nonPoolTokenUSDCPrice] = await sushiRouter.getAmountsIn(
             oneNonPoolToken.toFixed(),
             nonPoolTokenUSDCPath,

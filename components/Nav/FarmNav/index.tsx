@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
@@ -8,22 +8,16 @@ const SLP = 1;
 // const InvestNav
 export default (({ left, right }) => {
     const router = useRouter();
-
-    useEffect(() => {
-        router.prefetch('/stake');
-        router.prefetch('/slp');
-    }, []);
-
     const handleRoute = (route: number) => {
         switch (route) {
             case STAKE:
                 router.push({
-                    pathname: '/stake',
+                    pathname: '/stake/pool/',
                 });
                 break;
             case SLP:
                 router.push({
-                    pathname: '/slp',
+                    pathname: '/stake/slp/',
                 });
                 break;
             default:
@@ -36,10 +30,10 @@ export default (({ left, right }) => {
         <StakeNav>
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
-                <Item onClick={(_e) => handleRoute(STAKE)} selected={router.pathname === '/stake'}>
+                <Item onClick={(_e) => handleRoute(STAKE)} selected={router.asPath === '/stake/pool/'}>
                     Stake Pool
                 </Item>
-                <Item onClick={(_e) => handleRoute(SLP)} selected={router.pathname === '/slp'}>
+                <Item onClick={(_e) => handleRoute(SLP)} selected={router.asPath === '/stake/slp/'}>
                     Stake SLP
                 </Item>
             </div>

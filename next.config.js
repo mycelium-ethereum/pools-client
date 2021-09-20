@@ -27,6 +27,16 @@ module.exports = {
         ignoreBuildErrors: true,
     },
 
+    async redirects() {
+        return [
+            {
+                source: '/stake',
+                destination: 'stake/pool',
+                permanent: true,
+            },
+        ]
+    },
+
     webpack(config, { isServer }, options) {
         // // Fixes npm packages that depend on `fs` module
         // if (!isServer) {

@@ -13,7 +13,7 @@ export default ((nextUpdate, frontRunningInterval) => {
     }, [nextUpdate]);
 
     useEffect(() => {
-        const now = parseInt(Date.now() / 1000);
+        const now = Math.floor(Date.now() / 1000);
         const isBeforeFrontRunning_ = nextUpdate - frontRunningInterval > now;
         let waiting: any;
         if (isBeforeFrontRunning_ && nextUpdate !== 0) {
