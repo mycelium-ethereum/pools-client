@@ -32,7 +32,6 @@ const expectedCommitExecution: (
 
     useEffect(() => {
         if (!beforeFrontRunning) {
-            console.log('Setting next update');
             if (!lastUpdate.eq(0)) {
                 const nextUpdate = lastUpdate.plus(updateInterval.times(2)).toNumber();
                 setExpectedRebalance(Math.floor(nextUpdate));
