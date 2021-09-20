@@ -34,8 +34,10 @@ export interface FarmTableRowData {
     stakingTokenBalance: BigNumber;
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
-    isPoolTokenFarm: boolean;
-    slpDetails: Farm['slpDetails'];
+    slpDetails?: Farm['slpDetails'];
+    poolTokenDetails?: {
+        poolTokenPrice: BigNumber;
+    };
 }
 
 export interface StakeState {

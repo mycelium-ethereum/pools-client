@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
@@ -7,7 +7,6 @@ import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
-import useTokenPrice from '@libs/hooks/useTokenPrice';
 import Loading from '@components/General/Loading';
 
 // TODO: use an actual price
@@ -98,8 +97,8 @@ const PoolRow: React.FC<{
         }
         const { token0, token1 } = farm.slpDetails;
 
-        const token0USDCPrice = token0.isPoolToken ? useTokenPrice(token0.address) : token0.usdcPrice;
-        const token1USDCPrice = token1.isPoolToken ? useTokenPrice(token1.address) : token1.usdcPrice;
+        const token0USDCPrice = token0.usdcPrice;
+        const token1USDCPrice = token1.usdcPrice;
 
         const token0USDCValue = token0USDCPrice.times(token0.reserves);
         const token1USDCValue = token1USDCPrice.times(token1.reserves);
@@ -112,8 +111,12 @@ const PoolRow: React.FC<{
 
         return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
     };
+    console.log(farm.poolTokenDetails?.poolTokenPrice, 'Woooo');
 
-    const tokenPrice = farm.isPoolTokenFarm ? useTokenPrice(farm.tokenAddress) : calculateSlpTokenPrice(farm);
+    const tokenPrice = useMemo(
+        () => (farm.poolTokenDetails ? farm.poolTokenDetails.poolTokenPrice : calculateSlpTokenPrice(farm)),
+        [farm],
+    );
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
@@ -130,7 +133,7 @@ const PoolRow: React.FC<{
             <span>
                 <Logo
                     className="inline w-[25px] mr-2"
-                    ticker={farm.isPoolTokenFarm ? tokenSymbolToLogoTicker(farm.name) : ''}
+                    ticker={farm.poolTokenDetails ? tokenSymbolToLogoTicker(farm.name) : ''}
                 />
                 {farm.name}
             </span>

@@ -12,6 +12,7 @@ import {
     IUniswapV2Pair__factory,
 } from '@libs/staking/uniswapRouterV2';
 import BigNumber from 'bignumber.js';
+import { fetchTokenPrice } from './helpers';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -40,6 +41,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
     // used to fetch details of tokens on both sides of a sushi pool
     const getSlpDetails = async (
         slpPairAddress: string,
+        pool: string,
         token1IsPoolToken: boolean,
         token0IsPoolToken: boolean,
     ): Promise<Farm['slpDetails']> => {
@@ -69,13 +71,20 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
         ]);
 
         // if both sides of the pool are pool tokens, we don't need to consult the sushi price oracle
+
         if (token1IsPoolToken && token0IsPoolToken) {
+            const [token0USDCPrice, token1USDCPrice] = await fetchTokenPrice(
+                pool,
+                [token0Address, token1Address],
+                provider,
+            );
+            console.log(token0USDCPrice.toNumber(), token1USDCPrice.toNumber());
             return {
                 token0: {
                     reserves: token0Reserves.div(10 ** token0Decimals),
                     decimals: token0Decimals,
                     name: token0Name,
-                    usdcPrice: new BigNumber(0), // currently only applies to tokens that are not pool tokens
+                    usdcPrice: token0USDCPrice, // currently only applies to tokens that are not pool tokens
                     isPoolToken: token0IsPoolToken,
                     address: token0Address,
                 },
@@ -83,7 +92,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                     reserves: token1Reserves.div(10 ** token1Decimals),
                     decimals: token1Decimals,
                     name: token1Name,
-                    usdcPrice: new BigNumber(0), // currently only applies to tokens that are not pool tokens
+                    usdcPrice: token1USDCPrice, // currently only applies to tokens that are not pool tokens
                     isPoolToken: token1IsPoolToken,
                     address: token1Address,
                 },
@@ -115,6 +124,12 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
         );
 
         const nonPoolTokenUSDCPrice = new BigNumber(_nonPoolTokenUSDCPrice.toString());
+        const poolTokenUSDCPrice = await fetchTokenPrice(
+            pool,
+            [token0IsPoolToken ? token0Address : token1Address],
+            provider,
+        );
+        console.log(poolTokenUSDCPrice[0].toNumber(), 'Token price');
 
         // pool tokens get a hardcoded price of 0 USDC
         // this is because we can't use useTokenPrice hooks from within this context
@@ -124,7 +139,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 reserves: token0Reserves.div(10 ** token0Decimals),
                 decimals: token0Decimals,
                 name: token0Name,
-                usdcPrice: token0IsPoolToken ? new BigNumber(0) : nonPoolTokenUSDCPrice,
+                usdcPrice: token0IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
                 isPoolToken: token0IsPoolToken,
                 address: token0Address,
             },
@@ -132,7 +147,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 reserves: token1Reserves.div(10 ** token1Decimals),
                 decimals: token1Decimals,
                 name: token1Name,
-                usdcPrice: token1IsPoolToken ? new BigNumber(0) : nonPoolTokenUSDCPrice,
+                usdcPrice: token1IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
                 isPoolToken: token1IsPoolToken,
                 address: token1Address,
             },
@@ -141,7 +156,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
     const refreshFarm = async (farmAddress: string) => {
         const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
-        const { stakingToken, isPoolTokenFarm, stakingTokenDecimals } = farm;
+        const { stakingToken, poolTokenDetails, stakingTokenDecimals } = farm;
         if (account && farm) {
             const [stakingTokenBalance, stakingTokenAllowance, myStaked, myRewards, rewardsTokenAddress] =
                 await Promise.all([
@@ -158,7 +173,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
 
             const decimalMultiplier = 10 ** stakingTokenDecimals;
 
-            if (isPoolTokenFarm) {
+            if (poolTokenDetails) {
                 setPoolFarms((previousPoolFarms) => ({
                     ...poolFarms,
                     [farmAddress]: {
@@ -194,7 +209,14 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                 }
                 const poolFarms: FarmsLookup = {};
                 const slpFarms: FarmsLookup = {};
-                for (const { address, abi, isPoolTokenFarm, token1IsPoolToken, token0IsPoolToken } of config.farms) {
+                for (const {
+                    address,
+                    abi,
+                    isPoolTokenFarm,
+                    token1IsPoolToken,
+                    token0IsPoolToken,
+                    pool,
+                } of config.farms) {
                     try {
                         const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
@@ -243,9 +265,14 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                                 ? undefined
                                 : await getSlpDetails(
                                       stakingTokenAddress,
+                                      pool,
                                       Boolean(token1IsPoolToken),
                                       Boolean(token0IsPoolToken),
                                   );
+
+                        const poolTokenPrice = isPoolTokenFarm
+                            ? (await fetchTokenPrice(pool, [stakingTokenAddress], provider))[0]
+                            : new BigNumber(1);
 
                         const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
                         const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
@@ -277,6 +304,11 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
                                 .times(52),
                             isPoolTokenFarm,
                             slpDetails,
+                            poolTokenDetails: isPoolTokenFarm
+                                ? {
+                                      poolTokenPrice,
+                                  }
+                                : undefined,
                         };
 
                         if (isPoolTokenFarm) {

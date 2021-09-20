@@ -15,6 +15,7 @@ export type Network = {
     farms: {
         address: string;
         abi: ethers.ContractInterface;
+        pool: string;
         isPoolTokenFarm: boolean;
         token0IsPoolToken?: boolean;
         token1IsPoolToken?: boolean;
@@ -62,12 +63,14 @@ export const networkConfig: Record<string, Network> = {
         farms: [
             {
                 address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
+                pool: '',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
                 token1IsPoolToken: false,
             },
             {
                 address: '0x6213c21518EF9d4875d9C41F7ad8d16B4f986cB2',
+                pool: '',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
                 token1IsPoolToken: false,
@@ -90,48 +93,57 @@ export const networkConfig: Record<string, Network> = {
         },
         farms: [
             {
-                address: '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0',
+                address: '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0', // 1-BTC/USDC-long
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0xD04dDCAEca6bf283A430Cb9E847CEEd5Da419Fa0',
+                address: '0xD04dDCAEca6bf283A430Cb9E847CEEd5Da419Fa0', // 1-BTC/USDC-short
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0xEb05e160D3C1990719aa25d74294783fE4e3D3Ef',
+                address: '0xEb05e160D3C1990719aa25d74294783fE4e3D3Ef', // 3-BTC/USD-long
+                pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0xeA4FF5ED11F93AA0Ce7744B1D40093f52eA1cda8',
+                address: '0xeA4FF5ED11F93AA0Ce7744B1D40093f52eA1cda8', // 3-BTC/USDC-short
+                pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0xA18413dC5506A91138e0604C283E36B021b8849B',
+                address: '0xA18413dC5506A91138e0604C283E36B021b8849B', // 1-ETH/USDC-long
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0x9769F208239C740cC40E9CB3427c34513213B83f',
+                address: '0x9769F208239C740cC40E9CB3427c34513213B83f', // 1-ETH/USDC-short
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0x07cCcDC913bCbab246fC6E38E81b0C53AaB3De9b',
+                address: '0x07cCcDC913bCbab246fC6E38E81b0C53AaB3De9b', // 3-ETH/USDC-long
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             {
-                address: '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC',
+                address: '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC', // 3-ETH/USDC-short
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: true,
             },
             // SLP farms
             {
                 address: '0x1908D6f83DF6E5cbc2DA9CaeF2b88DF78EA22833', // 1-ETH/USD Short/Long
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -139,6 +151,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0xEC49D9C1A45e135999f88A1B3a6631414Dc26720', // 1-ETH/USD Short/wETH
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: false,
@@ -146,6 +159,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x5Bc1E7D49a1C5433358317426b7e526367D60CD8', // 3-ETH/USD Short/Long
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -153,6 +167,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x04148587eCDE89933FC582E4dC5eE38d8C978b36', // 3-ETH/USD Short/wETH
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -160,6 +175,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x71505bc95053d57F9e699BC38A3621b0F564B042', // 1-BTC/USD Short/Long
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -167,6 +183,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x97c9F5F75863b8887FEF9CcBBDc05B31d2a34D07', // 1-BTC/USD Short/wBTC
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -174,6 +191,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x97C3d137b3158443Cac3006fCDaDeD23Dd9a36da', // 3-BTC/USD Short/Long
+                pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: true,
@@ -181,6 +199,7 @@ export const networkConfig: Record<string, Network> = {
             },
             {
                 address: '0x8D56b35A3f50d42Ae39e953448B0138FCDF0894e', // 3-BTC/USD Short/wBTC
+                pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
                 isPoolTokenFarm: false,
                 token0IsPoolToken: false,

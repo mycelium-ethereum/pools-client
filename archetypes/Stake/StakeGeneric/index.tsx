@@ -40,7 +40,7 @@ export default (({
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const poolToken = farm.isPoolTokenFarm ? tokenMap[farm.stakingToken.address] : null;
+        const poolToken = farm?.poolTokenDetails ? tokenMap[farm.stakingToken.address] : null;
 
         return {
             farm: farm.address,
@@ -53,9 +53,9 @@ export default (({
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
-            isPoolTokenFarm: farm.isPoolTokenFarm,
             stakingTokenSupply: farm.stakingTokenSupply,
             slpDetails: farm.slpDetails,
+            poolTokenDetails: farm.poolTokenDetails,
         };
     });
 

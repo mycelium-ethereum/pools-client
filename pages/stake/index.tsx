@@ -4,7 +4,6 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
-import { PoolStore } from '@context/PoolContext';
 import StakePool from '@archetypes/Stake/StakePool';
 import PendingCommits from '@components/PendingCommits';
 
@@ -17,14 +16,12 @@ export default (() => {
 
     return (
         <Page className={`page`}>
-            <PoolStore>
-                <FarmStore>
-                    <NavBar />
-                    <StakePool />
-                    <Footer />
-                </FarmStore>
-                <PendingCommits />
-            </PoolStore>
+            <NavBar />
+            <FarmStore>
+                <StakePool />
+            </FarmStore>
+            <Footer />
+            <PendingCommits />
         </Page>
     );
 }) as React.FC;
