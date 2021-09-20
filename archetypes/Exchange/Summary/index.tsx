@@ -36,8 +36,11 @@ const expectedCommitExecution: (
             // this is not really the true update interval value
             // the true update will be lastUpdate + updateInterval + updateInterval
             // assuming lastUpdate gets updaated
-            const nextUpdate = expectedRebalance + updateInterval.toNumber();
-            setExpectedRebalance(Math.floor(nextUpdate));
+            console.log('Setting next update');
+            if (!lastUpdate.eq(0)) {
+                const nextUpdate = lastUpdate.plus(updateInterval.times(2)).toNumber();
+                setExpectedRebalance(Math.floor(nextUpdate));
+            }
         }
     }, [beforeFrontRunning]);
 

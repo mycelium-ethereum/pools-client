@@ -1,31 +1,39 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-// checks if the current time is before the front running interval
-const checkInterval: (nextUpdate: number, frontRunningInterval: number) => boolean = (
-    nextUpdate,
-    frontRunningInterval,
-) => {
-    const now = Date.now() / 1000;
-    if (nextUpdate - frontRunningInterval > now) {
-        return true;
-    } else {
-        return false;
-    }
-};
 // const useIntervalCheck
 // hook used to trigger updates when the user enters the front running interval
 export default ((nextUpdate, frontRunningInterval) => {
-    const [isBeforeFrontRunning, setIsBeforeFrontRunning] = useState(true);
+    const [isBeforeFrontRunning, setIsBeforeFrontRunning] = useState<boolean>(true);
 
-    // checks every 5 seconds if the front running interval has been met
+    // this resets the isBeforeFrontRunning whenever nextUpdate changes
+    // this is to ensure whenever the timer is fired that setting isBeforeFrontRunning
+    // will trigger an update
+    useMemo(() => {
+        setIsBeforeFrontRunning(true);
+    }, [nextUpdate]);
+
     useEffect(() => {
-        const check = setInterval(() => {
-            if (nextUpdate !== 0) {
-                setIsBeforeFrontRunning(checkInterval(nextUpdate, frontRunningInterval));
-            }
-        }, 5000);
+        const now = Date.now() / 1000;
+        const isBeforeFrontRunning_ = nextUpdate - frontRunningInterval > now;
+        let waiting: any;
+        if (isBeforeFrontRunning_ && nextUpdate !== 0) {
+            // waits for it to enter the front running interval
+            console.debug(`Setting a timeout for ${nextUpdate - frontRunningInterval - now}s`);
+            waiting = setTimeout(() => {
+                console.debug(
+                    `Timer is now before the front running interval. Current isBeforeFrontRunning: ${isBeforeFrontRunning}`,
+                );
+                setIsBeforeFrontRunning(false);
+            }, (nextUpdate - frontRunningInterval - now) * 1000);
+        } else {
+            setIsBeforeFrontRunning(isBeforeFrontRunning_);
+        }
 
-        return () => clearInterval(check);
+        return () => {
+            if (waiting) {
+                clearTimeout(waiting);
+            }
+        };
     }, [nextUpdate]);
 
     return isBeforeFrontRunning;
