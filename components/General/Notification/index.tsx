@@ -1,13 +1,8 @@
 import React from 'react';
 import Icon, { CloseOutlined, InfoCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
-// @ts-ignore
-import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
-// @ts-ignore
 import Error from 'public/img/general/error.svg';
-// @ts-ignore
 import Success from 'public/img/general/success.svg';
-// @ts-ignore
 import Warning from 'public/img/general/warning.svg';
 import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
@@ -80,25 +75,13 @@ const appearances: Record<
         bg: '#00156C',
     },
     loading: {
-        icon: <Icon style={{color: '#000'}} component={TracerLoading} />,
+        icon: <><img className="w-1/6 h-1/6 mr-3" src="/img/general/loading.gif" alt="Tracer Loading" /></>,
         text: '#111928',
         fg: '#2684FF',
         bg: '#00156C',
     },
 };
 
-
-const IconWrap = styled.span`
-    display: inline-flex;
-    justify-content: center;
-    margin-right: 0.5rem;
-    vertical-align: 0.125rem;
-    color: transparent;
-    svg {
-        width: 26px;
-        height: 26px;
-    }
-`;
 const Close = styled(CloseOutlined)`
     position: absolute;
     top: 1.5rem;
@@ -126,7 +109,6 @@ const Content = styled((props: any) => (
 
     word-break: break-word;
     font-size: 1rem;
-    color: #3DA8F5;
 `;
 
 type HProps = {
@@ -166,15 +148,16 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <div className="text-cool-gray-900 text-xl">
-                <IconWrap>{appearance.icon}</IconWrap>
-                {/* title */}
-                <span>
-                    {children_[0]}
-                </span>
-                <Close onClick={onDismiss}/>
+            <Close onClick={onDismiss}/>
+            <div className="flex">
+                {appearance.icon}
+                <div>
+                    <div className="text-cool-gray-900 text-xl">
+                        {children_[0]}
+                    </div>
+                    <Content>{children_[1]}</Content>
+                </div>
             </div>
-            <Content>{children_[1]}</Content>
         </ToastWrapper>
     );
 };

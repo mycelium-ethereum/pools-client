@@ -107,7 +107,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    /** Very similiar function to above but handles regular async functions, mainly signing */
+    /** Very similar function to above but handles regular async functions, mainly signing */
     const handleAsync: HandleAsyncType = async (callMethod, params, options) => {
         const { statusMessages, onError, onSuccess } = options ?? {};
         // actually returns a string error in the library

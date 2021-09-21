@@ -2,12 +2,12 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
-import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
-import { providers, ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { ARBITRUM } from '@libs/constants';
@@ -173,7 +173,8 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         if (!networkConfig[network ?? -1] && provider) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
-                const toastId = addToast(
+                // @ts-ignore
+                errorToastID.current = addToast(
                     [
                         'Unsupported Network',
                         <span key="unsupported-network-content">
@@ -201,8 +202,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                         autoDismiss: false,
                     },
                 );
-                // @ts-ignore
-                errorToastID.current = toastId;
             }
         } else {
             if (errorToastID.current) {

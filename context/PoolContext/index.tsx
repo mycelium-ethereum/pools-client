@@ -296,7 +296,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         provider,
                     ) as LeveragedPool;
                     leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
-                        console.debug(`New lastupdated: ${lastUpdate}`);
+                        console.debug(`New last updated: ${lastUpdate}`);
                         poolsDispatch({
                             type: 'setLastUpdate',
                             pool: pool,
@@ -312,7 +312,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     /**
      * Commit to a pool
      * @param pool pool address to commit to
-     * @param commitType int corresponsing to commitType
+     * @param commitType int corresponding to commitType
      * @param amount amount to commit
      * @param options handleTransaction options
      */
