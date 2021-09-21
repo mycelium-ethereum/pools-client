@@ -116,15 +116,10 @@ const PoolRow: React.FC<{
         [farm],
     );
 
-    console.log('Pool token price', tokenPrice);
+    console.debug(`${farm.name} token price: ${tokenPrice.toNumber()}`);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
-
-    // console.log(farm.rewardsPerYear.toNumber(), "Rewards per year")
-    // console.log(TCR_PRICE.toNumber(), "Tcr price")
-    // console.log(tokenPrice.toNumber(), "Token price")
-    // console.log(farm.totalStaked, "Total staked")
 
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
 

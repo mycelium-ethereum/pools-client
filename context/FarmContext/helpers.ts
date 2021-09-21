@@ -33,8 +33,7 @@ export const fetchTokenPrice: (
     const committerInfo = await fetchCommits(poolInfo.committer.address, provider, poolInfo.quoteToken.decimals);
 
     return tokenAddresses.map((tokenAddress) => {
-        const isLong =
-            tokenAddress === poolInfo.longToken.address ? poolInfo.longToken.address : poolInfo.shortToken.address;
+        const isLong: boolean = tokenAddress.toLowerCase() === poolInfo.longToken.address.toLowerCase();
         const token = isLong ? poolInfo.longToken : poolInfo.shortToken;
         const notional: BigNumber = isLong ? nextLongBalance : nextShortBalance;
         const pendingBurns: BigNumber = isLong ? committerInfo.pendingLong.burn : committerInfo.pendingShort.burn;

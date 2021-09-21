@@ -223,7 +223,7 @@ export const FarmStore: React.FC<
 
     const fetchFarms = useCallback(
         async ({ reset }: { reset: boolean }) => {
-            if (signer && config && account) {
+            if (provider && config && account) {
                 if (reset) {
                     setFarms({});
                     setFetchingFarms(true);
@@ -342,7 +342,7 @@ export const FarmStore: React.FC<
                 });
             }
         },
-        [signer, config, account],
+        [provider, config, account],
     );
 
     // fetch farms initially
