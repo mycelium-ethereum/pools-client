@@ -106,11 +106,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     );
 };
 
-export const SellSummary: React.FC<
-    SummaryProps & {
-        gasFee: number;
-    }
-> = ({ pool, amount, isLong }) => {
+export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
