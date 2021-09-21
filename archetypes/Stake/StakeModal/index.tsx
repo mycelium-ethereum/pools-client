@@ -40,9 +40,9 @@ const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => { isInvalid: b
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
     const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
-    const { poolFarms, slpFarms } = useFarms();
+    const { farms } = useFarms();
 
-    const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
+    const farm = useMemo(() => farms[selectedFarm], [selectedFarm, farms]);
 
     const stakingTokenAllowance = farm ? farm.stakingTokenAllowance : new BigNumber(0);
 

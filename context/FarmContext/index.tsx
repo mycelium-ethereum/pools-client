@@ -50,16 +50,12 @@ export type Farm = {
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
-    // poolFarms: FarmsLookup;
-    // slpFarms: FarmsLookup;
     farms: FarmsLookup;
     refreshFarm: (farmAddress: string) => void;
     fetchingFarms: boolean;
 }
 
 export const FarmContext = React.createContext<ContextProps>({
-    // poolFarms: {},
-    // slpFarms: {},
     farms: {},
     refreshFarm: () => console.error('default FarmContext.refreshFarm'),
     fetchingFarms: false,
@@ -76,8 +72,6 @@ export const FarmStore: React.FC<
     } & Children
 > = ({ farmContext, children }) => {
     const { signer, config, account, provider } = useWeb3();
-    // const [poolFarms, setPoolFarms] = useState<ContextProps['poolFarms']>({});
-    // const [slpFarms, setSlpFarms] = useState<ContextProps['slpFarms']>({});
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
 
