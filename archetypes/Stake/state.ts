@@ -1,5 +1,5 @@
+import { FarmTableDetails } from '@context/FarmContext';
 import { SideEnum } from '@libs/constants';
-import { Farm } from '@libs/types/Staking';
 import BigNumber from 'bignumber.js';
 
 export enum LeverageFilterEnum {
@@ -28,17 +28,8 @@ export type FarmTableRowData = {
     name: string;
     leverage?: number;
     side?: SideEnum;
-    totalStaked: number;
-    myStaked: number;
-    myRewards: BigNumber;
-    stakingTokenBalance: BigNumber;
-    stakingTokenSupply: BigNumber;
-    rewardsPerYear: BigNumber;
-    poolDetails?: {
-        poolTokenPrice: BigNumber;
-    };
-    slpDetails?: Farm['slpDetails'];
-};
+} & FarmTableDetails;
+
 export interface StakeState {
     search: string;
     leverage: LeverageFilterEnum;

@@ -165,7 +165,7 @@ const PoolRow: React.FC<{
                     STAKE
                 </Button>
                 <Button
-                    disabled={farm.myStaked === 0}
+                    disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"

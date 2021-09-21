@@ -48,8 +48,8 @@ export default (({
             name: farm.name,
             leverage: poolToken?.leverage,
             side: poolToken?.side,
-            totalStaked: farm.totalStaked.toNumber(),
-            myStaked: farm.myStaked.toNumber(),
+            totalStaked: farm.totalStaked,
+            myStaked: farm.myStaked,
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
@@ -118,7 +118,7 @@ export default (({
             case SortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:
-                return farmB.myStaked - farmA.myStaked;
+                return farmB.myStaked.toNumber() - farmA.myStaked.toNumber();
             default:
                 return 0;
         }

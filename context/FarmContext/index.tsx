@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { Children } from 'libs/types/General';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import { Farm } from '@libs/types/Staking';
 import { StakingRewards } from '@libs/staking/typechain';
 import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import {
@@ -11,8 +10,43 @@ import {
     IUniswapV2Pair,
     IUniswapV2Pair__factory,
 } from '@libs/staking/uniswapRouterV2';
+
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
+
+type SlpPairTokenDetails = {
+    address: string;
+    name: string;
+    isPoolToken: boolean;
+    reserves: BigNumber;
+    usdcPrice: BigNumber;
+    decimals: number;
+};
+
+export type FarmTableDetails = {
+    totalStaked: BigNumber;
+    myStaked: BigNumber;
+    myRewards: BigNumber;
+    stakingTokenBalance: BigNumber;
+    stakingTokenSupply: BigNumber;
+    rewardsPerYear: BigNumber;
+    slpDetails?: {
+        token0: SlpPairTokenDetails;
+        token1: SlpPairTokenDetails;
+    };
+    poolDetails?: {
+        poolTokenPrice: BigNumber;
+    };
+};
+
+export type Farm = {
+    name: string;
+    address: string;
+    contract: StakingRewards;
+    stakingToken: ERC20;
+    stakingTokenDecimals: number;
+    stakingTokenAllowance: BigNumber;
+} & FarmTableDetails;
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -87,7 +121,6 @@ export const FarmStore: React.FC<
                 [token0Address, token1Address],
                 provider,
             );
-            console.log(token0USDCPrice.toNumber(), token1USDCPrice.toNumber());
             return {
                 token0: {
                     reserves: token0Reserves.div(10 ** token0Decimals),
@@ -138,7 +171,6 @@ export const FarmStore: React.FC<
             [token0IsPoolToken ? token0Address : token1Address],
             provider,
         );
-        console.log(poolTokenUSDCPrice[0].toNumber(), 'Token price');
 
         // pool tokens get a hardcoded price of 0 USDC
         // this is because we can't use useTokenPrice hooks from within this context
@@ -164,7 +196,6 @@ export const FarmStore: React.FC<
     };
 
     const refreshFarm = async (farmAddress: string) => {
-        // const farm = poolFarms[farmAddress] || slpFarms[farmAddress];
         const farm = farms[farmAddress];
         const { stakingToken, stakingTokenDecimals } = farm;
         if (account && farm) {
@@ -183,7 +214,6 @@ export const FarmStore: React.FC<
 
             const decimalMultiplier = 10 ** stakingTokenDecimals;
 
-            // if (poolTokenDetails) {
             setFarms((previousFarms) => ({
                 ...previousFarms,
                 [farmAddress]: {
@@ -194,18 +224,6 @@ export const FarmStore: React.FC<
                     myRewards: new BigNumber(myRewards.toString()).div(10 ** rewardsTokenDecimals),
                 },
             }));
-            // } else {
-            //     setSlpFarms((previousSlpFarms) => ({
-            //         ...previousSlpFarms,
-            //         [farmAddress]: {
-            //             ...previousSlpFarms[farmAddress],
-            //             stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(decimalMultiplier),
-            //             stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(decimalMultiplier),
-            //             myStaked: new BigNumber(myStaked.toString()).div(decimalMultiplier),
-            //             myRewards: new BigNumber(myRewards.toString()).div(10 ** rewardsTokenDecimals),
-            //         },
-            //     }));
-            // }
         }
     };
 
@@ -214,12 +232,8 @@ export const FarmStore: React.FC<
             if (signer && config && account) {
                 if (reset) {
                     setFarms({});
-                    // setPoolFarms({});
-                    // setSlpFarms({});
                     setFetchingFarms(true);
                 }
-                // const poolFarms: FarmsLookup = {};
-                // const slpFarms: FarmsLookup = {};
                 Promise.all(
                     config[farmContext].map(async ({ address, abi, token1IsPoolToken, token0IsPoolToken, pool }) => {
                         try {
@@ -291,8 +305,6 @@ export const FarmStore: React.FC<
                             const stakingTokenSupply = new BigNumber(_stakingTokenSupply.toString()).div(
                                 stakingDecimalMultiplier,
                             );
-
-                            console.log(isPoolTokenFarm, poolDetails, 'details');
 
                             return {
                                 name: isPoolTokenFarm
