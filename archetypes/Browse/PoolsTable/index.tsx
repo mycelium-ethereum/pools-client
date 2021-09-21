@@ -23,7 +23,7 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
-    const { provider } = useWeb3();
+    const { provider, account } = useWeb3();
     return (
         <>
             <Table>
@@ -50,6 +50,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             index={index}
                             key={token.address}
                             provider={provider}
+                            account={account}
                         />
                     );
                 })}
@@ -107,7 +108,8 @@ const TokenRow: React.FC<{
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
     provider: ethers.providers.JsonRpcProvider | undefined;
-}> = ({ token, onClickBuy, onClickSell, index, provider }) => {
+    account: string | undefined;
+}> = ({ token, onClickBuy, onClickSell, index, provider, account }) => {
     const hasHoldings = useMemo(() => token.myHoldings > 0, [token.myHoldings]);
 
     const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
@@ -139,6 +141,7 @@ const TokenRow: React.FC<{
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
+                    disabled={!account}
                     onClick={() => onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
                 >
                     Mint
@@ -147,7 +150,7 @@ const TokenRow: React.FC<{
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
-                    disabled={!hasHoldings}
+                    disabled={!hasHoldings || !account}
                     onClick={() => onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
                 >
                     Burn
