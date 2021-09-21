@@ -186,53 +186,51 @@ export const fetchCommits: (
         };
     }
 
+    let allUnexecutedCommits: CreatedCommitType[] = [];
     // current blocknumber alchemy has a 2000 block limit
-    const minBlockCheck = (await provider.getBlockNumber()) - 1990;
+    const minBlockCheck = (await provider.getBlockNumber()) - 1800;
+    if (minBlockCheck > 0) {
+        console.debug(`Not checking past ${minBlockCheck}`);
+        // once we have this we can get the block number and query all commits from that block number
+        const earliestUnexecutedCommit = (
+            await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted), minBlockCheck)
+        )?.[0];
 
-    console.debug(`Not checking past ${minBlockCheck}`);
-    // once we have this we can get the block number and query all commits from that block number
-    const earliestUnexecutedCommit = (
-        await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted), minBlockCheck)
-    )?.[0];
+        if (earliestUnexecutedCommit) {
+            console.debug(
+                `Found earliestUnececutedCommit at id: ${earliestUnexecutedCommit?.toString()}`,
+                earliestUnexecutedCommit,
+            );
 
-    console.debug(`Found earliestUnececutedCommit at id: ${earliestUnexecuted.toString()}`, earliestUnexecutedCommit);
+            allUnexecutedCommits = await (contract?.queryFilter(
+                contract.filters.CreateCommit(),
+                Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
+            ) as Promise<CreatedCommitType[]>);
+        } else {
+            console.error('Failed to fetch all commits: earliestUnexecutedCommit undefined');
+        }
+    } else {
+        console.error('Failed to fetch all commits: Min block check less than 0');
+    }
 
-    const allUnexecutedCommits = (await contract?.queryFilter(
-        contract.filters.CreateCommit(),
-        Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
-    )) as CreatedCommitType[];
+    const pendingAmounts = await Promise.all([
+        contract.shadowPools(CommitEnum.short_mint),
+        contract.shadowPools(CommitEnum.short_burn),
+        contract.shadowPools(CommitEnum.long_mint),
+        contract.shadowPools(CommitEnum.long_burn),
+    ]);
 
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
-    const pendingLong: PendingAmounts = {
-        mint: new BigNumber(0),
-        burn: new BigNumber(0),
-    };
-
     const pendingShort: PendingAmounts = {
-        mint: new BigNumber(0),
-        burn: new BigNumber(0),
+        mint: new BigNumber(ethers.utils.formatUnits(pendingAmounts[0], quoteTokenDecimals)),
+        burn: new BigNumber(ethers.utils.formatUnits(pendingAmounts[1], quoteTokenDecimals)),
     };
 
-    allUnexecutedCommits.forEach((commit) => {
-        const amount = new BigNumber(ethers.utils.formatUnits(commit.args.amount, quoteTokenDecimals));
-        switch (commit.args.commitType) {
-            case CommitEnum.short_mint:
-                pendingShort.mint = pendingShort.mint.plus(amount);
-                break;
-            case CommitEnum.short_burn:
-                pendingShort.burn = pendingShort.burn.plus(amount);
-                break;
-            case CommitEnum.long_mint:
-                pendingLong.mint = pendingLong.mint.plus(amount);
-                break;
-            case CommitEnum.long_burn:
-                pendingLong.burn = pendingLong.burn.plus(amount);
-                break;
-            default:
-            // do nothing
-        }
-    });
+    const pendingLong: PendingAmounts = {
+        mint: new BigNumber(ethers.utils.formatUnits(pendingAmounts[2], quoteTokenDecimals)),
+        burn: new BigNumber(ethers.utils.formatUnits(pendingAmounts[3], quoteTokenDecimals)),
+    };
 
     console.debug(`Pending Long`, pendingLong);
     console.debug(`Pending Short`, pendingShort);
