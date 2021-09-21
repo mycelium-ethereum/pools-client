@@ -167,7 +167,7 @@ export const fetchCommits: (
     pendingShort: PendingAmounts;
     allUnexecutedCommits: CreatedCommitType[];
 }> = async (committer, provider, quoteTokenDecimals) => {
-    console.debug('Initialising committer');
+    console.debug(`Initialising committer: ${committer}`);
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
     const earliestUnexecuted = await contract?.earliestCommitUnexecuted();
