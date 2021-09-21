@@ -3,6 +3,7 @@ import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractTransaction, ContractReceipt } from 'ethers';
 import { networkConfig } from './Web3Context/Web3Context.Config';
+import { CommitActionEnum } from '@libs/constants';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -19,7 +20,7 @@ export type Options = {
     transactionType?: string;
     commitInfo?: {
         poolName?: string;
-        mintOrBurn?: string;
+        actionType?: CommitActionEnum;
     };
 };
 type HandleTransactionType =
@@ -81,10 +82,17 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 autoDismiss: false,
             });
         } else if (transactionType === 'commit') {
-            toastId = addToast(['Queueing' + ` ${commitInfo?.poolName} ` + `${commitInfo?.mintOrBurn}`], {
-                appearance: 'loading' as AppearanceTypes,
-                autoDismiss: false,
-            });
+            toastId = addToast(
+                [
+                    'Queueing' +
+                        ` ${commitInfo?.poolName} ` +
+                        `${commitInfo?.actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'}`,
+                ],
+                {
+                    appearance: 'loading' as AppearanceTypes,
+                    autoDismiss: false,
+                },
+            );
         } else {
             toastId = addToast(
                 ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
@@ -117,7 +125,11 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 });
             } else if (transactionType === 'commit') {
                 updateToast(toastId as unknown as string, {
-                    content: [`${commitInfo?.poolName} ` + `${commitInfo?.mintOrBurn} ` + 'Queued'],
+                    content: [
+                        `${commitInfo?.poolName} ` +
+                            `${commitInfo?.actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} ` +
+                            'Queued',
+                    ],
                     appearance: 'success',
                     autoDismiss: true,
                 });

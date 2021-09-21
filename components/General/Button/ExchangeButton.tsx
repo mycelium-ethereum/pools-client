@@ -73,8 +73,9 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                             onSuccess: () => {
                                 swapDispatch?.({ type: 'setAmount', value: new BigNumber(0) });
                             },
-                            pooName: pool.name,
-                            mintOrBurn: actionType === CommitActionEnum.mint ? 'Mint' : 'Burn',
+                            poolName: pool.name,
+                            actionType:
+                                actionType === CommitActionEnum.mint ? CommitActionEnum.mint : CommitActionEnum.burn,
                         });
                     }}
                 >

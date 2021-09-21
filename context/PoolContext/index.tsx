@@ -19,15 +19,15 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { CommitEnum } from '@libs/constants';
+import { CommitActionEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
 
 type Options = {
     onSuccess?: (...args: any) => any;
-    pooName?: string;
-    mintOrBurn?: string;
+    poolName?: string;
+    actionType?: CommitActionEnum;
 };
 
 interface ContextProps {
@@ -364,8 +364,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         },
                         transactionType: 'commit',
                         commitInfo: {
-                            poolName: options?.pooName,
-                            mintOrBurn: options?.mintOrBurn,
+                            poolName: options?.poolName,
+                            actionType: options?.actionType,
                         },
                     },
                 );
