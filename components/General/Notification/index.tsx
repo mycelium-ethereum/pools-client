@@ -45,13 +45,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Success} />,
+        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Success} />,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Error} />,
+        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Error} />,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -63,13 +63,13 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Warning} />,
+        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Warning} />,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <InfoCircleFilled style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} />,
+        icon: <InfoCircleFilled className="text-2xl leading-none text-transparent mr-2" />,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',
