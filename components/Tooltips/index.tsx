@@ -54,4 +54,3 @@ export const PowerLeverageTip: React.FC = ({ children }) => {
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
-
