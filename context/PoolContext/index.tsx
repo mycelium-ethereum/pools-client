@@ -94,9 +94,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
-                // get and set token balances
-                updateTokenBalances(pool);
-                updateTokenApprovals(pool);
+
                 const decimals = pool.quoteToken.decimals;
 
                 // fetch commits
@@ -146,6 +144,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 updateTokenBalances(pool);
                 updateTokenApprovals(pool);
             });
+        } else if (!account && poolsState.poolsInitialised) {
+            // account disconnect
+            Object.keys(poolsState.pools).map((pool) => {
+                poolsDispatch({
+                    type: 'setTokenBalances',
+                    pool: pool,
+                    shortTokenBalance: new BigNumber(0),
+                    longTokenBalance: new BigNumber(0),
+                    quoteTokenBalance: new BigNumber(0),
+                });
+            })
         }
     }, [provider, account, poolsState.poolsInitialised]);
 
