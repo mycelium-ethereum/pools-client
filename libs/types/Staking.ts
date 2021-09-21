@@ -25,9 +25,11 @@ export type Farm = {
     stakingTokenAllowance: BigNumber;
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
-    isPoolTokenFarm: boolean;
     slpDetails?: {
         token0: SlpPairTokenDetails;
         token1: SlpPairTokenDetails;
+    };
+    poolDetails?: {
+        poolTokenPrice: BigNumber;
     };
 };

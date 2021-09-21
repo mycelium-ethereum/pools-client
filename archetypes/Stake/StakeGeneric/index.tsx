@@ -10,10 +10,10 @@ import {
     stakeReducer,
     StakeAction,
     StakeState,
-    FarmTableRowData,
     LeverageFilterEnum,
     SideFilterEnum,
     SortByEnum,
+    FarmTableRowData,
 } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -63,7 +63,7 @@ export default (({
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const filterFields = farm.isPoolTokenFarm
+        const filterFields = farm?.poolDetails
             ? {
                   leverage: tokenMap[farm.stakingToken.address]?.leverage,
                   side: tokenMap[farm.stakingToken.address]?.side,
@@ -76,14 +76,14 @@ export default (({
             name: farm.name,
             leverage: filterFields?.leverage,
             side: filterFields?.side,
-            totalStaked: farm.totalStaked.toNumber(),
-            myStaked: farm.myStaked.toNumber(),
+            totalStaked: farm.totalStaked,
+            myStaked: farm.myStaked,
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
-            isPoolTokenFarm: farm.isPoolTokenFarm,
             stakingTokenSupply: farm.stakingTokenSupply,
             slpDetails: farm.slpDetails,
+            poolDetails: farm.poolDetails,
         };
     });
 
@@ -146,7 +146,7 @@ export default (({
             case SortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:
-                return farmB.myStaked - farmA.myStaked;
+                return farmB.myStaked.toNumber() - farmA.myStaked.toNumber();
             default:
                 return 0;
         }

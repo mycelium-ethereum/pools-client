@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
@@ -7,7 +7,6 @@ import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
-import useTokenPrice from '@libs/hooks/useTokenPrice';
 import Loading from '@components/General/Loading';
 
 // TODO: use an actual price
@@ -94,17 +93,14 @@ const PoolRow: React.FC<{
     strategySubtitle?: string;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-
-    // although this is wasteful, we must always call hooks the same number of times between renders
-    const calculateTokenPrice = (farm: FarmTableRowData) => {
-        if (!farm.slpDetails) {
+    const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
+        if (!farm?.slpDetails) {
             return new BigNumber(0);
         }
+        const { token0, token1 } = farm?.slpDetails;
 
-        const { token0, token1 } = farm.slpDetails;
-
-        const token0USDCPrice = token0.isPoolToken ? useTokenPrice(token0.address) : token0.usdcPrice;
-        const token1USDCPrice = token1.isPoolToken ? useTokenPrice(token1.address) : token1.usdcPrice;
+        const token0USDCPrice = token0.usdcPrice;
+        const token1USDCPrice = token1.usdcPrice;
 
         const token0USDCValue = token0USDCPrice.times(token0.reserves);
         const token1USDCValue = token1USDCPrice.times(token1.reserves);
@@ -118,7 +114,12 @@ const PoolRow: React.FC<{
         return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
     };
 
-    const tokenPrice = calculateTokenPrice(farm);
+    const tokenPrice = useMemo(
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calculateSlpTokenPrice(farm)),
+        [farm],
+    );
+
+    console.debug(`${farm.name} token price: ${tokenPrice.toNumber()}`);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
@@ -131,7 +132,7 @@ const PoolRow: React.FC<{
         <TableRow key={farm.farm} rowNumber={index}>
             <div className="flex flex-wrap">
                 <div>
-                    {farm.isPoolTokenFarm ? (
+                    {farm?.poolDetails ? (
                         <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                     ) : (
                         <>
@@ -185,7 +186,7 @@ const PoolRow: React.FC<{
                     STAKE
                 </Button>
                 <Button
-                    disabled={farm.myStaked === 0}
+                    disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"

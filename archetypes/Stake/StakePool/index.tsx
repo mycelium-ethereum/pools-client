@@ -4,7 +4,7 @@ import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
 
 export default (() => {
-    const { poolFarms, refreshFarm, fetchingFarms } = useFarms();
+    const { farms, refreshFarm, fetchingFarms } = useFarms();
     return (
         <>
             <StakeGeneric
@@ -13,7 +13,7 @@ export default (() => {
                 subTitle="Stake Pool Tokens and earn TCR."
                 tokenType="Pool"
                 refreshFarm={refreshFarm}
-                farms={poolFarms}
+                farms={farms}
                 fetchingFarms={fetchingFarms}
             ></StakeGeneric>
         </>
