@@ -35,6 +35,18 @@ const hashieStates = (placement: PlacementType) => ({
     exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
+const IconWrap = styled.span`
+    display: inline-flex;
+    justify-content: center;
+    margin-right: 0.5rem;
+    vertical-align: 0.125rem;
+    color: transparent;
+    svg {
+        width: 26px;
+        height: 26px;
+    }
+`;
+
 const appearances: Record<
     string,
     {
@@ -45,13 +57,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <Icon component={Success} />,
+        icon: <IconWrap><Icon component={Success} /></IconWrap>,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <Icon component={Error} />,
+        icon: <IconWrap><Icon component={Error} /></IconWrap>,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -63,13 +75,13 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <Icon component={Warning} />,
+        icon: <IconWrap><Icon component={Warning} /></IconWrap>,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <InfoCircleFilled />,
+        icon: <IconWrap><InfoCircleFilled /></IconWrap>,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',

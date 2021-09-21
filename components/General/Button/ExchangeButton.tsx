@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
@@ -6,6 +6,7 @@ import { usePool, usePoolActions } from '@context/PoolContext';
 import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 import BigNumber from 'bignumber.js';
+import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
@@ -16,6 +17,21 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
     const pool = usePool(selectedPool);
 
     const { commit, approve } = usePoolActions();
+
+    const { addToast, updateToast } = useToasts();
+    const unlockToastID = React.useRef<string>('');
+
+    useEffect(() => {
+        if (pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance)) {
+            if (unlockToastID.current) {
+                updateToast(unlockToastID as unknown as string, {
+                    content: ['USDC Unlocked'],
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+            }
+        }
+    }, [pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance)]);
 
     const ButtonContent = () => {
         if (!account) {
@@ -42,6 +58,20 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                             if (!approve) {
                                 return;
                             }
+
+                            if (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance)) {
+                                if (!unlockToastID.current) {
+                                    // @ts-ignore
+                                    unlockToastID.current = addToast(
+                                        ['Unlocking USDC', 'This may take a few moments'],
+                                        {
+                                            appearance: 'loading' as AppearanceTypes,
+                                            autoDismiss: true,
+                                        },
+                                    );
+                                }
+                            }
+
                             approve(selectedPool ?? '');
                         }}
                     >
