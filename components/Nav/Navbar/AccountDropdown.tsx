@@ -82,7 +82,11 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                             className="self-center icon"
                             onClick={() => {
                                 /* This requires a secure origin, either HTTPS or localhost. */
-                                // navigator.clipboard.writeText(account);
+                                try {
+                                    navigator.clipboard.writeText(account);
+                                } catch (err) {
+                                    console.log("Failed to copy", err)
+                                }
                             }}
                         />
                         <style>{`
