@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
@@ -17,7 +16,7 @@ export default (() => {
     }, []);
 
     return (
-        <Page className={`page`}>
+        <div className={`page relative`}>
             <PoolStore>
                 <NavBar />
                 <InvestNav />
@@ -27,11 +26,7 @@ export default (() => {
                 <PendingCommits />
             </PoolStore>
             <Footer />
-        </Page>
+            <iframe src="https://vyps-kit.reputation.vercel.app/" />
+        </div>
     );
 }) as React.FC;
-
-const Page = styled.div`
-    position: relative;
-    background: var(--color-background);
-`;
