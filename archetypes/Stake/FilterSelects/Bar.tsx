@@ -24,7 +24,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeve
                 {!hideLeverageFilter ? (
                     <div className="mr-4">
                         <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
-                            <h3 className="mb-1">Leverage</h3>
+                            <h3 className="mb-1">Power Leverage</h3>
                         </TooltipSelector>
                         <Dropdown
                             value={state.leverage}
