@@ -200,8 +200,8 @@ const ToastWrapper = styled.div`
     margin-bottom: 0.5rem;
     margin-right: 0.5rem;
     border-radius: 0.375rem;
-    max-width: 24rem;
-    width: 24rem;
+    max-width: 25rem;
+    width: 25rem;
     display: flex;
     flex-direction: column;
 

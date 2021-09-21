@@ -16,6 +16,11 @@ export type Options = {
         pending?: string; // transaction message for when the transaction is pending
         userConfirmed?: string; // transaction method for when user confirms through provider
     };
+    transactionType?: string;
+    commitInfo?: {
+        poolName?: string;
+        mintOrBurn?: string;
+    };
 };
 type HandleTransactionType =
     | ((
@@ -59,39 +64,78 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess, afterConfirmation, network = '0' } = options ?? {};
+        const {
+            statusMessages,
+            onError,
+            onSuccess,
+            afterConfirmation,
+            network = '0',
+            transactionType,
+            commitInfo,
+        } = options ?? {};
 
-        // actually returns a string error in the library
-        const toastId = addToast(
-            ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
-            {
+        let toastId: unknown;
+        if (transactionType === 'approve') {
+            toastId = addToast(['Unlocking USDC', 'This may take a few moments'], {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
-            },
-        );
+            });
+        } else if (transactionType === 'commit') {
+            toastId = addToast(['Queueing' + ` ${commitInfo?.poolName} ` + `${commitInfo?.mintOrBurn}`], {
+                appearance: 'loading' as AppearanceTypes,
+                autoDismiss: false,
+            });
+        } else {
+            toastId = addToast(
+                ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
+                {
+                    appearance: 'loading' as AppearanceTypes,
+                    autoDismiss: false,
+                },
+            );
+        }
+
         setPendingCount(pendingCount + 1);
         const res = callMethod(...params);
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
-            updateToast(toastId as unknown as string, {
-                content: [
-                    'Transaction submitted',
-                    statusMessages?.userConfirmed ?? `Waiting for confirmation ${contractTransaction.hash}`,
-                ],
-                appearance: 'loading' as AppearanceTypes,
-                autoDismiss: false,
-            });
+            // updateToast(toastId as unknown as string, {
+            //     content: [
+            //         'Transaction submitted',
+            //         statusMessages?.userConfirmed ?? `Waiting for confirmation ${contractTransaction.hash}`,
+            //     ],
+            //     appearance: 'loading' as AppearanceTypes,
+            //     autoDismiss: false,
+            // });
             const receipt = await contractTransaction.wait();
-            updateToast(toastId as unknown as string, {
-                content: [
-                    'Transaction Successful',
-                    statusMessages?.success ?? (
-                        <a href={`${networkConfig[network].previewUrl}/${receipt.transactionHash}`}>View transaction</a>
-                    ),
-                ],
-                appearance: 'success',
-                autoDismiss: true,
-            });
+
+            if (transactionType === 'approve') {
+                updateToast(toastId as unknown as string, {
+                    content: ['USDC Unlocked'],
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+            } else if (transactionType === 'commit') {
+                updateToast(toastId as unknown as string, {
+                    content: [`${commitInfo?.poolName} ` + `${commitInfo?.mintOrBurn} ` + 'Queued'],
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+            } else {
+                updateToast(toastId as unknown as string, {
+                    content: [
+                        'Transaction Successful',
+                        statusMessages?.success ?? (
+                            <a href={`${networkConfig[network].previewUrl}/${receipt.transactionHash}`}>
+                                View transaction
+                            </a>
+                        ),
+                    ],
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+            }
+
             setPendingCount(pendingCount - 1);
             onSuccess ? onSuccess(receipt) : null;
         }).catch((error) => {

@@ -26,6 +26,8 @@ import { calcNextValueTransfer } from '@libs/utils/calcs';
 
 type Options = {
     onSuccess?: (...args: any) => any;
+    pooName?: string;
+    mintOrBurn?: string;
 };
 
 interface ContextProps {
@@ -352,6 +354,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             updateTokenBalances(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
+                        transactionType: 'commit',
+                        commitInfo: {
+                            poolName: options?.pooName,
+                            mintOrBurn: options?.mintOrBurn,
+                        },
                     },
                 );
             }
@@ -384,6 +391,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
+                transactionType: 'approve',
             });
         }
     };
