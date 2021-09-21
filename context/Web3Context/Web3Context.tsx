@@ -187,13 +187,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 Switch to Arbitrum Mainnet
                             </a>
                             <br />
+                            <span>New to Arbitrum? </span>
                             <a
-                                href="https://medium.com/stakingbits/guide-to-arbitrum-and-setting-up-metamask-for-arbitrum-543e513cdd8b"
+                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
                                 target="_blank"
                                 rel="noreferrer noopner"
                                 className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
                             >
-                                Learn more here
+                                Get started
                             </a>
                         </span>,
                     ],
