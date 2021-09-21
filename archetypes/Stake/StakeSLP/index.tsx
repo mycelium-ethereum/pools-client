@@ -17,6 +17,7 @@ export default (() => {
                 farms={farms}
                 hideLeverageFilter
                 hideSideFilter
+                strategySubtitle="via SushiSwap AMM"
             ></StakeGeneric>
         </>
     );

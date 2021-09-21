@@ -13,10 +13,11 @@ import {
 
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
+import { USDC_DECIMALS } from '@libs/constants';
 
-type SlpPairTokenDetails = {
+export type SlpPairTokenDetails = {
     address: string;
-    name: string;
+    symbol: string;
     isPoolToken: boolean;
     reserves: BigNumber;
     usdcPrice: BigNumber;
@@ -100,11 +101,11 @@ export const FarmStore: React.FC<
         const token0Contract = new ethers.Contract(token0Address, ERC20__factory.abi, provider) as ERC20;
         const token1Contract = new ethers.Contract(token1Address, ERC20__factory.abi, provider) as ERC20;
 
-        const [token0Decimals, token1Decimals, token0Name, token1Name] = await Promise.all([
+        const [token0Decimals, token1Decimals, token0Symbol, token1Symbol] = await Promise.all([
             token0Contract.decimals(),
             token1Contract.decimals(),
-            token0Contract.name(),
-            token1Contract.name(),
+            token0Contract.symbol(),
+            token1Contract.symbol(),
         ]);
 
         // if both sides of the pool are pool tokens, we don't need to consult the sushi price oracle
@@ -119,7 +120,7 @@ export const FarmStore: React.FC<
                 token0: {
                     reserves: token0Reserves.div(10 ** token0Decimals),
                     decimals: token0Decimals,
-                    name: token0Name,
+                    symbol: token0Symbol,
                     usdcPrice: token0USDCPrice, // currently only applies to tokens that are not pool tokens
                     isPoolToken: token0IsPoolToken,
                     address: token0Address,
@@ -127,7 +128,7 @@ export const FarmStore: React.FC<
                 token1: {
                     reserves: token1Reserves.div(10 ** token1Decimals),
                     decimals: token1Decimals,
-                    name: token1Name,
+                    symbol: token1Symbol,
                     usdcPrice: token1USDCPrice, // currently only applies to tokens that are not pool tokens
                     isPoolToken: token1IsPoolToken,
                     address: token1Address,
@@ -148,7 +149,7 @@ export const FarmStore: React.FC<
         const oneNonPoolToken = new BigNumber('1').times(10 ** nonPoolTokenDecimals);
 
         if (!config?.knownNonPoolTokenPricePaths?.[nonPoolTokenAddress]) {
-            const nonPoolTokenName = token0IsPoolToken ? token1Name : token0Name;
+            const nonPoolTokenName = token0IsPoolToken ? token1Symbol : token0Symbol;
             throw new Error(`No known USDC price path for non-pool token ${nonPoolTokenAddress} (${nonPoolTokenName})`);
         }
 
@@ -159,7 +160,7 @@ export const FarmStore: React.FC<
             nonPoolTokenUSDCPath,
         );
 
-        const nonPoolTokenUSDCPrice = new BigNumber(_nonPoolTokenUSDCPrice.toString());
+        const nonPoolTokenUSDCPrice = new BigNumber(ethers.utils.formatUnits(_nonPoolTokenUSDCPrice, USDC_DECIMALS));
         const poolTokenUSDCPrice = await fetchTokenPrice(
             pool,
             [token0IsPoolToken ? token0Address : token1Address],
@@ -173,7 +174,7 @@ export const FarmStore: React.FC<
             token0: {
                 reserves: token0Reserves.div(10 ** token0Decimals),
                 decimals: token0Decimals,
-                name: token0Name,
+                symbol: token0Symbol,
                 usdcPrice: token0IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
                 isPoolToken: token0IsPoolToken,
                 address: token0Address,
@@ -181,7 +182,7 @@ export const FarmStore: React.FC<
             token1: {
                 reserves: token1Reserves.div(10 ** token1Decimals),
                 decimals: token1Decimals,
-                name: token1Name,
+                symbol: token1Symbol,
                 usdcPrice: token1IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
                 isPoolToken: token1IsPoolToken,
                 address: token1Address,
@@ -303,7 +304,7 @@ export const FarmStore: React.FC<
                             return {
                                 name: isPoolTokenFarm
                                     ? stakingTokenName
-                                    : `${slpDetails?.token0.name}, ${slpDetails?.token1.name}`,
+                                    : generateSlpFarmName(slpDetails?.token0, slpDetails?.token1),
                                 address,
                                 contract,
                                 totalStaked,
@@ -366,6 +367,15 @@ export const FarmStore: React.FC<
             {children}
         </FarmContext.Provider>
     );
+};
+
+// generates a farm name where the non-pool token (if either) is listed second
+const generateSlpFarmName = (token0: SlpPairTokenDetails | undefined, token1: SlpPairTokenDetails | undefined) => {
+    // ensure that the non-pool token is the second listed token
+    if (token0?.isPoolToken) {
+        return `${token0.symbol}, ${token1?.symbol}`;
+    }
+    return `${token1?.symbol}, ${token0?.symbol}`;
 };
 
 export const useFarms: () => ContextProps = () => {

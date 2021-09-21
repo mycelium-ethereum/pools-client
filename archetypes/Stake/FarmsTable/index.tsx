@@ -12,7 +12,7 @@ import Loading from '@components/General/Loading';
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
 
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, strategySubtitle }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -36,6 +36,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
+                            strategySubtitle={strategySubtitle}
                         />
                     );
                 })}
@@ -80,6 +81,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
+    strategySubtitle?: string;
 }>;
 
 const PoolRow: React.FC<{
@@ -88,7 +90,8 @@ const PoolRow: React.FC<{
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
+    strategySubtitle?: string;
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
     const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
         if (!farm?.slpDetails) {
@@ -123,28 +126,51 @@ const PoolRow: React.FC<{
 
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
 
+    const { slpDetails } = farm;
+
     return (
         <TableRow key={farm.farm} rowNumber={index}>
-            <span>
-                <Logo
-                    className="inline w-[25px] mr-2"
-                    ticker={farm.poolDetails ? tokenSymbolToLogoTicker(farm.name) : ''}
-                />
-                {farm.name}
-            </span>
+            <div className="flex flex-wrap">
+                <div>
+                    {farm?.poolDetails ? (
+                        <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                    ) : (
+                        <>
+                            <Logo
+                                className="inline w-[25px] mr-2"
+                                ticker={tokenSymbolToLogoTicker(
+                                    (slpDetails?.token0?.isPoolToken
+                                        ? slpDetails?.token0?.symbol
+                                        : slpDetails?.token1?.symbol) || '',
+                                )}
+                            />
+                            <Logo
+                                className="inline w-[25px] mr-2"
+                                ticker={tokenSymbolToLogoTicker(
+                                    (slpDetails?.token0?.isPoolToken
+                                        ? slpDetails?.token1?.symbol
+                                        : slpDetails?.token0?.symbol) || '',
+                                )}
+                            />
+                        </>
+                    )}
+                </div>
+                <div>
+                    <div>{farm.name}</div>
+                    {strategySubtitle ? <div className="opacity-50">{strategySubtitle}</div> : null}
+                </div>
+            </div>
             <span>{apr.times(100).toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>
             <span>
-                <span>{farm.myStaked.toFixed(2)}</span>
-                {' / '}
-                <span>{toApproxCurrency(tokenPrice.times(farm.myStaked))}</span>
+                <div>{farm.myStaked.toFixed(2)}</div>
+                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.myStaked))}</div>
             </span>
             <span>
-                <span>{farm.stakingTokenBalance.toFixed(2)}</span>
-                {' / '}
-                <span>{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</span>
+                <div>{farm.stakingTokenBalance.toFixed(2)}</div>
+                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</div>
             </span>
             <span>
                 <span>{farm.myRewards.toFixed(6)}</span>

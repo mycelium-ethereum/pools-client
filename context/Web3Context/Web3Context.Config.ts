@@ -172,7 +172,7 @@ export const networkConfig: Record<string, Network> = {
                 token1IsPoolToken: true,
             },
             {
-                address: '0x97c9F5F75863b8887FEF9CcBBDc05B31d2a34D07', // 1-BTC/USD Short/wBTC
+                address: '0xD2701998bc649Adbc34a4039d2d15987e9814568', // 1-BTC/USD Short/wBTC
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
                 token0IsPoolToken: true,
