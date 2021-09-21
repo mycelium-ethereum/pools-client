@@ -26,7 +26,6 @@ export default (() => {
                 <PendingCommits />
             </PoolStore>
             <Footer />
-            <iframe src="https://vyps-kit.reputation.vercel.app/" />
         </div>
     );
 }) as React.FC;
