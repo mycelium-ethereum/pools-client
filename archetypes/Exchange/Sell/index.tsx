@@ -7,9 +7,8 @@ import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
-import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
-import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
@@ -58,10 +57,9 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, commitAction, invalidAmount } = swapState;
+    const { amount, side, selectedPool, invalidAmount } = swapState;
 
     const pool = usePool(selectedPool);
-    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
@@ -186,7 +184,7 @@ export default (() => {
                 </p>
             </div>
 
-            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
+            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} />
 
             <FeeNote pool={pool} isMint={false} />
 
