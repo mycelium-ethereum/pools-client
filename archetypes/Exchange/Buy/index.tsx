@@ -15,7 +15,7 @@ import FeeNote from '@archetypes/Exchange/FeeNote';
 import Button from '@components/General/Button';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Close from '/public/img/general/close-black.svg';
 
@@ -128,7 +128,9 @@ export default (() => {
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Power Leverage</p>
+                <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
+                    <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
+                </TooltipSelector>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({

@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyledTooltip, LockTip, ComingSoonTip } from '../';
+import { StyledTooltip, LockTip, ComingSoonTip, PowerLeverageTip } from '../';
 
 export enum TooltipKeys {
     ComingSoon = 'coming-soon',
     Lock = 'Lock',
+    PowerLeverage = 'power-leverage',
 }
 
 export type TooltipSelectorProps = {
@@ -18,6 +19,9 @@ const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip,
 
         case TooltipKeys.Lock:
             return <LockTip>{children}</LockTip>;
+
+        case TooltipKeys.PowerLeverage:
+            return <PowerLeverageTip>{children}</PowerLeverageTip>;
 
         default:
             return <StyledTooltip title={tooltip.content}>{children}</StyledTooltip>;
