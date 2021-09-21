@@ -15,7 +15,7 @@ export default (() => {
                 refreshFarm={refreshFarm}
                 farms={poolFarms}
                 fetchingFarms={fetchingFarms}
-            ></StakeGeneric>
+            />
         </>
     );
 }) as React.FC;

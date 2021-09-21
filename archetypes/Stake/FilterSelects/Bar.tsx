@@ -2,6 +2,7 @@ import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
 import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 interface FilterSelectsProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
@@ -22,7 +23,9 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeve
                 </div>
                 {!hideLeverageFilter ? (
                     <div className="mr-4">
-                        <h3 className="mb-1">Leverage</h3>
+                        <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
+                            <h3 className="mb-1">Leverage</h3>
+                        </TooltipSelector>
                         <Dropdown
                             value={state.leverage}
                             options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
