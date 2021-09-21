@@ -16,6 +16,7 @@ import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import FeeNote from '@archetypes/Exchange/FeeNote';
+import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -76,6 +77,8 @@ export default (() => {
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     useEffect(() => {
         if (pool) {
@@ -184,9 +187,9 @@ export default (() => {
                 </p>
             </div>
 
-            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} />
+            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} receiveIn={receiveIn} />
 
-            <FeeNote pool={pool} isMint={false} />
+            <FeeNote poolName={pool.name} isMint={false} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
