@@ -94,7 +94,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
-
                 const decimals = pool.quoteToken.decimals;
 
                 // fetch commits
@@ -154,7 +153,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     longTokenBalance: new BigNumber(0),
                     quoteTokenBalance: new BigNumber(0),
                 });
-            })
+            });
         }
     }, [provider, account, poolsState.poolsInitialised]);
 

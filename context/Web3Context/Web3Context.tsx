@@ -170,7 +170,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     // unsupported network popup
     useEffect(() => {
-        if (!networkConfig[network ?? -1] && provider) {
+        if (!networkConfig[network ?? -1] && provider && account) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
                 const toastId = addToast(
