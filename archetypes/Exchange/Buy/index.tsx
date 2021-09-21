@@ -18,6 +18,7 @@ import { TWModal } from '@components/General/TWModal';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Close from '/public/img/general/close-black.svg';
+import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 
 const inputRow = 'relative my-2 ';
 
@@ -71,6 +72,8 @@ export default (() => {
     const [showModal, setShowModal] = useState(false);
 
     const pool = usePool(selectedPool);
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     useEffect(() => {
         if (
@@ -184,9 +187,9 @@ export default (() => {
                 </div>
             </div>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
+            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} receiveIn={receiveIn} />
 
-            <FeeNote pool={pool} isMint={true} />
+            <FeeNote poolName={pool.name} isMint={true} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 
