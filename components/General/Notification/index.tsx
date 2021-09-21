@@ -35,18 +35,6 @@ const hashieStates = (placement: PlacementType) => ({
     exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
-const IconWrap = styled.span`
-    display: inline-flex;
-    justify-content: center;
-    margin-right: 0.5rem;
-    vertical-align: 0.125rem;
-    color: transparent;
-    svg {
-        width: 26px;
-        height: 26px;
-    }
-`;
-
 const appearances: Record<
     string,
     {
@@ -57,13 +45,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <IconWrap><Icon component={Success} /></IconWrap>,
+        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Success} />,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <IconWrap><Icon component={Error} /></IconWrap>,
+        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Error} />,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -75,19 +63,19 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <IconWrap><Icon component={Warning} /></IconWrap>,
+        icon: <Icon style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} component={Warning} />,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <IconWrap><InfoCircleFilled /></IconWrap>,
+        icon: <InfoCircleFilled style={{ fontSize: '26px', marginRight: '10px', color: 'transparent' }} />,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',
     },
     loading: {
-        icon: <><img className="w-1/6 h-1/6 mr-3" src="/img/general/loading.gif" alt="Tracer Loading" /></>,
+        icon: <img className="w-1/6 h-1/6 mr-3" src="/img/general/loading.gif" alt="Tracer Loading" />,
         text: '#111928',
         fg: '#2684FF',
         bg: '#00156C',
