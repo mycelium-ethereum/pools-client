@@ -1,4 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
+import BigNumber from 'bignumber.js';
+import { USDC_DECIMALS } from '@libs/constants';
 import { Children } from 'libs/types/General';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
@@ -11,7 +13,6 @@ import {
     IUniswapV2Pair,
     IUniswapV2Pair__factory,
 } from '@libs/staking/uniswapRouterV2';
-import BigNumber from 'bignumber.js';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -114,7 +115,7 @@ export const FarmStore: React.FC<Children> = ({ children }: Children) => {
             nonPoolTokenUSDCPath,
         );
 
-        const nonPoolTokenUSDCPrice = new BigNumber(_nonPoolTokenUSDCPrice.toString());
+        const nonPoolTokenUSDCPrice = new BigNumber(ethers.utils.formatUnits(_nonPoolTokenUSDCPrice, USDC_DECIMALS));
 
         // pool tokens get a hardcoded price of 0 USDC
         // this is because we can't use useTokenPrice hooks from within this context

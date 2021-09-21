@@ -16,6 +16,7 @@ export default (() => {
                 fetchingFarms={fetchingFarms}
                 farms={slpFarms}
                 hideSideFilter
+                strategySubtitle="via SushiSwap AMM"
             ></StakeGeneric>
         </>
     );
