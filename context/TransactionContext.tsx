@@ -1,9 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
-import { ContractTransaction, ContractReceipt } from 'ethers';
-import { networkConfig } from './Web3Context/Web3Context.Config';
-import { CommitActionEnum } from '@libs/constants';
+import { ContractReceipt, ContractTransaction } from 'ethers';
+import Toast, { ToastKeyAction } from '@components/General/Notification/Toast';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -17,11 +16,7 @@ export type Options = {
         pending?: string; // transaction message for when the transaction is pending
         userConfirmed?: string; // transaction method for when user confirms through provider
     };
-    transactionType?: string;
-    commitInfo?: {
-        poolName?: string;
-        actionType?: CommitActionEnum;
-    };
+    toastKeyAction?: ToastKeyAction;
 };
 type HandleTransactionType =
     | ((
@@ -65,84 +60,26 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const {
-            statusMessages,
-            onError,
-            onSuccess,
-            afterConfirmation,
-            network = '0',
-            transactionType,
-            commitInfo,
-        } = options ?? {};
+        const { statusMessages, onError, onSuccess, afterConfirmation, toastKeyAction } = options ?? {};
 
         let toastId: unknown;
-        if (transactionType === 'approve') {
-            toastId = addToast(['Unlocking USDC', 'This may take a few moments'], {
+        if (toastKeyAction) {
+            toastId = addToast(Toast(toastKeyAction.startToast), {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
             });
-        } else if (transactionType === 'commit') {
-            toastId = addToast(
-                [
-                    'Queueing' +
-                        ` ${commitInfo?.poolName} ` +
-                        `${commitInfo?.actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'}`,
-                ],
-                {
-                    appearance: 'loading' as AppearanceTypes,
-                    autoDismiss: false,
-                },
-            );
-        } else {
-            toastId = addToast(
-                ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
-                {
-                    appearance: 'loading' as AppearanceTypes,
-                    autoDismiss: false,
-                },
-            );
         }
 
         setPendingCount(pendingCount + 1);
         const res = callMethod(...params);
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
-            // updateToast(toastId as unknown as string, {
-            //     content: [
-            //         'Transaction submitted',
-            //         statusMessages?.userConfirmed ?? `Waiting for confirmation ${contractTransaction.hash}`,
-            //     ],
-            //     appearance: 'loading' as AppearanceTypes,
-            //     autoDismiss: false,
-            // });
+
             const receipt = await contractTransaction.wait();
 
-            if (transactionType === 'approve') {
+            if (toastKeyAction) {
                 updateToast(toastId as unknown as string, {
-                    content: ['USDC Unlocked'],
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-            } else if (transactionType === 'commit') {
-                updateToast(toastId as unknown as string, {
-                    content: [
-                        `${commitInfo?.poolName} ` +
-                            `${commitInfo?.actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} ` +
-                            'Queued',
-                    ],
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-            } else {
-                updateToast(toastId as unknown as string, {
-                    content: [
-                        'Transaction Successful',
-                        statusMessages?.success ?? (
-                            <a href={`${networkConfig[network].previewUrl}/${receipt.transactionHash}`}>
-                                View transaction
-                            </a>
-                        ),
-                    ],
+                    content: Toast(toastKeyAction.endToast),
                     appearance: 'success',
                     autoDismiss: true,
                 });

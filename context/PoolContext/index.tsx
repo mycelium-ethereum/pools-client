@@ -1,11 +1,9 @@
-import React, { useContext, useReducer, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
-import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { reducer, initialPoolState } from './poolDispatch';
-import { fetchTokenBalances, initPool, fetchCommits, fetchTokenApprovals } from './helpers';
-import { useMemo } from 'react';
+import { initialPoolState, reducer } from './poolDispatch';
+import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -23,6 +21,7 @@ import { CommitActionEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
+import { ToastKeyEnum } from '@components/General/Notification/Toast';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -362,10 +361,21 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             updateTokenBalances(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
-                        transactionType: 'commit',
-                        commitInfo: {
-                            poolName: options?.poolName,
-                            actionType: options?.actionType,
+                        toastKeyAction: {
+                            startToast: {
+                                key: ToastKeyEnum.Commit,
+                                props: {
+                                    poolName: options?.poolName,
+                                    actionType: options?.actionType,
+                                },
+                            },
+                            endToast: {
+                                key: ToastKeyEnum.Committed,
+                                props: {
+                                    poolName: options?.poolName,
+                                    actionType: options?.actionType,
+                                },
+                            },
                         },
                     },
                 );
@@ -399,7 +409,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
-                transactionType: 'approve',
+                toastKeyAction: {
+                    startToast: { key: ToastKeyEnum.Unlocking },
+                    endToast: { key: ToastKeyEnum.Unlocked },
+                },
             });
         }
     };
