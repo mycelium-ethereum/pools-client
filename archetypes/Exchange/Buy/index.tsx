@@ -15,7 +15,7 @@ import FeeNote from '@archetypes/Exchange/FeeNote';
 import Button from '@components/General/Button';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Close from '/public/img/general/close-black.svg';
 
