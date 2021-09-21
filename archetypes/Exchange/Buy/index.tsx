@@ -128,7 +128,9 @@ export default (() => {
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Power Leverage</p>
+                <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
+                    <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
+                </TooltipSelector>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
