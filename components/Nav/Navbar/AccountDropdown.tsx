@@ -85,7 +85,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                                 try {
                                     navigator.clipboard.writeText(account);
                                 } catch (err) {
-                                    console.log("Failed to copy", err)
+                                    console.log('Failed to copy', err);
                                 }
                             }}
                         />
