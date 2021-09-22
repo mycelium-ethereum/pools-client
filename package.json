@@ -21,7 +21,8 @@
         "react-resize-detector": "^6.7.4",
         "react-toast-notifications": "^2.4.0",
         "styled-components": "^5.2.1",
-        "universal-cookie": "^4.0.4"
+        "universal-cookie": "^4.0.4",
+        "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"
     },
     "scripts": {
         "dev": "next dev -p 3002",
