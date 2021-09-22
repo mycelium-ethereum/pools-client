@@ -13,7 +13,6 @@ import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
 
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
-import { CHAINLINK_PRICE_AGGREGATOR_V3_DECIMALS } from '@libs/constants';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 
 type FarmsLookup = { [address: string]: Farm };
@@ -75,9 +74,12 @@ export const FarmStore: React.FC<
                         provider,
                     ) as AggregatorV3Interface;
 
-                    const { answer } = await priceFeedAggregator.latestRoundData();
+                    const [{ answer }, priceFeedDecimals] = await Promise.all([
+                        priceFeedAggregator.latestRoundData(),
+                        priceFeedAggregator.decimals(),
+                    ]);
 
-                    usdcPrice = new BigNumber(ethers.utils.formatUnits(answer, CHAINLINK_PRICE_AGGREGATOR_V3_DECIMALS));
+                    usdcPrice = new BigNumber(ethers.utils.formatUnits(answer, priceFeedDecimals));
                 } else {
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
