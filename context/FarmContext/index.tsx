@@ -5,7 +5,6 @@ import { ethers } from 'ethers';
 import { StakingRewards } from '@libs/staking/typechain';
 import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { UniswapV2Router02, UniswapV2Router02__factory } from '@libs/staking/uniswapRouterV2';
-import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
 
 import BigNumber from 'bignumber.js';
@@ -39,7 +38,6 @@ export const FarmStore: React.FC<
     const { signer, config, account, provider } = useWeb3();
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
-    const { tokenMap } = usePoolTokens();
 
     // used to fetch details of tokens on both sides of a sushi pool
     const getBptDetails = async (balancerPoolId: string, pool: string): Promise<Farm['bptDetails']> => {
@@ -64,7 +62,7 @@ export const FarmStore: React.FC<
                 const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
                 const tokenBalance = tokenBalances[index];
 
-                const isPoolToken = Boolean(tokenMap[address]);
+                let isPoolToken = false;
 
                 let usdcPrice = new BigNumber(0);
 
@@ -81,6 +79,7 @@ export const FarmStore: React.FC<
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
                     [usdcPrice] = await fetchTokenPrice(pool, [address], provider);
+                    isPoolToken = true;
                 }
 
                 return {
