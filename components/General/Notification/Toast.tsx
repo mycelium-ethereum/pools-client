@@ -42,7 +42,7 @@ const Toast: ({ key, props }: ToastKey) => ReactNode[] = ({ key, props }: ToastK
             ];
 
         default:
-            return [];
+            return ['Pending Transaction'];
     }
 };
 
