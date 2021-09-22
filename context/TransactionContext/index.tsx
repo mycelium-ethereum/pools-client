@@ -28,17 +28,8 @@ type HandleTransactionType =
       ) => void)
     | undefined;
 
-type HandleAsyncType =
-    | ((
-          callMethod: (...args: any) => Promise<Result>,
-          params: any[], // eslint-disable-line
-          options?: Options,
-      ) => void)
-    | undefined;
-
 interface TransactionActionsContextProps {
     handleTransaction: HandleTransactionType;
-    handleAsync: HandleAsyncType;
 }
 interface TransactionContextProps {
     pendingCount: number;
@@ -125,44 +116,10 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         });
     };
 
-    /** Very similar function to above but handles regular async functions, mainly signing */
-    const handleAsync: HandleAsyncType = async (callMethod, params, options) => {
-        const { onError, onSuccess } = options ?? {};
-        // actually returns a string error in the library
-        const toastId = addToast(['Pending Transaction', 'Approve transaction with provider'], {
-            appearance: 'loading' as AppearanceTypes,
-            autoDismiss: false,
-        });
-
-        setPendingCount(pendingCount + 1);
-
-        const res = callMethod(...params);
-        Promise.resolve(res).then((res) => {
-            if (res.status === 'error') {
-                updateToast(toastId as unknown as string, {
-                    // confirmed this is a string
-                    content: `Transaction cancelled. ${res.message}`,
-                    appearance: 'error',
-                    autoDismiss: true,
-                });
-                onError ? onError(res) : null;
-            } else {
-                updateToast(toastId as unknown as string, {
-                    content: `${res.message}`,
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-                onSuccess ? onSuccess(res) : null;
-            }
-            setPendingCount(pendingCount - 1);
-        });
-    };
-
     return (
         <TransactionActionsContext.Provider
             value={{
                 handleTransaction,
-                handleAsync,
             }}
         >
             <TransactionContext.Provider
