@@ -15,12 +15,10 @@ export default (() => {
                 network={networkConfig[network ?? 0]?.name ?? 'Unknown'}
                 wallet={wallet?.name ?? 'Unknown'}
             >
-                <Icon component={GasIcon} className="icon mr-2" />
+                <Icon component={GasIcon} className="icon h-[22px] w-[20px] mr-2" />
                 <span>{gasPrice?.toFixed(3)}</span>
                 <style>{`
                     .icon {
-                        height: 22px;
-                        width: 20px;
                         vertical-align: 0;
                     }
                     .icon svg {
