@@ -26,7 +26,6 @@ export type Network = {
     hex: string;
     publicRPC: string;
     graphUri: string;
-    sushiRouterAddress: string;
     balancerVaultAddress: string;
     usdcAddress: string;
     // lookup from known token addresses to Chainink price feed address
@@ -55,7 +54,6 @@ export const networkConfig: Record<string, Network> = {
         publicRPC: '',
         hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
@@ -85,7 +83,6 @@ export const networkConfig: Record<string, Network> = {
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
@@ -153,7 +150,6 @@ export const networkConfig: Record<string, Network> = {
         hex: '0xA4B1',
         publicRPC: 'https://arb1.arbitrum.io/rpc',
         graphUri: 'TODO',
-        sushiRouterAddress: '0x1b02da8cb0d097eb8d57a175b88c7d8b47997506',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         knownUSDCPriceFeeds: {
@@ -177,7 +173,6 @@ export const networkConfig: Record<string, Network> = {
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
@@ -196,7 +191,6 @@ export const networkConfig: Record<string, Network> = {
         bptFarms: [],
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
