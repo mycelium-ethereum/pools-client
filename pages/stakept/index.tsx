@@ -11,7 +11,7 @@ export default (() => {
     const router = useRouter();
 
     useEffect(() => {
-        router.prefetch('/stakept');
+        router.prefetch('/staketpt');
     }, []);
 
     return (

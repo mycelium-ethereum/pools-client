@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
-const STAKEPT = 0;
+const STAKETPT = 0;
 const STAKEBPT = 1;
 
 // const InvestNav
@@ -10,15 +10,15 @@ export default (({ left, right }) => {
     const router = useRouter();
 
     useEffect(() => {
-        router.prefetch('/stakept');
+        router.prefetch('/staketpt');
         router.prefetch('/stakebpt');
     }, []);
 
     const handleRoute = (route: number) => {
         switch (route) {
-            case STAKEPT:
+            case STAKETPT:
                 router.push({
-                    pathname: '/stakept',
+                    pathname: '/staketpt',
                 });
                 break;
             case STAKEBPT:
@@ -36,7 +36,7 @@ export default (({ left, right }) => {
         <StakeNav>
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
-                <Item onClick={(_e) => handleRoute(STAKEPT)} selected={router.pathname === '/stakept'}>
+                <Item onClick={(_e) => handleRoute(STAKETPT)} selected={router.pathname === '/staketpt'}>
                     Stake Pool
                 </Item>
                 <Item onClick={(_e) => handleRoute(STAKEBPT)} selected={router.pathname === '/stakebpt'}>
