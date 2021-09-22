@@ -101,11 +101,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
-                {options.length ? (
-                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                ) : (
-                    <Loading className="flex items-center h-1/12 w-1/12 ml-auto mr-0 my-auto " aria-hidden="true" />
-                )}
+                <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
             </Menu.Button>
 
             <Transition
@@ -119,26 +115,32 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
                 <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
-                        {options.map((option) => (
-                            <Menu.Item key={option.key}>
-                                {({ active }) => (
-                                    <button
-                                        onClick={() => onSelect(option.key)}
-                                        className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
-                                            'block px-4 py-2 text-sm w-full text-left',
+                        {options.length ? (
+                            <>
+                                {options.map((option) => (
+                                    <Menu.Item key={option.key}>
+                                        {({ active }) => (
+                                            <button
+                                                onClick={() => onSelect(option.key)}
+                                                className={classNames(
+                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                                    'block px-4 py-2 text-sm w-full text-left',
+                                                )}
+                                            >
+                                                {option?.ticker ? (
+                                                    <Logo ticker={option.ticker} className="inline w-[20px] mr-2" />
+                                                ) : (
+                                                    ''
+                                                )}
+                                                {option?.text ?? option.key}
+                                            </button>
                                         )}
-                                    >
-                                        {option?.ticker ? (
-                                            <Logo ticker={option.ticker} className="inline w-[20px] mr-2" />
-                                        ) : (
-                                            ''
-                                        )}
-                                        {option?.text ?? option.key}
-                                    </button>
-                                )}
-                            </Menu.Item>
-                        ))}
+                                    </Menu.Item>
+                                ))}
+                            </>
+                        ) : (
+                            <Loading className="h-1/3 w-1/3 m-auto" />
+                        )}
                     </div>
                 </Menu.Items>
             </Transition>
