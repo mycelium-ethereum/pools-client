@@ -8,6 +8,7 @@ import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
+import { BalancerPoolAsset } from '@libs/types/Staking';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
@@ -93,40 +94,37 @@ const PoolRow: React.FC<{
     strategySubtitle?: string;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
     // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-    const calculateSlpTokenPrice = (farm: FarmTableRowData) => {
-        if (!farm?.slpDetails) {
+    const calculateBptTokenPrice = (farm: FarmTableRowData) => {
+        if (!farm?.bptDetails) {
             return new BigNumber(0);
         }
-        const { token0, token1 } = farm?.slpDetails;
+        const { tokens } = farm?.bptDetails;
 
-        const token0USDCPrice = token0.usdcPrice;
-        const token1USDCPrice = token1.usdcPrice;
+        let balancerPoolUSDCValue = new BigNumber(0);
 
-        const token0USDCValue = token0USDCPrice.times(token0.reserves);
-        const token1USDCValue = token1USDCPrice.times(token1.reserves);
+        for (const token of tokens) {
+            const tokenUSDCValue = token.usdcPrice.times(token.reserves);
+            balancerPoolUSDCValue = balancerPoolUSDCValue.plus(tokenUSDCValue);
+        }
 
-        const slpPoolCombinedUSDCValue = token0USDCValue.plus(token1USDCValue);
-
-        if (farm.stakingTokenSupply.eq(0)) {
+        if (balancerPoolUSDCValue.eq(0) || farm.stakingTokenSupply.eq(0)) {
             return new BigNumber(0);
         }
 
-        return slpPoolCombinedUSDCValue.div(farm.stakingTokenSupply);
+        return balancerPoolUSDCValue.div(farm.stakingTokenSupply);
     };
 
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calculateSlpTokenPrice(farm)),
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calculateBptTokenPrice(farm)),
         [farm],
     );
-
-    console.debug(`${farm.name} token price: ${tokenPrice.toNumber()}`);
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
 
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
 
-    const { slpDetails } = farm;
+    const { bptDetails } = farm;
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
@@ -135,24 +133,7 @@ const PoolRow: React.FC<{
                     {farm?.poolDetails ? (
                         <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                     ) : (
-                        <>
-                            <Logo
-                                className="inline w-[25px] mr-2"
-                                ticker={tokenSymbolToLogoTicker(
-                                    (slpDetails?.token0?.isPoolToken
-                                        ? slpDetails?.token0?.symbol
-                                        : slpDetails?.token1?.symbol) || '',
-                                )}
-                            />
-                            <Logo
-                                className="inline w-[25px] mr-2"
-                                ticker={tokenSymbolToLogoTicker(
-                                    (slpDetails?.token0?.isPoolToken
-                                        ? slpDetails?.token1?.symbol
-                                        : slpDetails?.token0?.symbol) || '',
-                                )}
-                            />
-                        </>
+                        <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
                     )}
                 </div>
                 <div>
@@ -207,3 +188,15 @@ const PoolRow: React.FC<{
         </TableRow>
     );
 };
+
+const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
+    <>
+        {tokens.map((token) => (
+            <Logo
+                key={`balancer-asset-${token.symbol}`}
+                className="inline w-[25px] mr-2"
+                ticker={tokenSymbolToLogoTicker(token.symbol)}
+            />
+        ))}
+    </>
+);

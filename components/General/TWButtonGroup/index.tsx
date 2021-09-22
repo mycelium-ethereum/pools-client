@@ -35,7 +35,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
         <span className="relative z-0 inline-flex shadow-sm">
             {options.map((option, index) =>
                 option.disabled ? (
-                    <TooltipSelector tooltip={{ key: option.disabled.optionKey }}>
+                    <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
                         <button
                             type="button"
                             data-tip
@@ -52,6 +52,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                     </TooltipSelector>
                 ) : (
                     <button
+                        key={`twbg-${option.key}`}
                         type="button"
                         onClick={() => onClick(option.key)}
                         className={classNames(value === option.key ? SELECTED[color] : '', buttonClass, BORDERS)}

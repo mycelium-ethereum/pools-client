@@ -1,4 +1,4 @@
-import { FarmTableDetails } from '@context/FarmContext';
+import { FarmTableDetails } from '@libs/types/Staking';
 import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 

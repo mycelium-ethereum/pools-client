@@ -3,12 +3,14 @@ import { StakingRewards__factory } from '@libs/staking/typechain/factories/Staki
 
 import { ethers } from 'ethers';
 
+// the vault address is the same on all networks
+const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
+
 type Farm = {
     address: string;
     abi: ethers.ContractInterface;
-    token0IsPoolToken?: boolean;
-    token1IsPoolToken?: boolean;
     pool: string;
+    balancerPoolId?: string;
 };
 export type Network = {
     name: string;
@@ -20,11 +22,12 @@ export type Network = {
         };
     };
     poolFarms: Farm[];
-    slpFarms: Farm[];
+    bptFarms: Farm[];
     hex: string;
     publicRPC: string;
     graphUri: string;
     sushiRouterAddress: string;
+    balancerVaultAddress: string;
     usdcAddress: string;
     knownNonPoolTokenPricePaths?: {
         [address: string]: string[];
@@ -46,11 +49,12 @@ export const networkConfig: Record<string, Network> = {
         name: 'Unknown',
         contracts: {},
         poolFarms: [],
-        slpFarms: [],
+        bptFarms: [],
         publicRPC: '',
         hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         sushiRouterAddress: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
     },
     '421611': {
@@ -67,20 +71,19 @@ export const networkConfig: Record<string, Network> = {
                 address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
                 pool: '',
                 abi: StakingRewards__factory.abi,
-                token1IsPoolToken: false,
             },
             {
                 address: '0x6213c21518EF9d4875d9C41F7ad8d16B4f986cB2',
                 pool: '',
                 abi: StakingRewards__factory.abi,
-                token1IsPoolToken: false,
             },
         ],
-        slpFarms: [],
+        bptFarms: [],
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
         sushiRouterAddress: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
     },
     '42161': {
@@ -134,69 +137,20 @@ export const networkConfig: Record<string, Network> = {
                 abi: StakingRewards__factory.abi,
             },
         ],
-        slpFarms: [
-            // SLP farms
+        bptFarms: [
             {
-                address: '0x1908D6f83DF6E5cbc2DA9CaeF2b88DF78EA22833', // 1-ETH/USD Short/Long
-                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: true,
-            },
-            {
-                address: '0xEC49D9C1A45e135999f88A1B3a6631414Dc26720', // 1-ETH/USD Short/wETH
-                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: false,
-                token1IsPoolToken: true,
-            },
-            {
-                address: '0x5Bc1E7D49a1C5433358317426b7e526367D60CD8', // 3-ETH/USD Short/Long
-                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: true,
-            },
-            {
-                address: '0x04148587eCDE89933FC582E4dC5eE38d8C978b36', // 3-ETH/USD Short/wETH
-                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: false,
-            },
-            {
-                address: '0x71505bc95053d57F9e699BC38A3621b0F564B042', // 1-BTC/USD Short/Long
-                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: true,
-            },
-            {
-                address: '0xD2701998bc649Adbc34a4039d2d15987e9814568', // 1-BTC/USD Short/wBTC
-                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: false,
-            },
-            {
-                address: '0x97C3d137b3158443Cac3006fCDaDeD23Dd9a36da', // 3-BTC/USD Short/Long
+                // mock farm with https://arbiscan.io/token/0x64541216bafffeec8ea535bb71fbc927831d0595 as staking token
+                address: '0x64Bb77266eE000f441920BA41561Cd82f69b4c27',
+                balancerPoolId: '0x64541216bafffeec8ea535bb71fbc927831d0595000100000000000000000002',
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
-                token0IsPoolToken: true,
-                token1IsPoolToken: true,
-            },
-            {
-                address: '0x8D56b35A3f50d42Ae39e953448B0138FCDF0894e', // 3-BTC/USD Short/wBTC
-                pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
-                abi: StakingRewards__factory.abi,
-                token0IsPoolToken: false,
-                token1IsPoolToken: true,
             },
         ],
         hex: '0xA4B1',
         publicRPC: 'https://arb1.arbitrum.io/rpc',
         graphUri: 'TODO',
         sushiRouterAddress: '0x1b02da8cb0d097eb8d57a175b88c7d8b47997506',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         knownNonPoolTokenPricePaths: {
             // wBTC: USDC -> wETH -> wBTC
@@ -211,6 +165,9 @@ export const networkConfig: Record<string, Network> = {
                 '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', // wETH
             ],
         },
+        // knownPoolTokenAddress: {
+        //     ''
+        // },
     },
     '42': {
         name: 'Kovan',
@@ -222,11 +179,12 @@ export const networkConfig: Record<string, Network> = {
             },
         },
         poolFarms: [],
-        slpFarms: [],
+        bptFarms: [],
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
         sushiRouterAddress: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
     },
     '1337': {
@@ -240,10 +198,11 @@ export const networkConfig: Record<string, Network> = {
         },
         hex: '',
         poolFarms: [],
-        slpFarms: [],
+        bptFarms: [],
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         sushiRouterAddress: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
     },
 };

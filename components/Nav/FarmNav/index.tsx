@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
 const STAKE = 0;
-const SLP = 1;
+const BPT = 1;
 
 // const InvestNav
 export default (({ left, right }) => {
@@ -11,7 +11,7 @@ export default (({ left, right }) => {
 
     useEffect(() => {
         router.prefetch('/stake');
-        router.prefetch('/slp');
+        router.prefetch('/bpt');
     }, []);
 
     const handleRoute = (route: number) => {
@@ -21,9 +21,9 @@ export default (({ left, right }) => {
                     pathname: '/stake',
                 });
                 break;
-            case SLP:
+            case BPT:
                 router.push({
-                    pathname: '/slp',
+                    pathname: '/bpt',
                 });
                 break;
             default:
@@ -39,8 +39,8 @@ export default (({ left, right }) => {
                 <Item onClick={(_e) => handleRoute(STAKE)} selected={router.pathname === '/stake'}>
                     Stake Pool
                 </Item>
-                <Item onClick={(_e) => handleRoute(SLP)} selected={router.pathname === '/slp'}>
-                    Stake SLP
+                <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/bpt'}>
+                    Stake BPT
                 </Item>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>

@@ -25,24 +25,21 @@ import { Farm } from '@libs/types/Staking';
 import { Logo } from '@components/General/Logo';
 
 const getFilterFieldsFromFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
-    if (!farm.slpDetails) {
+    if (!farm.bptDetails) {
         return {};
     }
-    const firstFoundPoolToken = farm.slpDetails.token0.isPoolToken ? farm.slpDetails.token0 : farm.slpDetails.token1;
+
+    const firstFoundPoolToken = farm.bptDetails.tokens.find((token) => token.isPoolToken);
+
+    if (!firstFoundPoolToken) {
+        return {};
+    }
 
     // pool tokens have format <leverage><side>-<market>
     // first character is leverage (1, 3)
     const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
-    // since all sushi pools contain the short token, we check for the presence of the long token in the pair
-    // if long pool token is one of the tokens in the sushi pair, use long side
-    // second character is the side (S, L)
-    const poolContainsLongToken =
-        farm.slpDetails.token0.symbol.slice(1, 2).startsWith('L') ||
-        farm.slpDetails.token1.symbol.slice(1, 2).startsWith('L');
-
     return {
         leverage,
-        side: poolContainsLongToken ? SideEnum.long : SideEnum.short,
     };
 };
 
@@ -82,7 +79,7 @@ export default (({
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
             stakingTokenSupply: farm.stakingTokenSupply,
-            slpDetails: farm.slpDetails,
+            bptDetails: farm.bptDetails,
             poolDetails: farm.poolDetails,
         };
     });
@@ -237,7 +234,6 @@ export default (({
         if (handleTransaction) {
             handleTransaction(contract.withdraw, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
                 onSuccess: () => {
-                    console.log('UNSTAKE ON SUCCESS');
                     refreshFarm(farmAddress);
                     dispatch({
                         type: 'reset',

@@ -2,7 +2,7 @@ import BigNumber from 'bignumber.js';
 import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 
-export type SlpPairTokenDetails = {
+export type BalancerPoolAsset = {
     address: string;
     symbol: string;
     isPoolToken: boolean;
@@ -11,25 +11,26 @@ export type SlpPairTokenDetails = {
     decimals: number;
 };
 
+export type FarmTableDetails = {
+    totalStaked: BigNumber;
+    myStaked: BigNumber;
+    myRewards: BigNumber;
+    stakingTokenBalance: BigNumber;
+    stakingTokenSupply: BigNumber;
+    rewardsPerYear: BigNumber;
+    bptDetails?: {
+        tokens: BalancerPoolAsset[];
+    };
+    poolDetails?: {
+        poolTokenPrice: BigNumber;
+    };
+};
+
 export type Farm = {
     name: string;
     address: string;
     contract: StakingRewards;
     stakingToken: ERC20;
     stakingTokenDecimals: number;
-    totalStaked: BigNumber;
-    // tvl: BigNumber;
-    myStaked: BigNumber;
-    myRewards: BigNumber;
-    stakingTokenBalance: BigNumber;
     stakingTokenAllowance: BigNumber;
-    stakingTokenSupply: BigNumber;
-    rewardsPerYear: BigNumber;
-    slpDetails?: {
-        token0: SlpPairTokenDetails;
-        token1: SlpPairTokenDetails;
-    };
-    poolDetails?: {
-        poolTokenPrice: BigNumber;
-    };
-};
+} & FarmTableDetails;
