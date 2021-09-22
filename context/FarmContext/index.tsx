@@ -3,13 +3,16 @@ import { Children } from 'libs/types/General';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { StakingRewards } from '@libs/staking/typechain';
-import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { UniswapV2Router02, UniswapV2Router02__factory } from '@libs/staking/uniswapRouterV2';
+import {
+    AggregatorV3Interface,
+    AggregatorV3Interface__factory,
+    ERC20,
+    ERC20__factory,
+} from '@tracer-protocol/perpetual-pools-contracts/types';
 import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
 
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
-import { USDC_DECIMALS } from '@libs/constants';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 
 type FarmsLookup = { [address: string]: Farm };
@@ -49,12 +52,6 @@ export const FarmStore: React.FC<
 
         const [tokenAddresses, tokenBalances] = await balancerPool.getPoolTokens(balancerPoolId);
 
-        const sushiRouter = new ethers.Contract(
-            config.sushiRouterAddress,
-            UniswapV2Router02__factory.abi,
-            provider,
-        ) as UniswapV2Router02;
-
         const tokens: BalancerPoolAsset[] = await Promise.all(
             tokenAddresses.map(async (address, index) => {
                 const tokenContract = new ethers.Contract(address, ERC20__factory.abi, provider) as ERC20;
@@ -68,13 +65,21 @@ export const FarmStore: React.FC<
 
                 if (address.toLowerCase() === config.usdcAddress.toLowerCase()) {
                     usdcPrice = new BigNumber(1);
-                } else if (config?.knownNonPoolTokenPricePaths?.[address]) {
-                    const oneToken = new BigNumber('1').times(10 ** decimals);
-                    const usdcPricePath = config.knownNonPoolTokenPricePaths[address];
+                } else if (config?.knownUSDCPriceFeeds?.[address]) {
+                    // fetch USDC price for known markets (BTC and ETH)
+                    // known market price feed addresses are configured in Web3Context.Config.ts
+                    const priceFeedAggregator = new ethers.Contract(
+                        config.knownUSDCPriceFeeds[address],
+                        AggregatorV3Interface__factory.abi,
+                        provider,
+                    ) as AggregatorV3Interface;
 
-                    const [_usdcPrice] = await sushiRouter.getAmountsIn(oneToken.toFixed(), usdcPricePath);
+                    const [{ answer }, priceFeedDecimals] = await Promise.all([
+                        priceFeedAggregator.latestRoundData(),
+                        priceFeedAggregator.decimals(),
+                    ]);
 
-                    usdcPrice = new BigNumber(ethers.utils.formatUnits(_usdcPrice, USDC_DECIMALS));
+                    usdcPrice = new BigNumber(ethers.utils.formatUnits(answer, priceFeedDecimals));
                 } else {
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token

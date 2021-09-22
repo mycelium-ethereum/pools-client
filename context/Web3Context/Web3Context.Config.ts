@@ -26,11 +26,12 @@ export type Network = {
     hex: string;
     publicRPC: string;
     graphUri: string;
-    sushiRouterAddress: string;
     balancerVaultAddress: string;
     usdcAddress: string;
-    knownNonPoolTokenPricePaths?: {
-        [address: string]: string[];
+    // lookup from known token addresses to Chainink price feed address
+    // https://docs.chain.link/docs/arbitrum-price-feeds/
+    knownUSDCPriceFeeds: {
+        [address: string]: string;
     };
 };
 
@@ -53,9 +54,9 @@ export const networkConfig: Record<string, Network> = {
         publicRPC: '',
         hex: '',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        knownUSDCPriceFeeds: {},
     },
     '421611': {
         name: 'Arbitrum Rinkeby',
@@ -82,9 +83,9 @@ export const networkConfig: Record<string, Network> = {
         hex: '0x66EEB',
         publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        knownUSDCPriceFeeds: {},
     },
     '42161': {
         name: 'Arbitrum',
@@ -149,25 +150,14 @@ export const networkConfig: Record<string, Network> = {
         hex: '0xA4B1',
         publicRPC: 'https://arb1.arbitrum.io/rpc',
         graphUri: 'TODO',
-        sushiRouterAddress: '0x1b02da8cb0d097eb8d57a175b88c7d8b47997506',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-        knownNonPoolTokenPricePaths: {
-            // wBTC: USDC -> wETH -> wBTC
-            '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': [
-                '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8', // USDC
-                '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', // wETH
-                '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f', // wBTC
-            ],
-            // wETH: USDC -> wETH -> wBTC
-            '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': [
-                '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8', // USDC
-                '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1', // wETH
-            ],
+        knownUSDCPriceFeeds: {
+            // wBTC: BTC/USD
+            '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': '0x6ce185860a4963106506C203335A2910413708e9',
+            // wETH: ETH/USD
+            '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
         },
-        // knownPoolTokenAddress: {
-        //     ''
-        // },
     },
     '42': {
         name: 'Kovan',
@@ -183,9 +173,9 @@ export const networkConfig: Record<string, Network> = {
         publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
         hex: '0x2A',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        knownUSDCPriceFeeds: {},
     },
     '1337': {
         name: 'Local',
@@ -201,8 +191,8 @@ export const networkConfig: Record<string, Network> = {
         bptFarms: [],
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
-        sushiRouterAddress: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        knownUSDCPriceFeeds: {},
     },
 };
