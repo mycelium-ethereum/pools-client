@@ -68,7 +68,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
         >
             <div className="p-6">
                 <div className="flex justify-between">
-                    <StakeModalHeader>{title || 'Stake Pool Tokens'}</StakeModalHeader>
+                    <StakeModalHeader>{title || 'Stake Tracer Pool Tokens'}</StakeModalHeader>
                     <Gas />
                     <div
                         className="w-3 h-3 ml-4 cursor-pointer"
