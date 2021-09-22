@@ -17,7 +17,7 @@ import {
     PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { CommitActionEnum, CommitEnum } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
@@ -25,9 +25,6 @@ import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 
 type Options = {
     onSuccess?: (...args: any) => any;
-    poolName?: string;
-    actionType?: CommitActionEnum;
-    network?: number | undefined;
 };
 
 interface ContextProps {

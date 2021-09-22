@@ -85,16 +85,6 @@ const appearances: Record<
     },
 };
 
-// const Close = styled(CloseOutlined)`
-//     position: absolute;
-//     top: 1.5rem;
-//     right: 1.5rem;
-//     height: 1rem;
-//     width: 1rem;
-//     color: #111928;
-//     cursor: pointer;
-// `;
-
 const Content = styled((props: any) => (
     <div className={classNames(
             `react-toast-notifications__toast__content`,

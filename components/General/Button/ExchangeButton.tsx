@@ -59,23 +59,20 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                     variant="primary"
                     disabled={!selectedPool || amount.eq(0) || invalidAmount.isInvalid}
                     onClick={(_e) => {
-                        let side_;
+                        let commitType;
                         if (!commit) {
                             return;
                         }
                         if (actionType === CommitActionEnum.mint) {
-                            side_ = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
+                            commitType = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
                         } else {
                             // actionType === CommitActionEnum.burn
-                            side_ = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
+                            commitType = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
                         }
-                        commit(selectedPool ?? '', side_, amount, {
+                        commit(selectedPool ?? '', commitType, amount, {
                             onSuccess: () => {
                                 swapDispatch?.({ type: 'setAmount', value: new BigNumber(0) });
                             },
-                            poolName: pool.name,
-                            actionType:
-                                actionType === CommitActionEnum.mint ? CommitActionEnum.mint : CommitActionEnum.burn,
                         });
                     }}
                 >
