@@ -9,8 +9,8 @@ export enum ToastKeyEnum {
 }
 
 export interface ToastKeyAction {
-    startToast: ToastKey;
-    endToast: ToastKey;
+    waiting: ToastKey;
+    success: ToastKey;
 }
 
 export interface ToastKey {

@@ -351,25 +351,21 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
                     {
                         network: network,
-                        statusMessages: {
-                            waiting: 'Submitting commit',
-                            error: 'Failed to commit',
-                        },
                         onSuccess: (receipt) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
                             updateTokenBalances(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
-                        toastKeyAction: {
-                            startToast: {
+                        statusMessage: {
+                            waiting: {
                                 key: ToastKeyEnum.Commit,
                                 props: {
                                     poolName: options?.poolName,
                                     actionType: options?.actionType,
                                 },
                             },
-                            endToast: {
+                            success: {
                                 key: ToastKeyEnum.Committed,
                                 props: {
                                     poolName: options?.poolName,
@@ -396,10 +392,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
                 network: network,
-                statusMessages: {
-                    waiting: 'Submitting commit',
-                    error: 'Failed to commit',
-                },
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({
@@ -409,9 +401,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
-                toastKeyAction: {
-                    startToast: { key: ToastKeyEnum.Unlocking },
-                    endToast: { key: ToastKeyEnum.Unlocked },
+                statusMessage: {
+                    waiting: { key: ToastKeyEnum.Unlocking },
+                    success: { key: ToastKeyEnum.Unlocked },
                 },
             });
         }

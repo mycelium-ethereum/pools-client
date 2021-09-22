@@ -9,14 +9,7 @@ export type Options = {
     onError?: (error?: Error | Result) => any;
     afterConfirmation?: (hash: string) => any;
     network?: number; // network number;
-    statusMessages?: {
-        waiting?: string; // transaction message for when we are waiting for the user to confirm
-        error?: string; // transaction message for when the transaction fails
-        success?: string; // transaction message for when the transaction succeeds
-        pending?: string; // transaction message for when the transaction is pending
-        userConfirmed?: string; // transaction method for when user confirms through provider
-    };
-    toastKeyAction?: ToastKeyAction;
+    statusMessage?: ToastKeyAction;
 };
 type HandleTransactionType =
     | ((
@@ -60,11 +53,11 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess, afterConfirmation, toastKeyAction } = options ?? {};
+        const { onError, onSuccess, afterConfirmation, statusMessage } = options ?? {};
 
         let toastId: unknown;
-        if (toastKeyAction) {
-            toastId = addToast(Toast(toastKeyAction.startToast), {
+        if (statusMessage) {
+            toastId = addToast(Toast(statusMessage.waiting), {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
             });
@@ -77,9 +70,9 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
             const receipt = await contractTransaction.wait();
 
-            if (toastKeyAction) {
+            if (statusMessage) {
                 updateToast(toastId as unknown as string, {
-                    content: Toast(toastKeyAction.endToast),
+                    content: Toast(statusMessage.success),
                     appearance: 'success',
                     autoDismiss: true,
                 });
@@ -91,7 +84,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             console.error('Failed transaction', error);
             updateToast(toastId as unknown as string, {
                 // confirmed this is a string
-                content: ['Transaction Cancelled', statusMessages?.error ?? `Transaction cancelled: ${error.message}`],
+                content: ['Transaction Cancelled', `Transaction cancelled: ${error.message}`],
                 appearance: 'error',
                 autoDismiss: true,
             });
@@ -102,15 +95,12 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Very similar function to above but handles regular async functions, mainly signing */
     const handleAsync: HandleAsyncType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess } = options ?? {};
+        const { onError, onSuccess } = options ?? {};
         // actually returns a string error in the library
-        const toastId = addToast(
-            ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
-            {
-                appearance: 'loading' as AppearanceTypes,
-                autoDismiss: false,
-            },
-        );
+        const toastId = addToast(['Pending Transaction', 'Approve transaction with provider'], {
+            appearance: 'loading' as AppearanceTypes,
+            autoDismiss: false,
+        });
 
         setPendingCount(pendingCount + 1);
 
@@ -119,14 +109,14 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             if (res.status === 'error') {
                 updateToast(toastId as unknown as string, {
                     // confirmed this is a string
-                    content: statusMessages?.error ?? `Transaction cancelled. ${res.message}`,
+                    content: `Transaction cancelled. ${res.message}`,
                     appearance: 'error',
                     autoDismiss: true,
                 });
                 onError ? onError(res) : null;
             } else {
                 updateToast(toastId as unknown as string, {
-                    content: statusMessages?.success ?? `${res.message}`,
+                    content: `${res.message}`,
                     appearance: 'success',
                     autoDismiss: true,
                 });
