@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useRef } from 'react';
 import { Children } from 'libs/types/General';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
-import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo } from 'components/General/Logo';
+import Loading from 'components/General/Loading';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -103,7 +104,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 {options.length ? (
                     <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
                 ) : (
-                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                    <Loading className="flex items-center h-1/12 w-1/12 ml-auto mr-0 my-auto " aria-hidden="true" />
                 )}
             </Menu.Button>
 
