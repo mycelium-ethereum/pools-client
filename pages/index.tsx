@@ -10,7 +10,6 @@ import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
 
-
 export default (() => {
     const router = useRouter();
 
@@ -29,7 +28,7 @@ export default (() => {
                 <PendingCommits />
             </PoolStore>
             <Footer />
-            <SecurityWidget 
+            <SecurityWidget
                 right
                 variant={'system'}
                 color={'#3E58C9'}
