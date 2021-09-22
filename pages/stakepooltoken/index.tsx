@@ -11,7 +11,7 @@ export default (() => {
     const router = useRouter();
 
     useEffect(() => {
-        router.prefetch('/staketpt');
+        router.prefetch('/stakepooltoken');
     }, []);
 
     return (
