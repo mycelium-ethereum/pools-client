@@ -59,3 +59,4 @@ export const KOVAN = '42';
 
 export const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');
 export const USDC_DECIMALS = 6;
+export const CHAINLINK_PRICE_AGGREGATOR_V3_DECIMALS = 8;
