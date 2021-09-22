@@ -119,8 +119,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         id: commit.args.commitID.toNumber(),
                                         amount: new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals)),
                                         type: commit.args.commitType as CommitEnum,
-                                        from: txn.from,
-                                        txnHash: txn.hash,
+                                        from: txn?.from,
+                                        txnHash: txn?.hash,
                                         created: Date.now() / 1000,
                                     },
                                 });
@@ -374,7 +374,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         className="text-sm text-tracer-400 underline cursor-pointer"
                                         onClick={() => openArbiscan(ArbiscanEnum.token, tokenAddress)}
                                     >
-                                        View on Arbiscan
+                                        View token on Arbiscan
                                     </div>
                                 ),
                             },

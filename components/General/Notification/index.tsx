@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon, { CloseOutlined, InfoCircleFilled } from '@ant-design/icons';
+import Icon, { InfoCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import Error from 'public/img/general/error.svg';
 import Success from 'public/img/general/success.svg';
@@ -8,6 +8,7 @@ import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
+import Close from '/public/img/general/close-black.svg';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -35,6 +36,8 @@ const hashieStates = (placement: PlacementType) => ({
     exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
+const icon = "text-2xl leading-none text-transparent align-baseline"
+
 const appearances: Record<
     string,
     {
@@ -45,13 +48,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Success} />,
+        icon: <Icon className={icon} component={Success} />,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Error} />,
+        icon: <Icon className={icon} component={Error} />,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -63,34 +66,34 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <Icon className="text-2xl leading-none text-transparent mr-2" component={Warning} />,
+        icon: <Icon className={icon} component={Warning} />,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <InfoCircleFilled className="text-2xl leading-none text-transparent mr-2" />,
+        icon: <InfoCircleFilled className={icon} />,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',
     },
     loading: {
-        icon: <img className="w-1/6 h-1/6 mr-3" src="/img/general/loading.gif" alt="Tracer Loading" />,
+        icon: <img className="w-[35px] inline mr-2" src="/img/general/loading.gif" alt="Tracer Loading" />,
         text: '#111928',
         fg: '#2684FF',
         bg: '#00156C',
     },
 };
 
-const Close = styled(CloseOutlined)`
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    height: 1rem;
-    width: 1rem;
-    color: #111928;
-    cursor: pointer;
-`;
+// const Close = styled(CloseOutlined)`
+//     position: absolute;
+//     top: 1.5rem;
+//     right: 1.5rem;
+//     height: 1rem;
+//     width: 1rem;
+//     color: #111928;
+//     cursor: pointer;
+// `;
 
 const Content = styled((props: any) => (
     <div className={classNames(
@@ -148,16 +151,17 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <Close onClick={onDismiss}/>
-            <div className="flex">
-                {appearance.icon}
-                <div>
-                    <div className="text-cool-gray-900 text-xl">
-                        {children_[0]}
-                    </div>
-                    <Content>{children_[1]}</Content>
-                </div>
+            <div className="text-cool-gray-900 text-base font-bold mb-2">
+                <span className="mr-2">
+                    {appearance.icon}
+                </span>
+                {/* title */}
+                <span>
+                    {children_[0]}
+                </span>
+                <Close className="absolute h-3 w-3 top-[2rem] right-6" onClick={onDismiss}/>
             </div>
+            <Content>{children_[1]}</Content>
         </ToastWrapper>
     );
 };
