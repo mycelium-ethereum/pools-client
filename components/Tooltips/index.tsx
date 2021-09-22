@@ -54,3 +54,15 @@ export const PowerLeverageTip: React.FC = ({ children }) => {
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
+
+export const GasPriceTooltip: React.FC<{
+    network: string;
+    wallet: string;
+}> = ({ children, network, wallet }) => {
+    const Content = (
+        <>
+            The current gas fee on {network} measured in GWEI, recommended by {wallet}.
+        </>
+    );
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
