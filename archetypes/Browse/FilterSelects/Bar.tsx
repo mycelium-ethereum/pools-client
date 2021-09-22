@@ -2,6 +2,7 @@ import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
 import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -20,7 +21,9 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="mr-6">
-                    <h3 className="mb-1">Power Leverage</h3>
+                    <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
+                        <h3 className="mb-1">Power Leverage</h3>
+                    </TooltipSelector>
                     <Dropdown
                         className="w-full"
                         value={state.leverage}

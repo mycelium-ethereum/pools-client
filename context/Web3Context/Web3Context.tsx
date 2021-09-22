@@ -214,7 +214,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 errorToastID.current = '';
             }
         }
-    }, [network]);
+    }, [network, account]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();

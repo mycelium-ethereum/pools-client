@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo } from 'react';
 import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
@@ -8,42 +8,16 @@ import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
-import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 type SummaryProps = {
     pool: Pool;
     amount: BigNumber;
     isLong: boolean;
-};
-
-// returns the timestamp when a commit is expected to be executed
-const expectedCommitExecution: (
-    lastUpdate: BigNumber,
-    updateInterval: BigNumber,
-    frontRunningInterval: BigNumber,
-) => number = (lastUpdate, updateInterval, frontRunningInterval) => {
-    const [expectedRebalance, setExpectedRebalance] = useState(0);
-
-    const beforeFrontRunning = useIntervalCheck(expectedRebalance, frontRunningInterval.toNumber());
-
-    useEffect(() => {
-        setExpectedRebalance(lastUpdate.plus(updateInterval).toNumber());
-    }, [lastUpdate, updateInterval]);
-
-    useEffect(() => {
-        if (!beforeFrontRunning) {
-            if (!lastUpdate.eq(0)) {
-                const nextUpdate = lastUpdate.plus(updateInterval.times(2)).toNumber();
-                setExpectedRebalance(Math.floor(nextUpdate));
-            }
-        }
-    }, [beforeFrontRunning]);
-
-    return expectedRebalance;
+    receiveIn: number;
 };
 
 // const BuySummary
-export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
+export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -61,8 +35,6 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
         shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
     };
-
-    const receiveIn = expectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     return (
         <HiddenExpand
@@ -106,7 +78,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
     );
 };
 
-export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
+export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -120,8 +92,6 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) =>
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
-
-    const receiveIn = expectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     return (
         <HiddenExpand

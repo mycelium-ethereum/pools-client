@@ -49,21 +49,6 @@ const Footer = styled(({ className }) => {
                         Security Audit
                     </a>
                 </Item>
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">*/}
-                {/*        Docs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">*/}
-                {/*        FAQs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">*/}
-                {/*        Tutorials*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
             </Items>
         </div>
     );
@@ -74,7 +59,7 @@ const Footer = styled(({ className }) => {
     margin-top: auto;
     padding: 1rem 2rem;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         flex-direction: column;
     }
 `;
@@ -82,7 +67,7 @@ const Footer = styled(({ className }) => {
 const Socials = styled.div`
     display: flex;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         margin: 2rem 0 3rem;
     }
 `;
@@ -98,14 +83,14 @@ const SocialIcon = styled.a`
 const Items = styled.div`
     display: flex;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         flex-direction: column;
     }
 `;
 const Item = styled.div`
     margin-left: 2rem;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         margin-left: 0;
         margin-bottom: 1rem;
 

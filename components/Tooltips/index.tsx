@@ -34,3 +34,35 @@ export const LockTip: React.FC = ({ children }) => {
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
+
+export const PowerLeverageTip: React.FC = ({ children }) => {
+    const Content = (
+        <>
+            A new type of leverage used by Perpetual Pools to amplify returns.{' '}
+            <a
+                onClick={() =>
+                    window.open(
+                        'https://docs.tracer.finance/market-types/perpetual-pools/mechanism-design#power-leverage',
+                        '_blank',
+                        'noopener',
+                    )
+                }
+            >
+                Learn more.
+            </a>
+        </>
+    );
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const GasPriceTooltip: React.FC<{
+    network: string;
+    wallet: string;
+}> = ({ children, network, wallet }) => {
+    const Content = (
+        <>
+            The current gas fee on {network} measured in GWEI, recommended by {wallet}.
+        </>
+    );
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
