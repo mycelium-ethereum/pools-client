@@ -189,6 +189,20 @@ export default (({
 
         if (handleTransaction) {
             handleTransaction(contract.stake, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
+                statusMessages: {
+                    waiting: {
+                        title: `Staking ${farm.name}`,
+                        body: '',
+                    },
+                    success: {
+                        title: `${farm.name} Staked`,
+                        body: '',
+                    },
+                    error: {
+                        title: `Stake ${farm.name} failed`,
+                        body: '',
+                    },
+                },
                 onSuccess: () => {
                     refreshFarm(farmAddress);
                     dispatch({
@@ -206,6 +220,20 @@ export default (({
 
         if (handleTransaction) {
             handleTransaction(contract.withdraw, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
+                statusMessages: {
+                    waiting: {
+                        title: `Unstaking ${farm.name}`,
+                        body: '',
+                    },
+                    success: {
+                        title: `${farm.name} Unstaked`,
+                        body: '',
+                    },
+                    error: {
+                        title: `Unstake ${farm.name} failed`,
+                        body: '',
+                    },
+                },
                 onSuccess: () => {
                     console.log('UNSTAKE ON SUCCESS');
                     refreshFarm(farmAddress);
@@ -223,6 +251,19 @@ export default (({
 
         if (handleTransaction) {
             handleTransaction(contract.getReward, [], {
+                statusMessages: {
+                    waiting: {
+                        title: `Claiming TCR`,
+                        body: '',
+                    },
+                    success: {
+                        title: `TCR Claimed`,
+                        body: '',
+                    },
+                    error: {
+                        title: `Claim TCR Failed`,
+                    },
+                },
                 onSuccess: () => {
                     refreshFarm(farmAddress);
                     dispatch({
@@ -239,6 +280,20 @@ export default (({
 
         if (handleTransaction) {
             handleTransaction(stakingToken.approve, [farmAddress, MAX_SOL_UINT.toString()], {
+                statusMessages: {
+                    waiting: {
+                        title: `Unlocking ${farm.name}`,
+                        body: '',
+                    },
+                    success: {
+                        title: `${farm.name} Unlocked`,
+                        body: '',
+                    },
+                    error: {
+                        title: `Unlock ${farm.name} failed`,
+                        body: '',
+                    },
+                },
                 onSuccess: () => {
                     refreshFarm(farmAddress);
                 },

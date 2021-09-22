@@ -2,15 +2,23 @@ import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractReceipt, ContractTransaction } from 'ethers';
-import Toast, { ToastKeyAction, ToastKeyEnum } from '@components/General/Notification/Toast';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+
+type Content = {
+    title?: React.ReactNode;
+    body?: React.ReactNode;
+};
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
     onError?: (error?: Error | Result) => any;
     afterConfirmation?: (hash: string) => any;
     network?: number; // network number;
-    statusMessage?: ToastKeyAction;
+    statusMessages?: {
+        waiting?: Content; // transaction message for when we are waiting for the user to confirm
+        error?: Content; // transaction message for when the transaction fails
+        success?: Content; // transaction message for when the transaction succeeds
+    };
 };
 type HandleTransactionType =
     | ((
@@ -54,66 +62,64 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { onError, onSuccess, afterConfirmation, network = '0', statusMessage } = options ?? {};
+        const { onError, onSuccess, afterConfirmation, network = 0, statusMessages } = options ?? {};
 
-        let toastId: unknown;
-        if (statusMessage) {
-            toastId = addToast(Toast(statusMessage.waiting), {
+        const toastId: unknown = addToast(
+            [statusMessages?.waiting?.title ?? 'Pending Transaction', statusMessages?.waiting?.body ?? ''],
+            {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
-            });
-        }
+            },
+        );
 
         setPendingCount(pendingCount + 1);
         const res = callMethod(...params);
+
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
 
             const contractReceipt = await contractTransaction.wait();
 
-            if (statusMessage) {
-                updateToast(toastId as unknown as string, {
-                    content: Toast({
-                        key: ToastKeyEnum.Committed,
-                        props: {
-                            poolName: statusMessage?.success?.props?.poolName,
-                            actionType: statusMessage?.success?.props?.actionType,
-                            network: statusMessage?.success?.props?.network,
-                            receipt: contractReceipt,
-                        },
-                    }),
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-            } else {
-                updateToast(toastId as unknown as string, {
-                    content: [
-                        'Transaction Successful',
+            updateToast(toastId as unknown as string, {
+                content: [
+                    statusMessages?.success?.title ?? 'Transaction Successful',
+                    statusMessages?.success?.body ?? (
                         <a
                             key={contractReceipt.transactionHash}
-                            href={`${networkConfig[network].previewUrl}/${contractReceipt.transactionHash}`}
+                            href={`${networkConfig[network ?? '0'].previewUrl}/${contractReceipt.transactionHash}`}
                             className="text-tracer-400 underline"
                             target="_blank"
                             rel="noreferrer"
                         >
                             View transaction
-                        </a>,
-                    ],
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-            }
+                        </a>
+                    ),
+                ],
+                appearance: 'success',
+                autoDismiss: true,
+            });
 
             setPendingCount(pendingCount - 1);
             onSuccess ? onSuccess(contractReceipt) : null;
         }).catch((error) => {
-            console.error('Failed transaction', error);
-            updateToast(toastId as unknown as string, {
-                // confirmed this is a string
-                content: ['Transaction Failed', `Transaction failed: ${error.message}`],
-                appearance: 'error',
-                autoDismiss: true,
-            });
+            console.error('Failed transaction', error, error.code);
+            if (error?.code === 4001) {
+                // user denied txn
+                updateToast(toastId as unknown as string, {
+                    content: ['Transaction Dismissed'],
+                    appearance: 'warning',
+                    autoDismiss: true,
+                });
+            } else {
+                updateToast(toastId as unknown as string, {
+                    content: [
+                        statusMessages?.error?.title ?? 'Transaction failed',
+                        statusMessages?.error?.body ?? error.message,
+                    ],
+                    appearance: 'error',
+                    autoDismiss: true,
+                });
+            }
             setPendingCount(pendingCount - 1);
             onError ? onError(error) : null;
         });

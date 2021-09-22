@@ -21,7 +21,7 @@ import { CommitActionEnum, CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
-import { ToastKeyEnum } from '@components/General/Notification/Toast';
+import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -347,6 +347,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 )}, Raw amount: ${amount.toFixed()}`,
             );
             if (handleTransaction) {
+                const poolName = poolsState.pools[pool].name;
+                const tokenAddress =
+                    commitType === CommitEnum.short_mint || commitType === CommitEnum.short_burn
+                        ? poolsState.pools[pool].shortToken.address
+                        : poolsState.pools[pool].longToken.address;
+
+                const type =
+                    commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
                 handleTransaction(
                     committer.commit,
                     [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
@@ -358,21 +366,23 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             updateTokenBalances(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
-                        statusMessage: {
+                        statusMessages: {
                             waiting: {
-                                key: ToastKeyEnum.Commit,
-                                props: {
-                                    poolName: options?.poolName,
-                                    actionType: options?.actionType,
-                                },
+                                title: `Queueing ${poolName} ${type}`,
+                                body: (
+                                    <div
+                                        className="text-sm text-tracer-400 underline cursor-pointer"
+                                        onClick={() => openArbiscan(ArbiscanEnum.token, tokenAddress)}
+                                    >
+                                        View on Arbiscan
+                                    </div>
+                                ),
                             },
                             success: {
-                                key: ToastKeyEnum.Committed,
-                                props: {
-                                    poolName: options?.poolName,
-                                    actionType: options?.actionType,
-                                    network: options?.network,
-                                },
+                                title: `${poolName} ${type} Queued`,
+                            },
+                            error: {
+                                title: `${type} ${poolName} Failed`,
                             },
                         },
                     },
@@ -403,9 +413,19 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
-                statusMessage: {
-                    waiting: { key: ToastKeyEnum.Unlocking },
-                    success: { key: ToastKeyEnum.Unlocked },
+                statusMessages: {
+                    waiting: {
+                        title: 'Unlocking USDC',
+                        body: '',
+                    },
+                    success: {
+                        title: 'USDC Unlocked',
+                        body: '',
+                    },
+                    error: {
+                        title: 'Unlock USDC Failed',
+                        body: '',
+                    },
                 },
             });
         }
