@@ -15,8 +15,8 @@ export default (() => {
                 network={networkConfig[network ?? 0]?.name ?? 'Unknown'}
                 wallet={wallet?.name ?? 'Unknown'}
             >
-                <Icon component={GasIcon} className="icon" />
-                <span className="ml-2">{gasPrice}</span>
+                <Icon component={GasIcon} className="icon mr-2" />
+                <span>{gasPrice?.toFixed(3)}</span>
                 <style>{`
                     .icon {
                         height: 22px;
