@@ -8,16 +8,16 @@ export default (() => {
     return (
         <>
             <StakeGeneric
-                logo="SUSHI"
-                title="SLP Token Strategies"
-                subTitle="Stake SLP Tokens and earn TCR."
-                tokenType="SLP"
+                logo="BALANCER"
+                title="Balancer Pool Token Strategies"
+                subTitle="Stake Balancer Pool Tokens and earn TCR."
+                tokenType="BPT"
                 refreshFarm={refreshFarm}
                 fetchingFarms={fetchingFarms}
                 farms={farms}
                 hideLeverageFilter
                 hideSideFilter
-                strategySubtitle="via SushiSwap AMM"
+                strategySubtitle="via Balancer AMM"
             ></StakeGeneric>
         </>
     );

@@ -4,50 +4,13 @@ import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { StakingRewards } from '@libs/staking/typechain';
 import { ERC20, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import {
-    UniswapV2Router02,
-    UniswapV2Router02__factory,
-    IUniswapV2Pair,
-    IUniswapV2Pair__factory,
-} from '@libs/staking/uniswapRouterV2';
+import { UniswapV2Router02, UniswapV2Router02__factory } from '@libs/staking/uniswapRouterV2';
+import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
 
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { USDC_DECIMALS } from '@libs/constants';
-
-export type SlpPairTokenDetails = {
-    address: string;
-    symbol: string;
-    isPoolToken: boolean;
-    reserves: BigNumber;
-    usdcPrice: BigNumber;
-    decimals: number;
-};
-
-export type FarmTableDetails = {
-    totalStaked: BigNumber;
-    myStaked: BigNumber;
-    myRewards: BigNumber;
-    stakingTokenBalance: BigNumber;
-    stakingTokenSupply: BigNumber;
-    rewardsPerYear: BigNumber;
-    slpDetails?: {
-        token0: SlpPairTokenDetails;
-        token1: SlpPairTokenDetails;
-    };
-    poolDetails?: {
-        poolTokenPrice: BigNumber;
-    };
-};
-
-export type Farm = {
-    name: string;
-    address: string;
-    contract: StakingRewards;
-    stakingToken: ERC20;
-    stakingTokenDecimals: number;
-    stakingTokenAllowance: BigNumber;
-} & FarmTableDetails;
+import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -62,7 +25,7 @@ export const FarmContext = React.createContext<ContextProps>({
     fetchingFarms: false,
 });
 
-export type FarmContexts = 'slpFarms' | 'poolFarms';
+export type FarmContexts = 'bptFarms' | 'poolFarms';
 
 /**
  * Wrapper store for the FarmContext.
@@ -77,68 +40,14 @@ export const FarmStore: React.FC<
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
 
     // used to fetch details of tokens on both sides of a sushi pool
-    const getSlpDetails = async (
-        slpPairAddress: string,
-        pool: string,
-        token1IsPoolToken: boolean,
-        token0IsPoolToken: boolean,
-    ): Promise<Farm['slpDetails']> => {
+    const getBptDetails = async (balancerPoolId: string, pool: string): Promise<Farm['bptDetails']> => {
         if (!config) {
             return undefined;
         }
 
-        const pair = new ethers.Contract(slpPairAddress, IUniswapV2Pair__factory.abi, provider) as IUniswapV2Pair;
+        const balancerPool = new ethers.Contract(config.balancerVaultAddress, Vault__factory.abi, provider) as Vault;
 
-        const [token0Address, token1Address, [_token0Reserves, _token1Reserves]] = await Promise.all([
-            await pair.token0(),
-            await pair.token1(),
-            await pair.getReserves(),
-        ]);
-
-        const token0Reserves = new BigNumber(_token0Reserves.toString());
-        const token1Reserves = new BigNumber(_token1Reserves.toString());
-
-        const token0Contract = new ethers.Contract(token0Address, ERC20__factory.abi, provider) as ERC20;
-        const token1Contract = new ethers.Contract(token1Address, ERC20__factory.abi, provider) as ERC20;
-
-        const [token0Decimals, token1Decimals, token0Symbol, token1Symbol] = await Promise.all([
-            token0Contract.decimals(),
-            token1Contract.decimals(),
-            token0Contract.symbol(),
-            token1Contract.symbol(),
-        ]);
-
-        // if both sides of the pool are pool tokens, we don't need to consult the sushi price oracle
-
-        if (token1IsPoolToken && token0IsPoolToken) {
-            const [token0USDCPrice, token1USDCPrice] = await fetchTokenPrice(
-                pool,
-                [token0Address, token1Address],
-                provider,
-            );
-            return {
-                token0: {
-                    reserves: token0Reserves.div(10 ** token0Decimals),
-                    decimals: token0Decimals,
-                    symbol: token0Symbol,
-                    usdcPrice: token0USDCPrice, // currently only applies to tokens that are not pool tokens
-                    isPoolToken: token0IsPoolToken,
-                    address: token0Address,
-                },
-                token1: {
-                    reserves: token1Reserves.div(10 ** token1Decimals),
-                    decimals: token1Decimals,
-                    symbol: token1Symbol,
-                    usdcPrice: token1USDCPrice, // currently only applies to tokens that are not pool tokens
-                    isPoolToken: token1IsPoolToken,
-                    address: token1Address,
-                },
-            };
-        }
-
-        // only side will be a non pool token
-        const nonPoolTokenAddress = token0IsPoolToken ? token1Address : token0Address;
-        const nonPoolTokenDecimals = token0IsPoolToken ? token1Decimals : token0Decimals;
+        const [tokenAddresses, tokenBalances] = await balancerPool.getPoolTokens(balancerPoolId);
 
         const sushiRouter = new ethers.Contract(
             config.sushiRouterAddress,
@@ -146,48 +55,45 @@ export const FarmStore: React.FC<
             provider,
         ) as UniswapV2Router02;
 
-        const oneNonPoolToken = new BigNumber('1').times(10 ** nonPoolTokenDecimals);
+        const tokens: BalancerPoolAsset[] = await Promise.all(
+            tokenAddresses.map(async (address, index) => {
+                const tokenContract = new ethers.Contract(address, ERC20__factory.abi, provider) as ERC20;
 
-        if (!config?.knownNonPoolTokenPricePaths?.[nonPoolTokenAddress]) {
-            const nonPoolTokenName = token0IsPoolToken ? token1Symbol : token0Symbol;
-            throw new Error(`No known USDC price path for non-pool token ${nonPoolTokenAddress} (${nonPoolTokenName})`);
-        }
+                const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
+                const tokenBalance = tokenBalances[index];
 
-        const nonPoolTokenUSDCPath = config.knownNonPoolTokenPricePaths[nonPoolTokenAddress];
+                let isPoolToken = false;
 
-        const [_nonPoolTokenUSDCPrice] = await sushiRouter.getAmountsIn(
-            oneNonPoolToken.toFixed(),
-            nonPoolTokenUSDCPath,
+                let usdcPrice = new BigNumber(0);
+
+                if (address.toLowerCase() === config.usdcAddress.toLowerCase()) {
+                    usdcPrice = new BigNumber(1);
+                } else if (config?.knownNonPoolTokenPricePaths?.[address]) {
+                    const oneToken = new BigNumber('1').times(10 ** decimals);
+                    const usdcPricePath = config.knownNonPoolTokenPricePaths[address];
+
+                    const [_usdcPrice] = await sushiRouter.getAmountsIn(oneToken.toFixed(), usdcPricePath);
+
+                    usdcPrice = new BigNumber(ethers.utils.formatUnits(_usdcPrice, USDC_DECIMALS));
+                } else {
+                    // not usdc and not listed as a known non-pool token
+                    // assume it is a perpetual pools token
+                    [usdcPrice] = await fetchTokenPrice(pool, [address], provider);
+                    isPoolToken = true;
+                }
+
+                return {
+                    address,
+                    symbol,
+                    isPoolToken,
+                    reserves: new BigNumber(ethers.utils.formatUnits(tokenBalance, decimals)),
+                    usdcPrice,
+                    decimals,
+                };
+            }),
         );
 
-        const nonPoolTokenUSDCPrice = new BigNumber(ethers.utils.formatUnits(_nonPoolTokenUSDCPrice, USDC_DECIMALS));
-        const poolTokenUSDCPrice = await fetchTokenPrice(
-            pool,
-            [token0IsPoolToken ? token0Address : token1Address],
-            provider,
-        );
-
-        // pool tokens get a hardcoded price of 0 USDC
-        // this is because we can't use useTokenPrice hooks from within this context
-        // pool token USDC prices must be calculated elsewhere where useTokenPrice is available
-        return {
-            token0: {
-                reserves: token0Reserves.div(10 ** token0Decimals),
-                decimals: token0Decimals,
-                symbol: token0Symbol,
-                usdcPrice: token0IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
-                isPoolToken: token0IsPoolToken,
-                address: token0Address,
-            },
-            token1: {
-                reserves: token1Reserves.div(10 ** token1Decimals),
-                decimals: token1Decimals,
-                symbol: token1Symbol,
-                usdcPrice: token1IsPoolToken ? poolTokenUSDCPrice[0] : nonPoolTokenUSDCPrice,
-                isPoolToken: token1IsPoolToken,
-                address: token1Address,
-            },
-        };
+        return { tokens };
     };
 
     const refreshFarm = async (farmAddress: string) => {
@@ -229,8 +135,9 @@ export const FarmStore: React.FC<
                     setFarms({});
                     setFetchingFarms(true);
                 }
+
                 Promise.all(
-                    config[farmContext].map(async ({ address, abi, token1IsPoolToken, token0IsPoolToken, pool }) => {
+                    config[farmContext].map(async ({ address, abi, pool, balancerPoolId }) => {
                         try {
                             const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
@@ -278,15 +185,9 @@ export const FarmStore: React.FC<
 
                             const isPoolTokenFarm = farmContext === 'poolFarms';
 
-                            const slpDetails =
-                                isPoolTokenFarm && !token1IsPoolToken
-                                    ? undefined
-                                    : await getSlpDetails(
-                                          stakingTokenAddress,
-                                          pool,
-                                          Boolean(token1IsPoolToken),
-                                          Boolean(token0IsPoolToken),
-                                      );
+                            const bptDetails = isPoolTokenFarm
+                                ? undefined
+                                : await getBptDetails(balancerPoolId as string, pool);
 
                             const poolDetails = isPoolTokenFarm
                                 ? {
@@ -304,7 +205,7 @@ export const FarmStore: React.FC<
                             return {
                                 name: isPoolTokenFarm
                                     ? stakingTokenName
-                                    : generateSlpFarmName(slpDetails?.token0, slpDetails?.token1),
+                                    : generateBptFarmName(bptDetails?.tokens || []),
                                 address,
                                 contract,
                                 totalStaked,
@@ -323,7 +224,7 @@ export const FarmStore: React.FC<
                                     .div(rewardsDecimalMultiplier)
                                     .times(52),
                                 isPoolTokenFarm,
-                                slpDetails,
+                                bptDetails,
                                 poolDetails: poolDetails,
                             };
                         } catch (error) {
@@ -370,12 +271,9 @@ export const FarmStore: React.FC<
 };
 
 // generates a farm name where the non-pool token (if either) is listed second
-const generateSlpFarmName = (token0: SlpPairTokenDetails | undefined, token1: SlpPairTokenDetails | undefined) => {
+const generateBptFarmName = (tokens: BalancerPoolAsset[]) => {
     // ensure that the non-pool token is the second listed token
-    if (token0?.isPoolToken) {
-        return `${token0.symbol}, ${token1?.symbol}`;
-    }
-    return `${token1?.symbol}, ${token0?.symbol}`;
+    return tokens.map((token) => token.symbol).join(', ');
 };
 
 export const useFarms: () => ContextProps = () => {
