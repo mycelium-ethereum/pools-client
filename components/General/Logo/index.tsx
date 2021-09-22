@@ -43,6 +43,7 @@ const logos: Record<string, string> = {
     BTC: '/img/logos/currencies/btc.svg',
     WBTC: '/img/logos/currencies/btc.svg',
     SUSHI: '/img/logos/currencies/sushi.svg',
+    BALANCER: '/img/logos/currencies/balancer.svg',
 };
 
 interface LProps {
