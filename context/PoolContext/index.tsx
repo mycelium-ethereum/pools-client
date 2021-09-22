@@ -27,6 +27,7 @@ type Options = {
     onSuccess?: (...args: any) => any;
     poolName?: string;
     actionType?: CommitActionEnum;
+    network?: number | undefined;
 };
 
 interface ContextProps {
@@ -370,6 +371,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 props: {
                                     poolName: options?.poolName,
                                     actionType: options?.actionType,
+                                    network: options?.network,
                                 },
                             },
                         },

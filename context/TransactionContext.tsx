@@ -2,7 +2,8 @@ import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractReceipt, ContractTransaction } from 'ethers';
-import Toast, { ToastKeyAction } from '@components/General/Notification/Toast';
+import Toast, { ToastKeyAction, ToastKeyEnum } from '@components/General/Notification/Toast';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -53,7 +54,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { onError, onSuccess, afterConfirmation, statusMessage } = options ?? {};
+        const { onError, onSuccess, afterConfirmation, network = '0', statusMessage } = options ?? {};
 
         let toastId: unknown;
         if (statusMessage) {
@@ -68,23 +69,48 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
 
-            const receipt = await contractTransaction.wait();
+            const contractReceipt = await contractTransaction.wait();
 
             if (statusMessage) {
                 updateToast(toastId as unknown as string, {
-                    content: Toast(statusMessage.success),
+                    content: Toast({
+                        key: ToastKeyEnum.Committed,
+                        props: {
+                            poolName: statusMessage?.success?.props?.poolName,
+                            actionType: statusMessage?.success?.props?.actionType,
+                            network: statusMessage?.success?.props?.network,
+                            receipt: contractReceipt,
+                        },
+                    }),
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+            } else {
+                updateToast(toastId as unknown as string, {
+                    content: [
+                        'Transaction Successful',
+                        <a
+                            key={contractReceipt.transactionHash}
+                            href={`${networkConfig[network].previewUrl}/${contractReceipt.transactionHash}`}
+                            className="text-tracer-400 underline"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            View transaction
+                        </a>,
+                    ],
                     appearance: 'success',
                     autoDismiss: true,
                 });
             }
 
             setPendingCount(pendingCount - 1);
-            onSuccess ? onSuccess(receipt) : null;
+            onSuccess ? onSuccess(contractReceipt) : null;
         }).catch((error) => {
             console.error('Failed transaction', error);
             updateToast(toastId as unknown as string, {
                 // confirmed this is a string
-                content: ['Transaction Cancelled', `Transaction cancelled: ${error.message}`],
+                content: ['Transaction Failed', `Transaction failed: ${error.message}`],
                 appearance: 'error',
                 autoDismiss: true,
             });

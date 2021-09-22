@@ -1,5 +1,7 @@
-import { ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { CommitActionEnum } from '@libs/constants';
+import { ContractReceipt } from 'ethers';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 export enum ToastKeyEnum {
     Unlocking = 'unlocking',
@@ -18,6 +20,8 @@ export interface ToastKey {
     props?: {
         poolName?: string;
         actionType?: CommitActionEnum;
+        network?: number | undefined;
+        receipt?: ContractReceipt | undefined;
     };
 }
 
@@ -27,7 +31,18 @@ const Toast: ({ key, props }: ToastKey) => ReactNode[] = ({ key, props }: ToastK
             return ['Unlocking USDC', 'This may take a few moments'];
 
         case ToastKeyEnum.Unlocked:
-            return ['USDC Unlocked'];
+            return [
+                'USDC Unlocked',
+                <a
+                    key={props?.receipt?.transactionHash}
+                    href={`${networkConfig[props?.network ?? '0'].previewUrl}/${props?.receipt?.transactionHash}`}
+                    className="text-tracer-400 underline"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    View transaction
+                </a>,
+            ];
 
         case ToastKeyEnum.Commit:
             return [
@@ -39,6 +54,15 @@ const Toast: ({ key, props }: ToastKey) => ReactNode[] = ({ key, props }: ToastK
         case ToastKeyEnum.Committed:
             return [
                 `${props?.poolName} ` + `${props?.actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} ` + 'Queued',
+                <a
+                    key={props?.receipt?.transactionHash}
+                    href={`${networkConfig[props?.network ?? '0'].previewUrl}/${props?.receipt?.transactionHash}`}
+                    className="text-tracer-400 underline"
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    View transaction
+                </a>,
             ];
 
         default:
