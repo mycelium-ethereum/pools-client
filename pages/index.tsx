@@ -28,13 +28,33 @@ export default (() => {
                 <PendingCommits />
             </PoolStore>
             <Footer />
-            <SecurityWidget
-                right
-                variant={'system'}
-                color={'#3E58C9'}
-                textColor={'#ffffff'}
-                url={'https://beta.reputation.link/protocols/tracer/'}
-            />
+            <CorWidget />
         </div>
     );
 }) as React.FC;
+
+const CorWidget: React.FC = () => (
+    <div id="cor-widget">
+        <SecurityWidget
+            right
+            color={'#3E58C9'}
+            textColor={'#ffffff'}
+            url={'https://beta.reputation.link/protocols/tracer/?network=Arbitrum'}
+        />
+        <style>{`
+            #cor-widget a {
+                background: rgba(87, 113, 226)!important;
+            }
+            @media (max-width: 1024px) {
+                #cor-widget div {
+                    bottom: 20px!important;
+                }
+            }
+            @media (min-width: 1024px) {
+                #cor-widget div {
+                    bottom: 60px!important;
+                }
+            }
+        `}</style>
+    </div>
+);
