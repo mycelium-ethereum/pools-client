@@ -2,10 +2,10 @@ import React from 'react';
 import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
 import styled from 'styled-components';
 
-type ShortLongToken = 'ETH_L' | 'BTC_S' | 'ETH_L' | 'BTC_S' | 'DEFAULT';
+import { ShortLongToken } from '@libs/types/General';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
-export const tokenSymbolToLogoTicker: (tokenSymbol: string) => string = (tokenSymbol) => {
+export const tokenSymbolToLogoTicker: (tokenSymbol: ShortLongToken) => string = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
     }

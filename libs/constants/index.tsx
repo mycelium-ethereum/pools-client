@@ -43,7 +43,7 @@ export const COMMIT_TYPE_MAP: Record<CommitEnum, string> = {
 
 export const EMPTY_TOKEN: PoolToken = {
     name: '',
-    symbol: '',
+    symbol: 'DEFAULT',
     decimals: 18,
     address: '',
     balance: new BigNumber(0),

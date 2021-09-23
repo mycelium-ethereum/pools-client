@@ -27,7 +27,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     shortToken: {
         address: '',
         name: '',
-        symbol: '',
+        symbol: 'DEFAULT',
         decimals: 18,
         balance: new BigNumber(0),
         supply: new BigNumber(0),
@@ -37,7 +37,7 @@ export const DEFAULT_POOLSTATE: Pool = {
     longToken: {
         address: '',
         name: '',
-        symbol: '',
+        symbol: 'DEFAULT',
         decimals: 18,
         balance: new BigNumber(0),
         supply: new BigNumber(0),

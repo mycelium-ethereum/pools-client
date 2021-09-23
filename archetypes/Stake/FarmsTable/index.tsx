@@ -9,6 +9,7 @@ import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
+import { ShortLongToken } from '@libs/types/General';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
@@ -133,7 +134,11 @@ const PoolRow: React.FC<{
                     {farm?.bptDetails ? (
                         <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
                     ) : (
-                        <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                        <Logo
+                            className="inline w-[25px] mr-2"
+                            // since there are no bptDetails, we assume this is a pool token farm
+                            ticker={tokenSymbolToLogoTicker(farm.name as ShortLongToken)}
+                        />
                     )}
                 </div>
                 <div>
@@ -192,11 +197,7 @@ const PoolRow: React.FC<{
 const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
     <>
         {tokens.map((token) => (
-            <Logo
-                key={`balancer-asset-${token.symbol}`}
-                className="inline w-[25px] mr-2"
-                ticker={tokenSymbolToLogoTicker(token.symbol)}
-            />
+            <Logo key={`balancer-asset-${token.symbol}`} className="inline w-[25px] mr-2" ticker={token.symbol} />
         ))}
     </>
 );

@@ -1,5 +1,6 @@
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { ShortLongToken } from '@libs/types/General';
 import { ethers } from 'ethers';
 
 const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';
@@ -30,7 +31,7 @@ export const watchAsset: (
                 address: token.address,
                 symbol: token.symbol,
                 decimals: token.decimals,
-                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
+                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol as ShortLongToken)}.svg`,
             },
         })
         .then((success) => {

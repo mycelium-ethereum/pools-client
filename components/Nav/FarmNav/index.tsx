@@ -41,6 +41,7 @@ export default (({ left, right }) => {
                     Stake Pool Token
                 </Item>
                 <Item onClick={(_e) => console.log(`${BPT} coming soon`)} selected={router.pathname === '/stakebpt'}>
+                    {/* <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/stakebpt'}> */}
                     <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>Stake BPT</TooltipSelector>
                 </Item>
             </div>
