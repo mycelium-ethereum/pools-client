@@ -177,9 +177,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 errorToastID.current = addToast(
                     [
                         'Unsupported Network',
-                        <span key="unsupported-network-content">
+                        <span key="unsupported-network-content" className="text-sm">
                             <a
-                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                                 onClick={() => {
                                     switchNetworks(provider, ARBITRUM);
                                 }}
@@ -192,7 +192,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
                                 target="_blank"
                                 rel="noreferrer noopner"
-                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                             >
                                 Get started
                             </a>
