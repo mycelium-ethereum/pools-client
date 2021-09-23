@@ -1,8 +1,13 @@
 import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
-import { ContractTransaction, ContractReceipt } from 'ethers';
-import { networkConfig } from './Web3Context/Web3Context.Config';
+import { ContractReceipt, ContractTransaction } from 'ethers';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+
+type Content = {
+    title?: React.ReactNode;
+    body?: React.ReactNode;
+};
 
 export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
@@ -10,11 +15,9 @@ export type Options = {
     afterConfirmation?: (hash: string) => any;
     network?: number; // network number;
     statusMessages?: {
-        waiting?: string; // transaction message for when we are waiting for the user to confirm
-        error?: string; // transaction message for when the transaction fails
-        success?: string; // transaction message for when the transaction succeeds
-        pending?: string; // transaction message for when the transaction is pending
-        userConfirmed?: string; // transaction method for when user confirms through provider
+        waiting?: Content; // transaction message for when we are waiting for the user to confirm
+        error?: Content; // transaction message for when the transaction fails
+        success?: Content; // transaction message for when the transaction succeeds
     };
 };
 type HandleTransactionType =
@@ -25,17 +28,8 @@ type HandleTransactionType =
       ) => void)
     | undefined;
 
-type HandleAsyncType =
-    | ((
-          callMethod: (...args: any) => Promise<Result>,
-          params: any[], // eslint-disable-line
-          options?: Options,
-      ) => void)
-    | undefined;
-
 interface TransactionActionsContextProps {
     handleTransaction: HandleTransactionType;
-    handleAsync: HandleAsyncType;
 }
 interface TransactionContextProps {
     pendingCount: number;
@@ -59,87 +53,66 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess, afterConfirmation, network = '0' } = options ?? {};
+        const { onError, onSuccess, afterConfirmation, network = 0, statusMessages } = options ?? {};
 
-        // actually returns a string error in the library
-        const toastId = addToast(
-            ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
+        const toastId: unknown = addToast(
+            [statusMessages?.waiting?.title ?? 'Pending Transaction', statusMessages?.waiting?.body ?? ''],
             {
                 appearance: 'loading' as AppearanceTypes,
                 autoDismiss: false,
             },
         );
+
         setPendingCount(pendingCount + 1);
         const res = callMethod(...params);
+
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
+
+            const contractReceipt = await contractTransaction.wait();
+
             updateToast(toastId as unknown as string, {
                 content: [
-                    'Transaction submitted',
-                    statusMessages?.userConfirmed ?? `Waiting for confirmation ${contractTransaction.hash}`,
-                ],
-                appearance: 'loading' as AppearanceTypes,
-                autoDismiss: false,
-            });
-            const receipt = await contractTransaction.wait();
-            updateToast(toastId as unknown as string, {
-                content: [
-                    'Transaction Successful',
-                    statusMessages?.success ?? (
-                        <a href={`${networkConfig[network].previewUrl}/${receipt.transactionHash}`}>View transaction</a>
+                    statusMessages?.success?.title ?? 'Transaction Successful',
+                    statusMessages?.success?.body ?? (
+                        <a
+                            key={contractReceipt.transactionHash}
+                            href={`${networkConfig[network ?? '0'].previewUrl}/${contractReceipt.transactionHash}`}
+                            className="text-tracer-400 underline"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            View transaction
+                        </a>
                     ),
                 ],
                 appearance: 'success',
                 autoDismiss: true,
             });
+
             setPendingCount(pendingCount - 1);
-            onSuccess ? onSuccess(receipt) : null;
+            onSuccess ? onSuccess(contractReceipt) : null;
         }).catch((error) => {
-            console.error('Failed transaction', error);
-            updateToast(toastId as unknown as string, {
-                // confirmed this is a string
-                content: ['Transaction Cancelled', statusMessages?.error ?? `Transaction cancelled: ${error.message}`],
-                appearance: 'error',
-                autoDismiss: true,
-            });
-            setPendingCount(pendingCount - 1);
-            onError ? onError(error) : null;
-        });
-    };
-
-    /** Very similiar function to above but handles regular async functions, mainly signing */
-    const handleAsync: HandleAsyncType = async (callMethod, params, options) => {
-        const { statusMessages, onError, onSuccess } = options ?? {};
-        // actually returns a string error in the library
-        const toastId = addToast(
-            ['Pending Transaction', statusMessages?.waiting ?? 'Approve transaction with provider'],
-            {
-                appearance: 'loading' as AppearanceTypes,
-                autoDismiss: false,
-            },
-        );
-
-        setPendingCount(pendingCount + 1);
-
-        const res = callMethod(...params);
-        Promise.resolve(res).then((res) => {
-            if (res.status === 'error') {
+            console.error('Failed transaction', error, error.code);
+            if (error?.code === 4001) {
+                // user denied txn
                 updateToast(toastId as unknown as string, {
-                    // confirmed this is a string
-                    content: statusMessages?.error ?? `Transaction cancelled. ${res.message}`,
+                    content: ['Transaction Dismissed'],
+                    appearance: 'warning',
+                    autoDismiss: true,
+                });
+            } else {
+                updateToast(toastId as unknown as string, {
+                    content: [
+                        statusMessages?.error?.title ?? 'Transaction failed',
+                        statusMessages?.error?.body ?? error.message,
+                    ],
                     appearance: 'error',
                     autoDismiss: true,
                 });
-                onError ? onError(res) : null;
-            } else {
-                updateToast(toastId as unknown as string, {
-                    content: statusMessages?.success ?? `${res.message}`,
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-                onSuccess ? onSuccess(res) : null;
             }
             setPendingCount(pendingCount - 1);
+            onError ? onError(error) : null;
         });
     };
 
@@ -147,7 +120,6 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         <TransactionActionsContext.Provider
             value={{
                 handleTransaction,
-                handleAsync,
             }}
         >
             <TransactionContext.Provider

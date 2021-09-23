@@ -1,11 +1,9 @@
-import React, { useContext, useReducer, useRef, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
-import { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { reducer, initialPoolState } from './poolDispatch';
-import { fetchTokenBalances, initPool, fetchCommits, fetchTokenApprovals } from './helpers';
-import { useMemo } from 'react';
+import { initialPoolState, reducer } from './poolDispatch';
+import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -23,6 +21,7 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@libs/utils/calcs';
+import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -117,8 +116,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         id: commit.args.commitID.toNumber(),
                                         amount: new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals)),
                                         type: commit.args.commitType as CommitEnum,
-                                        from: txn.from,
-                                        txnHash: txn.hash,
+                                        from: txn?.from,
+                                        txnHash: txn?.hash,
                                         created: Date.now() / 1000,
                                     },
                                 });
@@ -304,7 +303,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         provider,
                     ) as LeveragedPool;
                     leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
-                        console.debug(`New lastupdated: ${lastUpdate}`);
+                        console.debug(`New last updated: ${lastUpdate}`);
                         poolsDispatch({
                             type: 'setLastUpdate',
                             pool: pool,
@@ -320,7 +319,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     /**
      * Commit to a pool
      * @param pool pool address to commit to
-     * @param commitType int corresponsing to commitType
+     * @param commitType int corresponding to commitType
      * @param amount amount to commit
      * @param options handleTransaction options
      */
@@ -345,20 +344,43 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 )}, Raw amount: ${amount.toFixed()}`,
             );
             if (handleTransaction) {
+                const poolName = poolsState.pools[pool].name;
+                const tokenAddress =
+                    commitType === CommitEnum.short_mint || commitType === CommitEnum.short_burn
+                        ? poolsState.pools[pool].shortToken.address
+                        : poolsState.pools[pool].longToken.address;
+
+                const type =
+                    commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
                 handleTransaction(
                     committer.commit,
                     [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
                     {
                         network: network,
-                        statusMessages: {
-                            waiting: 'Submitting commit',
-                            error: 'Failed to commit',
-                        },
                         onSuccess: (receipt) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
                             updateTokenBalances(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
+                        },
+                        statusMessages: {
+                            waiting: {
+                                title: `Queueing ${poolName} ${type}`,
+                                body: (
+                                    <div
+                                        className="text-sm text-tracer-400 underline cursor-pointer"
+                                        onClick={() => openArbiscan(ArbiscanEnum.token, tokenAddress)}
+                                    >
+                                        View token on Arbiscan
+                                    </div>
+                                ),
+                            },
+                            success: {
+                                title: `${poolName} ${type} Queued`,
+                            },
+                            error: {
+                                title: `${type} ${poolName} Failed`,
+                            },
                         },
                     },
                 );
@@ -379,10 +401,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
                 network: network,
-                statusMessages: {
-                    waiting: 'Submitting commit',
-                    error: 'Failed to commit',
-                },
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({
@@ -391,6 +409,20 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         pool: pool,
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
+                },
+                statusMessages: {
+                    waiting: {
+                        title: 'Unlocking USDC',
+                        body: '',
+                    },
+                    success: {
+                        title: 'USDC Unlocked',
+                        body: '',
+                    },
+                    error: {
+                        title: 'Unlock USDC Failed',
+                        body: '',
+                    },
                 },
             });
         }

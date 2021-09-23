@@ -2,12 +2,12 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
-import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
-import { providers, ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { ARBITRUM } from '@libs/constants';
@@ -173,7 +173,8 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         if (!networkConfig[network ?? -1] && provider && account) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
-                const toastId = addToast(
+                // @ts-ignore
+                errorToastID.current = addToast(
                     [
                         'Unsupported Network',
                         <span key="unsupported-network-content">
@@ -186,13 +187,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 Switch to Arbitrum Mainnet
                             </a>
                             <br />
+                            <span>New to Arbitrum? </span>
                             <a
-                                href="https://medium.com/stakingbits/guide-to-arbitrum-and-setting-up-metamask-for-arbitrum-543e513cdd8b"
+                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
                                 target="_blank"
                                 rel="noreferrer noopner"
                                 className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
                             >
-                                Learn more here
+                                Get started
                             </a>
                         </span>,
                     ],
@@ -201,8 +203,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                         autoDismiss: false,
                     },
                 );
-                // @ts-ignore
-                errorToastID.current = toastId;
             }
         } else {
             if (errorToastID.current) {

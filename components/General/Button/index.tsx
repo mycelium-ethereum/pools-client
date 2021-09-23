@@ -12,11 +12,11 @@ const SIZE: Record<ButtonSize, string> = {
 const VARIANT: Record<ButtonVariant, string> = {
     default: 'bg-transparent opacity-80 hover:opacity-100',
     primary:
-        'bg-tracer-600 text-white w-full text-high-emphesis hover:bg-tracer-900 disabled:bg-opacity-50 focus:ring focus:ring-tracer-300',
+        'bg-tracer-600 text-white w-full hover:bg-tracer-900 disabled:bg-opacity-50 disabled:hover:bg-tracer-600 disabled:hover:opacity-50 focus:ring focus:ring-tracer-300',
     'primary-light':
-        'bg-tracer-100 border border-tracer-500 text-cool-gray-700 w-full text-high-emphesis hover:bg-opacity-50 disabled:bg-tracer-100 disabled:opacity-50',
+        'bg-tracer-100 border border-tracer-500 text-cool-gray-700 w-full hover:bg-opacity-50 disabled:bg-tracer-100 disabled:opacity-50',
     transparent:
-        'bg-white bg-opacity-20 border border-white text-white w-full text-high-emphesis disabled:bg-opacity-50 focus:border-solid',
+        'bg-white bg-opacity-20 border border-white text-white w-full disabled:bg-opacity-50 focus:border-solid',
 };
 type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
@@ -42,7 +42,6 @@ const Button: React.FC<ButtonProps> = ({
                 SIZE[size],
                 className,
                 'rounded disabled:cursor-not-allowed focus:outline-none',
-                // 'rounded focus:outline-none focus:ring disabled:opacity-50 disabled:cursor-not-allowed font-medium',
             )}
             {...rest}
         >

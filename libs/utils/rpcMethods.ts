@@ -90,7 +90,7 @@ export enum ArbiscanEnum {
     token = 1,
 }
 // Not really an RPC but thought it kind of belongs here
-export const openEtherscan: (type: ArbiscanEnum, taraget: string) => boolean = (type, target) => {
+export const openArbiscan: (type: ArbiscanEnum, taraget: string) => boolean = (type, target) => {
     switch (type) {
         case ArbiscanEnum.txn:
             window.open(`https://arbiscan.io/tx/${target}`, '', 'noreferrer=true,noopener=true');
