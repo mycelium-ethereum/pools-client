@@ -121,7 +121,7 @@ const PoolRow: React.FC<{
                         />
                     )}
                 </div>
-                <div>
+                <div className="flex flex-col justify-center">
                     <div>{farm.name}</div>
                     {strategySubtitle ? <div className="opacity-50">{strategySubtitle}</div> : null}
                 </div>
