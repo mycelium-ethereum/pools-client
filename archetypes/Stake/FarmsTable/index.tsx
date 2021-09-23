@@ -130,10 +130,10 @@ const PoolRow: React.FC<{
         <TableRow key={farm.farm} rowNumber={index}>
             <div className="flex flex-wrap">
                 <div>
-                    {farm?.poolDetails ? (
-                        <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
-                    ) : (
+                    {farm?.bptDetails ? (
                         <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
+                    ) : (
+                        <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
                     )}
                 </div>
                 <div>
