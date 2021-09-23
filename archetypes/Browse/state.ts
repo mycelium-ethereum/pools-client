@@ -1,5 +1,3 @@
-import { ShortLongToken } from '@libs/types/General';
-
 export enum LeverageFilterEnum {
     All = 'All',
     One = '1',
@@ -24,7 +22,7 @@ export interface BrowseTableRowData {
     address: string;
     decimals: number;
     pool: string;
-    symbol: ShortLongToken;
+    symbol: string;
     leverage: number;
     side: 'short' | 'long';
     lastPrice: number;

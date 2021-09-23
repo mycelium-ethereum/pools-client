@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { usePools } from '@context/PoolContext';
 import { SideEnum } from '@libs/constants';
-import { ShortLongToken } from '@libs/types/General';
 
 type TokenRow = {
     side: SideEnum;
     leverage: number;
     pool: string;
-    symbol: ShortLongToken;
+    symbol: string;
 };
 
 type TokenMap = {

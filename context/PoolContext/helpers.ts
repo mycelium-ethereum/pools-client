@@ -1,5 +1,5 @@
 import { SideEnum, CommitEnum, MAX_SOL_UINT } from '@libs/constants';
-import { CreatedCommitType, PendingAmounts, Pool, PoolType, ShortLongToken } from '@libs/types/General';
+import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -131,7 +131,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             longToken: {
                 address: longToken,
                 name: longTokenName,
-                symbol: longTokenSymbol as ShortLongToken,
+                symbol: longTokenSymbol,
                 decimals: longTokenDecimals,
                 approvedAmount: new BigNumber(0),
                 balance: new BigNumber(0),
@@ -141,7 +141,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             shortToken: {
                 address: shortToken,
                 name: shortTokenName,
-                symbol: shortTokenSymbol as ShortLongToken,
+                symbol: shortTokenSymbol,
                 decimals: shortTokenDecimals,
                 approvedAmount: new BigNumber(0),
                 balance: new BigNumber(0),

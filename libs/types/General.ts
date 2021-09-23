@@ -49,7 +49,7 @@ export type TokenBreakdown = PoolToken & {
 export type PoolToken = Omit<Token, 'symbol'> & {
     side: SideEnum;
     supply: BigNumber;
-    symbol: ShortLongToken;
+    symbol: string;
 };
 
 export type PendingAmounts = {
@@ -118,5 +118,3 @@ export type Heading = {
     text: string;
     width: string; // string width
 };
-
-export type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'DEFAULT';

@@ -9,7 +9,6 @@ import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { ShortLongToken } from '@libs/types/General';
 import { calcBptTokenPrice } from '@libs/utils/calcs';
 
 // TODO: use an actual price
@@ -117,7 +116,7 @@ const PoolRow: React.FC<{
                         <Logo
                             className="inline w-[25px] mr-2"
                             // since there are no bptDetails, we assume this is a pool token farm
-                            ticker={tokenSymbolToLogoTicker(farm.name as ShortLongToken)}
+                            ticker={tokenSymbolToLogoTicker(farm.name)}
                         />
                     )}
                 </div>

@@ -11,7 +11,6 @@ import { Currency } from '@components/General/Currency';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { StakeAction, StakeState } from '../state';
 import { useFarms } from '@context/FarmContext';
-import { ShortLongToken } from '@libs/types/General';
 interface StakeModalProps {
     state: StakeState;
     dispatch: React.Dispatch<StakeAction>;
@@ -92,11 +91,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         <InnerInputText>
                             <Currency
                                 label={farm?.name}
-                                ticker={
-                                    farm.poolDetails
-                                        ? tokenSymbolToLogoTicker(farm?.name as ShortLongToken)
-                                        : farm?.name
-                                }
+                                ticker={farm.poolDetails ? tokenSymbolToLogoTicker(farm?.name) : farm?.name}
                                 className="shadow-md"
                             />
                             <div
