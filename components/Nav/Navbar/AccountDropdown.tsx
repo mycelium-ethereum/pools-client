@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useEnsName from '@libs/hooks/useEnsName';
 import { Logo } from '@components/General';
@@ -8,12 +7,12 @@ import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import { ARBITRUM } from '@libs/constants';
 
-const ETHERSCAN_URI = 'https://etherscan.io';
+const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
 export default (({ account, className }) => {
-    const { network } = useWeb3();
     const { resetOnboard, handleConnect } = useWeb3Actions();
     const ensName = useEnsName(account ?? '');
 
@@ -21,14 +20,7 @@ export default (({ account, className }) => {
         <div className={`${className} relative inline-block text-left`}>
             {(() => {
                 if (!!account) {
-                    return (
-                        <AccountDropdownButton
-                            account={account}
-                            ensName={ensName}
-                            network={network ?? 0}
-                            logout={resetOnboard}
-                        />
-                    );
+                    return <AccountDropdownButton account={account} ensName={ensName} logout={resetOnboard} />;
                 } else {
                     return <ConnectWalletButton handleConnect={handleConnect} />;
                 }
@@ -55,11 +47,10 @@ const ConnectWalletButton = ({ handleConnect }: ConnectWalletProps) => {
 interface AccountDropdownButtonProps {
     account: string;
     ensName: string;
-    network: number;
     logout: () => void;
 }
 
-const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDropdownButtonProps) => {
+const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButtonProps) => {
     const accountLong = useMemo(() => accountDescriptionLong(account, ensName), [account, ensName]);
     const accountShort = useMemo(() => accountDescriptionShort(account, ensName), [account, ensName]);
     return (
@@ -77,7 +68,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                     <div className="px-2 self-center">{accountLong}</div>
                     <TooltipSelector tooltip={{ content: <>Copy</> }}>
                         <CopyOutlined
-                            className="self-center icon"
+                            className="self-center copy"
                             onClick={() => {
                                 /* This requires a secure origin, either HTTPS or localhost. */
                                 try {
@@ -88,7 +79,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                             }}
                         />
                         <style>{`
-                            svg {
+                            .copy svg {
                                 vertical-align: 0;
                             }
                         `}</style>
@@ -97,8 +88,8 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
             </div>
 
             <div className="py-1 px-4 mb-2">
-                <ViewOnEtherscanOption account={account} />
-                <BridgeFundsOption network={network} />
+                <ViewOnArbiscanOption account={account} />
+                <BridgeFundsOption />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -117,19 +108,19 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
     );
 };
 
-const ViewOnEtherscanOption: React.FC<{
+const ViewOnArbiscanOption: React.FC<{
     account: string;
     className?: string;
 }> = ({ account, className }) => {
     return (
         <a
-            className={classNames(className ?? '', 'flex')}
-            href={`${ETHERSCAN_URI}/address/${account}`}
+            className={classNames(className ?? '', 'flex hover:bg-gray-100')}
+            href={`${ARBISCAN_URI}/address/${account}`}
             target="_blank"
             rel="noopener noreferrer"
         >
-            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker="ETHERSCAN" />
-            <div className="text-sm">View on Etherscan</div>
+            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker={ARBITRUM} />
+            <div className="text-sm">View on Arbiscan</div>
         </a>
     );
 };
@@ -148,25 +139,21 @@ const WalletIcon: React.FC<{
     );
 };
 
-const BridgeFundsOption = styled(({ network, className }) => {
+const BridgeFundsOption: React.FC<{
+    className?: string;
+}> = ({ className }) => {
     return (
-        <a className={className} href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
-            <Logo ticker={network} />
+        <a
+            className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')}
+            href="https://bridge.arbitrum.io"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker={ARBITRUM} />
             <div className="text-sm">Bridge Funds</div>
         </a>
     );
-})`
-    display: flex;
-    margin-top: 15px;
-
-    ${Logo} {
-        display: inline;
-        vertical-align: 0;
-        width: 20px;
-        height: 22px;
-        margin: auto 0.5rem auto 0;
-    }
-`;
+};
 
 // const AddTCROption = styled(({ className }) => {
 //     return (

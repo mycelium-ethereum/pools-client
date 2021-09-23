@@ -4,6 +4,7 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
+import { ARBITRUM } from '@libs/constants';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget }) => (
@@ -44,8 +45,8 @@ export default (({ provider, token, arbiscanTarget }) => (
                                     className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
                                     onClick={() => openArbiscan(arbiscanTarget.type, arbiscanTarget.target)}
                                 >
-                                    <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
-                                    View on Etherscan
+                                    <Logo className="relative inline mr-2 w-[18px]" ticker={ARBITRUM} />
+                                    View on Arbiscan
                                 </div>
                             </div>
                         </Popover.Panel>
