@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-
 import useEnsName from '@libs/hooks/useEnsName';
 import { Logo } from '@components/General';
-import {
-    CopyOutlined,
-    // PlusOutlined
-} from '@ant-design/icons';
+import { CopyOutlined } from '@ant-design/icons';
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
@@ -64,19 +60,21 @@ interface AccountDropdownButtonProps {
 }
 
 const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDropdownButtonProps) => {
+    const accountLong = useMemo(() => accountDescriptionLong(account, ensName), [account, ensName]);
+    const accountShort = useMemo(() => accountDescriptionShort(account, ensName), [account, ensName]);
     return (
         <TWPopup
             preview={
                 <>
                     <WalletIcon />
-                    <div className="px-2 m-auto">{accountDescriptionShort(account, ensName)}</div>
+                    <div className="px-2 m-auto">{accountShort}</div>
                 </>
             }
         >
             <div className="py-1">
                 <div className="flex px-4 py-2 text-sm w-[180px]">
                     <WalletIcon />
-                    <div className="px-2 self-center">{accountDescriptionLong(account, ensName)}</div>
+                    <div className="px-2 self-center">{accountLong}</div>
                     <TooltipSelector tooltip={{ content: <>Copy</> }}>
                         <CopyOutlined
                             className="self-center icon"
@@ -194,6 +192,8 @@ const accountDescriptionLong: (account: string, ensName: string) => string = (ac
 };
 
 const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
+    // return `${account.slice(0, 5)}..`
+    console.log(ensName, 'ens name');
     if (ensName) {
         const len = ensName.length;
         if (len > 14) {
