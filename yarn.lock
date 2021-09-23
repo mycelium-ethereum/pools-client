@@ -3086,10 +3086,10 @@
     memory-cache "^0.2.0"
     web3-utils "^1.4.0"
 
-"@tracer-protocol/onboard@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.0.4.tgz#5908bc149c86b98d67f5f8c29168feee285782c1"
-  integrity sha512-A443zqASlTTde/JUwNLiCMK28aDehELo48gUQ9ITEnVfvNTl+RaFOoceB7OL9TGYlDEWTjqJTuYWxUmNiKdBEQ==
+"@tracer-protocol/onboard@^2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.1.0.tgz#a1cd3f88871e5e0cfd3a4714c2bb7b84b059432d"
+  integrity sha512-fzTjvh5/psab0jcB11WCz/O9eqDbTGa+pzKiKOsj8SbXa2h37bu2Lh6cDlgLQghjYiL5RCGyaP4R5nlQbOvlPw==
   dependencies:
     "@cvbb/eth-keyring" "^1.1.0"
     "@ensdomains/ensjs" "^2.0.1"
