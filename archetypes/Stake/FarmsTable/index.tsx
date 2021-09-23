@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
@@ -7,13 +7,14 @@ import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
 import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
-import useTokenPrice from '@libs/hooks/useTokenPrice';
 import Loading from '@components/General/Loading';
+import { BalancerPoolAsset } from '@libs/types/Staking';
+import { calcBptTokenPrice } from '@libs/utils/calcs';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
 
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, strategySubtitle }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -37,6 +38,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
+                            strategySubtitle={strategySubtitle}
                         />
                     );
                 })}
@@ -81,6 +83,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
+    strategySubtitle?: string;
 }>;
 
 const PoolRow: React.FC<{
@@ -89,39 +92,50 @@ const PoolRow: React.FC<{
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
-    // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-    const { price: tokenPrice } = farm.isPoolToken ? useTokenPrice(farm.tokenAddress) : { price: new BigNumber(1) };
+    strategySubtitle?: string;
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
+    const tokenPrice = useMemo(
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
+        [farm],
+    );
 
     const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
 
-    // console.log(farm.rewardsPerYear.toNumber(), "Rewards per year")
-    // console.log(TCR_PRICE.toNumber(), "Tcr price")
-    // console.log(tokenPrice.toNumber(), "Token price")
-    // console.log(farm.totalStaked, "Total staked")
-
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+
+    const { bptDetails } = farm;
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
-            <span>
-                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(farm.name)} />
-                {farm.name}
-            </span>
+            <div className="flex flex-wrap">
+                <div>
+                    {farm?.bptDetails ? (
+                        <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
+                    ) : (
+                        <Logo
+                            className="inline w-[25px] mr-2"
+                            // since there are no bptDetails, we assume this is a pool token farm
+                            ticker={tokenSymbolToLogoTicker(farm.name)}
+                        />
+                    )}
+                </div>
+                <div className="flex flex-col justify-center">
+                    <div>{farm.name}</div>
+                    {strategySubtitle ? <div className="opacity-50">{strategySubtitle}</div> : null}
+                </div>
+            </div>
             <span>{apr.times(100).toFixed(2)}%</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>
             <span>
-                <span>{farm.myStaked.toFixed(2)}</span>
-                {' / '}
-                <span>{toApproxCurrency(tokenPrice.times(farm.myStaked))}</span>
+                <div>{farm.myStaked.toFixed(2)}</div>
+                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.myStaked))}</div>
             </span>
             <span>
-                <span>{farm.stakingTokenBalance.toFixed(2)}</span>
-                {' / '}
-                <span>{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</span>
+                <div>{farm.stakingTokenBalance.toFixed(2)}</div>
+                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</div>
             </span>
             <span>
                 <span>{farm.myRewards.toFixed(6)}</span>
@@ -137,7 +151,7 @@ const PoolRow: React.FC<{
                     STAKE
                 </Button>
                 <Button
-                    disabled={farm.myStaked === 0}
+                    disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
@@ -158,3 +172,11 @@ const PoolRow: React.FC<{
         </TableRow>
     );
 };
+
+const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
+    <>
+        {tokens.map((token) => (
+            <Logo key={`balancer-asset-${token.symbol}`} className="inline w-[25px] mr-2" ticker={token.symbol} />
+        ))}
+    </>
+);

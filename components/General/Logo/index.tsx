@@ -2,17 +2,21 @@ import React from 'react';
 import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
 import styled from 'styled-components';
 
-type ShortLongToken = 'ETH_L' | 'BTC_S' | 'ETH_L' | 'BTC_S' | 'DEFAULT';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
-export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = (tokenSymbol) => {
+type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'DEFAULT';
+export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
     }
-    const [leverageSide, name] = tokenSymbol.split('-');
-    const side = leverageSide.slice(-1);
-    const asset = name.split('/')[0];
-    return `${asset}_${side}` as ShortLongToken;
+    try {
+        const [leverageSide, name] = tokenSymbol.split('-');
+        const side = leverageSide.slice(-1);
+        const asset = name.split('/')[0];
+        return `${asset}_${side}` as ShortLongToken;
+    } catch (error) {
+        return 'DEFAULT';
+    }
 };
 
 const clearLogos: Record<string, string> = {
@@ -35,8 +39,11 @@ const logos: Record<string, string> = {
     ETH_S: '/img/logos/currencies/eth_short.svg',
     BTC_S: '/img/logos/currencies/btc_short.svg',
     ETH: '/img/logos/currencies/eth.svg',
+    WETH: '/img/logos/currencies/eth.svg',
     BTC: '/img/logos/currencies/btc.svg',
+    WBTC: '/img/logos/currencies/btc.svg',
     SUSHI: '/img/logos/currencies/sushi.svg',
+    BALANCER: '/img/logos/currencies/balancer.svg',
 };
 
 interface LProps {

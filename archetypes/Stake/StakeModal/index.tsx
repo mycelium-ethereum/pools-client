@@ -40,9 +40,9 @@ const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => { isInvalid: b
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
     const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
-    const { poolFarms, slpFarms } = useFarms();
+    const { farms } = useFarms();
 
-    const farm = useMemo(() => poolFarms[selectedFarm] || slpFarms[selectedFarm], [selectedFarm, poolFarms, slpFarms]);
+    const farm = useMemo(() => farms[selectedFarm], [selectedFarm, farms]);
 
     const stakingTokenAllowance = farm ? farm.stakingTokenAllowance : new BigNumber(0);
 
@@ -66,85 +66,83 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
             open={state.stakeModalState !== 'closed'}
             onClose={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
         >
-            <div className="p-6">
-                <div className="flex justify-between">
-                    <StakeModalHeader>{title || 'Stake Pool Tokens'}</StakeModalHeader>
-                    <Gas />
-                    <div
-                        className="w-3 h-3 ml-4 cursor-pointer"
-                        onClick={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
-                    >
-                        <Close />
-                    </div>
+            <div className="flex justify-between">
+                <StakeModalHeader>{title || 'Stake Tracer Pool Tokens'}</StakeModalHeader>
+                <Gas />
+                <div
+                    className="w-3 h-3 ml-4 cursor-pointer"
+                    onClick={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
+                >
+                    <Close />
                 </div>
-                <div className="w-full">
-                    <p className="mb-4 mt-6 text-black font-semibold">
-                        {state.stakeModalState === 'claim' ? 'Available to claim' : 'Amount'}
-                    </p>
-                    {state.stakeModalState !== 'claim' ? (
-                        <InputContainer error={false /* invalidAmount.isInvalid */}>
-                            <NumericInput
-                                disabled={!isApproved}
-                                className="w-full h-full text-base font-normal "
-                                value={amount.eq(0) ? '' : amount.toFixed()}
-                                onUserInput={(val) => dispatch({ type: 'setAmount', amount: new BigNumber(val || 0) })}
+            </div>
+            <div className="w-full">
+                <p className="mb-4 mt-6 text-black font-semibold">
+                    {state.stakeModalState === 'claim' ? 'Available to claim' : 'Amount'}
+                </p>
+                {state.stakeModalState !== 'claim' ? (
+                    <InputContainer error={false /* invalidAmount.isInvalid */}>
+                        <NumericInput
+                            disabled={!isApproved}
+                            className="w-full h-full text-base font-normal "
+                            value={amount.eq(0) ? '' : amount.toFixed()}
+                            onUserInput={(val) => dispatch({ type: 'setAmount', amount: new BigNumber(val || 0) })}
+                        />
+                        <InnerInputText>
+                            <Currency
+                                label={farm?.name}
+                                ticker={tokenSymbolToLogoTicker(farm?.name)}
+                                className="shadow-md"
                             />
-                            <InnerInputText>
-                                <Currency
-                                    label={farm?.name}
-                                    ticker={tokenSymbolToLogoTicker(farm?.name)}
-                                    className="shadow-md"
-                                />
-                                <div
-                                    className={
-                                        !isApproved
-                                            ? 'm-auto cursor-disabled text-gray-800'
-                                            : 'm-auto cursor-pointer hover:underline'
-                                    }
-                                    onClick={(_e) =>
-                                        dispatch({
-                                            type: 'setAmount',
-                                            amount: stakeModalBalance,
-                                        })
-                                    }
-                                >
-                                    Max
-                                </div>
-                            </InnerInputText>
-                        </InputContainer>
-                    ) : (
-                        <AvailableToClaim>{stakeModalBalance?.toFixed()}</AvailableToClaim>
-                    )}
-                    {isApproved && state.stakeModalState !== 'claim' ? (
-                        <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
-                            {invalidAmount.isInvalid && invalidAmount.message ? (
-                                invalidAmount.message
-                            ) : (
-                                <>
-                                    {`Available: ${stakeModalBalance?.toFixed(6)}`}
-                                    {!amount.eq(0) ? ` >>> ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
-                                </>
-                            )}
-                        </div>
-                    ) : (
-                        <>{state.stakeModalState !== 'claim' ? 'Token approval required' : ''}</>
-                    )}
-                    {isApproved ? (
-                        <Button
-                            className="mt-8"
-                            size="lg"
-                            variant="primary"
-                            disabled={amount.eq(0) || stakeModalBalance.eq(0) || invalidAmount.isInvalid}
-                            onClick={(_e) => onStake(farm.address, amount)}
-                        >
-                            {btnLabel}
-                        </Button>
-                    ) : (
-                        <Button className="mt-8" size="lg" variant="primary" onClick={(_e) => onApprove(farm.address)}>
-                            Approve
-                        </Button>
-                    )}
-                </div>
+                            <div
+                                className={
+                                    !isApproved
+                                        ? 'm-auto cursor-disabled text-gray-800'
+                                        : 'm-auto cursor-pointer hover:underline'
+                                }
+                                onClick={(_e) =>
+                                    dispatch({
+                                        type: 'setAmount',
+                                        amount: stakeModalBalance,
+                                    })
+                                }
+                            >
+                                Max
+                            </div>
+                        </InnerInputText>
+                    </InputContainer>
+                ) : (
+                    <AvailableToClaim>{stakeModalBalance?.toFixed()}</AvailableToClaim>
+                )}
+                {isApproved && state.stakeModalState !== 'claim' ? (
+                    <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                        {invalidAmount.isInvalid && invalidAmount.message ? (
+                            invalidAmount.message
+                        ) : (
+                            <>
+                                {`Available: ${stakeModalBalance?.toFixed(6)}`}
+                                {!amount.eq(0) ? ` >>> ${stakeModalBalance?.minus(amount).toFixed(6)}` : ''}
+                            </>
+                        )}
+                    </div>
+                ) : (
+                    <>{state.stakeModalState !== 'claim' ? 'Token approval required' : ''}</>
+                )}
+                {isApproved ? (
+                    <Button
+                        className="mt-8"
+                        size="lg"
+                        variant="primary"
+                        disabled={amount.eq(0) || stakeModalBalance.eq(0) || invalidAmount.isInvalid}
+                        onClick={(_e) => onStake(farm.address, amount)}
+                    >
+                        {btnLabel}
+                    </Button>
+                ) : (
+                    <Button className="mt-8" size="lg" variant="primary" onClick={(_e) => onApprove(farm.address)}>
+                        Approve
+                    </Button>
+                )}
             </div>
         </TWModal>
     );

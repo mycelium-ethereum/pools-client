@@ -2,24 +2,26 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import StakeSLP from '@archetypes/Stake/StakeSLP';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
+import StakePool from '@archetypes/Stake/StakePool';
+import PendingCommits from '@components/PendingCommits';
 
 export default (() => {
     const router = useRouter();
 
     useEffect(() => {
-        router.prefetch('/slp');
+        router.prefetch('/stakepooltoken');
     }, []);
 
     return (
         <Page className={`page`}>
-            <FarmStore>
-                <NavBar />
-                <StakeSLP />
+            <NavBar />
+            <FarmStore farmContext="poolFarms">
+                <StakePool />
             </FarmStore>
             <Footer />
+            <PendingCommits />
         </Page>
     );
 }) as React.FC;

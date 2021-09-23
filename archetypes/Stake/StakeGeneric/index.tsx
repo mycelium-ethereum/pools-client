@@ -10,10 +10,10 @@ import {
     stakeReducer,
     StakeAction,
     StakeState,
-    FarmTableRowData,
     LeverageFilterEnum,
     SideFilterEnum,
     SortByEnum,
+    FarmTableRowData,
 } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -23,6 +23,25 @@ import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo } from '@components/General/Logo';
+
+const getFilterFieldsFromFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
+    if (!farm.bptDetails) {
+        return {};
+    }
+
+    const firstFoundPoolToken = farm.bptDetails.tokens.find((token) => token.isPoolToken);
+
+    if (!firstFoundPoolToken) {
+        return {};
+    }
+
+    // pool tokens have format <leverage><side>-<market>
+    // first character is leverage (1, 3)
+    const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
+    return {
+        leverage,
+    };
+};
 
 export default (({
     logo,
@@ -34,27 +53,35 @@ export default (({
     hideLeverageFilter,
     hideSideFilter,
     fetchingFarms,
+    strategySubtitle,
 }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const poolToken = farm.isPoolToken ? tokenMap[farm.stakingToken.address] : null;
+        const filterFields = farm?.poolDetails
+            ? {
+                  leverage: tokenMap[farm.stakingToken.address]?.leverage,
+                  side: tokenMap[farm.stakingToken.address]?.side,
+              }
+            : getFilterFieldsFromFarm(farm);
 
         return {
             farm: farm.address,
             tokenAddress: farm.stakingToken.address,
             name: farm.name,
-            leverage: poolToken?.leverage,
-            side: poolToken?.side,
-            apr: farm.apr.toNumber(),
-            totalStaked: farm.totalStaked.toNumber(),
-            myStaked: farm.myStaked.toNumber(),
+            leverage: filterFields?.leverage,
+            side: filterFields?.side,
+            totalStaked: farm.totalStaked,
+            tvl: farm.tvl,
+            myStaked: farm.myStaked,
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
-            isPoolToken: farm.isPoolToken,
+            stakingTokenSupply: farm.stakingTokenSupply,
+            bptDetails: farm.bptDetails,
+            poolDetails: farm.poolDetails,
         };
     });
 
@@ -112,11 +139,11 @@ export default (({
             case SortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
             case SortByEnum.TotalValueLocked:
-                return farmB.apr - farmA.apr;
+                return farmB.tvl.toNumber() - farmA.tvl.toNumber();
             case SortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:
-                return farmB.myStaked - farmA.myStaked;
+                return farmB.myStaked.toNumber() - farmA.myStaked.toNumber();
             default:
                 return 0;
         }
@@ -235,7 +262,6 @@ export default (({
                     },
                 },
                 onSuccess: () => {
-                    console.log('UNSTAKE ON SUCCESS');
                     refreshFarm(farmAddress);
                     dispatch({
                         type: 'reset',
@@ -340,6 +366,7 @@ export default (({
                         onClickClaim={handleClaim}
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
+                        strategySubtitle={strategySubtitle}
                     />
                 </FarmContainer>
             </Container>
@@ -365,6 +392,7 @@ export default (({
     hideLeverageFilter?: boolean;
     hideSideFilter?: boolean;
     fetchingFarms: boolean;
+    strategySubtitle?: string;
 }>;
 
 const StakeModalWithState: React.FC<{
