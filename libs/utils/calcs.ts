@@ -1,3 +1,4 @@
+import { Farm } from '@libs/types/Staking';
 import { BigNumber } from 'bignumber.js';
 
 const UP = 1;
@@ -200,4 +201,27 @@ export const calcNextValueTransfer: (
         longValueTransfer: new BigNumber(0),
         shortValueTransfer: new BigNumber(0),
     };
+};
+
+export const calcBptTokenPrice: (args: {
+    bptDetails?: Farm['bptDetails'];
+    stakingTokenSupply: Farm['stakingTokenSupply'];
+}) => BigNumber = ({ bptDetails, stakingTokenSupply }) => {
+    if (!bptDetails) {
+        return new BigNumber(0);
+    }
+    const { tokens } = bptDetails;
+
+    let balancerPoolUSDCValue = new BigNumber(0);
+
+    for (const token of tokens) {
+        const tokenUSDCValue = token.usdcPrice.times(token.reserves);
+        balancerPoolUSDCValue = balancerPoolUSDCValue.plus(tokenUSDCValue);
+    }
+
+    if (balancerPoolUSDCValue.eq(0) || stakingTokenSupply.eq(0)) {
+        return new BigNumber(0);
+    }
+
+    return balancerPoolUSDCValue.div(stakingTokenSupply);
 };

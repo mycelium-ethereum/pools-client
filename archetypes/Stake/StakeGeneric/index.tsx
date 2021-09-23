@@ -74,6 +74,7 @@ export default (({
             leverage: filterFields?.leverage,
             side: filterFields?.side,
             totalStaked: farm.totalStaked,
+            tvl: farm.tvl,
             myStaked: farm.myStaked,
             myRewards: farm.myRewards,
             stakingTokenBalance: farm.stakingTokenBalance,
@@ -137,9 +138,8 @@ export default (({
         switch (state.sortBy) {
             case SortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
-            // case SortByEnum.TotalValueLocked:
-            // TODO fix this, tvl is calculated using tokenPrice so tricky to get in here
-            //     return farmB.apr - farmA.apr;
+            case SortByEnum.TotalValueLocked:
+                return farmB.tvl.toNumber() - farmA.tvl.toNumber();
             case SortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
             case SortByEnum.MyStaked:

@@ -10,6 +10,7 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { ShortLongToken } from '@libs/types/General';
+import { calcBptTokenPrice } from '@libs/utils/calcs';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
@@ -94,29 +95,8 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
     strategySubtitle?: string;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
-    // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-    const calculateBptTokenPrice = (farm: FarmTableRowData) => {
-        if (!farm?.bptDetails) {
-            return new BigNumber(0);
-        }
-        const { tokens } = farm?.bptDetails;
-
-        let balancerPoolUSDCValue = new BigNumber(0);
-
-        for (const token of tokens) {
-            const tokenUSDCValue = token.usdcPrice.times(token.reserves);
-            balancerPoolUSDCValue = balancerPoolUSDCValue.plus(tokenUSDCValue);
-        }
-
-        if (balancerPoolUSDCValue.eq(0) || farm.stakingTokenSupply.eq(0)) {
-            return new BigNumber(0);
-        }
-
-        return balancerPoolUSDCValue.div(farm.stakingTokenSupply);
-    };
-
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calculateBptTokenPrice(farm)),
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
         [farm],
     );
 

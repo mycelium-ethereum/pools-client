@@ -13,6 +13,7 @@ export type BalancerPoolAsset = {
 
 export type FarmTableDetails = {
     totalStaked: BigNumber;
+    tvl: BigNumber;
     myStaked: BigNumber;
     myRewards: BigNumber;
     stakingTokenBalance: BigNumber;

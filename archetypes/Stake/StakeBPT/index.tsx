@@ -15,7 +15,6 @@ export default (() => {
                 refreshFarm={refreshFarm}
                 fetchingFarms={fetchingFarms}
                 farms={farms}
-                hideLeverageFilter
                 hideSideFilter
                 strategySubtitle="via Balancer AMM"
             ></StakeGeneric>

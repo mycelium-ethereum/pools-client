@@ -14,6 +14,7 @@ import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
+import { calcBptTokenPrice } from '@libs/utils/calcs';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -207,6 +208,10 @@ export const FarmStore: React.FC<
                                 stakingDecimalMultiplier,
                             );
 
+                            const tvl = poolDetails
+                                ? poolDetails.poolTokenPrice.times(totalStaked)
+                                : calcBptTokenPrice({ bptDetails, stakingTokenSupply }).times(totalStaked);
+
                             return {
                                 name: isPoolTokenFarm
                                     ? stakingTokenName
@@ -231,6 +236,7 @@ export const FarmStore: React.FC<
                                 isPoolTokenFarm,
                                 bptDetails,
                                 poolDetails: poolDetails,
+                                tvl,
                             };
                         } catch (error) {
                             console.error('failed fetching farm with address: ', address, error);
