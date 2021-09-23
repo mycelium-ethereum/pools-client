@@ -8,8 +8,9 @@ import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import { ARBITRUM } from '@libs/constants';
 
-const ETHERSCAN_URI = 'https://etherscan.io';
+const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
 export default (({ account, className }) => {
@@ -77,7 +78,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                     <div className="px-2 self-center">{accountLong}</div>
                     <TooltipSelector tooltip={{ content: <>Copy</> }}>
                         <CopyOutlined
-                            className="self-center icon"
+                            className="self-center copy"
                             onClick={() => {
                                 /* This requires a secure origin, either HTTPS or localhost. */
                                 try {
@@ -88,7 +89,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
                             }}
                         />
                         <style>{`
-                            svg {
+                            .copy svg {
                                 vertical-align: 0;
                             }
                         `}</style>
@@ -97,7 +98,7 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
             </div>
 
             <div className="py-1 px-4 mb-2">
-                <ViewOnEtherscanOption account={account} />
+                <ViewOnArbiscanOption account={account} />
                 <BridgeFundsOption network={network} />
                 {/*<AddTCROption />*/}
             </div>
@@ -117,19 +118,19 @@ const AccountDropdownButton = ({ account, ensName, network, logout }: AccountDro
     );
 };
 
-const ViewOnEtherscanOption: React.FC<{
+const ViewOnArbiscanOption: React.FC<{
     account: string;
     className?: string;
 }> = ({ account, className }) => {
     return (
         <a
-            className={classNames(className ?? '', 'flex')}
-            href={`${ETHERSCAN_URI}/address/${account}`}
+            className={classNames(className ?? '', 'flex my-1')}
+            href={`${ARBISCAN_URI}/address/${account}`}
             target="_blank"
             rel="noopener noreferrer"
         >
-            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker="ETHERSCAN" />
-            <div className="text-sm">View on Etherscan</div>
+            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker={ARBITRUM} />
+            <div className="text-sm">View on Arbiscan</div>
         </a>
     );
 };
@@ -159,7 +160,7 @@ const BridgeFundsOption = styled(({ network, className }) => {
     display: flex;
     margin-top: 15px;
 
-    ${Logo} {
+    & ${Logo} {
         display: inline;
         vertical-align: 0;
         width: 20px;
