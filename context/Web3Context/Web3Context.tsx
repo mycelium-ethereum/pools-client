@@ -134,17 +134,8 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     }, []);
 
     useEffect(() => {
-        let mounted = true;
         const signer = provider?.getSigner();
         setSigner(signer);
-        signer?.getAddress().then((address) => {
-            if (mounted) {
-                setAccount(address);
-            }
-        });
-        return () => {
-            mounted = false;
-        };
     }, [provider, account]);
 
     React.useMemo(() => {
