@@ -5,7 +5,7 @@ import styled from 'styled-components';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
 type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'DEFAULT';
-export const tokenSymbolToLogoTicker: (tokenSymbol: string) => ShortLongToken = (tokenSymbol) => {
+export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
     }

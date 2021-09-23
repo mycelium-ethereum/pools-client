@@ -91,7 +91,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         <InnerInputText>
                             <Currency
                                 label={farm?.name}
-                                ticker={farm.poolDetails ? tokenSymbolToLogoTicker(farm?.name) : farm?.name}
+                                ticker={tokenSymbolToLogoTicker(farm?.name)}
                                 className="shadow-md"
                             />
                             <div
