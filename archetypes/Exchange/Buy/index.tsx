@@ -15,8 +15,10 @@ import FeeNote from '@archetypes/Exchange/FeeNote';
 import Button from '@components/General/Button';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import Close from '/public/img/general/close-black.svg';
+import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 
 const inputRow = 'relative my-2 ';
 
@@ -70,6 +72,8 @@ export default (() => {
     const [showModal, setShowModal] = useState(false);
 
     const pool = usePool(selectedPool);
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     useEffect(() => {
         if (
@@ -127,7 +131,9 @@ export default (() => {
                 </span>
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Power Leverage</p>
+                <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
+                    <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
+                </TooltipSelector>
                 <TWButtonGroup
                     value={leverage}
                     options={LEVERAGE_OPTIONS.map((option) => ({
@@ -135,7 +141,7 @@ export default (() => {
                         text: `${option.leverage}`,
                         disabled: option.disabled
                             ? {
-                                  text: 'Coming soon',
+                                  optionKey: TooltipKeys.ComingSoon,
                               }
                             : undefined,
                     }))}
@@ -183,9 +189,9 @@ export default (() => {
                 </div>
             </div>
 
-            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} />
+            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} receiveIn={receiveIn} />
 
-            <FeeNote pool={pool} isMint={true} />
+            <FeeNote poolName={pool.name} isMint={true} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 

@@ -1,18 +1,14 @@
 import React from 'react';
-import Icon, { CloseOutlined, InfoCircleFilled } from '@ant-design/icons';
+import Icon, { InfoCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
-// @ts-ignore
-import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
-// @ts-ignore
 import Error from 'public/img/general/error.svg';
-// @ts-ignore
 import Success from 'public/img/general/success.svg';
-// @ts-ignore
 import Warning from 'public/img/general/warning.svg';
 import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
+import Close from '/public/img/general/close-black.svg';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -40,6 +36,8 @@ const hashieStates = (placement: PlacementType) => ({
     exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
+const icon = "text-2xl leading-none text-transparent align-baseline"
+
 const appearances: Record<
     string,
     {
@@ -50,13 +48,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <Icon component={Success} />,
+        icon: <Icon className={icon} component={Success} />,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <Icon component={Error} />,
+        icon: <Icon className={icon} component={Error} />,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -68,46 +66,24 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <Icon component={Warning} />,
+        icon: <Icon className={icon} component={Warning} />,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <InfoCircleFilled />,
+        icon: <InfoCircleFilled className={icon} />,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',
     },
     loading: {
-        icon: <Icon style={{color: '#000'}} component={TracerLoading} />,
+        icon: <img className="w-[35px] inline mr-2" src="/img/general/loading.gif" alt="Tracer Loading" />,
         text: '#111928',
         fg: '#2684FF',
         bg: '#00156C',
     },
 };
-
-
-const IconWrap = styled.span`
-    display: inline-flex;
-    justify-content: center;
-    margin-right: 0.5rem;
-    vertical-align: 0.125rem;
-    color: transparent;
-    svg {
-        width: 26px;
-        height: 26px;
-    }
-`;
-const Close = styled(CloseOutlined)`
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    height: 1rem;
-    width: 1rem;
-    color: #111928;
-    cursor: pointer;
-`;
 
 const Content = styled((props: any) => (
     <div className={classNames(
@@ -126,7 +102,6 @@ const Content = styled((props: any) => (
 
     word-break: break-word;
     font-size: 1rem;
-    color: #3DA8F5;
 `;
 
 type HProps = {
@@ -166,13 +141,15 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <div className="text-cool-gray-900 text-xl">
-                <IconWrap>{appearance.icon}</IconWrap>
+            <div className="text-cool-gray-900 text-base font-bold mb-2">
+                <span className="mr-2">
+                    {appearance.icon}
+                </span>
                 {/* title */}
                 <span>
                     {children_[0]}
                 </span>
-                <Close onClick={onDismiss}/>
+                <Close className="absolute h-3 w-3 top-[2rem] right-6" onClick={onDismiss}/>
             </div>
             <Content>{children_[1]}</Content>
         </ToastWrapper>
@@ -205,8 +182,8 @@ const ToastWrapper = styled.div`
     margin-bottom: 0.5rem;
     margin-right: 0.5rem;
     border-radius: 0.375rem;
-    max-width: 24rem;
-    width: 24rem;
+    max-width: 25rem;
+    width: 25rem;
     display: flex;
     flex-direction: column;
 

@@ -36,6 +36,7 @@ export default (() => {
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
+                        frontRunning: pool.frontRunningInterval.toNumber(),
                     },
                     {
                         address: longToken.address,
@@ -55,6 +56,7 @@ export default (() => {
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),
+                        frontRunning: pool.frontRunningInterval.toNumber(),
                     },
                 );
             });

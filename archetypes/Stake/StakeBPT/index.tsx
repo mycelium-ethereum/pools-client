@@ -4,19 +4,19 @@ import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
 
 export default (() => {
-    const { slpFarms, refreshFarm, fetchingFarms } = useFarms();
+    const { farms, refreshFarm, fetchingFarms } = useFarms();
     return (
         <>
             <StakeGeneric
-                logo="SUSHI"
-                title="SLP Token Strategies"
-                subTitle="Stake SLP Tokens and earn TCR."
-                tokenType="SLP"
+                logo="BALANCER"
+                title="Balancer Pool Token Strategies"
+                subTitle="Stake Balancer Pool Tokens and earn TCR."
+                tokenType="Balancer Pool"
                 refreshFarm={refreshFarm}
                 fetchingFarms={fetchingFarms}
-                farms={slpFarms}
-                hideLeverageFilter
+                farms={farms}
                 hideSideFilter
+                strategySubtitle="via Balancer AMM"
             ></StakeGeneric>
         </>
     );

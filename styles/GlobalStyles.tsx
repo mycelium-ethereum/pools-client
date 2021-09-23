@@ -144,4 +144,17 @@ export default createGlobalStyle`
         top: 65px !important;
         z-index: 100001 !important;
     }
+    
+    /* ANTD overrides */
+	.ant-tooltip-inner {
+		background: white;
+		color: black;
+	}
+    .ant-tooltip-inner a {
+        color: blue;
+        text-decoration: underline;
+    }
+	.ant-tooltip-arrow-content {
+		background-color: white;
+	}
 `;

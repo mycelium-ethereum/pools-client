@@ -1,30 +1,30 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import { Tooltip } from '@components/General/Tooltip';
-const STAKE = 0;
-const SLP = 1;
+const POOLTOKEN = 0;
+const BPT = 1;
 
 // const InvestNav
 export default (({ left, right }) => {
     const router = useRouter();
 
     useEffect(() => {
-        router.prefetch('/stake');
-        router.prefetch('/slp');
+        router.prefetch('/stakepooltoken');
+        router.prefetch('/stakebpt');
     }, []);
 
     const handleRoute = (route: number) => {
         switch (route) {
-            case STAKE:
+            case POOLTOKEN:
                 router.push({
-                    pathname: '/stake',
+                    pathname: '/stakepooltoken',
                 });
                 break;
-            case SLP:
+            case BPT:
                 router.push({
-                    pathname: '/slp',
+                    pathname: '/stakebpt',
                 });
                 break;
             default:
@@ -37,13 +37,12 @@ export default (({ left, right }) => {
         <StakeNav>
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
-                <Item onClick={(_e) => handleRoute(STAKE)} selected={router.pathname === '/stake'}>
-                    Stake Pool
+                <Item onClick={(_e) => handleRoute(POOLTOKEN)} selected={router.pathname === '/stakepooltoken'}>
+                    Stake Pool Tokens
                 </Item>
-                <Item onClick={(_e) => console.debug('coming soon')} selected={router.pathname === '/slp'}>
-                    <Tooltip text="Coming soon" placement="bottom">
-                        Stake SLP
-                    </Tooltip>
+                <Item onClick={(_e) => console.log(`${BPT} coming soon`)} selected={router.pathname === '/stakebpt'}>
+                    {/* <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/stakebpt'}> */}
+                    <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>Stake BPT</TooltipSelector>
                 </Item>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>
@@ -66,7 +65,7 @@ const StakeNav = styled.div`
 `;
 
 const Item = styled.div<{ selected: boolean }>`
-    width: 120px;
+    width: 130px;
     height: 44px;
     line-height: 44px;
     display: inline;

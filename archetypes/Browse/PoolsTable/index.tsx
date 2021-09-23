@@ -2,7 +2,7 @@ import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import Modal from '@components/General/Modal';
@@ -16,6 +16,10 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+
+import Lock from '/public/img/general/lock.svg';
+import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
@@ -38,58 +42,15 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>{/* Empty header for buttons column */}</span>
                 </TableHeader>
                 {rows.map((token, index) => {
-                    const hasHoldings = token.myHoldings > 0;
                     return (
-                        <TableRow key={token.address} rowNumber={index}>
-                            <span>
-                                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                {token.symbol}
-                            </span>
-                            <span>{toApproxCurrency(token.lastPrice)}</span>
-
-                            <RebalanceRate rebalanceRate={token.rebalanceRate} />
-                            <TimeLeft targetTime={token.nextRebalance} />
-                            <span>{toApproxCurrency(token.totalValueLocked)}</span>
-                            <span>
-                                <div>{`${token.myHoldings.toFixed(2)}`}</div>
-                                <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
-                            </span>
-                            <span>
-                                <Button
-                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    onClick={() =>
-                                        onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
-                                    }
-                                >
-                                    Mint
-                                </Button>
-                                <Button
-                                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                                    size="sm"
-                                    variant="primary-light"
-                                    disabled={!hasHoldings}
-                                    onClick={() =>
-                                        onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)
-                                    }
-                                >
-                                    Burn
-                                </Button>
-                                <Actions
-                                    provider={provider as ethers.providers.JsonRpcProvider}
-                                    token={{
-                                        address: token.address,
-                                        decimals: token.decimals,
-                                        symbol: token.symbol,
-                                    }}
-                                    arbiscanTarget={{
-                                        type: ArbiscanEnum.token,
-                                        target: token.address,
-                                    }}
-                                />
-                            </span>
-                        </TableRow>
+                        <TokenRow
+                            token={token}
+                            onClickBuy={onClickBuy}
+                            onClickSell={onClickSell}
+                            index={index}
+                            key={token.address}
+                            provider={provider}
+                        />
                     );
                 })}
             </Table>
@@ -139,6 +100,74 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
+
+const TokenRow: React.FC<{
+    token: BrowseTableRowData;
+    index: number;
+    onClickBuy: (pool: string, side: SideEnum) => void;
+    onClickSell: (pool: string, side: SideEnum) => void;
+    provider: ethers.providers.JsonRpcProvider | undefined;
+}> = ({ token, onClickBuy, onClickSell, index, provider }) => {
+    const hasHoldings = useMemo(() => token.myHoldings > 0, [token.myHoldings]);
+
+    const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
+
+    return (
+        <TableRow rowNumber={index}>
+            <span>
+                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                {token.symbol}
+            </span>
+            <span>{toApproxCurrency(token.lastPrice)}</span>
+
+            <RebalanceRate rebalanceRate={token.rebalanceRate} />
+            <span className="flex">
+                {!isBeforeFrontRunning ? (
+                    <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
+                        <Lock className="mr-2" />
+                    </TooltipSelector>
+                ) : null}
+                <TimeLeft targetTime={token.nextRebalance} />
+            </span>
+            <span>{toApproxCurrency(token.totalValueLocked)}</span>
+            <span>
+                <div>{`${token.myHoldings.toFixed(2)}`}</div>
+                <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
+            </span>
+            <span>
+                <Button
+                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                    size="sm"
+                    variant="primary-light"
+                    onClick={() => onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                >
+                    Mint
+                </Button>
+                <Button
+                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                    size="sm"
+                    variant="primary-light"
+                    disabled={!hasHoldings}
+                    onClick={() => onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                >
+                    Burn
+                </Button>
+                <Actions
+                    provider={provider as ethers.providers.JsonRpcProvider}
+                    token={{
+                        address: token.address,
+                        decimals: token.decimals,
+                        symbol: token.symbol,
+                    }}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.token,
+                        target: token.address,
+                    }}
+                />
+            </span>
+        </TableRow>
+    );
+};
 
 // const ColoredChangeNumber = (({ number }) => {
 //     return (

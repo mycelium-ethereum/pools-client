@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Link from 'next/link';
 
 import DiscourseLogo from '/public/img/socials/discourse.svg';
 import TwitterLogo from '/public/img/socials/twitter.svg';
@@ -26,19 +27,13 @@ const Footer = styled(({ className }) => {
             </Socials>
             <Items>
                 <Item>
-                    <a href="/privacy-policy" target="_blank">
-                        Privacy Policy
-                    </a>
+                    <Link href="/privacy-policy">Privacy Policy</Link>
                 </Item>
                 <Item>
-                    <a href="/terms-of-use" target="_blank">
-                        Terms of Use
-                    </a>
+                    <Link href="/terms-of-use">Terms of Use</Link>
                 </Item>
                 <Item>
-                    <a href="/disclaimer" target="_blank">
-                        Disclaimer
-                    </a>
+                    <Link href="/disclaimer">Disclaimer</Link>
                 </Item>
                 <Item>
                     <a
@@ -50,25 +45,10 @@ const Footer = styled(({ className }) => {
                     </a>
                 </Item>
                 <Item>
-                    <a href="/security-audit.pdf" target="_blank">
+                    <a href="https://tracer.finance/radar/sigma-prime-audit-response/" target="_blank" rel="noreferrer">
                         Security Audit
                     </a>
                 </Item>
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">*/}
-                {/*        Docs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/faqs/perpetual-swaps-faq" target="_blank" rel="noreferrer">*/}
-                {/*        FAQs*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
-                {/*<Item>*/}
-                {/*    <a href="https://docs.tracer.finance/tutorials/trader-tutorials" target="_blank" rel="noreferrer">*/}
-                {/*        Tutorials*/}
-                {/*    </a>*/}
-                {/*</Item>*/}
             </Items>
         </div>
     );
@@ -79,7 +59,7 @@ const Footer = styled(({ className }) => {
     margin-top: auto;
     padding: 1rem 2rem;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         flex-direction: column;
     }
 `;
@@ -87,7 +67,7 @@ const Footer = styled(({ className }) => {
 const Socials = styled.div`
     display: flex;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         margin: 2rem 0 3rem;
     }
 `;
@@ -103,14 +83,14 @@ const SocialIcon = styled.a`
 const Items = styled.div`
     display: flex;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         flex-direction: column;
     }
 `;
 const Item = styled.div`
     margin-left: 2rem;
 
-    @media (max-width: 1100px) {
+    @media (max-width: 1024px) {
         margin-left: 0;
         margin-bottom: 1rem;
 

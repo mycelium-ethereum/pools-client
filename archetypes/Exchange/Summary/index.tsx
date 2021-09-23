@@ -13,10 +13,11 @@ type SummaryProps = {
     pool: Pool;
     amount: BigNumber;
     isLong: boolean;
+    receiveIn: number;
 };
 
 // const BuySummary
-export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => {
+export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -30,7 +31,6 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
-
     const balancesAfter = {
         longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
         shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
@@ -51,7 +51,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                     {token.name}
                 </h2>
                 <Transition
-                    show={!!amount}
+                    show={!amount.eq(0)}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -71,22 +71,27 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong }) => 
                 </Transition>
                 <Countdown>
                     {'Receive In'}
-                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
+                    <TimeLeft targetTime={receiveIn} />
                 </Countdown>
             </Box>
         </HiddenExpand>
     );
 };
 
-export const SellSummary: React.FC<
-    SummaryProps & {
-        gasFee: number;
-    }
-> = ({ pool, amount, isLong }) => {
-    const token = isLong ? pool.longToken : pool.shortToken;
-    const notional = isLong ? pool.longBalance : pool.shortBalance;
-
-    const tokenPrice = calcTokenPrice(notional, token.supply);
+export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const notional = useMemo(
+        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
+        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    );
+    const pendingBurns = useMemo(
+        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
+        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+    );
+    const tokenPrice = useMemo(
+        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+        [notional, token, pendingBurns],
+    );
 
     return (
         <HiddenExpand
@@ -103,7 +108,7 @@ export const SellSummary: React.FC<
                     USDC
                 </h2>
                 <Transition
-                    show={!!amount}
+                    show={!amount.eq(0)}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -117,7 +122,7 @@ export const SellSummary: React.FC<
                 </Transition>
                 <Countdown>
                     {'Receive In'}
-                    <TimeLeft targetTime={pool.lastUpdate.plus(pool.updateInterval).toNumber()} />
+                    <TimeLeft targetTime={receiveIn} />
                 </Countdown>
             </Box>
         </HiddenExpand>

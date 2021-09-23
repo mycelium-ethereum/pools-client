@@ -7,9 +7,8 @@ import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
-import useEstimatedGasFee from '@libs/hooks/useEstimatedGasFee';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
-import { toApproxCurrency, toCommitType } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
@@ -17,6 +16,7 @@ import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import FeeNote from '@archetypes/Exchange/FeeNote';
+import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -58,10 +58,9 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, commitAction, invalidAmount } = swapState;
+    const { amount, side, selectedPool, invalidAmount } = swapState;
 
     const pool = usePool(selectedPool);
-    const gasFee = useEstimatedGasFee(pool.committer.address, amount, toCommitType(side, commitAction));
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
@@ -73,6 +72,13 @@ export default (() => {
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
+
+    const tokenPrice = useMemo(
+        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
+        [notional, token, pendingBurns],
+    );
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     useEffect(() => {
         if (pool) {
@@ -121,14 +127,14 @@ export default (() => {
                     }}
                 />
                 <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
-                    Expected Price: {toApproxCurrency(calcTokenPrice(pool.nextShortBalance, pool.nextLongBalance))}
+                    Expected Price: {toApproxCurrency(tokenPrice)}
                 </p>
             </div>
             <div className="w-full">
                 <p className="mb-2 text-black">Amount</p>
                 <InputContainer className="w-full ">
                     <Input
-                        className="w-full h-full text-xl font-normal text-base"
+                        className="w-full h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
@@ -181,9 +187,9 @@ export default (() => {
                 </p>
             </div>
 
-            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} gasFee={gasFee} />
+            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} receiveIn={receiveIn} />
 
-            <FeeNote pool={pool} isMint={false} />
+            <FeeNote poolName={pool.name} isMint={false} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>

@@ -2,12 +2,12 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
-import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
-import { providers, ethers } from 'ethers';
+import { ethers, providers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { ARBITRUM } from '@libs/constants';
@@ -39,7 +39,7 @@ type Web3Context = {
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
-    provider?: providers.Web3Provider;
+    provider?: providers.JsonRpcProvider;
 };
 
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
@@ -58,15 +58,17 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(undefined);
-    const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
+    const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
+        new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/dT1PNFTKLLfSdqR1jWModJajw-3Z6Akd'),
+    );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[0]);
+    const [config, setConfig] = useState<Network>(networkConfig[ARBITRUM]);
 
     // Initialize OnboardJS
     useEffect(() => {
@@ -168,15 +170,16 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     // unsupported network popup
     useEffect(() => {
-        if (!networkConfig[network ?? -1] && provider) {
+        if (!networkConfig[network ?? -1] && provider && account) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
-                const toastId = addToast(
+                // @ts-ignore
+                errorToastID.current = addToast(
                     [
                         'Unsupported Network',
-                        <span key="unsupported-network-content">
+                        <span key="unsupported-network-content" className="text-sm">
                             <a
-                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                                 onClick={() => {
                                     switchNetworks(provider, ARBITRUM);
                                 }}
@@ -184,13 +187,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 Switch to Arbitrum Mainnet
                             </a>
                             <br />
+                            <span>New to Arbitrum? </span>
                             <a
-                                href="https://medium.com/stakingbits/guide-to-arbitrum-and-setting-up-metamask-for-arbitrum-543e513cdd8b"
+                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
                                 target="_blank"
                                 rel="noreferrer noopner"
-                                className="mt-3 text-sm underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                             >
-                                Learn more here
+                                Get started
                             </a>
                         </span>,
                     ],
@@ -199,8 +203,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                         autoDismiss: false,
                     },
                 );
-                // @ts-ignore
-                errorToastID.current = toastId;
             }
         } else {
             if (errorToastID.current) {
@@ -212,7 +214,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 errorToastID.current = '';
             }
         }
-    }, [network]);
+    }, [network, account]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();

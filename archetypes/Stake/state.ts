@@ -1,3 +1,4 @@
+import { FarmTableDetails } from '@libs/types/Staking';
 import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 
@@ -21,20 +22,13 @@ export enum SortByEnum {
     MyRewards = 'My Rewards',
 }
 
-export interface FarmTableRowData {
+export type FarmTableRowData = {
     farm: string;
     tokenAddress: string;
     name: string;
     leverage?: number;
     side?: SideEnum;
-    apr: number;
-    totalStaked: number;
-    myStaked: number;
-    myRewards: BigNumber;
-    stakingTokenBalance: BigNumber;
-    rewardsPerYear: BigNumber;
-    isPoolToken: boolean;
-}
+} & FarmTableDetails;
 
 export interface StakeState {
     search: string;

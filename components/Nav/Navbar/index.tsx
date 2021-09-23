@@ -60,13 +60,13 @@ export const NavBarContent = styled(({ className }) => {
         <nav className={`${className} container`}>
             <HeaderSiteSwitcher />
             <Links>
-                <li className={linkStyles + (route === '' ? ' selected' : '')}>
+                <li className={linkStyles + (route === '' || route === 'browse' ? ' selected' : '')}>
                     <Link href="/">
-                        <a className="m-auto">Invest</a>
+                        <a className="m-auto">Trade</a>
                     </Link>
                 </li>
-                <li className={linkStyles + (route === 'stake' ? ' selected' : '')}>
-                    <Link href="/stake">
+                <li className={linkStyles + (route.startsWith('stake') ? ' selected' : '')}>
+                    <Link href="/stakepooltoken">
                         <a className="m-auto">Stake</a>
                     </Link>
                 </li>

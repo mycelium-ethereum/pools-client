@@ -2,8 +2,9 @@ import React, { Fragment } from 'react';
 import { Logo } from '@components/General';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
-import { ArbiscanEnum, openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
+import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
+import { ARBITRUM } from '@libs/constants';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget }) => (
@@ -42,10 +43,10 @@ export default (({ provider, token, arbiscanTarget }) => (
                                 </div>
                                 <div
                                     className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
-                                    onClick={() => openEtherscan(arbiscanTarget.type, arbiscanTarget.target)}
+                                    onClick={() => openArbiscan(arbiscanTarget.type, arbiscanTarget.target)}
                                 >
-                                    <Logo className="relative inline mr-2 w-[18px]" ticker={'ETHERSCAN'} />
-                                    View on Etherscan
+                                    <Logo className="relative inline mr-2 w-[18px]" ticker={ARBITRUM} />
+                                    View on Arbiscan
                                 </div>
                             </div>
                         </Popover.Panel>

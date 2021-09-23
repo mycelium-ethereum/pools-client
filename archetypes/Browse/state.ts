@@ -30,6 +30,7 @@ export interface BrowseTableRowData {
     totalValueLocked: number;
     myHoldings: number;
     nextRebalance: number;
+    frontRunning: number;
 }
 
 export interface BrowseState {

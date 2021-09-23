@@ -46,9 +46,10 @@ export type TokenBreakdown = PoolToken & {
     pool: string;
 };
 
-export type PoolToken = Token & {
+export type PoolToken = Omit<Token, 'symbol'> & {
     side: SideEnum;
     supply: BigNumber;
+    symbol: string;
 };
 
 export type PendingAmounts = {

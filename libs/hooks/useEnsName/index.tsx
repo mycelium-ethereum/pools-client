@@ -5,7 +5,7 @@ import ENS, { getEnsAddress } from '@ensdomains/ensjs';
 
 // const useEnsName
 export default ((account: string) => {
-    const [ensName, setEnsName] = useState(account);
+    const [ensName, setEnsName] = useState('');
     const [ens, setEns] = useState(undefined);
     const { provider } = useWeb3();
 
@@ -26,6 +26,7 @@ export default ((account: string) => {
                     }
                 } catch (err) {
                     console.error('Failed to fetch ens name', err);
+                    setEnsName('');
                 }
             };
             getEns();
