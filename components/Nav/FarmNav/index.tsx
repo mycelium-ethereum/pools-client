@@ -38,7 +38,7 @@ export default (({ left, right }) => {
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
                 <Item onClick={(_e) => handleRoute(POOLTOKEN)} selected={router.pathname === '/stakepooltoken'}>
-                    Stake Pool Token
+                    Stake Pool Tokens
                 </Item>
                 <Item onClick={(_e) => console.log(`${BPT} coming soon`)} selected={router.pathname === '/stakebpt'}>
                     {/* <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/stakebpt'}> */}
