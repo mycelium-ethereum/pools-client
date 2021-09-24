@@ -6,7 +6,7 @@ export const Table: React.FC<{ className?: string }> = ({ className, children })
         <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
             <div className="overflow-x-scroll h-full">
                 <div className="py-2 align-middle inline-block min-w-full">
-                    <div className="shadow border-b border-gray-200 sm:rounded-lg">
+                    <div className="border-b border-gray-200 sm:rounded-lg">
                         <table className="min-w-full divide-y divide-gray-200">{children}</table>
                     </div>
                 </div>
