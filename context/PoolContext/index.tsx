@@ -93,38 +93,42 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
     // fetch all pending commits
     useEffect(() => {
+        let mounted = true;
         if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 const decimals = pool.quoteToken.decimals;
-
                 // fetch commits
                 try {
                     fetchCommits(pool.committer.address, provider, pool.quoteToken.decimals).then((committerInfo) => {
-                        poolsDispatch({
-                            type: 'setPendingAmounts',
-                            pool: pool.address,
-                            pendingLong: committerInfo.pendingLong,
-                            pendingShort: committerInfo.pendingShort,
-                        });
+                        if (mounted) {
+                            poolsDispatch({
+                                type: 'setPendingAmounts',
+                                pool: pool.address,
+                                pendingLong: committerInfo.pendingLong,
+                                pendingShort: committerInfo.pendingShort,
+                            });
 
-                        setExpectedPrice(pool);
+                            setExpectedPrice(pool);
 
-                        committerInfo.allUnexecutedCommits.map((commit) => {
-                            commit.getTransaction().then((txn) => {
-                                commitDispatch({
-                                    type: 'addCommit',
-                                    commitInfo: {
-                                        pool: pool.address,
-                                        id: commit.args.commitID.toNumber(),
-                                        amount: new BigNumber(ethers.utils.formatUnits(commit.args.amount, decimals)),
-                                        type: commit.args.commitType as CommitEnum,
-                                        from: txn?.from,
-                                        txnHash: txn?.hash,
-                                        created: Date.now() / 1000,
-                                    },
+                            committerInfo.allUnexecutedCommits.map((commit) => {
+                                commit.getTransaction().then((txn) => {
+                                    commitDispatch({
+                                        type: 'addCommit',
+                                        commitInfo: {
+                                            pool: pool.address,
+                                            id: commit.args.commitID.toNumber(),
+                                            amount: new BigNumber(
+                                                ethers.utils.formatUnits(commit.args.amount, decimals),
+                                            ),
+                                            type: commit.args.commitType as CommitEnum,
+                                            from: txn?.from,
+                                            txnHash: txn?.hash,
+                                            created: Date.now() / 1000,
+                                        },
+                                    });
                                 });
                             });
-                        });
+                        }
                     });
                 } catch (err) {
                     console.error('Failed to initialise committer', err);
@@ -134,6 +138,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 subscribeToPool(pool.address);
             });
         }
+        return () => {
+            mounted = false;
+        };
     }, [provider, poolsState.poolsInitialised]);
 
     // update token balances and approvals when address changes

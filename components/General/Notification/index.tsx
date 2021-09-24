@@ -149,7 +149,7 @@ const Hashie: React.FC<HProps | any> = ({
                 <span>
                     {children_[0]}
                 </span>
-                <Close className="absolute h-3 w-3 top-[2rem] right-6" onClick={onDismiss}/>
+                <Close className="absolute h-3 w-3 top-[2rem] right-6 cursor-pointer" onClick={onDismiss}/>
             </div>
             <Content>{children_[1]}</Content>
         </ToastWrapper>

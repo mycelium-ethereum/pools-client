@@ -159,24 +159,6 @@ export const networkConfig: Record<string, Network> = {
             '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
         },
     },
-    '42': {
-        name: 'Kovan',
-        previewUrl: 'https://kovan.etherscan.io',
-        contracts: {
-            poolFactory: {
-                address: '0x24d73Dd9Aa5ca7C7eA59e5aB3B5f5BA9784733F5',
-                abi: PoolFactory__factory.abi,
-            },
-        },
-        poolFarms: [],
-        bptFarms: [],
-        publicRPC: 'https://kovan.infura.io/v3/ad68300d4b3e483f8cb54452485b4854',
-        hex: '0x2A',
-        graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-kovan',
-        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
-        knownUSDCPriceFeeds: {},
-    },
     '1337': {
         name: 'Local',
         previewUrl: '',

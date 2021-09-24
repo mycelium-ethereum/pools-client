@@ -170,22 +170,27 @@ export const fetchCommits: (
     allUnexecutedCommits: CreatedCommitType[];
 }> = async (committer, provider, quoteTokenDecimals) => {
     console.debug(`Initialising committer: ${committer}`);
-    const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
+    const defaultState = {
+        pendingLong: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
+        },
+        pendingShort: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
+        },
+        allUnexecutedCommits: [],
+    };
 
-    const earliestUnexecuted = await contract?.earliestCommitUnexecuted();
+    if (!provider || !committer) {
+        return defaultState;
+    }
+
+    const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
+    const earliestUnexecuted = await contract.earliestCommitUnexecuted();
     if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
         console.debug('No unexecuted commits');
-        return {
-            pendingLong: {
-                mint: new BigNumber(0),
-                burn: new BigNumber(0),
-            },
-            pendingShort: {
-                mint: new BigNumber(0),
-                burn: new BigNumber(0),
-            },
-            allUnexecutedCommits: [],
-        };
+        return defaultState;
     }
 
     let allUnexecutedCommits: CreatedCommitType[] = [];
