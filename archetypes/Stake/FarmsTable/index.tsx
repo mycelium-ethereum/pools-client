@@ -119,17 +119,17 @@ const PoolRow: React.FC<{
                 </div>
                 <div className="flex flex-col justify-center">
                     {farm.link ? (
-                        <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">
-                            {farm.name}
-                        </a>
+                        <>
+                            <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">
+                                {farm.name}
+                            </a>
+                            <a className="flex opacity-50" href={farm.link} target="_blank" rel="noopener noreferrer">
+                                {farm.linkText || 'click to view'}
+                            </a>
+                        </>
                     ) : (
                         <div>{farm.name}</div>
                     )}
-                    {farm.linkText ? (
-                        <a className="flex opacity-50" href={farm.link} target="_blank" rel="noopener noreferrer">
-                            {farm.linkText}
-                        </a>
-                    ) : null}
                 </div>
             </div>
             <span>{apr.times(100).toFixed(2)}%</span>
