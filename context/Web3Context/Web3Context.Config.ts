@@ -11,6 +11,8 @@ type Farm = {
     abi: ethers.ContractInterface;
     pool: string;
     balancerPoolId?: string;
+    link?: string;
+    linkText?: string;
 };
 export type Network = {
     name: string;
@@ -145,6 +147,8 @@ export const networkConfig: Record<string, Network> = {
                 balancerPoolId: '0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
+                linkText: '(click to view pool)',
             },
             {
                 // 50 wBTC 33 3S-BTC 17 3L-BTC
@@ -152,6 +156,8 @@ export const networkConfig: Record<string, Network> = {
                 balancerPoolId: '0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
+                linkText: '(click to view pool)',
             },
             {
                 // 50 1S-ETH 25 1L-ETH 25 wETH
@@ -159,6 +165,8 @@ export const networkConfig: Record<string, Network> = {
                 balancerPoolId: '0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a',
                 pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a',
+                linkText: '(click to view pool)',
             },
             {
                 // 50 1S-BTC 25 1L-BTC 25 wBTC
@@ -166,6 +174,8 @@ export const networkConfig: Record<string, Network> = {
                 balancerPoolId: '0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b',
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b',
+                linkText: '(click to view pool)',
             },
         ],
         hex: '0xA4B1',

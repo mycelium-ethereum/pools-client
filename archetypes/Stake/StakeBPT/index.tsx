@@ -16,7 +16,6 @@ export default (() => {
                 fetchingFarms={fetchingFarms}
                 farms={farms}
                 hideSideFilter
-                strategySubtitle="via Balancer AMM"
             ></StakeGeneric>
         </>
     );

@@ -172,7 +172,7 @@ export const FarmStore: React.FC<
                 }
 
                 Promise.all(
-                    config[farmContext].map(async ({ address, abi, pool, balancerPoolId }) => {
+                    config[farmContext].map(async ({ address, abi, pool, balancerPoolId, link, linkText }) => {
                         try {
                             const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
@@ -264,6 +264,8 @@ export const FarmStore: React.FC<
                                 bptDetails,
                                 poolDetails: poolDetails,
                                 tvl,
+                                link,
+                                linkText,
                             };
                         } catch (error) {
                             console.error('failed fetching farm with address: ', address, error);
