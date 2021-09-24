@@ -55,7 +55,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <p className="mt-2 text-sm text-cool-gray-900">
+            <p className="mt-2 text-sm text-cool-gray-900 max-w-2xl">
                 * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
                 indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
                 <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
