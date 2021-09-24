@@ -130,21 +130,25 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             };
         case 'setPendingAmounts':
             console.debug(`Setting pending amounts on ${action.pool}`, state.pools);
-            return {
-                ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        committer: {
-                            ...state.pools[action.pool]?.committer,
-                            pendingLong: action.pendingLong,
-                            pendingShort: action.pendingShort,
+            const currentCommitter = state.pools[action.pool]?.committer
+            if (currentCommitter) {
+                return {
+                    ...state,
+                    pools: {
+                        ...state.pools,
+                        [action.pool]: {
+                            ...state.pools[action.pool],
+                            committer: {
+                                ...currentCommitter,
+                                pendingLong: action.pendingLong,
+                                pendingShort: action.pendingShort,
+                            },
                         },
                     },
-                },
-            };
-
+                };
+            } else {
+                return state
+            }
         case 'addToPending':
             const committer = state.pools[action.pool].committer;
             switch (action.commitType) {
