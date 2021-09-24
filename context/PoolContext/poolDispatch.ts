@@ -1,5 +1,5 @@
 import { CommitEnum } from '@libs/constants';
-import { CreatedCommitType, PendingAmounts, Pool } from '@libs/types/General';
+import { PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
@@ -34,7 +34,6 @@ export type PoolAction =
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
-    | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
     | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
@@ -118,20 +117,6 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     },
                 },
             };
-        case 'setUnexecutedCommits':
-            return {
-                ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        committer: {
-                            ...state.pools[action.pool].committer,
-                            allUnexecutedCommits: action.commits,
-                        },
-                    },
-                },
-            };
         case 'setLastUpdate':
             return {
                 ...state,
@@ -144,6 +129,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setPendingAmounts':
+            console.debug(`Setting pending amounts on ${action.pool}`, state.pools);
             return {
                 ...state,
                 pools: {
@@ -151,7 +137,7 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     [action.pool]: {
                         ...state.pools[action.pool],
                         committer: {
-                            ...state.pools[action.pool].committer,
+                            ...state.pools[action.pool]?.committer,
                             pendingLong: action.pendingLong,
                             pendingShort: action.pendingShort,
                         },
