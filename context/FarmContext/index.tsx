@@ -308,12 +308,6 @@ export const FarmStore: React.FC<
     );
 };
 
-// generates a farm name where the non-pool token (if either) is listed second
-const generateBptFarmName = (tokens: BalancerPoolAsset[]) => {
-    // ensure that the non-pool token is the second listed token
-    return tokens.map((token) => token.symbol).join(', ');
-};
-
 export const useFarms: () => ContextProps = () => {
     const context = useContext(FarmContext);
     if (context === undefined) {
