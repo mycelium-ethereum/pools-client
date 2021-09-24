@@ -57,6 +57,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
+    // ref to assist in the ensuring that contracts are not double subscribed
+    const subscriptions = useRef<Record<string, boolean>>({});
 
     // if the pools from the factory change, re-init them
     useMemo(() => {
@@ -220,7 +222,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             ) as PoolCommitter;
 
             // @ts-ignore
-            if (!poolsState.subscriptions[committerInfo.address]) {
+            if (!subscriptions.current[committerInfo.address]) {
                 console.debug(`Subscribing committer: ${committerInfo.address}`);
                 committer.on(committer.filters.CreateCommit(), (id, amount, type, log) => {
                     console.debug('Commit created', {
@@ -252,44 +254,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
                 });
 
-                committer.on('ExecuteCommit', (id, amount, type) => {
-                    console.debug('Commit executed', {
-                        id,
-                        amount,
-                        type,
-                    });
-                    updateTokenBalances(poolsState.pools[pool]);
-                    if (commitDispatch) {
-                        commitDispatch({
-                            type: 'removeCommit',
-                            id: id.toNumber(),
-                            pool: pool,
-                        });
-                    }
-                });
-
-                committer.on('RemoveCommit', (id, amount, type) => {
-                    console.debug('Commit deleted', {
-                        id,
-                        amount,
-                        type,
-                    });
-                    if (commitDispatch) {
-                        commitDispatch({
-                            type: 'removeCommit',
-                            id: id.toNumber(),
-                            pool: pool,
-                        });
-                    }
-                });
-                committer.on('FailedCommitExecution', () => {
-                    console.debug('Failed to execute commit');
-                });
-                poolsDispatch({ type: 'setSubscribed', contract: committerInfo.address, value: true });
+                subscriptions.current = {
+                    ...subscriptions.current,
+                    [committerInfo.address]: true,
+                };
+            } else {
+                console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
             }
 
             const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
-            if (!poolsState.subscriptions[keeper]) {
+            if (!subscriptions.current[keeper]) {
                 console.debug(`Subscribing keeper: ${keeper.slice()}`);
                 keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (pool, _data, startPrice, endPrice) => {
                     console.debug(`
@@ -310,8 +284,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             value: new BigNumber(lastUpdate.toString()),
                         });
                     });
+                    updateTokenBalances(poolsState.pools[pool]);
+                    commitDispatch({
+                        type: 'resetCommits',
+                    });
                 });
-                poolsDispatch({ type: 'setSubscribed', contract: keeper, value: true });
+                subscriptions.current = {
+                    ...subscriptions.current,
+                    [keeper]: true,
+                };
+            } else {
+                console.debug(`Keeper ${keeper.slice()} already subscribed`);
             }
         }
     };

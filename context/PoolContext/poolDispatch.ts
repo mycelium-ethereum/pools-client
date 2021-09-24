@@ -34,13 +34,11 @@ export type PoolAction =
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
-    | { type: 'setSubscribed'; contract: string; value: boolean }
     | { type: 'setUnexecutedCommits'; pool: string; commits: CreatedCommitType[] }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
     | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
-    | { type: 'resetCommits' }
     | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
@@ -118,14 +116,6 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                             // .gte(state.pools[action.pool].quoteToken.balance),
                         },
                     },
-                },
-            };
-        case 'setSubscribed':
-            return {
-                ...state,
-                subscriptions: {
-                    ...state.subscriptions,
-                    [action.contract]: action.value,
                 },
             };
         case 'setUnexecutedCommits':
