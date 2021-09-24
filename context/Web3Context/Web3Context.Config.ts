@@ -81,7 +81,7 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [],
         hex: '0x66EEB',
-        publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/QF3hs2p0H00-8hkAzs6QsdpMABmQkjx_',
+        publicRPC: 'https://arb-mainnet.g.alchemy.com/v2/kmW5Ft_-SizDp3Is5Q7XQrRPvUQWw-yW',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',

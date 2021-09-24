@@ -60,7 +60,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
-        new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/dT1PNFTKLLfSdqR1jWModJajw-3Z6Akd'),
+        new ethers.providers.JsonRpcProvider('https://arb-mainnet.g.alchemy.com/v2/kmW5Ft_-SizDp3Is5Q7XQrRPvUQWw-yW'),
     );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
@@ -88,7 +88,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                             onboardConfig?.subscriptions?.address && onboardConfig?.subscriptions?.address(address);
                         },
                         wallet: (wallet) => {
+                            console.debug('Detected wallet change');
                             if (wallet.provider) {
+                                console.debug('Setting wallet provider');
                                 wallet.name &&
                                     cacheWalletSelection &&
                                     localStorage.setItem('onboard.selectedWallet', wallet.name);
@@ -159,14 +161,13 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         };
     }, [provider, network]);
 
-    useEffect(() => {
-        console.debug('Detected wallet change');
-        if (wallet && wallet?.provider) {
-            console.debug('Setting new provider');
-            const provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
-            setProvider(provider);
-        }
-    }, [wallet]);
+    // useEffect(() => {
+    //     if (wallet && wallet?.provider) {
+    //         console.debug('Setting new provider');
+    //         const provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
+    //         setProvider(provider);
+    //     }
+    // }, [wallet]);
 
     // unsupported network popup
     useEffect(() => {
