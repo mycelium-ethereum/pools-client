@@ -25,7 +25,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         <h3 className="mb-1">Power Leverage</h3>
                     </TooltipSelector>
                     <Dropdown
-                        className="w-full"
+                        className="w-36"
                         value={state.leverage}
                         options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
                         onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
