@@ -140,10 +140,31 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [
             {
-                // mock farm with https://arbiscan.io/token/0x64541216bafffeec8ea535bb71fbc927831d0595 as staking token
-                address: '0x64Bb77266eE000f441920BA41561Cd82f69b4c27',
-                balancerPoolId: '0x64541216bafffeec8ea535bb71fbc927831d0595000100000000000000000002',
+                // 50 wETH 33 3S-ETH 17 3L-ETH
+                address: '0x06F0A46Ba44de4f5AA327237b0b3A1610f125d8f',
+                balancerPoolId: '0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                // 50 wBTC 33 3S-BTC 17 3L-BTC
+                address: '0xdbEA4B2F086D0e7259Ff84d2A088896E8Adb79Cf',
+                balancerPoolId: '0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                // 50 1S-ETH 25 1L-ETH 25 wETH
+                address: '0x2Cba704478d6B2104067Be827ff2C9b724047325',
+                balancerPoolId: '0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a',
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                // 50 1S-BTC 25 1L-BTC 25 wBTC
+                address: '0xDee48Ee9e2afFD569AAA47FDbD49F7FEc71D7feA',
+                balancerPoolId: '0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b',
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
             },
         ],

@@ -176,7 +176,11 @@ const PoolRow: React.FC<{
 const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
     <>
         {tokens.map((token) => (
-            <Logo key={`balancer-asset-${token.symbol}`} className="inline w-[25px] mr-2" ticker={token.symbol} />
+            <Logo
+                key={`balancer-asset-${token.symbol}`}
+                className="inline w-[25px] mr-2"
+                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : token.symbol}
+            />
         ))}
     </>
 );
