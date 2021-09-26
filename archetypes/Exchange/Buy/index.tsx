@@ -101,7 +101,7 @@ export default (() => {
 
     return (
         <>
-            <div className={`${inputRow} flex justify-between`}>
+            <div className={`${inputRow} flex justify-between mb-5`}>
                 <span className="w-60">
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
@@ -130,7 +130,7 @@ export default (() => {
                     />
                 </span>
             </div>
-            <div className={`${inputRow} `}>
+            <div className={`${inputRow} mb-5`}>
                 <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
                     <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
                 </TooltipSelector>
