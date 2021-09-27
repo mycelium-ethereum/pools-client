@@ -70,7 +70,7 @@ export default (({ account, className }) => {
                                             <Icon className="text-xl mr-2 align-bottom" component={Invest} />
                                             Trade
                                         </div>
-                                        <div className="text-white mt-2" onClick={() => handleRoute('stake')}>
+                                        <div className="text-white mt-2" onClick={() => handleRoute('/stakepooltoken')}>
                                             <Icon className="text-xl mr-2 align-bottom" component={Stake} />
                                             Stake
                                         </div>

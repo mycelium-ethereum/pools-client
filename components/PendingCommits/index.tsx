@@ -16,6 +16,30 @@ import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close-black.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
+// import BigNumber from 'bignumber.js';
+// const testCommits:QueuedCommit[] = [
+//     {
+//         pool: '',
+//         id: 0,
+//         type: 0,
+//         amount: new BigNumber (5),
+//         txnHash: '',
+//         token: {
+//             side: 0,
+//             supply: new BigNumber(5),
+//             address: '',
+//             name: '',
+//             symbol: 'test',
+//             balance: new BigNumber(5),
+//             approved: new BigNumber(6),
+//         },
+//         tokenPrice: new BigNumber(30),
+//         nextRebalance: new BigNumber(1),
+//         frontRunningInterval: new BigNumber(10),
+//         updateInterval: new BigNumber(20)
+//     }
+// ]
+
 export default (() => {
     const { provider } = useWeb3();
     const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
@@ -102,7 +126,7 @@ const BuyRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
             </span>
             <span>{toApproxCurrency(amount)}</span>
@@ -149,7 +173,7 @@ const SellRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
             </span>
             <span>{amount.toFixed(2)}</span>

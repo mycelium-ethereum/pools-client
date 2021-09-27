@@ -115,7 +115,7 @@ const TokenRow: React.FC<{
     return (
         <TableRow rowNumber={index}>
             <span>
-                <Logo className="inline w-[25px] mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
                 {token.symbol}
             </span>
             <span>{toApproxCurrency(token.lastPrice)}</span>

@@ -46,18 +46,24 @@ const logos: Record<string, string> = {
     BALANCER: '/img/logos/currencies/balancer.svg',
 };
 
+type Size = 'sm' | 'md' | 'full';
 interface LProps {
     className?: string;
     ticker: string;
+    size?: Size;
     clear?: boolean; // true then display outlined image
 }
 
-const DEFAULT = 'w-6 my-2 mx-0';
+const SIZES: Record<Size, string> = {
+    sm: 'w-[20px] h-[20px]',
+    md: 'w-6 h-6',
+    full: 'h-full',
+};
 
-export const Logo: React.FC<LProps> = ({ className, ticker, clear }: LProps) => {
+export const Logo: React.FC<LProps> = ({ className, ticker, clear, size = 'sm' }: LProps) => {
     return (
         <img
-            className={classNames(className ?? DEFAULT)}
+            className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')}
             src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']}
             alt="logo"
         />

@@ -3,7 +3,6 @@ import BigNumber from 'bignumber.js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { Container } from '@components/General';
 import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
 import {
     stakeReducer,
@@ -343,7 +342,7 @@ export default (({
     return (
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
-            <Container className="mt-0 md:mt-[100px]">
+            <div className="container mt-0 md:mt-[100px]">
                 <div className="p-0 md:py-20 md:px-16 shadow-xl border-3xl">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
@@ -368,7 +367,7 @@ export default (({
                         onClickStake={handleStake}
                     />
                 </div>
-            </Container>
+            </div>
             <FilterModal state={state} dispatch={dispatch} />
             <StakeModalWithState
                 state={state}
