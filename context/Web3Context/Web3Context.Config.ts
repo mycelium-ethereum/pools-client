@@ -160,21 +160,21 @@ export const networkConfig: Record<string, Network> = {
                 linkText: '(click to view pool)',
             },
             {
-                // 50 1S-ETH 25 1L-ETH 25 wETH
-                address: '0x2Cba704478d6B2104067Be827ff2C9b724047325',
-                balancerPoolId: '0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a',
+                // 33 1S-ETH 33 1L-ETH 33 USDC
+                address: '0xBcA90fe2c8cc273Bb4ba1147FAdA3097f9316F9c',
+                balancerPoolId: '0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
                 pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
-                link: 'https://arbitrum.balancer.fi/#/pool/0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
                 linkText: '(click to view pool)',
             },
             {
-                // 50 1S-BTC 25 1L-BTC 25 wBTC
-                address: '0xDee48Ee9e2afFD569AAA47FDbD49F7FEc71D7feA',
-                balancerPoolId: '0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b',
+                // 33 1S-BTC 33 1L-BTC 33 USDC
+                address: '0xB8d52DE47a6C3a3A5679A72f2f7c05b30A9B5309',
+                balancerPoolId: '0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
-                link: 'https://arbitrum.balancer.fi/#/pool/0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
                 linkText: '(click to view pool)',
             },
         ],
