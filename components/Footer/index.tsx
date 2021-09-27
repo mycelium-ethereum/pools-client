@@ -7,11 +7,11 @@ import TwitterLogo from '/public/img/socials/twitter.svg';
 import GitHubLogo from '/public/img/socials/github.svg';
 import DiscordLogo from '/public/img/socials/discord.svg';
 
-const Footer = styled(({ className }) => {
+const Footer = () => {
     return (
-        <div className={className}>
+        <div className={'flex container flex-col lg:flex-row justify-between mt-auto py-4 px-4 md:px-0 text-gray-900'}>
             <Copyright>&copy; 2021 Tracer DAO</Copyright>
-            <Socials>
+            <div className="flex my-6 lg:my-0 ">
                 <SocialIcon href="https://discourse.tracer.finance" target="_blank">
                     <DiscourseLogo />
                 </SocialIcon>
@@ -24,7 +24,7 @@ const Footer = styled(({ className }) => {
                 <SocialIcon href="https://discord.com/invite/kddBUqDVVb" target="_blank">
                     <DiscordLogo />
                 </SocialIcon>
-            </Socials>
+            </div>
             <Items>
                 <Item>
                     <Link href="/privacy-policy">Privacy Policy</Link>
@@ -52,25 +52,8 @@ const Footer = styled(({ className }) => {
             </Items>
         </div>
     );
-})`
-    display: flex;
-    justify-content: space-between;
-    color: #27272a;
-    margin-top: auto;
-    padding: 1rem 2rem;
+};
 
-    @media (max-width: 1024px) {
-        flex-direction: column;
-    }
-`;
-
-const Socials = styled.div`
-    display: flex;
-
-    @media (max-width: 1024px) {
-        margin: 2rem 0 3rem;
-    }
-`;
 const SocialIcon = styled.a`
     margin: auto 0.5rem;
 
