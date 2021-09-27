@@ -130,7 +130,7 @@ export default (() => {
                     />
                 </span>
             </div>
-            <div className={`${inputRow} mb-5`}>
+            <div className={`${inputRow} mb-4`}>
                 <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
                     <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
                 </TooltipSelector>
