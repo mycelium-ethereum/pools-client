@@ -9,7 +9,7 @@ const item =
     'inline min-w-[130px] my-auto mx-2 py-3 px-3 text-gray-700 rounded-xl transition-all cursor-pointer text-base whitespace-nowrap hover:bg-gray-50 hover:shadow-sm';
 const selected = 'bg-white hover:bg-white hover:shadow-none';
 
-// const InvestNav
+// const FarmNav
 export default (({ left, right }) => {
     const router = useRouter();
 
