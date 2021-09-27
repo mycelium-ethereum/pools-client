@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
-import ThemeSwitcher from './ThemeSwitcher';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
@@ -23,7 +21,7 @@ const NavBar: React.FC = () => {
     );
 };
 
-export const NavBarContent = styled(({ className }) => {
+export const NavBarContent: React.FC = () => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account } = useWeb3();
@@ -31,53 +29,41 @@ export const NavBarContent = styled(({ className }) => {
     // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
 
-    const linkStyles = 'flex transition-all mx-2 py-2 px-2 hover:opacity-80 ';
+    const linkStyles = 'flex transition-all mx-2 py-2 px-2 text-base hover:opacity-80';
 
     return (
-        <nav className={`${className} container`}>
-            <HeaderSiteSwitcher />
-            <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
-                <li className={classNames(linkStyles, route === '' || route === 'browse' ? 'underline' : '')}>
-                    <Link href="/">
-                        <a className="m-auto">Trade</a>
-                    </Link>
-                </li>
-                <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
-                    <Link href="/stakepooltoken">
-                        <a className="m-auto">Stake</a>
-                    </Link>
-                </li>
-            </ul>
+        <nav className={`container text-base h-[60px]`}>
+            <div className={'flex h-full px-4 md:px-0'}>
+                <HeaderSiteSwitcher />
+                <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
+                    <li className={classNames(linkStyles, route === '' || route === 'browse' ? 'underline' : '')}>
+                        <Link href="/">
+                            <a className="m-auto">Trade</a>
+                        </Link>
+                    </li>
+                    <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
+                        <Link href="/stakepooltoken">
+                            <a className="m-auto">Stake</a>
+                        </Link>
+                    </li>
+                </ul>
 
-            {/* DESKTOP */}
-            <span className="hidden lg:flex ml-auto">
-                {account ? <NetworkDropdown className="relative my-auto mx-4 whitespace-nowrap" /> : null}
+                {/* DESKTOP */}
+                <span className="hidden lg:flex ml-auto">
+                    {account ? <NetworkDropdown className="relative my-auto mx-4 whitespace-nowrap" /> : null}
 
-                <AccountDropdown account={account ?? ''} className="my-auto" />
+                    <AccountDropdown account={account ?? ''} className="my-auto" />
 
-                {/* Hide if showing queued */}
-                <AccountBalance hide={showQueued} className="my-auto mx-2" />
+                    {/* Hide if showing queued */}
+                    <AccountBalance hide={showQueued} className="my-auto mx-2" />
 
-                <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
-                {/* <ThemeSwitcher /> */}
-            </span>
-
-            <MobileMenu account={account ?? ''} />
+                    <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
+                    {/* <ThemeSwitcher /> */}
+                </span>
+                <MobileMenu account={account ?? ''} />
+            </div>
         </nav>
     );
-})`
-    display: flex;
-    color: var(--color-text);
-    height: 60px;
-
-    @media (max-width: 768px) {
-        padding: 0 1rem;
-    }
-    @media (max-width: 1024px) {
-        ${ThemeSwitcher} {
-            display: none;
-        }
-    }
-`;
+};
 
 export default NavBar;
