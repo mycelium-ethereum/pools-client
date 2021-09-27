@@ -8,7 +8,7 @@ import DiscordLogo from '/public/img/socials/discord.svg';
 
 const item = 'ml-0 mb-4 lg:mb-0 lg:ml-8 last:mb-0';
 
-const Footer:React.FC = () => {
+const Footer: React.FC = () => {
     return (
         <div className={'flex container flex-col lg:flex-row justify-between mt-auto py-4 px-4 md:px-0 text-gray-900'}>
             <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
