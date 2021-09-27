@@ -126,8 +126,6 @@ export const FarmStore: React.FC<
             tokenLookup[token3] || tokenLookup[`${token3}/USD`],
         ];
 
-        console.log('BPT TOKENS', tokens);
-
         return { tokens };
     };
 
