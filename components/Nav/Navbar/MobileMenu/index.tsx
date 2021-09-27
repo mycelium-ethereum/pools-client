@@ -6,9 +6,6 @@ import { classNames } from '@libs/utils/functions';
 import NetworkDropdown from '../NetworkDropdown';
 import AccountDropdown from '../AccountDropdown';
 
-import Invest from '@public/img/general/invest.svg';
-import Stake from '@public/img/general/stake.svg';
-import Icon from '@ant-design/icons';
 import { useRouter } from 'next/router';
 
 export default (({ account, className }) => {
@@ -66,12 +63,18 @@ export default (({ account, className }) => {
                                     >
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="w-full my-4 relative text-center" />
-                                        <div className="text-white mt-2" onClick={() => handleRoute('/')}>
-                                            <Icon className="text-xl mr-2 align-bottom" component={Invest} />
+                                        <div
+                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            onClick={() => handleRoute('/')}
+                                        >
+                                            <img className="inline mr-2" src={'/img/general/invest.svg'} />
                                             Trade
                                         </div>
-                                        <div className="text-white mt-2" onClick={() => handleRoute('stake')}>
-                                            <Icon className="text-xl mr-2 align-bottom" component={Stake} />
+                                        <div
+                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            onClick={() => handleRoute('stake')}
+                                        >
+                                            <img className="inline mr-2" src={'/img/general/stake.svg'} />
                                             Stake
                                         </div>
                                     </div>

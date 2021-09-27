@@ -2,8 +2,8 @@ import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 const SELECTED = {
-    tracer: 'z-10 bg-tracer-500 text-white border-none focus:border-none ',
-    default: 'z-10 bg-tracer-800 text-white border-none focus:border-none ',
+    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-none focus:border-none ',
+    default: 'z-10 bg-tracer-800 hover:bg-tracer-800 text-white border-none focus:border-none ',
 };
 
 const SIZE = {
@@ -15,7 +15,7 @@ const SIZE = {
 const DISABLED = 'cursor-not-allowed opacity-50';
 const BORDERS = 'first:rounded-l-md last:rounded-r-md ';
 const DEFAULT_BUTTON =
-    'relative inline-flex items-center border border-gray-300 bg-white text-gray-700 focus:outline-none focus:border-solid ';
+    'relative inline-flex items-center border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:border-solid';
 
 type Option = {
     key: number;
