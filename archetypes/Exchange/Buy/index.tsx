@@ -101,7 +101,7 @@ export default (() => {
 
     return (
         <>
-            <div className={`${inputRow} flex justify-between`}>
+            <div className={`${inputRow} flex justify-between mb-4`}>
                 <span className="w-60">
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
@@ -130,7 +130,7 @@ export default (() => {
                     />
                 </span>
             </div>
-            <div className={`${inputRow} `}>
+            <div className={`${inputRow} mb-4`}>
                 <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
                     <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
                 </TooltipSelector>
@@ -176,7 +176,7 @@ export default (() => {
                         invalidAmount.message
                     ) : (
                         <>
-                            <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
+                            <span className={`${!!pool.name ? 'inline' : 'hidden'} text-gray-500`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
                                     {!amount.eq(0)
