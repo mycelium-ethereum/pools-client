@@ -1,14 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-// @ts-ignore
-import ArrowDown from '@public/img/general/caret-down-white.svg';
+import Link from 'next/link';
+import { classNames } from '@libs/utils/functions';
+import { Transition } from '@headlessui/react';
 import Icon from '@ant-design/icons';
-
-// @ts-ignore
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
-import SocialLogos from './SocialLogos';
 
-export default (() => {
+// Images
+const DiscourseLogo = '/img/socials/discourse-white.svg';
+const TwitterLogo = '/img/socials/twitter-white.svg';
+const GitHubLogo = '/img/socials/github-white.svg';
+const DiscordLogo = '/img/socials/discord-white.svg';
+const Folder = '/img/general/folder.svg';
+const Icons = [
+    {
+        text: 'Website',
+        href: 'https://tracer.finance',
+        logo: Folder,
+    },
+    {
+        text: 'Twitter',
+        href: 'https://twitter.com/TracerDAO',
+        logo: TwitterLogo,
+    },
+    {
+        text: 'Discourse',
+        href: 'https://discourse.tracer.finance/',
+        logo: DiscourseLogo,
+    },
+    {
+        text: 'Github',
+        href: 'https://github.com/tracer-protocol/',
+        logo: GitHubLogo,
+    },
+    {
+        text: 'Discord',
+        href: 'https://discord.gg/7rhrmYkAJs',
+        logo: DiscordLogo,
+    },
+];
+
+const ArrowDown = '/img/general/caret-down-white.svg';
+
+const DropdownMenu: React.FC = () => {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
@@ -30,154 +63,120 @@ export default (() => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, [open]);
-
     return (
-        <SiteSwitcher id="site-switcher" className={open ? 'open' : ''}>
-            <MainLink onClick={() => setOpen(!open)}>
-                <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_logo.svg" />
-                <Arrow component={ArrowDown} />
-            </MainLink>
-
-            <HiddenBoxMenu>
-                <MenuItem>
-                    <a href="/" target="_blank" rel="noreferrer noopener">
-                        <StyledIcon component={TracerBox} style={{ color: '#7912FC' }} />
-                        <span>
-                            <div>Tracer</div>
-                            <div className="font-bold">Perpetual Pools</div>
-                        </span>
-                    </a>
-                </MenuItem>
-                <MenuItem>
-                    <a href="https://vote.tracer.finance" target="_blank" rel="noreferrer noopener">
-                        <StyledIcon component={TracerBox} style={{ color: '#1AAA8D' }} />
-                        <span>
-                            <div>Tracer</div>
-                            <div className="font-bold">Governance</div>
-                        </span>
-                    </a>
-                </MenuItem>
-                <MenuItem>
-                    <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer noopener">
-                        <StyledIcon component={TracerBox} style={{ color: '#1E5CF5' }} />
-                        <span>
-                            <div>Tracer</div>
-                            <div className="font-bold">Documentation</div>
-                        </span>
-                    </a>
-                </MenuItem>
-                <MenuItem>
-                    <SocialLogos />
-                </MenuItem>
-            </HiddenBoxMenu>
-        </SiteSwitcher>
+        <div id="site-switcher" className="relative flex">
+            <Link href="/">
+                <>
+                    <img
+                        className="sm:w-24 w-22 h-auto sm:block hidden cursor-pointer"
+                        alt="tracer-logo"
+                        src="/img/logos/tracer/tracer_logo.svg"
+                    />
+                    <img
+                        className="w-12 h-10 sm:hidden cursor-pointer"
+                        src={'/img/logos/tracer/tracer_logo.svg'}
+                        alt="Tracer Logo"
+                    />
+                </>
+            </Link>
+            <button
+                id="toggle"
+                className="flex pl-3 w-22 h-22 left-0 top-0 z-0 justify-center items-center cursor-pointer outline-none border-none"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(!open);
+                }}
+            >
+                <img
+                    className={classNames('w-4 h-auto transition-all duration-500 transform', open ? 'rotate-180' : '')}
+                    src={ArrowDown}
+                    alt="Dropdown toggle"
+                />
+            </button>
+            <div
+                className={classNames(
+                    open ? 'scale-100' : 'scale-0',
+                    'block fixed md:absolute transform-gpu origin-top-left z-10 box-border transition-all w-[350px] sm:px-8 px-4 top-11 md:top-[4.5rem] left-0 duration-700',
+                )}
+            >
+                <div
+                    className={
+                        'backdrop-filter backdrop-blur bg-tracer-800 bg-opacity-80 absolute top-0 left-0 h-full w-full rounded-lg'
+                    }
+                />
+                <Transition
+                    show={open}
+                    enter="transition-all duration-300 delay-500"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-all duration-75"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                    className="relative sm:mt-8 my-4"
+                >
+                    <DropdownOption
+                        href={'https://pools.tracer.finance'}
+                        label={'Perpetual Pools'}
+                        boxColor={'#7912fc'}
+                    />
+                    <DropdownOption href={'https://vote.tracer.finance/#/'} label={'Governance'} boxColor={'#1AAA8D'} />
+                    <DropdownOption
+                        href={'https://docs.tracer.finance/'}
+                        label={'Documentation'}
+                        boxColor={'#1e5cf5'}
+                    />
+                    <div className="mt-12">
+                        {Icons.map((icon, i) => (
+                            <a
+                                className="w-fit sm:px-2 transition-all duration-300 flex items-center mt-5 rounded-lg hover:opacity-50"
+                                href={icon.href}
+                                rel="noreferrer"
+                                target="_blank"
+                                key={i}
+                            >
+                                <span>
+                                    <img className="w-5 mr-2 opacity-70" src={icon.logo} alt="Logo" />
+                                </span>
+                                <span className="block text-white font-normal my-auto">{icon.text}</span>
+                            </a>
+                        ))}
+                    </div>
+                </Transition>
+            </div>
+        </div>
     );
-}) as React.FC;
+};
 
-const MainLink = styled.div`
-    z-index: 11;
-    cursor: pointer;
-`;
+const DropdownOption: React.FC<{
+    href: string;
+    label: string;
+    boxColor: string;
+}> = ({ href, label, boxColor }) => (
+    <a
+        className={'flex w-fit pr-2 mb-6 transition-all duration-300 rounded-lg hover:bg-tracer-900 bg-opacity-50'}
+        href={href}
+        rel="noreferrer"
+        target="_blank"
+    >
+        <Icon
+            component={TracerBox}
+            className="box h-[48px] w-[48px] mr-3"
+            style={{ color: boxColor }}
+            alt="Tracer Box"
+        />
+        <span className="block text-white font-normal my-auto">
+            <p>Tracer</p>
+            <p>
+                <b>{label}</b>
+            </p>
+        </span>
+        <style>{`
+            .box svg {
+                width: 100%;
+                height: 100%;
+            }
+        `}</style>
+    </a>
+);
 
-const Arrow = styled(Icon)`
-    height: 8px;
-    width: 15px;
-    display: inline;
-    transition: all 400ms ease-in-out;
-    z-index: 11;
-    vertical-align: -0.3rem;
-`;
-
-const StyledIcon = styled(Icon)`
-    height: 41px;
-    width: 41px;
-    margin-right: 1rem;
-    svg {
-        width: 100%;
-        height: 100%;
-    }
-`;
-
-const StyledTracerLogo = styled.img`
-    display: inline;
-    height: 1.7rem;
-    margin-right: 2rem;
-`;
-
-const HiddenBoxMenu = styled.div`
-    position: absolute;
-    width: 353px;
-    height: 425px;
-
-    background: #0000b0;
-    border-radius: 7px;
-    left: 0;
-    top: calc(100% + 1rem);
-    right: -3.5rem;
-    padding: 1.5rem 0;
-    opacity: 0;
-    transform-origin: top left;
-    transform: scale(0.7, 0);
-    transition: all 500ms ease-in-out;
-    z-index: 10;
-`;
-
-const MenuItem = styled.div`
-    color: #fff;
-    transition: all 400ms ease;
-    margin-bottom: 1rem;
-    cursor: pointer;
-
-    // initially hide itself
-    opacity: 0;
-    padding-left: 2rem;
-
-    > a {
-        height: 60px;
-        display: flex;
-        align-items: center;
-        padding-left: 2rem;
-        transition: all 300ms ease;
-    }
-
-    &:last-child {
-        padding-bottom: 1rem;
-    }
-
-    > a:hover {
-        background: #3da8f5;
-    }
-`;
-
-const SiteSwitcher = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    &.open {
-        ${Arrow} {
-            transform: rotate(180deg);
-        }
-        ${HiddenBoxMenu} {
-            opacity: 1;
-            transform: none;
-        }
-        ${MenuItem} {
-            opacity: 1;
-            padding-left: 0;
-        }
-        ${MenuItem}:nth-child(2) {
-            transition: all 400ms ease 300ms;
-        }
-        ${MenuItem}:nth-child(3) {
-            transition: all 400ms ease 450ms;
-        }
-        ${MenuItem}:nth-child(4) {
-            transition: all 400ms ease 600ms;
-        }
-        ${MenuItem}:nth-child(5) {
-            transition: all 400ms ease 750ms;
-            cursor: auto;
-        }
-    }
-`;
+export default DropdownMenu;
