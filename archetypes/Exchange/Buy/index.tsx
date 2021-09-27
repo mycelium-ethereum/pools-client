@@ -101,7 +101,7 @@ export default (() => {
 
     return (
         <>
-            <div className={`${inputRow} flex justify-between mb-5`}>
+            <div className={`${inputRow} flex justify-between mb-4`}>
                 <span className="w-60">
                     <p className="mb-2 text-black">Market</p>
                     <Dropdown
