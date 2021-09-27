@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
 
 import DiscourseLogo from '/public/img/socials/discourse.svg';
@@ -7,35 +6,57 @@ import TwitterLogo from '/public/img/socials/twitter.svg';
 import GitHubLogo from '/public/img/socials/github.svg';
 import DiscordLogo from '/public/img/socials/discord.svg';
 
-const Footer = () => {
+const item = 'ml-0 mb-4 lg:mb-0 lg:ml-8 last:mb-0';
+
+const Footer:React.FC = () => {
     return (
         <div className={'flex container flex-col lg:flex-row justify-between mt-auto py-4 px-4 md:px-0 text-gray-900'}>
-            <Copyright>&copy; 2021 Tracer DAO</Copyright>
+            <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
             <div className="flex my-6 lg:my-0 ">
-                <SocialIcon href="https://discourse.tracer.finance" target="_blank">
+                <a
+                    className="my-auto mx-2 transition-opacity hover:opacity-80"
+                    href="https://discourse.tracer.finance"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     <DiscourseLogo />
-                </SocialIcon>
-                <SocialIcon href="https://twitter.com/TracerDAO" target="_blank">
+                </a>
+                <a
+                    className="my-auto mx-2 transition-opacity hover:opacity-80"
+                    href="https://twitter.com/TracerDAO"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     <TwitterLogo />
-                </SocialIcon>
-                <SocialIcon href="https://github.com/tracer-protocol" target="_blank">
+                </a>
+                <a
+                    className="my-auto mx-2 transition-opacity hover:opacity-80"
+                    href="https://github.com/tracer-protocol"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     <GitHubLogo />
-                </SocialIcon>
-                <SocialIcon href="https://discord.com/invite/kddBUqDVVb" target="_blank">
+                </a>
+                <a
+                    className="my-auto mx-2 transition-opacity hover:opacity-80"
+                    href="https://discord.com/invite/kddBUqDVVb"
+                    target="_blank"
+                    rel="noreferrer"
+                >
                     <DiscordLogo />
-                </SocialIcon>
+                </a>
             </div>
-            <Items>
-                <Item>
+            <div className="flex flex-col lg:flex-row">
+                <div className={item}>
                     <Link href="/privacy-policy">Privacy Policy</Link>
-                </Item>
-                <Item>
+                </div>
+                <div className={item}>
                     <Link href="/terms-of-use">Terms of Use</Link>
-                </Item>
-                <Item>
+                </div>
+                <div className={item}>
                     <Link href="/disclaimer">Disclaimer</Link>
-                </Item>
-                <Item>
+                </div>
+                <div className={item}>
                     <a
                         href="https://gateway.pinata.cloud/ipfs/QmS161WXV2bEAWUtdecfS5FYPmHQZdhNnjVFAwQ5FTX3og"
                         target="_blank"
@@ -43,49 +64,15 @@ const Footer = () => {
                     >
                         Participation Agreement
                     </a>
-                </Item>
-                <Item>
+                </div>
+                <div className={item}>
                     <a href="https://tracer.finance/radar/sigma-prime-audit-response/" target="_blank" rel="noreferrer">
                         Security Audit
                     </a>
-                </Item>
-            </Items>
+                </div>
+            </div>
         </div>
     );
 };
-
-const SocialIcon = styled.a`
-    margin: auto 0.5rem;
-
-    &:hover svg path {
-        transition: 0.3s;
-        fill: #3da8f5;
-    }
-`;
-
-const Items = styled.div`
-    display: flex;
-
-    @media (max-width: 1024px) {
-        flex-direction: column;
-    }
-`;
-const Item = styled.div`
-    margin-left: 2rem;
-
-    @media (max-width: 1024px) {
-        margin-left: 0;
-        margin-bottom: 1rem;
-
-        &:last-child {
-            margin-bottom: 0;
-        }
-    }
-`;
-
-const Copyright = styled.div`
-    white-space: nowrap;
-    display: inline;
-`;
 
 export default Footer;
