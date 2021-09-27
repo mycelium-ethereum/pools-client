@@ -10,41 +10,18 @@ import MobileMenu from './MobileMenu';
 import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
+import { classNames } from '@libs/utils/functions';
 
-const NavBar: React.FC = styled(({ className }) => {
+const NavBar: React.FC = () => {
     return (
-        <div className={className}>
+        <div className={classNames('relative bg-tracer-900 bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat')}>
             <NavBarContent />
+            <style>{`
+                background-position-x:
+            `}</style>
         </div>
     );
-})`
-    background-image: url('/img/nav-bg.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;
-`;
-
-const Links = styled.ul`
-    display: flex;
-    margin-right: auto;
-    margin-left: 1rem;
-    color: #fff;
-    margin-bottom: 0;
-    font-size: 14px;
-
-    & li {
-        display: flex;
-        transition: 0.2s;
-    }
-
-    & li.selected {
-        text-decoration: underline;
-    }
-
-    & li:hover {
-        opacity: 0.8;
-    }
-`;
+};
 
 export const NavBarContent = styled(({ className }) => {
     const routes = useRouter().asPath.split('/');
@@ -54,23 +31,23 @@ export const NavBarContent = styled(({ className }) => {
     // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
 
-    const linkStyles = 'mx-2 py-2 px-2';
+    const linkStyles = 'flex transition-all mx-2 py-2 px-2 hover:opacity-80 ';
 
     return (
         <nav className={`${className} container`}>
             <HeaderSiteSwitcher />
-            <Links>
-                <li className={linkStyles + (route === '' || route === 'browse' ? ' selected' : '')}>
+            <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
+                <li className={classNames(linkStyles, route === '' || route === 'browse' ? 'underline' : '')}>
                     <Link href="/">
                         <a className="m-auto">Trade</a>
                     </Link>
                 </li>
-                <li className={linkStyles + (route.startsWith('stake') ? ' selected' : '')}>
+                <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
                     <Link href="/stakepooltoken">
                         <a className="m-auto">Stake</a>
                     </Link>
                 </li>
-            </Links>
+            </ul>
 
             {/* DESKTOP */}
             <span className="hidden lg:flex ml-auto">
@@ -93,15 +70,11 @@ export const NavBarContent = styled(({ className }) => {
     color: var(--color-text);
     height: 60px;
 
-    background-image: url('/img/nav-bg.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-
     @media (max-width: 768px) {
         padding: 0 1rem;
     }
     @media (max-width: 1024px) {
-        ${ThemeSwitcher}, ${Links} {
+        ${ThemeSwitcher} {
             display: none;
         }
     }
