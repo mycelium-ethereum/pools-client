@@ -19,6 +19,8 @@ export type FarmTableDetails = {
     stakingTokenBalance: BigNumber;
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
+    link?: string;
+    linkText?: string;
     bptDetails?: {
         tokens: BalancerPoolAsset[];
     };

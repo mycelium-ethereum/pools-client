@@ -42,7 +42,7 @@ export const Input = React.memo(
                 maxLength={79}
                 spellCheck="false"
                 className={classNames(
-                    'relative outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
+                    'relative outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary focus:border',
                     className,
                 )}
             />

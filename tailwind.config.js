@@ -41,6 +41,10 @@ module.exports = {
             screens: {
                 '3xl': '1800px',
             },
+            backgroundImage: {
+                'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
+                'nav-bg': "url('/img/nav-bg.svg')",
+            }
         },
     },
     variants: {

@@ -46,7 +46,8 @@ export const InputContainer: React.FC<{
     <div
         className={classNames(
             'relative py-3 px-3 border rounded bg-cool-gray-50',
-            error ? 'border-red-300 text-red-500 ' : 'border-cool-gray-300 text-gray-500 ',
+            error ? 'border-red-300 text-red-500 ' : 'border-cool-gray-300 text-gray-500',
+            'focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-opacity-80 ',
             className,
         )}
     >
