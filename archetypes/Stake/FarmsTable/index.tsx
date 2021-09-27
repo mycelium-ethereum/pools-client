@@ -124,7 +124,7 @@ const PoolRow: React.FC<{
                                 {farm.name}
                             </a>
                             <a className="flex opacity-50" href={farm.link} target="_blank" rel="noopener noreferrer">
-                                {farm.linkText || 'click to view'}
+                                {farm.linkText || '(click to view pool)'}
                             </a>
                         </>
                     ) : (
