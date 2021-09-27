@@ -1,6 +1,6 @@
 import React from 'react';
 import { ARBITRUM, ARBITRUM_RINKEBY, KOVAN } from '@libs/constants';
-import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -52,9 +52,14 @@ interface LProps {
     clear?: boolean; // true then display outlined image
 }
 
-export const Logo = styled(({ className, ticker, clear }: LProps) => {
-    return <img className={className} src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']} alt="logo" />;
-})<LProps>`
-    width: 30px;
-    margin: 5px 0;
-`;
+const DEFAULT = 'w-6 my-2 mx-0';
+
+export const Logo: React.FC<LProps> = ({ className, ticker, clear }: LProps) => {
+    return (
+        <img
+            className={classNames(className ?? DEFAULT)}
+            src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']}
+            alt="logo"
+        />
+    );
+};

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { Table, TableBody, span, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -16,28 +15,6 @@ import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close-black.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-
-// import BigNumber from 'bignumber.js';
-// const testCommits = [
-//     {
-//         pool: '',
-//         id: 0,
-//         type: 0,
-//         amount: new BigNumber (5),
-//         txnHash: '',
-//         token: {
-//             side: 0,
-//             supply: new BigNumber(5),
-//             address: '',
-//             name: '',
-//             symbol: 'test',
-//             balance: new BigNumber(5),
-//             approved: new BigNumber(6),
-//         },
-//         tokenPrice: new BigNumber(30),
-//         nextRebalance: new BigNumber(1),
-//     }
-// ]
 
 export default (() => {
     const { provider } = useWeb3();
