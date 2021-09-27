@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 const POOLTOKEN = 0;
 const BPT = 1;
@@ -40,9 +39,8 @@ export default (({ left, right }) => {
                 <Item onClick={(_e) => handleRoute(POOLTOKEN)} selected={router.pathname === '/stakepooltoken'}>
                     Stake Pool Tokens
                 </Item>
-                <Item onClick={(_e) => console.log(`${BPT} coming soon`)} selected={router.pathname === '/stakebpt'}>
-                    {/* <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/stakebpt'}> */}
-                    <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>Stake BPT</TooltipSelector>
+                <Item onClick={(_e) => handleRoute(BPT)} selected={router.pathname === '/stakebpt'}>
+                    Stake BPT
                 </Item>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>

@@ -14,7 +14,7 @@ import { calcBptTokenPrice } from '@libs/utils/calcs';
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
 
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, strategySubtitle }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -38,7 +38,6 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
-                            strategySubtitle={strategySubtitle}
                         />
                     );
                 })}
@@ -83,7 +82,6 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
-    strategySubtitle?: string;
 }>;
 
 const PoolRow: React.FC<{
@@ -92,8 +90,7 @@ const PoolRow: React.FC<{
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-    strategySubtitle?: string;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, strategySubtitle }) => {
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
     const tokenPrice = useMemo(
         () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
         [farm],
@@ -121,8 +118,18 @@ const PoolRow: React.FC<{
                     )}
                 </div>
                 <div className="flex flex-col justify-center">
-                    <div>{farm.name}</div>
-                    {strategySubtitle ? <div className="opacity-50">{strategySubtitle}</div> : null}
+                    {farm.link ? (
+                        <>
+                            <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">
+                                {farm.name}
+                            </a>
+                            <a className="flex opacity-50" href={farm.link} target="_blank" rel="noopener noreferrer">
+                                {farm.linkText || '(click to view pool)'}
+                            </a>
+                        </>
+                    ) : (
+                        <div>{farm.name}</div>
+                    )}
                 </div>
             </div>
             <span>{apr.times(100).toFixed(2)}%</span>
@@ -176,7 +183,11 @@ const PoolRow: React.FC<{
 const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
     <>
         {tokens.map((token) => (
-            <Logo key={`balancer-asset-${token.symbol}`} className="inline w-[25px] mr-2" ticker={token.symbol} />
+            <Logo
+                key={`balancer-asset-${token.symbol}`}
+                className="inline w-[25px] mr-2"
+                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : token.symbol}
+            />
         ))}
     </>
 );

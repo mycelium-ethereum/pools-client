@@ -53,7 +53,6 @@ export default (({
     hideLeverageFilter,
     hideSideFilter,
     fetchingFarms,
-    strategySubtitle,
 }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
@@ -82,6 +81,8 @@ export default (({
             stakingTokenSupply: farm.stakingTokenSupply,
             bptDetails: farm.bptDetails,
             poolDetails: farm.poolDetails,
+            link: farm.link,
+            linkText: farm.linkText,
         };
     });
 
@@ -366,7 +367,6 @@ export default (({
                         onClickClaim={handleClaim}
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
-                        strategySubtitle={strategySubtitle}
                     />
                 </FarmContainer>
             </Container>
@@ -392,7 +392,6 @@ export default (({
     hideLeverageFilter?: boolean;
     hideSideFilter?: boolean;
     fetchingFarms: boolean;
-    strategySubtitle?: string;
 }>;
 
 const StakeModalWithState: React.FC<{
