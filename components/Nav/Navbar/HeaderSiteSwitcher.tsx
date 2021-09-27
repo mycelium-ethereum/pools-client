@@ -68,13 +68,13 @@ const DropdownMenu: React.FC = () => {
             <Link href="/">
                 <>
                     <img
-                        className="sm:w-24 w-22 h-auto sm:block hidden cursor-pointer"
+                        className="sm:w-24 w-22 h-auto hidden md:block cursor-pointer"
                         alt="tracer-logo"
                         src="/img/logos/tracer/tracer_logo.svg"
                     />
                     <img
-                        className="w-12 h-10 sm:hidden cursor-pointer"
-                        src={'/img/logos/tracer/tracer_logo.svg'}
+                        className="w-12 h-auto block md:hidden cursor-pointer"
+                        src={'/img/logos/tracer/tracer_no_text.svg'}
                         alt="Tracer Logo"
                     />
                 </>
@@ -96,7 +96,7 @@ const DropdownMenu: React.FC = () => {
             <div
                 className={classNames(
                     open ? 'scale-100' : 'scale-0',
-                    'block fixed md:absolute transform-gpu origin-top-left z-10 box-border transition-all w-[350px] sm:px-8 px-4 top-11 md:top-[4.5rem] left-0 duration-700',
+                    'block fixed md:absolute transform-gpu origin-top-left z-20 box-border transition-all w-[350px] sm:px-8 px-4 top-16 md:top-[4.5rem] left-0 duration-700',
                 )}
             >
                 <div

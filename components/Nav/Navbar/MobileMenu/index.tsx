@@ -22,13 +22,23 @@ export default (({ account, className }) => {
         setOpen(false);
     };
 
+    const handleClick = (open: boolean) => {
+        const root = document.getElementById('__next');
+        if (open) {
+            root?.classList.add('overflow-hidden');
+        } else {
+            root?.classList.remove('overflow-hidden');
+        }
+        setOpen(open);
+    };
+
     return (
         <div className={classNames(`relative m-auto mr-0 overflow-hidden lg:hidden`, className ?? '')}>
-            <Hamburger open={open} setOpen={setOpen} />
+            <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
                     as="div"
-                    className="fixed inset-0 overflow-hidden top-full"
+                    className="fixed inset-0 overflow-hidden top-full z-10"
                     onClose={() => {
                         // do nothing here since its fired before the hamburger
                         console.debug('Closing mobile nav');
@@ -47,8 +57,13 @@ export default (({ account, className }) => {
                                 leaveFrom="translate-x-0"
                                 leaveTo="translate-x-full"
                             >
-                                <div className="w-screen md">
-                                    <div className="h-full flex flex-col p-6 bg-tracer-900 overflow-y-scroll">
+                                <div className="w-screen">
+                                    <div
+                                        className={classNames(
+                                            'h-full flex flex-col p-6 bg-tracer-900 bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
+                                            'aligned-background',
+                                        )}
+                                    >
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="w-full my-4 relative text-center" />
                                         <div className="text-white mt-2" onClick={() => handleRoute('/')}>
@@ -60,6 +75,12 @@ export default (({ account, className }) => {
                                             Stake
                                         </div>
                                     </div>
+                                    <style>{`
+                                        .aligned-background {
+                                            background-position-y: -60px; 
+                                            background-size: 100%;
+                                        }
+                                    `}</style>
                                 </div>
                             </Transition.Child>
                         </div>
