@@ -14,7 +14,7 @@ export default (() => {
     }, []);
 
     return (
-        <div className={`page relative bg-white`}>
+        <div className={`page relative`}>
             <NavBar />
             <FarmStore farmContext="poolFarms">
                 <StakePool />
