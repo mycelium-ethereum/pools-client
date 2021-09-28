@@ -132,9 +132,9 @@ export const Browse: React.FC = () => {
         <>
             <InvestNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-20">
-                <div className="p-0 md:py-20 md:px-16 mb-4 shadow-xl rounded-3xl">
+                <div className="p-0 md:py-20 md:px-16 mb-4 shadow-xl rounded-3xl bg-theme-background">
                     <section className="hidden md:block">
-                        <h1 className="font-bold text-3xl mb-2 text-cool-gray-900 hidden md:block">Pool Tokens</h1>
+                        <h1 className="font-bold text-3xl mb-2 text-theme-text hidden md:block">Pool Tokens</h1>
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>

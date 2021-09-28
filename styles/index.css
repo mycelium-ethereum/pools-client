@@ -143,7 +143,7 @@ body > div:first-child {
 @tailwind utilities;
 
 .page {
-    @apply h-screen flex flex-col;
+    @apply min-h-screen flex flex-col;
     background: var(--background-secondary);
 }
 
@@ -156,7 +156,8 @@ html, body {
 html {
     --background: #fff;
 
-    --background-secondary: #fff;
+    /* gray-50 */
+    --background-secondary: #f9fafb;
 
     --background-nav-secondary: #EEEEF6;
 
@@ -177,7 +178,6 @@ html {
 
   /* cool-gray-100 */
   --button-bg-hover: #F3F4F6;
-  
 }
 
 @media (max-height: 800px) {
