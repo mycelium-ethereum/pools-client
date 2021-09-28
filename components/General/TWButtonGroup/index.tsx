@@ -2,8 +2,18 @@ import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 const SELECTED = {
-    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-none focus:border-none ',
-    default: 'z-10 bg-tracer-800 hover:bg-tracer-800 text-white border-none focus:border-none ',
+    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-transparent',
+    default: 'z-10 bg-tracer-800 hover:bg-tracer-800 text-white border-transparent',
+};
+
+const UNSELECTED = {
+    tracer: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
+    default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
+};
+
+const BORDERS = {
+    default: 'first:rounded-l-md last:rounded-r-md',
+    tracer: 'first:rounded-l-md last:rounded-r-md border border-theme-border',
 };
 
 const SIZE = {
@@ -13,9 +23,7 @@ const SIZE = {
 };
 
 const DISABLED = 'cursor-not-allowed opacity-50';
-const BORDERS = 'first:rounded-l-md last:rounded-r-md ';
-const DEFAULT_BUTTON =
-    'relative inline-flex items-center border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:border-solid';
+const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all focus:outline-none';
 
 type Option = {
     key: number;
@@ -29,7 +37,7 @@ type Option = {
 type Color = 'tracer' | 'default';
 type ButtonSize = 'lg' | 'xl' | 'default';
 
-export default (({ options, value, color = 'default', size = 'default', onClick }) => {
+export default (({ options, value, color = 'default', size = 'default', borderColor = 'default', onClick }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
     return (
         <span className="relative z-0 inline-flex shadow-sm">
@@ -39,11 +47,13 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         <button
                             type="button"
                             data-tip
+                            disabled={true}
                             data-for={`${option.text}`}
                             onClick={() => onClick(option.key)}
                             className={classNames(
                                 DISABLED,
                                 buttonClass,
+                                BORDERS[borderColor],
                                 index === options.length - 1 ? 'rounded-r-md' : '',
                             )}
                         >
@@ -55,7 +65,11 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         key={`twbg-${option.key}`}
                         type="button"
                         onClick={() => onClick(option.key)}
-                        className={classNames(value === option.key ? SELECTED[color] : '', buttonClass, BORDERS)}
+                        className={classNames(
+                            value === option.key ? SELECTED[color] : UNSELECTED[color],
+                            buttonClass,
+                            BORDERS[borderColor],
+                        )}
                     >
                         {option.text}
                     </button>
@@ -67,6 +81,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
     onClick: (key: number) => any;
     color?: Color;
     size?: ButtonSize;
+    borderColor?: Color;
     options: Option[];
     value: number; // key
 }>;

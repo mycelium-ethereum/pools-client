@@ -9,10 +9,15 @@ import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
+import ThemeSwitcher from './ThemeSwitcher';
 
 const NavBar: React.FC = () => {
     return (
-        <div className={classNames('relative bg-tracer-900 bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat')}>
+        <div
+            className={classNames(
+                'relative bg-tracer-900 dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
+            )}
+        >
             <NavBarContent />
             <style>{`
                 background-position-x:
@@ -58,7 +63,7 @@ export const NavBarContent: React.FC = () => {
                     <AccountBalance hide={showQueued} className="my-auto mx-2" />
 
                     <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
-                    {/* <ThemeSwitcher /> */}
+                    <ThemeSwitcher />
                 </span>
                 <MobileMenu account={account ?? ''} />
             </div>

@@ -114,7 +114,7 @@ const ViewOnArbiscanOption: React.FC<{
 }> = ({ account, className }) => {
     return (
         <a
-            className={classNames(className ?? '', 'flex hover:bg-gray-100')}
+            className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover')}
             href={`${ARBISCAN_URI}/address/${account}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -144,7 +144,7 @@ const BridgeFundsOption: React.FC<{
 }> = ({ className }) => {
     return (
         <a
-            className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')}
+            className={classNames(className ?? '', 'flex mt-3 hover:bg-theme-button-bg-hover')}
             href="https://bridge.arbitrum.io"
             target="_blank"
             rel="noopener noreferrer"

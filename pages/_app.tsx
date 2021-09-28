@@ -10,7 +10,6 @@ import { ToastProvider } from 'react-toast-notifications';
 import { Notification } from '@components/General/Notification';
 import { TransactionStore } from '@context/TransactionContext';
 import { FactoryStore } from '@context/FactoryContext';
-import GlobalStyles from 'styles/GlobalStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 
@@ -53,7 +52,6 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
             </Head>
-            <GlobalStyles />
             <ToastProvider components={{ Toast: Notification }}>
                 <Web3Store
                     onboardConfig={{

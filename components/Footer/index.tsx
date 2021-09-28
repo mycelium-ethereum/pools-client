@@ -1,16 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
 
-import DiscourseLogo from '/public/img/socials/discourse.svg';
-import TwitterLogo from '/public/img/socials/twitter.svg';
-import GitHubLogo from '/public/img/socials/github.svg';
-import DiscordLogo from '/public/img/socials/discord.svg';
+import DiscourseLogo from '@public/img/socials/discourse.svg';
+import TwitterLogo from '@public/img/socials/twitter.svg';
+import GitHubLogo from '@public/img/socials/github.svg';
+import DiscordLogo from '@public/img/socials/discord.svg';
 
 const item = 'ml-0 mb-4 lg:mb-0 lg:ml-8 last:mb-0';
 
 const Footer: React.FC = () => {
     return (
-        <div className={'container mt-auto py-4 text-gray-900'}>
+        <div className={'container mt-auto py-4'}>
             <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
                 <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
                 <div className="flex my-6 lg:my-0 ">

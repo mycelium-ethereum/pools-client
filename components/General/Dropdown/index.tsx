@@ -32,7 +32,7 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
         <div
             className={classNames(
                 className ?? '',
-                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md bg-white',
+                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md',
             )}
             ref={main}
         >
@@ -89,12 +89,12 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
             <Menu.Button
                 className={classNames(
-                    `inline-flex justify-between w-full rounded-md border `,
+                    `inline-flex justify-between w-full rounded-md border`,
                     SIZE[size],
-                    'font-normal border-gray-300 bg-gray-50 text-gray-500 hover:bg-white focus:outline-none focus:border-solid hover:ring-1 hover:ring-tracer-50',
+                    'font-normal border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:outline-none focus:border-solid hover:ring-1 hover:ring-50',
                 )}
             >
-                <span className="mr-2">
+                <span className="mr-2 opacity-80">
                     {placeHolderIcon && value !== '' ? (
                         <Logo ticker={placeHolderIcon} className="inline my-0 mr-2" />
                     ) : null}
@@ -116,7 +116,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="origin-top-right z-10 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
                             <Menu.Item key={option.key}>
@@ -124,7 +124,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                     <button
                                         onClick={() => onSelect(option.key)}
                                         className={classNames(
-                                            active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                                            active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >

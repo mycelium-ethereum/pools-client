@@ -6,8 +6,9 @@ const EXCHANGE = 0;
 const BROWSE = 1;
 
 const item =
-    'inline w-[120px] my-auto mx-2 py-1.5 text-gray-700 rounded-xl transition-all cursor-pointer text-base hover:bg-gray-50 hover:shadow-sm';
-const selected = 'bg-white hover:bg-white hover:shadow-none';
+    'inline w-[120px] my-auto mx-2 py-1.5 text-theme-text-secondary rounded-xl transition-all cursor-pointer text-base hover:shadow-sm hover:bg-theme-background-secondary';
+const selected = 'bg-theme-background-secondary hover:shadow-none';
+const unselected = '';
 
 // const InvestNav
 export default (({ left, right }) => {
@@ -37,17 +38,17 @@ export default (({ left, right }) => {
     };
 
     return (
-        <div className="relative flex w-full h-[60px] text-center bg-tracer-50">
+        <div className="relative flex w-full h-[60px] text-center bg-theme-background-nav-secondary">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
                 <div
-                    className={classNames(router.pathname === '/' ? selected : '', item)}
+                    className={classNames(router.pathname === '/' ? selected : unselected, item)}
                     onClick={(_e) => handleRoute(EXCHANGE)}
                 >
                     Exchange
                 </div>
                 <div
-                    className={classNames(router.pathname === '/browse' ? selected : '', item)}
+                    className={classNames(router.pathname === '/browse' ? selected : unselected, item)}
                     onClick={(_e) => handleRoute(BROWSE)}
                 >
                     Browse

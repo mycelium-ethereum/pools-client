@@ -1,6 +1,6 @@
 module.exports = {
     important: true,
-    // lfg
+    darkMode: 'class',
     mode: 'jit',
     purge: [
         './pages/**/*.{js,ts,jsx,tsx}',
@@ -21,7 +21,7 @@ module.exports = {
                 tracer: {
                     50: '#F0F0FF',
                     100: '#DEDEFF',
-                    // 200: '#A6A6F2',
+                    200: '#A6A6F2',
                     400: '#3DA8F5',
                     500: '#3535DC',
                     600: '#2A2AC7',
@@ -36,6 +36,18 @@ module.exports = {
                     600: '#6B7280',
                     700: '#374151',
                     900: '#111928',
+                },
+                theme: {
+                    background: 'var(--background)',
+                    ['background-secondary']: 'var(--background-secondary)',
+                    ['background-nav-secondary']: 'var(--background-nav-secondary)',
+                    primary: 'var(--primary)',
+                    accent: 'var(--accent)',
+                    text: 'var(--text)',
+                    ['text-secondary']: 'var(--text-secondary)',
+                    border: 'var(--border)',
+                    ['button-bg']: 'var(--button-bg)',
+                    ['button-bg-hover']: 'var(--button-bg-hover)'
                 },
             },
             screens: {

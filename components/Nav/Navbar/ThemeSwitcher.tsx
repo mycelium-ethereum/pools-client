@@ -55,12 +55,12 @@ export default styled(({ className }) => {
     const [toggle, setToggle] = useState(true);
 
     const handleClick = (_e: any) => {
-        document.getElementsByTagName('html')[0].classList.toggle('light');
+        document.getElementsByTagName('html')[0].classList.toggle('dark');
         setToggle(!toggle);
     };
 
     useEffect(() => {
-        document.getElementsByTagName('html')[0].classList.add('light');
+        document.getElementsByTagName('html')[0].classList.add('dark');
     }, []);
 
     return (

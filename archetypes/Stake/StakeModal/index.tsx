@@ -75,7 +75,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                 </div>
             </div>
             <div className="w-full">
-                <p className="mb-4 mt-6 text-black font-semibold">
+                <p className="mb-4 mt-6  font-semibold">
                     {state.stakeModalState === 'claim' ? 'Available to claim' : 'Amount'}
                 </p>
                 {state.stakeModalState !== 'claim' ? (

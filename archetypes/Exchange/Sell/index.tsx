@@ -106,7 +106,7 @@ export default (() => {
     return (
         <>
             <div className="w-full mb-2">
-                <p className="mb-2 text-black">Token</p>
+                <p className="mb-2 ">Token</p>
                 <Dropdown
                     className="w-full"
                     placeHolder="Select Token"
@@ -131,8 +131,8 @@ export default (() => {
                 </p>
             </div>
             <div className="w-full">
-                <p className="mb-2 text-black">Amount</p>
-                <InputContainer className="w-full ">
+                <p className="mb-2 ">Amount</p>
+                <InputContainer error={invalidAmount.isInvalid} className="w-full">
                     <Input
                         className="w-full h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
@@ -158,7 +158,12 @@ export default (() => {
                         </div>
                     </InnerInputText>
                 </InputContainer>
-                <p className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                <p
+                    className={classNames(
+                        invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
+                        'opacity-70 text-sm mt-2',
+                    )}
+                >
                     {invalidAmount.isInvalid && invalidAmount.message ? (
                         invalidAmount.message
                     ) : (
