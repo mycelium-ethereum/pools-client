@@ -33,8 +33,10 @@ module.exports = {
                     100: '#F3F4F6',
                     200: '#E5E7EB',
                     300: '#D1D5DB',
+                    400: '#9CA3AF',
                     600: '#6B7280',
                     700: '#374151',
+                    800: '#1F2A37',
                     900: '#111928',
                 },
                 theme: {
@@ -47,7 +49,7 @@ module.exports = {
                     ['text-secondary']: 'var(--text-secondary)',
                     border: 'var(--border)',
                     ['button-bg']: 'var(--button-bg)',
-                    ['button-bg-hover']: 'var(--button-bg-hover)'
+                    ['button-bg-hover']: 'var(--button-bg-hover)',
                 },
             },
             screens: {

@@ -14,7 +14,7 @@ const VARIANT: Record<ButtonVariant, string> = {
     primary:
         'bg-tracer-800 text-white w-full hover:bg-tracer-900 disabled:hover:bg-tracer-800 disabled:opacity-50 focus:ring focus:ring-tracer-300',
     'primary-light':
-        'bg-tracer-100 border border-tracer-500 text-cool-gray-700 w-full hover:bg-opacity-50 disabled:bg-tracer-100 disabled:opacity-50',
+        'bg-tracer-100 dark:bg-cool-gray-700 border border-tracer-500 dark:border-cool-gray-400 text-theme-text w-full hover:bg-opacity-50 dark:hover:bg-opacity-50 disabled:opacity-50',
     transparent:
         'bg-white bg-opacity-20 border border-white text-white w-full disabled:bg-opacity-50 focus:border-solid',
 };
