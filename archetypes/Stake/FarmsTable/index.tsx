@@ -5,7 +5,7 @@ import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
 import Modal from '@components/General/Modal';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';

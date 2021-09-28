@@ -17,7 +17,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
 

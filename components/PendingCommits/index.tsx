@@ -13,7 +13,7 @@ import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 // import BigNumber from 'bignumber.js';

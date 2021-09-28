@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { TWModal } from '@components/General/TWModal';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { InnerInputText, InputContainer } from '@components/General/Input';

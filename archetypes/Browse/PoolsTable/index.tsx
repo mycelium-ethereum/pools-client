@@ -10,7 +10,7 @@ import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
