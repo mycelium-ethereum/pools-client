@@ -69,6 +69,7 @@ module.exports = {
             backgroundColor: ['active', 'disabled', 'dark', 'dark:focus', 'dark:hover'],
             cursor: ['disabled'],
             opacity: ['disabled'],
+            outline: ['active'],
             textColor: ['disabled', 'dark', 'dark:focus', 'dark:hover'],
         },
     },

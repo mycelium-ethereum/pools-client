@@ -220,3 +220,7 @@ html.theme-dark{
 html.matrix {
   --background: #000;
 }
+
+.no-focus-outline:focus {
+    outline: none;
+}

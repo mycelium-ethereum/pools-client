@@ -1,20 +1,24 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+
+// the difference here is the bg on unselected
 const SELECTED = {
-    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-transparent',
-    default: 'z-10 bg-tracer-800 hover:bg-tracer-800 text-white border-transparent',
+    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-tracer-500',
+    default: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-tracer-500',
 };
 
 const UNSELECTED = {
-    tracer: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
+    tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
 };
 
-const BORDERS = {
-    default: 'first:rounded-l-md last:rounded-r-md',
-    tracer: 'first:rounded-l-md last:rounded-r-md border border-theme-border',
+const BORDER_COLORS = {
+    default: '',
+    tracer: 'border border-theme-border focus:border-solid',
 };
+
+const BORDERS = 'first:rounded-l-md last:rounded-r-md';
 
 const SIZE = {
     default: 'px-4 py-2 text-sm font-medium ',
@@ -23,7 +27,7 @@ const SIZE = {
 };
 
 const DISABLED = 'cursor-not-allowed opacity-50';
-const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all focus:outline-none';
+const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all no-focus-outline';
 
 type Option = {
     key: number;
@@ -53,7 +57,7 @@ export default (({ options, value, color = 'default', size = 'default', borderCo
                             className={classNames(
                                 DISABLED,
                                 buttonClass,
-                                BORDERS[borderColor],
+                                BORDER_COLORS[borderColor],
                                 index === options.length - 1 ? 'rounded-r-md' : '',
                             )}
                         >
@@ -68,7 +72,8 @@ export default (({ options, value, color = 'default', size = 'default', borderCo
                         className={classNames(
                             value === option.key ? SELECTED[color] : UNSELECTED[color],
                             buttonClass,
-                            BORDERS[borderColor],
+                            BORDER_COLORS[borderColor],
+                            BORDERS,
                         )}
                     >
                         {option.text}

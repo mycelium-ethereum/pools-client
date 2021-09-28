@@ -29,6 +29,7 @@ export default (() => {
                     <TWButtonGroup
                         value={swapState?.commitAction ?? CommitActionEnum.mint}
                         size={'xl'}
+                        color={'tracer'}
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: new BigNumber(0) });
