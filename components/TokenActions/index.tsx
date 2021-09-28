@@ -45,7 +45,7 @@ export default (({ provider, token, arbiscanTarget }) => (
                                     className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
                                     onClick={() => openArbiscan(arbiscanTarget.type, arbiscanTarget.target)}
                                 >
-                                    <Logo className="relative inline mr-2 w-[18px]" ticker={ARBITRUM} />
+                                    <Logo className="relative inline mr-2" ticker={ARBITRUM} />
                                     View on Arbiscan
                                 </div>
                             </div>

@@ -1,10 +1,8 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { Container } from '@components/General';
 import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
 import {
     stakeReducer,
@@ -344,8 +342,8 @@ export default (({
     return (
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
-            <Container className="mt-0 md:mt-[100px]">
-                <FarmContainer>
+            <div className="container mt-0 md:mt-[100px]">
+                <div className="p-0 md:py-20 md:px-16 shadow-xl border-3xl">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
                             {!!logo ? <Logo ticker={logo} className="pb-0 pr-1" /> : null}
@@ -368,8 +366,8 @@ export default (({
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
                     />
-                </FarmContainer>
-            </Container>
+                </div>
+            </div>
             <FilterModal state={state} dispatch={dispatch} />
             <StakeModalWithState
                 state={state}
@@ -442,13 +440,3 @@ const StakeModalWithState: React.FC<{
             return null;
     }
 };
-
-const FarmContainer = styled.div`
-    @media (max-width: 768px) {
-        padding: 0;
-    }
-    background: var(--color-background);
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-    padding: 48px 32px;
-`;

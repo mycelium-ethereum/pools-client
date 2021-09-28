@@ -6,7 +6,7 @@ const POOLTOKEN = 0;
 const BPT = 1;
 
 const item =
-    'inline min-w-[130px] my-auto mx-2 py-3 px-3 text-gray-700 rounded-xl transition-all cursor-pointer text-base whitespace-nowrap hover:bg-gray-50 hover:shadow-sm';
+    'inline min-w-[130px] my-auto mx-2 py-1.5 px-3 text-gray-700 rounded-xl transition-all cursor-pointer text-base whitespace-nowrap hover:bg-gray-50 hover:shadow-sm';
 const selected = 'bg-white hover:bg-white hover:shadow-none';
 
 // const FarmNav
@@ -37,7 +37,7 @@ export default (({ left, right }) => {
     };
 
     return (
-        <div className="relative flex w-full h-[4.5rem] text-center bg-tracer-50">
+        <div className="relative flex w-full h-[60px] text-center bg-tracer-50">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
                 <div

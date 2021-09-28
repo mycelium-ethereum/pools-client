@@ -72,7 +72,7 @@ export default (({ account, className }) => {
                                         </div>
                                         <div
                                             className="text-white py-2 cursor-pointer hover:bg-tracer-900"
-                                            onClick={() => handleRoute('stake')}
+                                            onClick={() => handleRoute('/stakepooltoken')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/stake.svg'} />
                                             Stake

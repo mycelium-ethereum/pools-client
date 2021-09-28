@@ -47,7 +47,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
         >
             <Box>
                 <h2>
-                    <Logo className="inline w-6 mr-2" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                    <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                     {token.name}
                 </h2>
                 <Transition
@@ -104,7 +104,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
         >
             <Box>
                 <h2>
-                    <Logo className="inline w-6 mr-2" ticker="USDC" />
+                    <Logo className="inline mr-2" size={'md'} ticker="USDC" />
                     USDC
                 </h2>
                 <Transition
@@ -133,10 +133,6 @@ const Box = styled.div`
     box-sizing: border-box;
     position: relative;
     padding: 1rem 1rem 0.5rem 1rem;
-
-    ${Section}, ${Section} .label {
-        color: #374151;
-    }
 `;
 
 const Countdown = styled.div`

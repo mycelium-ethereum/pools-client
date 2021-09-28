@@ -96,7 +96,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
                 <span className="mr-2">
                     {placeHolderIcon && value !== '' ? (
-                        <Logo ticker={placeHolderIcon} className="inline w-[20px] mr-2" />
+                        <Logo ticker={placeHolderIcon} className="inline my-0 mr-2" />
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
@@ -128,11 +128,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
-                                        {option?.ticker ? (
-                                            <Logo ticker={option.ticker} className="inline w-[20px] mr-2" />
-                                        ) : (
-                                            ''
-                                        )}
+                                        {option?.ticker ? <Logo ticker={option.ticker} className="inline mr-2" /> : ''}
                                         {option?.text ?? option.key}
                                     </button>
                                 )}
