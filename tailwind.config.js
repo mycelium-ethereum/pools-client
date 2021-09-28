@@ -1,6 +1,5 @@
 module.exports = {
     important: true,
-    darkMode: 'class',
     mode: 'jit',
     purge: [
         './pages/**/*.{js,ts,jsx,tsx}',
@@ -10,6 +9,7 @@ module.exports = {
     ],
 
     theme: {
+        themeVariants: ['dark', 'matrix'],
         container: {
             center: true,
             padding: {
@@ -66,11 +66,11 @@ module.exports = {
         cursor: ['disabled'],
         extend: {
             borderRadius: ['first', 'last'],
-            backgroundColor: ['active', 'disabled'],
+            backgroundColor: ['active', 'disabled', 'dark', 'dark:focus', 'dark:hover'],
             cursor: ['disabled'],
             opacity: ['disabled'],
-            textColor: ['disabled'],
+            textColor: ['disabled', 'dark', 'dark:focus', 'dark:hover'],
         },
     },
-    plugins: [],
+    plugins: [require('tailwindcss-multi-theme')],
 };

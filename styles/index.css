@@ -186,7 +186,7 @@ html {
     }
 }
 
-html.dark {
+html.theme-dark{
     /* cool-gray-900 */
   --background: #111928;
   
