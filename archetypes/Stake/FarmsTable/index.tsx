@@ -4,7 +4,7 @@ import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
-import Modal from '@components/General/Modal';
+import { TWModal } from '@components/General/TWModal';
 import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
@@ -43,7 +43,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 })}
             </Table>
             {fetchingFarms ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalance Rate</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
@@ -73,7 +73,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC<{

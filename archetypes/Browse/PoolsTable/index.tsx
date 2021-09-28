@@ -5,7 +5,7 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import React, { useMemo, useState } from 'react';
 import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
-import Modal from '@components/General/Modal';
+import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
 
@@ -62,7 +62,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
-            <Modal show={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
+            <TWModal open={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
@@ -92,7 +92,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC<{

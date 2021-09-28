@@ -1,16 +1,25 @@
 import React from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
+import { classNames } from '@libs/utils/functions';
 
 interface TWModalProps {
     open: boolean;
     onClose: () => any;
+    size?: Size;
 }
 
-export const TWModal: React.FC<TWModalProps> = (props) => {
+type Size = 'default' | 'wide';
+
+const SIZES: Record<Size, string> = {
+    default: 'sm:max-w-xl',
+    wide: 'max-w-[1010px] h-[700px]',
+};
+
+export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default', children }) => {
     return (
-        <Transition.Root show={props.open} as={Fragment}>
-            <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => props.onClose()}>
+        <Transition.Root show={open} as={Fragment}>
+            <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => onClose()}>
                 <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                     <Transition.Child
                         as={Fragment}
@@ -37,8 +46,13 @@ export const TWModal: React.FC<TWModalProps> = (props) => {
                         leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                         leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
                     >
-                        <div className="p-10 inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-                            {props.children}
+                        <div
+                            className={classNames(
+                                'p-10 inline-block align-bottom bg-theme-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle w-full',
+                                SIZES[size],
+                            )}
+                        >
+                            {children}
                         </div>
                     </Transition.Child>
                 </div>
