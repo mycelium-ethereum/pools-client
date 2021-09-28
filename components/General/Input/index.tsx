@@ -1,7 +1,9 @@
-import { DownOutlined, SearchOutlined } from '@ant-design/icons';
-import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
-import React, { useRef } from 'react';
+import { DownOutlined } from '@ant-design/icons';
+import { Children } from '@libs/types/General';
+import { classNames } from '@libs/utils/functions';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
+import Button from '../Button';
 
 export const Input = styled.input`
     color: #000;
@@ -9,7 +11,6 @@ export const Input = styled.input`
     border: 1px solid #d1d5db;
     box-sizing: border-box;
     border-radius: 7px;
-    box-sizing: border-box;
     padding: 12px 20px;
     height: 3.44rem; // 55px
 
@@ -38,150 +39,38 @@ export const Input = styled.input`
     }
 `;
 
-export const SearchBar = styled(({ className, ...props }) => {
-    return (
-        <InputWrapper className={className}>
-            <Input type="text" placeholder="Search" {...props} />
-            <SearchOutlined />
-        </InputWrapper>
-    );
-})`
-    & ${Input} {
-        padding: 12px 14px 12px 32px;
-    }
-
-    & svg {
-        width: 14px;
-        height: 14px;
-        position: absolute;
-        left: 0.8rem;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-        vertical-align: 0.125rem;
-    }
-`;
-
-export const InputWrapper = styled.div`
-    position: relative;
-    ${Input} {
-        width: 100%;
-    }
-`;
-
-export const InnerInputText = styled.div`
-    color: var(--color-primary);
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    align-items: center;
-    line-height: 1rem;
-    font-size: 1rem;
-    height: 50%;
-    display: flex;
-    right: 1rem;
-    margin: auto;
-`;
-
-export const CheckboxContainer = styled.div`
-    display: flex;
-    cursor: pointer;
-    width: fit-content;
-`;
-
-export const CheckboxTitle = styled.span`
-    margin-left: 0.5rem;
-    margin-top: -0.2rem;
-    font-size: var(--font-size-small);
-`;
-
-type CBProps = {
+export const InputContainer: React.FC<{
     className?: string;
-    checked?: boolean;
-    onClick?: any;
-};
-export const Checkbox: React.FC<CBProps> = styled(({ className, checked, onClick }: CBProps) => {
-    return (
-        <span className={className} onClick={onClick}>
-            <input type="checkbox" checked={checked} readOnly />
-            <span className="checkmark" />
-        </span>
-    );
-})`
-    border: 1px solid var(--color-primary);
-    width: 1.7rem;
-    height: 1.1rem;
-    display: block;
-    position: relative;
-    border-radius: 10px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    transition: 0.3s;
+    error?: boolean;
+}> = ({ error, className = '', children }) => (
+    <div
+        className={classNames(
+            'relative py-3 px-3 border rounded bg-cool-gray-50',
+            error ? 'border-red-300 text-red-500 ' : 'border-cool-gray-300 text-gray-500',
+            'focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-opacity-80 ',
+            className,
+        )}
+    >
+        {children}
+    </div>
+);
 
-    /* Hide the browser's default checkbox */
-    & > input {
-        position: absolute;
-        opacity: 0;
-        cursor: pointer;
-        height: 0;
-        width: 0;
-    }
-
-    /* Create a custom checkbox */
-    & > .checkmark {
-        position: absolute;
-        transition: 0.3s;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 5px;
-    }
-
-    /* On mouse-over, add a grey background color */
-    &:hover {
-        opacity: 0.8;
-    }
-
-    /* When the checkbox is checked, add a blue background */
-    & > input:checked ~ .checkmark {
-        background-color: var(--color-primary);
-    }
-
-    /* Create the checkmark/indicator (hidden when not checked) */
-    & > .checkmark:after {
-        content: '';
-        position: absolute;
-        display: none;
-    }
-
-    /* Show the checkmark when checked */
-    & > input:checked ~ .checkmark:after {
-        display: block;
-    }
-
-    /* Style the checkmark/indicator */
-    & > .checkmark:after {
-        left: 10px;
-        top: 3px;
-        width: 5px;
-        height: 10px;
-        border: solid white;
-        border-width: 0 3px 3px 0;
-        -webkit-transform: rotate(45deg);
-        -ms-transform: rotate(45deg);
-        transform: rotate(45deg);
-    }
-`;
+export const InnerInputText = (({ className, children }) => (
+    <div className={`${className ?? ''} absolute flex m-auto top-0 bottom-0 right-5 h-1/2 text-tracer-800`}>
+        {children}
+    </div>
+)) as React.FC<
+    {
+        className?: string;
+    } & Children
+>;
 
 export const SelectDropdown = styled.div`
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 0;
     right: 0;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.1);
     opacity: 0;
     background: #fff;
     border-radius: 6px;
@@ -191,40 +80,32 @@ export const SelectDropdown = styled.div`
     z-index: 10;
 `;
 
-export const Select = styled(({ preview, onChange, icon, className, children }) => {
-    const ref = useRef<HTMLDivElement>(null);
+export const Select = styled(({ preview, onChange, className, children }) => {
+    const ref = useRef<HTMLButtonElement>(null);
+    const [open, setOpen] = useState(false);
 
     const handleClick = (e: any) => {
         if (e.target.value) {
             onChange(e);
         }
-        ref?.current?.classList?.toggle('open');
+        setOpen(!open);
     };
 
     return (
-        <div ref={ref} className={className} onClick={handleClick}>
+        <Button size="sm" variant="transparent" ref={ref} className={`relative ${className}`} onClick={handleClick}>
             {preview}
-            {icon ? icon : <DownOutlined />}
-            <SelectDropdown>{children}</SelectDropdown>
-        </div>
+            <DownOutlined className={classNames('inline w-8 h-8 transform', open ? 'rotate-180' : '')} />
+            <SelectDropdown className={classNames(open ? 'transform-none opacity-100 ' : '')}>
+                {children}
+            </SelectDropdown>
+        </Button>
     );
 })<{
     preview: React.ReactNode;
     onChange: React.MouseEventHandler<HTMLDivElement>;
-    icon?: AntdIconProps;
 }>`
-    background: #f9fafb;
-    border: 1px solid #d1d5db;
-    box-sizing: border-box;
-    border-radius: 7px;
-    padding-left: 1rem;
-    color: #6b7280;
-    cursor: pointer;
-    position: relative;
-    box-sizing: border-box;
-
     > .anticon {
-        vertical-align: 0;
+        vertical-align: 0.125rem;
     }
 
     & svg {
@@ -237,29 +118,24 @@ export const Select = styled(({ preview, onChange, icon, className, children }) 
         transition: 0.3s;
         transform: rotate(0);
     }
-
-    &.open {
-        ${SelectDropdown} {
-            transform: none;
-            opacity: 1;
-        }
-        & svg {
-            transform: rotate(180deg);
-        }
-    }
 `;
 
 export const SelectOption = styled.option`
-    backround: #fff;
     padding: 12px 1rem;
-    cursor: pointer;
+    line-height: 1rem;
+    &:first-child {
+        border-top-left-radius: 7px;
+        border-top-right-radius: 7px;
+    }
+    &:last-child {
+        border-bottom-left-radius: 7px;
+        border-bottom-right-radius: 7px;
+    }
+    color: ${(props) => (props.disabled ? '' : '#374151')};
+    cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
     transition: 0.3s;
 
     &:hover {
-        background: #d1d5db;
-    }
-
-    &:last-child {
-        border-top: 1px solid #f3f4f6;
+        background: ${(props) => (props.disabled ? '' : '#d1d5db')};
     }
 `;

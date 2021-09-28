@@ -1,37 +1,21 @@
-import Icon from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import React from 'react';
-import styled from 'styled-components';
-
-// @ts-ignore
-import GasIcon from '@public/img/general/gas_icon.svg';
+import { GasPriceTooltip } from '@components/Tooltips';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 export default (() => {
-    const { gasPrice } = useWeb3();
+    const { gasPrice, wallet, network } = useWeb3();
     return (
-        <Gas>
-            <Icon component={GasIcon} className="icon" />
-            <span className="text">{gasPrice}</span>
-        </Gas>
+        <div className="flex flex-col items-center justify-center p-2 ml-auto">
+            <GasPriceTooltip
+                network={networkConfig[network ?? 0]?.name ?? 'Unknown'}
+                wallet={wallet?.name ?? 'Unknown'}
+            >
+                <div className="flex">
+                    <img src={'/img/general/gas_icon.svg'} className="inline h-[22px] w-[20px] mr-2" />
+                    <span>{gasPrice?.toFixed(3)}</span>
+                </div>
+            </GasPriceTooltip>
+        </div>
     );
 }) as React.FC;
-
-const Gas = styled.div`
-    // background: var(--color-accent);
-    // border-radius: 10px;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    .text {
-        margin-left: 0.5rem;
-    }
-    .icon {
-        height: 22px;
-        width: 20px;
-        vertical-align: 0;
-        svg {
-            width: 100%;
-            height: 100%;
-        }
-    }
-`;

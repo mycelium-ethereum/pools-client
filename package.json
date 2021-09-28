@@ -8,10 +8,11 @@
         "@apollo/client": "^3.3.7",
         "@ensdomains/ensjs": "^2.0.0",
         "@headlessui/react": "^1.4.1",
-        "@tracer-protocol/onboard": "^1.29.3",
-        "@tracer-protocol/perpetual-pools-contracts": "^0.0.2",
         "arb-ts": "^0.0.36",
         "assert": "^2.0.0",
+        "@tracer-protocol/onboard": "^2.1.0",
+        "@tracer-protocol/perpetual-pools-contracts": "^0.0.4",
+        "antd": "^4.16.13",
         "bignumber.js": "^9.0.1",
         "crypto": "^1.0.1",
         "ethers": "^5.4.3",
@@ -27,7 +28,8 @@
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
         "token-bridge-sdk": "^0.5.0",
-        "universal-cookie": "^4.0.4"
+        "universal-cookie": "^4.0.4",
+        "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"
     },
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev -p 3002",

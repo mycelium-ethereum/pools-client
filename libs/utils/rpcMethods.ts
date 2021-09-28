@@ -1,20 +1,26 @@
-import { PoolToken } from '@libs/types/General';
+import { tokenSymbolToLogoTicker } from '@components/General';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ethers } from 'ethers';
 
+const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';
 /**
  * Adds a token asset to the users wallet watch
  * @param provider ethereum provider
  * @param token token to add
  * @returns true if success and false otherwise
  */
-export const watchAsset: (provider: ethers.providers.JsonRpcProvider | null, token: PoolToken) => Promise<boolean> = (
-    provider,
-    token,
-) => {
+export const watchAsset: (
+    provider: ethers.providers.JsonRpcProvider | null,
+    token: {
+        address: string;
+        symbol: string;
+        decimals: number;
+    },
+) => Promise<boolean> = (provider, token) => {
     if (!provider) {
         return new Promise(() => false);
     }
+
     return provider
         ?.send('wallet_watchAsset', {
             // @ts-ignore
@@ -22,8 +28,9 @@ export const watchAsset: (provider: ethers.providers.JsonRpcProvider | null, tok
             options: {
                 type: 'ERC20',
                 address: token.address,
-                symbol: token.name,
-                decimals: 18,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
             },
         })
         .then((success) => {
@@ -79,8 +86,20 @@ export const switchNetworks: (
     return false;
 };
 
+export enum ArbiscanEnum {
+    txn = 0,
+    token = 1,
+}
 // Not really an RPC but thought it kind of belongs here
-export const openEtherscan: (txn: string) => boolean = (txn) => {
-    window.open(`https://kovan.etherscan.io/tx/${txn}`, '', 'noreferrer=true,noopener=true');
+export const openArbiscan: (type: ArbiscanEnum, taraget: string) => boolean = (type, target) => {
+    switch (type) {
+        case ArbiscanEnum.txn:
+            window.open(`https://arbiscan.io/tx/${target}`, '', 'noreferrer=true,noopener=true');
+            break;
+        case ArbiscanEnum.token:
+            window.open(`https://arbiscan.io/token/${target}`, '', 'noreferrer=true,noopener=true');
+            break;
+        default: //nothing
+    }
     return false;
 };

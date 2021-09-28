@@ -2,11 +2,11 @@ import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
 
-    html.light {
-        --color-background: #fff;
-        --color-background-secondary: #E5E5E5;
-        --color-text: #000;
-        --color-primary: #0000B0;
+    html.dark {
+        --color-background: #000240;
+        --color-background-secondary: #00125D;
+        --color-text: #fff;
+        --color-primary: #3da8f5;
         --color-secondary: #005ea4;
         --color-accent: #002886;
 
@@ -35,12 +35,17 @@ export default createGlobalStyle`
   	html {
         font-size:16px;
 
-        --color-background: #000240;
-        --color-background-secondary: #00125D;
-        --color-text: #fff;
-        --color-primary: #3da8f5;
+        --color-background: #fff;
+        --color-background-secondary: #E5E5E5;
+        --color-text: #000;
+        --color-primary: #0000B0;
         --color-secondary: #005ea4;
         --color-accent: #002886;
+
+        --table-darkborder: #00156C;
+        --table-semidarkborder: #000240;
+        --table-lightborder: #002886;
+
         --color-red: #F15025;
         --color-green: #05CB3A; 
 
@@ -48,10 +53,6 @@ export default createGlobalStyle`
         --status-lightblue: #3da8f5;
         --status-orange: #F15025;
         --status-white: #fff;
-
-        --table-darkborder: #00156C;
-        --table-semidarkborder: #000240;
-        --table-lightborder: #002886;
         
         --font-size-extra-small: 12px;
         --font-size-small: 16px;
@@ -143,4 +144,17 @@ export default createGlobalStyle`
         top: 65px !important;
         z-index: 100001 !important;
     }
+    
+    /* ANTD overrides */
+	.ant-tooltip-inner {
+		background: white;
+		color: black;
+	}
+    .ant-tooltip-inner a {
+        color: blue;
+        text-decoration: underline;
+    }
+	.ant-tooltip-arrow-content {
+		background-color: white;
+	}
 `;

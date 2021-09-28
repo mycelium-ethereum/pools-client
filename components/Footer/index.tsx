@@ -1,99 +1,84 @@
 import React from 'react';
 import Link from 'next/link';
-import styled from 'styled-components';
-import { GithubOutlined, TwitterOutlined } from '@ant-design/icons';
 
-const Footer = styled(({ className }) => {
+import DiscourseLogo from '/public/img/socials/discourse.svg';
+import TwitterLogo from '/public/img/socials/twitter.svg';
+import GitHubLogo from '/public/img/socials/github.svg';
+import DiscordLogo from '/public/img/socials/discord.svg';
+
+const item = 'ml-0 mb-4 lg:mb-0 lg:ml-8 last:mb-0';
+
+const Footer: React.FC = () => {
     return (
-        <FooterContent className={`${className} container`}>
-            <Copyright>&copy; 2021 Tracer DAO</Copyright>
-            <Socials>
-                <TwitterOutlined />
-                <GithubOutlined />
-            </Socials>
-            <Section>
-                <Item>
-                    <Link href="/privacy-policy">Privacy Policy</Link>
-                </Item>
-                <Item>
-                    <Link href="/terms-of-use">Terms of Use</Link>
-                </Item>
-                <Item>
-                    <Link href="/disclaimer">Disclaimer</Link>
-                </Item>
-                <Item>
-                    <a onClick={() => window.open('https://docs.tracer.finance', '_blank', 'noopener')}>Docs</a>
-                </Item>
-                <Item>
+        <div className={'container mt-auto py-4 text-gray-900'}>
+            <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
+                <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
+                <div className="flex my-6 lg:my-0 ">
                     <a
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/perpetual-swaps-faq', '_blank', 'noopener')
-                        }
+                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        href="https://discourse.tracer.finance"
+                        target="_blank"
+                        rel="noreferrer"
                     >
-                        FAQs
+                        <DiscourseLogo />
                     </a>
-                </Item>
-                <Item>
                     <a
-                        onClick={() =>
-                            window.open('https://docs.tracer.finance/trader-tutorials', '_blank', 'noopener')
-                        }
+                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        href="https://twitter.com/TracerDAO"
+                        target="_blank"
+                        rel="noreferrer"
                     >
-                        Tutorials
+                        <TwitterLogo />
                     </a>
-                </Item>
-            </Section>
-        </FooterContent>
+                    <a
+                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        href="https://github.com/tracer-protocol"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <GitHubLogo />
+                    </a>
+                    <a
+                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        href="https://discord.com/invite/kddBUqDVVb"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <DiscordLogo />
+                    </a>
+                </div>
+                <div className="flex flex-col lg:flex-row">
+                    <div className={item}>
+                        <Link href="/privacy-policy">Privacy Policy</Link>
+                    </div>
+                    <div className={item}>
+                        <Link href="/terms-of-use">Terms of Use</Link>
+                    </div>
+                    <div className={item}>
+                        <Link href="/disclaimer">Disclaimer</Link>
+                    </div>
+                    <div className={item}>
+                        <a
+                            href="https://gateway.pinata.cloud/ipfs/QmS161WXV2bEAWUtdecfS5FYPmHQZdhNnjVFAwQ5FTX3og"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Participation Agreement
+                        </a>
+                    </div>
+                    <div className={item}>
+                        <a
+                            href="https://tracer.finance/radar/sigma-prime-audit-response/"
+                            target="_blank"
+                            rel="noreferrer"
+                        >
+                            Security Audit
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     );
-})`
-    display: flex;
-    color: #27272a;
-    margin-top: auto;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding-bottom: 1rem;
-
-    @media (max-width: 768px) {
-        padding: 0 0.5rem 1rem 0.5rem;
-`;
-
-const FooterContent = styled.div`
-    display: flex;
-    justify-content: space-between;
-`;
-
-const Section = styled.div`
-    display: flex;
-    @media (max-width: 1127px) {
-        display: none;
-    }
-`;
-const Socials = styled.div`
-    margin-right: auto;
-    margin-left: auto;
-    @media (max-width: 1127px) {
-        margin-right: 0;
-    }
-    & svg {
-        display: inline;
-        height: 18px;
-        width: 18px;
-        margin: 0 1rem;
-        color: #27272a;
-    }
-`;
-
-const Item = styled.div`
-    margin-left: 2rem;
-    color: #27272a;
-    display: inline;
-`;
-
-const Copyright = styled.div`
-    white-space: nowrap;
-    color: #27272a;
-    display: inline;
-`;
+};
 
 export default Footer;

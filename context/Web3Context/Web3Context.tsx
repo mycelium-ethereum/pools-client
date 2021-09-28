@@ -2,21 +2,20 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
-import { API as OnboardApi, Wallet, Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
-import ApproveConnectionModal from '@components/Legal/ApproveConnectionModal';
-import { providers, ethers } from 'ethers';
-
-import Cookies from 'universal-cookie';
+import { ethers, providers } from 'ethers';
+import { useToasts } from 'react-toast-notifications';
+import { switchNetworks } from '@libs/utils/rpcMethods';
+import { ARBITRUM } from '@libs/constants';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
 type Web3ContextProps = {
     cacheWalletSelection?: boolean;
-    checkNetwork?: boolean;
     children: React.ReactNode;
     networkIds?: number[];
     onboardConfig?: OnboardConfig;
@@ -40,7 +39,7 @@ type Web3Context = {
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
-    provider?: providers.Web3Provider;
+    provider?: providers.JsonRpcProvider;
 };
 
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
@@ -54,34 +53,32 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     onboardConfig,
     networkIds,
     cacheWalletSelection = true,
-    checkNetwork = (networkIds && networkIds.length > 0) || false,
 }) => {
+    const errorToastID = React.useRef<string>('');
+    const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(undefined);
-    const [provider, setProvider] = useState<providers.Web3Provider | undefined>(undefined);
+    const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
+        new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_DEFAULT_RPC),
+    );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[0]);
-    const [showTerms, setShowTerms] = useState<boolean>(false);
-    const [acceptedTerms, acceptTerms] = useState(false);
+    const [config, setConfig] = useState<Network>(networkConfig[ARBITRUM]);
 
     // Initialize OnboardJS
     useEffect(() => {
         const initializeOnboard = async () => {
             const checks = [{ checkName: 'accounts' }, { checkName: 'connect' }];
-            if (networkIds && checkNetwork) {
-                checks.push({ checkName: 'network' });
-            }
 
             try {
                 const onboard = Onboard({
                     ...onboardConfig,
-                    networkId: networkIds ? networkIds[0] : 421611, //Default to arb
+                    networkId: networkIds ? networkIds[0] : parseInt(ARBITRUM), //Default to arb
                     walletCheck: checks,
                     subscriptions: {
                         address: (address) => {
@@ -91,7 +88,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                             onboardConfig?.subscriptions?.address && onboardConfig?.subscriptions?.address(address);
                         },
                         wallet: (wallet) => {
+                            console.debug('Detected wallet change');
                             if (wallet.provider) {
+                                console.debug('Setting wallet provider');
                                 wallet.name &&
                                     cacheWalletSelection &&
                                     localStorage.setItem('onboard.selectedWallet', wallet.name);
@@ -137,17 +136,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     }, []);
 
     useEffect(() => {
-        const cookies = new Cookies();
-        if (acceptedTerms) {
-            cookies.set('acceptedTerms', 'true', { path: '/' });
-            handleConnect();
-            setShowTerms(false);
-        }
-    }, [acceptedTerms]);
-
-    useEffect(() => {
         const signer = provider?.getSigner();
-        console.log(signer, 'Signer');
         setSigner(signer);
     }, [provider, account]);
 
@@ -172,14 +161,53 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         };
     }, [provider, network]);
 
+    // unsupported network popup
     useEffect(() => {
-        console.debug('Detected wallet change');
-        if (wallet && wallet?.provider) {
-            console.debug('Setting new provider');
-            const provider = new ethers.providers.Web3Provider(wallet.provider, 'any');
-            setProvider(provider);
+        if (!networkConfig[network ?? -1] && provider && account) {
+            // ignore if we are already showing the error
+            if (!errorToastID.current) {
+                // @ts-ignore
+                errorToastID.current = addToast(
+                    [
+                        'Unsupported Network',
+                        <span key="unsupported-network-content" className="text-sm">
+                            <a
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                onClick={() => {
+                                    switchNetworks(provider, ARBITRUM);
+                                }}
+                            >
+                                Switch to Arbitrum Mainnet
+                            </a>
+                            <br />
+                            <span>New to Arbitrum? </span>
+                            <a
+                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
+                                target="_blank"
+                                rel="noreferrer noopner"
+                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
+                            >
+                                Get started
+                            </a>
+                        </span>,
+                    ],
+                    {
+                        appearance: 'error',
+                        autoDismiss: false,
+                    },
+                );
+            }
+        } else {
+            if (errorToastID.current) {
+                updateToast(errorToastID.current as unknown as string, {
+                    content: 'Switched Network',
+                    appearance: 'success',
+                    autoDismiss: true,
+                });
+                errorToastID.current = '';
+            }
         }
-    }, [wallet]);
+    }, [network, account]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
@@ -196,25 +224,11 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         await onboard?.walletReset();
     };
 
-    const acceptLegalTerms = () => {
-        const cookies = new Cookies();
-        if (cookies.get('acceptedTerms') !== 'true') {
-            setShowTerms(true);
-        } else {
-            setShowTerms(false);
-            acceptTerms(true);
-        }
-        return acceptedTerms;
-    };
-
     const handleConnect = async () => {
         if (onboard) {
             try {
-                const accepted = acceptLegalTerms();
-                if (accepted) {
-                    await onboard?.walletSelect();
-                    await checkIsReady();
-                }
+                await onboard?.walletSelect();
+                await checkIsReady();
             } catch (err) {
                 console.error(err);
             }
@@ -251,12 +265,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             >
                 <Web3Context.Provider value={web3Context}>{children}</Web3Context.Provider>
             </OnboardContext.Provider>
-            <ApproveConnectionModal
-                acceptedTerms={acceptedTerms}
-                show={showTerms}
-                setShow={setShowTerms}
-                acceptTerms={acceptTerms}
-            />
         </>
     );
 };

@@ -1,44 +1,52 @@
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
-import { SHORT_MINT, LONG_MINT } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { useCommits } from '@context/UsersCommitContext';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 export default (() => {
+    const { account = '' } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools = {} } = usePools();
-    const [buys, setBuys] = useState<number>(0);
-    const [sells, setSells] = useState<number>(0);
+    const [mints, setMints] = useState<number>(0);
+    const [burns, setBurns] = useState<number>(0);
     const [nextUpdate, setNextUpdate] = useState<number>(0);
 
     useEffect(() => {
         if (commits && Object.keys(pools).length) {
-            let buys = 0,
-                sells = 0,
+            let mints = 0,
+                burns = 0,
                 nextUpdate = 0;
+            const accountLower = account.toLowerCase();
             Object.values(commits).map((commit) => {
-                if (commit.type === SHORT_MINT || commit.type === LONG_MINT) {
-                    buys += 1;
-                } else {
-                    sells += 1;
+                if (commit.from.toLowerCase() !== accountLower) {
+                    return;
                 }
-                const newMin = pools[commit.pool].updateInterval.plus(pools[commit.pool].updateInterval).toNumber();
-                if (newMin < nextUpdate) {
-                    nextUpdate = newMin; // set new min
+                if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
+                    mints += 1;
+                } else {
+                    burns += 1;
+                }
+                if (pools[commit.pool]) {
+                    const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
+                    if (newMin < nextUpdate || nextUpdate === 0) {
+                        nextUpdate = newMin; // set new min
+                    }
                 }
             });
-            setBuys(buys);
-            setSells(sells);
+            setMints(mints);
+            setBurns(burns);
             setNextUpdate(nextUpdate);
         }
-    }, [commits, pools]);
+    }, [commits, pools, account]);
 
     return {
-        buys,
-        sells,
+        mints,
+        burns,
         nextUpdate,
     };
 }) as () => {
-    buys: number;
-    sells: number;
+    mints: number;
+    burns: number;
     nextUpdate: number;
 };

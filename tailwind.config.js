@@ -1,14 +1,15 @@
 module.exports = {
     important: true,
-    purge: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+    // lfg
+    mode: 'jit',
+    purge: [
+        './pages/**/*.{js,ts,jsx,tsx}',
+        './components/**/*.{js,ts,jsx,tsx}',
+        './archetypes/**/*.{js,ts,jsx,tsx}',
+        // Add more here
+    ],
+
     theme: {
-        screeens: {
-            sm: { min: '640px', max: '767px' },
-            md: { min: '768px', max: '1023px' },
-            lg: { min: '1024px', max: '1279px' },
-            xl: { min: '1280px', max: '1600px' },
-            '2xl': { min: '1601px' },
-        },
         container: {
             center: true,
             padding: {
@@ -16,9 +17,45 @@ module.exports = {
             },
         },
         extend: {
+            colors: {
+                tracer: {
+                    50: '#F0F0FF',
+                    100: '#DEDEFF',
+                    // 200: '#A6A6F2',
+                    400: '#3DA8F5',
+                    500: '#3535DC',
+                    600: '#2A2AC7',
+                    800: '#0000B0',
+                    900: '#00007A',
+                },
+                'cool-gray': {
+                    50: '#F9FAFB',
+                    100: '#F3F4F6',
+                    200: '#E5E7EB',
+                    300: '#D1D5DB',
+                    600: '#6B7280',
+                    700: '#374151',
+                    900: '#111928',
+                },
+            },
             screens: {
                 '3xl': '1800px',
             },
+            backgroundImage: {
+                'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
+                'nav-bg': "url('/img/nav-bg.svg')",
+            }
+        },
+    },
+    variants: {
+        opacity: ['disabled'],
+        cursor: ['disabled'],
+        extend: {
+            borderRadius: ['first', 'last'],
+            backgroundColor: ['active', 'disabled'],
+            cursor: ['disabled'],
+            opacity: ['disabled'],
+            textColor: ['disabled'],
         },
     },
     variants: {

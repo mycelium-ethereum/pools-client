@@ -1,108 +1,182 @@
-import React from 'react';
-import MobileSocialLogos from './MobileSocialLogos';
-import styled from 'styled-components';
-import { Menu, MenuItem } from './HeaderDropdown';
-// @ts-ignore
-import ArrowDown from '@public/img/general/caret_down.svg';
+import React, { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { classNames } from '@libs/utils/functions';
+import { Transition } from '@headlessui/react';
 import Icon from '@ant-design/icons';
+import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
-export default (() => (
-    <StyledHeaderSiteSwitcher>
-        <MainLink href="/">
-            <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_perps.svg" />
-        </MainLink>
+// Images
+const DiscourseLogo = '/img/socials/discourse-white.svg';
+const TwitterLogo = '/img/socials/twitter-white.svg';
+const GitHubLogo = '/img/socials/github-white.svg';
+const DiscordLogo = '/img/socials/discord-white.svg';
+const Folder = '/img/general/folder.svg';
+const Icons = [
+    {
+        text: 'Website',
+        href: 'https://tracer.finance',
+        logo: Folder,
+    },
+    {
+        text: 'Twitter',
+        href: 'https://twitter.com/TracerDAO',
+        logo: TwitterLogo,
+    },
+    {
+        text: 'Discourse',
+        href: 'https://discourse.tracer.finance/',
+        logo: DiscourseLogo,
+    },
+    {
+        text: 'Github',
+        href: 'https://github.com/tracer-protocol/',
+        logo: GitHubLogo,
+    },
+    {
+        text: 'Discord',
+        href: 'https://discord.gg/7rhrmYkAJs',
+        logo: DiscordLogo,
+    },
+];
 
-        <Arrow component={ArrowDown} />
+const ArrowDown = '/img/general/caret-down-white.svg';
 
-        <Menu>
-            <StyledMenuItem>
-                <a href="https://tracer.finance" target="_blank" rel="noreferrer noopener">
-                    <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_logo.svg" />
-                </a>
-            </StyledMenuItem>
-            <StyledMenuItem>
-                <a href="https://tracer.finance" target="_blank" rel="noreferrer noopener">
-                    <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_logo.svg" />
-                </a>
-            </StyledMenuItem>
-            <StyledMenuItem>
-                <a href="https://gov.tracer.finance" target="_blank" rel="noreferrer noopener">
-                    <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_govern.svg" />
-                </a>
-            </StyledMenuItem>
-            <StyledMenuItem>
-                <a href="https://tracer.finance/radar" target="_blank" rel="noreferrer noopener">
-                    <StyledTracerLogo alt="tracer-logo" src="/img/logos/tracer/tracer_blog.svg" />
-                </a>
-            </StyledMenuItem>
-            <StyledMenuItem>
-                <StyledMobileSocialLogos />
-            </StyledMenuItem>
-        </Menu>
-    </StyledHeaderSiteSwitcher>
-)) as React.FC;
+const DropdownMenu: React.FC = () => {
+    const [open, setOpen] = useState(false);
 
-const MainLink = styled.a`
-    z-index: 11;
-`;
-
-const Arrow = styled(Icon)`
-    height: 8px;
-    width: 15px;
-    transition: all 400ms ease-in-out;
-    z-index: 11;
-    vertical-align: 0;
-`;
-
-const StyledTracerLogo = styled.img`
-    display: block;
-    height: 1.7rem;
-    margin-right: 2rem;
-`;
-
-const StyledMenuItem = styled(MenuItem)`
-    &:first-child > ${StyledTracerLogo} {
-        opacity: 0;
-    }
-`;
-
-const StyledMobileSocialLogos = styled(MobileSocialLogos)`
-    width: 60%;
-`;
-
-const StyledHeaderSiteSwitcher = styled.div`
-    position: relative;
-    display: flex;
-    align-items: center;
-
-    &:hover {
-        cursor: pointer;
-        ${Arrow} {
-            transform: rotate(180deg);
-        }
-        ${Menu} {
-            opacity: 1;
-            transform: none;
-        }
-        ${MenuItem} {
-            opacity: 1;
-            padding-left: 0;
-            &:last-child {
-                cursor: auto;
-                padding-left: 2rem;
+    useEffect(() => {
+        const handleClickOutside = (event: any) => {
+            const dropdown = document.getElementById('site-switcher');
+            if (dropdown) {
+                console.debug('Closing site-switcher');
+                if (!dropdown.contains(event.target)) {
+                    setOpen(false);
+                }
             }
+        };
+        if (!open) {
+            document.removeEventListener('mousedown', handleClickOutside);
+        } else {
+            document.addEventListener('mousedown', handleClickOutside);
         }
-        ${MenuItem}:nth-child(2) {
-            transition: all 400ms ease 300ms;
-        }
-        ${MenuItem}:nth-child(3) {
-            transition: all 400ms ease 450ms;
-        }
-        ${MenuItem}:nth-child(4) {
-            transition: all 400ms ease 600ms;
-        }
-        ${MenuItem}:nth-child(5) {
-            transition: all 400ms ease 750ms;
-        }
-    }
-`;
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [open]);
+    return (
+        <div id="site-switcher" className="relative flex">
+            <Link href="/">
+                <>
+                    <img
+                        className="sm:w-24 w-22 h-auto hidden md:block cursor-pointer"
+                        alt="tracer-logo"
+                        src="/img/logos/tracer/tracer_logo.svg"
+                    />
+                    <img
+                        className="w-12 h-auto block md:hidden cursor-pointer"
+                        src={'/img/logos/tracer/tracer_no_text.svg'}
+                        alt="Tracer Logo"
+                    />
+                </>
+            </Link>
+            <button
+                id="toggle"
+                className="flex pl-3 w-22 h-22 left-0 top-0 z-0 justify-center items-center cursor-pointer outline-none border-none"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    setOpen(!open);
+                }}
+            >
+                <img
+                    className={classNames('w-4 h-auto transition-all duration-500 transform', open ? 'rotate-180' : '')}
+                    src={ArrowDown}
+                    alt="Dropdown toggle"
+                />
+            </button>
+            <div
+                className={classNames(
+                    open ? 'scale-100' : 'scale-0',
+                    'block fixed md:absolute transform-gpu origin-top-left z-20 box-border transition-all w-[350px] sm:px-8 px-4 top-16 md:top-[4.5rem] left-0 duration-700',
+                )}
+            >
+                <div
+                    className={
+                        'backdrop-filter backdrop-blur bg-tracer-800 bg-opacity-80 absolute top-0 left-0 h-full w-full rounded-lg'
+                    }
+                />
+                <Transition
+                    show={open}
+                    enter="transition-all duration-300 delay-500"
+                    enterFrom="opacity-0"
+                    enterTo="opacity-100"
+                    leave="transition-all duration-75"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                    className="relative sm:mt-8 my-4"
+                >
+                    <DropdownOption
+                        href={'https://pools.tracer.finance'}
+                        label={'Perpetual Pools'}
+                        boxColor={'#7912fc'}
+                    />
+                    <DropdownOption href={'https://vote.tracer.finance/#/'} label={'Governance'} boxColor={'#1AAA8D'} />
+                    <DropdownOption
+                        href={'https://docs.tracer.finance/'}
+                        label={'Documentation'}
+                        boxColor={'#1e5cf5'}
+                    />
+                    <div className="mt-12">
+                        {Icons.map((icon, i) => (
+                            <a
+                                className="w-fit sm:px-2 transition-all duration-300 flex items-center mt-5 rounded-lg hover:opacity-50"
+                                href={icon.href}
+                                rel="noreferrer"
+                                target="_blank"
+                                key={i}
+                            >
+                                <span>
+                                    <img className="w-5 mr-2 opacity-70" src={icon.logo} alt="Logo" />
+                                </span>
+                                <span className="block text-white font-normal my-auto">{icon.text}</span>
+                            </a>
+                        ))}
+                    </div>
+                </Transition>
+            </div>
+        </div>
+    );
+};
+
+const DropdownOption: React.FC<{
+    href: string;
+    label: string;
+    boxColor: string;
+}> = ({ href, label, boxColor }) => (
+    <a
+        className={'flex w-fit pr-2 mb-6 transition-all duration-300 rounded-lg hover:bg-tracer-900 bg-opacity-50'}
+        href={href}
+        rel="noreferrer"
+        target="_blank"
+    >
+        <Icon
+            component={TracerBox}
+            className="box h-[48px] w-[48px] mr-3"
+            style={{ color: boxColor }}
+            alt="Tracer Box"
+        />
+        <span className="block text-white font-normal my-auto">
+            <p>Tracer</p>
+            <p>
+                <b>{label}</b>
+            </p>
+        </span>
+        <style>{`
+            .box svg {
+                width: 100%;
+                height: 100%;
+            }
+        `}</style>
+    </a>
+);
+
+export default DropdownMenu;

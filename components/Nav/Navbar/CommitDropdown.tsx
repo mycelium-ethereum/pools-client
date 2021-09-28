@@ -1,18 +1,28 @@
-import { Select, SelectDropdown } from '@components/General/Input';
+import React, { useMemo } from 'react';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { BUYS, SELLS } from '@libs/constants';
-import { CommitsFocus } from '@libs/types/General';
+import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
-import React from 'react';
-import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
+import TWPopup from '@components/General/TWPopup';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
+
+const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
 // const CommitDropdown
-export default (() => {
+export default (({ setShowQueued, hide }) => {
     const { commitDispatch } = useCommitActions();
-    const { buys, sells, nextUpdate } = useCommitsBreakdown();
+    const { mints, burns, nextUpdate } = useCommitsBreakdown();
 
-    const handleClick = (focus: CommitsFocus) => {
+    useMemo(() => {
+        if (mints + burns > 0) {
+            setShowQueued(true);
+        } else {
+            setShowQueued(false);
+        }
+    }, [mints, burns]);
+
+    const handleClick = (focus: CommitsFocusEnum) => {
         if (commitDispatch) {
             commitDispatch({ type: 'show', focus: focus });
         } else {
@@ -21,71 +31,28 @@ export default (() => {
     };
 
     return (
-        <QueuedDropdown preview={`${buys + sells} Queued`}>
-            <Header>
-                UP NEXT <TimeLeft targetTime={nextUpdate} />
-            </Header>
-            <Link onClick={() => handleClick(BUYS)}>
-                <a>{buys} Buys</a>
-            </Link>
-            <Link onClick={() => handleClick(SELLS)}>
-                <a>{sells} Sells</a>
-            </Link>
-        </QueuedDropdown>
+        <TWPopup
+            className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
+            preview={`${mints + burns} Queued`}
+        >
+            <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
+                <TooltipSelector tooltip={{ content: <>Time until mints/burns are processed</> }}>
+                    <div className="uppercase mr-2 whitespace-nowrap">Up Next</div>
+                </TooltipSelector>
+                <TimeLeft
+                    className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
+                    targetTime={nextUpdate}
+                />
+            </div>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.mints)}>
+                <a>{mints} Mints</a>
+            </div>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.burns)}>
+                <a>{burns} Burns</a>
+            </div>
+        </TWPopup>
     );
-}) as React.FC;
-
-const QueuedDropdown = styled(Select)`
-    border: 1px solid #ffffff;
-    box-sizing: border-box;
-    border-radius: 7px;
-    background: #3da8f5;
-    margin: auto 1rem;
-    width: 158px;
-    height: 2.625rem;
-    line-height: 2.625rem;
-    color: #fff;
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.06), 0px 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 6px;
-
-    // for size of menu
-    ${SelectDropdown} {
-        left: -50px;
-        background: #fff;
-    }
-
-    & svg {
-        fill: #fff;
-    }
-`;
-
-const Link = styled.div`
-    margin: 0.8rem 1rem;
-    color: #3da8f5;
-    cursor: pointer;
-    line-height: normal;
-    &:hover {
-        text-decoration: underline;
-    }
-`;
-
-const Header = styled.div`
-    border-bottom: 1px solid #f3f4f6;
-    padding: 0.5rem 1rem;
-    color: #3f3f46;
-    display: flex;
-    font-size: 14px;
-    font-weight: 600;
-    align-items: center;
-    line-height: normal;
-    height: 4rem;
-    ${TimeLeft} {
-        background: #fafafa;
-        color: #6b7280;
-        border: 1px solid #e4e4e7;
-        box-sizing: border-box;
-        border-radius: 6px;
-        padding: 2px 8px;
-        margin: auto;
-    }
-`;
+}) as React.FC<{
+    setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
+    hide?: boolean;
+}>;

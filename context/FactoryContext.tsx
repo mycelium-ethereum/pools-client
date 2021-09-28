@@ -4,8 +4,57 @@ import { useWeb3 } from './Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
-import { ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 
+// this is a temp hack to fix fetching pools > 2000 blocks from currentBlock
+type ArbitrumNetwork = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
+
+const POOLS: Record<ArbitrumNetwork, any> = {
+    [ARBITRUM_RINKEBY]: [
+        {
+            // 1x
+            name: '1-BTC/USDC',
+            address: '0x1b9A08Bd1b976fd91a355625509FbFcbbF34fb20',
+        },
+        {
+            // 3x
+            name: '3-BTC/USDC',
+            address: '0xd0983C3E9E4Af753E6e74D741a39c3053b06dFcf',
+        },
+        {
+            // 1x
+            name: '1-ETH/USDC',
+            address: '0x34eE510e1d51904C50d9CD03199dE5147A4E15eD',
+        },
+        {
+            // 3x
+            name: '3-ETH/USDC',
+            address: '0xe3cAD84c29775399a25c6Ff040FE141b4eD10047',
+        },
+    ],
+    [ARBITRUM]: [
+        {
+            // 1x
+            name: '1-BTC/USDC',
+            address: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
+        },
+        {
+            // 3x
+            name: '3-BTC/USDC',
+            address: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
+        },
+        {
+            // 1x
+            name: '1-ETH/USDC',
+            address: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
+        },
+        {
+            // 3x
+            name: '3-ETH/USDC',
+            address: '0x54114e9e1eEf979070091186D7102805819e916B',
+        },
+    ],
+};
 interface ContextProps {
     pools: PoolType[];
 }
@@ -38,13 +87,9 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         const fetch = async () => {
             if (contract) {
-                if (network === parseInt(ARBITRUM_RINKEBY)) {
-                    setPools([
-                        {
-                            name: 'tBTC/USD',
-                            address: '0xA1a3Cb7f1D504A65B4187B93eF9EE975095FA598',
-                        },
-                    ]);
+                if (POOLS[network as unknown as ArbitrumNetwork]) {
+                    // hacky temp solution to rpc limit issues
+                    setPools(POOLS[network as unknown as ArbitrumNetwork]);
                 } else {
                     const createdMarkets = contract.filters.DeployPool();
                     const allEvents = await contract?.queryFilter(createdMarkets);

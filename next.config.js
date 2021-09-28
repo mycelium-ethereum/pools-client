@@ -1,6 +1,7 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
-module.exports = ({
+module.exports = {
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
@@ -8,11 +9,11 @@ module.exports = ({
     // lessVarsFilePath: './styles/antd-variables.less',
     // // optional https://github.com/webpack-contrib/css-loader#object
     // cssLoaderOptions: {},
-    
+
     trailingSlash: true,
 
     watchOptions: {
-        ignored: ['node_modules', 'public/static' ],
+        ignored: ['node_modules', 'public/static'],
     },
 
     // resolve: {
@@ -28,7 +29,7 @@ module.exports = ({
 
     webpack(config) {
         // Fixes npm packages that depend on `fs` module
-        config.resolve.fallback = { 
+        config.resolve.fallback = {
             fs: false,
             crypto: false,
             stream: false,
@@ -52,8 +53,8 @@ module.exports = ({
                 test: /\.svg$/,
                 use: ['@svgr/webpack'],
             },
-                // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
-            { 
+            // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
+            {
                 test: /\.ts?$/,
                 options: {
                     allowTsInNodeModules: true,
@@ -61,12 +62,10 @@ module.exports = ({
                         noEmit: false,
                     },
                 },
-                include: [
-                    path.resolve(__dirname, "node_modules/@tracer-protocol/perpetual-pools-contracts")
-                ],
-                loader: "ts-loader" 
-            }
+                include: [path.resolve(__dirname, 'node_modules/@tracer-protocol/perpetual-pools-contracts')],
+                loader: 'ts-loader',
+            },
         );
         return config;
     },
-});
+};

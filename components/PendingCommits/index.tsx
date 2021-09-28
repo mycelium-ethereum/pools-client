@@ -1,57 +1,103 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Table, TableBody, TableCell, TableHeader, TableHeading, TableRow } from '@components/General/Table';
-import { Heading, QueuedCommit } from '@libs/types/General';
+import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { usePoolActions } from '@context/PoolContext';
-import { BUYS } from '@libs/constants';
-import { Button, Logo } from '@components/General';
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
-import { Select, SelectDropdown } from '@components/General/Input';
+import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import { openEtherscan, watchAsset } from '@libs/utils/rpcMethods';
 import Modal, { ModalInner } from '@components/General/Modal';
+import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
+import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { tokenSymbolToLogoTicker } from '@components/General';
+import Actions from '@components/TokenActions';
+import Close from '/public/img/general/close-black.svg';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
-// TODO filter buys and sells
+// import BigNumber from 'bignumber.js';
+// const testCommits:QueuedCommit[] = [
+//     {
+//         pool: '',
+//         id: 0,
+//         type: 0,
+//         amount: new BigNumber (5),
+//         txnHash: '',
+//         token: {
+//             side: 0,
+//             supply: new BigNumber(5),
+//             address: '',
+//             name: '',
+//             symbol: 'test',
+//             balance: new BigNumber(5),
+//             approved: new BigNumber(6),
+//         },
+//         tokenPrice: new BigNumber(30),
+//         nextRebalance: new BigNumber(1),
+//         frontRunningInterval: new BigNumber(10),
+//         updateInterval: new BigNumber(20)
+//     }
+// ]
+
 export default (() => {
     const { provider } = useWeb3();
-    const { showCommits = false, focus = BUYS } = useCommits();
+    const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
-    const { uncommit = () => console.error('uncommit undefined') } = usePoolActions();
-    const commits = usePendingCommits();
+    const commits = usePendingCommits(focus);
+
+    const mintCommits = commits.filter(
+        (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
+    );
+
+    const burnCommits = commits.filter(
+        (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
+    );
 
     return (
         <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
-            <Title>Queued {focus === BUYS ? 'Buys' : 'Sells'}</Title>
+            <div className="flex justify-between">
+                <h1 className="text-bold font-size[30px] text-cool-gray-900">
+                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
+                </h1>
+                <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
+                    <Close />
+                </div>
+            </div>
             <Table>
-                <TableHeader>
-                    {headings.map((heading, index) => (
-                        /* pchr -> pending-commit-heading-row */
-                        <TableHeading key={`pchr-${index}`} width={heading.width}>
-                            {heading.text}
-                        </TableHeading>
-                    ))}
-                </TableHeader>
-                <TableBody>
-                    {commits.map((commit, index) => (
-                        <CommitRow key={`pcr-${index}`} {...commit} provider={provider ?? null} uncommit={uncommit} />
-                    ))}
-                </TableBody>
+                {focus === CommitsFocusEnum.mints ? (
+                    <>
+                        <TableHeader>
+                            <span>Token</span>
+                            <span>Spend (USDC)</span>
+                            <span>Token Price (USDC)</span>
+                            <span>Amount (Tokens)</span>
+                            <span>Receive in</span>
+                            <span>{/* Empty header for buttons column */}</span>
+                        </TableHeader>
+                        {mintCommits.map((commit, index) => (
+                            <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                        ))}
+                    </>
+                ) : (
+                    <>
+                        <TableHeader>
+                            <span>Token</span>
+                            <span>Sold (USDC)</span>
+                            <span>Price* (Token)</span>
+                            <span>Return (USDC)</span>
+                            <span>Burn in</span>
+                            <span>{/* Empty header for buttons column */}</span>
+                        </TableHeader>
+                        {burnCommits.map((commit, index) => (
+                            <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                        ))}
+                    </>
+                )}
             </Table>
         </PendingCommitsModal>
     );
 }) as React.FC;
-
-const Title = styled.h1`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 30px;
-    color: #111928;
-`;
 
 const PendingCommitsModal = styled(Modal)`
     ${ModalInner} {
@@ -60,130 +106,96 @@ const PendingCommitsModal = styled(Modal)`
     }
 `;
 
-const CommitRow: React.FC<
+const BuyRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        uncommit: (pool: string, commitID: number) => void;
+        index: number;
     }
-> = ({ token, pool, id, txnHash, spent, tokenPrice, amount, nextRebalance, provider, uncommit }) => {
+> = ({
+    token,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+}) => {
     return (
-        <StyledTableRow>
-            <TableCell>{token.name}</TableCell>
-            <TableCell>{toApproxCurrency(spent)}</TableCell>
-            <TableCell>{toApproxCurrency(tokenPrice)}</TableCell>
-            <TableCell>{amount.toNumber()}</TableCell>
-            <TableCell>
-                <TimeLeft targetTime={nextRebalance.toNumber()} />
-            </TableCell>
-            <TableCell>
-                <Cancel onClick={() => uncommit(pool, id)}>Cancel</Cancel>
-                <StyledSelect icon={<MoreOutlined />}>
-                    <div>
-                        <MenuRow onClick={() => watchAsset(provider, token)}>
-                            <PlusOutlined />
-                            Add token to wallet
-                        </MenuRow>
-                        <MenuRow onClick={() => openEtherscan(txnHash)}>
-                            <Logo ticker={'ETHERSCAN'} />
-                            View on Etherscan
-                        </MenuRow>
-                    </div>
-                </StyledSelect>
-            </TableCell>
-        </StyledTableRow>
+        <TableRow key={txnHash} rowNumber={index}>
+            <span>
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
+                {token.name}
+            </span>
+            <span>{toApproxCurrency(amount)}</span>
+            <span>{toApproxCurrency(tokenPrice)}</span>
+            <span>{amount.div(tokenPrice).toFixed()}</span>
+            <span>
+                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
+                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
+                ) : (
+                    <TimeLeft targetTime={nextRebalance.toNumber()} />
+                )}
+            </span>
+            <span className="flex text-right">
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
+            </span>
+        </TableRow>
     );
 };
 
-const StyledTableRow = styled(TableRow)`
-    ${TableCell}:last-child {
-        text-align: right;
+const SellRow: React.FC<
+    QueuedCommit & {
+        provider: ethers.providers.JsonRpcProvider | null;
+        index: number;
     }
-`;
-
-const StyledSelect = styled(Select)`
-    width: 20px;
-    display: inline;
-    padding-left: 0;
-    border: none;
-    background: transparent;
-
-    .anticon {
-        vertical-align: 0;
-        width: 26px;
-    }
-
-    & svg {
-        color: #000;
-        height: 20px;
-        width: 20px;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        margin: auto;
-    }
-    ${SelectDropdown} {
-        left: -150px;
-    }
-`;
-
-const MenuRow = styled.div`
-    line-height: 14px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0.5rem;
-    & svg,
-    ${Logo} {
-        display: inline;
-        position: relative;
-        margin-right: 0.5rem;
-    }
-    & svg {
-        height: 12px;
-    }
-    ${Logo} {
-        width: 18px;
-    }
-    &:hover {
-        background: #d1d5db;
-    }
-`;
-
-const Cancel = styled(Button)`
-    background: #dedeff;
-    display: inline;
-    border: 1px solid #3535dc;
-    box-sizing: border-box;
-    border-radius: 12px;
-    width: 65px;
-    height: 32px;
-`;
-
-// last heading is for buttons
-const headings: Heading[] = [
-    {
-        text: 'TOKEN',
-        width: 'auto',
-    },
-    {
-        text: 'SPEND (USDC)',
-        width: 'auto',
-    },
-    {
-        text: 'TOKEN PRICE (USDC)',
-        width: 'auto',
-    },
-    {
-        text: 'AMOUNT (TOKENS)',
-        width: 'auto',
-    },
-    {
-        text: 'NEXT_REBALANCE',
-        width: 'auto',
-    },
-    {
-        text: '',
-        width: '15%',
-    },
-];
+> = ({
+    token,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+}) => {
+    return (
+        <TableRow key={txnHash} rowNumber={index}>
+            <span>
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
+                {token.name}
+            </span>
+            <span>{amount.toFixed(2)}</span>
+            <span>{toApproxCurrency(tokenPrice)}</span>
+            <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
+            <span>
+                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
+                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
+                ) : (
+                    <TimeLeft targetTime={nextRebalance.toNumber()} />
+                )}
+            </span>
+            <span className="flex text-right">
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
+            </span>
+        </TableRow>
+    );
+};

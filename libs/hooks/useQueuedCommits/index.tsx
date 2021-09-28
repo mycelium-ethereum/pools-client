@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { SHORT_MINT, SHORT_BURN } from '@libs/constants';
+import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
 import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommits } from '@context/UsersCommitContext';
 
-export default (() => {
+export default ((focus) => {
     const { account, provider } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools } = usePools();
@@ -15,31 +15,52 @@ export default (() => {
     useMemo(() => {
         // filter user commits
         if (pools && Object.keys(pools).length && provider && account) {
-            setAllQueuedCommits(
-                Object.values(commits).map((commit) => {
-                    const { shortToken, longToken, shortBalance, longBalance, lastUpdate, updateInterval } =
-                        pools[commit.pool];
+            const parsedCommits = [];
+            const accountLower = account.toLowerCase();
+            for (const commit of Object.values(commits)) {
+                if (
+                    !pools[commit.pool] || // pools doesnt exist
+                    commit.from.toLowerCase() !== accountLower || // not committed by connected account
+                    (focus === CommitsFocusEnum.mints &&
+                        (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
+                ) {
+                    continue;
+                }
+                const {
+                    shortToken,
+                    longToken,
+                    nextShortBalance,
+                    nextLongBalance,
+                    lastUpdate,
+                    updateInterval,
+                    committer: {
+                        pendingLong: { burn: pendingLongBurn },
+                        pendingShort: { burn: pendingShortBurn },
+                    },
+                } = pools[commit.pool];
 
-                    let token, tokenPrice;
+                let token, tokenPrice;
 
-                    if (commit.type === SHORT_MINT || commit.type === SHORT_BURN) {
-                        token = shortToken;
-                        tokenPrice = calcTokenPrice(shortBalance, shortToken.supply);
-                    } else {
-                        token = longToken;
-                        tokenPrice = calcTokenPrice(longBalance, longToken.supply);
-                    }
-                    return {
-                        ...commit,
-                        token,
-                        tokenPrice,
-                        spent: commit.amount.times(tokenPrice),
-                        nextRebalance: lastUpdate.plus(updateInterval),
-                    };
-                }),
-            );
+                if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
+                    token = shortToken;
+                    tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
+                } else {
+                    token = longToken;
+                    tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
+                }
+
+                parsedCommits.push({
+                    ...commit,
+                    token,
+                    tokenPrice,
+                    nextRebalance: lastUpdate.plus(updateInterval),
+                    frontRunningInterval: pools[commit.pool].frontRunningInterval,
+                    updateInterval: updateInterval,
+                });
+            }
+            setAllQueuedCommits(parsedCommits);
         }
-    }, [pools, commits, provider]);
+    }, [pools, commits, provider, account, focus]);
 
     return allQueuedCommits;
-}) as () => QueuedCommit[];
+}) as (focus: CommitsFocusEnum) => QueuedCommit[];

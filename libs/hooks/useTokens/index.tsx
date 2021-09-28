@@ -13,15 +13,24 @@ export default (() => {
         if (pools && Object.keys(pools).length) {
             const tokens: TokenBreakdown[] = [];
             Object.values(pools).forEach((pool) => {
+                const {
+                    committer: {
+                        pendingLong: { burn: pendingLongBurn },
+                        pendingShort: { burn: pendingShortBurn },
+                    },
+                } = pool;
                 tokens.push(
                     {
                         ...pool.shortToken,
-                        tokenPrice: calcTokenPrice(pool.shortBalance, pool.shortToken.supply),
+                        tokenPrice: calcTokenPrice(
+                            pool.nextShortBalance,
+                            pool.shortToken.supply.plus(pendingShortBurn),
+                        ),
                         pool: pool.address,
                     },
                     {
                         ...pool.longToken,
-                        tokenPrice: calcTokenPrice(pool.longBalance, pool.longToken.supply),
+                        tokenPrice: calcTokenPrice(pool.nextLongBalance, pool.longToken.supply.plus(pendingLongBurn)),
                         pool: pool.address,
                     },
                 );

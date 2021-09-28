@@ -1,7 +1,9 @@
+import { Farm } from '@libs/types/Staking';
 import { BigNumber } from 'bignumber.js';
 
-const UP = -1;
-const DOWN = 0;
+const UP = 1;
+const DOWN = 2;
+const NO_CHANGE = 3;
 
 /**
  * Calculate the losing pool multiplier
@@ -44,6 +46,19 @@ export const calcPercentageLossTransfer: (oldPrice: BigNumber, newPrice: BigNumb
     };
 
 /**
+ * Calculates the notional value of tokens
+ * @param tokenPrice current price of tokens
+ * @param numTokens number of tokens
+ * @returns notional value of the tokens
+ */
+export const calcNotionalValue: (tokenPrice: BigNumber, numTokens: BigNumber) => BigNumber = (
+    tokenPrice,
+    numTokens,
+) => {
+    return tokenPrice.times(numTokens);
+};
+
+/**
  * Calculates the ratio of the old price to the new price
  */
 export const calcRatio: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber = (oldPrice, newPrice) => {
@@ -53,21 +68,76 @@ export const calcRatio: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber 
     return newPrice.div(oldPrice);
 };
 
+export const calcSkew: (shortBalance: BigNumber, longBalance: BigNumber) => BigNumber = (shortBalance, longBalance) => {
+    // even rebalance rate is 1 so even skew is 2.
+    // This isnt a fully accurate representation since
+    //  at shortBalance 0 there there will be short incentive to participate
+    if (shortBalance.eq(0)) {
+        return new BigNumber(1);
+    }
+    return longBalance.div(shortBalance);
+};
+
+export const calcRebalanceRate: (shortBalance: BigNumber, longBalance: BigNumber) => BigNumber = (
+    shortBalance,
+    longBalance,
+) => {
+    return calcSkew(shortBalance, longBalance).minus(1);
+};
+
 /**
  * Calcualtes the direction of the price movement
  * @param newPrice new pool price based on pool balances
  * @param oldPrice old pool price based on pool balances
- * @return -1 if oldPrice > newPrice, 0 if newPrice = oldPrice, or 1 if newPrice > oldPrice
+ * @return DOWN (2) if oldPrice > newPrice, NO_CHANGE (3) if newPrice = oldPrice, or UP (1) if newPrice > oldPrice
  */
 export const calcDirection: (oldPrice: BigNumber, newPrice: BigNumber) => BigNumber = (oldPrice, newPrice) => {
+    // newPrice.div(oldPrice);
     const priceRatio = calcRatio(oldPrice, newPrice);
-    if (priceRatio.lt(1)) {
-        return new BigNumber(-1);
-    } else if (priceRatio.eq(0)) {
-        return new BigNumber(0);
+    if (priceRatio.gt(1)) {
+        // number go up
+        return new BigNumber(UP);
+    } else if (priceRatio.eq(1)) {
+        return new BigNumber(NO_CHANGE);
     } else {
-        return new BigNumber(1);
+        // priceRatio.lt(1)
+        return new BigNumber(DOWN);
     }
+};
+
+// function getWithdrawAmountOnBurn(
+//         uint256 tokenSupply,
+//         uint256 amountIn,
+//         uint256 balance,
+//         uint256 shadowBalance
+//     ) external pure returns (uint256) {
+//         require(amountIn > 0, "Invalid amount");
+
+//         // Catch the divide by zero error.
+//         if (balance == 0 || tokenSupply + shadowBalance == 0) {
+//             return amountIn;
+//         }
+//         bytes16 numerator = ABDKMathQuad.mul(ABDKMathQuad.fromUInt(balance), ABDKMathQuad.fromUInt(amountIn));
+//         return ABDKMathQuad.toUInt(ABDKMathQuad.div(numerator, ABDKMathQuad.fromUInt(tokenSupply + shadowBalance)));
+//     }
+
+/**
+ * Calc minimum amount in to sell
+ * @param totalSupply total token supply
+ * @param tokenBalance token balance
+ * @param minimumCommitSize
+ * @param pendingCommits accumulative commit amounts
+ * @returns Minimum amount in
+ */
+export const calcMinAmountIn: (
+    totalSupply: BigNumber,
+    tokenBalance: BigNumber,
+    minimumCommitSize: BigNumber,
+    pendingCommits: BigNumber,
+) => BigNumber = (totalSupply, tokenBalance, minimumCommitSize, pendingCommits) => {
+    // minumumCommitSize = (balance * amountIn) / tokenSupply + shadowPool
+    // (minimumCommitSize * (tokenSupply + shadowPool)) / balance
+    return minimumCommitSize.times(totalSupply.plus(pendingCommits)).div(tokenBalance.minus(minimumCommitSize));
 };
 
 /**
@@ -79,8 +149,9 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
     totalQuoteValue,
     tokenSupply,
 ) => {
+    // if supply is 0 priceRatio is 1/1
     if (tokenSupply.eq(0)) {
-        return new BigNumber(0);
+        return new BigNumber(1);
     }
     return totalQuoteValue.div(tokenSupply);
 };
@@ -94,8 +165,7 @@ export const calcTokenPrice: (totalQuoteValue: BigNumber, tokenSupply: BigNumber
  * @param longBalance quote balance of the long pool in USD
  * @param shortBalance quote balance of the short pool in USD
  *
- * returns an array of length 2 representing [longGain/loss, shortGain/loss]
- *  This is more readable in my opinion than returning a gain as well as a direction
+ * returns an object containing longValueTransfer and shortValueTransfer
  */
 export const calcNextValueTransfer: (
     oldPrice: BigNumber,
@@ -103,19 +173,55 @@ export const calcNextValueTransfer: (
     leverage: BigNumber,
     longBalance: BigNumber,
     shortBalance: BigNumber,
-) => [BigNumber, BigNumber] = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
+) => {
+    longValueTransfer: BigNumber;
+    shortValueTransfer: BigNumber;
+} = (oldPrice, newPrice, leverage, longBalance, shortBalance) => {
     const direction = calcDirection(oldPrice, newPrice);
     const percentageLossTransfer = calcPercentageLossTransfer(oldPrice, newPrice, leverage);
-    let gain;
+    let gain: BigNumber;
+
     if (direction.eq(UP)) {
         // long wins
         gain = percentageLossTransfer.times(shortBalance);
         // long gains and short loses longs gain
-        return [gain, gain.negated()];
+        return {
+            longValueTransfer: gain,
+            shortValueTransfer: gain.negated(),
+        };
     } else if (direction.eq(DOWN)) {
         // short wins
-        gain = percentageLossTransfer.times(longBalance);
-        return [gain.negated(), gain];
+        gain = percentageLossTransfer.times(longBalance).abs();
+        return {
+            longValueTransfer: gain.negated(),
+            shortValueTransfer: gain,
+        };
     } // else no value transfer
-    return [new BigNumber(0), new BigNumber(0)];
+    return {
+        longValueTransfer: new BigNumber(0),
+        shortValueTransfer: new BigNumber(0),
+    };
+};
+
+export const calcBptTokenPrice: (args: {
+    bptDetails?: Farm['bptDetails'];
+    stakingTokenSupply: Farm['stakingTokenSupply'];
+}) => BigNumber = ({ bptDetails, stakingTokenSupply }) => {
+    if (!bptDetails) {
+        return new BigNumber(0);
+    }
+    const { tokens } = bptDetails;
+
+    let balancerPoolUSDCValue = new BigNumber(0);
+
+    for (const token of tokens) {
+        const tokenUSDCValue = token.usdcPrice.times(token.reserves);
+        balancerPoolUSDCValue = balancerPoolUSDCValue.plus(tokenUSDCValue);
+    }
+
+    if (balancerPoolUSDCValue.eq(0) || stakingTokenSupply.eq(0)) {
+        return new BigNumber(0);
+    }
+
+    return balancerPoolUSDCValue.div(stakingTokenSupply);
 };

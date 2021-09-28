@@ -1,0 +1,13 @@
+<svg version="1.2" baseProfile="tiny-ps" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 41 41" width="100%" height="100%">
+	<title>tracer_icon_box-svg</title>
+	<style>
+		tspan { white-space:pre }
+		.shp1 { fill: #ffffff } 
+	</style>
+	<g id="Layer">
+		<path id="Layer"  d="M0 5C0 2.24 2.24 0 5 0L36 0C38.76 0 41 2.24 41 5L41 36C41 38.76 38.76 41 36 41L5 41C2.24 41 0 38.76 0 36L0 5Z" />
+		<path id="Layer" class="shp1" d="M31.18 14L21.24 19.74L31.18 25.48L31.18 23.97L23.85 19.74L31.18 15.51L31.18 14Z" />
+		<path id="Layer" class="shp1" d="M21.24 14L19.94 14L19.94 25.48L21.24 25.48L21.24 14Z" />
+		<path id="Layer" class="shp1" d="M10 15.51L17.32 19.74L10 23.97L10 25.48L19.94 19.74L10 14L10 15.51Z" />
+	</g>
+</svg>
