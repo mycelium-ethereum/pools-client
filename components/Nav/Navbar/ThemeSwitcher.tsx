@@ -5,7 +5,7 @@ import React from 'react';
 const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 
 export default (() => {
-    const { isDark, toggleTheme} = useTheme();
+    const { isDark, toggleTheme } = useTheme();
 
     return (
         <div onClick={toggleTheme} className={'relative inline-block w-12 h-6 my-auto mx-0'}>

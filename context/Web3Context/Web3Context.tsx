@@ -139,9 +139,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     useEffect(() => {
         if (onboard) {
-            onboard?.config({ darkMode: isDark })
+            onboard?.config({ darkMode: isDark });
         }
-    }, [isDark])
+    }, [isDark]);
 
     useEffect(() => {
         const signer = provider?.getSigner();

@@ -1,21 +1,21 @@
-import { Children } from "@libs/types/General";
-import React, { useEffect, useState } from "react";
+import { Children } from '@libs/types/General';
+import React, { useEffect, useState } from 'react';
 
 interface ContextProps {
     isDark: boolean;
-	toggleTheme: () => void
+    toggleTheme: () => void;
 }
 
 export const ThemeContext = React.createContext<ContextProps>({
-	isDark: false,
-	toggleTheme: () => undefined 
+    isDark: false,
+    toggleTheme: () => undefined,
 });
 
 /**
  * Wrapper store for the FactoryContext.
  */
 export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
-	const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(false);
 
     const toggleTheme = () => {
         const head = document.getElementsByTagName('html')[0];
@@ -42,7 +42,7 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
         <ThemeContext.Provider
             value={{
                 isDark,
-				toggleTheme
+                toggleTheme,
             }}
         >
             {children}
