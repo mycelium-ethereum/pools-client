@@ -1,5 +1,6 @@
 import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
-import Inbox from '@libs/abi/arbitrum/Inbox.json';
+// import Inbox from '@libs/abi/arbitrum/Inbox.json';
+import { IInbox__factory, ArbSys__factory, GatewayRouter__factory } from 'arb-ts/dist/lib/abi';
 import { ethers } from 'ethers';
 
 export const destinationNetworkLookup: { [current: number]: string } = {
@@ -9,33 +10,39 @@ export const destinationNetworkLookup: { [current: number]: string } = {
     [ARBITRUM]: MAINNET,
 };
 
-export const bridgeableTokens: { [networkId: string]: { name: string; ticker: string; address: string }[] } = {
+export const bridgeableTokens: {
+    [networkId: string]: { name: string; symbol: string; address: string; decimals: number }[];
+} = {
     [ARBITRUM]: [
         {
-            address: '',
+            address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
             name: 'USDC',
-            ticker: 'USDC',
+            symbol: 'USDC',
+            decimals: 6,
         },
     ],
     [ARBITRUM_RINKEBY]: [
         {
             address: '',
             name: 'USDC',
-            ticker: 'USDC',
+            symbol: 'USDC',
+            decimals: 6,
         },
     ],
     [MAINNET]: [
         {
             address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
             name: 'USDC',
-            ticker: 'USDC',
+            symbol: 'USDC',
+            decimals: 6,
         },
     ],
     [RINKEBY]: [
         {
             address: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
             name: 'USDC',
-            ticker: 'USDC',
+            symbol: 'USDC',
+            decimals: 6,
         },
     ],
 };
@@ -51,20 +58,21 @@ export const arbitrumContracts: {
     [RINKEBY]: {
         INBOX: {
             address: '0x578BAde599406A8fE3d24Fd7f7211c0911F5B29e',
-            abi: Inbox,
+            abi: IInbox__factory.abi,
+        },
+        GATEWAY_ROUTER: {
+            address: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
+            abi: GatewayRouter__factory.abi,
+        },
+    },
+    [ARBITRUM_RINKEBY]: {
+        ARBSYS: {
+            address: '0x0000000000000000000000000000000000000064',
+            abi: ArbSys__factory.abi,
+        },
+        GATEWAY_ROUTER: {
+            address: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
+            abi: GatewayRouter__factory.abi,
         },
     },
 };
-
-// export const arbitrumContracts: {
-//     [network: string]: { [name: string]: string };
-// } = {
-//     [RINKEBY]: {
-//         l1GatewayRouterAddress: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
-//         l2GatewayRouterAddress: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
-//     },
-//     [ARBITRUM_RINKEBY]: {
-//         l1GatewayRouterAddress: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
-//         l2GatewayRouterAddress: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
-//     },
-// };

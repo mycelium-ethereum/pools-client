@@ -9,7 +9,11 @@ import styled from 'styled-components';
 import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
+import { Input } from '@components/General/Input/Numeric';
+import { InnerInputText, InputContainer } from '@components/General/Input';
+import { Currency } from '@components/General/Currency';
 import Button from '@components/General/Button';
+import { tokenSymbolToLogoTicker } from '@components/General';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 // import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '@libs/utils';
 // import { bridgeReducer, DefaultBridgeState } from './state';
@@ -22,8 +26,8 @@ interface MultiBridgeProps {
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
     onSwitchNetwork: (networkId: Network['id']) => void;
     onClose: () => void;
-    onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber) => Promise<void>;
-    onApproveToken: () => Promise<boolean>;
+    onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber) => void;
+    onApproveToken: (tokenAddress: string, spender: string) => void;
 }
 
 export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
@@ -37,15 +41,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onBridgeAsset,
         show,
         onClose,
+        onApproveToken,
     } = props;
 
     // const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
 
-    console.log('BRIDGEABLE ASSET LIST', bridgeableAssetList);
-
     const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
-    const [amount, setAmount] = useState('0');
+    const [amount, setAmount] = useState(new BigNumber(0));
 
     // useEffect(() => {
     //     if(show) {
@@ -58,24 +61,31 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     }, [selectedAssetIndex]);
 
     useEffect(() => {
-        console.log('SELECTED ASSET CHANGED', selectedAsset);
         if (selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [selectedAsset]);
 
     const bridgeAsset = () => {
-        if (!selectedAsset || !amount) {
+        if (!selectedAsset || amount.eq(0)) {
             return;
         }
-        onBridgeAsset(selectedAsset, new BigNumber(amount));
+
+        onBridgeAsset(selectedAsset, amount);
     };
 
     const selectedAssetBalance = useMemo(() => {
-        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.ticker];
-        console.log('BALANCE', assetBalance?.balance?.toFixed());
-        return assetBalance?.balance || null;
+        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.symbol];
+        return assetBalance || null;
     }, [selectedAsset, fromNetwork, bridgeableBalances]);
+
+    const approveToken = () => {
+        if (!selectedAsset || !selectedAsset.address || !selectedAssetBalance) {
+            return;
+        }
+
+        onApproveToken(selectedAsset.address, selectedAssetBalance.spender);
+    };
 
     return (
         <TWModal open={show} onClose={() => onClose()}>
@@ -147,7 +157,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     }}
                                 >
                                     {bridgeableAssetList.map((asset) => (
-                                        <Option key={asset.ticker}>{asset.ticker}</Option>
+                                        <Option key={asset.symbol}>{asset.symbol}</Option>
                                     ))}
                                 </SlideSelect>
                             </StyledSlideSelect>
@@ -159,26 +169,46 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="amount" className="block text-base font-medium text-gray-700 pb-1">
                                 Amount
                             </label>
-                            <div className="flex-grow mt-1 relative rounded-md shadow-sm bg-gray-100">
-                                <input
-                                    type="number"
-                                    name="amount"
-                                    id="amount"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 border-gray-300 flex-grow"
-                                    value={amount}
-                                    onChange={(ev) => setAmount(ev.target.value)}
+                            <InputContainer className="w-full ">
+                                <Input
+                                    className="w-full h-full font-normal text-base"
+                                    value={amount.eq(0) ? '' : amount.toFixed()}
+                                    onUserInput={(val) => setAmount(new BigNumber(val || 0))}
                                 />
-                            </div>
-                            <p className="text-base text-gray-500 mt-3">
-                                Balance: {selectedAssetBalance?.toFixed()} {selectedAsset?.ticker}
-                            </p>
+                                <InnerInputText>
+                                    {selectedAsset.symbol ? (
+                                        <Currency
+                                            ticker={tokenSymbolToLogoTicker(selectedAsset.symbol)}
+                                            label={selectedAsset.symbol}
+                                        />
+                                    ) : null}
+                                    <div
+                                        className="m-auto cursor-pointer hover:underline"
+                                        onClick={(_e) => setAmount(selectedAssetBalance.balance)}
+                                    >
+                                        Max
+                                    </div>
+                                </InnerInputText>
+                            </InputContainer>
+                            {selectedAssetBalance?.allowance.eq(0) ? (
+                                <p className="text-base text-gray-500 mt-3">Token approval required</p>
+                            ) : (
+                                <p className="text-base text-gray-500 mt-3">
+                                    Balance: {selectedAssetBalance?.balance?.toFixed()} {selectedAsset?.symbol}
+                                </p>
+                            )}
                         </div>
                     </div>
 
-                    <Button className="primary mb-0">Approve</Button>
-                    <Button className="primary" onClick={bridgeAsset}>
-                        Bridge
-                    </Button>
+                    {selectedAssetBalance?.allowance.eq(0) ? (
+                        <Button variant="primary" onClick={approveToken}>
+                            Approve
+                        </Button>
+                    ) : (
+                        <Button variant="primary" onClick={bridgeAsset}>
+                            Bridge
+                        </Button>
+                    )}
                 </div>
             </div>
         </TWModal>

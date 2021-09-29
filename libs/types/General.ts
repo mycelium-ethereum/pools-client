@@ -121,15 +121,17 @@ export type Heading = {
 
 export type BridgeableAsset = {
     name: string;
-    ticker: string;
+    symbol: string;
     address: string | null;
 };
 
 export type BridgeableBalance = {
     balance: BigNumber;
+    allowance: BigNumber;
+    spender: string; // address that allowance corresponds to
     approved: boolean;
 };
 
-export type BridgeableBalances = { [network: string]: { [ticker: string]: BridgeableBalance } };
+export type BridgeableBalances = { [network: string]: { [symbol: string]: BridgeableBalance } };
 
 export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };

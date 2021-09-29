@@ -36,6 +36,7 @@ export type Network = {
     knownUSDCPriceFeeds: {
         [address: string]: string;
     };
+    isLayer2: boolean;
 };
 
 /**
@@ -52,6 +53,7 @@ export const networkConfig: Record<string, Network> = {
         id: '0',
         previewUrl: '',
         name: 'Unknown',
+        isLayer2: false,
         contracts: {},
         poolFarms: [],
         bptFarms: [],
@@ -65,6 +67,7 @@ export const networkConfig: Record<string, Network> = {
     '421611': {
         id: '421611',
         name: 'Arbitrum Rinkeby',
+        isLayer2: true,
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
@@ -95,6 +98,7 @@ export const networkConfig: Record<string, Network> = {
     '42161': {
         id: '42161',
         name: 'Arbitrum',
+        isLayer2: true,
         previewUrl: 'https://explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
@@ -193,6 +197,7 @@ export const networkConfig: Record<string, Network> = {
     '1337': {
         id: '1337',
         name: 'Local',
+        isLayer2: false,
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -211,7 +216,9 @@ export const networkConfig: Record<string, Network> = {
     },
     '1': {
         // TODO: fill this out properly
+        id: '1',
         name: 'Mainnet',
+        isLayer2: false,
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -222,16 +229,17 @@ export const networkConfig: Record<string, Network> = {
         hex: '0x1',
         poolFarms: [],
         bptFarms: [],
-        id: '1',
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
+        usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         knownUSDCPriceFeeds: {},
     },
     '4': {
         // TODO: fill this out properly
+        id: '4',
         name: 'Rinkeby',
+        isLayer2: false,
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -242,11 +250,10 @@ export const networkConfig: Record<string, Network> = {
         hex: '0x4',
         poolFarms: [],
         bptFarms: [],
-        id: '4',
         publicRPC: '',
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
+        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
         knownUSDCPriceFeeds: {},
     },
 };
