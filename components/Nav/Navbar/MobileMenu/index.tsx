@@ -57,7 +57,7 @@ export default (({ account, className }) => {
                                 <div className="w-screen">
                                     <div
                                         className={classNames(
-                                            'h-full flex flex-col p-6 bg-tracer-900 bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
+                                            'h-full flex flex-col p-6 bg-tracer-900 dark:bg-theme-background matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
                                             'aligned-background',
                                         )}
                                     >
