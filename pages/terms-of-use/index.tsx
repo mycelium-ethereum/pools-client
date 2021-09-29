@@ -105,9 +105,7 @@ const Terms: React.FC = () => {
                     the United Kingdom government, by the European Union or the United Nations (collectively, {'"'}
                     Sanctions Lists Persons{'"'});
                 </li>
-                <li>
-                    you do not intend to transact with any Restricted Territories or Sanctions List Persons;
-                </li>
+                <li>you do not intend to transact with any Restricted Territories or Sanctions List Persons;</li>
                 <li>you are not a Restricted Person; and</li>
                 <li>
                     your access to the Services is not (a) prohibited by and does not otherwise violate or assist you to
@@ -150,9 +148,7 @@ const Terms: React.FC = () => {
                     the pricing information provided on the Site does not represent an offer, a solicitation of an
                     offer, or any advice regarding, or recommendation to enter into, a transaction with Tracer DAO;
                 </li>
-                <li>
-                    Tracer DAO does not act as an agent for you or any other user of the Site or the Services;
-                </li>
+                <li>Tracer DAO does not act as an agent for you or any other user of the Site or the Services;</li>
                 <li>
                     you are solely responsible for your use of the Services, including all of your transfers of Assets;
                 </li>

@@ -29,22 +29,13 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                     }
                 >
                     <div className="p-3">
-                        <div className={classNames(
-                            menuItem,
-                            route === '/privacy-policy' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/privacy-policy' ? selected : unselected)}>
                             <Link href="/privacy-policy">Privacy Policy</Link>
                         </div>
-                        <div className={classNames(
-                            menuItem,
-                            route === '/terms-of-use' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/terms-of-use' ? selected : unselected)}>
                             <Link href="/terms-of-use">Terms of Use</Link>
                         </div>
-                        <div className={classNames(
-                            menuItem,
-                            route === '/disclaimer' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/disclaimer' ? selected : unselected)}>
                             <Link href="/disclaimer">Disclaimer</Link>
                         </div>
                     </div>
@@ -54,22 +45,13 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                 <div className="flex-col w/20 hidden lg:flex">
                     <div className="my-0 mx-auto">
                         <div className="text-3xl pt-16 pb-3 font-bold">Legal</div>
-                        <div className={classNames(
-                            menuItem,
-                            route === '/privacy-policy' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/privacy-policy' ? selected : unselected)}>
                             <Link href="/privacy-policy">Privacy Policy</Link>
                         </div>
-                        <div className={classNames(
-                            menuItem,
-                            route === '/terms-of-use' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/terms-of-use' ? selected : unselected)}>
                             <Link href="/terms-of-use">Terms of Use</Link>
                         </div>
-                        <div className={classNames(
-                            menuItem,
-                            route === '/disclaimer' ? selected : unselected
-                        )}>
+                        <div className={classNames(menuItem, route === '/disclaimer' ? selected : unselected)}>
                             <Link href="/disclaimer">Disclaimer</Link>
                         </div>
                     </div>
@@ -93,34 +75,17 @@ export const LegalPageLayout: React.FC = ({ children }) => {
     );
 };
 
+const menuItem = 'ml-auto my-1 text-base cursor-pointer whitespace-nowrap no-underline';
 
-const menuItem = 'ml-auto my-1 text-base cursor-pointer whitespace-nowrap no-underline'
+export const MainTitle: React.FC = ({ children }) => <div className="text-3xl font-bold pt-16 pb-3">{children}</div>;
 
-export const MainTitle:React.FC = ({ children }) => (
-    <div className="text-3xl font-bold pt-16 pb-3">
-        {children}
-    </div>
-)
+export const Title: React.FC = ({ children }) => <div className="mt-6 mb-2 text-xl">{children}</div>;
 
-export const Title:React.FC = ({ children }) => (
-    <div className="mt-6 mb-2 text-xl">
-        {children}
-    </div>
-)
+export const Subtitle: React.FC = ({ children }) => <div className="pb-4 font-bold">{children}</div>;
 
-export const Subtitle:React.FC = ({ children }) => (
-    <div className="pb-4 font-bold">
-        {children}
-    </div>
-)
+export const Paragraph: React.FC = ({ children }) => <p className="py-2 max-w-screen-md">{children}</p>;
 
-export const Paragraph: React.FC = ({ children }) => (
-    <p className="py-2 max-w-screen-md">
-        {children}
-    </p>
-)
-
-export const List:React.FC = ({ children }) => (
+export const List: React.FC = ({ children }) => (
     <ul className="max-w-screen-md mb-4">
         {children}
         <style>{`
@@ -130,4 +95,4 @@ export const List:React.FC = ({ children }) => (
             }
         `}</style>
     </ul>
-)
+);

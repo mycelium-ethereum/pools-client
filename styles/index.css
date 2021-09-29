@@ -94,7 +94,7 @@ body > div:first-child {
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: transparent;
+    background: var(--background-secondary);
 }
 
 /* Corner piece */
@@ -104,15 +104,15 @@ body > div:first-child {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: var(--color-text);
+    background: var(--text);
     cursor: pointer;
     border-radius: 10px;
 }
 
 /* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: var(--background-secondary);
-}
+/* ::-webkit-scrollbar-thumb:hover {
+    background: var(--background);
+} */
 
 .bn-onboard-custom.bn-onboard-modal { 
     z-index: 99;

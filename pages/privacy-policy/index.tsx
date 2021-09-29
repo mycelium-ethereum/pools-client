@@ -72,9 +72,7 @@ const PrivacyPolicy: React.FC = () => {
                 </li>
                 <li>interact with our sites, services, content and advertising.</li>
                 <li>Why do we collect, use and disclose personal information?</li>
-                <li>
-                    We may collect, hold, use and disclose your personal information for the following purposes:
-                </li>
+                <li>We may collect, hold, use and disclose your personal information for the following purposes:</li>
                 <li>to enable you to access and use our website, services and app;</li>
                 <li>
                     to operate, protect, improve and optimise our website, services and app, business and our users
