@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import StakeBPT from '@archetypes/Stake/StakeBPT';
@@ -15,18 +14,13 @@ export default (() => {
     }, []);
 
     return (
-        <Page className={`page`}>
+        <div className={`page relative bg-white`}>
             <FarmStore farmContext="bptFarms">
                 <NavBar />
                 <StakeBPT />
             </FarmStore>
             <Footer />
             <PendingCommits />
-        </Page>
+        </div>
     );
 }) as React.FC;
-
-const Page = styled.div`
-    position: relative;
-    background: var(--color-background);
-`;

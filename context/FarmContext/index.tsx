@@ -44,7 +44,11 @@ export const FarmStore: React.FC<
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
 
     // used to fetch details of tokens on both sides of a sushi pool
-    const getBptDetails = async (balancerPoolId: string, pool: string): Promise<Farm['bptDetails']> => {
+    const getBptDetails = async (
+        balancerPoolId: string,
+        pool: string,
+        balancerPoolName: string,
+    ): Promise<Farm['bptDetails']> => {
         if (!config) {
             return undefined;
         }
@@ -53,7 +57,10 @@ export const FarmStore: React.FC<
 
         const [tokenAddresses, tokenBalances] = await balancerPool.getPoolTokens(balancerPoolId);
 
-        const tokens: BalancerPoolAsset[] = await Promise.all(
+        const tokenLookup: Record<string, BalancerPoolAsset> = {};
+
+        // populate token details and add to lookup
+        await Promise.all(
             tokenAddresses.map(async (address, index) => {
                 const tokenContract = new ethers.Contract(address, ERC20__factory.abi, provider) as ERC20;
 
@@ -88,7 +95,7 @@ export const FarmStore: React.FC<
                     isPoolToken = true;
                 }
 
-                return {
+                tokenLookup[symbol] = {
                     address,
                     symbol,
                     isPoolToken,
@@ -98,6 +105,26 @@ export const FarmStore: React.FC<
                 };
             }),
         );
+
+        // ensure the tokens are ordered the same as the pool name
+        // this is just for display purposes
+        // the pool name is formatted like so:
+        // 50 wETH 33 3S-ETH 17 3L-ETH
+        const poolNameComponents = balancerPoolName.split(' ');
+        // results in something like
+        // ['50', 'wETH', '33', '3S-ETH', '17', '3L-ETH']
+
+        const token1 = poolNameComponents[1].toUpperCase();
+        const token2 = poolNameComponents[3].toUpperCase();
+        const token3 = poolNameComponents[5].toUpperCase();
+
+        // the tracer pool token symbols have a trailing '/USD' in the symbol
+        // but the balancer pool name omits this trailing '/USD'
+        const tokens: BalancerPoolAsset[] = [
+            tokenLookup[token1] || tokenLookup[`${token1}/USD`],
+            tokenLookup[token2] || tokenLookup[`${token2}/USD`],
+            tokenLookup[token3] || tokenLookup[`${token3}/USD`],
+        ];
 
         return { tokens };
     };
@@ -143,7 +170,7 @@ export const FarmStore: React.FC<
                 }
 
                 Promise.all(
-                    config[farmContext].map(async ({ address, abi, pool, balancerPoolId }) => {
+                    config[farmContext].map(async ({ address, abi, pool, balancerPoolId, link, linkText }) => {
                         try {
                             const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
@@ -193,7 +220,7 @@ export const FarmStore: React.FC<
 
                             const bptDetails = isPoolTokenFarm
                                 ? undefined
-                                : await getBptDetails(balancerPoolId as string, pool);
+                                : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
                             const poolDetails = isPoolTokenFarm
                                 ? {
@@ -213,9 +240,7 @@ export const FarmStore: React.FC<
                                 : calcBptTokenPrice({ bptDetails, stakingTokenSupply }).times(totalStaked);
 
                             return {
-                                name: isPoolTokenFarm
-                                    ? stakingTokenName
-                                    : generateBptFarmName(bptDetails?.tokens || []),
+                                name: stakingTokenName,
                                 address,
                                 contract,
                                 totalStaked,
@@ -237,6 +262,8 @@ export const FarmStore: React.FC<
                                 bptDetails,
                                 poolDetails: poolDetails,
                                 tvl,
+                                link,
+                                linkText,
                             };
                         } catch (error) {
                             console.error('failed fetching farm with address: ', address, error);
@@ -279,12 +306,6 @@ export const FarmStore: React.FC<
             {children}
         </FarmContext.Provider>
     );
-};
-
-// generates a farm name where the non-pool token (if either) is listed second
-const generateBptFarmName = (tokens: BalancerPoolAsset[]) => {
-    // ensure that the non-pool token is the second listed token
-    return tokens.map((token) => token.symbol).join(', ');
 };
 
 export const useFarms: () => ContextProps = () => {

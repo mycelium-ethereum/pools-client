@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { Table, TableBody, span, TableHeader, TableHeading, TableRow } from '@components/General/Table';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -18,7 +17,7 @@ import Close from '/public/img/general/close-black.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 // import BigNumber from 'bignumber.js';
-// const testCommits = [
+// const testCommits:QueuedCommit[] = [
 //     {
 //         pool: '',
 //         id: 0,
@@ -36,6 +35,8 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 //         },
 //         tokenPrice: new BigNumber(30),
 //         nextRebalance: new BigNumber(1),
+//         frontRunningInterval: new BigNumber(10),
+//         updateInterval: new BigNumber(20)
 //     }
 // ]
 
@@ -125,7 +126,7 @@ const BuyRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
             </span>
             <span>{toApproxCurrency(amount)}</span>
@@ -172,7 +173,7 @@ const SellRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <span>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline w-[20px] mr-2" />
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
             </span>
             <span>{amount.toFixed(2)}</span>

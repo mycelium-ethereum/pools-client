@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { FarmStore } from '@context/FarmContext';
@@ -15,19 +14,13 @@ export default (() => {
     }, []);
 
     return (
-        <Page className={`page`}>
+        <div className={`page relative bg-white`}>
             <NavBar />
             <FarmStore farmContext="poolFarms">
                 <StakePool />
             </FarmStore>
             <Footer />
             <PendingCommits />
-        </Page>
+        </div>
     );
 }) as React.FC;
-
-const Page = styled.div`
-    position: relative;
-    background: var(--color-background);
-`;
-//still to do: stake context + archetypes -> fills out the table

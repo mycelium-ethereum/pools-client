@@ -20,6 +20,14 @@ export const Input = React.memo(
         fontSize?: string;
         align?: 'right' | 'left';
     } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
+        const inputHandler = (e: any) => {
+            const { value, maxLength } = e.target;
+            if (String(value).length >= maxLength) {
+                e.preventDefault();
+                return;
+            }
+        };
+
         return (
             <input
                 {...rest}
@@ -39,10 +47,11 @@ export const Input = React.memo(
                 placeholder={placeholder || '0.0'}
                 min={0}
                 minLength={1}
-                maxLength={79}
+                maxLength={10}
+                onKeyPress={inputHandler}
                 spellCheck="false"
                 className={classNames(
-                    'relative outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary',
+                    'relative outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary focus:border',
                     className,
                 )}
             />

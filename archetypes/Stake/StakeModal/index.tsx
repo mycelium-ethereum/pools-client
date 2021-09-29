@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import Button from '@components/General/Button';
-import Gas from '@archetypes/Exchange/Gas';
 import Close from '/public/img/general/close-black.svg';
 import { TWModal } from '@components/General/TWModal';
 import { tokenSymbolToLogoTicker } from '@components/General';
@@ -66,9 +64,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
             open={state.stakeModalState !== 'closed'}
             onClose={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
         >
-            <div className="flex justify-between">
-                <StakeModalHeader>{title || 'Stake Tracer Pool Tokens'}</StakeModalHeader>
-                <Gas />
+            <div className="flex justify-between pb-6">
+                <div className="font-bold text-2xl text-cool-gray-900">{title || 'Stake Tracer Pool Tokens'}</div>
+                {/* <Gas /> */}
                 <div
                     className="w-3 h-3 ml-4 cursor-pointer"
                     onClick={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
@@ -112,7 +110,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         </InnerInputText>
                     </InputContainer>
                 ) : (
-                    <AvailableToClaim>{stakeModalBalance?.toFixed()}</AvailableToClaim>
+                    <div className="text-2xl">{stakeModalBalance?.toFixed()}</div>
                 )}
                 {isApproved && state.stakeModalState !== 'claim' ? (
                     <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
@@ -147,17 +145,5 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
         </TWModal>
     );
 };
-
-const StakeModalHeader = styled.h2`
-    font-style: normal;
-    font-weight: bold;
-    font-size: 24px;
-    color: #111928;
-    padding-bottom: 1.3rem;
-`;
-
-const AvailableToClaim = styled.p`
-    font-size: 24px;
-`;
 
 export default StakeModal;

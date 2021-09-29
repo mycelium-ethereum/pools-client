@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
 
 const EXCHANGE = 0;
 const BROWSE = 1;
+
+const item =
+    'inline w-[120px] my-auto mx-2 py-1.5 text-gray-700 rounded-xl transition-all cursor-pointer text-base hover:bg-gray-50 hover:shadow-sm';
+const selected = 'bg-white hover:bg-white hover:shadow-none';
 
 // const InvestNav
 export default (({ left, right }) => {
@@ -33,48 +37,26 @@ export default (({ left, right }) => {
     };
 
     return (
-        <InvestNav>
+        <div className="relative flex w-full h-[60px] text-center bg-tracer-50">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
-                <Item onClick={(_e) => handleRoute(EXCHANGE)} selected={router.pathname === '/'}>
+                <div
+                    className={classNames(router.pathname === '/' ? selected : '', item)}
+                    onClick={(_e) => handleRoute(EXCHANGE)}
+                >
                     Exchange
-                </Item>
-                <Item onClick={(_e) => handleRoute(BROWSE)} selected={router.pathname === '/browse'}>
+                </div>
+                <div
+                    className={classNames(router.pathname === '/browse' ? selected : '', item)}
+                    onClick={(_e) => handleRoute(BROWSE)}
+                >
                     Browse
-                </Item>
+                </div>
             </div>
             <div className="absolute right-0 top-0 bottom-0 flex items-center">{right}</div>
-        </InvestNav>
+        </div>
     );
 }) as React.FC<{
     left?: JSX.Element;
     right?: JSX.Element;
 }>;
-
-const InvestNav = styled.div`
-    position: relative;
-    background: #eeeef6;
-    width: 100%;
-    min-height: 60px;
-    height: 60px;
-    text-align: center;
-    display: flex;
-    // justify-content: space-between;
-`;
-
-const Item = styled.div<{ selected: boolean }>`
-    width: 120px;
-    height: 44px;
-    line-height: 44px;
-    display: inline;
-    border-radius: 10px;
-    margin: auto 0;
-    cursor: pointer;
-    background: ${(props) => (props.selected ? '#fff' : 'none')};
-    transition: 0.3s;
-
-    color: #374151;
-    &:hover {
-        opacity: 0.8;
-    }
-`;

@@ -11,6 +11,8 @@ type Farm = {
     abi: ethers.ContractInterface;
     pool: string;
     balancerPoolId?: string;
+    link?: string;
+    linkText?: string;
 };
 export type Network = {
     name: string;
@@ -140,11 +142,36 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [
             {
-                // mock farm with https://arbiscan.io/token/0x64541216bafffeec8ea535bb71fbc927831d0595 as staking token
-                address: '0x64Bb77266eE000f441920BA41561Cd82f69b4c27',
-                balancerPoolId: '0x64541216bafffeec8ea535bb71fbc927831d0595000100000000000000000002',
+                // 50 wETH 33 3S-ETH 17 3L-ETH
+                address: '0x06F0A46Ba44de4f5AA327237b0b3A1610f125d8f',
+                balancerPoolId: '0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
+                pool: '0x54114e9e1eEf979070091186D7102805819e916B',
+                abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
+            },
+            {
+                // 50 wBTC 33 3S-BTC 17 3L-BTC
+                address: '0xdbEA4B2F086D0e7259Ff84d2A088896E8Adb79Cf',
+                balancerPoolId: '0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
+            },
+            {
+                // 33 1S-ETH 33 1L-ETH 33 USDC
+                address: '0xBcA90fe2c8cc273Bb4ba1147FAdA3097f9316F9c',
+                balancerPoolId: '0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
+                pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
+                abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
+            },
+            {
+                // 33 1S-BTC 33 1L-BTC 33 USDC
+                address: '0xB8d52DE47a6C3a3A5679A72f2f7c05b30A9B5309',
+                balancerPoolId: '0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
+                pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
+                abi: StakingRewards__factory.abi,
+                link: 'https://arbitrum.balancer.fi/#/pool/0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
             },
         ],
         hex: '0xA4B1',

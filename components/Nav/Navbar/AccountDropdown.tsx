@@ -119,7 +119,7 @@ const ViewOnArbiscanOption: React.FC<{
             target="_blank"
             rel="noopener noreferrer"
         >
-            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker={ARBITRUM} />
+            <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
             <div className="text-sm">View on Arbiscan</div>
         </a>
     );
@@ -149,7 +149,7 @@ const BridgeFundsOption: React.FC<{
             target="_blank"
             rel="noopener noreferrer"
         >
-            <Logo className="inline text-lg w-[20px] my-auto mr-2" ticker={ARBITRUM} />
+            <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
             <div className="text-sm">Bridge Funds</div>
         </a>
     );
