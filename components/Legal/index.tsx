@@ -12,7 +12,7 @@ const unselected = 'opacity-60';
 export const LegalPageLayout: React.FC = ({ children }) => {
     const route = useRouter().pathname;
     return (
-        <div className="page relative">
+        <div className="page relative matrix:bg-theme-background">
             <NavBar />
             <div className="container">
                 <TWPopup

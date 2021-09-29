@@ -15,7 +15,7 @@ const NavBar: React.FC = () => {
     return (
         <div
             className={classNames(
-                'relative bg-tracer-900 dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
+                'relative bg-tracer-900 matrix:bg-transparent matrix:bg-none dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
             )}
         >
             <NavBarContent />

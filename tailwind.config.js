@@ -44,7 +44,6 @@ module.exports = {
                     ['background-secondary']: 'var(--background-secondary)',
                     ['background-nav-secondary']: 'var(--background-nav-secondary)',
                     primary: 'var(--primary)',
-                    accent: 'var(--accent)',
                     text: 'var(--text)',
                     ['text-secondary']: 'var(--text-secondary)',
                     border: 'var(--border)',
@@ -58,6 +57,7 @@ module.exports = {
             backgroundImage: {
                 'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
                 'nav-bg': "url('/img/nav-bg.svg')",
+                'matrix-bg': "url('/img/matrix.gif')",
             }
         },
     },

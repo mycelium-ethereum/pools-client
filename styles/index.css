@@ -199,10 +199,7 @@ html.theme-dark{
   --text: #FAFAFA;
 
   /* cool-gray-200 */
-  --text: #E5E7EB;
-
-  /* cool-gray-800 */
-  --accent: #1F2A37;
+  --text-secondary: #E5E7EB;
 
   /* cool-gray-500*/
   --border: #6B7280;
@@ -217,8 +214,32 @@ html.theme-dark{
   --button-bg-hover: #374151;
 }
 
-html.matrix {
-  --background: #000;
+html.theme-matrix {
+    /* cool-gray-900 */
+  --background: #020204;
+  
+  --background-secondary: #003b00;
+
+    /* cool-gray-900 */
+    --background-nav-secondary: #020204;
+
+  /* gray-50 */
+  --text: #22b455;
+
+  /* cool-gray-200 */
+  --text-secondary: #80ce87;
+
+  /* cool-gray-500*/
+  --border: #008f11;
+
+  /* tracer-100*/
+  --primary: #00ff41;
+
+  /* cool-gray-800 */
+  --button-bg: #003b00;
+
+  /* cool-gray-700 */
+  --button-bg-hover: #;
 }
 
 .no-focus-outline:focus {

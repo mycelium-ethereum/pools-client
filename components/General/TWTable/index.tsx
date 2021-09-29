@@ -17,7 +17,7 @@ export const Table: React.FC<{ className?: string }> = ({ className, children })
 
 export const TableHeader: React.FC<{ className?: string }> = ({ children, className }) => {
     return (
-        <thead className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700', className ?? '')}>
+        <thead className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg', className ?? '')}>
             <tr>
                 {React.Children.map(children, (child, index) => (
                     <th
@@ -40,7 +40,7 @@ interface TableRowProps {
 export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
     return (
         <tbody>
-            <tr className={rowNumber % 2 === 0 ? 'bg-theme-background' : 'bg-cool-gray-50 dark:bg-cool-gray-800'}>
+            <tr className={rowNumber % 2 === 0 ? 'bg-theme-background' : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'}>
                 {React.Children.map(children, (child, index) => (
                     <td
                         key={`cell_${rowNumber}_${index}`}

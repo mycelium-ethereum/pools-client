@@ -38,7 +38,7 @@ export default (({ left, right }) => {
     };
 
     return (
-        <div className="relative flex w-full h-[60px] text-center bg-theme-background-nav-secondary">
+        <div className="relative flex w-full h-[60px] text-center bg-theme-background-nav-secondary matrix:bg-transparent">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
                 <div
