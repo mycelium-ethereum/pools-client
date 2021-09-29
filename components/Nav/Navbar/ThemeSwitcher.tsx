@@ -1,99 +1,49 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import styled from 'styled-components';
+import { classNames } from '@libs/utils/functions';
+import React, { useState, useEffect } from 'react';
 
-const Dark = styled.img`
-	position: absolute;
-	right: 2px;
-	width: 12px;
-	height: 12px;
-	opacity: 1;
-	top: 0;
-	bottom: 0;
-	margin: auto;
-	transition .4s;
-`;
-const Light = styled.img`
-	position: absolute;
-	left: 2px;
-	width: 12px;
-	height: 12px;
-	opacity: 0;
-	margin: auto;
-	top: 0;
-	bottom: 0;
-	transition .4s;
-`;
+const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 
-const Slider = styled.span`
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    border-radius: 34px;
-    -webkit-transition: 0.4s;
-    transition: 0.4s;
-
-    &:before {
-        position: absolute;
-        content: '';
-        height: 16px;
-        width: 16px;
-        left: 4px;
-        bottom: 3px;
-        background-color: white;
-        -webkit-transition: 0.4s;
-        transition: 0.4s;
-        border-radius: 50%;
-    }
-`;
-
-export default styled(({ className }) => {
-    const [toggle, setToggle] = useState(true);
+export default (() => {
+    const [isDark, setIsDark] = useState(false);
 
     const handleClick = (_e: any) => {
-        document.getElementsByTagName('html')[0].classList.toggle('theme-dark');
-        setToggle(!toggle);
+        const head = document.getElementsByTagName('html')[0];
+        if (isDark) {
+            // is dark going to light
+            localStorage.removeItem('theme');
+            head.classList.remove('theme-dark');
+            setIsDark(false);
+        } else {
+            localStorage.setItem('theme', 'dark');
+            head.classList.add('theme-dark');
+            setIsDark(true);
+        }
     };
 
     useEffect(() => {
-        document.getElementsByTagName('html')[0].classList.add('theme-dark');
+        const head = document.getElementsByTagName('html')[0];
+        if (head.classList.contains('theme-dark')) {
+            setIsDark(true);
+        }
     }, []);
 
     return (
-        <div onClick={handleClick} className={`${className} ${toggle ? 'checked' : ''}`}>
-            <Slider />
-            <Dark src="/img/general/dark_theme.png" />
-            <Light src="/img/general/light_theme.png" />
+        <div onClick={handleClick} className={'relative inline-block w-12 h-6 my-auto mx-0'}>
+            <span
+                className={classNames(
+                    'absolute inset-0 rounded-3xl transition-all bg-tracer-600 dark:bg-cool-gray-700 cursor-pointer',
+                    "before:absolute before:content-[''] before:h-6 before:w-6 before:right-0 before:bg-white before:transition-all before:rounded-[50%]",
+                    isDark ? 'before:-translate-x-6' : 'before:translate-x-0',
+                )}
+            />
+            <img
+                className={classNames(img, isDark ? 'opacity-100' : 'opacity-0', 'left-[0.4rem] cursor-pointer')}
+                src="/img/general/dark_theme.svg"
+            />
+            <img
+                className={classNames(img, isDark ? 'opacity-0' : 'opacity-100', 'right-[0.4rem] cursor-pointer')}
+                src="/img/general/light_theme.svg"
+            />
         </div>
     );
-})`
-    position: relative;
-    display: inline-block;
-    width: 40px;
-    height: 22px;
-    margin: auto 0;
-
-    &.checked {
-        ${Slider} {
-            background-color: var(--color-primary);
-            box-shadow: 0 0 1px var(--color-primary);
-        }
-        ${Slider}:before {
-            -webkit-transform: translateX(16px);
-            -ms-transform: translateX(16px);
-            transform: translateX(16px);
-        }
-
-        ${Dark} {
-            opacity: 0;
-        }
-
-        ${Light} {
-            opacity: 1;
-        }
-    }
-`;
+}) as React.FC;
