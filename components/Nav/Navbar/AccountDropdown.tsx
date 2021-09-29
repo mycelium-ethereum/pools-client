@@ -132,7 +132,7 @@ const WalletIcon: React.FC<{
     const { wallet, account } = useWeb3();
 
     const IconContent = () => {
-        if (wallet?.icons.iconSrc) {
+        if (wallet?.icons?.iconSrc) {
             return (
                 <img
                     className={classNames(className ?? '', 'inline text-lg h-[20px] my-auto')}
