@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
@@ -31,7 +30,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 </Button>
             );
         }
-        if (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance)) {
+        if (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) {
             return (
                 <>
                     <Button
@@ -47,9 +46,9 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                     >
                         Unlock USDC
                     </Button>
-                    <HelperText>
+                    <p className="mt-2 text-theme-text text-sm text-center opacity-70">
                         Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.
-                    </HelperText>
+                    </p>
                 </>
             );
         } else {
@@ -86,14 +85,3 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
 };
 
 export default ExchangeButton;
-
-const HelperText = styled.p`
-    color: #6b7280;
-    font-size: 14px;
-    margin-top: 5px;
-
-    a {
-        text-decoration: underline;
-        cursor: pointer;
-    }
-`;

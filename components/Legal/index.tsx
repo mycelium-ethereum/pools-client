@@ -1,21 +1,24 @@
 import React from 'react';
-import styled from 'styled-components';
 import NavBar from '@components/Nav';
 import Footer from '@components/Footer';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import TWPopup from '@components/General/TWPopup';
+import { classNames } from '@libs/utils/functions';
+
+const selected = 'opacity-100';
+const unselected = 'opacity-60';
 
 export const LegalPageLayout: React.FC = ({ children }) => {
     const route = useRouter().pathname;
     return (
-        <>
+        <div className="page relative">
             <NavBar />
             <div className="container">
                 <TWPopup
-                    className={'mt-6 ml-4 mr-auto w-[175px] text-left text-white relative block lg:hidden'}
+                    className={'mt-6 ml-4 mr-auto w-[175px] text-left text-theme-text relative block lg:hidden'}
                     buttonClasses={
-                        'w-full p-3 bg-gray-50 whitespace-nowrap border-none  rounded-xl border-gray-100 outline-gray-100 focus:border focus:outline-none'
+                        'w-full p-3 bg-theme-button-bg whitespace-nowrap rounded-xl border border-theme-border focus:border-solid focus:outline-none focus:bg-theme-button-bg-hover hover:bg-theme-button-bg-hover'
                     }
                     preview={
                         route === '/privacy-policy'
@@ -26,150 +29,105 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                     }
                 >
                     <div className="p-3">
-                        <MenuItem className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/privacy-policy' ? selected : unselected
+                        )}>
                             <Link href="/privacy-policy">Privacy Policy</Link>
-                        </MenuItem>
-                        <MenuItem className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
+                        </div>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/terms-of-use' ? selected : unselected
+                        )}>
                             <Link href="/terms-of-use">Terms of Use</Link>
-                        </MenuItem>
-                        <MenuItem className={`${route === '/disclaimer' ? 'selected' : ''}`}>
+                        </div>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/disclaimer' ? selected : unselected
+                        )}>
                             <Link href="/disclaimer">Disclaimer</Link>
-                        </MenuItem>
+                        </div>
                     </div>
                 </TWPopup>
             </div>
-            <LayoutWrapper className="container flex">
-                <LeftPanel>
-                    <ContentWrapper>
-                        <NavMainTitle>Legal</NavMainTitle>
-                        <NavTitle className={`${route === '/privacy-policy' ? 'selected' : ''}`}>
+            <div className="container flex mb-8">
+                <div className="flex-col w/20 hidden lg:flex">
+                    <div className="my-0 mx-auto">
+                        <div className="text-3xl pt-16 pb-3 font-bold">Legal</div>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/privacy-policy' ? selected : unselected
+                        )}>
                             <Link href="/privacy-policy">Privacy Policy</Link>
-                        </NavTitle>
-                        <NavTitle className={`${route === '/terms-of-use' ? 'selected' : ''}`}>
+                        </div>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/terms-of-use' ? selected : unselected
+                        )}>
                             <Link href="/terms-of-use">Terms of Use</Link>
-                        </NavTitle>
-                        <NavTitle className={`${route === '/disclaimer' ? 'selected' : ''}`}>
+                        </div>
+                        <div className={classNames(
+                            menuItem,
+                            route === '/disclaimer' ? selected : unselected
+                        )}>
                             <Link href="/disclaimer">Disclaimer</Link>
-                        </NavTitle>
-                    </ContentWrapper>
-                </LeftPanel>
-                <RightPanel>
-                    <ContentWrapper>{children}</ContentWrapper>
-                </RightPanel>
-            </LayoutWrapper>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex flex-col w-full px-5 lg:px-0 lg:w/80">
+                    <div className="my-0 mx-auto transition-all content">{children}</div>
+                    <style>{`
+                        .content a {
+                            text-decoration: underline;
+                            cursor: pointer;
+                            color: var(--secondary);
+                        }
+                        .content a:hover {
+                            opacity: 0.8;
+                        }
+                    `}</style>
+                </div>
+            </div>
             <Footer />
-        </>
+        </div>
     );
 };
 
-const LayoutWrapper = styled.div``;
 
-const MenuItem = styled.div`
-    font-size: 16px;
-    font-weight: normal;
-    color: gray;
-    cursor: pointer;
-    margin-left: auto;
-    padding: 5px 0;
+const menuItem = 'ml-auto my-1 text-base cursor-pointer whitespace-nowrap no-underline'
 
-    &.selected {
-        color: black;
-        font-weight: 500;
-    }
-`;
+export const MainTitle:React.FC = ({ children }) => (
+    <div className="text-3xl font-bold pt-16 pb-3">
+        {children}
+    </div>
+)
 
-const LeftPanel = styled.div`
-    width: 20%;
-    display: flex;
-    flex-direction: column;
+export const Title:React.FC = ({ children }) => (
+    <div className="mt-6 mb-2 text-xl">
+        {children}
+    </div>
+)
 
-    @media (max-width: 1024px) {
-        display: none;
-    }
-`;
+export const Subtitle:React.FC = ({ children }) => (
+    <div className="pb-4 font-bold">
+        {children}
+    </div>
+)
 
-const RightPanel = styled.div`
-    width: 80%;
-    display: flex;
-    flex-direction: column;
+export const Paragraph: React.FC = ({ children }) => (
+    <p className="py-2 max-w-screen-md">
+        {children}
+    </p>
+)
 
-    a {
-        color: var(--color-secondary);
-        text-decoration: underline;
-    }
-
-    @media (max-width: 1024px) {
-        width: 100%;
-        padding: 0 20px;
-    }
-`;
-
-const ContentWrapper = styled.div`
-    margin: 0 auto;
-`;
-
-const NavMainTitle = styled.div`
-    font-size: 30px;
-    padding: 40px 0 10px;
-`;
-
-const NavTitle = styled.div`
-    padding: 5px 0 5px 15px;
-    color: gray;
-    opacity: 0.5;
-
-    &.selected {
-        color: black;
-        opacity: 1;
-    }
-`;
-
-export const MainTitle = styled.div`
-    font-size: 30px;
-    font-weight: 500;
-    padding: 40px 0 20px;
-`;
-
-export const Title = styled.div`
-    font-size: 20px;
-    padding: 15px 0;
-`;
-
-export const Subtitle = styled.div`
-    font-weight: bold;
-    padding-bottom: 15px;
-`;
-
-export const Paragraph = styled.div`
-    padding: 5px 0;
-    max-width: 800px;
-`;
-
-export const GeneralContainer = styled.div`
-    max-height: calc(100vh - 100px);
-`;
-
-export const BodyText = styled.div`
-    padding: 16px;
-    width: 100%;
-    border: 1px solid #0c3586;
-    overflow-y: scroll;
-    height: fit-content;
-    max-height: calc(100vh - 170px);
-
-    p:last-of-type {
-        padding-bottom: 0;
-    }
-
-    a {
-        color: var(--color-secondary);
-    }
-`;
-
-export const List = styled.ul`
-    max-width: 800px;
-    list-style: unset;
-    padding-inline-start: 16px;
-    margin-bottom: 16px;
-`;
-export const ListItem = styled.li``;
+export const List:React.FC = ({ children }) => (
+    <ul className="max-w-screen-md mb-4">
+        {children}
+        <style>{`
+            .list {
+                list-style: unset;
+                padding-inline-start: 16px;
+            }
+        `}</style>
+    </ul>
+)

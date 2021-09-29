@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegalPageLayout, MainTitle, Title, Subtitle, Paragraph, List, ListItem } from '@components/Legal';
+import { LegalPageLayout, MainTitle, Title, Subtitle, Paragraph, List } from '@components/Legal';
 
 const Terms: React.FC = () => {
     return (
@@ -74,24 +74,24 @@ const Terms: React.FC = () => {
                 DAO the following:
             </Paragraph>
             <List>
-                <ListItem>
+                <li>
                     if you are entering into these Terms as an individual, then you are of legal age in the jurisdiction
                     in which you reside and you have the legal capacity to enter into these Terms and be bound by them;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     if you are entering into these Terms as an entity, then you must have the legal authority to accept
                     these Terms on that entity{"'"}s behalf, in which case {'"'}you{'"'} (except as used in this
                     paragraph) will mean that entity;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     if you are entering into these Terms to access Perpetual Swaps Contracts or will in the future
                     access Perpetual Swaps Contracts, then you are not a US Person;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you do not, and will not, use VPN software or any other privacy or anonymisation tools or techniques
                     to circumvent, or attempt to circumvent, any restrictions that apply to the Services; and
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you are not a resident of, reside in, a citizen of, incorporated in, or have a registered office in
                     China, the United States, Antigua and Barbuda, Algeria, Bangladesh, Bolivia, Belarus, Burundi,
                     Myanmar (Burma), Cote D{"'"}Ivoire (Ivory Coast), Crimea and Sevastopol, Cuba, Democratic Republic
@@ -99,17 +99,17 @@ const Terms: React.FC = () => {
                     Somalia, Sudan, Syria, Venezuela, Yemen, Zimbabwe or any other country to which the United States,
                     the United Kingdom or the European Union embargoes goods or imposes similar sanctions (collectively,{' '}
                     {'"'}Restricted Territories{'"'});
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you are not a member of any sanctions list or equivalent maintained by the United States government,
                     the United Kingdom government, by the European Union or the United Nations (collectively, {'"'}
                     Sanctions Lists Persons{'"'});
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you do not intend to transact with any Restricted Territories or Sanctions List Persons;
-                </ListItem>
-                <ListItem>you are not a Restricted Person; and</ListItem>
-                <ListItem>
+                </li>
+                <li>you are not a Restricted Person; and</li>
+                <li>
                     your access to the Services is not (a) prohibited by and does not otherwise violate or assist you to
                     violate any domestic or foreign law, rule, statute, regulation, by-law, order, protocol, code,
                     decree, or another directive, requirement, or guideline, published or in force that applies to or is
@@ -120,88 +120,88 @@ const Terms: React.FC = () => {
                     or the Services, or as otherwise duly enacted, enforceable by law, the common law or equity
                     (collectively,
                     {'"'}Applicable Laws{'"'}); or (b) contribute to or facilitate any illegal activity.
-                </ListItem>
+                </li>
             </List>
             <Paragraph>
                 2.2 As a condition to accessing or using the Services or the Site, you acknowledge, understand, and
                 agree to the following:
             </Paragraph>
             <List>
-                <ListItem>
+                <li>
                     from time to time the Site and the Services may be inaccessible or inoperable for any reason,
                     including, without limitation: (a) equipment malfunctions; (b) periodic maintenance procedures or
                     repairs that Tracer DAO or any of its suppliers or contractors may undertake from time to time; (c)
                     causes beyond Tracer DAO{"'"}s control or that Tracer DAO could not reasonably foresee; (d)
                     disruptions and temporary or permanent unavailability of underlying blockchain infrastructure; or
                     (e) unavailability of third-party service providers or external partners for any reason;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     we reserve the right to disable or modify access to the Site and the Services at any time in the
                     event of any breach of these Terms, including, without limitation, if we reasonably believe any of
                     your representations and warranties may be untrue or inaccurate, and we will not be liable to you
                     for any losses or damages you may suffer as a result of or in connection with the Site or the
                     Services being inaccessible to you at any time or for any reason;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     the Site and the Services may evolve, which means Tracer DAO may apply changes, replace, or
                     discontinue (temporarily or permanently) the Services at any time in its sole discretion;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     the pricing information provided on the Site does not represent an offer, a solicitation of an
                     offer, or any advice regarding, or recommendation to enter into, a transaction with Tracer DAO;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     Tracer DAO does not act as an agent for you or any other user of the Site or the Services;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you are solely responsible for your use of the Services, including all of your transfers of Assets;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     to the fullest extent not prohibited by Applicable Law, we owe no fiduciary duties or liabilities to
                     you or any other party, and that to the extent any such duties or liabilities may exist at law or in
                     equity, you hereby irrevocably disclaim, waive, and eliminate those duties and liabilities;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     your use of the Services is at your own risk and you agree that Tracer DAO is not liable for any
                     damage or harm arising out of your use of the Services;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you are solely responsible for reporting and paying any taxes applicable to your use of the
                     Services; and
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     we have no control over, or liability for, the delivery, quality, safety, legality, or any other
                     aspect of any Assets that you may transfer to or from a third party, and we are not responsible for
                     ensuring that an entity with whom you transact completes the transaction or is authorised to do so,
                     and if you experience a problem with any transactions in Assets using the Services, then you bear
                     the entire risk.
-                </ListItem>
+                </li>
             </List>
             <Paragraph>
                 2.3 As a condition to accessing or using the Services or the Site, you covenant to Tracer DAO the
                 following:
             </Paragraph>
             <List>
-                <ListItem>
+                <li>
                     in connection with using the Services, you only will transfer legally-obtained Assets that belong to
                     you;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     you will obey all Applicable Laws in connection with using the Services, and you will not use the
                     Site or the Services if the laws of your country, or any other Applicable Law, prohibit you from
                     doing so;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     any Assets you use in connection with the Services are either owned by you or you are validly
                     authorised to carry out actions using such Assets;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     in addition to complying with all restrictions, prohibitions, and other provisions of these Terms,
                     you will (a) ensure that, at all times, all information that you provide on the Site and during your
                     use of the Services is current, complete, and accurate; (b) maintain the security and
                     confidentiality of your private keys associated with your public Ethereum address, passwords, API
                     keys and other related credentials.
-                </ListItem>
+                </li>
             </List>
             <Title>3. FEES AND PRICE ESTIMATES</Title>
             <Paragraph>
@@ -234,54 +234,54 @@ const Terms: React.FC = () => {
                 Services to do any of the following:
             </Paragraph>
             <List>
-                <ListItem>
+                <li>
                     violate any Applicable Laws including, without limitation, any relevant and applicable anti-money
                     laundering and anti-terrorist financing laws and sanctions programs and legislation;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     use the Services in any manner that could interfere with, disrupt, negatively affect, or inhibit
                     other users from fully enjoying the Services, or that could damage, disable, overburden, or impair
                     the functioning of the Site or the Services in any manner;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     circumvent any content-filtering techniques, security measures or access controls that Tracer DAO
                     employs on the Site, including, without limitation, through the use of a VPN;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     use any robot, spider, crawler, scraper, or other automated means or interface not provided by us,
                     to access the Services or to extract data, or introduce any malware, virus, Trojan horse, worm,
                     logic bomb, drop-dead device, backdoor, shutdown mechanism or other harmful material into the Site
                     or the Services;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     provide false, inaccurate, or misleading information while using the Site or the Services or engage
                     in activity that operates to defraud Tracer DAO, other users of the Services, or any other person;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     use or access the Site or Services to transmit or exchange Assets that are the direct or indirect
                     proceeds of any criminal or fraudulent activity, including, without limitation, terrorism or tax
                     evasion;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     use the Site in any way that is, in our sole discretion, libelous, defamatory, profane, obscene,
                     pornographic, sexually explicit, indecent, lewd, vulgar, suggestive, harassing, stalking, hateful,
                     threatening, offensive, discriminatory, bigoted, abusive, inflammatory, fraudulent, deceptive, or
                     otherwise objectionable or likely or intended to incite, threaten, facilitate, promote, or encourage
                     hate, racial intolerance, or violent acts against others;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     use the Site or the Services from a jurisdiction where the use of the Site or the Services is
                     prohibited;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     harass, abuse, or harm of another person or entity, including Tracer DAO members, Service Providers
                     and users;
-                </ListItem>
-                <ListItem>impersonate another user of the Services or otherwise misrepresent yourself; or</ListItem>
-                <ListItem>
+                </li>
+                <li>impersonate another user of the Services or otherwise misrepresent yourself; or</li>
+                <li>
                     encourage, induce or assist any third party, or yourself attempt, to engage in any of the activities
                     prohibited under this Section 5 or any other provision of these Terms.
-                </ListItem>
+                </li>
             </List>
             <Title>6. CONTENT</Title>
             <Paragraph>

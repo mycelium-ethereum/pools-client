@@ -1,5 +1,5 @@
 import React from 'react';
-import { LegalPageLayout, MainTitle, Title, Paragraph, List, ListItem } from '@components/Legal';
+import { LegalPageLayout, MainTitle, Title, Paragraph, List } from '@components/Legal';
 
 const PrivacyPolicy: React.FC = () => {
     return (
@@ -33,31 +33,31 @@ const PrivacyPolicy: React.FC = () => {
             <Title>What personal information do we collect?</Title>
             <Paragraph>We may collect the following types of personal information:</Paragraph>
             <List>
-                <ListItem>contact information, such as your email address;</ListItem>
-                <ListItem>
+                <li>contact information, such as your email address;</li>
+                <li>
                     transactional information, such as information about the transactions you make on our services, such
                     as the type, time or amount of a transaction;
-                </ListItem>
-                <ListItem>correspondence, such as your feedback or questionnaire and other survey responses; </ListItem>
-                <ListItem>
+                </li>
+                <li>correspondence, such as your feedback or questionnaire and other survey responses; </li>
+                <li>
                     online identifiers, such as your blockchain address, device ID, device type, geo-location
                     information, computer and connection information, statistics on page views, traffic to and from the
                     sites, ad data, IP address and standard web log information;
-                </ListItem>
-                <ListItem>usage data, such as user preferences and other data collected;</ListItem>
-                <ListItem>
+                </li>
+                <li>usage data, such as user preferences and other data collected;</li>
+                <li>
                     details of the products and services we have provided to you or that you have enquired about,
                     including any additional information necessary to deliver those products and services and respond to
                     your enquiries;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     any additional information relating to you that you provide to us directly through our website or
                     app or indirectly through your use of our website or app or online presence or through other
                     websites or accounts from which you permit us to collect information; or
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     any other personal information that may be required in order to facilitate your dealings with us.
-                </ListItem>
+                </li>
             </List>
             <Title>How do we collect personal information?</Title>
             <Paragraph>
@@ -65,39 +65,39 @@ const PrivacyPolicy: React.FC = () => {
                 may collect this information when you:
             </Paragraph>
             <List>
-                <ListItem>register on our website or app;</ListItem>
-                <ListItem>
+                <li>register on our website or app;</li>
+                <li>
                     communicate with us through correspondence, chats, email, or when you share information with us from
                     other social applications, services or websites; or
-                </ListItem>
-                <ListItem>interact with our sites, services, content and advertising.</ListItem>
-                <ListItem>Why do we collect, use and disclose personal information?</ListItem>
-                <ListItem>
+                </li>
+                <li>interact with our sites, services, content and advertising.</li>
+                <li>Why do we collect, use and disclose personal information?</li>
+                <li>
                     We may collect, hold, use and disclose your personal information for the following purposes:
-                </ListItem>
-                <ListItem>to enable you to access and use our website, services and app;</ListItem>
-                <ListItem>
+                </li>
+                <li>to enable you to access and use our website, services and app;</li>
+                <li>
                     to operate, protect, improve and optimise our website, services and app, business and our users
                     {"'"} experience, such as to perform analytics, conduct research and for advertising and marketing;{' '}
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     to send you service, support and administrative messages, reminders, technical notices, updates,
                     security alerts, and information requested by you;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     to send you marketing and promotional messages and other information that may be of interest to you,
                     including information sent by, or on behalf of, our business partners that we think you may find
                     interesting;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     to administer rewards, surveys, contests, or other promotional activities or events sponsored or
                     managed by us or our business partners;
-                </ListItem>
-                <ListItem>
+                </li>
+                <li>
                     to comply with our legal obligations, resolve any disputes that we may have with any of our users,
                     and enforce our agreements with third parties; and
-                </ListItem>
-                <ListItem>to consider your employment application.</ListItem>
+                </li>
+                <li>to consider your employment application.</li>
             </List>
             <Paragraph>
                 We may also disclose your personal information to a trusted third party who also holds other information
@@ -119,18 +119,18 @@ const PrivacyPolicy: React.FC = () => {
                 We may disclose personal information for the purposes described in this privacy policy to:
             </Paragraph>
             <List>
-                <ListItem>
+                <li>
                     third party suppliers and service providers (including providers for the operation of our websites
                     and/or our business or in connection with providing our products and services to you);
-                </ListItem>
-                <ListItem>our existing or potential agents, business partners or partners;</ListItem>
-                <ListItem>our sponsors or promoters of any competition that we conduct via our services;</ListItem>
-                <ListItem>anyone to whom our assets or businesses (or any part of them) are transferred;</ListItem>
-                <ListItem>specific third parties authorised by you to receive information held by us; and/or</ListItem>
-                <ListItem>
+                </li>
+                <li>our existing or potential agents, business partners or partners;</li>
+                <li>our sponsors or promoters of any competition that we conduct via our services;</li>
+                <li>anyone to whom our assets or businesses (or any part of them) are transferred;</li>
+                <li>specific third parties authorised by you to receive information held by us; and/or</li>
+                <li>
                     other persons, including government agencies, regulatory bodies and law enforcement agencies, or as
                     required, authorised or permitted by law.
-                </ListItem>
+                </li>
             </List>
             <Title>Disclosure of personal information</Title>
             <Paragraph>
@@ -197,9 +197,9 @@ const PrivacyPolicy: React.FC = () => {
                 information, or make a complaint, please contact us at{' '}
                 <a href="mailto:hello@tracer.finance">hello@tracer.finance</a>.
             </Paragraph>
-            <Paragraph className="mt-5">
+            <p className="mt-5">
                 <b>Effective: 23 April, 2021</b>
-            </Paragraph>
+            </p>
         </LegalPageLayout>
     );
 };
