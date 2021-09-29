@@ -1,34 +1,14 @@
+import { useTheme } from '@context/ThemeContext';
 import { classNames } from '@libs/utils/functions';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 
 export default (() => {
-    const [isDark, setIsDark] = useState(false);
-
-    const handleClick = (_e: any) => {
-        const head = document.getElementsByTagName('html')[0];
-        if (isDark) {
-            // is dark going to light
-            localStorage.removeItem('theme');
-            head.classList.remove('theme-dark');
-            setIsDark(false);
-        } else {
-            localStorage.setItem('theme', 'dark');
-            head.classList.add('theme-dark');
-            setIsDark(true);
-        }
-    };
-
-    useEffect(() => {
-        const head = document.getElementsByTagName('html')[0];
-        if (head.classList.contains('theme-dark')) {
-            setIsDark(true);
-        }
-    }, []);
+    const { isDark, toggleTheme} = useTheme();
 
     return (
-        <div onClick={handleClick} className={'relative inline-block w-12 h-6 my-auto mx-0'}>
+        <div onClick={toggleTheme} className={'relative inline-block w-12 h-6 my-auto mx-0'}>
             <span
                 className={classNames(
                     'absolute inset-0 rounded-3xl transition-all bg-tracer-600 dark:bg-cool-gray-700 cursor-pointer',

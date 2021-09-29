@@ -11,6 +11,7 @@ import { ethers, providers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { ARBITRUM } from '@libs/constants';
+import { useTheme } from '@context/ThemeContext';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -54,6 +55,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     networkIds,
     cacheWalletSelection = true,
 }) => {
+    const { isDark } = useTheme();
     const errorToastID = React.useRef<string>('');
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
@@ -74,11 +76,11 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     useEffect(() => {
         const initializeOnboard = async () => {
             const checks = [{ checkName: 'accounts' }, { checkName: 'connect' }];
-
             try {
                 const onboard = Onboard({
                     ...onboardConfig,
                     networkId: networkIds ? networkIds[0] : parseInt(ARBITRUM), //Default to arb
+                    darkMode: true,
                     walletCheck: checks,
                     subscriptions: {
                         address: (address) => {
@@ -134,6 +136,12 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
         initializeOnboard();
     }, []);
+
+    useEffect(() => {
+        if (onboard) {
+            onboard?.config({ darkMode: isDark })
+        }
+    }, [isDark])
 
     useEffect(() => {
         const signer = provider?.getSigner();

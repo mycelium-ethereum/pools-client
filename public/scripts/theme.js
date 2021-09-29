@@ -13,6 +13,6 @@
         const currentTheme = localStorage.getItem('theme');
         changeTheme(currentTheme);
     } catch (err) {
-        console.log(new Error('accessing theme has been denied'));
+        console.error(new Error('Accessing theme has been denied'));
     }
 })();
