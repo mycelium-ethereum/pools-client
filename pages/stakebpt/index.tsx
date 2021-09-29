@@ -5,6 +5,8 @@ import StakeBPT from '@archetypes/Stake/StakeBPT';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 
 export default (() => {
     const router = useRouter();
@@ -15,12 +17,15 @@ export default (() => {
 
     return (
         <div className={`page relative bg-white`}>
-            <FarmStore farmContext="bptFarms">
-                <NavBar />
-                <StakeBPT />
-            </FarmStore>
-            <Footer />
-            <PendingCommits />
+            <ArbitrumBridgeStore>
+                <FarmStore farmContext="bptFarms">
+                    <NavBar />
+                    <StakeBPT />
+                </FarmStore>
+                <Footer />
+                <PendingCommits />
+                <ArbitrumBridge />
+            </ArbitrumBridgeStore>
         </div>
     );
 }) as React.FC;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TWModal } from '@components/General/TWModal';
-import { toApproxCurrency } from '@libs/utils';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { useReducer } from 'react';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
 
@@ -224,7 +224,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         disabled={!isConnectBtnEnabled()}
                         className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
-                        Ok, let's connect
+                        Ok, {`let's`} connect
                     </button>
                     <button
                         type="button"

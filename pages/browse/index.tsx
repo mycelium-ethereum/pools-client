@@ -5,6 +5,8 @@ import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 
 export default (() => {
     const router = useRouter();
@@ -16,9 +18,12 @@ export default (() => {
     return (
         <div className={`page relative bg-white`}>
             <PoolStore>
-                <NavBar />
-                <Browse />
-                <PendingCommits />
+                <ArbitrumBridgeStore>
+                    <NavBar />
+                    <Browse />
+                    <PendingCommits />
+                    <ArbitrumBridge />
+                </ArbitrumBridgeStore>
             </PoolStore>
             <Footer />
         </div>

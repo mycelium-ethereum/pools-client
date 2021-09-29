@@ -2653,6 +2653,7 @@
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/@rehooks/local-storage/-/local-storage-2.4.1.tgz#a35bf8ea03d8bf2202029a7b5885ed2806a3594b"
   integrity sha512-btOCPMDDG5PtNw+qNMTG9HGsgQTUYa3bvZ/ELDSeZ4YA9IGJA97oP6Tcb9EOrN7OqC8zpsiO7qxvpYP01PE+XQ==
+
 "@rollup/plugin-babel@^5.3.0":
   version "5.3.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-babel/-/plugin-babel-5.3.0.tgz#9cb1c5146ddd6a4968ad96f209c50c62f92f9879"
@@ -3132,10 +3133,6 @@
     memory-cache "^0.2.0"
     web3-utils "^1.4.0"
 
-"@tracer-protocol/onboard@^1.29.3":
-  version "1.29.3"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-1.29.3.tgz#45a4c20073c418893907fb9e9ce74975e6ddfd81"
-  integrity sha512-LC2WVjkKxr8FDfXgQ3BO16tpTaeUQRB4hJ+xFTBNuglVgdZRtjdZoyz+yg3dbAmYLOsnuZ4hBLNxAHj2zKSWpQ==
 "@tracer-protocol/onboard@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.1.0.tgz#a1cd3f88871e5e0cfd3a4714c2bb7b84b059432d"
@@ -4637,6 +4634,7 @@ arb-ts@^0.0.36:
     "@types/promise-poller" "^1.7.0"
     dotenv "^10.0.0"
     ethers "^5.1.0"
+
 are-we-there-yet@~1.1.2:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/are-we-there-yet/-/are-we-there-yet-1.1.7.tgz#b15474a932adab4ff8a50d9adfa7e4e926f21146"
@@ -9089,7 +9087,6 @@ ethers@^5.1.0, ethers@^5.4.6:
     "@ethersproject/web" "5.4.0"
     "@ethersproject/wordlists" "5.4.0"
 
-ethjs-unit@0.1.6:
 ethjs-unit@0.1.6, ethjs-unit@^0.1.6:
   version "0.1.6"
   resolved "https://registry.yarnpkg.com/ethjs-unit/-/ethjs-unit-0.1.6.tgz#c665921e476e87bce2a9d588a6fe0405b2c41699"
@@ -12802,6 +12799,7 @@ lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
   integrity sha1-QVxEePK8wwEgwizhDtMib30+GOA=
+
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
   resolved "https://registry.yarnpkg.com/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz#7c526a52d89b45c45cc690b88163be0497f550cb"

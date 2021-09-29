@@ -1,16 +1,16 @@
-import { ARBITRUM_RINKEBY, ARBITRUM_ONE, MAINNET, RINKEBY } from '@libs/constants';
+import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
 import Inbox from '@libs/abi/arbitrum/Inbox.json';
 import { ethers } from 'ethers';
 
 export const destinationNetworkLookup: { [current: number]: string } = {
     [RINKEBY]: ARBITRUM_RINKEBY,
     [ARBITRUM_RINKEBY]: RINKEBY,
-    [MAINNET]: ARBITRUM_ONE,
-    [ARBITRUM_ONE]: MAINNET,
+    [MAINNET]: ARBITRUM,
+    [ARBITRUM]: MAINNET,
 };
 
 export const bridgeableTokens: { [networkId: string]: { name: string; ticker: string; address: string }[] } = {
-    [ARBITRUM_ONE]: [
+    [ARBITRUM]: [
         {
             address: '',
             name: 'USDC',

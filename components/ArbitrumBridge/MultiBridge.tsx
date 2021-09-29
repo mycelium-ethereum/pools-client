@@ -1,18 +1,20 @@
-import React, { useReducer, useState, useMemo, useEffect } from 'react';
-import { ethers } from 'ethers';
+import React, {
+    // useReducer,
+    useState,
+    useMemo,
+    useEffect,
+} from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import Icon from '@ant-design/icons';
 import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import SlideSelect, { Option } from '@components/General/SlideSelect';
-import { ExchangeButton } from '@archetypes/Exchange/Inputs';
+import Button from '@components/General/Button';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
-import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '@libs/utils';
-import { bridgeReducer, DefaultBridgeState } from './state';
-
+// import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '@libs/utils';
+// import { bridgeReducer, DefaultBridgeState } from './state';
 interface MultiBridgeProps {
-    isOpen: boolean;
+    show: boolean;
     fromNetwork: Network;
     toNetwork?: Network;
     bridgeableAssetList: BridgeableAsset[];
@@ -33,25 +35,33 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onSwitchNetwork,
         refreshBridgeableBalance,
         onBridgeAsset,
+        show,
+        onClose,
     } = props;
 
-    const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
+    // const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
+
+    console.log('BRIDGEABLE ASSET LIST', bridgeableAssetList);
+
     const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
     const [amount, setAmount] = useState('0');
 
     // useEffect(() => {
-    //     if(isOpen) {
+    //     if(show) {
     //         refreshBridgeableBalance(selectedAsset)
     //     }
-    // }, [isOpen])
+    // }, [show])
 
     useEffect(() => {
         setSelectedAsset(bridgeableAssetList[selectedAssetIndex]);
     }, [selectedAssetIndex]);
 
     useEffect(() => {
-        refreshBridgeableBalance(selectedAsset);
+        console.log('SELECTED ASSET CHANGED', selectedAsset);
+        if (selectedAsset) {
+            refreshBridgeableBalance(selectedAsset);
+        }
     }, [selectedAsset]);
 
     const bridgeAsset = () => {
@@ -62,17 +72,17 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     };
 
     const selectedAssetBalance = useMemo(() => {
-        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset.ticker];
+        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.ticker];
         console.log('BALANCE', assetBalance?.balance?.toFixed());
         return assetBalance?.balance || null;
     }, [selectedAsset, fromNetwork, bridgeableBalances]);
 
     return (
-        <TWModal open={props.isOpen} onClose={() => props.onClose()}>
+        <TWModal open={show} onClose={() => onClose()}>
             <div className="bg-white p-6">
                 <div className="flex justify-between items-center">
                     <h2 className="text-lg leading-6 font-medium text-gray-900">Bridge Funds</h2>
-                    <div className="text-xl cursor-pointer" onClick={() => props.onClose()}>
+                    <div className="text-xl cursor-pointer" onClick={() => onClose()}>
                         &times;
                     </div>
                 </div>
@@ -160,15 +170,15 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 />
                             </div>
                             <p className="text-base text-gray-500 mt-3">
-                                Balance: {selectedAssetBalance?.toFixed()} {selectedAsset.ticker}
+                                Balance: {selectedAssetBalance?.toFixed()} {selectedAsset?.ticker}
                             </p>
                         </div>
                     </div>
 
-                    <ExchangeButton className="primary mb-0">Approve</ExchangeButton>
-                    <ExchangeButton className="primary" onClick={bridgeAsset}>
+                    <Button className="primary mb-0">Approve</Button>
+                    <Button className="primary" onClick={bridgeAsset}>
                         Bridge
-                    </ExchangeButton>
+                    </Button>
                 </div>
             </div>
         </TWModal>

@@ -209,4 +209,44 @@ export const networkConfig: Record<string, Network> = {
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
     },
+    '1': {
+        // TODO: fill this out properly
+        name: 'Mainnet',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x1',
+        poolFarms: [],
+        bptFarms: [],
+        id: '1',
+        publicRPC: '',
+        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '',
+        knownUSDCPriceFeeds: {},
+    },
+    '4': {
+        // TODO: fill this out properly
+        name: 'Rinkeby',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x4',
+        poolFarms: [],
+        bptFarms: [],
+        id: '4',
+        publicRPC: '',
+        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '',
+        knownUSDCPriceFeeds: {},
+    },
 };

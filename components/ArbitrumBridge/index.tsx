@@ -1,5 +1,5 @@
-import useBridge from '@libs/hooks/useBridge';
-import React, { useState, useCallback } from 'react';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { MultiBridge } from './MultiBridge';
@@ -7,7 +7,7 @@ import { MultiBridge } from './MultiBridge';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import { BridgeableAsset } from '@libs/types/General';
-import { bridgeableTickers } from '@libs/utils';
+import { bridgeableTickers } from '@libs/utils/bridge';
 
 // mainnet
 // const USDC_ADDRESS = '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48';
@@ -16,9 +16,8 @@ import { bridgeableTickers } from '@libs/utils';
 const USDC_ADDRESS = '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b';
 
 // ArbitrumBridge
-export default (() => {
-    const [isOpen, setOpen] = useState(false);
-    const { provider, signer } = useWeb3();
+export const ArbitrumBridge: React.FC = (() => {
+    const { provider } = useWeb3();
     const {
         bridgeToken,
         bridgeEth,
@@ -28,7 +27,11 @@ export default (() => {
         toNetwork,
         bridgeableAssetList,
         bridgeableBalances,
-    } = useBridge();
+        hideBridgeModal,
+        bridgeModalIsOpen,
+    } = useArbitrumBridge();
+
+    console.log('BRIDGE MODAL IS OPEN', bridgeModalIsOpen);
 
     const onBridgeAsset = async (asset: BridgeableAsset, amount: BigNumber) => {
         if (asset.ticker === bridgeableTickers.ETH) {
@@ -53,24 +56,17 @@ export default (() => {
     );
 
     return (
-        <>
-            <button className="text-white underline" onClick={() => setOpen(true)}>
-                Bridge
-            </button>
-            <MultiBridge
-                isOpen={isOpen}
-                onClose={() => setOpen(false)}
-                fromNetwork={fromNetwork}
-                toNetwork={toNetwork}
-                bridgeableAssetList={bridgeableAssetList}
-                bridgeableBalances={bridgeableBalances}
-                provider={provider}
-                signer={signer}
-                refreshBridgeableBalance={refreshBridgeableBalance}
-                onSwitchNetwork={onSwitchNetwork}
-                onBridgeAsset={onBridgeAsset}
-                onApproveUSDC={onApproveUSDC}
-            />
-        </>
+        <MultiBridge
+            show={bridgeModalIsOpen}
+            onClose={hideBridgeModal}
+            fromNetwork={fromNetwork}
+            toNetwork={toNetwork}
+            bridgeableAssetList={bridgeableAssetList}
+            bridgeableBalances={bridgeableBalances}
+            refreshBridgeableBalance={refreshBridgeableBalance}
+            onSwitchNetwork={onSwitchNetwork}
+            onBridgeAsset={onBridgeAsset}
+            onApproveToken={onApproveUSDC}
+        />
     );
 }) as React.FC;

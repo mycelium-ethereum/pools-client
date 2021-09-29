@@ -8,23 +8,42 @@ import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { ARBITRUM } from '@libs/constants';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
 export default (({ account, className }) => {
     const { resetOnboard, handleConnect } = useWeb3Actions();
+    const { showBridgeModal } = useArbitrumBridge();
     const ensName = useEnsName(account ?? '');
 
     return (
         <div className={`${className} relative inline-block text-left`}>
-            {(() => {
+            {!!account ? (
+                <AccountDropdownButton
+                    account={account}
+                    ensName={ensName}
+                    logout={resetOnboard}
+                    showBridgeModal={showBridgeModal}
+                />
+            ) : (
+                <ConnectWalletButton handleConnect={handleConnect} />
+            )}
+            {/* {(() => {
                 if (!!account) {
-                    return <AccountDropdownButton account={account} ensName={ensName} logout={resetOnboard} />;
+                    return (
+                        <AccountDropdownButton
+                            account={account}
+                            ensName={ensName}
+                            logout={resetOnboard}
+                            showBridgeModal={showBridgeModal}
+                        />
+                    );
                 } else {
                     return <ConnectWalletButton handleConnect={handleConnect} />;
                 }
-            })()}
+            })()} */}
         </div>
     );
 }) as React.FC<{
@@ -48,9 +67,10 @@ interface AccountDropdownButtonProps {
     account: string;
     ensName: string;
     logout: () => void;
+    showBridgeModal: () => void;
 }
 
-const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButtonProps) => {
+const AccountDropdownButton = ({ account, ensName, logout, showBridgeModal }: AccountDropdownButtonProps) => {
     const accountLong = useMemo(() => accountDescriptionLong(account, ensName), [account, ensName]);
     const accountShort = useMemo(() => accountDescriptionShort(account, ensName), [account, ensName]);
     return (
@@ -89,7 +109,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
 
             <div className="py-1 px-4 mb-2">
                 <ViewOnArbiscanOption account={account} />
-                <BridgeFundsOption />
+                <BridgeFundsOption showBridgeModal={showBridgeModal} />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -141,17 +161,24 @@ const WalletIcon: React.FC<{
 
 const BridgeFundsOption: React.FC<{
     className?: string;
-}> = ({ className }) => {
+    showBridgeModal: () => void;
+}> = ({ className, showBridgeModal }) => {
     return (
-        <a
-            className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')}
-            href="https://bridge.arbitrum.io"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
-            <div className="text-sm">Bridge Funds</div>
-        </a>
+        <>
+            <button className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')} onClick={showBridgeModal}>
+                <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
+                Bridge Funds
+            </button>
+        </>
+        // <a
+        //     className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')}
+        //     href="https://bridge.arbitrum.io"
+        //     target="_blank"
+        //     rel="noopener noreferrer"
+        // >
+        //     <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
+        //     <div className="text-sm">Bridge Funds</div>
+        // </a>
     );
 };
 

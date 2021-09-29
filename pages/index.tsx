@@ -9,6 +9,8 @@ import InvestNav from '@components/Nav/InvestNav';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 
 export default (() => {
     const router = useRouter();
@@ -20,12 +22,15 @@ export default (() => {
     return (
         <div className={`page relative`}>
             <PoolStore>
-                <NavBar />
-                <InvestNav />
-                <SwapStore>
-                    <Exchange />
-                </SwapStore>
-                <PendingCommits />
+                <ArbitrumBridgeStore>
+                    <NavBar />
+                    <InvestNav />
+                    <SwapStore>
+                        <Exchange />
+                    </SwapStore>
+                    <PendingCommits />
+                    <ArbitrumBridge />
+                </ArbitrumBridgeStore>
             </PoolStore>
             <Footer />
             <CorWidget />
