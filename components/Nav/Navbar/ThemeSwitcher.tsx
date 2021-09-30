@@ -19,10 +19,12 @@ export default (() => {
             <img
                 className={classNames(img, isDark ? 'opacity-100' : 'opacity-0', 'left-[0.4rem] cursor-pointer')}
                 src="/img/general/dark_theme.svg"
+                alt="Dark Theme"
             />
             <img
                 className={classNames(img, isDark ? 'opacity-0' : 'opacity-100', 'right-[0.4rem] cursor-pointer')}
                 src="/img/general/light_theme.svg"
+                alt="Light Theme"
             />
         </div>
     );
