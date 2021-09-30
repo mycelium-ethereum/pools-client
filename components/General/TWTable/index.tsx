@@ -4,7 +4,7 @@ import React from 'react';
 export const Table: React.FC<{ className?: string }> = ({ className, children }) => {
     return (
         <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
-            <div className="overflow-x-scroll h-full">
+            <div className="overflow-x-auto h-full">
                 <div className="py-2 align-middle inline-block min-w-full">
                     <div className="border-b border-theme-border sm:rounded-lg">
                         <table className="min-w-full divide-y divide-theme-border">{children}</table>

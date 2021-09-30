@@ -126,11 +126,11 @@ body > div:first-child {
 
 /* ANTD overrides */
 .ant-tooltip-inner {
-    background: white;
-    color: black;
+    background: var(--background);
+    color: var(--text);
 }
 .ant-tooltip-inner a {
-    color: blue;
+    color: var(--text-secondary);
     text-decoration: underline;
 }
 .ant-tooltip-arrow-content {
