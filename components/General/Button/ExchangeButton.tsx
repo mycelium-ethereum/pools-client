@@ -10,7 +10,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch } = useSwapContext();
-    const { selectedPool, side, amount, invalidAmount } = swapState;
+    const { selectedPool, side, amount, invalidAmount, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -30,7 +30,11 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 </Button>
             );
         }
-        if (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) {
+        if (
+            (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) 
+            || pool.quoteToken.approvedAmount.eq(0))
+            && (commitAction !== CommitActionEnum.burn)
+        ) {
             return (
                 <>
                     <Button
