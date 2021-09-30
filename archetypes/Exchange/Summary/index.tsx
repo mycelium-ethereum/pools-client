@@ -5,7 +5,6 @@ import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
 import { BigNumber } from 'bignumber.js';
-import styled from 'styled-components';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
 
@@ -15,6 +14,9 @@ type SummaryProps = {
     isLong: boolean;
     receiveIn: number;
 };
+
+const countdown = 'absolute left-[1.5rem] top-[-1rem] text-sm z-[2] p-1.5 rounded bg-theme-background';
+const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
@@ -41,12 +43,12 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
             defaultHeight={0}
             open={!!pool.name}
             className={classNames(
-                'border-2xl border text-base',
-                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+                'border-2xl border text-base bg-theme-background',
+                !!pool.name ? 'border-theme-border' : 'border-transparent',
             )}
         >
-            <Box>
-                <h2>
+            <div className="relative border-box px-4 pt-4 pb-2">
+                <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                     {token.name}
                 </h2>
@@ -69,15 +71,16 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                         {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
                 </Transition>
-                <Countdown>
+                <div className={countdown}>
                     {'Receive In'}
-                    <TimeLeft targetTime={receiveIn} />
-                </Countdown>
-            </Box>
+                    <TimeLeft className={timeLeft} targetTime={receiveIn} />
+                </div>
+            </div>
         </HiddenExpand>
     );
 };
 
+// const SellSummary
 export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
@@ -99,11 +102,11 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
             open={!!pool.name}
             className={classNames(
                 'border-2x border text-base',
-                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+                !!pool.name ? 'border-theme-border' : 'border-transparent',
             )}
         >
-            <Box>
-                <h2>
+            <div className="relative border-box px-4 pt-4 pb-2">
+                <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size={'md'} ticker="USDC" />
                     USDC
                 </h2>
@@ -120,38 +123,11 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
                 </Transition>
-                <Countdown>
+                <div className={countdown}>
                     {'Receive In'}
-                    <TimeLeft targetTime={receiveIn} />
-                </Countdown>
-            </Box>
+                    <TimeLeft className={timeLeft} targetTime={receiveIn} />
+                </div>
+            </div>
         </HiddenExpand>
     );
 };
-
-const Box = styled.div`
-    box-sizing: border-box;
-    position: relative;
-    padding: 1rem 1rem 0.5rem 1rem;
-`;
-
-const Countdown = styled.div`
-    position: absolute;
-    background: #fff;
-    left: 1.5rem;
-    top: -1rem;
-    height: 2rem;
-    font-size: 1rem;
-    z-index: 2;
-    padding 0 5px;
-
-    ${TimeLeft} {
-        display: inline;
-        background: #FAFAFA;
-        border: 1px solid #E4E4E7;
-        margin-left: 5px;
-        padding: 0 5px;
-        border-radius: 10px;
-        color: #6B7280;
-    }
-`;

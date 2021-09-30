@@ -11,7 +11,6 @@ const Divider = styled.div`
     align-items: center;
     text-align: center;
     opacity: 0.5;
-    color: var(--color-primary);
     &:not(:empty)::before {
         margin-right: 0.25em;
     }
@@ -23,7 +22,7 @@ const Divider = styled.div`
     &::after {
         content: '';
         flex: 1;
-        border-bottom: 1px solid #e6e6e6;
+        border-bottom: 1px solid var(--border);
     }
 `;
 export default styled(({ text, className }: DProps) => (

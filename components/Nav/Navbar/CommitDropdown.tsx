@@ -35,12 +35,12 @@ export default (({ setShowQueued, hide }) => {
             className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
             preview={`${mints + burns} Queued`}
         >
-            <div className="flex text-sm font-normal items-center py-2 px-4 text-gray-700 border-b border-cool-gray-100">
+            <div className="flex text-sm font-normal items-center py-2 px-4 text-theme-text opacity-90 border-b border-theme-border">
                 <TooltipSelector tooltip={{ content: <>Time until mints/burns are processed</> }}>
                     <div className="uppercase mr-2 whitespace-nowrap">Up Next</div>
                 </TooltipSelector>
                 <TimeLeft
-                    className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-gray-50 text-cool-gray-500 border-gray-200"
+                    className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-theme-button-bg text-theme-text opacity-90 border-theme-border"
                     targetTime={nextUpdate}
                 />
             </div>

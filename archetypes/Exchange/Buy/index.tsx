@@ -17,8 +17,9 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import { classNames } from '@libs/utils/functions';
 
 const inputRow = 'relative my-2 ';
 
@@ -103,7 +104,7 @@ export default (() => {
         <>
             <div className={`${inputRow} flex justify-between mb-4`}>
                 <span className="w-60">
-                    <p className="mb-2 text-black">Market</p>
+                    <p className="mb-2">Market</p>
                     <Dropdown
                         className="w-full "
                         placeHolder="Select Market"
@@ -121,21 +122,23 @@ export default (() => {
                     />
                 </span>
                 <span>
-                    <p className="mb-2 text-black">Side</p>
+                    <p className="mb-2 ">Side</p>
                     <TWButtonGroup
                         value={side}
                         onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
                         size={'lg'}
+                        borderColor={'tracer'}
                         options={SIDE_OPTIONS}
                     />
                 </span>
             </div>
             <div className={`${inputRow} mb-4`}>
                 <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
-                    <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
+                    <div className="mb-2  w-min whitespace-nowrap">Power Leverage</div>
                 </TooltipSelector>
                 <TWButtonGroup
                     value={leverage}
+                    borderColor={'tracer'}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
                         text: `${option.leverage}`,
@@ -151,7 +154,7 @@ export default (() => {
                 />
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Amount</p>
+                <p className="mb-2 ">Amount</p>
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
@@ -171,12 +174,17 @@ export default (() => {
                     </InnerInputText>
                 </InputContainer>
 
-                <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                <div
+                    className={classNames(
+                        invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
+                        'opacity-70 text-sm mt-2',
+                    )}
+                >
                     {invalidAmount.isInvalid && invalidAmount.message ? (
                         invalidAmount.message
                     ) : (
                         <>
-                            <span className={`${!!pool.name ? 'inline' : 'hidden'} text-gray-500`}>
+                            <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
                                     {!amount.eq(0)

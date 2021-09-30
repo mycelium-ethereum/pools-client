@@ -54,13 +54,187 @@ input {
     }
 }
 
+body,
+html {
+    font-family: 'SourceSansPro', ui-sans-serif, system-ui, -apple-system, serif !important;
+}
+
+html,
+body,
+body > div:first-child,
+div#__next,
+div#__next > div {
+    height: 100%;
+}
+body > div:first-child {
+    display: block;
+    overflow: auto;
+}
+
+
+.tracer-loading {
+    font-size: 32px;
+    color: var(--text);
+}
+
+/** GLOBAL TABLE STYLES */
+.bid, .green {
+    color: #05CB3A;
+}
+
+.ask, .red {
+    color: #F15025;
+}
+
+/* Scroll bar stuff */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: var(--background-secondary);
+}
+
+/* Corner piece */
+::-webkit-scrollbar-corner {
+    display: none;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: var(--text);
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+    background: var(--background);
+} */
+
+.bn-onboard-custom.bn-onboard-modal { 
+    z-index: 99;
+}
+
+/* React toast notifications */
+.react-toast-notifications__container {
+    top: 65px !important;
+    z-index: 100001 !important;
+}
+
+/* ANTD overrides */
+.ant-tooltip-inner {
+    background: var(--background);
+    color: var(--text);
+}
+.ant-tooltip-inner a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+.ant-tooltip-arrow-content {
+    background-color: var(--background);
+}
 @tailwind base;
 
 @tailwind components;
 
 @tailwind utilities;
 
-/** Table css */
 .page {
-    @apply h-screen flex flex-col;
+    @apply min-h-screen flex flex-col;
+    background: var(--background-secondary);
+}
+
+html, body {
+    color: var(--text);
+    font-size:16px;
+}
+
+/* Colour themes */
+html {
+    --background: #fff;
+
+    /* gray-50 */
+    --background-secondary: #f9fafb;
+
+    --background-nav-secondary: #EEEEF6;
+
+    /* cool-gray-900 */
+    --text: #111928;
+
+    /* cool-gray-700 */
+    --text: #374151;
+
+    /* cool-gray-300*/
+    --border: #D1D5DB;
+
+    /* tracer-800*/
+    --primary: #0000B0;
+
+    /* cool-gray-50 */
+    --button-bg: #F9FAFB;
+
+    /* cool-gray-100 */
+    --button-bg-hover: #F3F4F6;
+}
+
+@media (max-height: 800px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+html.theme-dark{
+    /* cool-gray-900 */
+    --background: #111928;
+
+    --background-secondary: #1B2436;
+
+    /* cool-gray-900 */
+    --background-nav-secondary: #111928;
+
+    /* gray-50 */
+    --text: #FAFAFA;
+
+    /* cool-gray-200 */
+    --text-secondary: #E5E7EB;
+
+    /* cool-gray-500*/
+    --border: #6B7280;
+
+    /* tracer-100*/
+    --primary: #DEDEFF;
+
+    /* cool-gray-800 */
+    --button-bg: #1F2A37;
+
+    /* cool-gray-700 */
+    --button-bg-hover: #374151;
+}
+
+html.theme-matrix {
+    /* cool-gray-900 */
+    --background: #020204;
+
+    --background-secondary: #003b00;
+
+    --background-nav-secondary: #020204;
+
+    --text: #22b455;
+
+    --text-secondary: #80ce87;
+
+    --border: #008f11;
+
+    --primary: #00ff41;
+
+    --button-bg: #003b00;
+
+    --button-bg-hover: #020204;
+}
+
+.no-focus-outline:focus {
+    outline: none;
 }

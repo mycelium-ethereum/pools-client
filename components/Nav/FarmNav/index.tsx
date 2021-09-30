@@ -6,8 +6,9 @@ const POOLTOKEN = 0;
 const BPT = 1;
 
 const item =
-    'inline min-w-[130px] my-auto mx-2 py-1.5 px-3 text-gray-700 rounded-xl transition-all cursor-pointer text-base whitespace-nowrap hover:bg-gray-50 hover:shadow-sm';
-const selected = 'bg-white hover:bg-white hover:shadow-none';
+    'inline min-w-[130px] my-auto mx-2 py-1.5 px-3 text-theme-text-secondary rounded-xl transition-all cursor-pointer text-base hover:shadow-sm hover:bg-theme-background-secondary';
+const selected = 'bg-theme-background-secondary hover:shadow-none';
+const unselected = '';
 
 // const FarmNav
 export default (({ left, right }) => {
@@ -37,18 +38,18 @@ export default (({ left, right }) => {
     };
 
     return (
-        <div className="relative flex w-full h-[60px] text-center bg-tracer-50">
+        <div className="relative flex w-full py-2 text-center bg-theme-background-nav-secondary matrix:bg-transparent">
             <div className="absolute left-0 top-0 bottom-0 flex items-center">{left}</div>
             <div className="flex flex-grow justify-center">
                 <div
                     onClick={(_e) => handleRoute(POOLTOKEN)}
-                    className={classNames(router.pathname === '/stakepooltoken' ? selected : '', item)}
+                    className={classNames(router.pathname === '/stakepooltoken' ? selected : unselected, item)}
                 >
                     Stake Pool Tokens
                 </div>
                 <div
                     onClick={(_e) => handleRoute(BPT)}
-                    className={classNames(router.pathname === '/stakebpt' ? selected : '', item)}
+                    className={classNames(router.pathname === '/stakebpt' ? selected : unselected, item)}
                 >
                     Stake BPT
                 </div>

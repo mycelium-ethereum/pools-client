@@ -14,7 +14,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
         <TWModal open={state.filterModalOpen} onClose={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
             <div className="p-6">
                 <div className="flex justify-between items-center">
-                    <h3 className="text-xl">Filter Data</h3>
+                    <h3 className="text-theme-text text-xl">Filter Data</h3>
                     <button className="text-xl" onClick={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
                         &times;
                     </button>
@@ -27,7 +27,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-gray-800 font-bold mb-1">Power Leverage</h4>
+                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Power Leverage</h4>
                     <Select
                         className="w-1/2"
                         value={state.leverage}
@@ -36,7 +36,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-gray-800 font-bold mb-1">Side</h4>
+                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Side</h4>
                     <Select
                         className="w-1/2"
                         value={state.side}
@@ -45,7 +45,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-gray-800 font-bold mb-1">Sort</h4>
+                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Sort</h4>
                     <Select
                         className="w-1/2"
                         value={state.sortBy}
