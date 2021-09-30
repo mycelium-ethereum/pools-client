@@ -17,14 +17,9 @@ export default (() => {
             let mints = 0,
                 burns = 0,
                 nextUpdate = 0;
-            const accountLower = account.toLowerCase();
+            const accountLower = account?.toLowerCase();
             Object.values(commits).map((commit) => {
-                try {
-                    if (commit.from.toLowerCase() !== accountLower) {
-                        return;
-                    }
-                } catch (err) {
-                    console.error(`Failed to check commit. Account: ${accountLower.slice}, commit: ${commit?.from?.slice()}`, err)
+                if (commit.from?.toLowerCase() !== accountLower) {
                     return;
                 }
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {

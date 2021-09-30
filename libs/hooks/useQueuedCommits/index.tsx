@@ -21,17 +21,12 @@ export default ((focus) => {
             const parsedCommits = [];
             const accountLower = account?.toLowerCase();
             for (const commit of Object.values(commits)) {
-                try {
-                    if (
-                        !pools[commit.pool] || // pools doesnt exist
-                        commit.from?.toLowerCase() !== accountLower || // not committed by connected account
-                        (focus === CommitsFocusEnum.mints &&
-                            (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
-                    ) {
-                        continue;
-                    }
-                } catch (err) {
-                    console.error('Failed to check commit', commit);
+                if (
+                    !pools[commit.pool] || // pools doesnt exist
+                    commit.from?.toLowerCase() !== accountLower || // not committed by connected account
+                    (focus === CommitsFocusEnum.mints &&
+                        (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
+                ) {
                     continue;
                 }
                 const {
