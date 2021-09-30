@@ -14,6 +14,8 @@ export default (({ account, className }) => {
     const router = useRouter();
 
     const handleRoute = (route: string) => {
+        const root = document.getElementById('__next');
+        root?.classList.remove('overflow-hidden');
         router.push({
             pathname: route,
         });

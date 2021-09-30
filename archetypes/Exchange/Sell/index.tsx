@@ -58,7 +58,7 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, invalidAmount } = swapState;
+    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -194,7 +194,7 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} receiveIn={receiveIn} />
 
-            <FeeNote poolName={pool.name} isMint={false} receiveIn={receiveIn} />
+            <FeeNote poolName={pool.name} isMint={commitAction === CommitActionEnum.mint} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
