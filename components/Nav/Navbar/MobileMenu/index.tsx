@@ -7,6 +7,7 @@ import NetworkDropdown from '../NetworkDropdown';
 import AccountDropdown from '../AccountDropdown';
 
 import { useRouter } from 'next/router';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 export default (({ account, className }) => {
     const [open, setOpen] = useState(false);
@@ -76,6 +77,9 @@ export default (({ account, className }) => {
                                         >
                                             <img className="inline mr-2" src={'/img/general/stake.svg'} />
                                             Stake
+                                        </div>
+                                        <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
+                                            <ThemeSwitcher />
                                         </div>
                                     </div>
                                     <style>{`
