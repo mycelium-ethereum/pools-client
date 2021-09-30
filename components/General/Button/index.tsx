@@ -12,7 +12,7 @@ const SIZE: Record<ButtonSize, string> = {
 const VARIANT: Record<ButtonVariant, string> = {
     default: 'bg-transparent opacity-80 hover:opacity-100',
     primary:
-        'bg-tracer-800 matrix:bg-theme-primary matrix:text-theme-background text-white w-full hover:bg-tracer-900 disabled:hover:bg-tracer-800 disabled:opacity-50 focus:ring focus:ring-tracer-300',
+        'bg-tracer-500 matrix:bg-theme-primary matrix:text-theme-background dark:bg-tracer-500 text-white w-full hover:bg-tracer-600 disabled:hover:bg-tracer-800 disabled:opacity-50 focus:ring focus:ring-tracer-300',
     'primary-light':
         'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-transparent border border-tracer-500 dark:border-cool-gray-400 matrix:border-theme-border text-theme-text w-full hover:bg-opacity-50 dark:hover:bg-opacity-50 matrix:hover:opacity-50 disabled:opacity-50',
     transparent:
