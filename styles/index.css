@@ -134,7 +134,7 @@ body > div:first-child {
     text-decoration: underline;
 }
 .ant-tooltip-arrow-content {
-    background-color: white;
+    background-color: var(--background);
 }
 @tailwind base;
 

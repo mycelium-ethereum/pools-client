@@ -80,6 +80,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
     );
 };
 
+// const SellSummary
 export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
@@ -101,11 +102,11 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
             open={!!pool.name}
             className={classNames(
                 'border-2x border text-base',
-                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+                !!pool.name ? 'border-theme-border' : 'border-transparent',
             )}
         >
             <div className="relative border-box px-4 pt-4 pb-2">
-                <h2>
+                <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size={'md'} ticker="USDC" />
                     USDC
                 </h2>
