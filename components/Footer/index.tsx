@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 
+import GitbookLogo from '@public/img/socials/gitbook.svg';
 import DiscourseLogo from '@public/img/socials/discourse.svg';
 import TwitterLogo from '@public/img/socials/twitter.svg';
 import GitHubLogo from '@public/img/socials/github.svg';
@@ -14,6 +15,14 @@ const Footer: React.FC = () => {
             <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
                 <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
                 <div className="flex my-6 lg:my-0 ">
+                    <a
+                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        href="https://docs.tracer.finance"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <GitbookLogo />
+                    </a>
                     <a
                         className="my-auto mx-2 transition-opacity hover:opacity-80"
                         href="https://discourse.tracer.finance"
