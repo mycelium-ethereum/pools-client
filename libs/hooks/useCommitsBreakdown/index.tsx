@@ -13,7 +13,7 @@ export default (() => {
     const [nextUpdate, setNextUpdate] = useState<number>(0);
 
     useEffect(() => {
-        if (commits && Object.keys(pools).length) {
+        if (commits && Object.keys(pools).length && account) {
             let mints = 0,
                 burns = 0,
                 nextUpdate = 0;
