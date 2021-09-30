@@ -9,7 +9,7 @@ import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcAPY, calcBptTokenPrice } from '@libs/utils/calcs';
 
 // TODO: use an actual price
 const TCR_PRICE = new BigNumber('0.10');
@@ -22,7 +22,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
             <Table>
                 <TableHeader className="uppercase">
                     <span>Strategy</span>
-                    <span>APR</span>
+                    <span>APY/APR</span>
                     <span>TVL (USDC)</span>
                     <span>My Staked (TOKENS/USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
@@ -133,7 +133,7 @@ const PoolRow: React.FC<{
                     )}
                 </div>
             </div>
-            <span>{apr.times(100).toFixed(2)}%</span>
+            <span>{`${calcAPY(apr).times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`}</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>
