@@ -57,7 +57,7 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                     </div>
                 </div>
                 <div className="flex flex-col w-full px-5 lg:px-0 lg:w/80">
-                    <div className="my-0 mx-auto transition-all content">{children}</div>
+                    <div className="my-0 mx-auto transition-all content max-w-screen-md">{children}</div>
                     <style>{`
                         .content a {
                             text-decoration: underline;
@@ -83,16 +83,6 @@ export const Title: React.FC = ({ children }) => <div className="mt-6 mb-2 text-
 
 export const Subtitle: React.FC = ({ children }) => <div className="pb-4 font-bold">{children}</div>;
 
-export const Paragraph: React.FC = ({ children }) => <p className="py-2 max-w-screen-md">{children}</p>;
+export const Paragraph: React.FC = ({ children }) => <p className="py-2">{children}</p>;
 
-export const List: React.FC = ({ children }) => (
-    <ul className="max-w-screen-md mb-4">
-        {children}
-        <style>{`
-            .list {
-                list-style: unset;
-                padding-inline-start: 16px;
-            }
-        `}</style>
-    </ul>
-);
+export const List: React.FC = ({ children }) => <ul className="mb-4 list-disc pl-4">{children}</ul>;

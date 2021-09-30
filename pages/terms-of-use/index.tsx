@@ -229,7 +229,7 @@ const Terms: React.FC = () => {
                 at hello@tracer.finance. By using the Site or Services, you confirm that you will not use the Site or
                 Services to do any of the following:
             </Paragraph>
-            <List>
+            <ul>
                 <li>
                     violate any Applicable Laws including, without limitation, any relevant and applicable anti-money
                     laundering and anti-terrorist financing laws and sanctions programs and legislation;
@@ -278,7 +278,7 @@ const Terms: React.FC = () => {
                     encourage, induce or assist any third party, or yourself attempt, to engage in any of the activities
                     prohibited under this Section 5 or any other provision of these Terms.
                 </li>
-            </List>
+            </ul>
             <Title>6. CONTENT</Title>
             <Paragraph>
                 You hereby grant to us a royalty-free, fully paid-up, sublicensable, transferable, perpetual,
