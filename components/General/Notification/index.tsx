@@ -8,7 +8,7 @@ import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -134,14 +134,18 @@ const Hashie: React.FC<HProps | any> = ({
     const appearance = appearances[appearance_] ?? appearances['info']; //default info
     let children_ = React.Children.toArray(children);
     return (
-        <ToastWrapper
+        <div
+            className={classNames(
+                'relative flex  flex-col overflow-hidden rounded-3xl mb-2 mr-2 p-6 w-[25rem] bg-theme-background shadow  '
+            )}
+
             style={{
                 transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1), opacity ${transitionDuration}ms`,
                 cursor: 'default',
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <div className="text-cool-gray-900 text-base font-bold mb-2">
+            <div className="text-theme-text text-base font-bold mb-2">
                 <span className="mr-2">
                     {appearance.icon}
                 </span>
@@ -152,7 +156,7 @@ const Hashie: React.FC<HProps | any> = ({
                 <Close className="absolute h-3 w-3 top-[2rem] right-6 cursor-pointer" onClick={onDismiss}/>
             </div>
             <Content>{children_[1]}</Content>
-        </ToastWrapper>
+        </div>
     );
 };
 
@@ -176,26 +180,4 @@ Hashie.defaultProps = {
     }
 };
 
-const ToastWrapper = styled.div`
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 0.5rem;
-    margin-right: 0.5rem;
-    border-radius: 0.375rem;
-    max-width: 25rem;
-    width: 25rem;
-    display: flex;
-    flex-direction: column;
-
-    background: #FFFFFF;
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-    padding: 1.5rem;
-
-    &:hover ${Close} {
-        opacity: 1;
-    }
-`
-
 export const Notification = ({ children, ...props }: any) => <Hashie {...props}>{children}</Hashie>;
-

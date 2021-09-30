@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -8,12 +7,12 @@ import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import Modal, { ModalInner } from '@components/General/Modal';
+import { TWModal } from '@components/General/TWModal';
 import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 // import BigNumber from 'bignumber.js';
@@ -55,9 +54,9 @@ export default (() => {
     );
 
     return (
-        <PendingCommitsModal show={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
+        <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
-                <h1 className="text-bold font-size[30px] text-cool-gray-900">
+                <h1 className="text-bold font-size[30px] text-theme-text">
                     {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
@@ -95,16 +94,9 @@ export default (() => {
                     </>
                 )}
             </Table>
-        </PendingCommitsModal>
+        </TWModal>
     );
 }) as React.FC;
-
-const PendingCommitsModal = styled(Modal)`
-    ${ModalInner} {
-        max-width: 1010px;
-        height: 700px;
-    }
-`;
 
 const BuyRow: React.FC<
     QueuedCommit & {

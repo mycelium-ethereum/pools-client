@@ -35,7 +35,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeve
                 ) : null}
                 {!hideSideFilter ? (
                     <div>
-                        <h3 className="mb-1">Side</h3>
+                        <h3 className="mb-1 text-theme-text">Side</h3>
                         <Dropdown
                             value={state.side}
                             options={Object.values(SideFilterEnum).map((key) => ({ key }))}
@@ -45,7 +45,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeve
                 ) : null}
                 <div className="flex-grow" />
                 <div>
-                    <h3 className="mb-1">Sort</h3>
+                    <h3 className="mb-1 text-theme-text">Sort</h3>
                     <Dropdown
                         value={state.sortBy}
                         options={Object.values(SortByEnum).map((key) => ({ key: key }))}
