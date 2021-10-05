@@ -12,7 +12,7 @@ import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@libs/utils/calcs';
 
 // TODO: use an actual price
-const TCR_PRICE = new BigNumber('0.10');
+const TCR_PRICE = new BigNumber('0.25');
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
     const [showModal, setShowModal] = useState(false);
