@@ -4,7 +4,7 @@ import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
 
 export default (() => {
-    const { farms, refreshFarm, fetchingFarms } = useFarms();
+    const { farms, refreshFarm, fetchingFarms, tcrUSDCPrice } = useFarms();
     return (
         <>
             <StakeGeneric
@@ -15,6 +15,7 @@ export default (() => {
                 refreshFarm={refreshFarm}
                 farms={farms}
                 fetchingFarms={fetchingFarms}
+                tcrUSDCPrice={tcrUSDCPrice}
             />
         </>
     );

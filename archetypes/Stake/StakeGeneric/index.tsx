@@ -60,6 +60,7 @@ export default (({
     hideLeverageFilter,
     hideSideFilter,
     fetchingFarms,
+    tcrUSDCPrice,
 }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
@@ -367,6 +368,7 @@ export default (({
                     <FarmsTable
                         rows={sortedFilteredFarms}
                         fetchingFarms={fetchingFarms}
+                        tcrUSDCPrice={tcrUSDCPrice}
                         onClickClaim={handleClaim}
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
@@ -395,6 +397,7 @@ export default (({
     hideLeverageFilter?: boolean;
     hideSideFilter?: boolean;
     fetchingFarms: boolean;
+    tcrUSDCPrice: BigNumber;
 }>;
 
 const StakeModalWithState: React.FC<{
