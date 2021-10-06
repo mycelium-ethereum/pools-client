@@ -35,6 +35,8 @@ export type Network = {
     knownUSDCPriceFeeds: {
         [address: string]: string;
     };
+    tcrAddress: string;
+    sushiRouterAddress: string;
 };
 
 /**
@@ -58,6 +60,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        tcrAddress: '',
+        sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
     '421611': {
@@ -87,6 +91,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        tcrAddress: '',
+        sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
     '42161': {
@@ -185,6 +191,8 @@ export const networkConfig: Record<string, Network> = {
             // wETH: ETH/USD
             '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
         },
+        sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
+        tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
     },
     '1337': {
         name: 'Local',
@@ -203,5 +211,7 @@ export const networkConfig: Record<string, Network> = {
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
+        sushiRouterAddress: '',
+        tcrAddress: '',
     },
 };

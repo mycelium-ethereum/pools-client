@@ -11,10 +11,7 @@ import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@libs/utils/calcs';
 
-// TODO: use an actual price
-const TCR_PRICE = new BigNumber('0.25');
-
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -35,6 +32,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             key={`${farm}-${index}`}
                             farm={farm}
                             index={index}
+                            tcrUSDCPrice={tcrUSDCPrice}
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
@@ -82,21 +80,23 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
+    tcrUSDCPrice: BigNumber;
 }>;
 
 const PoolRow: React.FC<{
     farm: FarmTableRowData;
     index: number;
+    tcrUSDCPrice: BigNumber;
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
         () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
         [farm],
     );
 
-    const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
+    const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
 
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
