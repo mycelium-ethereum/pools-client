@@ -58,3 +58,6 @@ export const ARBITRUM = '42161';
 export const KOVAN = '42';
 
 export const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');
+
+export const TCR_DECIMALS = 18;
+export const USDC_DECIMALS = 6;
