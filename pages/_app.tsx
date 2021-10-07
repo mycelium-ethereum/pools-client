@@ -26,6 +26,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
             api.init();
             api.show(USERSNAP_API_KEY);
         };
+        (window as any).newFunctionNotDefined();
     }, []);
 
     return (
