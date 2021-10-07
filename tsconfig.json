@@ -55,7 +55,7 @@
     "next-env.d.ts",
     "next.config.js",
     "node_modules/@tracer-protocol/perpetual-pools-contracts"
-  ],
+, "pages/_error.js"  ],
   "exclude": [
     "public/static/*"
   ]
