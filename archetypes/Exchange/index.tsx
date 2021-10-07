@@ -7,7 +7,7 @@ import Buy from './Buy';
 import Sell from './Sell';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import OnboardModal from '@components/OnboardModal';
+import OnboardModal from '@components/OnboardModal/Trade';
 
 const TRADE_OPTIONS = [
     {
@@ -26,7 +26,9 @@ export default (() => {
 
     useEffect(() => {
         const timeout = setTimeout(() => {
-            setShowOnboardModal(true);
+            if (localStorage.getItem('onboard.completedTutorial') !== 'true') {
+                setShowOnboardModal(true);
+            }
         }, 3000);
 
         return () => clearTimeout(timeout);
@@ -58,7 +60,13 @@ export default (() => {
                 {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
             </div>
 
-            <OnboardModal showOnboardModal={showOnboardModal} setShowOnboardModal={() => setShowOnboardModal(false)} />
+            <OnboardModal
+                showOnboardModal={showOnboardModal}
+                setShowOnboardModal={() => {
+                    setShowOnboardModal(false);
+                    localStorage.setItem('onboard.completedTutorial', 'true');
+                }}
+            />
         </div>
     );
 }) as React.FC;
