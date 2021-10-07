@@ -4,17 +4,14 @@ import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
-import Modal from '@components/General/Modal';
-import Close from '/public/img/general/close-black.svg';
+import { TWModal } from '@components/General/TWModal';
+import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@libs/utils/calcs';
 
-// TODO: use an actual price
-const TCR_PRICE = new BigNumber('0.10');
-
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -35,6 +32,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             key={`${farm}-${index}`}
                             farm={farm}
                             index={index}
+                            tcrUSDCPrice={tcrUSDCPrice}
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
@@ -43,7 +41,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 })}
             </Table>
             {fetchingFarms ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <Modal show={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalance Rate</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
@@ -73,7 +71,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC<{
@@ -82,21 +80,23 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
+    tcrUSDCPrice: BigNumber;
 }>;
 
 const PoolRow: React.FC<{
     farm: FarmTableRowData;
     index: number;
+    tcrUSDCPrice: BigNumber;
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index }) => {
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
         () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
         [farm],
     );
 
-    const aprNumerator = farm.rewardsPerYear.times(TCR_PRICE);
+    const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
     const aprDenominator = tokenPrice.times(farm.totalStaked);
 
     const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);

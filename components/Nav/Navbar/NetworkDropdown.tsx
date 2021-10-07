@@ -1,5 +1,4 @@
 import React from 'react';
-import { SelectOption } from '@components/General/Input';
 import { Logo } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
@@ -10,6 +9,9 @@ import TWPopup from '@components/General/TWPopup';
 // @ts-ignore
 import Error from 'public/img/general/error.svg';
 import Icon from '@ant-design/icons';
+
+const option =
+    'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
 
 export default (({ className }) => {
     const { provider, network = '0' } = useWeb3();
@@ -25,12 +27,16 @@ export default (({ className }) => {
                 />
             }
         >
-            <SelectOption value={ARBITRUM} onClick={() => switchNetworks(provider, ARBITRUM)}>
+            <option className={option} value={ARBITRUM} onClick={() => switchNetworks(provider, ARBITRUM)}>
                 Arbitrum
-            </SelectOption>
-            <SelectOption value={ARBITRUM_RINKEBY} onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}>
+            </option>
+            <option
+                className={option}
+                value={ARBITRUM_RINKEBY}
+                onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}
+            >
                 Arbitrum Rinkeby
-            </SelectOption>
+            </option>
         </TWPopup>
     );
 }) as React.FC<{

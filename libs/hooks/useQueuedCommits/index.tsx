@@ -7,7 +7,7 @@ import { calcTokenPrice } from '@libs/utils/calcs';
 import { useCommits } from '@context/UsersCommitContext';
 
 export default ((focus) => {
-    const { account, provider } = useWeb3();
+    const { account = '', provider } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools } = usePools();
     const [allQueuedCommits, setAllQueuedCommits] = useState<QueuedCommit[]>([]);
@@ -16,11 +16,11 @@ export default ((focus) => {
         // filter user commits
         if (pools && Object.keys(pools).length && provider && account) {
             const parsedCommits = [];
-            const accountLower = account.toLowerCase();
+            const accountLower = account?.toLowerCase();
             for (const commit of Object.values(commits)) {
                 if (
                     !pools[commit.pool] || // pools doesnt exist
-                    commit.from.toLowerCase() !== accountLower || // not committed by connected account
+                    commit.from?.toLowerCase() !== accountLower || // not committed by connected account
                     (focus === CommitsFocusEnum.mints &&
                         (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
                 ) {

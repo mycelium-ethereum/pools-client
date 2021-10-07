@@ -1,21 +1,30 @@
 import React from 'react';
 import Link from 'next/link';
 
-import DiscourseLogo from '/public/img/socials/discourse.svg';
-import TwitterLogo from '/public/img/socials/twitter.svg';
-import GitHubLogo from '/public/img/socials/github.svg';
-import DiscordLogo from '/public/img/socials/discord.svg';
+import GitbookLogo from '@public/img/socials/gitbook.svg';
+import DiscourseLogo from '@public/img/socials/discourse.svg';
+import TwitterLogo from '@public/img/socials/twitter.svg';
+import GitHubLogo from '@public/img/socials/github.svg';
+import DiscordLogo from '@public/img/socials/discord.svg';
 
-const item = 'ml-0 mb-4 lg:mb-0 lg:ml-8 last:mb-0';
+const item = 'ml-0 mb-4 lg:mb-0 ml-0 lg:ml-4 last:mb-0';
 
 const Footer: React.FC = () => {
     return (
-        <div className={'container mt-auto py-4 text-gray-900'}>
+        <div className={'container mt-auto py-4'}>
             <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
                 <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
                 <div className="flex my-6 lg:my-0 ">
                     <a
-                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        className="my-auto mr-4 transition-opacity hover:opacity-80"
+                        href="https://docs.tracer.finance"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        <GitbookLogo />
+                    </a>
+                    <a
+                        className="my-auto mr-4 transition-opacity hover:opacity-80"
                         href="https://discourse.tracer.finance"
                         target="_blank"
                         rel="noreferrer"
@@ -23,7 +32,7 @@ const Footer: React.FC = () => {
                         <DiscourseLogo />
                     </a>
                     <a
-                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        className="my-auto mr-4 transition-opacity hover:opacity-80"
                         href="https://twitter.com/TracerDAO"
                         target="_blank"
                         rel="noreferrer"
@@ -31,7 +40,7 @@ const Footer: React.FC = () => {
                         <TwitterLogo />
                     </a>
                     <a
-                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        className="my-auto mr-4 transition-opacity hover:opacity-80"
                         href="https://github.com/tracer-protocol"
                         target="_blank"
                         rel="noreferrer"
@@ -39,7 +48,7 @@ const Footer: React.FC = () => {
                         <GitHubLogo />
                     </a>
                     <a
-                        className="my-auto mx-2 transition-opacity hover:opacity-80"
+                        className="my-auto transition-opacity hover:opacity-80"
                         href="https://discord.com/invite/kddBUqDVVb"
                         target="_blank"
                         rel="noreferrer"

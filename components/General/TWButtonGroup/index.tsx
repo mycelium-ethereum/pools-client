@@ -1,10 +1,25 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+
+// the difference here is the bg on unselected
 const SELECTED = {
-    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 text-white border-none focus:border-none ',
-    default: 'z-10 bg-tracer-800 hover:bg-tracer-800 text-white border-none focus:border-none ',
+    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-green-500',
+    default:
+        'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500',
 };
+
+const UNSELECTED = {
+    tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
+    default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
+};
+
+const BORDER_COLORS = {
+    default: '',
+    tracer: 'border border-theme-border focus:border-solid',
+};
+
+const BORDERS = 'first:rounded-l-md last:rounded-r-md';
 
 const SIZE = {
     default: 'px-4 py-2 text-sm font-medium ',
@@ -13,9 +28,7 @@ const SIZE = {
 };
 
 const DISABLED = 'cursor-not-allowed opacity-50';
-const BORDERS = 'first:rounded-l-md last:rounded-r-md ';
-const DEFAULT_BUTTON =
-    'relative inline-flex items-center border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:outline-none focus:border-solid';
+const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all no-focus-outline';
 
 type Option = {
     key: number;
@@ -29,7 +42,7 @@ type Option = {
 type Color = 'tracer' | 'default';
 type ButtonSize = 'lg' | 'xl' | 'default';
 
-export default (({ options, value, color = 'default', size = 'default', onClick }) => {
+export default (({ options, value, color = 'default', size = 'default', borderColor = 'default', onClick }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
     return (
         <span className="relative z-0 inline-flex shadow-sm">
@@ -39,11 +52,13 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         <button
                             type="button"
                             data-tip
+                            disabled={true}
                             data-for={`${option.text}`}
                             onClick={() => onClick(option.key)}
                             className={classNames(
                                 DISABLED,
                                 buttonClass,
+                                BORDER_COLORS[borderColor],
                                 index === options.length - 1 ? 'rounded-r-md' : '',
                             )}
                         >
@@ -55,7 +70,12 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
                         key={`twbg-${option.key}`}
                         type="button"
                         onClick={() => onClick(option.key)}
-                        className={classNames(value === option.key ? SELECTED[color] : '', buttonClass, BORDERS)}
+                        className={classNames(
+                            value === option.key ? SELECTED[color] : UNSELECTED[color],
+                            buttonClass,
+                            BORDER_COLORS[borderColor],
+                            BORDERS,
+                        )}
                     >
                         {option.text}
                     </button>
@@ -67,6 +87,7 @@ export default (({ options, value, color = 'default', size = 'default', onClick 
     onClick: (key: number) => any;
     color?: Color;
     size?: ButtonSize;
+    borderColor?: Color;
     options: Option[];
     value: number; // key
 }>;
