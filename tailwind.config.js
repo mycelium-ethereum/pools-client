@@ -9,9 +9,6 @@ module.exports = {
     ],
 
     theme: {
-        borderWidth: {
-            0.5: '0.5px',
-        },
         themeVariants: ['dark', 'matrix'],
         container: {
             center: true,
