@@ -10,6 +10,7 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@libs/utils/calcs';
+import { APYTip } from '@components/Tooltips';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
     const [showModal, setShowModal] = useState(false);
@@ -19,7 +20,9 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
             <Table>
                 <TableHeader className="uppercase">
                     <span>Strategy</span>
-                    <span>APY/APR</span>
+                    <span>
+                        <APYTip>APY</APYTip>/APR
+                    </span>
                     <span>TVL (USDC)</span>
                     <span>My Staked (TOKENS/USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
