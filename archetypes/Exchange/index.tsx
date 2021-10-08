@@ -7,7 +7,7 @@ import Buy from './Buy';
 import Sell from './Sell';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import OnboardModal from '@components/OnboardModal/Trade';
+import OnboardTradeModal from '@components/OnboardModal/Trade';
 
 const TRADE_OPTIONS = [
     {
@@ -22,16 +22,15 @@ const TRADE_OPTIONS = [
 
 export default (() => {
     const { swapState, swapDispatch } = useContext(SwapContext);
-    const [showOnboardModal, setShowOnboardModal] = useState(false);
+    const [showOnboardTradeModal, setShowOnboardTradeModal] = useState(false);
 
     useEffect(() => {
-        const timeout = setTimeout(() => {
-            if (localStorage.getItem('onboard.completedTutorial') !== 'true') {
-                setShowOnboardModal(true);
-            }
-        }, 3000);
-
-        return () => clearTimeout(timeout);
+        if (localStorage.getItem('onboard.completedTradeTutorial') !== 'true') {
+            const timeout = setTimeout(() => {
+                setShowOnboardTradeModal(true);
+            }, 3000);
+            return () => clearTimeout(timeout);
+        }
     }, []);
 
     return (
@@ -60,11 +59,11 @@ export default (() => {
                 {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
             </div>
 
-            <OnboardModal
-                showOnboardModal={showOnboardModal}
+            <OnboardTradeModal
+                showOnboardModal={showOnboardTradeModal}
                 setShowOnboardModal={() => {
-                    setShowOnboardModal(false);
-                    localStorage.setItem('onboard.completedTutorial', 'true');
+                    setShowOnboardTradeModal(false);
+                    localStorage.setItem('onboard.completedTradeTutorial', 'true');
                 }}
             />
         </div>

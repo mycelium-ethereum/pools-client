@@ -9,8 +9,8 @@ interface OnboardModalProps {
     showOnboardModal: boolean;
     setShowOnboardModal: () => any;
 }
-const OnboardModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setShowOnboardModal }) => {
-    const [onboardStep, setOnboardStep] = useState(1);
+const OnboardTradeModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setShowOnboardModal }) => {
+    const [onboardStep, setOnboardStep] = useState<number>(1);
     const OnboardContent = () => {
         switch (onboardStep) {
             case 1:
@@ -25,11 +25,11 @@ const OnboardModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setShowOn
                         </div>
                         <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
                         <div className="flex">
-                            <Button variant="primary" className="mr-5" onClick={() => setOnboardStep(onboardStep + 1)}>
-                                Show me around
-                            </Button>
-                            <Button variant="primary-light" onClick={() => setShowOnboardModal()}>
+                            <Button variant="primary-light" className="mr-5" onClick={() => setShowOnboardModal()}>
                                 Get started
+                            </Button>
+                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                                Show me around
                             </Button>
                         </div>
                     </>
@@ -199,4 +199,4 @@ const OnboardModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setShowOn
     );
 };
 
-export default OnboardModal;
+export default OnboardTradeModal;
