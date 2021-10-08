@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
@@ -6,11 +6,17 @@ import Button from '@components/General/Button';
 import Close from '/public/img/general/close.svg';
 
 interface OnboardModalProps {
+    onboardStep: number;
+    setOnboardStep: React.Dispatch<React.SetStateAction<number>>;
     showOnboardModal: boolean;
     setShowOnboardModal: () => any;
 }
-const OnboardStakeModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setShowOnboardModal }) => {
-    const [onboardStep, setOnboardStep] = useState<number>(1);
+const OnboardStakeModal: React.FC<OnboardModalProps> = ({
+    onboardStep,
+    setOnboardStep,
+    showOnboardModal,
+    setShowOnboardModal,
+}) => {
     const OnboardContent = () => {
         switch (onboardStep) {
             case 1:
@@ -26,12 +32,16 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setS
                                 Staking
                             </a>
                         </div>
-                        <div className="flex">
-                            <Button variant="primary-light" className="mr-5" onClick={() => setShowOnboardModal()}>
-                                Get started
+                        <div className="flex flex-col sm:flex-row">
+                            <Button
+                                variant="primary"
+                                className="mr-5 mb-3 sm:mb-0"
+                                onClick={() => setOnboardStep(onboardStep + 1)}
+                            >
+                                Sure, show me around!
                             </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
-                                Show me around
+                            <Button variant="primary-light" onClick={() => setShowOnboardModal()}>
+                                {`No thanks, I'd like to get started`}
                             </Button>
                         </div>
                     </>

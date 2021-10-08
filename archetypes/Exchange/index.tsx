@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import { SwapContext } from '@context/SwapContext';
 import { CommitActionEnum } from '@libs/constants';
@@ -7,7 +7,6 @@ import Buy from './Buy';
 import Sell from './Sell';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import OnboardTradeModal from '@components/OnboardModal/Trade';
 
 const TRADE_OPTIONS = [
     {
@@ -22,16 +21,6 @@ const TRADE_OPTIONS = [
 
 export default (() => {
     const { swapState, swapDispatch } = useContext(SwapContext);
-    const [showOnboardTradeModal, setShowOnboardTradeModal] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('onboard.completedTradeTutorial') !== 'true') {
-            const timeout = setTimeout(() => {
-                setShowOnboardTradeModal(true);
-            }, 3000);
-            return () => clearTimeout(timeout);
-        }
-    }, []);
 
     return (
         <div className="w-full justify-center">
@@ -58,14 +47,6 @@ export default (() => {
                 {/** Inputs */}
                 {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
             </div>
-
-            <OnboardTradeModal
-                showOnboardModal={showOnboardTradeModal}
-                setShowOnboardModal={() => {
-                    setShowOnboardTradeModal(false);
-                    localStorage.setItem('onboard.completedTradeTutorial', 'true');
-                }}
-            />
         </div>
     );
 }) as React.FC;
