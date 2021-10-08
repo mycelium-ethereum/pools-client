@@ -44,7 +44,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({ showOnboardModal, setS
                         <div className="text-sm mb-8">
                             Staking for Balancer Pool Tokens (BPT) is now available. Provide token liquidity on Balancer
                             to earn more TCR.
-                            {`We're excited by what's possible with Perpetual Pool tokens. If you are too, join the `}
+                            {` We're excited by what's possible with Perpetual Pool tokens. If you are too, join the `}
                             <a href="https://discord.com/invite/kddBUqDVVb" target="_blank" rel="noreferrer">
                                 discord
                             </a>
