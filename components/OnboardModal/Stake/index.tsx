@@ -32,16 +32,16 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                                 Staking
                             </a>
                         </div>
-                        <div className="flex flex-col sm:flex-row">
+                        <div className="flex flex-col-reverse sm:flex-row">
                             <Button
-                                variant="primary"
-                                className="mr-5 mb-3 sm:mb-0"
-                                onClick={() => setOnboardStep(onboardStep + 1)}
+                                variant="primary-light"
+                                className="mr-5 mt-3 sm:mt-0"
+                                onClick={() => setShowOnboardModal()}
                             >
-                                Sure, show me around!
-                            </Button>
-                            <Button variant="primary-light" onClick={() => setShowOnboardModal()}>
                                 {`No thanks, I'd like to get started`}
+                            </Button>
+                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                                Sure, show me around!
                             </Button>
                         </div>
                     </>
