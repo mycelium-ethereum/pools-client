@@ -12,7 +12,7 @@ interface TWModalProps {
 type Size = 'default' | 'wide';
 
 const SIZES: Record<Size, string> = {
-    default: 'sm:max-w-xl',
+    default: 'sm:max-w-2xl',
     wide: 'max-w-[1010px] h-[700px]',
 };
 
