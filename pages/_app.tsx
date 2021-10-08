@@ -17,7 +17,11 @@ import { ThemeStore } from '@context/ThemeContext';
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
-const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
+interface WorkaroundAppProps extends AppProps {
+    err: any;
+}
+
+const App = ({ Component, pageProps, err }: WorkaroundAppProps) => { // eslint-disable-line
     useEffect(() => {
         // @ts-ignore
         window.onUsersnapCXLoad = function (api) {
@@ -82,7 +86,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                         <FactoryStore>
                             <TransactionStore>
                                 <UsersCommitStore>
-                                    <Component {...pageProps} />
+                                    <Component {...pageProps} err={err} />
                                 </UsersCommitStore>
                             </TransactionStore>
                         </FactoryStore>

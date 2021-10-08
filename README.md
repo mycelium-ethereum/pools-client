@@ -27,3 +27,14 @@ Occasionally npm struggles with the depending pinning so try yarn if you cannot 
 
 `npm install` or `yarn` then
 `npm run dev` or `yarn dev`
+
+
+## Sentry Configuration
+For use of cli with environment variables set the following values. Further details can be found [here](https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/#use-environment-variables).
+
+```
+SENTRY_URL=https://sentry.io/
+SENTRY_ORG=mycelium-ethereum
+SENTRY_PROJECT=tracer-pools
+SENTRY_AUTH_TOKEN=YOUR_SENTRY_AUTH_TOKEN
+```

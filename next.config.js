@@ -1,7 +1,24 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
+const { withSentryConfig } = require("@sentry/nextjs");
 
-module.exports = {
+const SentryWebpackPluginOptions = {
+  // Additional config options for the Sentry Webpack plugin. Keep in mind that
+  // the following options are set automatically, and overriding them is not
+  // recommended:
+  //   release, url, org, project, authToken, configFile, stripPrefix,
+  //   urlPrefix, include, ignore
+
+//   silent: true, // Suppresses all logs
+//   sentry: {
+//     disableServerWebpackPlugin: true,
+//     disableClientWebpackPlugin: true,
+//   },
+  // For all available options, see:
+  // https://github.com/getsentry/sentry-webpack-plugin#options.
+};
+
+module.exports = withSentryConfig({
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
@@ -65,4 +82,4 @@ module.exports = {
         );
         return config;
     },
-};
+}, SentryWebpackPluginOptions);
