@@ -15,7 +15,7 @@ import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {

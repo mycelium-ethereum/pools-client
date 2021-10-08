@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BrowseTableRowData } from '@archetypes/Browse/state';
 import { usePools } from '@context/PoolContext';
-import { calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
+import { calcRebalanceRate, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 // const useBrowsePools
 export default (() => {

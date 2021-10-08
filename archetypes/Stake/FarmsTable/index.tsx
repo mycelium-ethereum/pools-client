@@ -9,7 +9,7 @@ import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { calcAPY, calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { APYTip } from '@components/Tooltips';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {

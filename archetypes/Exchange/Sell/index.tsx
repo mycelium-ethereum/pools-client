@@ -9,7 +9,7 @@ import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
+import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
