@@ -46,12 +46,12 @@ export const NavBarContent: React.FC = () => {
     const [onboardStakeStep, setOnboardStakeStep] = useState<number>(1);
 
     useEffect(() => {
-        if (localStorage.getItem('onboard.completedTradeTutorial') !== 'true') {
+        if (localStorage.getItem('onboard.completedTradeTutorial') !== 'true' && (route === '' || route === 'browse')) {
             const timeout = setTimeout(() => {
                 setShowOnboardTradeModal(true);
             }, 3000);
             return () => clearTimeout(timeout);
-        } else if (localStorage.getItem('onboard.completedStakeTutorial') !== 'true') {
+        } else if (localStorage.getItem('onboard.completedStakeTutorial') !== 'true' && route.startsWith('stake')) {
             const timeout = setTimeout(() => {
                 setShowOnboardStakeModal(true);
             }, 3000);
