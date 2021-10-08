@@ -32,6 +32,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                                 Staking
                             </a>
                         </div>
+                        <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
                                 variant="primary-light"
