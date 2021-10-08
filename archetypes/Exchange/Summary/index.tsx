@@ -7,6 +7,7 @@ import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/util
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
+import Button from '@components/General/Button';
 
 type SummaryProps = {
     pool: Pool;
@@ -15,7 +16,7 @@ type SummaryProps = {
     receiveIn: number;
 };
 
-const countdown = 'absolute left-[1.5rem] top-[-1rem] text-sm z-[2] p-1.5 rounded bg-theme-background';
+const countdown = 'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-background';
 const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
 // const BuySummary
@@ -75,6 +76,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     {'Receive In'}
                     <TimeLeft className={timeLeft} targetTime={receiveIn} />
                 </div>
+                <BalancerLink tokenName={token.name} isBuy={true} />
             </div>
         </HiddenExpand>
     );
@@ -127,7 +129,34 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     {'Receive In'}
                     <TimeLeft className={timeLeft} targetTime={receiveIn} />
                 </div>
+                <BalancerLink tokenName={token.name} isBuy={false} />
             </div>
         </HiddenExpand>
     );
 };
+
+const USDC = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8';
+
+const balancerLink = (token: string, isBuy: boolean) =>
+    isBuy
+        ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${tokenMappings[token]}`
+        : `https://arbitrum.balancer.fi/#/trade/${tokenMappings[token]}/${USDC}`;
+
+const tokenMappings: Record<string, string> = {
+    '1L-ETH/USD': '0x38c0a5443c7427e65A9Bf15AE746a28BB9a052cc',
+    '1S-ETH/USD': '0xf581571DBcCeD3A59AaaCbf90448E7B3E1704dcD',
+    '3L-ETH/USD': '0xaA846004Dc01b532B63FEaa0b7A0cB0990f19ED9',
+    '3S-ETH/USD': '0x7d7E4f49a29dDA8b1eCDcf8a8bc85EdcB234E997',
+    '1L-BTC/USD': '0x1616bF7bbd60E57f961E83A602B6b9Abb6E6CAFc',
+    '1S-BTC/USD': '0x052814194f459aF30EdB6a506eABFc85a4D99501',
+    '3L-BTC/USD': '0x05A131B3Cd23Be0b4F7B274B3d237E73650e543d',
+};
+
+const BalancerLink: React.FC<{ tokenName: string; isBuy: boolean }> = ({ tokenName, isBuy }) => (
+    <div className="absolute right-6 -top-6 text-sm z-[2] p-1.5 rounded bg-theme-background flex items-center">
+        <span className="mr-2 whitespace-nowrap">Dont want to wait?</span>
+        <Button onClick={() => window.open(balancerLink(tokenName, isBuy), '_blank')} variant={'primary'} size={'sm'}>
+            {`${isBuy ? 'Buy' : 'Sell'} on Balancer`}
+        </Button>
+    </div>
+);
