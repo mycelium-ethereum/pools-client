@@ -33,7 +33,7 @@ export default (({ account, className }) => {
     };
 
     return (
-        <div className={classNames(`relative m-auto mr-0 overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog

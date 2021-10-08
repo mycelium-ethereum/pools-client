@@ -8,18 +8,17 @@ import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
-import Close from '/public/img/general/close.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-
-import Lock from '/public/img/general/lock.svg';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
+
+import QuestionMark from '/public/img/general/question-mark-circle.svg';
+import Close from '/public/img/general/close.svg';
+import Lock from '/public/img/general/lock.svg';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
