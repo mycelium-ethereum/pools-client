@@ -60,7 +60,7 @@ export const arbitrumContracts: {
             address: '0x578BAde599406A8fE3d24Fd7f7211c0911F5B29e',
             abi: IInbox__factory.abi,
         },
-        GATEWAY_ROUTER: {
+        L1_GATEWAY_ROUTER: {
             address: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
             abi: GatewayRouter__factory.abi,
         },
@@ -70,7 +70,27 @@ export const arbitrumContracts: {
             address: '0x0000000000000000000000000000000000000064',
             abi: ArbSys__factory.abi,
         },
-        GATEWAY_ROUTER: {
+        L1_GATEWAY_ROUTER: {
+            address: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
+            abi: GatewayRouter__factory.abi,
+        },
+    },
+    [MAINNET]: {
+        INBOX: {
+            address: '0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f',
+            abi: IInbox__factory.abi,
+        },
+        L1_GATEWAY_ROUTER: {
+            address: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
+            abi: GatewayRouter__factory.abi,
+        },
+    },
+    [ARBITRUM]: {
+        ARBSYS: {
+            address: '0x0000000000000000000000000000000000000064',
+            abi: ArbSys__factory.abi,
+        },
+        L1_GATEWAY_ROUTER: {
             address: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
             abi: GatewayRouter__factory.abi,
         },

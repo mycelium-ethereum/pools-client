@@ -129,7 +129,6 @@ export type BridgeableBalance = {
     balance: BigNumber;
     allowance: BigNumber;
     spender: string; // address that allowance corresponds to
-    approved: boolean;
 };
 
 export type BridgeableBalances = { [network: string]: { [symbol: string]: BridgeableBalance } };

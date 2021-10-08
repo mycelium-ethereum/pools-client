@@ -50,11 +50,11 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
     const [amount, setAmount] = useState(new BigNumber(0));
 
-    // useEffect(() => {
-    //     if(show) {
-    //         refreshBridgeableBalance(selectedAsset)
-    //     }
-    // }, [show])
+    useEffect(() => {
+        if (show) {
+            refreshBridgeableBalance(selectedAsset);
+        }
+    }, [show]);
 
     useEffect(() => {
         setSelectedAsset(bridgeableAssetList[selectedAssetIndex]);
@@ -171,6 +171,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <InputContainer className="w-full ">
                                 <Input
+                                    type="text"
                                     className="w-full h-full font-normal text-base"
                                     value={amount.eq(0) ? '' : amount.toFixed()}
                                     onUserInput={(val) => setAmount(new BigNumber(val || 0))}
@@ -184,7 +185,11 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     ) : null}
                                     <div
                                         className="m-auto cursor-pointer hover:underline"
-                                        onClick={(_e) => setAmount(selectedAssetBalance.balance)}
+                                        onClick={(_e) =>
+                                            selectedAssetBalance?.balance
+                                                ? setAmount(selectedAssetBalance.balance)
+                                                : null
+                                        }
                                     >
                                         Max
                                     </div>
