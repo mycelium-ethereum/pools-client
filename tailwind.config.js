@@ -58,7 +58,7 @@ module.exports = {
                 'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
                 'nav-bg': "url('/img/nav-bg.svg')",
                 'matrix-bg': "url('/img/matrix.gif')",
-            }
+            },
         },
     },
     variants: {
