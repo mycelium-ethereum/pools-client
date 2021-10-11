@@ -7,7 +7,7 @@ export default (() => {
     const { farms, refreshFarm, fetchingFarms, tcrUSDCPrice } = useFarms();
     return (
         <StakeGeneric
-            logo='BALANCER'
+            logo="BALANCER"
             title="Balancer Pool Token Strategies"
             subTitle="Stake Balancer Pool Tokens and earn TCR."
             tokenType="Balancer Pool"

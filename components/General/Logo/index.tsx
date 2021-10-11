@@ -34,7 +34,7 @@ const USDCLogo: React.FC<{
     className: string;
 }> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
-type LogoTicker =
+export type LogoTicker =
     | 'ETHERSCAN'
     | 'USDC'
     | 'ETH_L'
@@ -66,7 +66,7 @@ const logos: Record<LogoTicker, any> = {
     BTC: BTC,
     WBTC: BTC,
     SUSHI: SUSHI,
-    BALANCER: BALANCER
+    BALANCER: BALANCER,
 };
 
 type Size = 'sm' | 'md' | 'full';

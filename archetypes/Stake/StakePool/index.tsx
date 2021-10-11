@@ -9,7 +9,6 @@ export default (() => {
     return (
         <>
             <StakeGeneric
-                logo=""
                 title="Stake Tracer Pool Tokens"
                 subTitle="Stake Tracer Pool Tokens and earn TCR."
                 tokenType="Tracer Pool"
