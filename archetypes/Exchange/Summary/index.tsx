@@ -8,6 +8,8 @@ import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
 import Link from '/public/img/general/link.svg';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { ARBITRUM } from '@libs/constants';
 
 type SummaryProps = {
     pool: Pool;
@@ -71,7 +73,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     <Section label="Expected rebalancing rate">
                         {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
-                    <BalancerLink tokenName={token.name} isBuy={true} />
+                    <BalancerLink token={token.address} isBuy={true} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -124,7 +126,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     <Section label="Expected return">
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
-                    <BalancerLink tokenName={token.name} isBuy={false} />
+                    <BalancerLink token={token.address} isBuy={false} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -139,29 +141,19 @@ const USDC = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8';
 
 const constructBalancerLink = (token: string, isBuy: boolean) =>
     isBuy
-        ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${tokenMappings[token]}`
-        : `https://arbitrum.balancer.fi/#/trade/${tokenMappings[token]}/${USDC}`;
+        ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${token}`
+        : `https://arbitrum.balancer.fi/#/trade/${token}/${USDC}`;
 
-const tokenMappings: Record<string, string> = {
-    '1L-ETH/USD': '0x38c0a5443c7427e65A9Bf15AE746a28BB9a052cc',
-    '1S-ETH/USD': '0xf581571DBcCeD3A59AaaCbf90448E7B3E1704dcD',
-    '3L-ETH/USD': '0xaA846004Dc01b532B63FEaa0b7A0cB0990f19ED9',
-    '3S-ETH/USD': '0x7d7E4f49a29dDA8b1eCDcf8a8bc85EdcB234E997',
-    '1L-BTC/USD': '0x1616bF7bbd60E57f961E83A602B6b9Abb6E6CAFc',
-    '1S-BTC/USD': '0x052814194f459aF30EdB6a506eABFc85a4D99501',
-    '3L-BTC/USD': '0x05A131B3Cd23Be0b4F7B274B3d237E73650e543d',
-};
-
-const BalancerLink: React.FC<{ tokenName: string; isBuy: boolean }> = ({ tokenName, isBuy }) => {
-    const balancerLink = tokenMappings[tokenName];
-    return !balancerLink ? null : (
+const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBuy }) => {
+    const { network = 0 } = useWeb3();
+    return network === parseInt(ARBITRUM) ? (
         <div className="text-sm p-1.5">
             <div className="mr-2 whitespace-nowrap">Dont want to wait?</div>
             <div>
                 <Logo className="inline mr-2" ticker="BALANCER" />
                 <a
                     className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
-                    href={constructBalancerLink(tokenName, isBuy)}
+                    href={constructBalancerLink(token, isBuy)}
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                 >
@@ -170,5 +162,5 @@ const BalancerLink: React.FC<{ tokenName: string; isBuy: boolean }> = ({ tokenNa
                 </a>
             </div>
         </div>
-    );
+    ) : null;
 };
