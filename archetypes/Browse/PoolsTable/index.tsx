@@ -29,7 +29,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>Token</span>
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
-                        {'Expected Rebalancing rate * '}
+                        {'Leverage Gain / Leverage Loss * '}
                         <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
                             <QuestionMark />
                         </span>
@@ -62,33 +62,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             </p>
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
-                    <div className="text-2xl">Rebalancing Rate</div>
+                    <div className="text-2xl">Effective Leverage on Gains</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
                         <Close />
                     </div>
                 </div>
                 <br />
                 <div>
-                    The <b>Rebalancing Rate</b> is function of collateral skew in the pool. It can result in a polarised
-                    leverage effect at rebalance. The Rebalancing Rate is calculated as (long side collateral/short side
-                    collateral) - 1.
-                </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and
-                    short side of the pool. At rebalance, the winning side{`'`}s gains are neither amplified or reduced.
-                </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate {'>'} 0</b>, there is more collateral held in the long side of the pool.
-                    At rebalance, the short side&apos;s gains are effectively amplified relative to their losses.
-                    Conversely, the long side&apos;s gains are effectively reduced.
-                </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate {'<'} 0</b>, there is more collateral held in the short side of the pool.
-                    At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
-                    Conversely, the long side&apos;s gains are effectively amplified.
+                    <b>Effective Leverage on Gains:</b>  This metric is the the effective leverage by which your gains will be determined at the next rebalancing event. While the leverage on losses is always fixed, the leverage on gains varies depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
         </>
@@ -171,11 +152,15 @@ const TokenRow: React.FC<{
 
 const GainsAndLosses = (({ effectiveGain, leverage }) => {
     return (
-        <span className={effectiveGain >= leverage ? 'text-green-500' : 'text-red-500'}>
-            {`${effectiveGain.toFixed(
-                2,
-            )} / ${leverage.toFixed(2)}`}
-        </span>
+        <>
+            <span className={effectiveGain >= leverage ? 'text-green-500' : 'text-red-500'}>
+                {`${effectiveGain.toFixed(2)}x`}
+            </span>
+            {` / `}
+            <span>
+                {`${leverage.toFixed(2)}x`}
+            </span>
+        </>
     );
 }) as React.FC<{
     effectiveGain: number;
