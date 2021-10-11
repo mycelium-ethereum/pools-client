@@ -3,7 +3,6 @@ import { Table, TableHeader, TableRow } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
 import React, { useMemo, useState } from 'react';
-import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -21,7 +20,7 @@ import Close from '/public/img/general/close.svg';
 import Lock from '/public/img/general/lock.svg';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
-    const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
+    const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider } = useWeb3();
     return (
         <>
@@ -31,7 +30,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
                         {'Expected Rebalancing rate * '}
-                        <span className="cursor-pointer ml-1" onClick={() => setShowModalRebalanceRate(true)}>
+                        <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
                             <QuestionMark />
                         </span>
                     </span>
@@ -61,10 +60,10 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
-            <TWModal open={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
+            <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
                         <Close />
                     </div>
                 </div>
@@ -118,8 +117,10 @@ const TokenRow: React.FC<{
                 {token.symbol}
             </span>
             <span>{toApproxCurrency(token.lastPrice)}</span>
-
-            <RebalanceRate rebalanceRate={token.rebalanceRate} />
+            <GainsAndLosses 
+                effectiveGain={token.effectiveGain}
+                leverage={token.leverage}
+            />
             <span className="flex">
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
@@ -168,12 +169,15 @@ const TokenRow: React.FC<{
     );
 };
 
-// const ColoredChangeNumber = (({ number }) => {
-//     return (
-//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
-//             2,
-//         )}`}</span>
-//     );
-// }) as React.FC<{
-//     number: number;
-// }>;
+const GainsAndLosses = (({ effectiveGain, leverage }) => {
+    return (
+        <span className={effectiveGain >= leverage ? 'text-green-500' : 'text-red-500'}>
+            {`${effectiveGain.toFixed(
+                2,
+            )} / ${leverage.toFixed(2)}`}
+        </span>
+    );
+}) as React.FC<{
+    effectiveGain: number;
+    leverage: number;
+}>;

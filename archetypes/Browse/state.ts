@@ -13,7 +13,7 @@ export enum SideFilterEnum {
 export enum SortByEnum {
     Name = 'Token',
     Price = 'Price',
-    RebalanceRate = 'Rebalancing Rate',
+    EffectiveGain = 'Effective Gain',
     TotalValueLocked = 'TVL',
     MyHoldings = 'My Holdings',
 }
@@ -26,7 +26,8 @@ export interface BrowseTableRowData {
     leverage: number;
     side: 'short' | 'long';
     lastPrice: number;
-    rebalanceRate: number;
+    effectiveGain: number,
+    // rebalanceRate: number;
     totalValueLocked: number;
     myHoldings: number;
     nextRebalance: number;
