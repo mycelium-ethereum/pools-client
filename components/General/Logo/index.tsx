@@ -2,7 +2,6 @@ import React from 'react';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { classNames } from '@libs/utils/functions';
 
-import TSLA from '@public/img/logos/currencies/tesla.svg';
 import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
 import Etherscan from '@public/img/logos/currencies/etherscan.svg';
 import ETH_L from '@public/img/logos/currencies/eth_long.svg';
@@ -13,7 +12,6 @@ import ETH from '@public/img/logos/currencies/eth.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
-import ETH_CLEAR from '@public/img/logos/currencies/tesla.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -32,16 +30,11 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
     }
 };
 
-const clearLogos: Record<string, any> = {
-    ETH: ETH_CLEAR,
-};
-
 const USDCLogo: React.FC<{
     className: string;
 }> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
 type LogoTicker =
-    | 'TSLA'
     | 'ETHERSCAN'
     | 'USDC'
     | 'ETH_L'
@@ -59,12 +52,11 @@ type LogoTicker =
     | 'DEFAULT';
 
 const logos: Record<LogoTicker, any> = {
-    TSLA: TSLA,
     [ARBITRUM]: Arbitrum,
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
     USDC: USDCLogo,
-    DEFAULT: TSLA,
+    DEFAULT: ETH,
     ETH_L: ETH_L,
     BTC_L: BTC_L,
     ETH_S: ETH_S,
@@ -74,7 +66,7 @@ const logos: Record<LogoTicker, any> = {
     BTC: BTC,
     WBTC: BTC,
     SUSHI: SUSHI,
-    BALANCER: BALANCER,
+    BALANCER: BALANCER
 };
 
 type Size = 'sm' | 'md' | 'full';
@@ -82,7 +74,6 @@ interface LProps {
     className?: string;
     ticker: LogoTicker;
     size?: Size;
-    clear?: boolean; // true then display outlined image
 }
 
 const SIZES: Record<Size, string> = {
@@ -91,7 +82,7 @@ const SIZES: Record<Size, string> = {
     full: 'h-full',
 };
 
-export const Logo: React.FC<LProps> = ({ className, ticker, clear, size = 'sm' }: LProps) => {
-    const LogoImage = clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH'];
+export const Logo: React.FC<LProps> = ({ className, ticker, size = 'sm' }: LProps) => {
+    const LogoImage = logos[ticker] ?? logos['ETH'];
     return <LogoImage className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')} />;
 };
