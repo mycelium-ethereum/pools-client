@@ -7,7 +7,7 @@ import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/util
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
-import Button from '@components/General/Button';
+import Link from '/public/img/general/link.svg';
 
 type SummaryProps = {
     pool: Pool;
@@ -71,12 +71,12 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     <Section label="Expected rebalancing rate">
                         {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
+                    <BalancerLink tokenName={token.name} isBuy={true} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
                     <TimeLeft className={timeLeft} targetTime={receiveIn} />
                 </div>
-                <BalancerLink tokenName={token.name} isBuy={true} />
             </div>
         </HiddenExpand>
     );
@@ -124,12 +124,12 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     <Section label="Expected return">
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
+                    <BalancerLink tokenName={token.name} isBuy={false} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
                     <TimeLeft className={timeLeft} targetTime={receiveIn} />
                 </div>
-                <BalancerLink tokenName={token.name} isBuy={false} />
             </div>
         </HiddenExpand>
     );
@@ -137,7 +137,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
 
 const USDC = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8';
 
-const balancerLink = (token: string, isBuy: boolean) =>
+const constructBalancerLink = (token: string, isBuy: boolean) =>
     isBuy
         ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${tokenMappings[token]}`
         : `https://arbitrum.balancer.fi/#/trade/${tokenMappings[token]}/${USDC}`;
@@ -152,11 +152,23 @@ const tokenMappings: Record<string, string> = {
     '3L-BTC/USD': '0x05A131B3Cd23Be0b4F7B274B3d237E73650e543d',
 };
 
-const BalancerLink: React.FC<{ tokenName: string; isBuy: boolean }> = ({ tokenName, isBuy }) => (
-    <div className="absolute right-6 -top-6 text-sm z-[2] p-1.5 rounded bg-theme-background flex items-center">
-        <span className="mr-2 whitespace-nowrap">Dont want to wait?</span>
-        <Button onClick={() => window.open(balancerLink(tokenName, isBuy), '_blank')} variant={'primary'} size={'sm'}>
-            {`${isBuy ? 'Buy' : 'Sell'} on Balancer`}
-        </Button>
-    </div>
-);
+const BalancerLink: React.FC<{ tokenName: string; isBuy: boolean }> = ({ tokenName, isBuy }) => {
+    const balancerLink = tokenMappings[tokenName];
+    return !balancerLink ? null : (
+        <div className="text-sm p-1.5">
+            <div className="mr-2 whitespace-nowrap">Dont want to wait?</div>
+            <div>
+                <Logo className="inline mr-2" ticker="BALANCER" />
+                <a
+                    className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
+                    href={constructBalancerLink(tokenName, isBuy)}
+                    target={'_blank'}
+                    rel={'noopener noreferrer'}
+                >
+                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools`}
+                    <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
+                </a>
+            </div>
+        </div>
+    );
+};

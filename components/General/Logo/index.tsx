@@ -34,7 +34,24 @@ const USDCLogo: React.FC<{
     className: string;
 }> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
-const logos: Record<string, any> = {
+type LogoTicker =
+    | 'ETHERSCAN'
+    | 'USDC'
+    | 'ETH_L'
+    | 'BTC_L'
+    | 'ETH_S'
+    | 'BTC_S'
+    | 'ETH'
+    | 'WETH'
+    | 'BTC'
+    | 'WBTC'
+    | 'SUSHI'
+    | 'BALANCER'
+    | typeof ARBITRUM
+    | typeof ARBITRUM_RINKEBY
+    | 'DEFAULT';
+
+const logos: Record<LogoTicker, any> = {
     [ARBITRUM]: Arbitrum,
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
@@ -55,7 +72,7 @@ const logos: Record<string, any> = {
 type Size = 'sm' | 'md' | 'full';
 interface LProps {
     className?: string;
-    ticker: string;
+    ticker: LogoTicker;
     size?: Size;
 }
 
