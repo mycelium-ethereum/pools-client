@@ -20,6 +20,17 @@ export const calcLossMultiplier: (oldPrice: BigNumber, newPrice: BigNumber) => B
         : ratio;
 };
 
+// hourly -> 24 * 365
+const COMPOUND_FREQUENCY = 8760;
+
+/**
+ * Calculate the compounding gains
+ * @param apr annual percentage rate
+ * @returns annual percentage yield
+ */
+export const calcAPY: (apr: BigNumber) => BigNumber = (apr) =>
+    apr.div(COMPOUND_FREQUENCY).plus(1).pow(COMPOUND_FREQUENCY).minus(1);
+
 /**
  *
  * Calculate the leveraged losing pool multiplier

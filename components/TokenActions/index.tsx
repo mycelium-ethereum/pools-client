@@ -32,17 +32,17 @@ export default (({ provider, token, arbiscanTarget }) => (
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-gray-200">
+                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-theme-background ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-theme-border">
                             <div>
                                 <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
+                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
                                     onClick={() => watchAsset(provider, token)}
                                 >
                                     <PlusOutlined className="relative inline mr-2 h-[12px]" />
                                     Add token to wallet
                                 </div>
                                 <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-tracer-50"
+                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
                                     onClick={() => openArbiscan(arbiscanTarget.type, arbiscanTarget.target)}
                                 >
                                     <Logo className="relative inline mr-2" ticker={ARBITRUM} />

@@ -13,13 +13,13 @@ export default (() => {
     const [nextUpdate, setNextUpdate] = useState<number>(0);
 
     useEffect(() => {
-        if (commits && Object.keys(pools).length) {
+        if (Object.keys(pools).length && account) {
             let mints = 0,
                 burns = 0,
                 nextUpdate = 0;
-            const accountLower = account.toLowerCase();
+            const accountLower = account?.toLowerCase();
             Object.values(commits).map((commit) => {
-                if (commit.from.toLowerCase() !== accountLower) {
+                if (commit.from?.toLowerCase() !== accountLower) {
                     return;
                 }
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {

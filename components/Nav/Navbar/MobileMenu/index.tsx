@@ -7,12 +7,15 @@ import NetworkDropdown from '../NetworkDropdown';
 import AccountDropdown from '../AccountDropdown';
 
 import { useRouter } from 'next/router';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 export default (({ account, className }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
 
     const handleRoute = (route: string) => {
+        const root = document.getElementById('__next');
+        root?.classList.remove('overflow-hidden');
         router.push({
             pathname: route,
         });
@@ -30,7 +33,7 @@ export default (({ account, className }) => {
     };
 
     return (
-        <div className={classNames(`relative m-auto mr-0 overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -57,7 +60,7 @@ export default (({ account, className }) => {
                                 <div className="w-screen">
                                     <div
                                         className={classNames(
-                                            'h-full flex flex-col p-6 bg-tracer-900 bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
+                                            'h-full flex flex-col p-6 bg-tracer-900 dark:bg-theme-background matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
                                             'aligned-background',
                                         )}
                                     >
@@ -76,6 +79,9 @@ export default (({ account, className }) => {
                                         >
                                             <img className="inline mr-2" src={'/img/general/stake.svg'} />
                                             Stake
+                                        </div>
+                                        <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
+                                            <ThemeSwitcher />
                                         </div>
                                     </div>
                                     <style>{`

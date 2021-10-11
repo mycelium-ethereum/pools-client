@@ -16,13 +16,22 @@ import {
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
-import usePoolTokens from '@libs/hooks/usePoolTokens';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
-import { Logo } from '@components/General/Logo';
+import { Logo, LogoTicker } from '@components/General/Logo';
 
-const getFilterFieldsFromFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
+const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
+    const leverageSide = farm.name.split('-')[0];
+    const side = leverageSide.slice(-1);
+    const leverage = leverageSide.slice(0, -1);
+    return {
+        leverage: parseInt(leverage),
+        side: side === 'L' ? SideEnum.long : SideEnum.short,
+    };
+};
+
+const getFilterFieldsFromBPTFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
     if (!farm.bptDetails) {
         return {};
     }
@@ -51,18 +60,15 @@ export default (({
     hideLeverageFilter,
     hideSideFilter,
     fetchingFarms,
+    tcrUSDCPrice,
 }) => {
     const { account } = useWeb3();
     const { handleTransaction } = useTransactionContext();
-    const { tokenMap } = usePoolTokens();
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
         const filterFields = farm?.poolDetails
-            ? {
-                  leverage: tokenMap[farm.stakingToken.address]?.leverage,
-                  side: tokenMap[farm.stakingToken.address]?.side,
-              }
-            : getFilterFieldsFromFarm(farm);
+            ? getFilterFieldsFromPoolTokenFarm(farm)
+            : getFilterFieldsFromBPTFarm(farm);
 
         return {
             farm: farm.address,
@@ -343,11 +349,11 @@ export default (({
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-[100px]">
-                <div className="p-0 md:py-20 md:px-16 shadow-xl border-3xl">
+                <div className="p-0 md:py-20 md:px-16 shadow-xl bg-theme-background border-3xl">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
-                            {!!logo ? <Logo ticker={logo} className="pb-0 pr-1" /> : null}
-                            <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-cool-gray-900 sm:none flex-wrap: wrap;">
+                            {!!logo ? <Logo ticker={logo} className="pb-0 pr-1 text-theme-text" /> : null}
+                            <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-theme-text sm:none flex-wrap: wrap;">
                                 {title}
                             </h1>
                         </span>
@@ -362,6 +368,7 @@ export default (({
                     <FarmsTable
                         rows={sortedFilteredFarms}
                         fetchingFarms={fetchingFarms}
+                        tcrUSDCPrice={tcrUSDCPrice}
                         onClickClaim={handleClaim}
                         onClickUnstake={handleUnstake}
                         onClickStake={handleStake}
@@ -381,7 +388,7 @@ export default (({
         </>
     );
 }) as React.FC<{
-    logo: string;
+    logo?: LogoTicker;
     title: string;
     subTitle: string;
     tokenType: string;
@@ -390,6 +397,7 @@ export default (({
     hideLeverageFilter?: boolean;
     hideSideFilter?: boolean;
     fetchingFarms: boolean;
+    tcrUSDCPrice: BigNumber;
 }>;
 
 const StakeModalWithState: React.FC<{

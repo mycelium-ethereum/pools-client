@@ -13,7 +13,7 @@ type TokenMap = {
     [address: string]: TokenRow;
 };
 
-// const useTokens
+// const usePoolTokens
 export default (() => {
     const { pools } = usePools();
     const [tokens, setTokens] = useState<TokenRow[]>([]);

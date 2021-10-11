@@ -9,9 +9,12 @@ type SProps = {
 export const Section: React.FC<SProps> = ({ className, children, label }: SProps) => {
     return (
         <div
-            className={classNames(`flex w-full pb-2 last:pb-0 text-sm border-box text-cool-gray-700`, className ?? '')}
+            className={classNames(
+                `flex w-full pb-2 last:pb-0 text-sm border-box text-theme-text-secondary`,
+                className ?? '',
+            )}
         >
-            <div className={'text-left whitespace-nowrap text-cool-gray-700 capitalize'}>{label}</div>
+            <div className={'text-left whitespace-nowrap capitalize'}>{label}</div>
             <span className={'w-full text-right pl-1'}>{children}</span>
         </div>
     );

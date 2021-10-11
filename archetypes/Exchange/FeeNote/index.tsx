@@ -10,11 +10,11 @@ interface FeeNoteProps {
 
 const FeeNote: React.FC<FeeNoteProps> = ({ poolName, isMint, receiveIn }) => {
     return (
-        <HiddenExpand defaultHeight={0} open={!!poolName} className="text-cool-gray-600 my-5 text-sm">
-            <b>Note</b>: A small keeper fee will be taken when you {isMint ? 'receive' : 'sell'} the token in{' '}
+        <HiddenExpand defaultHeight={0} open={!!poolName} className="my-5 text-sm text-center">
+            <b>Note</b>: A small keeper fee will be taken when you {isMint ? 'receive' : 'burn'} the token in{' '}
             <TimeLeft targetTime={receiveIn} />. To learn more, visit{' '}
             <a
-                className="text-tracer-800 underline"
+                className="text-theme-primary underline"
                 href="https://docs.tracer.finance/market-types/perpetual-pools/mechanism-design/fees#keeper-fees"
                 target="_blank"
                 rel="noreferrer"

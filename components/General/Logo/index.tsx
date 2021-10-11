@@ -1,6 +1,17 @@
 import React from 'react';
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY, KOVAN } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { classNames } from '@libs/utils/functions';
+
+import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
+import Etherscan from '@public/img/logos/currencies/etherscan.svg';
+import ETH_L from '@public/img/logos/currencies/eth_long.svg';
+import ETH_S from '@public/img/logos/currencies/eth_short.svg';
+import BTC_L from '@public/img/logos/currencies/btc_long.svg';
+import BTC_S from '@public/img/logos/currencies/btc_short.svg';
+import ETH from '@public/img/logos/currencies/eth.svg';
+import BTC from '@public/img/logos/currencies/btc.svg';
+import SUSHI from '@public/img/logos/currencies/sushi.svg';
+import BALANCER from '@public/img/logos/currencies/balancer.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -19,41 +30,50 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
     }
 };
 
-const clearLogos: Record<string, string> = {
-    ETH: '/img/logos/currencies/eth_clear.svg',
-    TEST1: '/img/logos/currencies/eth_clear.svg',
-};
+const USDCLogo: React.FC<{
+    className: string;
+}> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
-const logos: Record<string, string> = {
-    TSLA: '/img/logos/currencies/tesla.svg',
-    TEST1: '/img/logos/currencies/eth.svg',
-    LINK: '/img/logos/currencies/link.svg',
-    [ARBITRUM_RINKEBY]: '/img/logos/currencies/arbitrum.svg',
-    [ARBITRUM]: '/img/logos/currencies/arbitrum.svg',
-    [RINKEBY]: '/img/logos/currencies/arbitrum.svg',
-    [MAINNET]: '/img/logos/currencies/arbitrum.svg',
-    [KOVAN]: '/img/logos/currencies/arbitrum.svg',
-    ETHERSCAN: '/img/logos/currencies/etherscan.svg',
-    USDC: '/img/logos/currencies/usdc.png',
-    DEFAULT: '/img/logos/currencies/tesla.svg',
-    ETH_L: '/img/logos/currencies/eth_long.svg',
-    BTC_L: '/img/logos/currencies/btc_long.svg',
-    ETH_S: '/img/logos/currencies/eth_short.svg',
-    BTC_S: '/img/logos/currencies/btc_short.svg',
-    ETH: '/img/logos/currencies/eth.svg',
-    WETH: '/img/logos/currencies/eth.svg',
-    BTC: '/img/logos/currencies/btc.svg',
-    WBTC: '/img/logos/currencies/btc.svg',
-    SUSHI: '/img/logos/currencies/sushi.svg',
-    BALANCER: '/img/logos/currencies/balancer.svg',
+export type LogoTicker =
+    | 'ETHERSCAN'
+    | 'USDC'
+    | 'ETH_L'
+    | 'BTC_L'
+    | 'ETH_S'
+    | 'BTC_S'
+    | 'ETH'
+    | 'WETH'
+    | 'BTC'
+    | 'WBTC'
+    | 'SUSHI'
+    | 'BALANCER'
+    | typeof ARBITRUM
+    | typeof ARBITRUM_RINKEBY
+    | 'DEFAULT';
+
+const logos: Record<LogoTicker, any> = {
+    [ARBITRUM]: Arbitrum,
+    [ARBITRUM_RINKEBY]: Arbitrum,
+    ETHERSCAN: Etherscan,
+    USDC: USDCLogo,
+    DEFAULT: ETH,
+    ETH_L: ETH_L,
+    BTC_L: BTC_L,
+    ETH_S: ETH_S,
+    BTC_S: BTC_S,
+    ETH: ETH,
+    WETH: ETH,
+    BTC: BTC,
+    WBTC: BTC,
+    SUSHI: SUSHI,
+    BALANCER: BALANCER,
 };
 
 type Size = 'sm' | 'md' | 'full';
 interface LProps {
     className?: string;
-    ticker: string;
+    ticker: LogoTicker;
     size?: Size;
-    clear?: boolean; // true then display outlined image
 }
 
 const SIZES: Record<Size, string> = {
@@ -62,12 +82,7 @@ const SIZES: Record<Size, string> = {
     full: 'h-full',
 };
 
-export const Logo: React.FC<LProps> = ({ className, ticker, clear, size = 'sm' }: LProps) => {
-    return (
-        <img
-            className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')}
-            src={clear ? clearLogos[ticker] : logos[ticker] ?? logos['ETH']}
-            alt="logo"
-        />
-    );
+export const Logo: React.FC<LProps> = ({ className, ticker, size = 'sm' }: LProps) => {
+    const LogoImage = logos[ticker] ?? logos['ETH'];
+    return <LogoImage className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')} />;
 };

@@ -9,6 +9,7 @@ import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { ARBITRUM } from '@libs/constants';
 import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import Identicon from '@components/Nav/Navbar/Identicon';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
@@ -134,7 +135,7 @@ const ViewOnArbiscanOption: React.FC<{
 }> = ({ account, className }) => {
     return (
         <a
-            className={classNames(className ?? '', 'flex hover:bg-gray-100')}
+            className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover')}
             href={`${ARBISCAN_URI}/address/${account}`}
             target="_blank"
             rel="noopener noreferrer"
@@ -148,15 +149,23 @@ const ViewOnArbiscanOption: React.FC<{
 const WalletIcon: React.FC<{
     className?: string;
 }> = ({ className }) => {
-    const { wallet } = useWeb3();
+    const { wallet, account } = useWeb3();
 
-    return (
-        <img
-            className={classNames(className ?? '', 'inline text-lg h-[20px] my-auto')}
-            src={wallet?.icons.iconSrc}
-            alt={wallet?.name ?? ''}
-        />
-    );
+    const IconContent = () => {
+        if (wallet?.icons?.iconSrc) {
+            return (
+                <img
+                    className={classNames(className ?? '', 'inline text-lg h-[20px] my-auto')}
+                    src={wallet?.icons.iconSrc}
+                    alt={wallet?.name ?? ''}
+                />
+            );
+        } else {
+            return <Identicon account={account ?? ''} />;
+        }
+    };
+
+    return <>{IconContent()}</>;
 };
 
 const BridgeFundsOption: React.FC<{

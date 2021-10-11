@@ -5,21 +5,20 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import React, { useMemo, useState } from 'react';
 import RebalanceRate from '../RebalanceRate';
 import { BrowseTableRowData } from '../state';
-import Modal from '@components/General/Modal';
+import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
-import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-
-import Lock from '/public/img/general/lock.svg';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
+
+import QuestionMark from '/public/img/general/question-mark-circle.svg';
+import Close from '/public/img/general/close.svg';
+import Lock from '/public/img/general/lock.svg';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
@@ -55,14 +54,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <p className="mt-2 text-sm text-cool-gray-900">
+            <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
                 * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
                 indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
                 <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
                 value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
                 will be calculated and updated at the next rebalalance.
             </p>
-            <Modal show={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
+            <TWModal open={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalancing Rate</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
@@ -92,7 +91,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
                     Conversely, the long side&apos;s gains are effectively amplified.
                 </div>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC<{

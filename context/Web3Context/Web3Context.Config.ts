@@ -38,6 +38,8 @@ export type Network = {
         [address: string]: string;
     };
     isArbitrum: boolean;
+    tcrAddress: string;
+    sushiRouterAddress: string;
 };
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
@@ -62,6 +64,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        tcrAddress: '',
+        sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
     '421611': {
@@ -93,6 +97,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
+        tcrAddress: '',
+        sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
     '42161': {
@@ -193,6 +199,8 @@ export const networkConfig: Record<string, Network> = {
             // wETH: ETH/USD
             '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
         },
+        sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
+        tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
     },
     '1337': {
         id: '1337',
@@ -213,6 +221,8 @@ export const networkConfig: Record<string, Network> = {
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
+        sushiRouterAddress: '',
+        tcrAddress: '',
     },
     '1': {
         // TODO: fill this out properly
@@ -233,6 +243,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        tcrAddress: '0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050',
         knownUSDCPriceFeeds: {},
     },
     '4': {
@@ -254,6 +266,8 @@ export const networkConfig: Record<string, Network> = {
         graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        sushiRouterAddress: '',
+        tcrAddress: '',
         knownUSDCPriceFeeds: {},
     },
 };
