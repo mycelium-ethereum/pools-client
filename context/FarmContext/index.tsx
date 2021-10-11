@@ -243,7 +243,7 @@ export const FarmStore: React.FC<
 
                             const tvl = poolDetails
                                 ? poolDetails.poolTokenPrice.times(totalStaked)
-                                : calcBptTokenPrice({ tokens: bptDetails?.tokens, stakingTokenSupply }).times(totalStaked);
+                                : calcBptTokenPrice(stakingTokenSupply, bptDetails?.tokens).times(totalStaked);
 
                             return {
                                 name: stakingTokenName,

@@ -95,7 +95,7 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens)),
         [farm],
     );
 
