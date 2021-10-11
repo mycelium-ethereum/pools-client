@@ -29,11 +29,12 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <span>Token</span>
                     <span>{'Price (USDC) *'}</span>
                     <span className="flex">
-                        {'Leverage Gain / Leverage Loss * '}
+                        {'Effective Leverage'}
                         <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
                             <QuestionMark />
                         </span>
                     </span>
+                    <span>Power Leverage</span>
                     <span>Next Rebalancing Event</span>
                     <span>TVL (USDC)</span>
                     <span>My Holdings (TOKENS/USDC)</span>
@@ -98,10 +99,12 @@ const TokenRow: React.FC<{
                 {token.symbol}
             </span>
             <span>{toApproxCurrency(token.lastPrice)}</span>
-            <GainsAndLosses 
-                effectiveGain={token.effectiveGain}
-                leverage={token.leverage}
-            />
+            <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
+                {`${token.effectiveGain.toFixed(2)}x`}
+            </span>
+            <span>
+                {`${token.leverage.toFixed(2)}x`}
+            </span>
             <span className="flex">
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
@@ -149,20 +152,3 @@ const TokenRow: React.FC<{
         </TableRow>
     );
 };
-
-const GainsAndLosses = (({ effectiveGain, leverage }) => {
-    return (
-        <>
-            <span className={effectiveGain >= leverage ? 'text-green-500' : 'text-red-500'}>
-                {`${effectiveGain.toFixed(2)}x`}
-            </span>
-            {` / `}
-            <span>
-                {`${leverage.toFixed(2)}x`}
-            </span>
-        </>
-    );
-}) as React.FC<{
-    effectiveGain: number;
-    leverage: number;
-}>;
