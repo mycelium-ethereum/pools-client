@@ -29,16 +29,17 @@ export default (() => {
     }, []);
 
     return (
-        <div className={`page relative bg-white`}>
+        <div className={`page relative matrix:bg-matrix-bg`}>
             <ArbitrumBridgeStore>
                 <FarmStore farmContext="bptFarms">
                     <NavBar />
                     <StakeBPT />
                 </FarmStore>
-                <Footer />
-                <PendingCommits />
                 <ArbitrumBridge />
             </ArbitrumBridgeStore>
+            <Footer />
+            <PendingCommits />
+
             <OnboardStakeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}
