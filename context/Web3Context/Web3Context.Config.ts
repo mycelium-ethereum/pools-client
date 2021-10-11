@@ -38,14 +38,7 @@ export type Network = {
         [address: string]: string;
     };
     isArbitrum: boolean;
-    tokenBridge?: TokenBridge;
 };
-
-interface TokenBridge {
-    l1Address: string;
-    l2Address: string;
-}
-
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
