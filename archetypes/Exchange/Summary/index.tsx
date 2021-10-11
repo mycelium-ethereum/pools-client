@@ -3,7 +3,7 @@ import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@component
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
@@ -33,10 +33,19 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
+
     const balancesAfter = {
         longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
         shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
     };
+    
+    const effectiveGains = useMemo(() => {
+        return (
+            isLong 
+            ? calcEffectiveLongGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
+            : calcEffectiveShortGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
+        )
+    }, [isLong, amount, balancesAfter.longBalance, balancesAfter.shortBalance])
 
     return (
         <HiddenExpand
@@ -67,8 +76,18 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
-                    <Section label="Expected rebalancing rate">
-                        {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
+                    <Section label="Expected Leverage">
+                        <div>
+                            <span className="opacity-60">{`Gains: `}</span>
+                            <span className={classNames(
+                                'mr-2',
+                                effectiveGains.gt(pool.leverage)? 'text-green-500' : 'text-red-500'
+                            )}>
+                                {effectiveGains.toFixed(2)}x
+                            </span>
+                            <span className="opacity-60">{`Losses: `}</span>
+                            {pool.leverage}x
+                        </div>
                     </Section>
                 </Transition>
                 <div className={countdown}>
