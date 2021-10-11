@@ -1,7 +1,5 @@
 import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
 // import Inbox from '@libs/abi/arbitrum/Inbox.json';
-import { IInbox__factory, ArbSys__factory, GatewayRouter__factory } from 'arb-ts/dist/lib/abi';
-import { ethers } from 'ethers';
 
 export const destinationNetworkLookup: { [current: number]: string } = {
     [RINKEBY]: ARBITRUM_RINKEBY,
@@ -23,7 +21,7 @@ export const bridgeableTokens: {
     ],
     [ARBITRUM_RINKEBY]: [
         {
-            address: '',
+            address: '0x1E77ad77925Ac0075CF61Fb76bA35D884985019d',
             name: 'USDC',
             symbol: 'USDC',
             decimals: 6,
@@ -50,49 +48,4 @@ export const bridgeableTokens: {
 export const bridgeableTickers = {
     ETH: 'ETH',
     USDC: 'USDC',
-};
-
-export const arbitrumContracts: {
-    [network: string]: { [name: string]: { address: string; abi: ethers.ContractInterface } };
-} = {
-    [RINKEBY]: {
-        INBOX: {
-            address: '0x578BAde599406A8fE3d24Fd7f7211c0911F5B29e',
-            abi: IInbox__factory.abi,
-        },
-        L1_GATEWAY_ROUTER: {
-            address: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
-            abi: GatewayRouter__factory.abi,
-        },
-    },
-    [ARBITRUM_RINKEBY]: {
-        ARBSYS: {
-            address: '0x0000000000000000000000000000000000000064',
-            abi: ArbSys__factory.abi,
-        },
-        L1_GATEWAY_ROUTER: {
-            address: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
-            abi: GatewayRouter__factory.abi,
-        },
-    },
-    [MAINNET]: {
-        INBOX: {
-            address: '0x4Dbd4fc535Ac27206064B68FfCf827b0A60BAB3f',
-            abi: IInbox__factory.abi,
-        },
-        L1_GATEWAY_ROUTER: {
-            address: '0x70C143928eCfFaf9F5b406f7f4fC28Dc43d68380',
-            abi: GatewayRouter__factory.abi,
-        },
-    },
-    [ARBITRUM]: {
-        ARBSYS: {
-            address: '0x0000000000000000000000000000000000000064',
-            abi: ArbSys__factory.abi,
-        },
-        L1_GATEWAY_ROUTER: {
-            address: '0x9413AD42910c1eA60c737dB5f58d1C504498a3cD',
-            abi: GatewayRouter__factory.abi,
-        },
-    },
 };

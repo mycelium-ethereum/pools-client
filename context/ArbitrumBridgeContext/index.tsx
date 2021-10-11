@@ -8,13 +8,8 @@ import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
 import { useTransactionContext } from '../TransactionContext';
 import { ERC20__factory, ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 // import { useArbTokenBridge } from 'token-bridge-sdk';
-import {
-    destinationNetworkLookup,
-    bridgeableTokens,
-    bridgeableTickers,
-    arbitrumContracts,
-} from '../../libs/utils/bridge';
-import { Bridge, L1TokenData, L2TokenData, Inbox__factory, L1ERC20Gateway__factory } from 'arb-ts';
+import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '../../libs/utils/bridge';
+import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { Children } from '@libs/types/General';
 
 import {
@@ -23,12 +18,6 @@ import {
     BridgeableBalances,
 } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
-
-type Contracts = {
-    INBOX: IInbox | null;
-    ARBSYS: ArbSys | null;
-    GATEWAY_ROUTER: GatewayRouter | null;
-};
 
 const defaultContracts = {
     INBOX: null,
@@ -46,7 +35,6 @@ interface ArbitrumBridgeProps {
     bridgeableTokenList: typeof bridgeableTokens[string];
     bridgeableAssetList: BridgeableAsset[];
     bridgeableBalances: BridgeableBalances;
-    contracts: Contracts;
     showBridgeModal: () => void;
     hideBridgeModal: () => void;
     bridgeModalIsOpen: boolean;
@@ -65,7 +53,6 @@ export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
     bridgeableTokenList: [],
     bridgeableAssetList: [],
     bridgeableBalances: {},
-    contracts: defaultContracts,
     showBridgeModal: () => console.debug('arbitrumBridge.showBridgeModal not ready'),
     hideBridgeModal: () => console.debug('arbitrumBridge.hideBridgeModal not ready'),
     bridgeModalIsOpen: false,
@@ -99,43 +86,17 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         ];
     }, [bridgeableTokenList]);
 
-    const contracts: Contracts = useMemo(() => {
-        return {
-            INBOX: arbitrumContracts[network]?.INBOX
-                ? (new ethers.Contract(
-                      arbitrumContracts[network].INBOX.address,
-                      arbitrumContracts[network].INBOX.abi,
-                      signer,
-                  ) as IInbox)
-                : null,
-            ARBSYS: arbitrumContracts[network]?.ARBSYS
-                ? (new ethers.Contract(
-                      arbitrumContracts[network].ARBSYS.address,
-                      arbitrumContracts[network].ARBSYS.abi,
-                      signer,
-                  ) as ArbSys)
-                : null,
-            GATEWAY_ROUTER: arbitrumContracts[network]?.GATEWAY_ROUTER
-                ? (new ethers.Contract(
-                      arbitrumContracts[network].GATEWAY_ROUTER.address,
-                      arbitrumContracts[network].GATEWAY_ROUTER.abi,
-                      signer,
-                  ) as GatewayRouter)
-                : null,
-        };
-    }, [network, signer]);
-
     useEffect(() => {
         if (!provider) {
             return;
         }
+
+        if (!account) {
+            return;
+        }
+
         const createBridge = async () => {
-            console.log('FROM CHAIN ID', fromNetwork.id, fromNetwork.publicRPC);
-            console.log('TO CHAIN ID', toNetwork.id, toNetwork.publicRPC);
-
             // await provider._networkPromise;
-
-            console.log('OG SIGNER', signer);
 
             const ethSigner = fromNetwork.isArbitrum
                 ? new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account)
@@ -145,52 +106,13 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 ? provider.getSigner(account)
                 : new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account);
 
-            const [ethChainId, arbChainId] = await Promise.all([ethSigner.getChainId(), arbSigner.getChainId()]);
-
-            console.log('ETH SIGNER', ethSigner, ethChainId);
-            console.log('ARB SIGNER', arbSigner, arbChainId);
-
-            // const stuff = {
-            //     ethSigner,
-            //     arbSigner,
-            // };
-
-            // console.log('MAKING BRIDGE', stuff);
-
             const bridge = await Bridge.init(ethSigner, arbSigner);
-
-            // console.log('GOT THE BRIDGE', bridge.l1Bridge);
 
             setBridge(bridge);
         };
 
         createBridge();
-    }, [fromNetwork]);
-
-    // const bridgeEth = (amount: BigNumber) => {
-    //     if (!handleTransaction) {
-    //         console.error('Failed to bridge ETH: handleTransaction is unavailable');
-    //         return;
-    //     }
-    //     if (!account) {
-    //         console.error('Failed to bridge ETH: account is unavailable');
-    //     }
-    //     if (!fromNetwork.isArbitrum && contracts.INBOX) {
-    //         // we are on layer 1, deposit into layer 2
-    //         handleTransaction(contracts.INBOX.depositEth, ['0', { value: ethers.utils.parseEther(amount.toFixed()) }]);
-    //     } else if (fromNetwork.isArbitrum && contracts.ARBSYS) {
-    //         // we are on layer 2, withdraw back to layer 1
-    //         if (!account) {
-    //             console.error('Failed to withdraw ETH from L2: account unavailable');
-    //         }
-    //         handleTransaction(contracts.ARBSYS.withdrawEth, [
-    //             account,
-    //             { value: ethers.utils.parseEther(amount.toFixed()) },
-    //         ]);
-    //     } else {
-    //         console.error('Failed to bridge token: inbox contract or transaction handler undefined');
-    //     }
-    // };
+    }, [fromNetwork, account]);
 
     const bridgeEth = async (amount: BigNumber) => {
         if (!handleTransaction) {
@@ -253,62 +175,36 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         }
         if (fromNetwork.isArbitrum) {
             // we are on layer 2, withdraw back to layer 1
-            if (!account) {
-                console.error('Failed to withdraw ETH from L2: account unavailable');
-            }
-            // handleTransaction(contracts.ARBSYS.withdrawEth, [
-            //     account,
-            //     { value: ethers.utils.parseEther(amount.toFixed()) },
-            // ]);
+
+            const l1TokenAddress = await bridge.l2Bridge.getERC20L1Address(tokenAddress);
+
+            handleTransaction(
+                bridge.l2Bridge.l2GatewayRouter.functions['outboundTransfer(address,address,uint256,bytes)'],
+                [l1TokenAddress, account, ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals), '0x'],
+            );
         } else {
             // we are on layer 1, deposit into layer 2
 
-            // const gatewayRouter = bridge.l1GatewayRouter;
+            const depositParams = await bridge.getDepositTxParams({
+                erc20L1Address: tokenAddress,
+                amount: ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals),
+                destinationAddress: account,
+            });
 
-            console.log('DOING STUFF', bridge);
+            const abiCoder = new ethers.utils.AbiCoder();
+            const data = abiCoder.encode(['uint256', 'bytes'], [depositParams.maxSubmissionCost, '0x']);
 
-            const gasPriceBid = await bridge.l2Provider.getGasPrice();
-
-            console.log('gasPriceBid', gasPriceBid);
-
-            const l1GatewayAddress = await bridge.l1Bridge.getGatewayAddress(tokenAddress);
-
-            console.log('l1GatewayAddress', l1GatewayAddress);
-
-            const l1Gateway = new L1ERC20Gateway__factory(provider.getSigner(account)).attach(l1GatewayAddress);
-
-            const sender = await bridge.l1Bridge.getWalletAddress();
-            console.log('sender', sender);
-
-            const depositCallData = await l1Gateway.getOutboundCalldata(
-                tokenAddress,
-                sender,
-                account,
-                amount.toFixed(),
-                '0x',
-            );
-
-            console.log('depositCallData', depositCallData);
-
-            const txnSubmissionPrice = await bridge.l2Bridge.getTxnSubmissionPrice(depositCallData.length - 2);
-
-            console.log('txnSubmissionPrice', txnSubmissionPrice);
-
-            // const depositParams = await bridge.getDepositTxParams({
-            //     erc20L1Address: tokenAddress,
-            //     amount: ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals),
-            //     // destinationAddress: account,
-            // });
-
-            // console.log('GOT DEPOSIT PARAMS', depositParams);
-
-            // handleTransaction(gatewayRouter.outboundTransfer, [
-
-            // ]);
-
-            // bridge.deposit(tokenAddress, ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals));
-
-            // console.log('GAS PRICE', gasPrice);
+            handleTransaction(bridge.l1GatewayRouter.outboundTransfer, [
+                depositParams.erc20L1Address,
+                depositParams.destinationAddress || account,
+                depositParams.amount,
+                depositParams.maxGas,
+                depositParams.gasPriceBid,
+                data,
+                {
+                    value: depositParams.l1CallValue,
+                },
+            ]);
         }
     };
 
@@ -360,19 +256,19 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     ? await bridge.l2Bridge.getL2TokenData(asset.address)
                     : await bridge.l1Bridge.getL1TokenData(asset.address);
 
-                const gatewayAddress = fromNetwork.isArbitrum
-                    ? bridge.l2Bridge.l2GatewayRouter.address
-                    : bridge.l1Bridge.l1GatewayRouter.address;
+                const erc20GatewayAddress = fromNetwork.isArbitrum
+                    ? await bridge.l2Bridge.getGatewayAddress(asset.address)
+                    : await bridge.l1Bridge.getGatewayAddress(asset.address);
 
                 const [allowance, decimals] = await Promise.all([
-                    tokenData.contract.allowance(account, gatewayAddress),
+                    tokenData.contract.allowance(account, erc20GatewayAddress),
                     isL1TokenData(tokenData) ? tokenData.decimals : tokenData.contract.decimals(),
                 ]);
 
                 newBridgeableBalances[network][asset.symbol] = {
                     balance: new BigNumber(ethers.utils.formatUnits(tokenData.balance, decimals)),
                     allowance: new BigNumber(ethers.utils.formatUnits(allowance, decimals)),
-                    spender: gatewayAddress,
+                    spender: erc20GatewayAddress,
                 };
 
                 console.log('NEW BALANCE', newBridgeableBalances[network][asset.symbol]);
@@ -399,7 +295,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 bridgeableTokenList,
                 bridgeableAssetList,
                 bridgeableBalances,
-                contracts,
                 showBridgeModal,
                 hideBridgeModal,
                 bridgeModalIsOpen,
