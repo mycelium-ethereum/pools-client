@@ -4,7 +4,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
-import { Logo } from 'components/General/Logo';
+import { Logo, LogoTicker } from 'components/General/Logo';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -66,11 +66,11 @@ export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 interface DropdownProps {
     value: string;
     placeHolder?: string;
-    placeHolderIcon?: string;
+    placeHolderIcon?: LogoTicker;
     options: {
         key: string;
         text?: string;
-        ticker?: string;
+        ticker?: LogoTicker;
     }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;

@@ -20,6 +20,7 @@ import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelect
 import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
+import { LogoTicker } from '@components/General';
 
 const inputRow = 'relative my-2 ';
 
@@ -108,11 +109,11 @@ export default (() => {
                     <Dropdown
                         className="w-full "
                         placeHolder="Select Market"
-                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0]}
+                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
                         size="lg"
                         options={Object.keys(markets).map((market) => ({
                             key: market,
-                            ticker: market.split('/')[0],
+                            ticker: market.split('/')[0] as LogoTicker,
                             text: market,
                         }))}
                         value={market}
