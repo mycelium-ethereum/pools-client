@@ -27,7 +27,6 @@
         "react-toast-notifications": "^2.4.0",
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
-        "token-bridge-sdk": "^2.0.3-beta.0",
         "tailwindcss-multi-theme": "^1.0.4",
         "universal-cookie": "^4.0.4",
         "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"

@@ -2,12 +2,10 @@ import React, { useContext, useEffect, useState, useMemo } from 'react';
 // import { Bridge } from 'arb-ts';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { IInbox, ArbSys, GatewayRouter } from 'arb-ts/dist/lib/abi';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
 import { useTransactionContext } from '../TransactionContext';
 import { ERC20__factory, ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
-// import { useArbTokenBridge } from 'token-bridge-sdk';
 import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '../../libs/utils/bridge';
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { Children } from '@libs/types/General';
@@ -18,13 +16,6 @@ import {
     BridgeableBalances,
 } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
-
-const defaultContracts = {
-    INBOX: null,
-    ARBSYS: null,
-    GATEWAY_ROUTER: null,
-};
-
 interface ArbitrumBridgeProps {
     bridgeToken: (tokenAddress: string, amount: BigNumber) => void;
     bridgeEth: (amount: BigNumber) => void;
