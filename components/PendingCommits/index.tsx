@@ -82,7 +82,7 @@ export default (() => {
                     <>
                         <TableHeader>
                             <span>Token</span>
-                            <span>Sold (USDC)</span>
+                            <span>Sold (Tokens)</span>
                             <span>Price* (Token)</span>
                             <span>Return (USDC)</span>
                             <span>Burn in</span>
