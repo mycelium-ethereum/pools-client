@@ -12,8 +12,7 @@ import BTC_S from '@public/img/logos/currencies/btc_short.svg';
 import ETH from '@public/img/logos/currencies/eth.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
-import BALANCER_DARK from '@public/img/logos/currencies/balancer-black.svg';
-import BALANCER_LIGHT from '@public/img/logos/currencies/balancer-white.svg';
+import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import ETH_CLEAR from '@public/img/logos/currencies/tesla.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
@@ -41,7 +40,25 @@ const USDCLogo: React.FC<{
     className: string;
 }> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
-const logos: Record<string, any> = {
+type LogoTicker =
+    | 'TSLA'
+    | 'ETHERSCAN'
+    | 'USDC'
+    | 'ETH_L'
+    | 'BTC_L'
+    | 'ETH_S'
+    | 'BTC_S'
+    | 'ETH'
+    | 'WETH'
+    | 'BTC'
+    | 'WBTC'
+    | 'SUSHI'
+    | 'BALANCER'
+    | typeof ARBITRUM
+    | typeof ARBITRUM_RINKEBY
+    | 'DEFAULT';
+
+const logos: Record<LogoTicker, any> = {
     TSLA: TSLA,
     [ARBITRUM]: Arbitrum,
     [ARBITRUM_RINKEBY]: Arbitrum,
@@ -57,14 +74,13 @@ const logos: Record<string, any> = {
     BTC: BTC,
     WBTC: BTC,
     SUSHI: SUSHI,
-    BALANCER_DARK: BALANCER_DARK,
-    BALANCER_LIGHT: BALANCER_LIGHT,
+    BALANCER: BALANCER,
 };
 
 type Size = 'sm' | 'md' | 'full';
 interface LProps {
     className?: string;
-    ticker: string;
+    ticker: LogoTicker;
     size?: Size;
     clear?: boolean; // true then display outlined image
 }
