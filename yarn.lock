@@ -2915,7 +2915,7 @@
     memory-cache "^0.2.0"
     web3-utils "^1.5.2"
 
-"@tracer-protocol/onboard@^2.2.0":
+"@tracer-protocol/onboard@^2.1.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.0.tgz#190d3812bcf2bfb497fb229e63b3272e76b02e5c"
   integrity sha512-0RDFCafhHpR3QyMydfeGOS2E7PnmA3ULJj0MlOTwxw4D57dqq+y4K5qbsGqWKMMzEJht/gScyHi08yJ8dONL5A==
@@ -2962,10 +2962,10 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
-"@tracer-protocol/tracer-pools-utils@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.2.tgz#7aa6665b86d503c10197652d9357042f191be509"
-  integrity sha512-Y4B2PPXflyl2kmcsQXsgozAnzwmdesFLdm26csNd4w/NauJmg0lWJh4Tfk88/ohG2A6Cu9CQREE+Z6TTlpZwmw==
+"@tracer-protocol/tracer-pools-utils@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.3.tgz#a7dcc87d8cd1b29fd891462139fd6e1d7e2c3474"
+  integrity sha512-liUtKndF6XBg9mPOI6/PL1MvOREcSs0tejTfTWABCk5eIq0gIaqIzgijVqboGPIycsh6HLkyVUBTgL6W4sHmpA==
   dependencies:
     bignumber.js "^9.0.1"
 
