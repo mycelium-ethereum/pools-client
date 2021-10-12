@@ -44,16 +44,19 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [amount, setAmount] = useState(new BigNumber(0));
     const [isBridging, setIsBridging] = useState(false);
 
+    // fetch balance when modal initially shows
     useEffect(() => {
         if (show) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [show]);
 
+    // update selectedAsset whenever the selected asset index changes
     useEffect(() => {
         setSelectedAsset(bridgeableAssetList[selectedAssetIndex]);
     }, [selectedAssetIndex]);
 
+    // refresh asset balance when selectedAsset changes
     useEffect(() => {
         if (selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
