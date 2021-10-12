@@ -10,6 +10,7 @@ import { classNames } from '@libs/utils/functions';
 import Link from '/public/img/general/link.svg';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
+import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
 
 type SummaryProps = {
     pool: Pool;
@@ -23,6 +24,7 @@ const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+    const balancerPoolPrices = useBalancerSpotPrices();
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -73,7 +75,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     <Section label="Expected rebalancing rate">
                         {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
-                    <BalancerLink token={token.address} isBuy={true} />
+                    <BalancerLink token={token.address} isBuy={true} price={balancerPoolPrices[token.symbol]} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -86,6 +88,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
 
 // const SellSummary
 export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+    const balancerPoolPrices = useBalancerSpotPrices();
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -126,7 +129,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     <Section label="Expected return">
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
-                    <BalancerLink token={token.address} isBuy={false} />
+                    <BalancerLink token={token.address} isBuy={false} price={balancerPoolPrices[token.symbol]} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -144,7 +147,7 @@ const constructBalancerLink = (token: string, isBuy: boolean) =>
         ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${token}`
         : `https://arbitrum.balancer.fi/#/trade/${token}/${USDC}`;
 
-const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBuy }) => {
+const BalancerLink: React.FC<{ token: string; isBuy: boolean, price: BigNumber}> = ({ token, isBuy, price }) => {
     const { network = 0 } = useWeb3();
     return network === parseInt(ARBITRUM) ? (
         <div className="text-sm p-1.5">
@@ -157,7 +160,7 @@ const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBu
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                 >
-                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools`}
+                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @${toApproxCurrency(price)}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>
             </div>
