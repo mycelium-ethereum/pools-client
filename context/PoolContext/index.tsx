@@ -20,7 +20,7 @@ import {
 import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { calcNextValueTransfer } from '@libs/utils/calcs';
+import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 
 type Options = {

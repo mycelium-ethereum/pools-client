@@ -9,7 +9,7 @@ import Close from '/public/img/general/close.svg';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { calcAPY, calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { APYTip } from '@components/Tooltips';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
@@ -95,14 +95,19 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
+        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens)),
         [farm],
     );
 
-    const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
-    const aprDenominator = tokenPrice.times(farm.totalStaked);
+    const apr = useMemo(() => {
+        const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
+        const aprDenominator = tokenPrice.times(farm.totalStaked);
+        return (
+            aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0)
+        )
+    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice])
 
-    const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+    const apy = useMemo(() => (calcAPY(apr)), [apr])
 
     const { bptDetails } = farm;
 
@@ -136,7 +141,7 @@ const PoolRow: React.FC<{
                     )}
                 </div>
             </div>
-            <span>{`${calcAPY(apr).times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`}</span>
+            <span>{`${apy.times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`}</span>
             <span>
                 <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
             </span>
