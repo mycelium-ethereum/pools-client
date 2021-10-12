@@ -108,7 +108,7 @@ const TokenRow: React.FC<{
                 <div>{toApproxCurrency(token.nextPrice)}</div>
                 <div className="opacity-80">
                     {Math.abs(priceDelta) <= 0.001 ? (
-                        'No change'
+                        'Minimal change'
                     ) : (
                         <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
                             {`${toApproxCurrency(token.nextPrice - token.lastPrice)} (${priceDelta.toFixed(2)}%)`}
