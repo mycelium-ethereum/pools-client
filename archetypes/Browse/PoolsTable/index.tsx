@@ -17,7 +17,6 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
-import Lock from '/public/img/general/lock.svg';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -28,9 +27,6 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">{'Price (USDC) *'}</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap align-top">
-                        {`△ Price Since Last Rebalance *`}
-                    </TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">
                         <div className="mb-4">Power Leverage</div>
                         <div className="flex font-normal">
@@ -43,13 +39,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <TableHeaderCell className="whitespace-nowrap font-normal" align="bottom">
                         For Losses
                     </TableHeaderCell>
-                    <TableHeaderCell align="bottom">
-                        <div className="mb-4 whitespace-nowrap">Next Rebalance</div>
-                        <div className="whitespace-nowrap font-normal">Commitment ends in</div>
-                    </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap font-normal" align="bottom">
-                        Mint/Burn In
-                    </TableHeaderCell>
+                    <TableHeaderCell>Next Rebalance</TableHeaderCell>
                     <TableHeaderCell>TVL (USDC)</TableHeaderCell>
                     <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
@@ -114,8 +104,19 @@ const TokenRow: React.FC<{
                 <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
                 {token.symbol}
             </span>
-            <span>{toApproxCurrency(token.nextPrice)}</span>
-            <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>{`${priceDelta.toFixed(2)}%`}</span>
+            <span>
+                <div>{toApproxCurrency(token.nextPrice)}</div>
+                <div className="opacity-80">
+                    {Math.abs(priceDelta) <= 0.001 ? (
+                        'No change'
+                    ) : (
+                        <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
+                            {`${toApproxCurrency(token.nextPrice - token.lastPrice)} (${priceDelta.toFixed(2)}%)`}
+                        </span>
+                    )}
+                    {` since last rebalance`}
+                </div>
+            </span>
             <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
                 {`${token.effectiveGain.toFixed(2)}x`}
             </span>
@@ -123,13 +124,14 @@ const TokenRow: React.FC<{
             <span className="flex">
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
-                        <Lock className="mr-2" />
+                        <div>Front running interval reached</div>
+                        <div className="opacity-80">
+                            Mint/burn in <TimeLeft targetTime={token.nextRebalance} />
+                        </div>
                     </TooltipSelector>
-                ) : null}
-                <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
-            </span>
-            <span>
-                <TimeLeft targetTime={token.nextRebalance} />
+                ) : (
+                    <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
+                )}
             </span>
             <span>{toApproxCurrency(token.totalValueLocked)}</span>
             <span>
