@@ -45,10 +45,15 @@ export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
     bridgeModalIsOpen: false,
 });
 
+const BRIDGEABLE_ASSET_ETH = {
+    name: 'Ethereum',
+    symbol: bridgeableTickers.ETH,
+    address: null,
+};
+
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = 1 } = useWeb3();
     const { handleTransaction } = useTransactionContext();
-    // const [bridge, setBridge] = useState<Bridge | null>(null);
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);
     const [bridge, setBridge] = useState<Bridge | null>(null);
@@ -62,14 +67,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         if (!toNetwork) {
             return [];
         }
-        return [
-            ...bridgeableTokenList,
-            {
-                name: 'Ethereum',
-                symbol: bridgeableTickers.ETH,
-                address: null,
-            },
-        ];
+        return [...bridgeableTokenList, BRIDGEABLE_ASSET_ETH];
     }, [bridgeableTokenList]);
 
     useEffect(() => {
@@ -123,7 +121,10 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             const arbSys = bridge.l2Bridge.arbSys;
 
             handleTransaction(arbSys.withdrawEth, [account, { value: ethers.utils.parseEther(amount.toFixed()) }], {
-                onSuccess,
+                onSuccess: () => {
+                    onSuccess();
+                    refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
+                },
             });
         } else {
             // on layer 1, deposit eth to layer 2
@@ -132,7 +133,10 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             const inbox = new Inbox__factory(provider.getSigner(0)).attach(inboxAddress);
 
             handleTransaction(inbox.depositEth, ['0', { value: ethers.utils.parseEther(amount.toFixed()) }], {
-                onSuccess,
+                onSuccess: () => {
+                    onSuccess();
+                    refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
+                },
             });
         }
     };
@@ -169,7 +173,12 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             handleTransaction(
                 bridge.l2Bridge.l2GatewayRouter.functions['outboundTransfer(address,address,uint256,bytes)'],
                 [l1TokenAddress, account, ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals), '0x'],
-                { onSuccess },
+                {
+                    onSuccess: () => {
+                        onSuccess();
+                        refreshBridgeableBalance(bridgeableToken);
+                    },
+                },
             );
         } else {
             // we are on layer 1, deposit into layer 2
@@ -196,7 +205,12 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         value: depositParams.l1CallValue,
                     },
                 ],
-                { onSuccess },
+                {
+                    onSuccess: () => {
+                        onSuccess();
+                        refreshBridgeableBalance(bridgeableToken);
+                    },
+                },
             );
         }
     };

@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -70,6 +71,7 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
+    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -232,7 +234,10 @@ export default (() => {
                 <Button
                     size="lg"
                     variant="primary"
-                    onClick={() => window.open('https://bridge.arbitrum.io', '_blank', 'noopener')}
+                    onClick={() => {
+                        showBridgeModal();
+                        setShowModal(false);
+                    }}
                 >
                     Launch Arbitrum Bridge
                 </Button>
