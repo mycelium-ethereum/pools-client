@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState, useMemo } from 'react';
-// import { Bridge } from 'arb-ts';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
@@ -10,11 +9,7 @@ import { destinationNetworkLookup, bridgeableTokens, bridgeableTickers } from '.
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { Children } from '@libs/types/General';
 
-import {
-    BridgeableAsset,
-    // BridgeableBalance,
-    BridgeableBalances,
-} from '../../libs/types/General';
+import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
 interface ArbitrumBridgeProps {
     bridgeToken: (tokenAddress: string, amount: BigNumber, onSuccess: () => void) => void;
@@ -65,7 +60,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
     const bridgeableAssetList: BridgeableAsset[] = useMemo(() => {
         if (!toNetwork) {
-            console.log('RETURNING EMPTY LIST BECAUSE NO toNetwork');
             return [];
         }
         return [
@@ -123,8 +117,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to bridge ETH: provider is unavailable');
             return;
         }
-
-        console.log('BRIDGING ETH', bridge);
 
         if (fromNetwork.isArbitrum) {
             // on layer 2, withdraw eth to layer 1
@@ -270,8 +262,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     allowance: new BigNumber(ethers.utils.formatUnits(allowance, decimals)),
                     spender: erc20GatewayAddress,
                 };
-
-                console.log('NEW BALANCE', newBridgeableBalances[network][asset.symbol]);
             }
 
             setBridgeableBalances(newBridgeableBalances);
@@ -314,6 +304,5 @@ export const useArbitrumBridge: () => ArbitrumBridgeProps = () => {
 };
 
 const isL1TokenData = (tokenData: L1TokenData | L2TokenData): tokenData is L1TokenData => {
-    console.log('IS L1 TOKEN', Boolean((tokenData as any).decimals));
     return Boolean((tokenData as any).decimals);
 };

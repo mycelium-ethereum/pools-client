@@ -1,9 +1,4 @@
-import React, {
-    // useReducer,
-    useState,
-    useMemo,
-    useEffect,
-} from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
@@ -43,7 +38,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onApproveToken,
     } = props;
 
-    // const [state, dispatch] = useReducer(bridgeReducer, DefaultBridgeState);
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
 
     const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
@@ -177,7 +171,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 fullWidthButtons={true}
                                 onClick={(val) => {
                                     setSelectedAssetIndex(val);
-                                    console.log('VALUE CHANGED', val);
                                 }}
                                 options={buttonGroupOptions}
                             />
