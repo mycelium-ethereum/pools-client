@@ -3,7 +3,7 @@ import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
-import { calcTokenPrice } from '@libs/utils/calcs';
+import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { useCommits } from '@context/UsersCommitContext';
 
 export default ((focus) => {

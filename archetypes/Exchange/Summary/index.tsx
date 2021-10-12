@@ -3,7 +3,7 @@ import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@component
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
+import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';

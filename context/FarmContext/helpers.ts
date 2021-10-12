@@ -1,5 +1,5 @@
 import { initPool, fetchCommits } from '@context/PoolContext/helpers';
-import { calcNextValueTransfer, calcTokenPrice } from '@libs/utils/calcs';
+import { calcNextValueTransfer, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 
