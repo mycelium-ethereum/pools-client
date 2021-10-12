@@ -227,7 +227,7 @@ export const networkConfig: Record<string, Network> = {
     '1': {
         // TODO: fill this out properly
         id: '1',
-        name: 'Mainnet',
+        name: 'Ethereum',
         isArbitrum: false,
         previewUrl: '',
         contracts: {

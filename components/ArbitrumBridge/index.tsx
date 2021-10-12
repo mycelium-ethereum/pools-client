@@ -25,13 +25,13 @@ export const ArbitrumBridge: React.FC = (() => {
         bridgeModalIsOpen,
     } = useArbitrumBridge();
 
-    const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber) => {
+    const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, onSuccess: () => void) => {
         if (asset.symbol === bridgeableTickers.ETH) {
-            return bridgeEth(amount);
+            return bridgeEth(amount, onSuccess);
         }
         // this type cast is safe because
         // ETH is the only asset with a null address
-        return bridgeToken(asset.address as string, amount);
+        return bridgeToken(asset.address as string, amount, onSuccess);
     };
 
     const onApproveToken = (tokenAddress: string, spender: string) => approveToken(tokenAddress, spender);

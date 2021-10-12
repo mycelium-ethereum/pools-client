@@ -1,5 +1,5 @@
 import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
-// import Inbox from '@libs/abi/arbitrum/Inbox.json';
+import { LogoTicker } from '@components/General/Logo';
 
 export const destinationNetworkLookup: { [current: number]: string } = {
     [RINKEBY]: ARBITRUM_RINKEBY,
@@ -9,7 +9,7 @@ export const destinationNetworkLookup: { [current: number]: string } = {
 };
 
 export const bridgeableTokens: {
-    [networkId: string]: { name: string; symbol: string; address: string; decimals: number }[];
+    [networkId: string]: { name: string; symbol: LogoTicker; address: string; decimals: number }[];
 } = {
     [ARBITRUM]: [
         {
@@ -48,4 +48,4 @@ export const bridgeableTokens: {
 export const bridgeableTickers = {
     ETH: 'ETH',
     USDC: 'USDC',
-};
+} as const;

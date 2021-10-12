@@ -174,20 +174,14 @@ const BridgeFundsOption: React.FC<{
 }> = ({ className, showBridgeModal }) => {
     return (
         <>
-            <button className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')} onClick={showBridgeModal}>
+            <button
+                className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover mt-3 text-sm w-full')}
+                onClick={showBridgeModal}
+            >
                 <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
                 Bridge Funds
             </button>
         </>
-        // <a
-        //     className={classNames(className ?? '', 'flex mt-3 hover:bg-gray-100')}
-        //     href="https://bridge.arbitrum.io"
-        //     target="_blank"
-        //     rel="noopener noreferrer"
-        // >
-        //     <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
-        //     <div className="text-sm">Bridge Funds</div>
-        // </a>
     );
 };
 

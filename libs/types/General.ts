@@ -3,6 +3,7 @@ import { CommitEnum, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
+import { LogoTicker } from '@components/General';
 
 /**
  * Can be used when component passes down children
@@ -121,7 +122,7 @@ export type Heading = {
 
 export type BridgeableAsset = {
     name: string;
-    symbol: string;
+    symbol: LogoTicker;
     address: string | null;
 };
 
