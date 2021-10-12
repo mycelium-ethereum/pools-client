@@ -15,10 +15,8 @@ import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
-// import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
 import Lock from '/public/img/general/lock.svg';
-import BigNumber from 'bignumber.js';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -102,6 +100,8 @@ const TokenRow: React.FC<{
 
     const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
 
+    const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
+
     return (
         <TableRow rowNumber={index}>
             <span>
@@ -109,8 +109,8 @@ const TokenRow: React.FC<{
                 {token.symbol}
             </span>
             <span>{toApproxCurrency(token.nextPrice)}</span>
-            <span className={token.nextPrice >= token.lastPrice ? 'text-green-500' : 'text-red-500'}>
-                {`${calcPercentageDifference(new BigNumber(token.nextPrice), new BigNumber(token.lastPrice)).toFixed(
+            <span className={priceDelta >=  0 ? 'text-green-500' : 'text-red-500'}>
+                {`${priceDelta.toFixed(
                     2,
                 )}%`}
             </span>
