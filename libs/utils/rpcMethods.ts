@@ -157,57 +157,55 @@ export const getBalancerPrices: () => Promise<Record<string, BigNumber>> = async
 
             }`,
     };
+
     const url = 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2';
-    return fetch(url, {
+    const res= await fetch(url, {
         method: 'POST',
         body: JSON.stringify(data),
     })
         .then((res) => res.json())
-        .then((res) => {
-            const tokenPrices: Record<string, BigNumber> = {};
-            const getTokenPrices: (
-                pools: {
-                    id: string;
-                    address: string;
-                    tokens: {
-                        address: string;
-                        balance: string;
-                        decimals: string;
-                        weight: string; // decimal
-                        symbol: string;
-                    }[];
-                }[],
-                baseAssets: ('USDC' | 'WETH' | 'WBTC')[],
-            ) => void = (pools, baseAssets) => {
-                for (const pool of pools) {
-                    const baseAsset = pool.tokens.filter((token: any) => baseAssets.includes(token.symbol))[0];
-                    const poolTokens = pool.tokens.filter((token: any) => !baseAssets.includes(token.symbol));
-                    let baseBalance = new BigNumber(baseAsset.balance);
-                    if (baseAsset.symbol !== 'USDC') {
-                        baseBalance = baseBalance.times(tokenPrices[baseAsset.symbol]);
-                    }
-                    for (const token of poolTokens) {
-                        tokenPrices[token.symbol] = calcBptTokenSpotPrice(
-                            {
-                                balance: baseBalance,
-                                weight: new BigNumber(baseAsset.weight),
-                            },
-                            {
-                                balance: new BigNumber(token.balance),
-                                weight: new BigNumber(token.weight),
-                            },
-                        );
-                    }
-                }
-            };
-            getTokenPrices(res.data.wPool, ['USDC']);
-            getTokenPrices(res.data.nonLeveragedPools, ['USDC']);
-            getTokenPrices(res.data.leveragedPools, ['WETH', 'WBTC']);
-
-            return tokenPrices;
-        })
         .catch((err) => {
             console.error('Failed to fetch tokens from balancer graph', err);
             return {};
         });
+    const tokenPrices: Record<string, BigNumber> = {};
+    const getTokenPrices: (
+        pools: {
+            id: string;
+            address: string;
+            tokens: {
+                address: string;
+                balance: string;
+                decimals: string;
+                weight: string; // decimal
+                symbol: string;
+            }[];
+        }[],
+        baseAssets: ('USDC' | 'WETH' | 'WBTC')[],
+    ) => void = (pools, baseAssets) => {
+        for (const pool of pools) {
+            const baseAsset = pool.tokens.filter((token: any) => baseAssets.includes(token.symbol))[0];
+            const poolTokens = pool.tokens.filter((token: any) => !baseAssets.includes(token.symbol));
+            let baseBalance = new BigNumber(baseAsset.balance);
+            if (baseAsset.symbol !== 'USDC') {
+                baseBalance = baseBalance.times(tokenPrices[baseAsset.symbol]);
+            }
+            for (const token of poolTokens) {
+                tokenPrices[token.symbol] = calcBptTokenSpotPrice(
+                    {
+                        balance: baseBalance,
+                        weight: new BigNumber(baseAsset.weight),
+                    },
+                    {
+                        balance: new BigNumber(token.balance),
+                        weight: new BigNumber(token.weight),
+                    },
+                );
+            }
+        }
+    };
+    getTokenPrices(res.data.wPool, ['USDC']);
+    getTokenPrices(res.data.nonLeveragedPools, ['USDC']);
+    getTokenPrices(res.data.leveragedPools, ['WETH', 'WBTC']);
+    return tokenPrices;
 };
