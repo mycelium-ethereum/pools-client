@@ -259,11 +259,11 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </Button>
                     )}
                     <p className="text-center w-full mt-4">
-                        Visit the &nbsp;
+                        Visit the&nbsp;
                         <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
                             Official Arbitrum Bridge
                         </a>
-                        &nbsp; to see pending transactions.
+                        &nbsp;to see deposit/withdrawal details.
                     </p>
                 </div>
             </div>
