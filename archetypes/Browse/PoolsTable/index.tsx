@@ -1,5 +1,5 @@
 import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow, TableHeaderCell } from '@components/General/TWTable';
+import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
 import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import React, { useMemo, useState } from 'react';
@@ -17,6 +17,7 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
+import { classNames } from '@libs/utils/functions';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -26,8 +27,8 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <Table>
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">{'Price (USDC) *'}</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">
+                    <TableHeaderCell className="whitespace-nowrap align-top">{'Price (USDC) *'}</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap pr-0">
                         <div className="mb-4">Power Leverage</div>
                         <div className="flex font-normal">
                             <span className="mt-auto">For Gains</span>
@@ -36,7 +37,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             </span>
                         </div>
                     </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap font-normal" align="bottom">
+                    <TableHeaderCell className="whitespace-nowrap font-normal pl-0" align="bottom">
                         For Losses
                     </TableHeaderCell>
                     <TableHeaderCell>Next Rebalance</TableHeaderCell>
@@ -100,11 +101,11 @@ const TokenRow: React.FC<{
 
     return (
         <TableRow rowNumber={index}>
-            <span>
+            <TableRowCell>
                 <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
                 {token.symbol}
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <div>{toApproxCurrency(token.nextPrice)}</div>
                 <div className="opacity-80">
                     {Math.abs(priceDelta) <= 0.001 ? (
@@ -116,12 +117,17 @@ const TokenRow: React.FC<{
                     )}
                     {` since last rebalance`}
                 </div>
-            </span>
-            <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
+            </TableRowCell>
+            <TableRowCell
+                className={classNames(
+                    'pr-0',
+                    token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500',
+                )}
+            >
                 {`${token.effectiveGain.toFixed(2)}x`}
-            </span>
-            <span>{`${token.leverage.toFixed(2)}x`}</span>
-            <span className="flex">
+            </TableRowCell>
+            <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}x`}</TableRowCell>
+            <TableRowCell className="flex">
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
                         <div>Front running interval reached</div>
@@ -132,13 +138,13 @@ const TokenRow: React.FC<{
                 ) : (
                     <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
                 )}
-            </span>
-            <span>{toApproxCurrency(token.totalValueLocked)}</span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>{toApproxCurrency(token.totalValueLocked)}</TableRowCell>
+            <TableRowCell>
                 <div>{`${token.myHoldings.toFixed(2)}`}</div>
                 <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <Button
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
@@ -168,7 +174,7 @@ const TokenRow: React.FC<{
                         target: token.address,
                     }}
                 />
-            </span>
+            </TableRowCell>
         </TableRow>
     );
 };

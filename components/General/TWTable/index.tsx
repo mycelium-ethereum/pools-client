@@ -56,15 +56,12 @@ export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
                         : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
                 }
             >
-                {React.Children.map(children, (child, index) => (
-                    <td
-                        key={`cell_${rowNumber}_${index}`}
-                        className="px-4 py-4 whitespace-nowrap text-sm text-theme-text"
-                    >
-                        {child}
-                    </td>
-                ))}
+                {children}
             </tr>
         </tbody>
     );
 };
+
+export const TableRowCell: React.FC<{ className?: string }> = ({ children, className }) => (
+    <td className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')}>{children}</td>
+);
