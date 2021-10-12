@@ -65,14 +65,14 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             </p>
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
-                    <div className="text-2xl">Effective Leverage on Gains</div>
+                    <div className="text-2xl">Leverage on Gains</div>
                     <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
                         <Close />
                     </div>
                 </div>
                 <br />
                 <div>
-                    <b>Effective Leverage on Gains:</b> This metric is the the effective leverage by which your gains
+                    This metric is the the effective leverage by which your gains
                     will be determined at the next rebalancing event. While the leverage on losses is always fixed, the
                     leverage on gains varies depending on the capital in the other side of the pool.
                 </div>
