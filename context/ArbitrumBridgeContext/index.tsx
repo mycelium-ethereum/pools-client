@@ -136,12 +136,18 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             const inboxAddress = await bridge.l1GatewayRouter.inbox();
             const inbox = new Inbox__factory(provider.getSigner(0)).attach(inboxAddress);
 
-            handleTransaction(inbox.depositEth, ['0', { value: ethers.utils.parseEther(amount.toFixed()) }], {
-                onSuccess: () => {
-                    onSuccess();
-                    refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
+            const [maxSubmissionPrice] = await bridge.l2Bridge.getTxnSubmissionPrice(0);
+
+            handleTransaction(
+                inbox.depositEth,
+                [maxSubmissionPrice, { value: ethers.utils.parseEther(amount.toFixed()) }],
+                {
+                    onSuccess: () => {
+                        onSuccess();
+                        refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
+                    },
                 },
-            });
+            );
         }
     };
 
