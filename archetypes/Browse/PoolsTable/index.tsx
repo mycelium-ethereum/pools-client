@@ -118,13 +118,10 @@ const TokenRow: React.FC<{
                     {` since last rebalance`}
                 </div>
             </TableRowCell>
-            <TableRowCell
-                className={classNames(
-                    'pr-0',
-                    token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500',
-                )}
-            >
-                {`${token.effectiveGain.toFixed(2)}x`}
+            <TableRowCell className={classNames('pr-0')}>
+                <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
+                    {`${token.effectiveGain.toFixed(2)}x`}
+                </span>
             </TableRowCell>
             <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}x`}</TableRowCell>
             <TableRowCell className="flex">

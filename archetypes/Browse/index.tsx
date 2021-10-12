@@ -74,7 +74,7 @@ export const Browse: React.FC = () => {
     const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.Name:
-                return tokenA.symbol.localeCompare(tokenB.symbol);
+                return tokenA.symbol.split('-')[1].localeCompare(tokenB.symbol.split('-')[1]);
             case SortByEnum.Price:
                 return tokenB.lastPrice - tokenA.lastPrice;
             case SortByEnum.EffectiveGain:
