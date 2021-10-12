@@ -26,7 +26,8 @@ export interface BrowseTableRowData {
     leverage: number;
     side: 'short' | 'long';
     lastPrice: number;
-    effectiveGain: number,
+    nextPrice: number;
+    effectiveGain: number;
     // rebalanceRate: number;
     totalValueLocked: number;
     myHoldings: number;

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
@@ -19,15 +19,15 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
         <>
             <Table>
                 <TableHeader className="uppercase">
-                    <span>Strategy</span>
-                    <span>
+                    <TableHeaderCell>Strategy</TableHeaderCell>
+                    <TableHeaderCell>
                         <APYTip>APY</APYTip>/APR
-                    </span>
-                    <span>TVL (USDC)</span>
-                    <span>My Staked (TOKENS/USDC)</span>
-                    <span>My Holdings (TOKENS/USDC)</span>
-                    <span>My Rewards (TCR)</span>
-                    <span>{/* Empty header for buttons column */}</span>
+                    </TableHeaderCell>
+                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Staked (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((farm, index) => {
                     return (
@@ -95,19 +95,20 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens)),
+        () =>
+            farm?.poolDetails
+                ? farm.poolDetails.poolTokenPrice
+                : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens),
         [farm],
     );
 
     const apr = useMemo(() => {
         const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
         const aprDenominator = tokenPrice.times(farm.totalStaked);
-        return (
-            aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0)
-        )
-    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice])
+        return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice]);
 
-    const apy = useMemo(() => (calcAPY(apr)), [apr])
+    const apy = useMemo(() => calcAPY(apr), [apr]);
 
     const { bptDetails } = farm;
 

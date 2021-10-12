@@ -192,3 +192,12 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
         }
     }
 };
+
+/**
+ * Calculates the percentage increase/decrease between two values
+ * @param newValue
+ * @param oldValue
+ * @returns the percentage difference between the two given values
+ */
+export const calcPercentageDifference: (newValue: BigNumber, oldValue: BigNumber) => BigNumber = (newValue, oldValue) =>
+    newValue.minus(oldValue).div(oldValue).times(100);

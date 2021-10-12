@@ -1,7 +1,7 @@
 import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { Table, TableHeader, TableRow, TableHeaderCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import React, { useMemo, useState } from 'react';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
@@ -15,9 +15,10 @@ import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
+// import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
 import Lock from '/public/img/general/lock.svg';
+import BigNumber from 'bignumber.js';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -26,19 +27,28 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         <>
             <Table>
                 <TableHeader>
-                    <span>Token</span>
-                    <span>{'Price (USDC) *'}</span>
-                    <span className="flex">
-                        {'Effective Leverage'}
-                        <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
-                            <QuestionMark />
-                        </span>
-                    </span>
-                    <span>Power Leverage</span>
-                    <span>Next Rebalancing Event</span>
-                    <span>TVL (USDC)</span>
-                    <span>My Holdings (TOKENS/USDC)</span>
-                    <span>{/* Empty header for buttons column */}</span>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">{'Price (USDC) *'}</TableHeaderCell>
+                    <TableHeaderCell className="w-full whitespace-nowrap">
+                        {`△ Price Since Last Rebalance *`}
+                    </TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">
+                        <div className="mb-3">Power Leverage</div>
+                        <div>For Gains*</div>
+                    </TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap" align="bottom">
+                        For Losses
+                    </TableHeaderCell>
+                    <TableHeaderCell align="bottom">
+                        <div className="mb-3 whitespace-nowrap">Next Rebalance</div>
+                        <div className="whitespace-nowrap">Commitment ends in</div>
+                    </TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap" align="bottom">
+                        Mint/Burn In
+                    </TableHeaderCell>
+                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((token, index) => {
                     return (
@@ -55,11 +65,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
-                * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
-                indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
-                <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
-                value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
-                will be calculated and updated at the next rebalalance.
+                * <strong>Price</strong> and <strong>△ Price Since Last Rebalance</strong> are indicative only, and
+                represent the estimated values for the next rebalance, given the committed mints and burns and change in
+                price of the underlying asset.
             </p>
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
@@ -70,7 +78,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 </div>
                 <br />
                 <div>
-                    <b>Effective Leverage on Gains:</b>  This metric is the the effective leverage by which your gains will be determined at the next rebalancing event. While the leverage on losses is always fixed, the leverage on gains varies depending on the capital in the other side of the pool.
+                    <b>Effective Leverage on Gains:</b> This metric is the the effective leverage by which your gains
+                    will be determined at the next rebalancing event. While the leverage on losses is always fixed, the
+                    leverage on gains varies depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
         </>
@@ -98,13 +108,16 @@ const TokenRow: React.FC<{
                 <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
                 {token.symbol}
             </span>
-            <span>{toApproxCurrency(token.lastPrice)}</span>
+            <span>{toApproxCurrency(token.nextPrice)}</span>
+            <span className={token.nextPrice >= token.lastPrice ? 'text-green-500' : 'text-red-500'}>
+                {`${calcPercentageDifference(new BigNumber(token.nextPrice), new BigNumber(token.lastPrice)).toFixed(
+                    2,
+                )}%`}
+            </span>
             <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
                 {`${token.effectiveGain.toFixed(2)}x`}
             </span>
-            <span>
-                {`${token.leverage.toFixed(2)}x`}
-            </span>
+            <span>{`${token.leverage.toFixed(2)}x`}</span>
             <span className="flex">
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
@@ -112,6 +125,9 @@ const TokenRow: React.FC<{
                     </TooltipSelector>
                 ) : null}
                 <TimeLeft targetTime={token.nextRebalance} />
+            </span>
+            <span>
+                <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
             </span>
             <span>{toApproxCurrency(token.totalValueLocked)}</span>
             <span>
