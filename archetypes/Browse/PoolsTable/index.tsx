@@ -33,21 +33,21 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     </TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">
                         <div className="mb-4">Power Leverage</div>
-                        <div className="flex">
-                            For Gains
+                        <div className="flex font-normal">
+                            <span className="mt-auto">For Gains</span>
                             <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
                                 <QuestionMark />
                             </span>
                         </div>
                     </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap" align="bottom">
+                    <TableHeaderCell className="whitespace-nowrap font-normal" align="bottom">
                         For Losses
                     </TableHeaderCell>
                     <TableHeaderCell align="bottom">
                         <div className="mb-4 whitespace-nowrap">Next Rebalance</div>
-                        <div className="whitespace-nowrap">Commitment ends in</div>
+                        <div className="whitespace-nowrap font-normal">Commitment ends in</div>
                     </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap" align="bottom">
+                    <TableHeaderCell className="whitespace-nowrap font-normal" align="bottom">
                         Mint/Burn In
                     </TableHeaderCell>
                     <TableHeaderCell>TVL (USDC)</TableHeaderCell>
@@ -115,11 +115,7 @@ const TokenRow: React.FC<{
                 {token.symbol}
             </span>
             <span>{toApproxCurrency(token.nextPrice)}</span>
-            <span className={priceDelta >=  0 ? 'text-green-500' : 'text-red-500'}>
-                {`${priceDelta.toFixed(
-                    2,
-                )}%`}
-            </span>
+            <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>{`${priceDelta.toFixed(2)}%`}</span>
             <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
                 {`${token.effectiveGain.toFixed(2)}x`}
             </span>
