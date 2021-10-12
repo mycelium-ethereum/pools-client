@@ -15,6 +15,7 @@ import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
+import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
 import Lock from '/public/img/general/lock.svg';
 
@@ -27,18 +28,23 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">{'Price (USDC) *'}</TableHeaderCell>
-                    <TableHeaderCell className="w-full whitespace-nowrap">
+                    <TableHeaderCell className="whitespace-nowrap align-top">
                         {`△ Price Since Last Rebalance *`}
                     </TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">
-                        <div className="mb-3">Power Leverage</div>
-                        <div>For Gains*</div>
+                        <div className="mb-4">Power Leverage</div>
+                        <div className="flex">
+                            For Gains
+                            <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
+                                <QuestionMark />
+                            </span>
+                        </div>
                     </TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap" align="bottom">
                         For Losses
                     </TableHeaderCell>
                     <TableHeaderCell align="bottom">
-                        <div className="mb-3 whitespace-nowrap">Next Rebalance</div>
+                        <div className="mb-4 whitespace-nowrap">Next Rebalance</div>
                         <div className="whitespace-nowrap">Commitment ends in</div>
                     </TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap" align="bottom">
@@ -124,10 +130,10 @@ const TokenRow: React.FC<{
                         <Lock className="mr-2" />
                     </TooltipSelector>
                 ) : null}
-                <TimeLeft targetTime={token.nextRebalance} />
+                <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
             </span>
             <span>
-                <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
+                <TimeLeft targetTime={token.nextRebalance} />
             </span>
             <span>{toApproxCurrency(token.totalValueLocked)}</span>
             <span>
