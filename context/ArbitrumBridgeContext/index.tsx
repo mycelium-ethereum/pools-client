@@ -79,6 +79,10 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
+        if (!fromNetwork || !toNetwork) {
+            return;
+        }
+
         const createBridge = async () => {
             // await provider._networkPromise;
 

@@ -41,7 +41,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
 
     const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
-    const [amount, setAmount] = useState(new BigNumber(0));
+    const [amount, setAmount] = useState('');
+    const [amountIsInvalid, setAmountIsInvalid] = useState(false);
     const [isBridging, setIsBridging] = useState(false);
 
     // fetch balance when modal initially shows
@@ -63,22 +64,32 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         }
     }, [selectedAsset]);
 
-    const bridgeAsset = () => {
-        if (!selectedAsset || amount.eq(0)) {
-            return;
-        }
-
-        setIsBridging(true);
-        onBridgeAsset(selectedAsset, amount, () => {
-            setIsBridging(false);
-            setAmount(new BigNumber(0));
-        });
-    };
-
     const selectedAssetBalance = useMemo(() => {
         const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.symbol];
         return assetBalance || null;
     }, [selectedAsset, fromNetwork, bridgeableBalances]);
+
+    // validate amount whenever it changes
+    useEffect(() => {
+        if (!selectedAssetBalance) {
+            // nothing to compare it to
+            return setAmountIsInvalid(false);
+        }
+
+        setAmountIsInvalid(selectedAssetBalance.balance.lt(amount));
+    }, [amount, selectedAssetBalance]);
+
+    const bridgeAsset = () => {
+        if (!selectedAsset || !amount) {
+            return;
+        }
+
+        setIsBridging(true);
+        onBridgeAsset(selectedAsset, new BigNumber(amount), () => {
+            setIsBridging(false);
+            setAmount('');
+        });
+    };
 
     const approveToken = () => {
         if (!selectedAsset || !selectedAsset.address || !selectedAssetBalance) {
@@ -185,12 +196,12 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="amount" className="block text-base font-medium mb-2">
                                 Amount
                             </label>
-                            <InputContainer className="w-full ">
+                            <InputContainer className="w-full" error={amountIsInvalid}>
                                 <Input
                                     type="text"
                                     className="w-full h-full font-normal text-base"
-                                    value={amount.eq(0) ? '' : amount.toFixed()}
-                                    onUserInput={(val) => setAmount(new BigNumber(val || 0))}
+                                    value={amount}
+                                    onUserInput={(val) => setAmount(val)}
                                 />
                                 <InnerInputText>
                                     {selectedAsset.symbol ? (
@@ -203,7 +214,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                             className="m-auto cursor-pointer hover:underline"
                                             onClick={(_e) =>
                                                 selectedAssetBalance?.balance
-                                                    ? setAmount(selectedAssetBalance.balance)
+                                                    ? setAmount(selectedAssetBalance.balance.toFixed())
                                                     : null
                                             }
                                         >
@@ -213,11 +224,20 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 </InnerInputText>
                             </InputContainer>
                             {approvalRequired ? (
-                                <p className="text-base mt-3">Token approval required</p>
+                                <div className="mt-2 text-sm">Token approval required</div>
                             ) : (
-                                <p className="text-base mt-3">
-                                    Balance: {selectedAssetBalance?.balance?.toFixed()} {selectedAsset?.symbol}
-                                </p>
+                                <div
+                                    className={`mt-2 text-sm ${
+                                        amountIsInvalid ? 'text-red-500 focus-within:ring-red-500' : ''
+                                    }`}
+                                >
+                                    {selectedAssetBalance?.balance
+                                        ? `Balance: ${selectedAssetBalance.balance.toFixed()}`
+                                        : ''}
+                                    {selectedAssetBalance?.balance && Number(amount) > 0
+                                        ? ` >>> ${selectedAssetBalance.balance.minus(amount).toFixed()}`
+                                        : ''}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -232,20 +252,19 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             size="lg"
                             onClick={bridgeAsset}
                             className="mt-2"
-                            disabled={amount.eq(0)}
+                            disabled={!(Number(amount) > 0) || amountIsInvalid}
                         >
                             Bridge
                             {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
                         </Button>
                     )}
-                    <a
-                        href="https://bridge.arbitrum.io"
-                        target="_blank"
-                        className="text-center w-full mt-4"
-                        rel="noreferrer"
-                    >
-                        Visit the Official Arbitrum Bridge to see pending transactions
-                    </a>
+                    <p className="text-center w-full mt-4">
+                        Visit the &nbsp;
+                        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
+                            Official Arbitrum Bridge
+                        </a>
+                        &nbsp; to see pending transactions.
+                    </p>
                 </div>
             </div>
         </TWModal>
