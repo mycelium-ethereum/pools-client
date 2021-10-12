@@ -36,7 +36,7 @@ module.exports = {
             os: false,
             http: false,
             https: false,
-            path: false
+            path: false,
         };
 
         config.module.rules.push(
