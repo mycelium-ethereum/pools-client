@@ -63,12 +63,12 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return [];
         }
         return [
+            ...bridgeableTokenList,
             {
                 name: 'Ethereum',
                 symbol: bridgeableTickers.ETH,
                 address: null,
             },
-            ...bridgeableTokenList,
         ];
     }, [bridgeableTokenList]);
 
