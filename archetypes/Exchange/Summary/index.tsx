@@ -160,7 +160,7 @@ const BalancerLink: React.FC<{ token: string; isBuy: boolean, price: BigNumber}>
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                 >
-                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @${toApproxCurrency(price)}`}
+                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(price)}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>
             </div>
