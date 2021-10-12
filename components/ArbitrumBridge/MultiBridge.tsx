@@ -121,7 +121,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     return (
         <TWModal open={show} onClose={() => onClose()}>
             <div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
                     <div className="w-3 h-3 ml-4 cursor-pointer" onClick={() => onClose()}>
                         <Close />
