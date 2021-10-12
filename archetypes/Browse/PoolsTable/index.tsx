@@ -40,7 +40,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     <TableHeaderCell className="whitespace-nowrap font-normal pl-0" align="bottom">
                         For Losses
                     </TableHeaderCell>
-                    <TableHeaderCell>Next Rebalance</TableHeaderCell>
+                    <TableHeaderCell>Commitment Ends In</TableHeaderCell>
                     <TableHeaderCell>TVL (USDC)</TableHeaderCell>
                     <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
