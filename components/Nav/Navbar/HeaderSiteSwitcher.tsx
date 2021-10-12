@@ -66,18 +66,18 @@ const DropdownMenu: React.FC = () => {
     return (
         <div id="site-switcher" className="relative flex">
             <Link href="/">
-                <>
+                <div className="my-auto">
                     <img
                         className="sm:w-24 w-22 h-auto hidden md:block cursor-pointer"
                         alt="tracer-logo"
-                        src="/img/logos/tracer/tracer_logo.svg"
+                        src={'/img/logos/tracer/tracer_logo.svg'}
                     />
                     <img
                         className="w-12 h-auto block md:hidden cursor-pointer"
                         src={'/img/logos/tracer/tracer_no_text.svg'}
                         alt="Tracer Logo"
                     />
-                </>
+                </div>
             </Link>
             <button
                 id="toggle"
