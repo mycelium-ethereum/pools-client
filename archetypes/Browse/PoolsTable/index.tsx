@@ -72,9 +72,9 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 </div>
                 <br />
                 <div>
-                    This metric is the the effective leverage by which your gains
-                    will be determined at the next rebalancing event. While the leverage on losses is always fixed, the
-                    leverage on gains varies depending on the capital in the other side of the pool.
+                    This metric is the the effective leverage by which your gains will be determined at the next
+                    rebalancing event. While the leverage on losses is always fixed, the leverage on gains varies
+                    depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
         </>

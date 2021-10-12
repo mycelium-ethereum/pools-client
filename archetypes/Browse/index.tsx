@@ -16,6 +16,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
+import { calcPercentageDifference } from '@libs/utils/converters';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -78,7 +79,10 @@ export const Browse: React.FC = () => {
             case SortByEnum.Price:
                 return tokenB.lastPrice - tokenA.lastPrice;
             case SortByEnum.EffectiveGain:
-                return tokenB.effectiveGain - tokenA.effectiveGain;
+                return (
+                    calcPercentageDifference(tokenB.effectiveGain, tokenB.leverage) -
+                    calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
+                );
             case SortByEnum.TotalValueLocked:
                 return tokenB.totalValueLocked - tokenA.totalValueLocked;
             case SortByEnum.MyHoldings:
