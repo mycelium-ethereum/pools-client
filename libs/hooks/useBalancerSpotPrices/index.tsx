@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { getBalancerPrices } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
-export default (() => {
+export default ((network) => {
     const [tokenPrices, setTokenPrices] = useState<Record<string, BigNumber>>({});
 
     useEffect(() => {
         let mounted = true;
-        getBalancerPrices().then((tokenPrices) => {
+        getBalancerPrices(networkConfig[network].balancerInfo).then((tokenPrices) => {
             if (mounted) {
                 setTokenPrices(tokenPrices);
             }
@@ -18,4 +19,4 @@ export default (() => {
     }, []);
 
     return tokenPrices;
-}) as () => Record<string, BigNumber>;
+}) as (network: number) => Record<string, BigNumber>;

@@ -1,5 +1,5 @@
 import { tokenSymbolToLogoTicker } from '@components/General';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { Network, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { calcBptTokenSpotPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -105,18 +105,17 @@ export const openArbiscan: (type: ArbiscanEnum, taraget: string) => boolean = (t
     return false;
 };
 
-export const getBalancerPrices: () => Promise<Record<string, BigNumber>> = async () => {
-    // 1-BTC/USD and 1-ETH/USD
-    const pools = ['0x6ee86e032173716a41818e6d6d320a752176d697', '0x17a35e3d578797e34131d10e66c11170848c6da1'];
-    // 3-BTC/USD and 3-ETH/USD
-    const leveragedPools = ['0xcf3ae4b9235b1c203457e472a011c12c3a2fde93', '0x996616bde0cb4974e571f17d31c844da2bd177f8'];
-    // wETH wBTC USDC pool
-    const wPool = '0x64541216bafffeec8ea535bb71fbc927831d0595';
+export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Promise<Record<string, BigNumber>> = async (
+    balancerInfo,
+) => {
+    if (!balancerInfo) {
+        return {};
+    }
 
     const data = {
         query: `{
                 leveragedPools: pools(where: { 
-                    address_in: ${JSON.stringify(leveragedPools)}
+                    address_in: ${JSON.stringify(balancerInfo.leveragedPools)}
                 }) {
                     id
                     address
@@ -129,7 +128,7 @@ export const getBalancerPrices: () => Promise<Record<string, BigNumber>> = async
                     }
                 },
                 nonLeveragedPools: pools(where: { 
-                    address_in: ${JSON.stringify(pools)}
+                    address_in: ${JSON.stringify(balancerInfo.pools)}
                 }) {
                     id
                     address
@@ -142,7 +141,7 @@ export const getBalancerPrices: () => Promise<Record<string, BigNumber>> = async
                     }
                 },
                 wPool: pools(where: {
-                    address: "${wPool}"
+                    address: "${balancerInfo.wPool}"
                 }) {
                     id
                     address
@@ -158,8 +157,7 @@ export const getBalancerPrices: () => Promise<Record<string, BigNumber>> = async
             }`,
     };
 
-    const url = 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2';
-    const res= await fetch(url, {
+    const res = await fetch(balancerInfo.graphUri, {
         method: 'POST',
         body: JSON.stringify(data),
     })

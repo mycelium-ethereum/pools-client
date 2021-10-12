@@ -153,7 +153,7 @@ const BalancerLink: React.FC<{
     isBuy: boolean;
 }> = ({ token, isBuy }) => {
     const { network = 0 } = useWeb3();
-    const balancerPoolPrices = useBalancerSpotPrices();
+    const balancerPoolPrices = useBalancerSpotPrices(network);
     return network === parseInt(ARBITRUM) ? (
         <div className="text-sm p-1.5">
             <div className="mr-2 whitespace-nowrap">Dont want to wait?</div>
