@@ -1,8 +1,8 @@
+import React, { useMemo, useState, useEffect } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
 import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
-import React, { useMemo, useState } from 'react';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -60,9 +60,8 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
-                * <strong>Price</strong> and <strong>△ Price Since Last Rebalance</strong> are indicative only, and
-                represent the estimated values for the next rebalance, given the committed mints and burns and change in
-                price of the underlying asset.
+                * <strong>Price</strong> values indicative only, and represent the estimated values for the next
+                rebalance, given the committed mints and burns and change in price of the underlying asset.
             </p>
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
@@ -93,11 +92,19 @@ const TokenRow: React.FC<{
     onClickSell: (pool: string, side: SideEnum) => void;
     provider: ethers.providers.JsonRpcProvider | undefined;
 }> = ({ token, onClickBuy, onClickSell, index, provider }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
     const hasHoldings = useMemo(() => token.myHoldings > 0, [token.myHoldings]);
 
     const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
 
     const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
+
+    useEffect(() => {
+        if (isBeforeFrontRunning) {
+            setPendingUpkeep(false);
+        }
+    }, [isBeforeFrontRunning]);
 
     return (
         <TableRow rowNumber={index}>
@@ -124,12 +131,22 @@ const TokenRow: React.FC<{
                 </span>
             </TableRowCell>
             <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}x`}</TableRowCell>
-            <TableRowCell className="flex">
+            <TableRowCell>
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
                         <div>Front running interval reached</div>
                         <div className="opacity-80">
-                            Mint/burn in <TimeLeft targetTime={token.nextRebalance} />
+                            {'Mint and burn in '}
+                            {!pendingUpkeep ? (
+                                <TimeLeft
+                                    targetTime={token.nextRebalance}
+                                    countdownEnded={() => {
+                                        setPendingUpkeep(true);
+                                    }}
+                                />
+                            ) : (
+                                'progress'
+                            )}
                         </div>
                     </TooltipSelector>
                 ) : (

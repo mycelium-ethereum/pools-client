@@ -86,7 +86,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
-                    <Section label="Expected Leverage">
+                    <Section label="Power Leverage">
                         <div>
                             <span className="opacity-60">{`Gains: `}</span>
                             <span
