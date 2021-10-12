@@ -6,10 +6,10 @@ import Icon from '@ant-design/icons';
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
 // Images
-const DiscourseLogo = '/img/socials/discourse-white.svg';
-const TwitterLogo = '/img/socials/twitter-white.svg';
-const GitHubLogo = '/img/socials/github-white.svg';
-const DiscordLogo = '/img/socials/discord-white.svg';
+const DiscourseLogo = '/img/socials/discourse.svg';
+const TwitterLogo = '/img/socials/twitter.svg';
+const GitHubLogo = '/img/socials/github.svg';
+const DiscordLogo = '/img/socials/discord.svg';
 const Folder = '/img/general/folder.svg';
 const Icons = [
     {

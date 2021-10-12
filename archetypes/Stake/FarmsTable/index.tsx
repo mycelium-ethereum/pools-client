@@ -6,7 +6,7 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import Close from '/public/img/general/close.svg';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -196,7 +196,7 @@ const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ toke
                 key={`balancer-asset-${token.symbol}`}
                 size="md"
                 className="inline mr-2"
-                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : token.symbol}
+                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : (token.symbol as LogoTicker)}
             />
         ))}
     </>

@@ -19,7 +19,7 @@ import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
-import { Logo } from '@components/General/Logo';
+import { Logo, LogoTicker } from '@components/General/Logo';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];
@@ -388,7 +388,7 @@ export default (({
         </>
     );
 }) as React.FC<{
-    logo: string;
+    logo?: LogoTicker;
     title: string;
     subTitle: string;
     tokenType: string;
