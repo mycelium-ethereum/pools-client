@@ -2962,6 +2962,13 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
+"@tracer-protocol/tracer-pools-utils@^0.0.5":
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.5.tgz#1e43d0e91feffe116f49267ed679a582d478a3b3"
+  integrity sha512-8jTlTkWSCx1c/Er+Q1OeDQhK8Xop6RW894LKDFkFrhopEeRajQtiEOMoZYtDfbJDRFI8T0J0EzB1Y7GHf8LDRQ==
+  dependencies:
+    bignumber.js "^9.0.1"
+
 "@truffle/error@^0.0.14":
   version "0.0.14"
   resolved "https://registry.yarnpkg.com/@truffle/error/-/error-0.0.14.tgz#59683b5407bede7bddf16d80dc5592f9c5e5fa05"
