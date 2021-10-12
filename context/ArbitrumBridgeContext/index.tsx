@@ -262,9 +262,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     ? await bridge.l2Bridge.getL2TokenData(asset.address)
                     : await bridge.l1Bridge.getL1TokenData(asset.address);
 
-                const erc20GatewayAddress = fromNetwork.isArbitrum
-                    ? await bridge.l2Bridge.getGatewayAddress(asset.address)
-                    : await bridge.l1Bridge.getGatewayAddress(asset.address);
+                const erc20GatewayAddress = await getERC20GatewayAddress(fromNetwork, asset, bridge);
 
                 const [allowance, decimals] = await Promise.all([
                     tokenData.contract.allowance(account, erc20GatewayAddress),
@@ -319,4 +317,22 @@ export const useArbitrumBridge: () => ArbitrumBridgeProps = () => {
 
 const isL1TokenData = (tokenData: L1TokenData | L2TokenData): tokenData is L1TokenData => {
     return Boolean((tokenData as any).decimals);
+};
+
+const getERC20GatewayAddress = async (fromNetwork: Network, asset: BridgeableAsset, bridge: Bridge) => {
+    if (!asset.address) {
+        throw new Error('Could not get ERC20GatewayAddress: asset address is unknown');
+    }
+
+    if (fromNetwork.isArbitrum) {
+        const l1Address = await bridge.l2Bridge.getERC20L1Address(asset.address);
+        if (!l1Address) {
+            throw new Error(
+                `Could not get ERC20GatewayAddress: l2 address ${asset.address} has no known corresponding l1 address`,
+            );
+        }
+        return bridge.l2Bridge.getGatewayAddress(l1Address);
+    }
+
+    return bridge.l1Bridge.getGatewayAddress(asset.address);
 };
