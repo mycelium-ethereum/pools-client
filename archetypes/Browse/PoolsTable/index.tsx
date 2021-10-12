@@ -106,13 +106,13 @@ const TokenRow: React.FC<{
                 {token.symbol}
             </TableRowCell>
             <TableRowCell>
-                <div>{toApproxCurrency(token.nextPrice)}</div>
+                <div>{toApproxCurrency(token.nextPrice, 3)}</div>
                 <div className="opacity-80">
                     {Math.abs(priceDelta) <= 0.001 ? (
                         'Minimal change'
                     ) : (
                         <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {`${toApproxCurrency(token.nextPrice - token.lastPrice)} (${priceDelta.toFixed(2)}%)`}
+                            {`${toApproxCurrency(token.nextPrice - token.lastPrice, 3)} (${priceDelta.toFixed(2)}%)`}
                         </span>
                     )}
                     {` since last rebalance`}
