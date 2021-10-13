@@ -272,7 +272,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     {approvalRequired ? (
                         <Button variant="primary" size="lg" onClick={approveToken} className="mt-2">
-                            Approve
+                            Unlock {selectedAsset?.symbol}
                         </Button>
                     ) : (
                         <Button
@@ -286,12 +286,27 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
                         </Button>
                     )}
+
                     <p className="text-center w-full mt-4 text-sm">
-                        <b>Note</b>: withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
-                        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
-                            Official Arbitrum Bridge
-                        </a>{' '}
-                        to see pending deposits/withdrawals.
+                        {approvalRequired ? (
+                            <span>
+                                Unlock {selectedAsset?.symbol} to bridge with Arbitrum. This is a one-time transaction
+                                per network for each asset.
+                            </span>
+                        ) : (
+                            <>
+                                <b>Note</b>: withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
+                                <a
+                                    href="https://bridge.arbitrum.io"
+                                    target="_blank"
+                                    className="underline"
+                                    rel="noreferrer"
+                                >
+                                    Official Arbitrum Bridge
+                                </a>{' '}
+                                to see pending deposits/withdrawals.
+                            </>
+                        )}
                     </p>
                 </div>
             </div>
