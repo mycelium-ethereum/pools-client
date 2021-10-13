@@ -16,6 +16,7 @@ import Link from '/public/img/general/link.svg';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
 import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type SummaryProps = {
     pool: Pool;
@@ -166,12 +167,13 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
     );
 };
 
-const USDC = '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8';
-
-const constructBalancerLink = (token: string, isBuy: boolean) =>
-    isBuy
-        ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${token}`
-        : `https://arbitrum.balancer.fi/#/trade/${token}/${USDC}`;
+const constructBalancerLink = (token: string, network: number, isBuy: boolean) => {
+    const { usdcAddress, balancerInfo } = networkConfig[network];
+    // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
+    return isBuy
+        ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
+        : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
+};
 
 const BalancerLink: React.FC<{
     token: {
@@ -189,7 +191,7 @@ const BalancerLink: React.FC<{
                 <Logo className="inline mr-2" ticker="BALANCER" />
                 <a
                     className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
-                    href={constructBalancerLink(token.address, isBuy)}
+                    href={constructBalancerLink(token.address, network, isBuy)}
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                 >

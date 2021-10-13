@@ -39,6 +39,7 @@ export type Network = {
     sushiRouterAddress: string;
     balancerInfo?: {
         graphUri: string;
+        baseUri: string; // base link to balancer trading page
         pools: string[];
         leveragedPools: string[];
         wPool: string;
@@ -201,6 +202,7 @@ export const networkConfig: Record<string, Network> = {
         tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
         balancerInfo: {
             graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
+            baseUri: 'https://arbitrum.balancer.fi/#/trade',
             // 1-BTC/USD and 1-ETH/USD
             pools: ['0x6ee86e032173716a41818e6d6d320a752176d697', '0x17a35e3d578797e34131d10e66c11170848c6da1'],
             // 3-BTC/USD and 3-ETH/USD
