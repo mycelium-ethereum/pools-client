@@ -136,7 +136,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             // on layer 1, deposit eth to layer 2
 
             const inboxAddress = await bridge.l1GatewayRouter.inbox();
-            const inbox = new Inbox__factory(provider.getSigner(0)).attach(inboxAddress);
+            const inbox = new Inbox__factory(bridge.l1Signer).attach(inboxAddress);
 
             const [maxSubmissionPrice] = await bridge.l2Bridge.getTxnSubmissionPrice(0);
 
@@ -250,9 +250,18 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const refreshBridgeableBalance = async (asset: BridgeableAsset): Promise<void> => {
         const newBridgeableBalances = Object.assign({}, bridgeableBalances);
 
-        if (!provider || !signer || !bridge || !account) {
+        if (!account) {
+            console.error('Failed to refresh bridgeable balance: account is unavailable');
             return;
         }
+        if (!bridge) {
+            console.error('Failed to refresh bridgeable balance: bridge is unavailable');
+            return;
+        }
+        if (!fromNetwork) {
+            console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
+        }
+
         // ensure the top level (network) entry is initialised
 
         newBridgeableBalances[network] = newBridgeableBalances[network] || {};
