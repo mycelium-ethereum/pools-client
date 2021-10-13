@@ -1,9 +1,14 @@
 import React from 'react';
+import { useTheme } from '@context/ThemeContext';
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
 
 import Close from '/public/img/general/close.svg';
+import WaveLight from '/public/img/onboard/wave-light.svg';
+import WaveDark from '/public/img/onboard/wave-dark.svg';
+import QuestionLight from '/public/img/onboard/question-light.svg';
+import QuestionDark from '/public/img/onboard/question-dark.svg';
 
 interface OnboardModalProps {
     onboardStep: number;
@@ -17,11 +22,13 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
     showOnboardModal,
     setShowOnboardModal,
 }) => {
+    const { isDark } = useTheme();
     const OnboardContent = () => {
         switch (onboardStep) {
             case 1:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <WaveDark /> : <WaveLight />}</div>
                         <div className="text-2xl text-center my-5">{`Welcome to Tracer's Perpetual Pools`}</div>
                         <Divider className="mb-8" />
                         <div className="text-sm text-center">
@@ -47,6 +54,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 2:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <QuestionDark /> : <QuestionLight />}</div>
                         <div className="text-2xl text-center my-5">How it works</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
@@ -74,6 +82,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 3:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <QuestionDark /> : <QuestionLight />}</div>
                         <div className="text-2xl text-center my-5">Crossing the bridge from L1 to Arbitrum</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
@@ -110,6 +119,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 4:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <QuestionDark /> : <QuestionLight />}</div>
                         <div className="text-2xl text-center my-5">Mint and burn Pool tokens</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
@@ -137,6 +147,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 5:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <QuestionDark /> : <QuestionLight />}</div>
                         <div className="text-2xl text-center my-5">Want to learn more?</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
