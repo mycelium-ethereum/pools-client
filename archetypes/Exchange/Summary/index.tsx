@@ -95,10 +95,10 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                                     effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
                                 )}
                             >
-                                {effectiveGains.toFixed(2)}x
+                                {effectiveGains.toFixed(2)}
                             </span>
                             <span className="opacity-60">{`Losses: `}</span>
-                            {pool.leverage}x
+                            {pool.leverage}
                         </div>
                     </Section>
                     <BalancerLink token={token.address} isBuy={true} />

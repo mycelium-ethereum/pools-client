@@ -128,10 +128,10 @@ const TokenRow: React.FC<{
             </TableRowCell>
             <TableRowCell className={classNames('pr-0')}>
                 <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
-                    {`${token.effectiveGain.toFixed(2)}x`}
+                    {`${token.effectiveGain.toFixed(2)}`}
                 </span>
             </TableRowCell>
-            <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}x`}</TableRowCell>
+            <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}`}</TableRowCell>
             <TableRowCell>
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
