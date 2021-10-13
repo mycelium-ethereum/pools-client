@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <GitbookLogo />
+                        <GitbookLogo className="w-7" />
                     </a>
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
@@ -29,7 +29,7 @@ const Footer: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <DiscourseLogo />
+                        <DiscourseLogo className="w-7" />
                     </a>
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
@@ -37,7 +37,7 @@ const Footer: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <TwitterLogo />
+                        <TwitterLogo className="w-7" />
                     </a>
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
@@ -45,7 +45,7 @@ const Footer: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <GitHubLogo />
+                        <GitHubLogo className="w-7" />
                     </a>
                     <a
                         className="my-auto transition-opacity hover:opacity-80"
@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        <DiscordLogo />
+                        <DiscordLogo className="w-7" />
                     </a>
                 </div>
                 <div className="flex flex-col lg:flex-row">
