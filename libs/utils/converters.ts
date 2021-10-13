@@ -37,16 +37,17 @@ export const round: (num: number, decimalPlaces: number) => number = (num, decim
  * @param num_ number to convert to currency
  * @returns returns the LocaleString representation of the value
  */
-export const etherToApproxCurrency: (num: BigNumber) => string = (num) => {
+export const etherToApproxCurrency: (num: BigNumber, decimals?: number) => string = (num, decimals = 2) => {
     if (!num || num?.eq(0)) {
         // reject if num is falsey or is 0
-        return '$0.00';
+        const ZERO = 0;
+        return `${ZERO.toFixed(decimals)}`;
     }
     const parsedNum = parseFloat(ethers.utils.formatEther(num.toString()));
     return parsedNum.toLocaleString('en-us', {
         style: 'currency',
         currency: 'USD',
-        minimumFractionDigits: 2,
+        minimumFractionDigits: decimals,
     });
 };
 
@@ -192,3 +193,12 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
         }
     }
 };
+
+/**
+ * Calculates the percentage increase/decrease between two values
+ * @param newValue
+ * @param oldValue
+ * @returns the percentage difference between the two given values
+ */
+export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
+    ((newValue - oldValue) / oldValue) * 100;
