@@ -175,8 +175,8 @@ const constructBalancerLink = (token: string, isBuy: boolean) =>
 const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBuy }) => {
     const { network = 0 } = useWeb3();
     return network === parseInt(ARBITRUM) ? (
-        <div className="text-sm p-1.5">
-            <div className="mr-2 whitespace-nowrap">Dont want to wait?</div>
+        <div className="text-sm mt-2">
+            <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
             <div>
                 <Logo className="inline mr-2" ticker="BALANCER" />
                 <a
