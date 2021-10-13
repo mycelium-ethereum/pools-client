@@ -57,6 +57,26 @@ const BRIDGEABLE_ASSET_ETH = {
     decimals: 18,
 };
 
+const withdrawalToastBody = (
+    <>
+        It will take approximately 7 days to receive your funds on Ethereum. To view any pending withdrawals, visit the{' '}
+        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
+            Official Arbitrum Bridge
+        </a>
+        .
+    </>
+);
+
+const depositToastBody = (
+    <>
+        It may take a couple of minutes to receive your funds on Arbitrum. To view any pending deposits, visit the{' '}
+        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
+            Official Arbitrum Bridge
+        </a>
+        .
+    </>
+);
+
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = 1 } = useWeb3();
     const { handleTransaction } = useTransactionContext();
@@ -133,6 +153,21 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 onError: () => {
                     callback();
                 },
+                statusMessages: {
+                    waiting: {
+                        title: `Submitting ETH withdrawal from ${fromNetwork.name}`,
+                        body: '',
+                    },
+                    success: {
+                        title: `Submitted ETH withdrawal from ${fromNetwork.name}`,
+                        body: withdrawalToastBody,
+                        autoDismiss: false,
+                    },
+                    error: {
+                        title: `Failed to submit ETH withdrawal from ${fromNetwork.name}`,
+                        body: '',
+                    },
+                },
             });
         } else {
             // on layer 1, deposit eth to layer 2
@@ -152,6 +187,21 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     },
                     onError: () => {
                         callback();
+                    },
+                    statusMessages: {
+                        waiting: {
+                            title: `Submitting ETH deposit to ${toNetwork.name}`,
+                            body: '',
+                        },
+                        success: {
+                            title: `Submitted ETH deposit to ${toNetwork.name}`,
+                            body: depositToastBody,
+                            autoDismiss: false,
+                        },
+                        error: {
+                            title: `Failed to submit ETH deposit to ${toNetwork.name}`,
+                            body: '',
+                        },
                     },
                 },
             );
@@ -203,6 +253,21 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     onError: () => {
                         callback();
                     },
+                    statusMessages: {
+                        waiting: {
+                            title: `Submitting ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
+                            body: '',
+                        },
+                        success: {
+                            title: `Submitted ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
+                            body: withdrawalToastBody,
+                            autoDismiss: false,
+                        },
+                        error: {
+                            title: `Failed to submit ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
+                            body: '',
+                        },
+                    },
                 },
             );
         } else {
@@ -238,6 +303,21 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     onError: () => {
                         callback();
                     },
+                    statusMessages: {
+                        waiting: {
+                            title: `Submitting ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
+                            body: '',
+                        },
+                        success: {
+                            title: `Submitted ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
+                            body: depositToastBody,
+                            autoDismiss: false,
+                        },
+                        error: {
+                            title: `Failed to submit ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
+                            body: '',
+                        },
+                    },
                 },
             );
         }
@@ -251,18 +331,34 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
         const token = new ethers.Contract(tokenAddress, ERC20__factory.abi, signer) as ERC20;
 
+        const bridgeableToken = bridgeableAssets[fromNetwork.id].find((token) => token.address === tokenAddress);
+        if (!bridgeableToken) {
+            console.error(`Failed to approve ERC20: bridgeable token not found with address ${tokenAddress}`);
+            return;
+        }
+
         handleTransaction(token.approve, [spender, MAX_SOL_UINT], {
             onSuccess: () => {
                 // TODO convert to hashmap to avoid looping both here and in bridgeToken
                 if (fromNetwork) {
-                    const bridgeableAsset = bridgeableAssets[fromNetwork.id].find(
-                        (token) => token.address === tokenAddress,
-                    );
-
-                    if (bridgeableAsset) {
-                        refreshBridgeableBalance(bridgeableAsset);
+                    if (bridgeableToken) {
+                        refreshBridgeableBalance(bridgeableToken);
                     }
                 }
+            },
+            statusMessages: {
+                waiting: {
+                    title: `Unlocking ${bridgeableToken.symbol}`,
+                    body: '',
+                },
+                success: {
+                    title: `Unlocked ${bridgeableToken.symbol}`,
+                    body: '',
+                },
+                error: {
+                    title: `Unlock ${bridgeableToken.symbol} failed`,
+                    body: '',
+                },
             },
         });
     };

@@ -7,6 +7,7 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 type Content = {
     title?: React.ReactNode;
     body?: React.ReactNode;
+    autoDismiss?: boolean;
 };
 
 export type Options = {
@@ -87,7 +88,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     ),
                 ],
                 appearance: 'success',
-                autoDismiss: true,
+                autoDismiss: statusMessages?.success?.autoDismiss ?? true,
             });
 
             setPendingCount(pendingCount - 1);
