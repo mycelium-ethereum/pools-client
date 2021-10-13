@@ -87,7 +87,7 @@ export const NavBarContent: React.FC<{
                     <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
                     <ThemeSwitcher />
                 </span>
-                <MobileMenu account={account ?? ''} />
+                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
             </div>
         </nav>
     );

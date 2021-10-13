@@ -70,14 +70,21 @@ export default (({ account, className }) => {
                                             className="text-white py-2 cursor-pointer hover:bg-tracer-900"
                                             onClick={() => handleRoute('/')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/invest.svg'} />
+                                            <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
                                             Trade
+                                        </div>
+                                        <div
+                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            onClick={() => handleRoute('/browse')}
+                                        >
+                                            <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Browse" />
+                                            Browse
                                         </div>
                                         <div
                                             className="text-white py-2 cursor-pointer hover:bg-tracer-900"
                                             onClick={() => handleRoute('/stakepooltoken')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/stake.svg'} />
+                                            <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Stake" />
                                             Stake
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
