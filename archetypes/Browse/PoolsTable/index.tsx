@@ -27,7 +27,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
             <Table>
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap align-top">{'Price (USDC) *'}</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap align-top">{'Token Price (USDC) *'}</TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap pr-0">
                         <div className="mb-4">Power Leverage</div>
                         <div className="flex font-normal">
