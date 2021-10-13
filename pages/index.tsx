@@ -5,7 +5,6 @@ import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import { useRouter } from 'next/router';
 import Exchange from '@archetypes/Exchange';
-import InvestNav from '@components/Nav/InvestNav';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
@@ -34,7 +33,6 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <InvestNav />
                 <SwapStore>
                     <Exchange />
                 </SwapStore>
