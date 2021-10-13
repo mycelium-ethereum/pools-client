@@ -49,6 +49,8 @@ const BRIDGEABLE_ASSET_ETH = {
     name: 'Ethereum',
     symbol: bridgeableTickers.ETH,
     address: null,
+    displayDecimals: 6,
+    decimals: 18,
 };
 
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {

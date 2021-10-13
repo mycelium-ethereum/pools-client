@@ -1,4 +1,5 @@
 import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
+import { BridgeableAsset } from '@libs/types/General';
 import { LogoTicker } from '@components/General/Logo';
 
 export const destinationNetworkLookup: { [current: number]: string } = {
@@ -8,39 +9,38 @@ export const destinationNetworkLookup: { [current: number]: string } = {
     [ARBITRUM]: MAINNET,
 };
 
+const usdcSharedDetails = {
+    name: 'USDC',
+    symbol: 'USDC' as LogoTicker,
+    decimals: 6,
+    displayDecimals: 2,
+};
+
 export const bridgeableTokens: {
-    [networkId: string]: { name: string; symbol: LogoTicker; address: string; decimals: number }[];
+    [networkId: string]: BridgeableAsset[];
 } = {
     [ARBITRUM]: [
         {
             address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-            name: 'USDC',
-            symbol: 'USDC',
-            decimals: 6,
+            ...usdcSharedDetails,
         },
     ],
     [ARBITRUM_RINKEBY]: [
         {
             address: '0x1E77ad77925Ac0075CF61Fb76bA35D884985019d',
-            name: 'USDC',
-            symbol: 'USDC',
-            decimals: 6,
+            ...usdcSharedDetails,
         },
     ],
     [MAINNET]: [
         {
             address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-            name: 'USDC',
-            symbol: 'USDC',
-            decimals: 6,
+            ...usdcSharedDetails,
         },
     ],
     [RINKEBY]: [
         {
             address: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
-            name: 'USDC',
-            symbol: 'USDC',
-            decimals: 6,
+            ...usdcSharedDetails,
         },
     ],
 };

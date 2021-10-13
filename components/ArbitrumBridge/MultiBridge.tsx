@@ -232,10 +232,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     }`}
                                 >
                                     {selectedAssetBalance?.balance
-                                        ? `Balance: ${selectedAssetBalance.balance.toFixed()}`
+                                        ? `Balance: ${selectedAssetBalance.balance.toFixed(
+                                              selectedAsset.displayDecimals,
+                                          )}`
                                         : ''}
                                     {selectedAssetBalance?.balance && Number(amount) > 0
-                                        ? ` >>> ${selectedAssetBalance.balance.minus(amount).toFixed()}`
+                                        ? ` >>> ${selectedAssetBalance.balance
+                                              .minus(amount)
+                                              .toFixed(selectedAsset.displayDecimals)}`
                                         : ''}
                                 </div>
                             )}

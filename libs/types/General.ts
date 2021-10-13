@@ -124,6 +124,8 @@ export type BridgeableAsset = {
     name: string;
     symbol: LogoTicker;
     address: string | null;
+    decimals: number;
+    displayDecimals: number;
 };
 
 export type BridgeableBalance = {
