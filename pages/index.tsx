@@ -3,7 +3,6 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
-import { useRouter } from 'next/router';
 import Exchange from '@archetypes/Exchange';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
@@ -11,8 +10,6 @@ import { SecurityWidget } from 'vyps-kit';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 
 export default (() => {
-    const router = useRouter();
-
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
@@ -23,10 +20,6 @@ export default (() => {
             }, 3000);
             return () => clearTimeout(timeout);
         }
-    }, []);
-
-    useEffect(() => {
-        router.prefetch('/browse');
     }, []);
 
     return (
