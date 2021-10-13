@@ -9,7 +9,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
 import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
-import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
@@ -67,12 +67,12 @@ export default (() => {
                 {focus === CommitsFocusEnum.mints ? (
                     <>
                         <TableHeader>
-                            <span>Token</span>
-                            <span>Spend (USDC)</span>
-                            <span>Token Price (USDC)</span>
-                            <span>Amount (Tokens)</span>
-                            <span>Receive in</span>
-                            <span>{/* Empty header for buttons column */}</span>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Receive in</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
                             <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
@@ -81,12 +81,12 @@ export default (() => {
                 ) : (
                     <>
                         <TableHeader>
-                            <span>Token</span>
-                            <span>Sold (Tokens)</span>
-                            <span>Price* (Token)</span>
-                            <span>Return (USDC)</span>
-                            <span>Burn in</span>
-                            <span>{/* Empty header for buttons column */}</span>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Price* (Token)</TableHeaderCell>
+                            <TableHeaderCell>Return (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Burn in</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
                             <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
@@ -117,21 +117,21 @@ const BuyRow: React.FC<
 }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
-            <span>
+            <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
-            </span>
-            <span>{toApproxCurrency(amount)}</span>
-            <span>{toApproxCurrency(tokenPrice)}</span>
-            <span>{amount.div(tokenPrice).toFixed()}</span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+            <TableRowCell>{amount.div(tokenPrice).toFixed()}</TableRowCell>
+            <TableRowCell>
                 {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
                     <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
                     <TimeLeft targetTime={nextRebalance.toNumber()} />
                 )}
-            </span>
-            <span className="flex text-right">
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
                     provider={provider}
@@ -140,7 +140,7 @@ const BuyRow: React.FC<
                         target: txnHash,
                     }}
                 />
-            </span>
+            </TableRowCell>
         </TableRow>
     );
 };
@@ -164,21 +164,21 @@ const SellRow: React.FC<
 }) => {
     return (
         <TableRow key={txnHash} rowNumber={index}>
-            <span>
+            <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
-            </span>
-            <span>{amount.toFixed(2)}</span>
-            <span>{toApproxCurrency(tokenPrice)}</span>
-            <span>{toApproxCurrency(amount.times(tokenPrice))}</span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>{amount.toFixed(2)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
+            <TableRowCell>
                 {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
                     <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
                 ) : (
                     <TimeLeft targetTime={nextRebalance.toNumber()} />
                 )}
-            </span>
-            <span className="flex text-right">
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
                     provider={provider}
@@ -187,7 +187,7 @@ const SellRow: React.FC<
                         target: txnHash,
                     }}
                 />
-            </span>
+            </TableRowCell>
         </TableRow>
     );
 };

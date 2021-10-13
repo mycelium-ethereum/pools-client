@@ -1,15 +1,16 @@
 import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { FarmTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import Close from '/public/img/general/close.svg';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General/Logo';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { APYTip } from '@components/Tooltips';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
     const [showModal, setShowModal] = useState(false);
@@ -18,13 +19,15 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
         <>
             <Table>
                 <TableHeader className="uppercase">
-                    <span>Strategy</span>
-                    <span>APR</span>
-                    <span>TVL (USDC)</span>
-                    <span>My Staked (TOKENS/USDC)</span>
-                    <span>My Holdings (TOKENS/USDC)</span>
-                    <span>My Rewards (TCR)</span>
-                    <span>{/* Empty header for buttons column */}</span>
+                    <TableHeaderCell>Strategy</TableHeaderCell>
+                    <TableHeaderCell>
+                        <APYTip>APY</APYTip>/APR
+                    </TableHeaderCell>
+                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Staked (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((farm, index) => {
                     return (
@@ -92,20 +95,26 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm)),
+        () =>
+            farm?.poolDetails
+                ? farm.poolDetails.poolTokenPrice
+                : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens),
         [farm],
     );
 
-    const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
-    const aprDenominator = tokenPrice.times(farm.totalStaked);
+    const apr = useMemo(() => {
+        const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
+        const aprDenominator = tokenPrice.times(farm.totalStaked);
+        return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice]);
 
-    const apr = aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+    const apy = useMemo(() => calcAPY(apr), [apr]);
 
     const { bptDetails } = farm;
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
-            <div className="flex flex-wrap">
+            <TableRowCell className="flex flex-wrap">
                 <div>
                     {farm?.bptDetails ? (
                         <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
@@ -132,23 +141,23 @@ const PoolRow: React.FC<{
                         <div>{farm.name}</div>
                     )}
                 </div>
-            </div>
-            <span>{apr.times(100).toFixed(2)}%</span>
-            <span>
-                <span>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</span>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>{`${apy.times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`}</TableRowCell>
+            <TableRowCell>
+                <TableRowCell>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</TableRowCell>
+            </TableRowCell>
+            <TableRowCell>
                 <div>{farm.myStaked.toFixed(2)}</div>
                 <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.myStaked))}</div>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <div>{farm.stakingTokenBalance.toFixed(2)}</div>
                 <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</div>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <span>{farm.myRewards.toFixed(6)}</span>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <Button
                     disabled={farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
@@ -176,7 +185,7 @@ const PoolRow: React.FC<{
                 >
                     CLAIM
                 </Button>
-            </span>
+            </TableRowCell>
         </TableRow>
     );
 };
@@ -188,7 +197,7 @@ const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ toke
                 key={`balancer-asset-${token.symbol}`}
                 size="md"
                 className="inline mr-2"
-                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : token.symbol}
+                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : (token.symbol as LogoTicker)}
             />
         ))}
     </>

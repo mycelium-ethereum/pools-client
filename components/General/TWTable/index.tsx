@@ -20,20 +20,27 @@ export const TableHeader: React.FC<{ className?: string }> = ({ children, classN
         <thead
             className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg', className ?? '')}
         >
-            <tr>
-                {React.Children.map(children, (child, index) => (
-                    <th
-                        key={`header_${index}`}
-                        scope="col"
-                        className="px-6 py-3 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider"
-                    >
-                        {child}
-                    </th>
-                ))}
-            </tr>
+            <tr>{children}</tr>
         </thead>
     );
 };
+
+export const TableHeaderCell: React.FC<{ className?: string; align?: 'bottom' }> = ({
+    children,
+    className,
+    align = 'top',
+}) => (
+    <th
+        scope="col"
+        className={classNames(
+            className ?? '',
+            `align-${align}`,
+            'px-4 pt-4 pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
+        )}
+    >
+        {children}
+    </th>
+);
 
 interface TableRowProps {
     rowNumber: number;
@@ -49,15 +56,12 @@ export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
                         : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
                 }
             >
-                {React.Children.map(children, (child, index) => (
-                    <td
-                        key={`cell_${rowNumber}_${index}`}
-                        className="px-6 py-4 whitespace-nowrap text-sm text-theme-text"
-                    >
-                        {child}
-                    </td>
-                ))}
+                {children}
             </tr>
         </tbody>
     );
 };
+
+export const TableRowCell: React.FC<{ className?: string }> = ({ children, className }) => (
+    <td className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')}>{children}</td>
+);

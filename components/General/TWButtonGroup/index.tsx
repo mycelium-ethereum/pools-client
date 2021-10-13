@@ -4,9 +4,9 @@ import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelect
 
 // the difference here is the bg on unselected
 const SELECTED = {
-    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-green-500',
+    tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
     default:
-        'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500',
+        'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
 };
 
 const UNSELECTED = {

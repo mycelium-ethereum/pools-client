@@ -80,7 +80,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 const onboard = Onboard({
                     ...onboardConfig,
                     networkId: networkIds ? networkIds[0] : parseInt(ARBITRUM), //Default to arb
-                    darkMode: true,
+                    darkMode: isDark,
                     walletCheck: checks,
                     subscriptions: {
                         address: (address) => {
