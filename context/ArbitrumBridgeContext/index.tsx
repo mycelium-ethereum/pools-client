@@ -150,6 +150,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         callback();
                         refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
                     },
+                    onError: () => {
+                        callback();
+                    },
                 },
             );
         }
