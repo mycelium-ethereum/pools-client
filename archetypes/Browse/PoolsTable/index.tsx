@@ -119,6 +119,7 @@ const TokenRow: React.FC<{
                         'Minimal change'
                     ) : (
                         <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
+                            {priceDelta > 0 ? '+' : ''}
                             {`${toApproxCurrency(token.nextPrice - token.lastPrice, 3)} (${priceDelta.toFixed(2)}%)`}
                         </span>
                     )}
@@ -134,7 +135,7 @@ const TokenRow: React.FC<{
             <TableRowCell>
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
-                        <div>Front running interval reached</div>
+                        <div>Front-running interval reached</div>
                         <div className="opacity-80">
                             {'Mint and burn in '}
                             {!pendingUpkeep ? (

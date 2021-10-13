@@ -21,7 +21,7 @@ export default ((nextUpdate, frontRunningInterval) => {
             console.debug(`Setting a timeout for ${nextUpdate - frontRunningInterval - now}s`);
             waiting = setTimeout(() => {
                 console.debug(
-                    `Timer is now before the front running interval. Current isBeforeFrontRunning: ${isBeforeFrontRunning}`,
+                    `Timer is now before the front-running interval. Current isBeforeFrontRunning: ${isBeforeFrontRunning}`,
                 );
                 setIsBeforeFrontRunning(false);
             }, (nextUpdate - frontRunningInterval - now) * 1000);
