@@ -10,25 +10,27 @@ import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import Close from '../../public/img/general/close.svg';
+import { BridgeableAssets } from '@libs/utils/bridge';
 
 interface MultiBridgeProps {
     show: boolean;
     fromNetwork: Network;
     toNetwork?: Network;
-    bridgeableAssetList: BridgeableAsset[];
+    bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
     onSwitchNetwork: (networkId: Network['id']) => void;
     onClose: () => void;
-    onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, onSuccess: () => void) => void;
+    onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
+    account?: string;
 }
 
 export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const {
         fromNetwork,
         toNetwork,
-        bridgeableAssetList,
+        bridgeableAssets,
         bridgeableBalances,
         onSwitchNetwork,
         refreshBridgeableBalance,
@@ -36,35 +38,57 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         show,
         onClose,
         onApproveToken,
+        account,
     } = props;
 
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
-
-    const [selectedAsset, setSelectedAsset] = useState(bridgeableAssetList[selectedAssetIndex]);
     const [amount, setAmount] = useState('');
     const [amountIsInvalid, setAmountIsInvalid] = useState(false);
     const [isBridging, setIsBridging] = useState(false);
 
+    const bridgeableAssetList = useMemo(() => {
+        return bridgeableAssets[fromNetwork.id];
+    }, [fromNetwork]);
+
+    const selectedAsset = useMemo(() => {
+        if (!bridgeableAssetList) {
+            return null;
+        }
+        return bridgeableAssetList[selectedAssetIndex];
+    }, [selectedAssetIndex, bridgeableAssetList]);
+
     // fetch balance when modal initially shows
     useEffect(() => {
-        if (show) {
+        if (show && fromNetwork.id && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [show]);
 
-    // update selectedAsset whenever the selected asset index changes
-    useEffect(() => {
-        setSelectedAsset(bridgeableAssetList[selectedAssetIndex]);
-    }, [selectedAssetIndex]);
-
     // refresh asset balance when selectedAsset changes
     useEffect(() => {
-        if (selectedAsset) {
+        if (show && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [selectedAsset]);
 
+    // refresh asset balance when selected account changes
+    useEffect(() => {
+        if (show && selectedAsset && account) {
+            refreshBridgeableBalance(selectedAsset);
+        }
+    }, [account]);
+
+    // refresh asset balance when selected network changes
+    useEffect(() => {
+        if (show && selectedAsset && fromNetwork) {
+            refreshBridgeableBalance(selectedAsset);
+        }
+    }, [fromNetwork]);
+
     const selectedAssetBalance = useMemo(() => {
+        if (!selectedAsset) {
+            return null;
+        }
         const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.symbol];
         return assetBalance || null;
     }, [selectedAsset, fromNetwork, bridgeableBalances]);
@@ -204,7 +228,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     onUserInput={(val) => setAmount(val)}
                                 />
                                 <InnerInputText>
-                                    {selectedAsset.symbol ? (
+                                    {selectedAsset?.symbol ? (
                                         <Currency ticker={selectedAsset.symbol} label={selectedAsset.symbol} />
                                     ) : null}
                                     {approvalRequired ? (
@@ -233,13 +257,13 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 >
                                     {selectedAssetBalance?.balance
                                         ? `Balance: ${selectedAssetBalance.balance.toFixed(
-                                              selectedAsset.displayDecimals,
+                                              selectedAsset?.displayDecimals || 6,
                                           )}`
                                         : ''}
                                     {selectedAssetBalance?.balance && Number(amount) > 0
                                         ? ` >>> ${selectedAssetBalance.balance
                                               .minus(amount)
-                                              .toFixed(selectedAsset.displayDecimals)}`
+                                              .toFixed(selectedAsset?.displayDecimals || 6)}`
                                         : ''}
                                 </div>
                             )}
@@ -262,12 +286,12 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
                         </Button>
                     )}
-                    <p className="text-center w-full mt-4">
-                        Visit the{' '}
+                    <p className="text-center w-full mt-4 text-sm">
+                        <b>Note</b>: withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
                         <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
                             Official Arbitrum Bridge
                         </a>{' '}
-                        to see deposit/withdrawal details.
+                        to see pending deposits/withdrawals.
                     </p>
                 </div>
             </div>

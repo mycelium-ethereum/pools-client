@@ -37,7 +37,6 @@ export type Network = {
     knownUSDCPriceFeeds: {
         [address: string]: string;
     };
-    isArbitrum: boolean;
     tcrAddress: string;
     sushiRouterAddress: string;
 };
@@ -55,7 +54,6 @@ export const networkConfig: Record<string, Network> = {
         id: '0',
         previewUrl: '',
         name: 'Unknown',
-        isArbitrum: false,
         contracts: {},
         poolFarms: [],
         bptFarms: [],
@@ -71,7 +69,6 @@ export const networkConfig: Record<string, Network> = {
     '421611': {
         id: '421611',
         name: 'Arbitrum Rinkeby',
-        isArbitrum: true,
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
@@ -104,7 +101,6 @@ export const networkConfig: Record<string, Network> = {
     '42161': {
         id: '42161',
         name: 'Arbitrum',
-        isArbitrum: true,
         previewUrl: 'https://explorer.arbitrum.io/#',
         contracts: {
             poolFactory: {
@@ -205,7 +201,6 @@ export const networkConfig: Record<string, Network> = {
     '1337': {
         id: '1337',
         name: 'Local',
-        isArbitrum: false,
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -228,7 +223,6 @@ export const networkConfig: Record<string, Network> = {
         // TODO: fill this out properly
         id: '1',
         name: 'Ethereum',
-        isArbitrum: false,
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -251,7 +245,6 @@ export const networkConfig: Record<string, Network> = {
         // TODO: fill this out properly
         id: '4',
         name: 'Rinkeby',
-        isArbitrum: false,
         previewUrl: '',
         contracts: {
             poolFactory: {

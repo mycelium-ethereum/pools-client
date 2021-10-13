@@ -11,7 +11,7 @@ import { bridgeableTickers } from '@libs/utils/bridge';
 
 // ArbitrumBridge
 export const ArbitrumBridge: React.FC = (() => {
-    const { provider } = useWeb3();
+    const { provider, account } = useWeb3();
     const {
         bridgeToken,
         bridgeEth,
@@ -19,19 +19,19 @@ export const ArbitrumBridge: React.FC = (() => {
         refreshBridgeableBalance,
         fromNetwork,
         toNetwork,
-        bridgeableAssetList,
+        bridgeableAssets,
         bridgeableBalances,
         hideBridgeModal,
         bridgeModalIsOpen,
     } = useArbitrumBridge();
 
-    const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, onSuccess: () => void) => {
+    const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => {
         if (asset.symbol === bridgeableTickers.ETH) {
-            return bridgeEth(amount, onSuccess);
+            return bridgeEth(amount, callback);
         }
         // this type cast is safe because
         // ETH is the only asset with a null address
-        return bridgeToken(asset.address as string, amount, onSuccess);
+        return bridgeToken(asset.address as string, amount, callback);
     };
 
     const onApproveToken = (tokenAddress: string, spender: string) => approveToken(tokenAddress, spender);
@@ -49,12 +49,13 @@ export const ArbitrumBridge: React.FC = (() => {
             onClose={hideBridgeModal}
             fromNetwork={fromNetwork}
             toNetwork={toNetwork}
-            bridgeableAssetList={bridgeableAssetList}
+            bridgeableAssets={bridgeableAssets}
             bridgeableBalances={bridgeableBalances}
             refreshBridgeableBalance={refreshBridgeableBalance}
             onSwitchNetwork={onSwitchNetwork}
             onBridgeAsset={onBridgeAsset}
             onApproveToken={onApproveToken}
+            account={account}
         />
     );
 }) as React.FC;
