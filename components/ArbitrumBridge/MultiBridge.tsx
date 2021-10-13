@@ -290,8 +290,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                     <p className="text-center w-full mt-4 text-sm">
                         {approvalRequired ? (
                             <span>
-                                Unlock {selectedAsset?.symbol} to bridge with Arbitrum. This is a one-time transaction
-                                per network for each asset.
+                                Unlock {selectedAsset?.symbol} to bridge funds. This is a one-time transaction per
+                                network for each unique asset.
                             </span>
                         ) : (
                             <>
