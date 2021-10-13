@@ -77,7 +77,7 @@ export default (({ account, className }) => {
                                             className="text-white py-2 cursor-pointer hover:bg-tracer-900"
                                             onClick={() => handleRoute('/browse')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Browse" />
+                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
                                             Browse
                                         </div>
                                         <div
