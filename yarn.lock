@@ -2962,10 +2962,10 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
-"@tracer-protocol/tracer-pools-utils@^0.0.5":
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.5.tgz#1e43d0e91feffe116f49267ed679a582d478a3b3"
-  integrity sha512-8jTlTkWSCx1c/Er+Q1OeDQhK8Xop6RW894LKDFkFrhopEeRajQtiEOMoZYtDfbJDRFI8T0J0EzB1Y7GHf8LDRQ==
+"@tracer-protocol/tracer-pools-utils@^0.0.6":
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.6.tgz#45dd18e06591a9202bed4325f8ed056eccca9bd3"
+  integrity sha512-AdTSbyVBQLS3BlL+AnDJ5TY2+t20A27KW3XgEseXfDOgHizNw3zQSfLlzLKENlHtdABDovqhnRTbxEtzdrLn6w==
   dependencies:
     bignumber.js "^9.0.1"
 
