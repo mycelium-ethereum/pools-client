@@ -1,9 +1,15 @@
 import React from 'react';
+import { useTheme } from '@context/ThemeContext';
+
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
 
 import Close from '/public/img/general/close.svg';
+import WaveLight from '/public/img/onboard/wave-light.svg';
+import WaveDark from '/public/img/onboard/wave-dark.svg';
+import QuestionLight from '/public/img/onboard/question-light.svg';
+import QuestionDark from '/public/img/onboard/question-dark.svg';
 
 interface OnboardModalProps {
     onboardStep: number;
@@ -17,11 +23,13 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
     showOnboardModal,
     setShowOnboardModal,
 }) => {
+    const { isDark } = useTheme();
     const OnboardContent = () => {
         switch (onboardStep) {
             case 1:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <WaveDark /> : <WaveLight />}</div>
                         <div className="text-2xl text-center my-5">Stake Pool tokens</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
@@ -50,6 +58,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
             case 2:
                 return (
                     <>
+                        <div className="flex justify-center">{isDark ? <QuestionDark /> : <QuestionLight />}</div>
                         <div className="text-2xl text-center my-5">Explore the wider landscape</div>
                         <Divider className="mb-8" />
                         <div className="text-sm mb-8">
