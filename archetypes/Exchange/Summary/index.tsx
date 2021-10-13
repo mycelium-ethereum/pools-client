@@ -10,6 +10,7 @@ import { classNames } from '@libs/utils/functions';
 import Link from '/public/img/general/link.svg';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
+import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
 
 type SummaryProps = {
     pool: Pool;
@@ -73,7 +74,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     <Section label="Expected rebalancing rate">
                         {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
                     </Section>
-                    <BalancerLink token={token.address} isBuy={true} />
+                    <BalancerLink token={token} isBuy={true} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -126,7 +127,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     <Section label="Expected return">
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
-                    <BalancerLink token={token.address} isBuy={false} />
+                    <BalancerLink token={token} isBuy={false} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -144,8 +145,15 @@ const constructBalancerLink = (token: string, isBuy: boolean) =>
         ? `https://arbitrum.balancer.fi/#/trade/${USDC}/${token}`
         : `https://arbitrum.balancer.fi/#/trade/${token}/${USDC}`;
 
-const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBuy }) => {
+const BalancerLink: React.FC<{
+    token: {
+        address: string;
+        symbol: string;
+    };
+    isBuy: boolean;
+}> = ({ token, isBuy }) => {
     const { network = 0 } = useWeb3();
+    const balancerPoolPrices = useBalancerSpotPrices(network);
     return network === parseInt(ARBITRUM) ? (
         <div className="text-sm p-1.5">
             <div className="mr-2 whitespace-nowrap">Dont want to wait?</div>
@@ -153,11 +161,13 @@ const BalancerLink: React.FC<{ token: string; isBuy: boolean }> = ({ token, isBu
                 <Logo className="inline mr-2" ticker="BALANCER" />
                 <a
                     className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
-                    href={constructBalancerLink(token, isBuy)}
+                    href={constructBalancerLink(token.address, isBuy)}
                     target={'_blank'}
                     rel={'noopener noreferrer'}
                 >
-                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools`}
+                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
+                        balancerPoolPrices[token.symbol],
+                    )}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>
             </div>

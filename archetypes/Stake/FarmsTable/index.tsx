@@ -95,19 +95,20 @@ const PoolRow: React.FC<{
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
     const tokenPrice = useMemo(
-        () => (farm?.poolDetails ? farm.poolDetails.poolTokenPrice : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens)),
+        () =>
+            farm?.poolDetails
+                ? farm.poolDetails.poolTokenPrice
+                : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens),
         [farm],
     );
 
     const apr = useMemo(() => {
         const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
         const aprDenominator = tokenPrice.times(farm.totalStaked);
-        return (
-            aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0)
-        )
-    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice])
+        return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
+    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice]);
 
-    const apy = useMemo(() => (calcAPY(apr)), [apr])
+    const apy = useMemo(() => calcAPY(apr), [apr]);
 
     const { bptDetails } = farm;
 
