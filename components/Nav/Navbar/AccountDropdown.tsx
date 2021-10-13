@@ -31,20 +31,6 @@ export default (({ account, className }) => {
             ) : (
                 <ConnectWalletButton handleConnect={handleConnect} />
             )}
-            {/* {(() => {
-                if (!!account) {
-                    return (
-                        <AccountDropdownButton
-                            account={account}
-                            ensName={ensName}
-                            logout={resetOnboard}
-                            showBridgeModal={showBridgeModal}
-                        />
-                    );
-                } else {
-                    return <ConnectWalletButton handleConnect={handleConnect} />;
-                }
-            })()} */}
         </div>
     );
 }) as React.FC<{
