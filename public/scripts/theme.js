@@ -1,12 +1,14 @@
 (function () {
     function changeTheme(inputTheme) {
-        if (inputTheme === 'dark') {
-            document.getElementsByTagName('html')[0].classList.add('theme-dark');
-            localStorage.setItem('theme', inputTheme);
+        const html = document.getElementsByTagName('html')[0];
+        if (inputTheme === 'light') {
+            html.classList.remove('theme-dark');
         } else if (inputTheme === 'matrix') {
-            document.getElementsByTagName('html')[0].classList.add('theme-matrix');
-            localStorage.setItem('theme', inputTheme);
-        } // else unknown theme do nothing;
+            html.classList.add('theme-matrix');
+        } else {
+            // else add theme dark this is default
+            html.classList.add('theme-dark')
+        } 
     }
 
     try {

@@ -32,12 +32,9 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
     };
 
     useEffect(() => {
-        const head = document.getElementsByTagName('html')[0];
-        if (!localStorage.getItem('theme')) {
-            head.classList.add('theme-dark')
-        } else {
+        if (localStorage.getItem('theme') === 'light') {
             setIsDark(false);
-        }
+        } 
     }, []);
 
     return (
