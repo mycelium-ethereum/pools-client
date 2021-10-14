@@ -63,7 +63,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // fetch balance when modal initially shows
     useEffect(() => {
-        if (show && fromNetwork.id && selectedAsset) {
+        if (show && fromNetwork?.id && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [show]);
@@ -168,7 +168,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     name="fromNetwork"
                                     id="fromNetwork"
                                     className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={fromNetwork?.name}
+                                    value={fromNetwork?.name || 'Unsupported Network'}
                                 />
                             </div>
                         </div>
