@@ -47,6 +47,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [isBridging, setIsBridging] = useState(false);
 
     const bridgeableAssetList = useMemo(() => {
+        if (!fromNetwork) {
+            return [];
+        }
+
         return bridgeableAssets[fromNetwork.id];
     }, [fromNetwork]);
 
