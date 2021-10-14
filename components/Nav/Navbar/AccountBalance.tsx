@@ -1,19 +1,13 @@
 import React from 'react';
 import { useTransactionState } from '@context/TransactionContext';
-import Icon from '@ant-design/icons';
-// @ts-ignore
-import TracerLoading from 'public/img/logos/tracer/tracer_loading.svg';
-
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BigNumber } from 'bignumber.js';
-import styled from 'styled-components';
 import { classNames } from '@libs/utils/functions';
 
-// This is to dispaly the quoteToken balance in the top right of the screen
-// It is expected that not every pool will have the same quoteToken so this
-// 	feature will likely be removed or updated in the future
+import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
+
 const useBalance = () => {
     const { pools } = usePools();
     const [balance, setBalance] = useState<BigNumber>(new BigNumber(0));
@@ -36,10 +30,12 @@ export default (({ hide, className }) => {
     return (
         <div className={classNames('text-white', hide ? 'hidden' : 'block', className ?? '')}>
             {pendingCount > 0 ? (
-                <span>
-                    <StyledIcon component={TracerLoading} />
-                    {`${pendingCount} Pending`}
-                </span>
+                <div className="flex">
+                    <div className="w-10 mx-2">
+                        <TracerLoading />
+                    </div>
+                    <div>{`${pendingCount} Pending`}</div>
+                </div>
             ) : (
                 `${toApproxCurrency(balance)} USDC`
             )}
@@ -49,12 +45,3 @@ export default (({ hide, className }) => {
     hide?: boolean;
     className?: string;
 }>;
-
-const StyledIcon = styled(Icon)`
-    color: #fff;
-    svg {
-        width: 28px;
-    }
-    vertical-align: 0;
-    margin-right: 0.3rem;
-`;
