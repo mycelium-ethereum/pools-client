@@ -63,7 +63,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             },
         );
 
-        setPendingCount(pendingCount + 1);
+        setPendingCount((previousValue) => previousValue + 1);
         const res = callMethod(...params);
 
         res.then(async (contractTransaction) => {
@@ -90,7 +90,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 autoDismiss: true,
             });
 
-            setPendingCount(pendingCount - 1);
+            setPendingCount((previousValue) => previousValue - 1);
             onSuccess ? onSuccess(contractReceipt) : null;
         }).catch((error) => {
             console.error('Failed transaction', error, error.code);
@@ -111,7 +111,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     autoDismiss: true,
                 });
             }
-            setPendingCount(pendingCount - 1);
+            setPendingCount((previousValue) => previousValue - 1);
             onError ? onError(error) : null;
         });
     };
