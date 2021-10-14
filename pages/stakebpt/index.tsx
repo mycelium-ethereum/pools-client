@@ -33,7 +33,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <ArbitrumBridgeStore>
                 <FarmStore farmContext="bptFarms">
-                    <NavBar />
+                    <NavBar setShowOnboardModal={setShowOnboardModal} />
                     <StakeBPT />
                 </FarmStore>
                 <ArbitrumBridge />
