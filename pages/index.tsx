@@ -10,6 +10,7 @@ import { SecurityWidget } from 'vyps-kit';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
@@ -33,6 +34,7 @@ export default (() => {
                         <Exchange />
                     </SwapStore>
                     <ArbitrumBridge />
+                    <UnsupportedNetworkPopup />
                 </ArbitrumBridgeStore>
             </PoolStore>
             <PendingCommits />
