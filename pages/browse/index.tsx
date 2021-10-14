@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default (() => {
                     <Browse />
                     <PendingCommits />
                     <ArbitrumBridge />
+                    <UnsupportedNetworkPopup />
                 </ArbitrumBridgeStore>
             </PoolStore>
             <Footer />

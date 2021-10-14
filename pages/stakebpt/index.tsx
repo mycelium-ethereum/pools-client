@@ -8,6 +8,7 @@ import PendingCommits from '@components/PendingCommits';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardStakeModal from '@components/OnboardModal/Stake';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const router = useRouter();
@@ -36,6 +37,7 @@ export default (() => {
                     <StakeBPT />
                 </FarmStore>
                 <ArbitrumBridge />
+                <UnsupportedNetworkPopup />
             </ArbitrumBridgeStore>
             <Footer />
             <PendingCommits />
