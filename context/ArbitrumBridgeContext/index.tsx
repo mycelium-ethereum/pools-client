@@ -59,21 +59,15 @@ const BRIDGEABLE_ASSET_ETH = {
 
 const withdrawalToastBody = (
     <>
-        It will take approximately 7 days to receive your funds on Ethereum. To view any pending withdrawals, visit the{' '}
-        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
-            Official Arbitrum Bridge
-        </a>
-        .
+        It will take approximately 7 days to receive your funds on Ethereum. To view pending withdrawals, visit the
+        official arbitrum bridge.
     </>
 );
 
 const depositToastBody = (
     <>
-        It may take a couple of minutes to receive your funds on Arbitrum. To view any pending deposits, visit the{' '}
-        <a href="https://bridge.arbitrum.io" target="_blank" className="underline" rel="noreferrer">
-            Official Arbitrum Bridge
-        </a>
-        .
+        It may take a couple of minutes to receive your funds on Arbitrum. To view pending deposits, visit the official
+        arbitrum bridge.
     </>
 );
 
