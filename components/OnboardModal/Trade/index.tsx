@@ -3,11 +3,11 @@ import { useTheme } from '@context/ThemeContext';
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
+import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
 
 import Close from '/public/img/general/close.svg';
 import Wave from '/public/img/onboard/wave.svg';
 import Question from '/public/img/onboard/question.svg';
-import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
 
 interface OnboardModalProps {
     onboardStep: number;
