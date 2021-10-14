@@ -226,9 +226,8 @@ export default (() => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        contact us
+                        contact us.
                     </a>
-                    .
                 </div>
                 <br />
                 <Button
@@ -239,8 +238,19 @@ export default (() => {
                         setShowModal(false);
                     }}
                 >
-                    Launch Arbitrum Bridge
+                    {`Ok, let's bridge funds`}
                 </Button>
+                <p className="mt-2 text-center">
+                    You can also bridge funds via the{' '}
+                    <a
+                        className="text-tracer-400 underline"
+                        href="https://bridge.arbitrum.io"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Official Arbitrum Bridge.
+                    </a>
+                </p>
             </TWModal>
         </>
     );
