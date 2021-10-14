@@ -86,9 +86,13 @@ export default (() => {
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
-            localStorage.setItem('showBridgeFunds', 'true');
         }
     }, [account]);
+
+    const onCloseArbitrumModal = () => {
+        setShowModal(false);
+        localStorage.setItem('showBridgeFunds', 'true');
+    };
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
@@ -206,10 +210,10 @@ export default (() => {
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 
-            <TWModal open={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={onCloseArbitrumModal}>
                 <div className="flex justify-between">
                     <div className="text-xl">Bridge Funds to Arbitrum</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={onCloseArbitrumModal}>
                         <Close />
                     </div>
                 </div>

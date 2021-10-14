@@ -17,7 +17,8 @@ const UnsupportedNetwork: React.FC = () => {
     // unsupported network popup
     useEffect(() => {
         // don't show this while the arb bridge is open
-        if (!bridgeModalIsOpen && !isSupportedNetwork(network) && provider && account) {
+        const hasDismissedInitialArbModal = localStorage.getItem('showBridgeFunds') === 'true';
+        if (hasDismissedInitialArbModal && !bridgeModalIsOpen && !isSupportedNetwork(network) && provider && account) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
                 // @ts-ignore
