@@ -153,8 +153,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">
-                        <div className="my-2 mb-4 w-full">
-                            <label htmlFor="from" className="block text-base font-medium mb-2">
+                        <div className="my-2 mb-2 w-full">
+                            <label htmlFor="from" className="block mb-2">
                                 From
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
@@ -180,8 +180,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <SwapOutlined />
                         </button>
 
-                        <div className="my-2 mb-4 w-full">
-                            <label htmlFor="to" className="block text-base font-medium mb-2">
+                        <div className="my-2 mb-2 w-full">
+                            <label htmlFor="to" className="block mb-2">
                                 To
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
@@ -198,8 +198,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                     </div>
 
                     <div className="flex flex-row">
-                        <div className="my-2 mb-4 flex-grow">
-                            <label htmlFor="asset" className="block text-base font-medium mb-2">
+                        <div className="my-2 mb-2 flex-grow">
+                            <label htmlFor="asset" className="block mb-2">
                                 Asset
                             </label>
                             <TWButtonGroup
@@ -216,8 +216,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                     </div>
 
                     <div className="flex flex-row">
-                        <div className="my-2 mb-4 flex-grow">
-                            <label htmlFor="amount" className="block text-base font-medium mb-2">
+                        <div className="my-2 mb-2 flex-grow">
+                            <label htmlFor="amount" className="block mb-2">
                                 Amount
                             </label>
                             <InputContainer className="w-full" error={amountIsInvalid}>
@@ -248,10 +248,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 </InnerInputText>
                             </InputContainer>
                             {approvalRequired ? (
-                                <div className="mt-2 text-sm">Token approval required</div>
+                                <div className="mt-2 text-sm opacity-70">Token approval required</div>
                             ) : (
                                 <div
-                                    className={`mt-2 text-sm ${
+                                    className={`mt-2 text-sm opacity-70 ${
                                         amountIsInvalid ? 'text-red-500 focus-within:ring-red-500' : ''
                                     }`}
                                 >
