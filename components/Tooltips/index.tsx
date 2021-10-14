@@ -16,7 +16,7 @@ export const ComingSoonTip: React.FC = ({ children }) => {
 };
 
 export const APYTip: React.FC = ({ children }) => {
-    const Content = 'APY calculated with an hourly compound frequency';
+    const Content = 'APY calculated with a weekly compound frequency';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
