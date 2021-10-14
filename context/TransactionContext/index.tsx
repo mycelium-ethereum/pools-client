@@ -64,7 +64,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
             },
         );
 
-        setPendingCount(pendingCount + 1);
+        setPendingCount((previousValue) => previousValue + 1);
         const res = callMethod(...params);
 
         res.then(async (contractTransaction) => {
@@ -91,7 +91,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 autoDismiss: statusMessages?.success?.autoDismiss ?? true,
             });
 
-            setPendingCount(pendingCount - 1);
+            setPendingCount((previousValue) => previousValue - 1);
             onSuccess ? onSuccess(contractReceipt) : null;
         }).catch((error) => {
             console.error('Failed transaction', error, error.code);
@@ -100,6 +100,14 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 updateToast(toastId as unknown as string, {
                     content: ['Transaction Dismissed'],
                     appearance: 'warning',
+                    autoDismiss: true,
+                });
+            } else if (error?.data?.message === 'not enough funds for gas') {
+                // this error uses error.code === -32603 and error.data.code === -32000
+                // which are both broad error codes unfortunately so cant be used for the checks
+                updateToast(toastId as unknown as string, {
+                    content: ['Insufficient funds for gas'],
+                    appearance: 'error',
                     autoDismiss: true,
                 });
             } else {
@@ -112,7 +120,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     autoDismiss: true,
                 });
             }
-            setPendingCount(pendingCount - 1);
+            setPendingCount((previousValue) => previousValue - 1);
             onError ? onError(error) : null;
         });
     };

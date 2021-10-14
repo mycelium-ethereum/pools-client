@@ -1,9 +1,9 @@
 import React from 'react';
 import { useTheme } from '@context/ThemeContext';
-
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
+import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
 
 import Close from '/public/img/general/close.svg';
 import Wave from '/public/img/onboard/wave.svg';
@@ -41,6 +41,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                             </a>
                         </div>
                         <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
+                        <ProgressIndicator totalSteps={2} currentStep={1} />
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
                                 variant="primary-light"
@@ -72,6 +73,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                             </a>
                             .
                         </div>
+                        <ProgressIndicator totalSteps={2} currentStep={2} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"
