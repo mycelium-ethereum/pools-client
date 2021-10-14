@@ -101,6 +101,14 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     appearance: 'warning',
                     autoDismiss: true,
                 });
+            } else if (error?.data?.message === 'not enough funds for gas') {
+                // this error uses error.code === -32603 and error.data.code === -32000
+                // which are both broad error codes unfortunately so cant be used for the checks
+                updateToast(toastId as unknown as string, {
+                    content: ['Insufficient funds for gas'],
+                    appearance: 'error',
+                    autoDismiss: true,
+                });
             } else {
                 updateToast(toastId as unknown as string, {
                     content: [
