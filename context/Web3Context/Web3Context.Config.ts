@@ -14,6 +14,7 @@ type Farm = {
     link?: string;
     linkText?: string;
 };
+
 export type Network = {
     name: string;
     previewUrl: string;
@@ -28,6 +29,7 @@ export type Network = {
     hex: string;
     publicRPC: string;
     graphUri: string;
+    id: string;
     balancerVaultAddress: string;
     usdcAddress: string;
     // lookup from known token addresses to Chainink price feed address
@@ -45,7 +47,6 @@ export type Network = {
         wPool: string;
     };
 };
-
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
@@ -57,13 +58,14 @@ export type Network = {
  */
 export const networkConfig: Record<string, Network> = {
     '0': {
+        id: '0',
         previewUrl: '',
         name: 'Unknown',
         contracts: {},
         poolFarms: [],
         bptFarms: [],
         publicRPC: '',
-        hex: '',
+        hex: '0x0',
         graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
@@ -72,6 +74,7 @@ export const networkConfig: Record<string, Network> = {
         knownUSDCPriceFeeds: {},
     },
     '421611': {
+        id: '421611',
         name: 'Arbitrum Rinkeby',
         previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
         contracts: {
@@ -94,7 +97,7 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [],
         hex: '0x66EEB',
-        publicRPC: 'https://arb-mainnet.g.alchemy.com/v2/kmW5Ft_-SizDp3Is5Q7XQrRPvUQWw-yW',
+        publicRPC: 'https://rinkeby.arbitrum.io/rpc',
         graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
@@ -103,6 +106,7 @@ export const networkConfig: Record<string, Network> = {
         knownUSDCPriceFeeds: {},
     },
     '42161': {
+        id: '42161',
         name: 'Arbitrum',
         previewUrl: 'https://explorer.arbitrum.io/#',
         contracts: {
@@ -215,6 +219,7 @@ export const networkConfig: Record<string, Network> = {
         },
     },
     '1337': {
+        id: '1337',
         name: 'Local',
         previewUrl: '',
         contracts: {
@@ -233,5 +238,49 @@ export const networkConfig: Record<string, Network> = {
         knownUSDCPriceFeeds: {},
         sushiRouterAddress: '',
         tcrAddress: '',
+    },
+    '1': {
+        // TODO: fill this out properly
+        id: '1',
+        name: 'Ethereum',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x1',
+        poolFarms: [],
+        bptFarms: [],
+        publicRPC: process.env.NEXT_PUBLIC_MAINNET_L1_RPC || '',
+        graphUri: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        tcrAddress: '0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050',
+        knownUSDCPriceFeeds: {},
+    },
+    '4': {
+        // TODO: fill this out properly
+        id: '4',
+        name: 'Rinkeby',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x4',
+        poolFarms: [],
+        bptFarms: [],
+        publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        graphUri: '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        sushiRouterAddress: '',
+        tcrAddress: '',
+        knownUSDCPriceFeeds: {},
     },
 };

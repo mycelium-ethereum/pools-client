@@ -3,6 +3,7 @@ import { CommitEnum, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
+import { LogoTicker } from '@components/General';
 
 /**
  * Can be used when component passes down children
@@ -118,3 +119,21 @@ export type Heading = {
     text: string;
     width: string; // string width
 };
+
+export type BridgeableAsset = {
+    name: string;
+    symbol: LogoTicker;
+    address: string | null;
+    decimals: number;
+    displayDecimals: number;
+};
+
+export type BridgeableBalance = {
+    balance: BigNumber;
+    allowance: BigNumber;
+    spender: string; // address that allowance corresponds to
+};
+
+export type BridgeableBalances = { [network: string]: { [symbol: string]: BridgeableBalance } };
+
+export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };

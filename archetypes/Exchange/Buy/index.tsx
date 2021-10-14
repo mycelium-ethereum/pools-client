@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -70,6 +71,7 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
+    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -224,18 +226,31 @@ export default (() => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        contact us
+                        contact us.
                     </a>
-                    .
                 </div>
                 <br />
                 <Button
                     size="lg"
                     variant="primary"
-                    onClick={() => window.open('https://bridge.arbitrum.io', '_blank', 'noopener')}
+                    onClick={() => {
+                        showBridgeModal();
+                        setShowModal(false);
+                    }}
                 >
-                    Launch Arbitrum Bridge
+                    {`Ok, let's bridge funds`}
                 </Button>
+                <p className="mt-2 text-center">
+                    You can also bridge funds via the{' '}
+                    <a
+                        className="text-tracer-400 underline"
+                        href="https://bridge.arbitrum.io"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Official Arbitrum Bridge.
+                    </a>
+                </p>
             </TWModal>
         </>
     );

@@ -7,7 +7,10 @@ import Exchange from '@archetypes/Exchange';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
@@ -25,12 +28,16 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
-                <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <SwapStore>
-                    <Exchange />
-                </SwapStore>
-                <PendingCommits />
+                <ArbitrumBridgeStore>
+                    <NavBar />
+                    <SwapStore>
+                        <Exchange />
+                    </SwapStore>
+                    <ArbitrumBridge />
+                    <UnsupportedNetworkPopup />
+                </ArbitrumBridgeStore>
             </PoolStore>
+            <PendingCommits />
             <Footer />
             <CorWidget />
 
