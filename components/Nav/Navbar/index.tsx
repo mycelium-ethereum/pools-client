@@ -47,9 +47,14 @@ export const NavBarContent: React.FC<{
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
-                    <li className={classNames(linkStyles, route === '' || route === 'browse' ? 'underline' : '')}>
+                    <li className={classNames(linkStyles, route === '' ? 'underline' : '')}>
                         <Link href="/">
                             <a className="m-auto">Trade</a>
+                        </Link>
+                    </li>
+                    <li className={classNames(linkStyles, route === 'browse' ? 'underline' : '')}>
+                        <Link href="/browse">
+                            <a className="m-auto">Browse</a>
                         </Link>
                     </li>
                     <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
@@ -82,7 +87,7 @@ export const NavBarContent: React.FC<{
                     <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
                     <ThemeSwitcher />
                 </span>
-                <MobileMenu account={account ?? ''} />
+                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
             </div>
         </nav>
     );

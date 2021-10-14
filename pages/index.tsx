@@ -3,9 +3,7 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
-import { useRouter } from 'next/router';
 import Exchange from '@archetypes/Exchange';
-import InvestNav from '@components/Nav/InvestNav';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
@@ -14,8 +12,6 @@ import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 
 export default (() => {
-    const router = useRouter();
-
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
@@ -28,23 +24,18 @@ export default (() => {
         }
     }, []);
 
-    useEffect(() => {
-        router.prefetch('/browse');
-    }, []);
-
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <ArbitrumBridgeStore>
                     <NavBar />
-                    <InvestNav />
                     <SwapStore>
                         <Exchange />
                     </SwapStore>
-                    <PendingCommits />
                     <ArbitrumBridge />
                 </ArbitrumBridgeStore>
             </PoolStore>
+            <PendingCommits />
             <Footer />
             <CorWidget />
 
