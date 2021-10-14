@@ -286,7 +286,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             className="mt-2"
                             disabled={!(Number(amount) > 0) || amountIsInvalid}
                         >
-                            Bridge
+                            Bridge {toNetwork ? `to ${toNetwork.name}` : 'Funds'}
                             {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
                         </Button>
                     )}
