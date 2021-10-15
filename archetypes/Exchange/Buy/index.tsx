@@ -215,8 +215,9 @@ export default (() => {
                 </div>
                 <br />
                 <div>
-                    Tracer runs on Arbitrum mainnet. Be sure to bridge <b>USDC</b> for collateral, and <b>ETH</b> for
-                    gas. It’s worth noting that there is a 7 day wait to withdraw your funds back to Ethereum Mainnet.
+                    Deposit funds from Ethereum to Arbitrum to get started with Perpetual Pools. Ensure you deposit{' '}
+                    <b>USDC</b> for collateral and <b>ETH</b> for gas. Please note that the withdrawal process from
+                    Arbitrum to Ethereum takes approximately 7 days.
                     <br />
                     <br />
                     If you have any questions, please{' '}
