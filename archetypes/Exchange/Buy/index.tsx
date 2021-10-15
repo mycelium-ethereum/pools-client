@@ -242,7 +242,7 @@ export default (() => {
                     {`Ok, let's bridge funds`}
                 </Button>
                 <p className="mt-2 text-center">
-                    You can also bridge funds via the{' '}
+                    You can also bridge funds using the{' '}
                     <a
                         className="text-tracer-400 underline"
                         href="https://bridge.arbitrum.io"
