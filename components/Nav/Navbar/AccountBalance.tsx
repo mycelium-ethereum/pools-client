@@ -31,7 +31,7 @@ export default (({ hide, className }) => {
         <div className={classNames('text-white', hide ? 'hidden' : 'block', className ?? '')}>
             {pendingCount > 0 ? (
                 <div className="flex">
-                    <div className="w-10 mx-2">
+                    <div className="w-8 mx-2">
                         <TracerLoading />
                     </div>
                     <div>{`${pendingCount} Pending`}</div>
