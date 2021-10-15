@@ -32,8 +32,6 @@ export const fetchTokenPrice: (
     const nextShortBalance = poolInfo.shortBalance.plus(shortValueTransfer);
     const committerInfo = await fetchCommits({
         committer: poolInfo.committer.address,
-        address: pool,
-        lastUpdate: poolInfo.lastUpdate.toNumber(),
         quoteTokenDecimals: poolInfo.quoteToken.decimals
     }, provider)
 

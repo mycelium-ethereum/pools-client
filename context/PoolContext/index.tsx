@@ -3,7 +3,7 @@ import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
-import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
+import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, fetchUserCommits, initPool } from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -102,8 +102,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     fetchCommits({
                         committer: pool.committer.address,
                         quoteTokenDecimals: decimals,
-                        lastUpdate: pool.lastUpdate.toNumber(),
-                        address: pool.address,
                     }, provider).then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
@@ -114,27 +112,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             });
 
                             setExpectedPrice(pool);
-
-                            committerInfo.allUnexecutedCommits.map(async (commit) => {
-                                // const block = await commit.getBlock()
-                                // const txn = await commit.getTransaction()
-                                commitDispatch({
-                                    type: 'addCommit',
-                                    commitInfo: {
-                                        pool: pool.address,
-                                        id: commit.commitID,
-                                        amount: commit.amount,
-                                        type: commit.commitType,
-                                        from: commit.from,
-                                        txnHash: commit.txnHash,
-                                        created: commit.timestamp 
-                                    },
-                                });
-                            });
                         }
                     });
                 } catch (err) {
-                    console.log("IM IN HERE")
                     console.error('Failed to initialise committer', err);
                 }
 
@@ -154,6 +134,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool);
                 updateTokenApprovals(pool);
+                updateCommittedAmounts(pool);
             });
         } else if (!account && poolsState.poolsInitialised) {
             // account disconnect
@@ -200,6 +181,25 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.error('Failed to fetch token balances', err);
             });
     };
+
+    // get and set token balances
+    const updateCommittedAmounts: (pool: Pool) => void = (pool) => {
+        if (!provider || !account) {
+            return false;
+        }
+        const decimals = pool.quoteToken.decimals;
+        fetchUserCommits(pool.committer.address, account, decimals, provider)
+            .then((commitAmounts) => {
+                poolsDispatch({
+                    type: 'setUserCommits', commitAmounts, pool: pool.address
+                })
+                console.log(commitAmounts)
+            })
+            .catch((err) => {
+                console.error('Failed to commit amounts token balances', err);
+            });
+    };
+
 
     // get and set approvals
     const updateTokenApprovals: (pool: Pool) => void = (pool) => {
@@ -251,7 +251,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             commitDispatch({
                                 type: 'addCommit',
                                 commitInfo: {
-                                    id: id.toNumber(),
+                                    id: parseInt(id),
                                     pool,
                                     from: txn.from, // from address
                                     txnHash: txn.hash,

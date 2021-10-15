@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "isolatedModules": true,
     "lib": [
       "dom",
@@ -12,8 +12,8 @@
     "strictNullChecks": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "noEmitOnError": true,
+    "noEmit": false,
+    "noEmitOnError": false,
     "module": "esnext",
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
@@ -21,7 +21,8 @@
     "noUnusedParameters": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "importHelpers": true,
+    "importHelpers": false,
+    
     "removeComments": true,
     "jsx": "preserve",
     "baseUrl": ".",
@@ -54,7 +55,7 @@
     "**/*.tsx",
     "next-env.d.ts",
     "next.config.js",
-    "node_modules/@tracer-protocol/perpetual-pools-contracts"
+    // "node_modules/@tracer-protocol/perpetual-pools-contracts"
   ],
   "exclude": [
     "public/static/*"

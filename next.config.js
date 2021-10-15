@@ -24,7 +24,7 @@ module.exports = {
         // Dangerously allow production builds to successfully complete even if
         // your project has type errors.
         // !! WARN !!
-        ignoreBuildErrors: true,
+        // ignoreBuildErrors: true,
     },
 
     webpack(config, { isServer }, options) {
@@ -52,14 +52,16 @@ module.exports = {
             },
             // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
             {
-                test: /\.ts?$/,
+                test: /\.tsx?$/,
                 options: {
                     allowTsInNodeModules: true,
                     compilerOptions: {
                         noEmit: false,
                     },
                 },
-                include: [path.resolve(__dirname, 'node_modules/@tracer-protocol/perpetual-pools-contracts')],
+                // include: [
+                //     path.resolve(__dirname, '../perpetual-pools-contracts'),
+                // ],
                 loader: 'ts-loader',
             },
         );

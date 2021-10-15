@@ -1,8 +1,6 @@
 import React from 'react';
 import { CommitEnum, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
-import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
-import { ethers } from 'ethers';
 
 /**
  * Can be used when component passes down children
@@ -58,19 +56,34 @@ export type PendingAmounts = {
 };
 export type Committer = {
     address: string;
-    pendingLong: PendingAmounts;
-    pendingShort: PendingAmounts;
-    allUnexecutedCommits: CreatedCommitType[];
-    minimumCommitSize: BigNumber;
+    global: {
+        pendingLong: PendingAmounts,
+        pendingShort: PendingAmounts
+    },
+    user: {
+        claimable: {
+            longTokens: BigNumber,
+            shortTokens: BigNumber,
+            settlementTokens: BigNumber
+        }
+        pending: {
+            long: PendingAmounts;
+            short: PendingAmounts;
+        },
+        followingUpdate: {
+            long: PendingAmounts;
+            short: PendingAmounts;
+        }
+    }
 };
 
-export type CreatedCommitType = TypedEvent<
-    [ethers.BigNumber, ethers.BigNumber, number] & {
-        commitID: ethers.BigNumber;
-        amount: ethers.BigNumber;
-        commitType: number;
-    }
->;
+// export type CreatedCommitType = TypedEvent<
+//     [ethers.BigNumber, ethers.BigNumber, number] & {
+//         commitID: ethers.BigNumber;
+//         amount: ethers.BigNumber;
+//         commitType: number;
+//     }
+// >;
 
 export type Pool = {
     address: string;
@@ -105,13 +118,26 @@ export type PendingCommitInfo = {
     created: number; // created timestamp of the given commit
 };
 
-export type QueuedCommit = PendingCommitInfo & {
+export type QueuedCommit = {
+    pool: string;
+    amount: BigNumber;
     token: PoolToken;
+    type: CommitEnum;
     tokenPrice: BigNumber;
-    nextRebalance: BigNumber;
-    frontRunningInterval: BigNumber;
-    updateInterval: BigNumber;
+    commitmentTime: BigNumber;
 };
+
+export type ClaimablePool = {
+    pool: {
+        address: string,
+        name: string
+    };
+    shortTokenPrice: BigNumber;
+    claimableShortTokens: BigNumber;
+    longTokenPrice: BigNumber;
+    claimableLongTokens: BigNumber;
+    claimableSettlementTokens: BigNumber;
+}
 
 // table heading initialiser
 export type Heading = {

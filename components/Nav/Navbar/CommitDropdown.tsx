@@ -44,11 +44,11 @@ export default (({ setShowQueued, hide }) => {
                     targetTime={nextUpdate}
                 />
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.mints)}>
-                <a>{mints} Mints</a>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.pending)}>
+                <a>{mints} Pending</a>
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.burns)}>
-                <a>{burns} Burns</a>
+            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.claimable)}>
+                <a>{burns} Claimable</a>
             </div>
         </TWPopup>
     );

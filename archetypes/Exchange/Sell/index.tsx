@@ -9,7 +9,7 @@ import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
@@ -82,19 +82,19 @@ export default (() => {
 
     useEffect(() => {
         if (pool) {
-            const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
+            // const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
-            const minimumTokens = calcMinAmountIn(
-                token.supply.plus(pendingBurns),
-                notional,
-                minimumCommitSize,
-                pendingBurns,
-            );
+            // const minimumTokens = calcMinAmountIn(
+            //     token.supply.plus(pendingBurns),
+            //     notional,
+            //     minimumCommitSize,
+            //     pendingBurns,
+            // );
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
             const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
 
-            const invalidAmount = isInvalidAmount(amount, currentBalance, minimumTokens, tokenPrice);
+            const invalidAmount = isInvalidAmount(amount, currentBalance, new BigNumber(0), tokenPrice);
 
             swapDispatch({
                 type: 'setInvalidAmount',

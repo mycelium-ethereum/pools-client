@@ -1,19 +1,24 @@
 import React from 'react';
-import { QueuedCommit } from '@libs/types/General';
+import { ClaimablePool, QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { Logo } from '@components/General';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { ethers } from 'ethers';
+import { Logo, LogoTicker } from '@components/General';
 import { TWModal } from '@components/General/TWModal';
-import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
+import { CommitsFocusEnum } from '@libs/constants';
+import { Table, TableHeader, TableHeaderCell, 
+    TableRow, 
+    TableRowCell 
+} from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+import { ethers } from 'ethers';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import Button from '@components/General/Button';
 
 // import BigNumber from 'bignumber.js';
 // const testCommits:QueuedCommit[] = [
@@ -41,31 +46,47 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 
 export default (() => {
     const { provider } = useWeb3();
-    const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
+    const { showCommits = true, focus = CommitsFocusEnum.pending } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
-    const commits = usePendingCommits(focus);
-
-    const mintCommits = commits.filter(
-        (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
-    );
-
-    const burnCommits = commits.filter(
-        (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
-    );
+    const {
+        pendingCommits,
+        claimablePools
+    } = usePendingCommits();
+    console.log(pendingCommits, claimablePools)
 
     return (
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
                 <h1 className="text-bold font-size[30px] text-theme-text">
-                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
+                    {`${focus === CommitsFocusEnum.pending ? 'Pending' : 'Claimable'} commits`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
                     <Close />
                 </div>
             </div>
-            <Table>
-                {focus === CommitsFocusEnum.mints ? (
-                    <>
+            <div className="flex">
+                <TWButtonGroup 
+                    value={focus}
+                    size={'xl'}
+                    color={'tracer'}
+                    onClick={(val) => {
+                        commitDispatch({ type: 'setFocus', focus: val as CommitsFocusEnum})
+                    }}
+                    options={[
+                        {
+                            key: 0,
+                            text: 'Pending'
+                        },
+                        {
+                            key: 1,
+                            text: 'Claimable'
+                        }
+                    ]}
+                />
+            </div>
+            {
+                focus === CommitsFocusEnum.pending ?
+                    <Table>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Spend (USDC)</TableHeaderCell>
@@ -74,49 +95,43 @@ export default (() => {
                             <TableHeaderCell>Receive in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {mintCommits.map((commit, index) => (
-                            <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                        {pendingCommits.map((commit, index) => (
+                            <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
-                    </>
-                ) : (
-                    <>
-                        <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Price* (Token)</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Burn in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </TableHeader>
-                        {burnCommits.map((commit, index) => (
-                            <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
-                        ))}
-                    </>
-                )}
-            </Table>
+                    </Table>
+                : 
+                <Table>
+                    <TableHeader>
+                        <TableHeaderCell>Pool</TableHeaderCell>
+                        <TableHeaderCell>Claimable (USDC)</TableHeaderCell>
+                        <TableHeaderCell>Claimable Long  / Token Price (USDC)</TableHeaderCell>
+                        <TableHeaderCell>Claimable Short / Token Price (USDC)</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </TableHeader>
+                    {claimablePools.map((pool, index) => (
+                        <ClaimablePoolRow key={`claimable-pool-${pool.pool}`} index={index} provider={provider ?? null} {...pool} />
+                    ))}
+                </Table>
+            }
         </TWModal>
     );
 }) as React.FC;
 
-const BuyRow: React.FC<
+const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
 > = ({
     token,
-    txnHash,
+    commitmentTime,
     tokenPrice,
     amount,
-    nextRebalance,
     provider,
     index,
-    frontRunningInterval,
-    updateInterval,
-    created,
 }) => {
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={`commit-row-${index}`} rowNumber={index}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
@@ -125,11 +140,7 @@ const BuyRow: React.FC<
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{amount.div(tokenPrice).toFixed()}</TableRowCell>
             <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
+                <TimeLeft targetTime={commitmentTime.toNumber()} />
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
@@ -137,7 +148,7 @@ const BuyRow: React.FC<
                     provider={provider}
                     arbiscanTarget={{
                         type: ArbiscanEnum.txn,
-                        target: txnHash,
+                        target: '',
                     }}
                 />
             </TableRowCell>
@@ -145,48 +156,38 @@ const BuyRow: React.FC<
     );
 };
 
-const SellRow: React.FC<
-    QueuedCommit & {
+const ClaimablePoolRow: React.FC<
+    ClaimablePool & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
 > = ({
-    token,
-    txnHash,
-    tokenPrice,
-    amount,
-    nextRebalance,
-    provider,
+    // provider,
     index,
-    frontRunningInterval,
-    updateInterval,
-    created,
+    pool: {
+        name
+    },
+    claimableLongTokens,
+    claimableShortTokens,
+    longTokenPrice,
+    shortTokenPrice,
+    claimableSettlementTokens,
 }) => {
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow rowNumber={index}>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.name}
+                <Logo ticker={name.split('/')[0] as LogoTicker} className="inline mr-2" />
+                {name}
             </TableRowCell>
-            <TableRowCell>{amount.toFixed(2)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(claimableSettlementTokens)}</TableRowCell>
             <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
+                {claimableLongTokens.toFixed(2)} / {toApproxCurrency(longTokenPrice)}
+            </TableRowCell>
+            <TableRowCell>
+                {claimableShortTokens.toFixed(2)} / {toApproxCurrency(shortTokenPrice)}
             </TableRowCell>
             <TableRowCell className="flex text-right">
-                <Actions
-                    token={token}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
-                        target: txnHash,
-                    }}
-                />
+                <Button>Claim</Button>
             </TableRowCell>
         </TableRow>
     );

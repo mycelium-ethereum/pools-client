@@ -1,4 +1,4 @@
-import { CreatedCommitType, Pool } from '@libs/types/General';
+import { Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 import { SideEnum } from '.';
 
@@ -54,8 +54,7 @@ export const DEFAULT_POOLSTATE: Pool = {
             mint: new BigNumber(0),
             burn: new BigNumber(0),
         },
-        allUnexecutedCommits: [] as CreatedCommitType[],
-        minimumCommitSize: new BigNumber(1000),
+        allUnexecutedCommits: [] as any[],
     },
     subscribed: false,
 };

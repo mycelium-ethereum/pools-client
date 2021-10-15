@@ -1,5 +1,5 @@
 import { CommitEnum } from '@libs/constants';
-import { PendingAmounts, Pool } from '@libs/types/General';
+import { Committer, PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 export type PoolState = {
@@ -36,6 +36,7 @@ export type PoolAction =
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
+    | { type: 'setUserCommits'; pool: string; commitAmounts: Committer['user'] }
     | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
@@ -67,6 +68,20 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         ...state.pools[action.pool],
                         nextLongBalance: action.nextLongBalance,
                         nextShortBalance: action.nextShortBalance,
+                    },
+                },
+            };
+        case 'setUserCommits':
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        committer: {
+                            ...state.pools[action.pool].committer,
+                            user: action.commitAmounts
+                        }
                     },
                 },
             };
@@ -153,16 +168,16 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             const committer = state.pools[action.pool].committer;
             switch (action.commitType) {
                 case CommitEnum.short_burn:
-                    committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
+                    committer.global.pendingShort.burn = committer.global.pendingShort.burn.plus(action.amount);
                     break;
                 case CommitEnum.short_mint:
-                    committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
+                    committer.global.pendingShort.mint = committer.global.pendingShort.mint.plus(action.amount);
                     break;
                 case CommitEnum.long_burn:
-                    committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
+                    committer.global.pendingLong.burn = committer.global.pendingLong.burn.plus(action.amount);
                     break;
                 case CommitEnum.long_mint:
-                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
+                    committer.global.pendingLong.mint = committer.global.pendingLong.mint.plus(action.amount);
                     break;
                 default:
                     break;

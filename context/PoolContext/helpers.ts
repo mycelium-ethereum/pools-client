@@ -1,6 +1,5 @@
-import { SideEnum, CommitEnum, MAX_SOL_UINT, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
-import { PendingAmounts, Pool, PoolType } from '@libs/types/General';
+import { SideEnum } from '@libs/constants';
+import { Committer, PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -86,14 +85,6 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             quoteTokenInstance.decimals(),
         ]);
 
-        // fetch minimum commit size
-        const poolCommitterInstance = new ethers.Contract(
-            poolCommitter,
-            PoolCommitter__factory.abi,
-            provider,
-        ) as PoolCommitter;
-        const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
-
         // fetch last keeper price
         const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
@@ -104,6 +95,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
         const leverage = parseInt(name.split('-')?.[0] ?? 1);
         return {
             ...pool,
+            name: await contract.poolName(),
             updateInterval: new BigNumber(updateInterval.toString()),
             lastUpdate: new BigNumber(lastUpdate.toString()),
             lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
@@ -115,16 +107,43 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
             committer: {
                 address: poolCommitter,
-                pendingLong: {
-                    mint: new BigNumber(0),
-                    burn: new BigNumber(0),
+                global: {
+                    pendingLong: {
+                        mint: new BigNumber(0),
+                        burn: new BigNumber(0),
+                    },
+                    pendingShort: {
+                        mint: new BigNumber(0),
+                        burn: new BigNumber(0),
+                    },
                 },
-                pendingShort: {
-                    mint: new BigNumber(0),
-                    burn: new BigNumber(0),
-                },
-                allUnexecutedCommits: [],
-                minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
+                user : {
+                    claimable: {
+                        shortTokens: new BigNumber(0),
+                        longTokens: new BigNumber(0),
+                        settlementTokens: new BigNumber(0),
+                    },
+                    pending: {
+                        long: {
+                            mint: new BigNumber(0),
+                            burn: new BigNumber(0),
+                        },
+                        short: {
+                            mint: new BigNumber(0),
+                            burn: new BigNumber(0),
+                        },
+                    },
+                    followingUpdate: {
+                        long: {
+                            mint: new BigNumber(0),
+                            burn: new BigNumber(0),
+                        },
+                        short: {
+                            mint: new BigNumber(0),
+                            burn: new BigNumber(0),
+                        },
+                    }
+                }
             },
             keeper,
             // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
@@ -163,18 +182,15 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
 export const fetchCommits: (
     poolInfo: {
-        address: string,
         committer: string,
-        lastUpdate: number,
         quoteTokenDecimals: number
     },
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
-    allUnexecutedCommits: APICommitReturn[];
 }> = async ({
-    committer, address: pool, lastUpdate, quoteTokenDecimals
+    committer, quoteTokenDecimals
 }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
     const defaultState = {
@@ -194,49 +210,142 @@ export const fetchCommits: (
     }
 
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
-    const earliestUnexecuted = await contract.earliestCommitUnexecuted();
-    if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
-        console.debug('No unexecuted commits');
-        return defaultState;
-    }
-    console.log(await contract.commits(earliestUnexecuted), pool);
 
-    let allUnexecutedCommits: APICommitReturn[] = [];
-    const network = provider.network.chainId;
-    if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        console.log("fetching")
-        allUnexecutedCommits = await fetchPoolCommits(pool, network.toString() as SourceType, {
-            from: lastUpdate,
-        })
-    }
-    console.log("Commits", allUnexecutedCommits)
+    const totalMostRecentCommit = await contract.totalMostRecentCommit();
+    const totalNextIntervalCommit = await contract.totalNextIntervalCommit();
 
-    const pendingAmounts = await Promise.all([
-        contract.shadowPools(CommitEnum.short_mint),
-        contract.shadowPools(CommitEnum.short_burn),
-        contract.shadowPools(CommitEnum.long_mint),
-        contract.shadowPools(CommitEnum.long_burn),
-    ]);
-
-    console.debug('All commits unfiltered', allUnexecutedCommits);
-
-    const pendingShort: PendingAmounts = {
-        mint: new BigNumber(ethers.utils.formatUnits(pendingAmounts[0], quoteTokenDecimals)),
-        burn: new BigNumber(ethers.utils.formatUnits(pendingAmounts[1], quoteTokenDecimals)),
-    };
-
-    const pendingLong: PendingAmounts = {
-        mint: new BigNumber(ethers.utils.formatUnits(pendingAmounts[2], quoteTokenDecimals)),
-        burn: new BigNumber(ethers.utils.formatUnits(pendingAmounts[3], quoteTokenDecimals)),
-    };
-
-    console.debug(`Pending Long`, pendingLong);
-    console.debug(`Pending Short`, pendingShort);
+    console.log("Total most recent", totalMostRecentCommit)
+    console.log("Totale next interval", totalNextIntervalCommit)
 
     return {
-        pendingLong,
-        pendingShort,
-        allUnexecutedCommits,
+        pendingLong: {
+            mint: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longMintAmount, quoteTokenDecimals)),
+            burn: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longBurnAmount, quoteTokenDecimals)),
+        }, 
+        pendingShort: {
+            mint: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.shortMintAmount, quoteTokenDecimals)),
+            burn: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.shortBurnAmount, quoteTokenDecimals)),
+        }
+    };
+};
+
+export const fetchUserCommits: (
+    committer: string,
+    account: string,
+    quoteTokenDecimals: number,
+    provider: ethers.providers.JsonRpcProvider,
+) => Promise<Committer['user']> = async (committer, account, quoteTokenDecimals, provider) => {
+    const defaultState = {
+        claimable: {
+            longTokens: new BigNumber(0),
+            shortTokens: new BigNumber(0),
+            settlementTokens: new BigNumber(0),
+        },
+        pending: {
+            long: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+            short: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+        },
+        followingUpdate: {
+            long: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+            short: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+        }
+    };
+
+    if (!provider || !committer) {
+        return defaultState;
+    }
+
+    const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
+    const {
+        longTokens,
+        shortTokens,
+        settlementTokens
+    } = await contract.getAggregateBalance(account);
+
+
+    const updateInterval = await contract.updateIntervalId();
+
+    let pending = {
+        long: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0)
+        },
+        short: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0)
+        }
+    };
+    let followingUpdate = {
+        long: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0)
+        },
+        short: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0)
+        }
+    };
+    const userMostRecentCommit = await contract.userMostRecentCommit(account)
+    const userNextIntervalCommit = await contract.userNextIntervalCommit(account)
+    if (userMostRecentCommit.updateIntervalId.gte(updateInterval)) {
+        // this means the userMostRecent is the current updateInterval therefore pending
+        pending = {
+            long: {
+                mint: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.longMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.longBurnAmount, quoteTokenDecimals)),
+            },
+            short: {
+                mint: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.shortMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.shortBurnAmount, quoteTokenDecimals)),
+            }
+        }
+    } else if (userNextIntervalCommit.updateIntervalId.eq(updateInterval)) {
+        // this means a user committed during front running interval and is in the next update interval
+        pending = {
+            long: {
+                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals)),
+            },
+            short: {
+                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals)),
+            }
+        }
+    } else if (userNextIntervalCommit.updateIntervalId.gt(updateInterval)) {
+        // user submitted in front running interval it will be included in the next round
+        followingUpdate = {
+            long: {
+                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals)),
+            },
+            short: {
+                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals)),
+                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals)),
+            }
+        }
+
+    }
+
+    return {
+        claimable: {
+            longTokens: new BigNumber(ethers.utils.formatUnits(longTokens, quoteTokenDecimals)),
+            shortTokens: new BigNumber(ethers.utils.formatUnits(shortTokens, quoteTokenDecimals)),
+            settlementTokens: new BigNumber(ethers.utils.formatUnits(settlementTokens, quoteTokenDecimals)),
+        },
+        pending,
+        followingUpdate
     };
 };
 

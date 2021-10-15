@@ -11,8 +11,8 @@ export type CommitsState = {
 export const initialCommitState: CommitsState = {
     commits: {},
     updateCommits: false,
-    showCommits: false,
-    focus: CommitsFocusEnum.mints,
+    showCommits: true,
+    focus: CommitsFocusEnum.pending,
 };
 
 export type CommitAction =
@@ -20,6 +20,7 @@ export type CommitAction =
     | { type: 'removeCommit'; id: number; pool: string }
     | { type: 'hide' }
     | { type: 'show'; focus: CommitsFocusEnum }
+    | { type: 'setFocus'; focus: CommitsFocusEnum }
     | { type: 'resetCommits' }
     | { type: 'updateCommits' };
 
@@ -42,6 +43,12 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
                 commits: commitsWithout,
             };
         case 'show':
+            return {
+                ...state,
+                showCommits: true,
+                focus: action.focus,
+            };
+        case 'setFocus':
             return {
                 ...state,
                 showCommits: true,
