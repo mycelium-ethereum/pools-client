@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useCallback, useState, useMemo } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
@@ -17,6 +17,13 @@ import { Children } from '@libs/types/General';
 
 import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
+
+type CachedBridges = {
+    [account: string]: {
+        [networkId: string]: Bridge;
+    };
+};
+
 interface ArbitrumBridgeProps {
     bridgeToken: (tokenAddress: string, amount: BigNumber, callback: () => void) => void;
     bridgeEth: (amount: BigNumber, callback: () => void) => void;
@@ -76,12 +83,12 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { handleTransaction } = useTransactionContext();
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);
-    const [bridge, setBridge] = useState<Bridge | null>(null);
+    const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
 
     const fromNetwork = useMemo(() => networkConfig[network], [network]);
     const toNetwork = useMemo(() => networkConfig[destinationNetworkLookup[network]], [network]);
 
-    useEffect(() => {
+    const getBridge = useCallback(async () => {
         if (!provider) {
             return;
         }
@@ -94,42 +101,52 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
-        const createBridge = async () => {
-            // await provider._networkPromise;
+        if (cachedBridges[account]?.[fromNetwork.id]) {
+            return cachedBridges[account]?.[fromNetwork.id];
+        }
 
-            const ethSigner = isArbitrumNetwork(fromNetwork.id)
-                ? new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account)
-                : provider.getSigner(account);
+        const ethSigner = isArbitrumNetwork(fromNetwork.id)
+            ? new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account)
+            : provider.getSigner(account);
+        const arbSigner = isArbitrumNetwork(fromNetwork.id)
+            ? provider.getSigner(account)
+            : new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account);
 
-            const arbSigner = isArbitrumNetwork(fromNetwork.id)
-                ? provider.getSigner(account)
-                : new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account);
+        const bridge = await Bridge.init(ethSigner, arbSigner);
 
-            const bridge = await Bridge.init(ethSigner, arbSigner);
+        setCachedBridges((previousValue) => ({
+            ...previousValue,
+            [account]: {
+                ...(previousValue?.[account] || {}),
+                [network]: bridge,
+            },
+        }));
 
-            setBridge(bridge);
-        };
-
-        createBridge();
-    }, [fromNetwork, account]);
+        return bridge;
+    }, [fromNetwork?.id, account]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
         if (!handleTransaction) {
             console.error('Failed to bridge ETH: handleTransaction is unavailable');
             return;
         }
+
         if (!account) {
             console.error('Failed to bridge ETH: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
         if (!bridge) {
             console.error('Failed to bridge ETH: bridge is unavailable');
             return;
         }
+
         if (!provider) {
             console.error('Failed to bridge ETH: provider is unavailable');
             return;
         }
+
         if (!fromNetwork) {
             console.error('Failed to bridge ETH: fromNetwork is unavailable');
             return;
@@ -211,6 +228,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to bridge ERC20: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
+
         if (!bridge) {
             console.error('Failed to bridge ERC20: bridge is unavailable');
             return;
@@ -360,6 +380,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
+
         if (!bridge) {
             console.error('Failed to refresh bridgeable balance: bridge is unavailable');
             return;
@@ -368,10 +391,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
         }
 
-        // ensure the top level (network) entry is initialised
-
-        newBridgeableBalances[network] = newBridgeableBalances[network] || {};
-        // if we are bridging a token from L1 -> L2, the spender is the gateway router for the L1 network
+        // ensure the network and account entries are initialised
+        newBridgeableBalances[fromNetwork.id] = newBridgeableBalances[fromNetwork.id] || {};
+        newBridgeableBalances[fromNetwork.id][account] = newBridgeableBalances[fromNetwork.id][account] || {};
 
         try {
             if (asset.symbol === bridgeableTickers.ETH) {
@@ -379,7 +401,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     ? await bridge?.l2Bridge.getL2EthBalance()
                     : await bridge?.l1Bridge.getL1EthBalance();
 
-                newBridgeableBalances[network][asset.symbol] = {
+                newBridgeableBalances[fromNetwork.id][account][asset.symbol] = {
                     balance: new BigNumber(ethers.utils.formatEther(balance)),
                     allowance: new BigNumber(ethers.utils.formatEther(balance)),
                     spender: '',
@@ -396,7 +418,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     isL1TokenData(tokenData) ? tokenData.decimals : tokenData.contract.decimals(),
                 ]);
 
-                newBridgeableBalances[network][asset.symbol] = {
+                newBridgeableBalances[fromNetwork.id][account][asset.symbol] = {
                     balance: new BigNumber(ethers.utils.formatUnits(tokenData.balance, decimals)),
                     allowance: new BigNumber(ethers.utils.formatUnits(allowance, decimals)),
                     spender: erc20GatewayAddress,

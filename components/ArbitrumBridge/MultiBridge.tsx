@@ -90,10 +90,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     }, [fromNetwork]);
 
     const selectedAssetBalance = useMemo(() => {
-        if (!selectedAsset) {
+        if (!selectedAsset || !account) {
             return null;
         }
-        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[selectedAsset?.symbol];
+        const assetBalance = bridgeableBalances[fromNetwork?.id]?.[account]?.[selectedAsset?.symbol];
         return assetBalance || null;
     }, [selectedAsset, fromNetwork, bridgeableBalances]);
 
