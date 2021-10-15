@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState, useMemo } from 'react';
+import React, { useContext, useCallback, useState, useMemo } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
@@ -17,6 +17,13 @@ import { Children } from '@libs/types/General';
 
 import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
+
+type CachedBridges = {
+    [account: string]: {
+        [networkId: string]: Bridge;
+    };
+};
+
 interface ArbitrumBridgeProps {
     bridgeToken: (tokenAddress: string, amount: BigNumber, callback: () => void) => void;
     bridgeEth: (amount: BigNumber, callback: () => void) => void;
@@ -82,12 +89,12 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { handleTransaction } = useTransactionContext();
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);
-    const [bridge, setBridge] = useState<Bridge | null>(null);
+    const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
 
     const fromNetwork = useMemo(() => networkConfig[network], [network]);
     const toNetwork = useMemo(() => networkConfig[destinationNetworkLookup[network]], [network]);
 
-    useEffect(() => {
+    const getBridge = useCallback(async () => {
         if (!provider) {
             return;
         }
@@ -100,23 +107,28 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
-        const createBridge = async () => {
-            // await provider._networkPromise;
+        if (cachedBridges[account]?.[fromNetwork.id]) {
+            return cachedBridges[account]?.[fromNetwork.id];
+        }
 
-            const ethSigner = isArbitrumNetwork(fromNetwork.id)
-                ? new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account)
-                : provider.getSigner(account);
+        const ethSigner = isArbitrumNetwork(fromNetwork.id)
+            ? new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account)
+            : provider.getSigner(account);
+        const arbSigner = isArbitrumNetwork(fromNetwork.id)
+            ? provider.getSigner(account)
+            : new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account);
 
-            const arbSigner = isArbitrumNetwork(fromNetwork.id)
-                ? provider.getSigner(account)
-                : new ethers.providers.JsonRpcProvider(toNetwork.publicRPC).getSigner(account);
+        const bridge = await Bridge.init(ethSigner, arbSigner);
 
-            const bridge = await Bridge.init(ethSigner, arbSigner);
+        setCachedBridges((previousValue) => ({
+            ...previousValue,
+            [account]: {
+                ...(previousValue?.[account] || {}),
+                [network]: bridge,
+            },
+        }));
 
-            setBridge(bridge);
-        };
-
-        createBridge();
+        return bridge;
     }, [fromNetwork, account]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
@@ -124,18 +136,23 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to bridge ETH: handleTransaction is unavailable');
             return;
         }
+
         if (!account) {
             console.error('Failed to bridge ETH: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
         if (!bridge) {
             console.error('Failed to bridge ETH: bridge is unavailable');
             return;
         }
+
         if (!provider) {
             console.error('Failed to bridge ETH: provider is unavailable');
             return;
         }
+
         if (!fromNetwork) {
             console.error('Failed to bridge ETH: fromNetwork is unavailable');
             return;
@@ -219,6 +236,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to bridge ERC20: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
+
         if (!bridge) {
             console.error('Failed to bridge ERC20: bridge is unavailable');
             return;
@@ -370,6 +390,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: account is unavailable');
             return;
         }
+
+        const bridge = await getBridge();
+
         if (!bridge) {
             console.error('Failed to refresh bridgeable balance: bridge is unavailable');
             return;
