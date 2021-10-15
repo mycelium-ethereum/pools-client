@@ -11,6 +11,7 @@ import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import WarningBanner from '@components/WarningBanner';
 
 export default (() => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
@@ -30,6 +31,7 @@ export default (() => {
             <PoolStore>
                 <ArbitrumBridgeStore>
                     <NavBar />
+                    <WarningBanner />
                     <SwapStore>
                         <Exchange />
                     </SwapStore>
