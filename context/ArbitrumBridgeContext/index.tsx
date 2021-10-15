@@ -129,7 +129,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         }));
 
         return bridge;
-    }, [fromNetwork, account]);
+    }, [fromNetwork?.id, account]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
         if (!handleTransaction) {
@@ -401,10 +401,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
         }
 
-        // ensure the top level (network) entry is initialised
-
-        newBridgeableBalances[network] = newBridgeableBalances[network] || {};
-        // if we are bridging a token from L1 -> L2, the spender is the gateway router for the L1 network
+        // ensure the network and account entries are initialised
+        newBridgeableBalances[fromNetwork.id] = newBridgeableBalances[fromNetwork.id] || {};
+        newBridgeableBalances[fromNetwork.id][account] = newBridgeableBalances[fromNetwork.id][account] || {};
 
         try {
             if (asset.symbol === bridgeableTickers.ETH) {
@@ -412,7 +411,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     ? await bridge?.l2Bridge.getL2EthBalance()
                     : await bridge?.l1Bridge.getL1EthBalance();
 
-                newBridgeableBalances[network][asset.symbol] = {
+                newBridgeableBalances[fromNetwork.id][account][asset.symbol] = {
                     balance: new BigNumber(ethers.utils.formatEther(balance)),
                     allowance: new BigNumber(ethers.utils.formatEther(balance)),
                     spender: '',
@@ -429,7 +428,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     isL1TokenData(tokenData) ? tokenData.decimals : tokenData.contract.decimals(),
                 ]);
 
-                newBridgeableBalances[network][asset.symbol] = {
+                newBridgeableBalances[fromNetwork.id][account][asset.symbol] = {
                     balance: new BigNumber(ethers.utils.formatUnits(tokenData.balance, decimals)),
                     allowance: new BigNumber(ethers.utils.formatUnits(allowance, decimals)),
                     spender: erc20GatewayAddress,

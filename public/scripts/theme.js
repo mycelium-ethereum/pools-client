@@ -8,8 +8,8 @@
             html.classList.remove('theme-dark');
         } else {
             // else add theme dark this is default
-            html.classList.add('theme-dark')
-        } 
+            html.classList.add('theme-dark');
+        }
     }
 
     try {

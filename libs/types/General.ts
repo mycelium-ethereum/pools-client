@@ -134,6 +134,6 @@ export type BridgeableBalance = {
     spender: string; // address that allowance corresponds to
 };
 
-export type BridgeableBalances = { [network: string]: { [symbol: string]: BridgeableBalance } };
+export type BridgeableBalances = { [network: string]: { [account: string]: { [symbol: string]: BridgeableBalance } } };
 
 export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };
