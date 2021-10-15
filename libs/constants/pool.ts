@@ -61,7 +61,7 @@ export const DEFAULT_POOLSTATE: Pool = {
                 shortTokens: new BigNumber(0),
                 longTokens: new BigNumber(0),
                 settlementTokens: new BigNumber(0),
-            }, 
+            },
             pending: {
                 long: {
                     mint: new BigNumber(0),
@@ -81,8 +81,8 @@ export const DEFAULT_POOLSTATE: Pool = {
                     mint: new BigNumber(0),
                     burn: new BigNumber(0),
                 },
-            }
-        }
+            },
+        },
     },
     subscribed: false,
 };

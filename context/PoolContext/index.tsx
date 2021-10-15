@@ -99,10 +99,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 const decimals = pool.quoteToken.decimals;
                 // fetch commits
                 try {
-                    fetchCommits({
-                        committer: pool.committer.address,
-                        quoteTokenDecimals: decimals,
-                    }, provider).then((committerInfo) => {
+                    fetchCommits(
+                        {
+                            committer: pool.committer.address,
+                            quoteTokenDecimals: decimals,
+                        },
+                        provider,
+                    ).then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
                                 type: 'setPendingAmounts',
@@ -191,15 +194,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         fetchUserCommits(pool.committer.address, account, decimals, provider)
             .then((commitAmounts) => {
                 poolsDispatch({
-                    type: 'setUserCommits', commitAmounts, pool: pool.address
-                })
-                console.log(commitAmounts)
+                    type: 'setUserCommits',
+                    commitAmounts,
+                    pool: pool.address,
+                });
+                console.log(commitAmounts);
             })
             .catch((err) => {
                 console.error('Failed to commit amounts token balances', err);
             });
     };
-
 
     // get and set approvals
     const updateTokenApprovals: (pool: Pool) => void = (pool) => {

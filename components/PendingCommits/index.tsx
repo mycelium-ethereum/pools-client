@@ -7,10 +7,7 @@ import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { Logo, LogoTicker } from '@components/General';
 import { TWModal } from '@components/General/TWModal';
 import { CommitsFocusEnum } from '@libs/constants';
-import { Table, TableHeader, TableHeaderCell, 
-    TableRow, 
-    TableRowCell 
-} from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
@@ -48,11 +45,8 @@ export default (() => {
     const { provider } = useWeb3();
     const { showCommits = true, focus = CommitsFocusEnum.pending } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
-    const {
-        pendingCommits,
-        claimablePools
-    } = usePendingCommits();
-    console.log(pendingCommits, claimablePools)
+    const { pendingCommits, claimablePools } = usePendingCommits();
+    console.log(pendingCommits, claimablePools);
 
     return (
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
@@ -65,54 +59,58 @@ export default (() => {
                 </div>
             </div>
             <div className="flex">
-                <TWButtonGroup 
+                <TWButtonGroup
                     value={focus}
                     size={'xl'}
                     color={'tracer'}
                     onClick={(val) => {
-                        commitDispatch({ type: 'setFocus', focus: val as CommitsFocusEnum})
+                        commitDispatch({ type: 'setFocus', focus: val as CommitsFocusEnum });
                     }}
                     options={[
                         {
                             key: 0,
-                            text: 'Pending'
+                            text: 'Pending',
                         },
                         {
                             key: 1,
-                            text: 'Claimable'
-                        }
+                            text: 'Claimable',
+                        },
                     ]}
                 />
             </div>
-            {
-                focus === CommitsFocusEnum.pending ?
-                    <Table>
-                        <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Receive in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </TableHeader>
-                        {pendingCommits.map((commit, index) => (
-                            <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
-                        ))}
-                    </Table>
-                : 
+            {focus === CommitsFocusEnum.pending ? (
+                <Table>
+                    <TableHeader>
+                        <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell>Spend (USDC)</TableHeaderCell>
+                        <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
+                        <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                        <TableHeaderCell>Receive in</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </TableHeader>
+                    {pendingCommits.map((commit, index) => (
+                        <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                    ))}
+                </Table>
+            ) : (
                 <Table>
                     <TableHeader>
                         <TableHeaderCell>Pool</TableHeaderCell>
                         <TableHeaderCell>Claimable (USDC)</TableHeaderCell>
-                        <TableHeaderCell>Claimable Long  / Token Price (USDC)</TableHeaderCell>
+                        <TableHeaderCell>Claimable Long / Token Price (USDC)</TableHeaderCell>
                         <TableHeaderCell>Claimable Short / Token Price (USDC)</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </TableHeader>
                     {claimablePools.map((pool, index) => (
-                        <ClaimablePoolRow key={`claimable-pool-${pool.pool}`} index={index} provider={provider ?? null} {...pool} />
+                        <ClaimablePoolRow
+                            key={`claimable-pool-${pool.pool}`}
+                            index={index}
+                            provider={provider ?? null}
+                            {...pool}
+                        />
                     ))}
                 </Table>
-            }
+            )}
         </TWModal>
     );
 }) as React.FC;
@@ -122,14 +120,7 @@ const CommitRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({
-    token,
-    commitmentTime,
-    tokenPrice,
-    amount,
-    provider,
-    index,
-}) => {
+> = ({ token, commitmentTime, tokenPrice, amount, provider, index }) => {
     return (
         <TableRow key={`commit-row-${index}`} rowNumber={index}>
             <TableRowCell>
@@ -164,9 +155,7 @@ const ClaimablePoolRow: React.FC<
 > = ({
     // provider,
     index,
-    pool: {
-        name
-    },
+    pool: { name },
     claimableLongTokens,
     claimableShortTokens,
     longTokenPrice,

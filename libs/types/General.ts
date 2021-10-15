@@ -57,24 +57,24 @@ export type PendingAmounts = {
 export type Committer = {
     address: string;
     global: {
-        pendingLong: PendingAmounts,
-        pendingShort: PendingAmounts
-    },
+        pendingLong: PendingAmounts;
+        pendingShort: PendingAmounts;
+    };
     user: {
         claimable: {
-            longTokens: BigNumber,
-            shortTokens: BigNumber,
-            settlementTokens: BigNumber
-        }
+            longTokens: BigNumber;
+            shortTokens: BigNumber;
+            settlementTokens: BigNumber;
+        };
         pending: {
             long: PendingAmounts;
             short: PendingAmounts;
-        },
+        };
         followingUpdate: {
             long: PendingAmounts;
             short: PendingAmounts;
-        }
-    }
+        };
+    };
 };
 
 // export type CreatedCommitType = TypedEvent<
@@ -129,15 +129,15 @@ export type QueuedCommit = {
 
 export type ClaimablePool = {
     pool: {
-        address: string,
-        name: string
+        address: string;
+        name: string;
     };
     shortTokenPrice: BigNumber;
     claimableShortTokens: BigNumber;
     longTokenPrice: BigNumber;
     claimableLongTokens: BigNumber;
     claimableSettlementTokens: BigNumber;
-}
+};
 
 // table heading initialiser
 export type Heading = {

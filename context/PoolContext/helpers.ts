@@ -117,7 +117,7 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
                         burn: new BigNumber(0),
                     },
                 },
-                user : {
+                user: {
                     claimable: {
                         shortTokens: new BigNumber(0),
                         longTokens: new BigNumber(0),
@@ -142,8 +142,8 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
                             mint: new BigNumber(0),
                             burn: new BigNumber(0),
                         },
-                    }
-                }
+                    },
+                },
             },
             keeper,
             // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
@@ -182,16 +182,14 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
 export const fetchCommits: (
     poolInfo: {
-        committer: string,
-        quoteTokenDecimals: number
+        committer: string;
+        quoteTokenDecimals: number;
     },
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
-}> = async ({
-    committer, quoteTokenDecimals
-}, provider) => {
+}> = async ({ committer, quoteTokenDecimals }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
     const defaultState = {
         pendingLong: {
@@ -214,18 +212,18 @@ export const fetchCommits: (
     const totalMostRecentCommit = await contract.totalMostRecentCommit();
     const totalNextIntervalCommit = await contract.totalNextIntervalCommit();
 
-    console.log("Total most recent", totalMostRecentCommit)
-    console.log("Totale next interval", totalNextIntervalCommit)
+    console.log('Total most recent', totalMostRecentCommit);
+    console.log('Totale next interval', totalNextIntervalCommit);
 
     return {
         pendingLong: {
             mint: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longMintAmount, quoteTokenDecimals)),
             burn: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longBurnAmount, quoteTokenDecimals)),
-        }, 
+        },
         pendingShort: {
             mint: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.shortMintAmount, quoteTokenDecimals)),
             burn: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.shortBurnAmount, quoteTokenDecimals)),
-        }
+        },
     };
 };
 
@@ -260,7 +258,7 @@ export const fetchUserCommits: (
                 mint: new BigNumber(0),
                 burn: new BigNumber(0),
             },
-        }
+        },
     };
 
     if (!provider || !committer) {
@@ -268,38 +266,35 @@ export const fetchUserCommits: (
     }
 
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
-    const {
-        longTokens,
-        shortTokens,
-        settlementTokens
-    } = await contract.getAggregateBalance(account);
-
+    const { longTokens, shortTokens, settlementTokens } = await contract.getAggregateBalance(account);
 
     const updateInterval = await contract.updateIntervalId();
 
     let pending = {
         long: {
             mint: new BigNumber(0),
-            burn: new BigNumber(0)
+            burn: new BigNumber(0),
         },
         short: {
             mint: new BigNumber(0),
-            burn: new BigNumber(0)
-        }
+            burn: new BigNumber(0),
+        },
     };
     let followingUpdate = {
         long: {
             mint: new BigNumber(0),
-            burn: new BigNumber(0)
+            burn: new BigNumber(0),
         },
         short: {
             mint: new BigNumber(0),
-            burn: new BigNumber(0)
-        }
+            burn: new BigNumber(0),
+        },
     };
-    const userMostRecentCommit = await contract.userMostRecentCommit(account)
-    const userNextIntervalCommit = await contract.userNextIntervalCommit(account)
-    if (userMostRecentCommit.updateIntervalId.gte(updateInterval)) {
+    const userMostRecentCommit = await contract.userMostRecentCommit(account);
+    const userNextIntervalCommit = await contract.userNextIntervalCommit(account);
+    console.log(updateInterval.toNumber(), 'update interval');
+    console.log(userNextIntervalCommit, 'Next');
+    if (userMostRecentCommit.updateIntervalId.eq(updateInterval)) {
         // this means the userMostRecent is the current updateInterval therefore pending
         pending = {
             long: {
@@ -309,33 +304,50 @@ export const fetchUserCommits: (
             short: {
                 mint: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.shortMintAmount, quoteTokenDecimals)),
                 burn: new BigNumber(ethers.utils.formatUnits(userMostRecentCommit.shortBurnAmount, quoteTokenDecimals)),
-            }
-        }
-    } else if (userNextIntervalCommit.updateIntervalId.eq(updateInterval)) {
+            },
+        };
+    }
+    if (userNextIntervalCommit.updateIntervalId.eq(updateInterval)) {
         // this means a user committed during front running interval and is in the next update interval
         pending = {
             long: {
-                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals)),
-                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals)),
+                mint: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals),
+                ),
+                burn: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals),
+                ),
             },
             short: {
-                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals)),
-                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals)),
-            }
-        }
+                mint: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals),
+                ),
+                burn: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals),
+                ),
+            },
+        };
     } else if (userNextIntervalCommit.updateIntervalId.gt(updateInterval)) {
+        console.log('True');
         // user submitted in front running interval it will be included in the next round
         followingUpdate = {
             long: {
-                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals)),
-                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals)),
+                mint: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.longMintAmount, quoteTokenDecimals),
+                ),
+                burn: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.longBurnAmount, quoteTokenDecimals),
+                ),
             },
             short: {
-                mint: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals)),
-                burn: new BigNumber(ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals)),
-            }
-        }
-
+                mint: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.shortMintAmount, quoteTokenDecimals),
+                ),
+                burn: new BigNumber(
+                    ethers.utils.formatUnits(userNextIntervalCommit.shortBurnAmount, quoteTokenDecimals),
+                ),
+            },
+        };
     }
 
     return {
@@ -345,7 +357,7 @@ export const fetchUserCommits: (
             settlementTokens: new BigNumber(ethers.utils.formatUnits(settlementTokens, quoteTokenDecimals)),
         },
         pending,
-        followingUpdate
+        followingUpdate,
     };
 };
 

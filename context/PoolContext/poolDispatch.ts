@@ -80,8 +80,8 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         ...state.pools[action.pool],
                         committer: {
                             ...state.pools[action.pool].committer,
-                            user: action.commitAmounts
-                        }
+                            user: action.commitAmounts,
+                        },
                     },
                 },
             };

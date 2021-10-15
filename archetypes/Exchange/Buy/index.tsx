@@ -92,7 +92,7 @@ export default (() => {
         const invalidAmount = isInvalidAmount(
             amount,
             pool.quoteToken.balance,
-            new BigNumber(0)
+            new BigNumber(0),
             // pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals),
         );
 

@@ -19,7 +19,6 @@ export default (() => {
             const parsedCommits: QueuedCommit[] = [];
             const claimablePools: ClaimablePool[] = [];
             for (const pool of Object.values(pools)) {
-
                 const {
                     address,
                     name,
@@ -40,9 +39,9 @@ export default (() => {
                             claimable: {
                                 shortTokens: claimableShortTokens,
                                 longTokens: claimableLongTokens,
-                                settlementTokens: claimableSettlementTokens
-                            }
-                        }
+                                settlementTokens: claimableSettlementTokens,
+                            },
+                        },
                     },
                 } = pool;
 
@@ -51,115 +50,67 @@ export default (() => {
 
                 Object.keys(pending).map((key) => {
                     const amounts = pending[key as 'long' | 'short'];
-                    if (key === 'long') {
-                        if (!amounts.burn.eq(0)) {
-                            // some burn amount
-                            parsedCommits.push({
-                                pool: address,
-                                token: longToken,
-                                amount: amounts.burn,
-                                tokenPrice: longTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval),
-                                type: CommitEnum.long_burn
-                            })
-                        }
-                        if (!amounts.mint.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: longToken,
-                                amount: amounts.mint,
-                                tokenPrice: longTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval),
-                                type: CommitEnum.long_mint
-                            })
-                        }
-                    } else if (key === 'short') {
-                        if (!amounts.burn.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: shortToken,
-                                amount: amounts.burn,
-                                tokenPrice: shortTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval),
-                                type: CommitEnum.short_burn
-                            })
-                        }
-                        if (!amounts.mint.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: shortToken,
-                                amount: amounts.mint,
-                                tokenPrice: shortTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval),
-                                type: CommitEnum.short_mint
-                            })
-                        }
+                    if (!amounts.burn.eq(0)) {
+                        // some burn amount
+                        parsedCommits.push({
+                            pool: address,
+                            token: key === 'long' ? longToken : shortToken,
+                            amount: amounts.burn,
+                            tokenPrice: key === 'long' ? longTokenPrice : shortTokenPrice,
+                            commitmentTime: lastUpdate.plus(updateInterval),
+                            type: key === 'long' ? CommitEnum.long_burn : CommitEnum.short_burn,
+                        });
                     }
-
-                })
+                    if (!amounts.mint.eq(0)) {
+                        parsedCommits.push({
+                            pool: address,
+                            token: key === 'long' ? longToken : shortToken,
+                            amount: amounts.mint,
+                            tokenPrice: key === 'long' ? longTokenPrice : shortTokenPrice,
+                            commitmentTime: lastUpdate.plus(updateInterval),
+                            type: key === 'long' ? CommitEnum.long_mint : CommitEnum.short_mint,
+                        });
+                    }
+                });
 
                 Object.keys(followingUpdate).map((key) => {
-                    const amounts = pending[key as 'long' | 'short'];
-                    if (key === 'long') {
-                        if (!amounts.burn.eq(0)) {
-                            // some burn amount
-                            parsedCommits.push({
-                                pool: address,
-                                token: longToken,
-                                amount: amounts.burn,
-                                tokenPrice: longTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
-                                type: CommitEnum.long_burn
-                            })
-                        }
-                        if (!amounts.mint.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: longToken,
-                                amount: amounts.mint,
-                                tokenPrice: longTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
-                                type: CommitEnum.long_mint
-                            })
-                        }
-                    } else if (key === 'short') {
-                        if (!amounts.burn.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: shortToken,
-                                amount: amounts.burn,
-                                tokenPrice: shortTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
-                                type: CommitEnum.short_burn
-                            })
-                        }
-                        if (!amounts.mint.eq(0)) {
-                            parsedCommits.push({
-                                pool: address,
-                                token: shortToken,
-                                amount: amounts.mint,
-                                tokenPrice: shortTokenPrice,
-                                commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
-                                type: CommitEnum.short_mint
-                            })
-                        }
+                    const amounts = followingUpdate[key as 'long' | 'short'];
+                    console.log('Amounts', amounts);
+                    if (!amounts.burn.eq(0)) {
+                        // some burn amount
+                        parsedCommits.push({
+                            pool: address,
+                            token: key === 'long' ? longToken : shortToken,
+                            amount: amounts.burn,
+                            tokenPrice: key === 'long' ? longTokenPrice : shortTokenPrice,
+                            commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
+                            type: key === 'long' ? CommitEnum.long_burn : CommitEnum.short_burn,
+                        });
                     }
-                })
+                    if (!amounts.mint.eq(0)) {
+                        parsedCommits.push({
+                            pool: address,
+                            token: key === 'long' ? longToken : shortToken,
+                            amount: amounts.mint,
+                            tokenPrice: key === 'long' ? longTokenPrice : shortTokenPrice,
+                            commitmentTime: lastUpdate.plus(updateInterval).plus(updateInterval),
+                            type: key === 'long' ? CommitEnum.long_mint : CommitEnum.short_mint,
+                        });
+                    }
+                });
 
-                if (
-                    !claimableLongTokens.eq(0) || !claimableShortTokens.eq(0) || !claimableSettlementTokens.eq(0)
-                ) {
+                if (!claimableLongTokens.eq(0) || !claimableShortTokens.eq(0) || !claimableSettlementTokens.eq(0)) {
                     claimablePools.push({
                         pool: {
                             address,
-                            name
+                            name,
                         },
                         longTokenPrice,
                         shortTokenPrice,
                         claimableLongTokens,
                         claimableShortTokens,
                         claimableSettlementTokens,
-                    })
+                    });
                     // some claimable amount add it to the list of claimable pools
                 }
             }
@@ -170,10 +121,9 @@ export default (() => {
 
     return {
         claimablePools,
-        pendingCommits
+        pendingCommits,
     };
 }) as () => {
-    claimablePools: ClaimablePool[],
-    pendingCommits: QueuedCommit[]
-
-}
+    claimablePools: ClaimablePool[];
+    pendingCommits: QueuedCommit[];
+};
