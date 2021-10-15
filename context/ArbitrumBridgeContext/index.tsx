@@ -155,7 +155,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     success: {
                         title: `Submitted ETH withdrawal from ${fromNetwork.name}`,
                         body: withdrawalToastBody,
-                        autoDismiss: false,
                     },
                     error: {
                         title: `Failed to submit ETH withdrawal from ${fromNetwork.name}`,
@@ -190,7 +189,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         success: {
                             title: `Submitted ETH deposit to ${toNetwork.name}`,
                             body: depositToastBody,
-                            autoDismiss: false,
                         },
                         error: {
                             title: `Failed to submit ETH deposit to ${toNetwork.name}`,
@@ -255,7 +253,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         success: {
                             title: `Submitted ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
                             body: withdrawalToastBody,
-                            autoDismiss: false,
                         },
                         error: {
                             title: `Failed to submit ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
@@ -305,7 +302,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         success: {
                             title: `Submitted ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
                             body: depositToastBody,
-                            autoDismiss: false,
                         },
                         error: {
                             title: `Failed to submit ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
