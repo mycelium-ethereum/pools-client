@@ -25,7 +25,7 @@ export default (() => {
                 const {
                     pendingLong: { burn: pendingLongBurn },
                     pendingShort: { burn: pendingShortBurn },
-                } = pool.committer;
+                } = pool.committer.global;
 
                 const leverageBN = new BigNumber(leverage);
                 rows.push(

@@ -38,7 +38,7 @@ export const NavBarContent: React.FC<{
     const { account } = useWeb3();
 
     // controls displaying queued commits
-    const [showQueued, setShowQueued] = useState(false);
+    const [_showQueued, setShowQueued] = useState(false);
 
     const linkStyles = 'flex transition-all mx-2 py-2 px-2 text-base hover:opacity-80';
 
@@ -82,9 +82,9 @@ export const NavBarContent: React.FC<{
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
 
                     {/* Hide if showing queued */}
-                    <AccountBalance hide={showQueued} className="my-auto mx-2" />
+                    <AccountBalance hide={false} className="my-auto mx-2" />
 
-                    <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
+                    <CommitDropdown hide={false} setShowQueued={setShowQueued} />
                     <ThemeSwitcher />
                 </span>
                 <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />

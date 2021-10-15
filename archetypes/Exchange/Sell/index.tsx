@@ -69,8 +69,8 @@ export default (() => {
         [isLong, pool.nextLongBalance, pool.nextShortBalance],
     );
     const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+        () => (isLong ? pool.committer.global.pendingLong.burn : pool.committer.global.pendingShort.burn),
+        [isLong, pool.committer.global.pendingLong.burn, pool.committer.global.pendingShort.burn],
     );
 
     const tokenPrice = useMemo(

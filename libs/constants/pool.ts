@@ -46,15 +46,43 @@ export const DEFAULT_POOLSTATE: Pool = {
     },
     committer: {
         address: '',
-        pendingLong: {
-            mint: new BigNumber(0),
-            burn: new BigNumber(0),
+        global: {
+            pendingLong: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
+            pendingShort: {
+                mint: new BigNumber(0),
+                burn: new BigNumber(0),
+            },
         },
-        pendingShort: {
-            mint: new BigNumber(0),
-            burn: new BigNumber(0),
-        },
-        allUnexecutedCommits: [] as any[],
+        user: {
+            claimable: {
+                shortTokens: new BigNumber(0),
+                longTokens: new BigNumber(0),
+                settlementTokens: new BigNumber(0),
+            }, 
+            pending: {
+                long: {
+                    mint: new BigNumber(0),
+                    burn: new BigNumber(0),
+                },
+                short: {
+                    mint: new BigNumber(0),
+                    burn: new BigNumber(0),
+                },
+            },
+            followingUpdate: {
+                long: {
+                    mint: new BigNumber(0),
+                    burn: new BigNumber(0),
+                },
+                short: {
+                    mint: new BigNumber(0),
+                    burn: new BigNumber(0),
+                },
+            }
+        }
     },
     subscribed: false,
 };

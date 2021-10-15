@@ -36,8 +36,8 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
         [isLong, pool.nextLongBalance, pool.nextShortBalance],
     );
     const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+        () => (isLong ? pool.committer.global.pendingLong.burn : pool.committer.global.pendingShort.burn),
+        [isLong, pool.committer.global.pendingLong.burn, pool.committer.global.pendingShort.burn],
     );
     const tokenPrice = useMemo(
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
@@ -45,8 +45,8 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
     );
 
     const balancesAfter = {
-        longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
-        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
+        longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.global.pendingLong.mint),
+        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.global.pendingShort.mint),
     };
 
     const effectiveGains = useMemo(() => {
@@ -122,8 +122,8 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
         [isLong, pool.nextLongBalance, pool.nextShortBalance],
     );
     const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
+        () => (isLong ? pool.committer.global.pendingLong.burn : pool.committer.global.pendingShort.burn),
+        [isLong, pool.committer.global.pendingLong.burn, pool.committer.global.pendingShort.burn],
     );
     const tokenPrice = useMemo(
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
