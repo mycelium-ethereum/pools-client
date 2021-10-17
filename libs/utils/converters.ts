@@ -1,6 +1,15 @@
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
-import { CommitEnum, SideEnum, CommitActionEnum } from '@libs/constants';
+import {
+    CommitEnum,
+    SideEnum,
+    CommitActionEnum,
+    MAINNET,
+    RINKEBY,
+    KOVAN,
+    ARBITRUM,
+    ARBITRUM_RINKEBY,
+} from '@libs/constants';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -202,3 +211,20 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
  */
 export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
     ((newValue - oldValue) / oldValue) * 100;
+
+export const toNetworkName: (network: string) => string = (network) => {
+    switch (network) {
+        case MAINNET:
+            return 'Mainnet';
+        case RINKEBY:
+            return 'Rinkeby';
+        case KOVAN:
+            return 'Kovan';
+        case ARBITRUM:
+            return 'Arbitrum';
+        case ARBITRUM_RINKEBY:
+            return 'Arbitrum Rinkeby';
+        default:
+            return 'Unknown Network';
+    }
+};
