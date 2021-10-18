@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
@@ -35,6 +35,13 @@ const isInvalidAmount: (
         return {
             message: undefined,
             isInvalid: false,
+        };
+    }
+
+    if (amount.toString().split('.')[1]?.length > 18) {
+        return {
+            message: undefined,
+            isInvalid: true,
         };
     }
 
@@ -107,6 +114,10 @@ export default (() => {
         });
     }, [amount, pool.quoteToken.balance]);
 
+    // this displays the breakdown on a valid amount
+    // the reason why it is down with useMemo as there was a flash display !isInvalid && !amount
+    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amount.eq(0), [invalidAmount]);
+
     return (
         <>
             <div className={`${inputRow} flex justify-between mb-4`}>
@@ -164,7 +175,7 @@ export default (() => {
                 <p className="mb-2 ">Amount</p>
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
-                        className="w-full h-full text-base font-normal "
+                        className="w-3/5 h-full text-base font-normal"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
@@ -195,7 +206,9 @@ export default (() => {
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
                                     {!amount.eq(0)
-                                        ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}`
+                                        ? `>>> ${toApproxCurrency(
+                                              BigNumber.max(pool.quoteToken.balance.minus(amount), 0),
+                                          )}`
                                         : ''}
                                 </span>
                             </span>
@@ -203,8 +216,14 @@ export default (() => {
                     )}
                 </div>
             </div>
-
-            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} receiveIn={receiveIn} />
+            {!amount.eq(0)}
+            <BuySummary
+                showBreakdown={showBreakdown}
+                pool={pool}
+                amount={amount}
+                isLong={side === SideEnum.long}
+                receiveIn={receiveIn}
+            />
 
             <FeeNote poolName={pool.name} isMint={true} receiveIn={receiveIn} />
 
