@@ -31,9 +31,8 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
             );
         }
         if (
-            (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) 
-            || pool.quoteToken.approvedAmount.eq(0))
-            && (commitAction !== CommitActionEnum.burn)
+            (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) &&
+            commitAction !== CommitActionEnum.burn
         ) {
             return (
                 <>
