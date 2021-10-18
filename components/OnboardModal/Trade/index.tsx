@@ -3,6 +3,7 @@ import { useTheme } from '@context/ThemeContext';
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
+import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
 
 import Close from '/public/img/general/close.svg';
 import Wave from '/public/img/onboard/wave.svg';
@@ -37,6 +38,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             BTC in your wallet.
                         </div>
                         <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
+                        <ProgressIndicator totalSteps={5} currentStep={1} />
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
                                 variant="primary-light"
@@ -67,6 +69,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             which is reflected in your pool token price. <br />
                             4. Burn your tokens and claim your collateral/realise your PnL.
                         </div>
+                        <ProgressIndicator totalSteps={5} currentStep={2} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"
@@ -106,6 +109,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                                 guide on bridging to Arbitrum.
                             </a>
                         </div>
+                        <ProgressIndicator totalSteps={5} currentStep={3} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"
@@ -136,6 +140,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                                 Minting and Burning
                             </a>
                         </div>
+                        <ProgressIndicator totalSteps={5} currentStep={4} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"
@@ -193,6 +198,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             </a>{' '}
                             with RMIT Blockchain Innovation hub
                         </div>
+                        <ProgressIndicator totalSteps={5} currentStep={5} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"

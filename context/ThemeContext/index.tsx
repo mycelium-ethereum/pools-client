@@ -15,26 +15,25 @@ export const ThemeContext = React.createContext<ContextProps>({
  * Wrapper store for the FactoryContext.
  */
 export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(true);
 
     const toggleTheme = () => {
         const head = document.getElementsByTagName('html')[0];
         if (isDark) {
             // is dark going to light
-            localStorage.removeItem('theme');
+            localStorage.setItem('theme', 'light');
             head.classList.remove('theme-dark');
             setIsDark(false);
         } else {
-            localStorage.setItem('theme', 'dark');
             head.classList.add('theme-dark');
+            localStorage.removeItem('theme');
             setIsDark(true);
         }
     };
 
     useEffect(() => {
-        const head = document.getElementsByTagName('html')[0];
-        if (head.classList.contains('theme-dark')) {
-            setIsDark(true);
+        if (localStorage.getItem('theme') === 'light') {
+            setIsDark(false);
         }
     }, []);
 
