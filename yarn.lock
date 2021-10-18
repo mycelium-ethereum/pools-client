@@ -2915,7 +2915,7 @@
     memory-cache "^0.2.0"
     web3-utils "^1.5.2"
 
-"@tracer-protocol/onboard@^2.1.0":
+"@tracer-protocol/onboard@^2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.0.tgz#190d3812bcf2bfb497fb229e63b3272e76b02e5c"
   integrity sha512-0RDFCafhHpR3QyMydfeGOS2E7PnmA3ULJj0MlOTwxw4D57dqq+y4K5qbsGqWKMMzEJht/gScyHi08yJ8dONL5A==
