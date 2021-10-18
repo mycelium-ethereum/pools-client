@@ -19,7 +19,7 @@ const WarningBanner: React.FC = () => {
             <div
                 className={`${
                     isDark ? 'bg-cool-gray-700 text-white' : 'bg-cool-gray-200 text-black'
-                } container px-2 3xl:px-20 py-3 absolute top-16 lg:top-20 left-0 right-0 mx-auto z-50 flex items-center rounded-lg`}
+                } container px-5 3xl:px-20 py-3 absolute top-16 lg:top-20 left-0 right-0 mx-auto z-50 flex items-center rounded-lg`}
             >
                 <div className="mr-2">
                     <Exclamation />
