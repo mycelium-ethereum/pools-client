@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { useTheme } from '@context/ThemeContext';
 
 import Exclamation from '@public/img/warning/exclamation-circle.svg';
 import Close from '@public/img/warning/cross.svg';
-import { useTheme } from '@context/ThemeContext';
 
 const WarningBanner: React.FC = () => {
     const [showWarning, setShowWarning] = useState(false);
-    const { network = '0' } = useWeb3();
     const { isDark } = useTheme();
 
     useEffect(() => {
@@ -28,9 +25,17 @@ const WarningBanner: React.FC = () => {
                     <Exclamation />
                 </div>
                 <div>
-                    <span className="font-semibold">NOTICE:</span>&nbsp;You’re connected to{' '}
-                    {networkConfig[network].name}, and the protocol is still in beta phase.&nbsp;
-                    <span className="font-semibold">Use at your own risk!</span>
+                    <span className="font-semibold">NOTICE:</span>&nbsp;Perpetual Pools has been{' '}
+                    <a
+                        href="https://tracer.finance/radar/sigma-prime-audit-response/"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline"
+                    >
+                        audited
+                    </a>
+                    , however it is still in beta phase.&nbsp;
+                    <span className="font-semibold">Please use at your own risk.</span>
                 </div>
                 <div
                     className="ml-auto cursor-pointer"
