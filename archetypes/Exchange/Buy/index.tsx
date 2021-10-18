@@ -38,13 +38,6 @@ const isInvalidAmount: (
         };
     }
 
-    if (amount.toString().split('.')[1]?.length > 18) {
-        return {
-            message: undefined,
-            isInvalid: true,
-        };
-    }
-
     if (amount.gt(balance)) {
         return {
             message: undefined,
@@ -115,7 +108,7 @@ export default (() => {
     }, [amount, pool.quoteToken.balance]);
 
     // this displays the breakdown on a valid amount
-    // the reason why it is down with useMemo as there was a flash display !isInvalid && !amount
+    // useMemo removes the flash display when !amount && calculating if the value is valid
     const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amount.eq(0), [invalidAmount]);
 
     return (
