@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
@@ -36,9 +36,6 @@ export const NavBarContent: React.FC<{
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account } = useWeb3();
-
-    // controls displaying queued commits
-    const [_showQueued, setShowQueued] = useState(false);
 
     const linkStyles = 'flex transition-all mx-2 py-2 px-2 text-base hover:opacity-80';
 
@@ -84,7 +81,7 @@ export const NavBarContent: React.FC<{
                     {/* Hide if showing queued */}
                     <AccountBalance hide={false} className="my-auto mx-2" />
 
-                    <CommitDropdown hide={false} setShowQueued={setShowQueued} />
+                    <CommitDropdown hide={false} />
                     <ThemeSwitcher />
                 </span>
                 <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />

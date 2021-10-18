@@ -1,26 +1,16 @@
-import React, { useMemo } from 'react';
-import TimeLeft from '@components/TimeLeft';
+import React from 'react';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { CommitsFocusEnum } from '@libs/constants';
-import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import { classNames } from '@libs/utils/functions';
 import TWPopup from '@components/General/TWPopup';
-import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import useQueuedCommits from '@libs/hooks/useQueuedCommits';
 
 const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
 // const CommitDropdown
-export default (({ setShowQueued, hide }) => {
+export default (({ hide }) => {
     const { commitDispatch } = useCommitActions();
-    const { mints, burns, nextUpdate } = useCommitsBreakdown();
-
-    useMemo(() => {
-        if (mints + burns > 0) {
-            setShowQueued(true);
-        } else {
-            setShowQueued(false);
-        }
-    }, [mints, burns]);
+    const { pendingCommits, claimablePools } = useQueuedCommits();
 
     const handleClick = (focus: CommitsFocusEnum) => {
         if (commitDispatch) {
@@ -33,26 +23,25 @@ export default (({ setShowQueued, hide }) => {
     return (
         <TWPopup
             className={classNames('my-auto mx-2 w-[120px] text-left relative', hide ? 'hidden' : 'block')}
-            preview={`${mints + burns} Queued`}
+            preview={`${pendingCommits.mints.length + pendingCommits.burns.length + claimablePools.length} Queued`}
         >
-            <div className="flex text-sm font-normal items-center py-2 px-4 text-theme-text opacity-90 border-b border-theme-border">
-                <TooltipSelector tooltip={{ content: <>Time until mints/burns are processed</> }}>
+            {/* <div className="flex text-sm font-normal items-center py-2 px-4 text-theme-text opacity-90 border-b border-theme-border">
+                <TooltipSelector tooltip={{ content: <>Time until pendingCommits become claimable</> }}>
                     <div className="uppercase mr-2 whitespace-nowrap">Up Next</div>
                 </TooltipSelector>
                 <TimeLeft
                     className="py-1 px-3 m-auto box-border whitespace-nowrap border rounded bg-theme-button-bg text-theme-text opacity-90 border-theme-border"
                     targetTime={nextUpdate}
                 />
-            </div>
+            </div> */}
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.pending)}>
-                <a>{mints} Pending</a>
+                <a>{pendingCommits.mints.length + pendingCommits.burns.length} Pending</a>
             </div>
             <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.claimable)}>
-                <a>{burns} Claimable</a>
+                <a>{claimablePools.length} Claimable</a>
             </div>
         </TWPopup>
     );
 }) as React.FC<{
-    setShowQueued: React.Dispatch<React.SetStateAction<boolean>>;
     hide?: boolean;
 }>;

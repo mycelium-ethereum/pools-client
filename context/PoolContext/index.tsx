@@ -35,6 +35,7 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
+    claim: (pool: string) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -198,7 +199,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     commitAmounts,
                     pool: pool.address,
                 });
-                console.log(commitAmounts);
             })
             .catch((err) => {
                 console.error('Failed to commit amounts token balances', err);
@@ -309,6 +309,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
                     });
                     updateTokenBalances(poolsState.pools[pool]);
+                    updateCommittedAmounts(poolsState.pools[pool]);
                     commitDispatch({
                         type: 'resetCommits',
                     });
@@ -368,6 +369,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
                             updateTokenBalances(poolsState.pools[pool]);
+                            updateCommittedAmounts(poolsState.pools[pool]);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
                         statusMessages: {
@@ -393,6 +395,37 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 );
             }
         };
+
+    const claim: (pool:string) => Promise<void> = async (pool) => {
+        const committer = new ethers.Contract(
+            poolsState.pools[pool].committer.address,
+            PoolCommitter__factory.abi,
+            signer,
+        ) as PoolCommitter;
+
+        if (handleTransaction) {
+            handleTransaction(committer.claim, [account], {
+                onSuccess: async (receipt) => {
+                    console.debug(`Successfully claimed commit`, receipt)
+                    updateCommittedAmounts(poolsState.pools[pool]);
+                },
+                statusMessages: {
+                    waiting: {
+                        title: 'Claiming commit',
+                        body: '',
+                    },
+                    success: {
+                        title: 'Successfully claimed commit',
+                        body: '',
+                    },
+                    error: {
+                        title: 'Failed to claim commit',
+                        body: '',
+                    },
+                },
+            })
+        }
+    }
 
     /**
      * Approve pool to spend quote token
@@ -478,6 +511,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
+                    claim
                 }}
             >
                 {children}

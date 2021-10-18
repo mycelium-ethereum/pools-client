@@ -16,6 +16,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { ethers } from 'ethers';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Button from '@components/General/Button';
+import { usePoolActions } from '@context/PoolContext';
 
 // import BigNumber from 'bignumber.js';
 // const testCommits:QueuedCommit[] = [
@@ -46,7 +47,6 @@ export default (() => {
     const { showCommits = true, focus = CommitsFocusEnum.pending } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const { pendingCommits, claimablePools } = usePendingCommits();
-    console.log(pendingCommits, claimablePools);
 
     return (
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
@@ -79,19 +79,36 @@ export default (() => {
                 />
             </div>
             {focus === CommitsFocusEnum.pending ? (
-                <Table>
-                    <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Spend (USDC)</TableHeaderCell>
-                        <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
-                        <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
-                        <TableHeaderCell>Receive in</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                    </TableHeader>
-                    {pendingCommits.map((commit, index) => (
-                        <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
-                    ))}
-                </Table>
+                <div>
+                    <h2 className="mt-3">Pending Mints</h2>
+                    <Table>
+                        <TableHeader>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Receive in</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </TableHeader>
+                        {pendingCommits.mints.map((commit, index) => (
+                            <MintRow key={`pending-mint-${index}`} index={index} provider={provider ?? null} {...commit} />
+                        ))}
+                    </Table>
+                    <h2 className="mt-3">Pending Burns</h2>
+                    <Table>
+                        <TableHeader>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Expected Return (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Receive in</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </TableHeader>
+                        {pendingCommits.burns.map((commit, index) => (
+                            <BurnRow key={`pending-burn-${index}`} index={index} provider={provider ?? null} {...commit} />
+                        ))}
+                    </Table>
+                </div>
             ) : (
                 <Table>
                     <TableHeader>
@@ -115,7 +132,8 @@ export default (() => {
     );
 }) as React.FC;
 
-const CommitRow: React.FC<
+
+const MintRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -147,6 +165,38 @@ const CommitRow: React.FC<
     );
 };
 
+const BurnRow: React.FC<
+    QueuedCommit & {
+        provider: ethers.providers.JsonRpcProvider | null;
+        index: number;
+    }
+> = ({ token, commitmentTime, tokenPrice, amount, provider, index }) => {
+    return (
+        <TableRow key={`commit-row-${index}`} rowNumber={index}>
+            <TableRowCell>
+                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
+                {token.name}
+            </TableRowCell>
+            <TableRowCell>{amount.toFixed(2)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
+            <TableRowCell>
+                <TimeLeft targetTime={commitmentTime.toNumber()} />
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: '',
+                    }}
+                />
+            </TableRowCell>
+        </TableRow>
+    );
+};
+
 const ClaimablePoolRow: React.FC<
     ClaimablePool & {
         provider: ethers.providers.JsonRpcProvider | null;
@@ -155,13 +205,14 @@ const ClaimablePoolRow: React.FC<
 > = ({
     // provider,
     index,
-    pool: { name },
+    pool: { name, address },
     claimableLongTokens,
     claimableShortTokens,
     longTokenPrice,
     shortTokenPrice,
     claimableSettlementTokens,
 }) => {
+    const { claim = () => console.error("Claim is undefined") } = usePoolActions();
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
@@ -176,7 +227,7 @@ const ClaimablePoolRow: React.FC<
                 {claimableShortTokens.toFixed(2)} / {toApproxCurrency(shortTokenPrice)}
             </TableRowCell>
             <TableRowCell className="flex text-right">
-                <Button>Claim</Button>
+                <Button variant="primary-light" size={"sm"} className="rounded-2xl" onClick={() => claim(address)} >Claim</Button>
             </TableRowCell>
         </TableRow>
     );

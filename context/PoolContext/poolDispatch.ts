@@ -168,16 +168,16 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             const committer = state.pools[action.pool].committer;
             switch (action.commitType) {
                 case CommitEnum.short_burn:
-                    committer.global.pendingShort.burn = committer.global.pendingShort.burn.plus(action.amount);
+                    committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
                     break;
                 case CommitEnum.short_mint:
-                    committer.global.pendingShort.mint = committer.global.pendingShort.mint.plus(action.amount);
+                    committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
                     break;
                 case CommitEnum.long_burn:
-                    committer.global.pendingLong.burn = committer.global.pendingLong.burn.plus(action.amount);
+                    committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
                     break;
                 case CommitEnum.long_mint:
-                    committer.global.pendingLong.mint = committer.global.pendingLong.mint.plus(action.amount);
+                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
                     break;
                 default:
                     break;

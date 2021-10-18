@@ -1,4 +1,5 @@
 import { SideEnum } from '@libs/constants';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { Committer, PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
@@ -106,44 +107,8 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
             oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
             frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
             committer: {
+                ...DEFAULT_POOLSTATE['committer'],
                 address: poolCommitter,
-                global: {
-                    pendingLong: {
-                        mint: new BigNumber(0),
-                        burn: new BigNumber(0),
-                    },
-                    pendingShort: {
-                        mint: new BigNumber(0),
-                        burn: new BigNumber(0),
-                    },
-                },
-                user: {
-                    claimable: {
-                        shortTokens: new BigNumber(0),
-                        longTokens: new BigNumber(0),
-                        settlementTokens: new BigNumber(0),
-                    },
-                    pending: {
-                        long: {
-                            mint: new BigNumber(0),
-                            burn: new BigNumber(0),
-                        },
-                        short: {
-                            mint: new BigNumber(0),
-                            burn: new BigNumber(0),
-                        },
-                    },
-                    followingUpdate: {
-                        long: {
-                            mint: new BigNumber(0),
-                            burn: new BigNumber(0),
-                        },
-                        short: {
-                            mint: new BigNumber(0),
-                            burn: new BigNumber(0),
-                        },
-                    },
-                },
             },
             keeper,
             // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
@@ -187,11 +152,13 @@ export const fetchCommits: (
     },
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
+    updateIntervalID: BigNumber;
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
 }> = async ({ committer, quoteTokenDecimals }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
     const defaultState = {
+        updateIntervalID: new BigNumber(0),
         pendingLong: {
             mint: new BigNumber(0),
             burn: new BigNumber(0),
@@ -200,7 +167,6 @@ export const fetchCommits: (
             mint: new BigNumber(0),
             burn: new BigNumber(0),
         },
-        allUnexecutedCommits: [],
     };
 
     if (!provider || !committer) {
@@ -209,6 +175,7 @@ export const fetchCommits: (
 
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
 
+    const updateIntervalID = await contract.updateIntervalId();
     const totalMostRecentCommit = await contract.totalMostRecentCommit();
     const totalNextIntervalCommit = await contract.totalNextIntervalCommit();
 
@@ -216,6 +183,7 @@ export const fetchCommits: (
     console.log('Totale next interval', totalNextIntervalCommit);
 
     return {
+        updateIntervalID: new BigNumber(updateIntervalID.toString()),
         pendingLong: {
             mint: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longMintAmount, quoteTokenDecimals)),
             burn: new BigNumber(ethers.utils.formatUnits(totalMostRecentCommit.longBurnAmount, quoteTokenDecimals)),
@@ -268,7 +236,7 @@ export const fetchUserCommits: (
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
     const { longTokens, shortTokens, settlementTokens } = await contract.getAggregateBalance(account);
 
-    const updateInterval = await contract.updateIntervalId();
+    const updateIntervalID = await contract.updateIntervalId();
 
     let pending = {
         long: {
@@ -292,9 +260,9 @@ export const fetchUserCommits: (
     };
     const userMostRecentCommit = await contract.userMostRecentCommit(account);
     const userNextIntervalCommit = await contract.userNextIntervalCommit(account);
-    console.log(updateInterval.toNumber(), 'update interval');
+    console.log(updateIntervalID.toNumber(), 'update interval');
     console.log(userNextIntervalCommit, 'Next');
-    if (userMostRecentCommit.updateIntervalId.eq(updateInterval)) {
+    if (userMostRecentCommit.updateIntervalId.eq(updateIntervalID)) {
         // this means the userMostRecent is the current updateInterval therefore pending
         pending = {
             long: {
@@ -307,7 +275,7 @@ export const fetchUserCommits: (
             },
         };
     }
-    if (userNextIntervalCommit.updateIntervalId.eq(updateInterval)) {
+    if (userNextIntervalCommit.updateIntervalId.eq(updateIntervalID)) {
         // this means a user committed during front running interval and is in the next update interval
         pending = {
             long: {
@@ -327,8 +295,7 @@ export const fetchUserCommits: (
                 ),
             },
         };
-    } else if (userNextIntervalCommit.updateIntervalId.gt(updateInterval)) {
-        console.log('True');
+    } else if (userNextIntervalCommit.updateIntervalId.gt(updateIntervalID)) {
         // user submitted in front running interval it will be included in the next round
         followingUpdate = {
             long: {

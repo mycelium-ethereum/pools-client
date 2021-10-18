@@ -46,15 +46,14 @@ export const DEFAULT_POOLSTATE: Pool = {
     },
     committer: {
         address: '',
-        global: {
-            pendingLong: {
-                mint: new BigNumber(0),
-                burn: new BigNumber(0),
-            },
-            pendingShort: {
-                mint: new BigNumber(0),
-                burn: new BigNumber(0),
-            },
+        updateIntervalID: new BigNumber(0),
+        pendingLong: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
+        },
+        pendingShort: {
+            mint: new BigNumber(0),
+            burn: new BigNumber(0),
         },
         user: {
             claimable: {

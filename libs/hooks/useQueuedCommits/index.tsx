@@ -10,13 +10,20 @@ export default (() => {
     const { account = '', provider } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools } = usePools();
-    const [pendingCommits, setPendingCommits] = useState<QueuedCommit[]>([]);
+    const [pendingCommits, setPendingCommits] = useState<{
+        mints: QueuedCommit[],
+        burns: QueuedCommit[]
+    }>({
+        mints: [],
+        burns: []
+    });
     const [claimablePools, setClaimablePools] = useState<ClaimablePool[]>([]);
 
     useMemo(() => {
         // filter user commits
         if (pools && Object.keys(pools).length && provider && account) {
-            const parsedCommits: QueuedCommit[] = [];
+            const mints: QueuedCommit[] = [];
+            const burns : QueuedCommit[] = [];
             const claimablePools: ClaimablePool[] = [];
             for (const pool of Object.values(pools)) {
                 const {
@@ -29,10 +36,8 @@ export default (() => {
                     lastUpdate,
                     updateInterval,
                     committer: {
-                        global: {
-                            pendingLong: { burn: pendingLongBurn },
-                            pendingShort: { burn: pendingShortBurn },
-                        },
+                        pendingLong: { burn: pendingLongBurn },
+                        pendingShort: { burn: pendingShortBurn },
                         user: {
                             pending,
                             followingUpdate,
@@ -52,7 +57,7 @@ export default (() => {
                     const amounts = pending[key as 'long' | 'short'];
                     if (!amounts.burn.eq(0)) {
                         // some burn amount
-                        parsedCommits.push({
+                        burns.push({
                             pool: address,
                             token: key === 'long' ? longToken : shortToken,
                             amount: amounts.burn,
@@ -62,7 +67,7 @@ export default (() => {
                         });
                     }
                     if (!amounts.mint.eq(0)) {
-                        parsedCommits.push({
+                        mints.push({
                             pool: address,
                             token: key === 'long' ? longToken : shortToken,
                             amount: amounts.mint,
@@ -78,7 +83,7 @@ export default (() => {
                     console.log('Amounts', amounts);
                     if (!amounts.burn.eq(0)) {
                         // some burn amount
-                        parsedCommits.push({
+                        burns.push({
                             pool: address,
                             token: key === 'long' ? longToken : shortToken,
                             amount: amounts.burn,
@@ -88,7 +93,7 @@ export default (() => {
                         });
                     }
                     if (!amounts.mint.eq(0)) {
-                        parsedCommits.push({
+                        mints.push({
                             pool: address,
                             token: key === 'long' ? longToken : shortToken,
                             amount: amounts.mint,
@@ -115,7 +120,10 @@ export default (() => {
                 }
             }
             setClaimablePools(claimablePools);
-            setPendingCommits(parsedCommits);
+            setPendingCommits({
+                mints,
+                burns
+            })
         }
     }, [pools, commits, provider, account]);
 
@@ -125,5 +133,8 @@ export default (() => {
     };
 }) as () => {
     claimablePools: ClaimablePool[];
-    pendingCommits: QueuedCommit[];
+    pendingCommits: {
+        mints: QueuedCommit[];
+        burns: QueuedCommit[];
+    }
 };

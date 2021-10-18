@@ -56,10 +56,9 @@ export type PendingAmounts = {
 };
 export type Committer = {
     address: string;
-    global: {
-        pendingLong: PendingAmounts;
-        pendingShort: PendingAmounts;
-    };
+    updateIntervalID: BigNumber;
+    pendingLong: PendingAmounts;
+    pendingShort: PendingAmounts;
     user: {
         claimable: {
             longTokens: BigNumber;
@@ -76,14 +75,6 @@ export type Committer = {
         };
     };
 };
-
-// export type CreatedCommitType = TypedEvent<
-//     [ethers.BigNumber, ethers.BigNumber, number] & {
-//         commitID: ethers.BigNumber;
-//         amount: ethers.BigNumber;
-//         commitType: number;
-//     }
-// >;
 
 export type Pool = {
     address: string;
