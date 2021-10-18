@@ -9,7 +9,7 @@
         "@ensdomains/ensjs": "^2.0.0",
         "@headlessui/react": "^1.4.1",
         "@tracer-protocol/onboard": "^2.1.0",
-        "@tracer-protocol/perpetual-pools-contracts": "^0.0.4",
+        "@tracer-protocol/perpetual-pools-contracts": "^1.0.0",
         "@tracer-protocol/tracer-pools-utils": "^0.0.6",
         "antd": "^4.16.13",
         "bignumber.js": "^9.0.1",
