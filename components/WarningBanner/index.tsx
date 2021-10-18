@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { toNetworkName } from '@libs/utils/converters';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 import Exclamation from '@public/img/warning/exclamation-circle.svg';
 import Close from '@public/img/warning/cross.svg';
@@ -25,8 +25,8 @@ const WarningBanner: React.FC = () => {
                 <Exclamation />
             </div>
             <div>
-                <span className="font-semibold">NOTICE:</span>&nbsp;You’re connected to{' '}
-                {toNetworkName(network.toString())}, and the protocol is still in beta phase.&nbsp;
+                <span className="font-semibold">NOTICE:</span>&nbsp;You’re connected to {networkConfig[network].name},
+                and the protocol is still in beta phase.&nbsp;
                 <span className="font-semibold">Use at your own risk!</span>
             </div>
             <div
