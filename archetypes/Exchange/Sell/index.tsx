@@ -103,6 +103,10 @@ export default (() => {
         }
     }, [side, amount, notional, token, pendingBurns]);
 
+    // this displays the breakdown on a valid amount
+    // useMemo removes the flash display when !amount && calculating if the value is valid
+    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amount.eq(0), [invalidAmount]);
+
     return (
         <>
             <div className="w-full mb-4">
@@ -134,7 +138,7 @@ export default (() => {
                 <p className="mb-2 ">Amount</p>
                 <InputContainer error={invalidAmount.isInvalid} className="w-full">
                     <Input
-                        className="w-full h-full font-normal text-base"
+                        className="w-3/5 h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
@@ -176,15 +180,16 @@ export default (() => {
                             } `}
                             {amount.gt(0) ? (
                                 <span className="opacity-80">
-                                    {`>>> ${
+                                    {`>>> ${BigNumber.max(
                                         side === SideEnum.long
                                             ? amount.eq(0)
-                                                ? pool.longToken.balance.toFixed(2)
-                                                : pool.longToken.balance.minus(amount).toFixed(2)
+                                                ? pool.longToken.balance
+                                                : pool.longToken.balance.minus(amount)
                                             : amount.eq(0)
-                                            ? pool.shortToken.balance.toFixed(2)
-                                            : pool.shortToken.balance.minus(amount).toFixed(2)
-                                    }`}
+                                            ? pool.shortToken.balance
+                                            : pool.shortToken.balance.minus(amount),
+                                        0,
+                                    ).toFixed(2)}`}
                                 </span>
                             ) : null}
                         </>
@@ -192,7 +197,13 @@ export default (() => {
                 </p>
             </div>
 
-            <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} receiveIn={receiveIn} />
+            <SellSummary
+                pool={pool}
+                showBreakdown={showBreakdown}
+                isLong={side === SideEnum.long}
+                amount={amount}
+                receiveIn={receiveIn}
+            />
 
             <FeeNote poolName={pool.name} isMint={commitAction === CommitActionEnum.mint} receiveIn={receiveIn} />
 

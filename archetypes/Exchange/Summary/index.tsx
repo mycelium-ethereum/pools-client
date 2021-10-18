@@ -20,6 +20,7 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type SummaryProps = {
     pool: Pool;
+    showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
     receiveIn: number;
@@ -29,7 +30,7 @@ const countdown = 'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-b
 const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
 // const BuySummary
-export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -74,7 +75,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     {token.name}
                 </h2>
                 <Transition
-                    show={!amount.eq(0)}
+                    show={showBreakdown}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -115,7 +116,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
 };
 
 // const SellSummary
-export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -145,7 +146,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     USDC
                 </h2>
                 <Transition
-                    show={!amount.eq(0)}
+                    show={showBreakdown}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
