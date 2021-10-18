@@ -2920,10 +2920,10 @@
     memory-cache "^0.2.0"
     web3-utils "^1.5.2"
 
-"@tracer-protocol/onboard@^2.2.0":
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.0.tgz#190d3812bcf2bfb497fb229e63b3272e76b02e5c"
-  integrity sha512-0RDFCafhHpR3QyMydfeGOS2E7PnmA3ULJj0MlOTwxw4D57dqq+y4K5qbsGqWKMMzEJht/gScyHi08yJ8dONL5A==
+"@tracer-protocol/onboard@^2.2.1":
+  version "2.2.1"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.1.tgz#618e6e1c510891dee267aa39a7b507c714bf8d77"
+  integrity sha512-9vMsEIPXTScLPhd82jgQ0DSxv1CPa3UN9I1E2KqZkqMIauEQ37HJgE4jdkaQoeeivI+eUEp0vI2E9oMCcerAiA==
   dependencies:
     "@cvbb/eth-keyring" "^1.1.0"
     "@ethereumjs/common" "^2.0.0"
@@ -2939,6 +2939,7 @@
     "@shapeshiftoss/hdwallet-keepkey-webusb" "^1.15.2"
     "@toruslabs/torus-embed" "^1.10.11"
     "@walletconnect/web3-provider" "^1.4.1"
+    assert "^2.0.0"
     authereum "^0.1.12"
     bignumber.js "^9.0.0"
     bnc-sdk "^3.4.1"
@@ -4575,7 +4576,7 @@ assert-plus@1.0.0, assert-plus@^1.0.0:
   resolved "https://registry.yarnpkg.com/assert-plus/-/assert-plus-1.0.0.tgz#f12e0f3c5d77b0b1cdd9146942e4e96c1e4dd525"
   integrity sha1-8S4PPF13sLHN2RRpQuTpbB5N1SU=
 
-assert@2.0.0:
+assert@2.0.0, assert@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/assert/-/assert-2.0.0.tgz#95fc1c616d48713510680f2eaf2d10dd22e02d32"
   integrity sha512-se5Cd+js9dXJnu6Ag2JFc00t+HmHOen+8Q+L7O9zI0PqQXr20uk2J0XQqMxZEeo5U50o8Nvmmx7dZrl+Ufr35A==
