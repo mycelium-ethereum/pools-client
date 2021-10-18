@@ -235,8 +235,10 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const handleConnect = async () => {
         if (onboard) {
             try {
-                await onboard?.walletSelect();
-                await checkIsReady();
+                const selectedWallet = await onboard?.walletSelect();
+                if (selectedWallet) {
+                    await checkIsReady();
+                }
             } catch (err) {
                 console.error(err);
             }
