@@ -18,8 +18,8 @@ const WarningBanner: React.FC = () => {
         <div className={`${showWarning ? '' : 'hidden'}`}>
             <div
                 className={`${
-                    isDark ? 'text-red-700' : 'bg-red-50 text-yellow-900'
-                } container px-2 3xl:px-20 py-3 absolute top-16 lg:top-20 left-0 right-0 mx-auto z-50 flex items-center rounded-lg border border-red-500`}
+                    isDark ? 'bg-cool-gray-700 text-white' : 'bg-cool-gray-200 text-black'
+                } container px-2 3xl:px-20 py-3 absolute top-16 lg:top-20 left-0 right-0 mx-auto z-50 flex items-center rounded-lg`}
             >
                 <div className="mr-2">
                     <Exclamation />
@@ -30,12 +30,11 @@ const WarningBanner: React.FC = () => {
                         href="https://tracer.finance/radar/sigma-prime-audit-response/"
                         target="_blank"
                         rel="noreferrer"
-                        className="underline"
+                        className="underline text-tracer-400"
                     >
                         audited
                     </a>
-                    , however it is still in beta phase.&nbsp;
-                    <span className="font-semibold">Please use at your own risk.</span>
+                    , however it is still in beta phase. Please use at your own risk.
                 </div>
                 <div
                     className="ml-auto cursor-pointer"
@@ -44,7 +43,7 @@ const WarningBanner: React.FC = () => {
                         localStorage.setItem('onboard.warningShown', 'true');
                     }}
                 >
-                    <Close fill={`${isDark ? '#771D1D' : '#F8B4B4'}`} />
+                    <Close fill={`${isDark ? 'white' : 'black'}`} />
                 </div>
             </div>
         </div>
