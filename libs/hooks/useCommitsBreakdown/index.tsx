@@ -18,7 +18,7 @@ export default (() => {
                 claimable = 0,
                 nextUpdate = 0;
             Object.values(commits).map((commit) => {
-                console.log(commits, "Commits")
+                console.log(commits, 'Commits');
                 if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
                     pendingCommits += 1;
                 } else {

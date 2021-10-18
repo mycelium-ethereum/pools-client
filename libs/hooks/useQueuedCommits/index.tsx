@@ -11,11 +11,11 @@ export default (() => {
     const { commits = {} } = useCommits();
     const { pools } = usePools();
     const [pendingCommits, setPendingCommits] = useState<{
-        mints: QueuedCommit[],
-        burns: QueuedCommit[]
+        mints: QueuedCommit[];
+        burns: QueuedCommit[];
     }>({
         mints: [],
-        burns: []
+        burns: [],
     });
     const [claimablePools, setClaimablePools] = useState<ClaimablePool[]>([]);
 
@@ -23,7 +23,7 @@ export default (() => {
         // filter user commits
         if (pools && Object.keys(pools).length && provider && account) {
             const mints: QueuedCommit[] = [];
-            const burns : QueuedCommit[] = [];
+            const burns: QueuedCommit[] = [];
             const claimablePools: ClaimablePool[] = [];
             for (const pool of Object.values(pools)) {
                 const {
@@ -122,8 +122,8 @@ export default (() => {
             setClaimablePools(claimablePools);
             setPendingCommits({
                 mints,
-                burns
-            })
+                burns,
+            });
         }
     }, [pools, commits, provider, account]);
 
@@ -136,5 +136,5 @@ export default (() => {
     pendingCommits: {
         mints: QueuedCommit[];
         burns: QueuedCommit[];
-    }
+    };
 };

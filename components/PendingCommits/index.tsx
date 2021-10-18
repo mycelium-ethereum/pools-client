@@ -91,7 +91,12 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {pendingCommits.mints.map((commit, index) => (
-                            <MintRow key={`pending-mint-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <MintRow
+                                key={`pending-mint-${index}`}
+                                index={index}
+                                provider={provider ?? null}
+                                {...commit}
+                            />
                         ))}
                     </Table>
                     <h2 className="mt-3">Pending Burns</h2>
@@ -105,7 +110,12 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {pendingCommits.burns.map((commit, index) => (
-                            <BurnRow key={`pending-burn-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <BurnRow
+                                key={`pending-burn-${index}`}
+                                index={index}
+                                provider={provider ?? null}
+                                {...commit}
+                            />
                         ))}
                     </Table>
                 </div>
@@ -131,7 +141,6 @@ export default (() => {
         </TWModal>
     );
 }) as React.FC;
-
 
 const MintRow: React.FC<
     QueuedCommit & {
@@ -212,7 +221,7 @@ const ClaimablePoolRow: React.FC<
     shortTokenPrice,
     claimableSettlementTokens,
 }) => {
-    const { claim = () => console.error("Claim is undefined") } = usePoolActions();
+    const { claim = () => console.error('Claim is undefined') } = usePoolActions();
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
@@ -227,7 +236,9 @@ const ClaimablePoolRow: React.FC<
                 {claimableShortTokens.toFixed(2)} / {toApproxCurrency(shortTokenPrice)}
             </TableRowCell>
             <TableRowCell className="flex text-right">
-                <Button variant="primary-light" size={"sm"} className="rounded-2xl" onClick={() => claim(address)} >Claim</Button>
+                <Button variant="primary-light" size={'sm'} className="rounded-2xl" onClick={() => claim(address)}>
+                    Claim
+                </Button>
             </TableRowCell>
         </TableRow>
     );

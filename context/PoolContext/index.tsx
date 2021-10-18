@@ -396,7 +396,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             }
         };
 
-    const claim: (pool:string) => Promise<void> = async (pool) => {
+    const claim: (pool: string) => Promise<void> = async (pool) => {
         const committer = new ethers.Contract(
             poolsState.pools[pool].committer.address,
             PoolCommitter__factory.abi,
@@ -406,7 +406,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (handleTransaction) {
             handleTransaction(committer.claim, [account], {
                 onSuccess: async (receipt) => {
-                    console.debug(`Successfully claimed commit`, receipt)
+                    console.debug(`Successfully claimed commit`, receipt);
                     updateCommittedAmounts(poolsState.pools[pool]);
                 },
                 statusMessages: {
@@ -423,9 +423,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         body: '',
                     },
                 },
-            })
+            });
         }
-    }
+    };
 
     /**
      * Approve pool to spend quote token
@@ -511,7 +511,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
-                    claim
+                    claim,
                 }}
             >
                 {children}
