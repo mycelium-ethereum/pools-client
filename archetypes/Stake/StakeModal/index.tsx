@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import { TWModal } from '@components/General/TWModal';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { InnerInputText, InputContainer } from '@components/General/Input';
@@ -75,7 +75,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                 </div>
             </div>
             <div className="w-full">
-                <p className="mb-4 mt-6 text-black font-semibold">
+                <p className="mb-4 mt-6  font-semibold">
                     {state.stakeModalState === 'claim' ? 'Available to claim' : 'Amount'}
                 </p>
                 {state.stakeModalState !== 'claim' ? (

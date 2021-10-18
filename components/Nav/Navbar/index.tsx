@@ -9,11 +9,20 @@ import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
+import ThemeSwitcher from './ThemeSwitcher';
 
-const NavBar: React.FC = () => {
+import RevisitOnboard from '/public/img/general/onboard-revisit.svg';
+
+const NavBar: React.FC<{
+    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
     return (
-        <div className={classNames('relative bg-tracer-900 bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat')}>
-            <NavBarContent />
+        <div
+            className={classNames(
+                'relative bg-tracer-900 matrix:bg-transparent matrix:bg-none dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
+            )}
+        >
+            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
             <style>{`
                 background-position-x:
             `}</style>
@@ -21,7 +30,9 @@ const NavBar: React.FC = () => {
     );
 };
 
-export const NavBarContent: React.FC = () => {
+export const NavBarContent: React.FC<{
+    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account } = useWeb3();
@@ -36,9 +47,14 @@ export const NavBarContent: React.FC = () => {
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
-                    <li className={classNames(linkStyles, route === '' || route === 'browse' ? 'underline' : '')}>
+                    <li className={classNames(linkStyles, route === '' ? 'underline' : '')}>
                         <Link href="/">
                             <a className="m-auto">Trade</a>
+                        </Link>
+                    </li>
+                    <li className={classNames(linkStyles, route === 'browse' ? 'underline' : '')}>
+                        <Link href="/browse">
+                            <a className="m-auto">Browse</a>
                         </Link>
                     </li>
                     <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
@@ -48,19 +64,30 @@ export const NavBarContent: React.FC = () => {
                     </li>
                 </ul>
 
-                {/* DESKTOP */}
-                <span className="hidden lg:flex ml-auto">
-                    {account ? <NetworkDropdown className="relative my-auto mx-4 whitespace-nowrap" /> : null}
+                {setShowOnboardModal ? (
+                    <div
+                        className="ml-auto my-auto cursor-pointer"
+                        onClick={() => {
+                            setShowOnboardModal(true);
+                        }}
+                    >
+                        <RevisitOnboard />
+                    </div>
+                ) : null}
 
-                    <AccountDropdown account={account ?? ''} className="my-auto" />
+                {/* DESKTOP */}
+                <span className="hidden lg:flex">
+                    {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
+
+                    <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
 
                     {/* Hide if showing queued */}
                     <AccountBalance hide={showQueued} className="my-auto mx-2" />
 
                     <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
-                    {/* <ThemeSwitcher /> */}
+                    <ThemeSwitcher />
                 </span>
-                <MobileMenu account={account ?? ''} />
+                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
             </div>
         </nav>
     );

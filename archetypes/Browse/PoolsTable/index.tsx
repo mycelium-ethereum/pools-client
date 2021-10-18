@@ -1,45 +1,49 @@
+import React, { useMemo, useState, useEffect } from 'react';
 import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow } from '@components/General/TWTable';
+import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
-import { toApproxCurrency } from '@libs/utils/converters';
-import React, { useMemo, useState } from 'react';
-import RebalanceRate from '../RebalanceRate';
+import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData } from '../state';
-import Modal from '@components/General/Modal';
+import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
-import Close from '/public/img/general/close-black.svg';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-
-import Lock from '/public/img/general/lock.svg';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
+import QuestionMark from '/public/img/general/question-mark-circle.svg';
+import Close from '/public/img/general/close.svg';
+import { classNames } from '@libs/utils/functions';
+
 export default (({ rows, onClickBuy, onClickSell }) => {
-    const [showModalRebalanceRate, setShowModalRebalanceRate] = useState(false);
+    const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider } = useWeb3();
     return (
         <>
             <Table>
                 <TableHeader>
-                    <span>Token</span>
-                    <span>{'Price (USDC) *'}</span>
-                    <span className="flex">
-                        {'Expected Rebalancing rate * '}
-                        <span className="cursor-pointer ml-1" onClick={() => setShowModalRebalanceRate(true)}>
-                            <QuestionMark />
-                        </span>
-                    </span>
-                    <span>Next Rebalancing Event</span>
-                    <span>TVL (USDC)</span>
-                    <span>My Holdings (TOKENS/USDC)</span>
-                    <span>{/* Empty header for buttons column */}</span>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap align-top">{'Token Price (USDC) *'}</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap pr-0">
+                        <div className="mb-4">Power Leverage</div>
+                        <div className="flex font-normal">
+                            <span className="mt-auto">For Gains</span>
+                            <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
+                                <QuestionMark />
+                            </span>
+                        </div>
+                    </TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap font-normal pl-0" align="bottom">
+                        For Losses
+                    </TableHeaderCell>
+                    <TableHeaderCell>Commitment Ends In</TableHeaderCell>
+                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((token, index) => {
                     return (
@@ -55,44 +59,24 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <p className="mt-2 text-sm text-cool-gray-900">
-                * The <strong>Price</strong> and <strong>Rebalancing Rate</strong> displayed for each token are
-                indicative only. The values displayed are the estimated <strong>Price</strong> and{' '}
-                <strong>Rebalancing Rate</strong> the next rebalance, given the queued mints and burns and estimated
-                value transfer. The actual <strong>Price</strong> and <strong>Rebalancing Rate</strong> for each token
-                will be calculated and updated at the next rebalalance.
+            <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
+                * <strong>Token Price</strong> values indicative only, and represent the estimated values for the next
+                rebalance, given the committed mints and burns and change in price of the underlying asset.
             </p>
-            <Modal show={showModalRebalanceRate} onClose={() => setShowModalRebalanceRate(false)}>
+            <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
-                    <div className="text-2xl">Rebalancing Rate</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalRebalanceRate(false)}>
+                    <div className="text-2xl">Leverage on Gains</div>
+                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
                         <Close />
                     </div>
                 </div>
                 <br />
                 <div>
-                    The <b>Rebalancing Rate</b> is function of collateral skew in the pool. It can result in a polarised
-                    leverage effect at rebalance. The Rebalancing Rate is calculated as (long side collateral/short side
-                    collateral) - 1.
+                    This metric is the the effective leverage by which your gains will be determined at the next
+                    rebalancing event. While the leverage on losses is always fixed, the leverage on gains varies
+                    depending on the capital in the other side of the pool.
                 </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate = 0</b>, there is an equal amount of collateral held in the long and
-                    short side of the pool. At rebalance, the winning side{`'`}s gains are neither amplified or reduced.
-                </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate {'>'} 0</b>, there is more collateral held in the long side of the pool.
-                    At rebalance, the short side&apos;s gains are effectively amplified relative to their losses.
-                    Conversely, the long side&apos;s gains are effectively reduced.
-                </div>
-                <br />
-                <div>
-                    If the <b>Rebalancing Rate {'<'} 0</b>, there is more collateral held in the short side of the pool.
-                    At rebalance, the short side&apos;s gains are effectively reduced relative to their losses.
-                    Conversely, the long side&apos;s gains are effectively amplified.
-                </div>
-            </Modal>
+            </TWModal>
         </>
     );
 }) as React.FC<{
@@ -108,33 +92,74 @@ const TokenRow: React.FC<{
     onClickSell: (pool: string, side: SideEnum) => void;
     provider: ethers.providers.JsonRpcProvider | undefined;
 }> = ({ token, onClickBuy, onClickSell, index, provider }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
     const hasHoldings = useMemo(() => token.myHoldings > 0, [token.myHoldings]);
 
     const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
 
+    const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
+
+    useEffect(() => {
+        if (isBeforeFrontRunning) {
+            setPendingUpkeep(false);
+        }
+    }, [isBeforeFrontRunning]);
+
     return (
         <TableRow rowNumber={index}>
-            <span>
+            <TableRowCell>
                 <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
                 {token.symbol}
-            </span>
-            <span>{toApproxCurrency(token.lastPrice)}</span>
-
-            <RebalanceRate rebalanceRate={token.rebalanceRate} />
-            <span className="flex">
+            </TableRowCell>
+            <TableRowCell>
+                <div>{toApproxCurrency(token.nextPrice, 3)}</div>
+                <div className="opacity-80">
+                    {Math.abs(priceDelta) <= 0.01 ? (
+                        'Minimal change'
+                    ) : (
+                        <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
+                            {priceDelta > 0 ? '+' : ''}
+                            {`${toApproxCurrency(token.nextPrice - token.lastPrice, 3)} (${priceDelta.toFixed(2)}%)`}
+                        </span>
+                    )}
+                    {` since last rebalance`}
+                </div>
+            </TableRowCell>
+            <TableRowCell className={classNames('pr-0')}>
+                <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
+                    {`${token.effectiveGain.toFixed(2)}`}
+                </span>
+            </TableRowCell>
+            <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}`}</TableRowCell>
+            <TableRowCell>
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
-                        <Lock className="mr-2" />
+                        <div>Front-running interval reached</div>
+                        <div className="opacity-80">
+                            {'Mint and burn in '}
+                            {!pendingUpkeep ? (
+                                <TimeLeft
+                                    targetTime={token.nextRebalance}
+                                    countdownEnded={() => {
+                                        setPendingUpkeep(true);
+                                    }}
+                                />
+                            ) : (
+                                'progress'
+                            )}
+                        </div>
                     </TooltipSelector>
-                ) : null}
-                <TimeLeft targetTime={token.nextRebalance} />
-            </span>
-            <span>{toApproxCurrency(token.totalValueLocked)}</span>
-            <span>
+                ) : (
+                    <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
+                )}
+            </TableRowCell>
+            <TableRowCell>{toApproxCurrency(token.totalValueLocked)}</TableRowCell>
+            <TableRowCell>
                 <div>{`${token.myHoldings.toFixed(2)}`}</div>
                 <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
-            </span>
-            <span>
+            </TableRowCell>
+            <TableRowCell>
                 <Button
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
@@ -164,17 +189,7 @@ const TokenRow: React.FC<{
                         target: token.address,
                     }}
                 />
-            </span>
+            </TableRowCell>
         </TableRow>
     );
 };
-
-// const ColoredChangeNumber = (({ number }) => {
-//     return (
-//         <span className={number >= 0 ? 'text-green-500' : 'text-red-500'}>{`${number >= 0 ? '+' : ''}${number.toFixed(
-//             2,
-//         )}`}</span>
-//     );
-// }) as React.FC<{
-//     number: number;
-// }>;

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BrowseTableRowData } from '@archetypes/Browse/state';
 import { usePools } from '@context/PoolContext';
-import { calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { BigNumber } from 'bignumber.js';
 
 // const useBrowsePools
 export default (() => {
@@ -12,11 +13,21 @@ export default (() => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool) => {
-                const { longToken, shortToken } = pool;
+                const {
+                    longToken,
+                    shortToken,
+                    shortBalance,
+                    longBalance,
+                    nextShortBalance,
+                    nextLongBalance,
+                    leverage,
+                } = pool;
                 const {
                     pendingLong: { burn: pendingLongBurn },
                     pendingShort: { burn: pendingShortBurn },
                 } = pool.committer;
+
+                const leverageBN = new BigNumber(leverage);
                 rows.push(
                     {
                         address: shortToken.address,
@@ -25,14 +36,12 @@ export default (() => {
                         symbol: shortToken.symbol,
                         leverage: pool.leverage,
                         side: 'short',
-                        lastPrice: calcTokenPrice(
-                            pool.nextShortBalance,
+                        lastPrice: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)).toNumber(),
+                        nextPrice: calcTokenPrice(
+                            nextShortBalance,
                             shortToken.supply.plus(pendingShortBurn),
                         ).toNumber(),
-                        rebalanceRate: calcRebalanceRate(
-                            pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
-                            pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
-                        ).toNumber(),
+                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.shortBalance.toNumber(),
                         myHoldings: shortToken.balance.toNumber(),
@@ -45,14 +54,9 @@ export default (() => {
                         symbol: longToken.symbol,
                         leverage: pool.leverage,
                         side: 'long',
-                        lastPrice: calcTokenPrice(
-                            pool.nextLongBalance,
-                            longToken.supply.plus(pendingLongBurn),
-                        ).toNumber(),
-                        rebalanceRate: calcRebalanceRate(
-                            pool.nextShortBalance.plus(pool.committer.pendingShort.mint),
-                            pool.nextLongBalance.plus(pool.committer.pendingLong.mint),
-                        ).toNumber(),
+                        lastPrice: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
+                        nextPrice: calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
+                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
                         nextRebalance: pool.lastUpdate.plus(pool.updateInterval).toNumber(),
                         totalValueLocked: pool.longBalance.toNumber(),
                         myHoldings: longToken.balance.toNumber(),

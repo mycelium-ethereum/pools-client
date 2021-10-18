@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
-import InvestNav from '@components/Nav/InvestNav';
 import {
     browseReducer,
     BrowseState,
@@ -11,11 +10,11 @@ import {
     SideFilterEnum,
     SortByEnum,
 } from './state';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
+import { calcPercentageDifference } from '@libs/utils/converters';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -74,11 +73,14 @@ export const Browse: React.FC = () => {
     const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.Name:
-                return tokenA.symbol.localeCompare(tokenB.symbol);
+                return tokenA.symbol.split('-')[1].localeCompare(tokenB.symbol.split('-')[1]);
             case SortByEnum.Price:
                 return tokenB.lastPrice - tokenA.lastPrice;
-            case SortByEnum.RebalanceRate:
-                return tokenB.rebalanceRate - tokenA.rebalanceRate;
+            case SortByEnum.EffectiveGain:
+                return (
+                    calcPercentageDifference(tokenB.effectiveGain, tokenB.leverage) -
+                    calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
+                );
             case SortByEnum.TotalValueLocked:
                 return tokenB.totalValueLocked - tokenA.totalValueLocked;
             case SortByEnum.MyHoldings:
@@ -115,26 +117,12 @@ export const Browse: React.FC = () => {
         });
     };
 
-    const SearchButton = (
-        <SearchOutlined
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
-        />
-    );
-    const FilterButton = (
-        <FilterFilled
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setModalOpen', open: true })}
-        />
-    );
-
     return (
         <>
-            <InvestNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-20">
-                <div className="p-0 md:py-20 md:px-16 mb-4 shadow-xl rounded-3xl">
+                <div className="p-0 md:pt-16 md:pb-12 md:px-16 mb-4 shadow-xl rounded-3xl bg-theme-background">
                     <section className="hidden md:block">
-                        <h1 className="font-bold text-3xl mb-2 text-cool-gray-900 hidden md:block">Pool Tokens</h1>
+                        <h1 className="font-bold text-3xl mb-2 text-theme-text hidden md:block">Pool Tokens</h1>
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>

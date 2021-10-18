@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import BigNumber from 'bignumber.js';
 import { SwapContext } from '@context/SwapContext';
 import { CommitActionEnum } from '@libs/constants';
-import styled from 'styled-components';
 import Gas from './Gas';
 import Buy from './Buy';
 import Sell from './Sell';
@@ -24,12 +23,13 @@ export default (() => {
     const { swapState, swapDispatch } = useContext(SwapContext);
 
     return (
-        <div className="w-full justify-center ">
-            <TradeModal>
+        <div className="w-full justify-center mt-0 md:mt-16">
+            <div className="bg-theme-background w-full md:w-[611px] md:shadow-xl rounded-3xl py-8 px-4 md:py-8 md:px-12 md:my-8 md:mx-auto ">
                 <div className="flex">
                     <TWButtonGroup
                         value={swapState?.commitAction ?? CommitActionEnum.mint}
                         size={'xl'}
+                        color={'tracer'}
                         onClick={(val) => {
                             if (swapDispatch) {
                                 swapDispatch({ type: 'setAmount', value: new BigNumber(0) });
@@ -46,24 +46,7 @@ export default (() => {
 
                 {/** Inputs */}
                 {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
-            </TradeModal>
+            </div>
         </div>
     );
 }) as React.FC;
-
-const TradeModal = styled.div`
-    background: var(--color-background);
-    width: 611px;
-    box-shadow: 4px 4px 50px rgba(0, 0, 0, 0.06);
-    border-radius: 20px;
-    padding: 2rem 3rem;
-    margin: 5vh auto;
-
-    @media (max-width: 611px) {
-        width: 100%;
-        border-radius: 0;
-        box-shadow: 0;
-        margin: 0;
-        padding: 2rem 1rem;
-    }
-`;

@@ -6,36 +6,38 @@ import Icon from '@ant-design/icons';
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
 // Images
-const DiscourseLogo = '/img/socials/discourse-white.svg';
-const TwitterLogo = '/img/socials/twitter-white.svg';
-const GitHubLogo = '/img/socials/github-white.svg';
-const DiscordLogo = '/img/socials/discord-white.svg';
-const Folder = '/img/general/folder.svg';
+import DiscourseLogo from '@public/img/socials/discourse.svg';
+import TwitterLogo from '@public/img/socials/twitter.svg';
+import GitHubLogo from '@public/img/socials/github.svg';
+import DiscordLogo from '@public/img/socials/discord.svg';
+import Folder from '@public/img/general/folder.svg';
+
+const icon = 'w-5 mr-2 opacity-70 text-white';
 const Icons = [
     {
         text: 'Website',
         href: 'https://tracer.finance',
-        logo: Folder,
+        logo: <Folder className={icon} />,
     },
     {
         text: 'Twitter',
         href: 'https://twitter.com/TracerDAO',
-        logo: TwitterLogo,
+        logo: <TwitterLogo className={icon} />,
     },
     {
         text: 'Discourse',
         href: 'https://discourse.tracer.finance/',
-        logo: DiscourseLogo,
+        logo: <DiscourseLogo className={icon} />,
     },
     {
         text: 'Github',
         href: 'https://github.com/tracer-protocol/',
-        logo: GitHubLogo,
+        logo: <GitHubLogo className={icon} />,
     },
     {
         text: 'Discord',
         href: 'https://discord.gg/7rhrmYkAJs',
-        logo: DiscordLogo,
+        logo: <DiscordLogo className={icon} />,
     },
 ];
 
@@ -66,18 +68,18 @@ const DropdownMenu: React.FC = () => {
     return (
         <div id="site-switcher" className="relative flex">
             <Link href="/">
-                <>
+                <div className="my-auto">
                     <img
                         className="sm:w-24 w-22 h-auto hidden md:block cursor-pointer"
                         alt="tracer-logo"
-                        src="/img/logos/tracer/tracer_logo.svg"
+                        src={'/img/logos/tracer/tracer_logo.svg'}
                     />
                     <img
                         className="w-12 h-auto block md:hidden cursor-pointer"
                         src={'/img/logos/tracer/tracer_no_text.svg'}
                         alt="Tracer Logo"
                     />
-                </>
+                </div>
             </Link>
             <button
                 id="toggle"
@@ -134,9 +136,7 @@ const DropdownMenu: React.FC = () => {
                                 target="_blank"
                                 key={i}
                             >
-                                <span>
-                                    <img className="w-5 mr-2 opacity-70" src={icon.logo} alt="Logo" />
-                                </span>
+                                <span>{icon.logo}</span>
                                 <span className="block text-white font-normal my-auto">{icon.text}</span>
                             </a>
                         ))}

@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -17,8 +18,10 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { TWModal } from '@components/General/TWModal';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import Close from '/public/img/general/close-black.svg';
+import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import { classNames } from '@libs/utils/functions';
+import { LogoTicker } from '@components/General';
 
 const inputRow = 'relative my-2 ';
 
@@ -68,6 +71,7 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
+    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -82,9 +86,13 @@ export default (() => {
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
-            localStorage.setItem('showBridgeFunds', 'true');
         }
     }, [account]);
+
+    const onCloseArbitrumModal = () => {
+        setShowModal(false);
+        localStorage.setItem('showBridgeFunds', 'true');
+    };
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
@@ -103,15 +111,15 @@ export default (() => {
         <>
             <div className={`${inputRow} flex justify-between mb-4`}>
                 <span className="w-60">
-                    <p className="mb-2 text-black">Market</p>
+                    <p className="mb-2">Market</p>
                     <Dropdown
                         className="w-full "
                         placeHolder="Select Market"
-                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0]}
+                        placeHolderIcon={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
                         size="lg"
                         options={Object.keys(markets).map((market) => ({
                             key: market,
-                            ticker: market.split('/')[0],
+                            ticker: market.split('/')[0] as LogoTicker,
                             text: market,
                         }))}
                         value={market}
@@ -121,21 +129,23 @@ export default (() => {
                     />
                 </span>
                 <span>
-                    <p className="mb-2 text-black">Side</p>
+                    <p className="mb-2 ">Side</p>
                     <TWButtonGroup
                         value={side}
                         onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
                         size={'lg'}
+                        borderColor={'tracer'}
                         options={SIDE_OPTIONS}
                     />
                 </span>
             </div>
             <div className={`${inputRow} mb-4`}>
                 <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
-                    <div className="mb-2 text-black w-min whitespace-nowrap">Power Leverage</div>
+                    <div className="mb-2  w-min whitespace-nowrap">Power Leverage</div>
                 </TooltipSelector>
                 <TWButtonGroup
                     value={leverage}
+                    borderColor={'tracer'}
                     options={LEVERAGE_OPTIONS.map((option) => ({
                         key: option.leverage,
                         text: `${option.leverage}`,
@@ -151,7 +161,7 @@ export default (() => {
                 />
             </div>
             <div className={`${inputRow} `}>
-                <p className="mb-2 text-black">Amount</p>
+                <p className="mb-2 ">Amount</p>
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-full h-full text-base font-normal "
@@ -171,12 +181,17 @@ export default (() => {
                     </InnerInputText>
                 </InputContainer>
 
-                <div className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                <div
+                    className={classNames(
+                        invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
+                        'opacity-70 text-sm mt-2',
+                    )}
+                >
                     {invalidAmount.isInvalid && invalidAmount.message ? (
                         invalidAmount.message
                     ) : (
                         <>
-                            <span className={`${!!pool.name ? 'inline' : 'hidden'} text-gray-500`}>
+                            <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
                                     {!amount.eq(0)
@@ -195,17 +210,18 @@ export default (() => {
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 
-            <TWModal open={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={onCloseArbitrumModal}>
                 <div className="flex justify-between">
                     <div className="text-xl">Bridge Funds to Arbitrum</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={onCloseArbitrumModal}>
                         <Close />
                     </div>
                 </div>
                 <br />
                 <div>
-                    Tracer runs on Arbitrum mainnet. Be sure to bridge <b>USDC</b> for collateral, and <b>ETH</b> for
-                    gas. It’s worth noting that there is a 7 day wait to withdraw your funds back to Ethereum Mainnet.
+                    Deposit funds from Ethereum to Arbitrum to get started with Perpetual Pools. Ensure you deposit{' '}
+                    <b>USDC</b> for collateral and <b>ETH</b> for gas. Please note that the withdrawal process from
+                    Arbitrum to Ethereum takes approximately 7 days.
                     <br />
                     <br />
                     If you have any questions, please{' '}
@@ -215,18 +231,31 @@ export default (() => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        contact us
+                        contact us.
                     </a>
-                    .
                 </div>
                 <br />
                 <Button
                     size="lg"
                     variant="primary"
-                    onClick={() => window.open('https://bridge.arbitrum.io', '_blank', 'noopener')}
+                    onClick={() => {
+                        showBridgeModal();
+                        setShowModal(false);
+                    }}
                 >
-                    Launch Arbitrum Bridge
+                    {`Ok, let's bridge funds`}
                 </Button>
+                <p className="mt-2 text-center">
+                    You can also bridge funds using the{' '}
+                    <a
+                        className="text-tracer-400 underline"
+                        href="https://bridge.arbitrum.io"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Official Arbitrum Bridge.
+                    </a>
+                </p>
             </TWModal>
         </>
     );

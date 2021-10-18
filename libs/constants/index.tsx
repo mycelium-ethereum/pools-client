@@ -55,6 +55,11 @@ export const EMPTY_TOKEN: PoolToken = {
 // networks
 export const ARBITRUM_RINKEBY = '421611';
 export const ARBITRUM = '42161';
+export const MAINNET = '1';
+export const RINKEBY = '4';
 export const KOVAN = '42';
 
 export const MAX_SOL_UINT = ethers.BigNumber.from('340282366920938463463374607431768211455');
+
+export const TCR_DECIMALS = 18;
+export const USDC_DECIMALS = 6;

@@ -2,6 +2,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import React from 'react';
 import { GasPriceTooltip } from '@components/Tooltips';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import GasIcon from '@public/img/general/gas_icon.svg';
 
 export default (() => {
     const { gasPrice, wallet, network } = useWeb3();
@@ -12,7 +13,7 @@ export default (() => {
                 wallet={wallet?.name ?? 'Unknown'}
             >
                 <div className="flex">
-                    <img src={'/img/general/gas_icon.svg'} className="inline h-[22px] w-[20px] mr-2" />
+                    <GasIcon className="inline h-[22px] w-[20px] mr-2" />
                     <span>{gasPrice?.toFixed(3)}</span>
                 </div>
             </GasPriceTooltip>

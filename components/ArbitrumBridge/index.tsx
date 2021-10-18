@@ -1,48 +1,61 @@
-import React, { useState } from 'react';
-import { ArbitrumBridgeModal } from './Modal';
-import styled from 'styled-components';
-import Button from '@components/General/Button';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import React, { useCallback } from 'react';
+import type { BigNumber } from 'bignumber.js';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { MultiBridge } from './MultiBridge';
+// import { SwapOutlined } from '@ant-design/icons';
+import { switchNetworks } from '@libs/utils/rpcMethods';
+import { Network } from '@context/Web3Context/Web3Context.Config';
+import { BridgeableAsset } from '@libs/types/General';
+import { bridgeableTickers } from '@libs/utils/bridge';
 
 // ArbitrumBridge
-export default (() => {
-    const [isOpen, setOpen] = useState(false);
+export const ArbitrumBridge: React.FC = (() => {
+    const { provider, account } = useWeb3();
+    const {
+        bridgeToken,
+        bridgeEth,
+        approveToken,
+        refreshBridgeableBalance,
+        fromNetwork,
+        toNetwork,
+        bridgeableAssets,
+        bridgeableBalances,
+        hideBridgeModal,
+        bridgeModalIsOpen,
+    } = useArbitrumBridge();
 
-    // TODO: Replace these with actual values & bridging functions
-    const ETHBalance = 3.14159;
-    const USDCBalance = 4000;
-
-    const onBridgeETH = (amount: number) => {
-        console.log(`Bridging ${amount} ETH...`);
-        return new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 1000));
+    const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => {
+        if (asset.symbol === bridgeableTickers.ETH) {
+            return bridgeEth(amount, callback);
+        }
+        // this type cast is safe because
+        // ETH is the only asset with a null address
+        return bridgeToken(asset.address as string, amount, callback);
     };
 
-    const onBridgeUSDC = (amount: number) => {
-        console.log(`Bridging ${amount} USDC...`);
-        return new Promise<boolean>((resolve) => setTimeout(() => resolve(true), 1000));
-    };
+    const onApproveToken = (tokenAddress: string, spender: string) => approveToken(tokenAddress, spender);
+
+    const onSwitchNetwork = useCallback(
+        (networkId: Network['id']) => {
+            switchNetworks(provider, networkId);
+        },
+        [provider],
+    );
 
     return (
-        <>
-            <StyledButton onClick={() => setOpen(true)}>Arbitrum Bridge</StyledButton>
-            <ArbitrumBridgeModal
-                isOpen={isOpen}
-                onClose={() => setOpen(false)}
-                ETHBalance={ETHBalance}
-                USDCBalance={USDCBalance}
-                onBridgeETH={onBridgeETH}
-                onBridgeUSDC={onBridgeUSDC}
-            />
-        </>
+        <MultiBridge
+            show={bridgeModalIsOpen}
+            onClose={hideBridgeModal}
+            fromNetwork={fromNetwork}
+            toNetwork={toNetwork}
+            bridgeableAssets={bridgeableAssets}
+            bridgeableBalances={bridgeableBalances}
+            refreshBridgeableBalance={refreshBridgeableBalance}
+            onSwitchNetwork={onSwitchNetwork}
+            onBridgeAsset={onBridgeAsset}
+            onApproveToken={onApproveToken}
+            account={account}
+        />
     );
 }) as React.FC;
-
-const StyledButton = styled(Button)`
-    margin: 1rem auto;
-    color: #3da8f5;
-    border: 1px solid #3da8f5;
-
-    &:hover {
-        color: #fff;
-        background: #3da8f5;
-    }
-`;

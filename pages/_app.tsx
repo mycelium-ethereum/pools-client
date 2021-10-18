@@ -10,9 +10,9 @@ import { ToastProvider } from 'react-toast-notifications';
 import { Notification } from '@components/General/Notification';
 import { TransactionStore } from '@context/TransactionContext';
 import { FactoryStore } from '@context/FactoryContext';
-import GlobalStyles from 'styles/GlobalStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
+import { ThemeStore } from '@context/ThemeContext';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -52,40 +52,42 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     async
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
+                <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
-            <GlobalStyles />
             <ToastProvider components={{ Toast: Notification }}>
-                <Web3Store
-                    onboardConfig={{
-                        hideBranding: true,
-                        walletSelect: {
-                            heading: 'Connect Wallet',
-                            wallets: [
-                                { walletName: 'metamask' },
-                                { walletName: 'coinbase' },
-                                { walletName: 'torus' },
-                                // { walletName: "binance" },
+                <ThemeStore>
+                    <Web3Store
+                        onboardConfig={{
+                            hideBranding: true,
+                            walletSelect: {
+                                heading: 'Connect Wallet',
+                                wallets: [
+                                    { walletName: 'metamask' },
+                                    { walletName: 'coinbase' },
+                                    { walletName: 'torus' },
+                                    // { walletName: "binance" },
 
-                                // {
-                                //     walletName: "walletConnect",
-                                //     infuraKey: INFURA_KEY
+                                    // {
+                                    //     walletName: "walletConnect",
+                                    //     infuraKey: INFURA_KEY
+                                    // },
+                                ],
+                                // agreement: {
+                                //     version: '1.0',
+                                //     termsUrl: 'https://google.com',
                                 // },
-                            ],
-                            // agreement: {
-                            //     version: '1.0',
-                            //     termsUrl: 'https://google.com',
-                            // },
-                        },
-                    }}
-                >
-                    <FactoryStore>
-                        <TransactionStore>
-                            <UsersCommitStore>
-                                <Component {...pageProps} />
-                            </UsersCommitStore>
-                        </TransactionStore>
-                    </FactoryStore>
-                </Web3Store>
+                            },
+                        }}
+                    >
+                        <FactoryStore>
+                            <TransactionStore>
+                                <UsersCommitStore>
+                                    <Component {...pageProps} />
+                                </UsersCommitStore>
+                            </TransactionStore>
+                        </FactoryStore>
+                    </Web3Store>
+                </ThemeStore>
             </ToastProvider>
         </div>
     );

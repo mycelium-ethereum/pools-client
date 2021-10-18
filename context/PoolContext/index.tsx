@@ -20,7 +20,7 @@ import {
 import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { calcNextValueTransfer } from '@libs/utils/calcs';
+import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 
 type Options = {
@@ -225,7 +225,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
-                provider,
+                process.env.NEXT_PUBLIC_WSS_RPC
+                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
+                    : provider,
             ) as PoolCommitter;
 
             // @ts-ignore
@@ -269,7 +271,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
             }
 
-            const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
+            const keeperInstance = new ethers.Contract(
+                keeper,
+                PoolKeeper__factory.abi,
+                process.env.NEXT_PUBLIC_WSS_RPC
+                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
+                    : provider,
+            ) as PoolKeeper;
+
             if (!subscriptions.current[keeper]) {
                 console.debug(`Subscribing keeper: ${keeper.slice()}`);
                 keeperInstance.on(keeperInstance.filters.UpkeepSuccessful(), (pool, _data, startPrice, endPrice) => {

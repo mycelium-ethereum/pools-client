@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { timeTill } from '@libs/utils/converters';
-import styled from 'styled-components';
 
 /**
  * Counts down to targetTime. This is generally lastUpdatedTime + updateInterval
  * @param targetTime time you want to countdown till in seconds
  *
  */
-export default styled(({ targetTime, className, hideHours, hideMinutes, hideSeconds }) => {
+export default (({ targetTime, className, hideHours, hideMinutes, hideSeconds, countdownEnded, countdownStarted }) => {
     const [hours, setHours] = useState(0);
     const [minutes, setMinutes] = useState(0);
     const [seconds, setSeconds] = useState(0);
@@ -20,6 +19,9 @@ export default styled(({ targetTime, className, hideHours, hideMinutes, hideSeco
         setHours(timeTill_.h ?? 0);
         setMinutes(timeTill_.m ?? 0);
         setSeconds(timeTill_.s ?? 0);
+        if (countdownStarted) {
+            countdownStarted();
+        }
     }, [targetTime]);
 
     useEffect(() => {
@@ -41,6 +43,9 @@ export default styled(({ targetTime, className, hideHours, hideMinutes, hideSeco
                     if (hours === 0) {
                         // seconds, minutes and hours is all 0
                         clearInterval(myInterval);
+                        if (countdownEnded) {
+                            countdownEnded();
+                        }
                     }
                 }
             }
@@ -59,6 +64,12 @@ export default styled(({ targetTime, className, hideHours, hideMinutes, hideSeco
             </span>
         </>
     );
-})<{
+}) as React.FC<{
     targetTime: number;
-}>``;
+    hideHours?: boolean;
+    hideMinutes?: boolean;
+    hideSeconds?: boolean;
+    className?: string;
+    countdownStarted?: () => any;
+    countdownEnded?: () => any;
+}>;

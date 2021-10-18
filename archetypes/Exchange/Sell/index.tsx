@@ -9,7 +9,7 @@ import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@libs/utils/calcs';
+import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
@@ -58,7 +58,7 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, invalidAmount } = swapState;
+    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -105,8 +105,8 @@ export default (() => {
 
     return (
         <>
-            <div className="w-full mb-2">
-                <p className="mb-2 text-black">Token</p>
+            <div className="w-full mb-4">
+                <p className="mb-2 ">Token</p>
                 <Dropdown
                     className="w-full"
                     placeHolder="Select Token"
@@ -126,13 +126,13 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
+                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'text-sm opacity-70 mt-2')}>
                     Expected Price: {toApproxCurrency(tokenPrice)}
                 </p>
             </div>
             <div className="w-full">
-                <p className="mb-2 text-black">Amount</p>
-                <InputContainer className="w-full ">
+                <p className="mb-2 ">Amount</p>
+                <InputContainer error={invalidAmount.isInvalid} className="w-full">
                     <Input
                         className="w-full h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
@@ -158,7 +158,12 @@ export default (() => {
                         </div>
                     </InnerInputText>
                 </InputContainer>
-                <p className={invalidAmount.isInvalid ? 'text-red-500 ' : ''}>
+                <p
+                    className={classNames(
+                        invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
+                        'opacity-70 text-sm mt-2',
+                    )}
+                >
                     {invalidAmount.isInvalid && invalidAmount.message ? (
                         invalidAmount.message
                     ) : (
@@ -189,7 +194,7 @@ export default (() => {
 
             <SellSummary pool={pool} isLong={side === SideEnum.long} amount={amount} receiveIn={receiveIn} />
 
-            <FeeNote poolName={pool.name} isMint={false} receiveIn={receiveIn} />
+            <FeeNote poolName={pool.name} isMint={commitAction === CommitActionEnum.mint} receiveIn={receiveIn} />
 
             <ExchangeButton actionType={CommitActionEnum.burn} />
         </>

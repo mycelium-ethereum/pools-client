@@ -9,24 +9,29 @@ import {
     ERC20,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
 import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
-
+import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@libs/utils/calcs';
+import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
     farms: FarmsLookup;
     refreshFarm: (farmAddress: string) => void;
     fetchingFarms: boolean;
+    tcrUSDCPrice: BigNumber;
 }
+
+const DEFAULT_TCR_PRICE = new BigNumber('0.25');
 
 export const FarmContext = React.createContext<ContextProps>({
     farms: {},
     refreshFarm: () => console.error('default FarmContext.refreshFarm'),
     fetchingFarms: false,
+    tcrUSDCPrice: DEFAULT_TCR_PRICE,
 });
 
 export type FarmContexts = 'bptFarms' | 'poolFarms';
@@ -42,8 +47,9 @@ export const FarmStore: React.FC<
     const { signer, config, account, provider } = useWeb3();
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
+    const [tcrUSDCPrice, setTcrUSDCPrice] = useState<BigNumber>(DEFAULT_TCR_PRICE);
 
-    // used to fetch details of tokens on both sides of a sushi pool
+    // used to fetch details of tokens that make up a balancer pool
     const getBptDetails = async (
         balancerPoolId: string,
         pool: string,
@@ -237,7 +243,7 @@ export const FarmStore: React.FC<
 
                             const tvl = poolDetails
                                 ? poolDetails.poolTokenPrice.times(totalStaked)
-                                : calcBptTokenPrice({ bptDetails, stakingTokenSupply }).times(totalStaked);
+                                : calcBptTokenPrice(stakingTokenSupply, bptDetails?.tokens).times(totalStaked);
 
                             return {
                                 name: stakingTokenName,
@@ -285,14 +291,36 @@ export const FarmStore: React.FC<
         [provider, config, account],
     );
 
+    const refreshTcrPriceUSDC = async () => {
+        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress) {
+            // leave it as the default value
+            return;
+        }
+        const sushiRouter = new ethers.Contract(
+            config?.sushiRouterAddress,
+            UniswapV2Router02__factory.abi,
+            provider,
+        ) as UniswapV2Router02;
+
+        const oneTcr = new BigNumber('1').times(10 ** TCR_DECIMALS);
+
+        const [usdcPer1Tcr] = await sushiRouter.getAmountsIn(oneTcr.toFixed(), [config.usdcAddress, config.tcrAddress]);
+
+        const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(usdcPer1Tcr, USDC_DECIMALS));
+
+        setTcrUSDCPrice(formattedUSDCPrice);
+    };
+
     // fetch farms initially
     useEffect(() => {
         fetchFarms({ reset: false });
+        refreshTcrPriceUSDC();
     }, []);
 
     // update farms on network change
     useEffect(() => {
         fetchFarms({ reset: true });
+        refreshTcrPriceUSDC();
     }, [signer, config, account]);
 
     return (
@@ -301,6 +329,7 @@ export const FarmStore: React.FC<
                 farms,
                 refreshFarm,
                 fetchingFarms,
+                tcrUSDCPrice,
             }}
         >
             {children}

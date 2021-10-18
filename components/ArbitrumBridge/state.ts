@@ -15,6 +15,7 @@ export type BridgeAction =
     | { type: 'setUSDC'; amount: number | undefined }
     | { type: 'setETH'; amount: number | undefined }
     | { type: 'setBridging'; status: boolean }
+    | { type: 'setApproving'; status: boolean }
     | { type: 'reset' };
 
 export const DefaultBridgeState: BridgeState = {
@@ -46,6 +47,12 @@ export const bridgeReducer: (state: BridgeState, action: BridgeAction) => Bridge
             return {
                 ...state,
                 isBridging: action.status,
+            };
+        }
+        case 'setApproving': {
+            return {
+                ...state,
+                isApproving: action.status,
             };
         }
         case 'reset': {

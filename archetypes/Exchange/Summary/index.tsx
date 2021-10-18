@@ -3,11 +3,20 @@ import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@component
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcNotionalValue, calcRebalanceRate, calcTokenPrice } from '@libs/utils/calcs';
+import {
+    calcEffectiveLongGain,
+    calcEffectiveShortGain,
+    calcNotionalValue,
+    calcTokenPrice,
+} from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
-import styled from 'styled-components';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
+import Link from '/public/img/general/link.svg';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { ARBITRUM } from '@libs/constants';
+import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type SummaryProps = {
     pool: Pool;
@@ -15,6 +24,9 @@ type SummaryProps = {
     isLong: boolean;
     receiveIn: number;
 };
+
+const countdown = 'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-background';
+const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
@@ -31,22 +43,33 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
+
     const balancesAfter = {
         longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
         shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
     };
+
+    const effectiveGains = useMemo(() => {
+        return isLong
+            ? calcEffectiveLongGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
+            : calcEffectiveShortGain(
+                  balancesAfter.shortBalance,
+                  balancesAfter.longBalance,
+                  new BigNumber(pool.leverage),
+              );
+    }, [isLong, amount, balancesAfter.longBalance, balancesAfter.shortBalance]);
 
     return (
         <HiddenExpand
             defaultHeight={0}
             open={!!pool.name}
             className={classNames(
-                'border-2xl border text-base',
-                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+                'border-2xl border text-base bg-theme-background',
+                !!pool.name ? 'border-theme-border' : 'border-transparent',
             )}
         >
-            <Box>
-                <h2>
+            <div className="relative border-box px-4 pt-4 pb-2">
+                <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
                     {token.name}
                 </h2>
@@ -65,19 +88,33 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
-                    <Section label="Expected rebalancing rate">
-                        {`${calcRebalanceRate(balancesAfter.shortBalance, balancesAfter.longBalance).toFixed(3)}`}
+                    <Section label="Power Leverage">
+                        <div>
+                            <span className="opacity-60">{`Gains: `}</span>
+                            <span
+                                className={classNames(
+                                    'mr-2',
+                                    effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
+                                )}
+                            >
+                                {effectiveGains.toFixed(2)}
+                            </span>
+                            <span className="opacity-60">{`Losses: `}</span>
+                            {pool.leverage}
+                        </div>
                     </Section>
+                    <BalancerLink token={token} isBuy={true} />
                 </Transition>
-                <Countdown>
+                <div className={countdown}>
                     {'Receive In'}
-                    <TimeLeft targetTime={receiveIn} />
-                </Countdown>
-            </Box>
+                    <TimeLeft className={timeLeft} targetTime={receiveIn} />
+                </div>
+            </div>
         </HiddenExpand>
     );
 };
 
+// const SellSummary
 export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
@@ -99,11 +136,11 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
             open={!!pool.name}
             className={classNames(
                 'border-2x border text-base',
-                !!pool.name ? 'border-cool-gray-200' : 'border-transparent',
+                !!pool.name ? 'border-theme-border' : 'border-transparent',
             )}
         >
-            <Box>
-                <h2>
+            <div className="relative border-box px-4 pt-4 pb-2">
+                <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size={'md'} ticker="USDC" />
                     USDC
                 </h2>
@@ -119,39 +156,51 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     <Section label="Expected return">
                         {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
                     </Section>
+                    <BalancerLink token={token} isBuy={false} />
                 </Transition>
-                <Countdown>
+                <div className={countdown}>
                     {'Receive In'}
-                    <TimeLeft targetTime={receiveIn} />
-                </Countdown>
-            </Box>
+                    <TimeLeft className={timeLeft} targetTime={receiveIn} />
+                </div>
+            </div>
         </HiddenExpand>
     );
 };
 
-const Box = styled.div`
-    box-sizing: border-box;
-    position: relative;
-    padding: 1rem 1rem 0.5rem 1rem;
-`;
+const constructBalancerLink = (token: string, network: number, isBuy: boolean) => {
+    const { usdcAddress, balancerInfo } = networkConfig[network];
+    // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
+    return isBuy
+        ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
+        : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
+};
 
-const Countdown = styled.div`
-    position: absolute;
-    background: #fff;
-    left: 1.5rem;
-    top: -1rem;
-    height: 2rem;
-    font-size: 1rem;
-    z-index: 2;
-    padding 0 5px;
-
-    ${TimeLeft} {
-        display: inline;
-        background: #FAFAFA;
-        border: 1px solid #E4E4E7;
-        margin-left: 5px;
-        padding: 0 5px;
-        border-radius: 10px;
-        color: #6B7280;
-    }
-`;
+const BalancerLink: React.FC<{
+    token: {
+        address: string;
+        symbol: string;
+    };
+    isBuy: boolean;
+}> = ({ token, isBuy }) => {
+    const { network = 0 } = useWeb3();
+    const balancerPoolPrices = useBalancerSpotPrices(network);
+    return network === parseInt(ARBITRUM) ? (
+        <div className="text-sm mt-2">
+            <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
+            <div>
+                <Logo className="inline mr-2" ticker="BALANCER" />
+                <a
+                    className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
+                    href={constructBalancerLink(token.address, network, isBuy)}
+                    target={'_blank'}
+                    rel={'noopener noreferrer'}
+                >
+                    {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
+                        balancerPoolPrices[token.symbol],
+                    )}`}
+                    <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
+                </a>
+            </div>
+        </div>
+    ) : null;
+};
