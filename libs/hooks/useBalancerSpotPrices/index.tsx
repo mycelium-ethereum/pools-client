@@ -8,7 +8,7 @@ export default ((network) => {
 
     useEffect(() => {
         let mounted = true;
-        getBalancerPrices(networkConfig[network].balancerInfo).then((tokenPrices) => {
+        getBalancerPrices(networkConfig[network]?.balancerInfo).then((tokenPrices) => {
             if (mounted) {
                 setTokenPrices(tokenPrices);
             }

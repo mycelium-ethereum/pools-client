@@ -9,10 +9,10 @@ export const destinationNetworkLookup: { [current: number]: string } = {
     [ARBITRUM]: MAINNET,
 };
 
-export const bridgeableTickers = {
+export const bridgeableTickers: { [symbol: string]: LogoTicker } = {
     ETH: 'ETH',
     USDC: 'USDC',
-} as const;
+};
 
 const usdcSharedDetails = {
     name: 'USDC',
