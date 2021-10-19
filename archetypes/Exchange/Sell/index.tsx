@@ -58,7 +58,7 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
+    const { amount, amountShadow, side, selectedPool, invalidAmount, commitAction } = swapState;
 
     const pool = usePool(selectedPool);
 
@@ -139,7 +139,7 @@ export default (() => {
                 <InputContainer error={invalidAmount.isInvalid} className="w-full">
                     <Input
                         className="w-3/5 h-full font-normal text-base"
-                        value={amount.eq(0) ? '' : amount.toFixed()}
+                        value={amount.eq(0) ? '' : amountShadow}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: val || '' });
                         }}
