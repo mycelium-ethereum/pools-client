@@ -9,7 +9,7 @@ const WarningBanner: React.FC = () => {
     const { isDark } = useTheme();
 
     useEffect(() => {
-        if (localStorage.getItem('onboard.warningShown') !== 'true') {
+        if (sessionStorage.getItem('onboard.warningShown') !== 'true') {
             setShowWarning(true);
         }
     }, []);
@@ -40,7 +40,7 @@ const WarningBanner: React.FC = () => {
                     className="ml-auto cursor-pointer"
                     onClick={() => {
                         setShowWarning(false);
-                        localStorage.setItem('onboard.warningShown', 'true');
+                        sessionStorage.setItem('onboard.warningShown', 'true');
                     }}
                 >
                     <Close fill={`${isDark ? 'white' : 'black'}`} />
