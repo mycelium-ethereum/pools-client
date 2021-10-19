@@ -36,8 +36,8 @@ export default (() => {
                     <ArbitrumBridge />
                     <UnsupportedNetworkPopup />
                 </ArbitrumBridgeStore>
+                <PendingCommits />
             </PoolStore>
-            <PendingCommits />
             <Footer />
             <CorWidget />
 
