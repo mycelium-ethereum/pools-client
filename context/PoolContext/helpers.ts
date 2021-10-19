@@ -163,19 +163,17 @@ export const initPool: (pool: PoolType, provider: ethers.providers.JsonRpcProvid
 
 export const fetchCommits: (
     poolInfo: {
-        address: string,
-        committer: string,
-        lastUpdate: number,
-        quoteTokenDecimals: number
+        address: string;
+        committer: string;
+        lastUpdate: number;
+        quoteTokenDecimals: number;
     },
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
     allUnexecutedCommits: APICommitReturn[];
-}> = async ({
-    committer, address: pool, lastUpdate, quoteTokenDecimals
-}, provider) => {
+}> = async ({ committer, address: pool, lastUpdate, quoteTokenDecimals }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
     const defaultState = {
         pendingLong: {
@@ -204,12 +202,12 @@ export const fetchCommits: (
     let allUnexecutedCommits: APICommitReturn[] = [];
     const network = provider.network.chainId;
     if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        console.log("fetching")
+        console.log('fetching');
         allUnexecutedCommits = await fetchPoolCommits(pool, network.toString() as SourceType, {
             from: lastUpdate,
-        })
+        });
     }
-    console.log("Commits", allUnexecutedCommits)
+    console.log('Commits', allUnexecutedCommits);
 
     const pendingAmounts = await Promise.all([
         contract.shadowPools(CommitEnum.short_mint),

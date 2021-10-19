@@ -30,12 +30,15 @@ export const fetchTokenPrice: (
 
     const nextLongBalance = poolInfo.longBalance.plus(longValueTransfer);
     const nextShortBalance = poolInfo.shortBalance.plus(shortValueTransfer);
-    const committerInfo = await fetchCommits({
-        committer: poolInfo.committer.address,
-        address: pool,
-        lastUpdate: poolInfo.lastUpdate.toNumber(),
-        quoteTokenDecimals: poolInfo.quoteToken.decimals
-    }, provider)
+    const committerInfo = await fetchCommits(
+        {
+            committer: poolInfo.committer.address,
+            address: pool,
+            lastUpdate: poolInfo.lastUpdate.toNumber(),
+            quoteTokenDecimals: poolInfo.quoteToken.decimals,
+        },
+        provider,
+    );
 
     return tokenAddresses.map((tokenAddress) => {
         const isLong: boolean = tokenAddress.toLowerCase() === poolInfo.longToken.address.toLowerCase();

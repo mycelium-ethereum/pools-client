@@ -99,12 +99,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 const decimals = pool.quoteToken.decimals;
                 // fetch commits
                 try {
-                    fetchCommits({
-                        committer: pool.committer.address,
-                        quoteTokenDecimals: decimals,
-                        lastUpdate: pool.lastUpdate.toNumber(),
-                        address: pool.address,
-                    }, provider).then((committerInfo) => {
+                    fetchCommits(
+                        {
+                            committer: pool.committer.address,
+                            quoteTokenDecimals: decimals,
+                            lastUpdate: pool.lastUpdate.toNumber(),
+                            address: pool.address,
+                        },
+                        provider,
+                    ).then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
                                 type: 'setPendingAmounts',
@@ -116,6 +119,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             setExpectedPrice(pool);
 
                             committerInfo.allUnexecutedCommits.map(async (commit) => {
+                                console.log('Whaaa commit', commit);
                                 // const block = await commit.getBlock()
                                 // const txn = await commit.getTransaction()
                                 commitDispatch({
@@ -127,14 +131,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         type: commit.commitType,
                                         from: commit.from,
                                         txnHash: commit.txnHash,
-                                        created: commit.timestamp 
+                                        created: commit.timestamp,
                                     },
                                 });
                             });
                         }
                     });
                 } catch (err) {
-                    console.log("IM IN HERE")
+                    console.log('IM IN HERE');
                     console.error('Failed to initialise committer', err);
                 }
 
