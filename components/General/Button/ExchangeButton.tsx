@@ -4,7 +4,6 @@ import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
-import BigNumber from 'bignumber.js';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
@@ -73,7 +72,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                         }
                         commit(selectedPool ?? '', commitType, amount, {
                             onSuccess: () => {
-                                swapDispatch?.({ type: 'setAmount', value: new BigNumber(0) });
+                                swapDispatch?.({ type: 'setAmount', value: '0' });
                             },
                         });
                     }}

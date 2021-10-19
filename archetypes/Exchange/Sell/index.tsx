@@ -141,7 +141,7 @@ export default (() => {
                         className="w-3/5 h-full font-normal text-base"
                         value={amount.eq(0) ? '' : amount.toFixed()}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
+                            swapDispatch({ type: 'setAmount', value: val || '' });
                         }}
                     />
                     <InnerInputText>

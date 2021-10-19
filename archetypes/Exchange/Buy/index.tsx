@@ -70,7 +70,7 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
+    const { leverage, selectedPool, side, amount, amountShadow, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
     const pool = usePool(selectedPool);
@@ -163,16 +163,18 @@ export default (() => {
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
                         className="w-3/5 h-full text-base font-normal"
-                        value={amount.eq(0) ? '' : amount.toFixed()}
+                        value={amount.eq(0) ? '' : amountShadow}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
+                            swapDispatch({ type: 'setAmount', value: val || '0' });
                         }}
                     />
                     <InnerInputText>
                         <Currency ticker={'USDC'} />
                         <div
                             className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance })}
+                            onClick={(_e) =>
+                                swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toString() })
+                            }
                         >
                             Max
                         </div>
