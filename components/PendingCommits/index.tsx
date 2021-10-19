@@ -68,9 +68,9 @@ export default (() => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Spent (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
                             <TableHeaderCell>Receive in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
@@ -83,8 +83,8 @@ export default (() => {
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Price* (Token)</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Burn in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
