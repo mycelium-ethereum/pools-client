@@ -90,7 +90,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider, pools]);
+    }, [pools]);
 
     // fetch all pending commits
     useEffect(() => {

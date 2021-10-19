@@ -2,7 +2,7 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
@@ -63,17 +63,17 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(parseInt(DEFAULT_NETWORK));
-    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
-        DEFAULT_WSS_RPC ? new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC) : undefined,
-    );
+    const [network, setNetwork] = useState<number | undefined>(undefined);
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[ARBITRUM]);
+    const [config, setConfig] = useState<Network>(networkConfig[0]);
+
+    const usingDefaultProvider = useRef(true);
 
     // Initialize OnboardJS
     useEffect(() => {
@@ -99,7 +99,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 wallet.name &&
                                     cacheWalletSelection &&
                                     localStorage.setItem('onboard.selectedWallet', wallet.name);
+
                                 setWallet(wallet);
+                                usingDefaultProvider.current = false;
                                 setProvider(new ethers.providers.Web3Provider(wallet.provider, 'any'));
                             } else {
                                 setWallet(undefined);
@@ -130,14 +132,39 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
                 const savedWallet = localStorage.getItem('onboard.selectedWallet');
                 cacheWalletSelection && savedWallet && onboard.walletSelect(savedWallet);
-
                 setOnboard(onboard);
             } catch (error) {
                 console.error('Error initializing onboard', error);
             }
+
+            // set defaults
         };
 
         initializeOnboard();
+    }, []);
+
+    useEffect(() => {
+        let mounted = true;
+        const waitForDefaultProvider = async () => {
+            if (DEFAULT_WSS_RPC) {
+                const provider_ = new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC);
+                // websocket providers need to initiate
+                console.debug('Waiting for provider', provider_.ready);
+                await provider_.ready;
+                if (usingDefaultProvider.current) {
+                    // if the provider has not been set by onboard
+                    if (mounted) {
+                        setNetwork(parseInt(DEFAULT_NETWORK));
+                        setConfig(networkConfig[DEFAULT_NETWORK]);
+                        setProvider(provider_);
+                    }
+                }
+            }
+        };
+        waitForDefaultProvider();
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     useEffect(() => {
