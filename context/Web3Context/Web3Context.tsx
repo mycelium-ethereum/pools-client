@@ -62,7 +62,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
-        new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_DEFAULT_RPC),
+       process.env.NEXT_PUBLIC_DEFAULT_WSS_RPC ?
+        new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_DEFAULT_WSS_RPC)
+        : undefined
     );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);

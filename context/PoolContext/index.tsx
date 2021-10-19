@@ -22,6 +22,7 @@ import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -222,11 +223,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const { committer: committerInfo, keeper } = poolsState.pools[pool];
 
+            
+            const wssProvider = networkConfig[provider?.network?.chainId].publicWebsocketRPC;
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
-                process.env.NEXT_PUBLIC_WSS_RPC
-                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
+                wssProvider
+                    ? new ethers.providers.WebSocketProvider(wssProvider)
                     : provider,
             ) as PoolCommitter;
 

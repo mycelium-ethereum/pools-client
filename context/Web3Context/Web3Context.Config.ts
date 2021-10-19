@@ -27,6 +27,7 @@ export type Network = {
     bptFarms: Farm[];
     hex: string;
     publicRPC: string;
+    publicWebsocketRPC?: string;
     graphUri: string;
     balancerVaultAddress: string;
     usdcAddress: string;
