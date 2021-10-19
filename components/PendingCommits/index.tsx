@@ -56,7 +56,7 @@ export default (() => {
     return (
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
-                <h1 className="text-bold font-size[30px] text-theme-text">
+                <h1 className="text-bold text-2xl text-theme-text">
                     {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
