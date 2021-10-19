@@ -8,8 +8,6 @@ import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onbo
 import { formatEther } from '@ethersproject/units';
 import { Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
-import { useToasts } from 'react-toast-notifications';
-import { switchNetworks } from '@libs/utils/rpcMethods';
 import { ARBITRUM } from '@libs/constants';
 import { useTheme } from '@context/ThemeContext';
 
@@ -56,8 +54,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     cacheWalletSelection = true,
 }) => {
     const { isDark } = useTheme();
-    const errorToastID = React.useRef<string>('');
-    const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
@@ -170,54 +166,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             mounted = false;
         };
     }, [provider, network]);
-
-    // unsupported network popup
-    useEffect(() => {
-        if (!networkConfig[network ?? -1] && provider && account) {
-            // ignore if we are already showing the error
-            if (!errorToastID.current) {
-                // @ts-ignore
-                errorToastID.current = addToast(
-                    [
-                        'Unsupported Network',
-                        <span key="unsupported-network-content" className="text-sm">
-                            <a
-                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
-                                onClick={() => {
-                                    switchNetworks(provider, ARBITRUM);
-                                }}
-                            >
-                                Switch to Arbitrum Mainnet
-                            </a>
-                            <br />
-                            <span>New to Arbitrum? </span>
-                            <a
-                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
-                                target="_blank"
-                                rel="noreferrer noopner"
-                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
-                            >
-                                Get started
-                            </a>
-                        </span>,
-                    ],
-                    {
-                        appearance: 'error',
-                        autoDismiss: false,
-                    },
-                );
-            }
-        } else {
-            if (errorToastID.current) {
-                updateToast(errorToastID.current as unknown as string, {
-                    content: 'Switched Network',
-                    appearance: 'success',
-                    autoDismiss: true,
-                });
-                errorToastID.current = '';
-            }
-        }
-    }, [network, account]);
 
     const checkIsReady = async () => {
         const isReady = await onboard?.walletCheck();
