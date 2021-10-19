@@ -242,7 +242,7 @@ export const networkConfig: Record<string, Network> = {
     '1': {
         // TODO: fill this out properly
         id: '1',
-        name: 'Mainet',
+        name: 'Ethereum',
         previewUrl: '',
         contracts: {
             poolFactory: {
