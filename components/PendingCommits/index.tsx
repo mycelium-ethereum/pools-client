@@ -68,7 +68,7 @@ export default (() => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Spent (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
                             <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
                             <TableHeaderCell>Receive in</TableHeaderCell>
