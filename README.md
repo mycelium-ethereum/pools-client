@@ -14,9 +14,15 @@ In order to get the full Dapp running locally you will need to run a number of t
 - Run a development eth-client using hardhat or ganache-cli.
 - Deploy pools contracts
 - Copy the Pool Factory address into a .env or .env.local file as below
+- The RPC variables are optional in the .env files although it is recommended to set some up for development as the default arbitrum RPC's are temperamental
 
 ```
 NEXT_PUBLIC_POOL_FACTORY_ADDRESS=0x54e98762CA9E0C970F1Df47b0F3B4Bb4f5e6C655
+
+NEXT_PUBLIC_MAINNET_RPC='MAINNET_RPC'
+NEXT_PUBLIC_MAINNET_WSS_RPC='MAINNET_WSS'
+NEXT_PUBLIC_TESTNET_RPC='TESTNET_RPC'
+NEXT_PUBLIC_TESTNET_WSS_RPC='TESTNET_WSS'
 ```
 
 ## Running
