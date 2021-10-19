@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -75,7 +75,7 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <MintRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 ) : (
@@ -89,7 +89,7 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <BurnRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 )}
@@ -104,7 +104,7 @@ export default (() => {
     );
 }) as React.FC;
 
-const BuyRow: React.FC<
+const MintRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -121,6 +121,34 @@ const BuyRow: React.FC<
     updateInterval,
     created,
 }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    const MintReceiveIn = () => {
+        if (pendingUpkeep) {
+            return 'Mint in progress';
+        } else {
+            if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
+                return (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
+                        countdownEnded={() => {
+                            setPendingUpkeep(true);
+                        }}
+                    />
+                );
+            } else {
+                return (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber()}
+                        countdownEnded={() => {
+                            setPendingUpkeep(true);
+                        }}
+                    />
+                );
+            }
+        }
+    };
+
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -130,13 +158,7 @@ const BuyRow: React.FC<
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{amount.div(tokenPrice).toFixed()}</TableRowCell>
-            <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
-            </TableRowCell>
+            <TableRowCell>{MintReceiveIn()}</TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
@@ -151,7 +173,7 @@ const BuyRow: React.FC<
     );
 };
 
-const SellRow: React.FC<
+const BurnRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -168,6 +190,34 @@ const SellRow: React.FC<
     updateInterval,
     created,
 }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    const BurnReceiveIn = () => {
+        if (pendingUpkeep) {
+            return 'Burn in progress';
+        } else {
+            if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
+                return (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
+                        countdownEnded={() => {
+                            setPendingUpkeep(true);
+                        }}
+                    />
+                );
+            } else {
+                return (
+                    <TimeLeft
+                        targetTime={nextRebalance.toNumber()}
+                        countdownEnded={() => {
+                            setPendingUpkeep(true);
+                        }}
+                    />
+                );
+            }
+        }
+    };
+
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -177,13 +227,7 @@ const SellRow: React.FC<
             <TableRowCell>{amount.toFixed(2)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
-            <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
-            </TableRowCell>
+            <TableRowCell>{BurnReceiveIn()}</TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
