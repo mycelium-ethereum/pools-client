@@ -136,8 +136,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             } catch (error) {
                 console.error('Error initializing onboard', error);
             }
-
-            // set defaults
         };
 
         initializeOnboard();
