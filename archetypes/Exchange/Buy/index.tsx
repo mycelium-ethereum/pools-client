@@ -165,7 +165,7 @@ export default (() => {
                         className="w-3/5 h-full text-base font-normal"
                         value={amount.eq(0) ? '' : amountShadow}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: val || '0' });
+                            swapDispatch({ type: 'setAmount', value: val || '' });
                         }}
                     />
                     <InnerInputText>
