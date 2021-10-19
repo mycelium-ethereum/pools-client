@@ -1,4 +1,4 @@
-import { SideEnum, CommitEnum, MAX_SOL_UINT, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { SideEnum, CommitEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
 import { PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
@@ -192,22 +192,14 @@ export const fetchCommits: (
     }
 
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
-    const earliestUnexecuted = await contract.earliestCommitUnexecuted();
-    if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
-        console.debug('No unexecuted commits');
-        return defaultState;
-    }
-    console.log(await contract.commits(earliestUnexecuted), pool);
 
     let allUnexecutedCommits: APICommitReturn[] = [];
     const network = provider.network.chainId;
     if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        console.log('fetching');
         allUnexecutedCommits = await fetchPoolCommits(pool, network.toString() as SourceType, {
             from: lastUpdate,
         });
     }
-    console.log('Commits', allUnexecutedCommits);
 
     const pendingAmounts = await Promise.all([
         contract.shadowPools(CommitEnum.short_mint),

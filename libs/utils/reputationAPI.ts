@@ -68,13 +68,11 @@ export const fetchPoolCommits: (
                     commitID: index,
                 });
             });
-            console.log('Parsed commits', parsedCommits);
             return parsedCommits;
         })
         .catch((err) => {
             console.error('Failed to fetch commits', err);
             return [];
         });
-    console.log(commits, 'Commits');
     return commits;
 };

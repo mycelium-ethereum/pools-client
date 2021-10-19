@@ -119,9 +119,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             setExpectedPrice(pool);
 
                             committerInfo.allUnexecutedCommits.map(async (commit) => {
-                                console.log('Whaaa commit', commit);
-                                // const block = await commit.getBlock()
-                                // const txn = await commit.getTransaction()
                                 commitDispatch({
                                     type: 'addCommit',
                                     commitInfo: {
@@ -138,7 +135,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         }
                     });
                 } catch (err) {
-                    console.log('IM IN HERE');
                     console.error('Failed to initialise committer', err);
                 }
 
