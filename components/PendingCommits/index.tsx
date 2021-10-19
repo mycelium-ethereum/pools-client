@@ -84,7 +84,7 @@ export default (() => {
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
                             <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Burn in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
