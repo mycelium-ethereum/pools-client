@@ -15,11 +15,11 @@ const WarningBanner: React.FC = () => {
     }, []);
 
     return (
-        <div className={`${showWarning ? '' : 'hidden'}`}>
+        <div className={`${showWarning ? 'container relative' : 'hidden'}`}>
             <div
                 className={`${
                     isDark ? 'bg-cool-gray-700 text-white' : 'bg-cool-gray-200 text-black'
-                } container px-5 py-3 absolute top-16 md:top-20 left-0 w-11/12 3xl:w-10/12 right-0 mx-auto mt-2 z-50 flex items-center rounded-lg text-sm lg:text-base`}
+                } px-5 py-3 absolute top-3 left-5 right-5 sm:left-0 sm:right-0 3xl:left-20 3xl:right-20 mt-2 z-50 flex items-center rounded-lg text-sm lg:text-base`}
             >
                 <div className="mr-2">
                     <Exclamation />
