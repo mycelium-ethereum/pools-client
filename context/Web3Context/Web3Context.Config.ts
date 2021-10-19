@@ -252,7 +252,6 @@ export const networkConfig: Record<string, Network> = {
         poolFarms: [],
         bptFarms: [],
         publicRPC: process.env.NEXT_PUBLIC_MAINNET_L1_RPC || '',
-        graphUri: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
