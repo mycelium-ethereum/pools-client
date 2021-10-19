@@ -34,7 +34,7 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         if (localStorage.getItem('theme') === 'light') {
             setIsDark(false);
-        } 
+        }
     }, []);
 
     return (

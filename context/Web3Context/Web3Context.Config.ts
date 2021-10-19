@@ -28,7 +28,6 @@ export type Network = {
     hex: string;
     publicRPC: string;
     publicWebsocketRPC?: string;
-    graphUri: string;
     balancerVaultAddress: string;
     usdcAddress: string;
     // lookup from known token addresses to Chainink price feed address
@@ -65,7 +64,6 @@ export const networkConfig: Record<string, Network> = {
         bptFarms: [],
         publicRPC: '',
         hex: '',
-        graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         tcrAddress: '',
@@ -95,8 +93,8 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [],
         hex: '0x66EEB',
-        publicRPC: 'https://arb-mainnet.g.alchemy.com/v2/kmW5Ft_-SizDp3Is5Q7XQrRPvUQWw-yW',
-        graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
+        publicRPC: 'https://arb-rinkeby.g.alchemy.com/v2/dFgGxwP6yyYQJuqCbQjHGSyIuhLp1Xmz',
+        publicWebsocketRPC: 'wss://arb-rinkeby.g.alchemy.com/v2/dFgGxwP6yyYQJuqCbQjHGSyIuhLp1Xmz',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         tcrAddress: '',
@@ -189,8 +187,8 @@ export const networkConfig: Record<string, Network> = {
             },
         ],
         hex: '0xA4B1',
-        publicRPC: 'https://arb1.arbitrum.io/rpc',
-        graphUri: 'TODO',
+        publicRPC: 'https://arb-mainnet.g.alchemy.com/v2/IlyRz2WtJckGhc3XVPbyZ_AoOL6KhBh0',
+        publicWebsocketRPC: 'wss://arb-mainnet.g.alchemy.com/v2/IlyRz2WtJckGhc3XVPbyZ_AoOL6KhBh0',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         knownUSDCPriceFeeds: {
@@ -228,7 +226,6 @@ export const networkConfig: Record<string, Network> = {
         poolFarms: [],
         bptFarms: [],
         publicRPC: '',
-        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
