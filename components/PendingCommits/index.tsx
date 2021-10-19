@@ -157,7 +157,7 @@ const MintRow: React.FC<
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-            <TableRowCell>{amount.div(tokenPrice).toFixed()}</TableRowCell>
+            <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
             <TableRowCell>{MintReceiveIn()}</TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
