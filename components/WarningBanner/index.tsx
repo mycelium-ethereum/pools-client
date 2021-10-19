@@ -19,7 +19,7 @@ const WarningBanner: React.FC = () => {
             <div
                 className={`${
                     isDark ? 'bg-cool-gray-700 text-white' : 'bg-cool-gray-200 text-black'
-                } container px-5 3xl:px-20 py-3 absolute top-16 lg:top-20 left-0 right-0 mx-auto z-50 flex items-center rounded-lg`}
+                } container px-5 py-3 absolute top-16 md:top-20 left-0 w-11/12 3xl:w-10/12 right-0 mx-auto mt-2 z-50 flex items-center rounded-lg text-sm lg:text-base`}
             >
                 <div className="mr-2">
                     <Exclamation />
@@ -34,7 +34,7 @@ const WarningBanner: React.FC = () => {
                     >
                         audited
                     </a>
-                    , however it is still in beta phase. Please use at your own risk.
+                    , however the protocol is still in beta phase. Please use at your own risk.
                 </div>
                 <div
                     className="ml-auto cursor-pointer"
