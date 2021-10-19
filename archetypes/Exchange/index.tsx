@@ -22,7 +22,7 @@ export default (() => {
     const { swapState, swapDispatch } = useContext(SwapContext);
 
     return (
-        <div className="w-full justify-center mt-28 sm:mt-20 lg:mt-16">
+        <div className="w-full justify-center mt-14">
             <div className="bg-theme-background w-full md:w-[611px] md:shadow-xl rounded-3xl py-8 px-4 md:py-8 md:px-12 md:my-8 md:mx-auto ">
                 <div className="flex">
                     <TWButtonGroup
