@@ -46,6 +46,9 @@ type Web3Context = {
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
 const OnboardContext = React.createContext<OnboardContext | undefined>(undefined);
 
+const DEFAULT_NETWORK = ARBITRUM;
+const DEFAULT_WSS_RPC = networkConfig[DEFAULT_NETWORK].publicWebsocketRPC;
+
 /**
  * Handles connection through BlockNative Onboard library
  */
@@ -60,11 +63,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
+    const [network, setNetwork] = useState<number | undefined>(parseInt(DEFAULT_NETWORK));
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
-        process.env.NEXT_PUBLIC_DEFAULT_WSS_RPC
-            ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_DEFAULT_WSS_RPC)
-            : undefined,
+        DEFAULT_WSS_RPC ? new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC) : undefined,
     );
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);

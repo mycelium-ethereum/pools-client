@@ -274,9 +274,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const keeperInstance = new ethers.Contract(
                 keeper,
                 PoolKeeper__factory.abi,
-                process.env.NEXT_PUBLIC_WSS_RPC
-                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
-                    : provider,
+                wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider,
             ) as PoolKeeper;
 
             if (!subscriptions.current[keeper]) {
