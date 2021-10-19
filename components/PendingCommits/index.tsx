@@ -94,6 +94,10 @@ export default (() => {
                     </>
                 )}
             </Table>
+            <div className="absolute bottom-10 left-0 right-0 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
+                * <strong>Token Price</strong> values indicative only, and represent the estimated values for the next
+                rebalance, given the committed mints and burns and change in price of the underlying asset.
+            </div>
         </TWModal>
     );
 }) as React.FC;
