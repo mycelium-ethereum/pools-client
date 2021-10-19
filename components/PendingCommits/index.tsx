@@ -69,7 +69,7 @@ export default (() => {
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Spent (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
                             <TableHeaderCell>Receive in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
