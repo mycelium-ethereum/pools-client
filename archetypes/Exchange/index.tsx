@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import BigNumber from 'bignumber.js';
 import { SwapContext } from '@context/SwapContext';
 import { CommitActionEnum } from '@libs/constants';
 import Gas from './Gas';
@@ -32,7 +31,7 @@ export default (() => {
                         color={'tracer'}
                         onClick={(val) => {
                             if (swapDispatch) {
-                                swapDispatch({ type: 'setAmount', value: new BigNumber(0) });
+                                swapDispatch({ type: 'setAmount', value: '' });
                                 swapDispatch({ type: 'setLeverage', value: 1 });
                                 swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
                             }

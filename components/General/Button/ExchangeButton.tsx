@@ -1,16 +1,17 @@
 import React from 'react';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { swapDefaults, useSwapContext } from '@context/SwapContext';
+import { swapDefaults, useBigNumber, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
-import BigNumber from 'bignumber.js';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch } = useSwapContext();
     const { selectedPool, side, amount, invalidAmount, commitAction } = swapState;
+
+    const amountBN = useBigNumber(amount);
 
     const pool = usePool(selectedPool);
 
@@ -59,7 +60,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                 <Button
                     size="lg"
                     variant="primary"
-                    disabled={!selectedPool || amount.eq(0) || invalidAmount.isInvalid}
+                    disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}
                     onClick={(_e) => {
                         let commitType;
                         if (!commit) {
@@ -71,9 +72,9 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                             // actionType === CommitActionEnum.burn
                             commitType = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
                         }
-                        commit(selectedPool ?? '', commitType, amount, {
+                        commit(selectedPool ?? '', commitType, amountBN, {
                             onSuccess: () => {
-                                swapDispatch?.({ type: 'setAmount', value: new BigNumber(0) });
+                                swapDispatch?.({ type: 'setAmount', value: '0' });
                             },
                         });
                     }}
