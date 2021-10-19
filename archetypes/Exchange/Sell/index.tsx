@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
-import { useSwapContext, swapDefaults, noDispatch } from '@context/SwapContext';
+import { useSwapContext, swapDefaults, noDispatch, useBigNumber } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
@@ -58,7 +58,9 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { tokens } = usePoolTokens();
 
-    const { amount, amountShadow, side, selectedPool, invalidAmount, commitAction } = swapState;
+    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
+
+    const amountBN = useBigNumber(amount);
 
     const pool = usePool(selectedPool);
 
@@ -94,7 +96,7 @@ export default (() => {
 
             const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
 
-            const invalidAmount = isInvalidAmount(amount, currentBalance, minimumTokens, tokenPrice);
+            const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice);
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -105,7 +107,7 @@ export default (() => {
 
     // this displays the breakdown on a valid amount
     // useMemo removes the flash display when !amount && calculating if the value is valid
-    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amount.eq(0), [invalidAmount]);
+    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amountBN.eq(0), [invalidAmount]);
 
     return (
         <>
@@ -139,7 +141,7 @@ export default (() => {
                 <InputContainer error={invalidAmount.isInvalid} className="w-full">
                     <Input
                         className="w-3/5 h-full font-normal text-base"
-                        value={amount.eq(0) ? '' : amountShadow}
+                        value={amount}
                         onUserInput={(val) => {
                             swapDispatch({ type: 'setAmount', value: val || '' });
                         }}
@@ -178,14 +180,14 @@ export default (() => {
                                     ? pool.longToken.balance.toFixed(2)
                                     : pool.shortToken.balance.toFixed(2)
                             } `}
-                            {amount.gt(0) ? (
+                            {amountBN.gt(0) ? (
                                 <span className="opacity-80">
                                     {`>>> ${BigNumber.max(
                                         side === SideEnum.long
-                                            ? amount.eq(0)
+                                            ? amountBN.eq(0)
                                                 ? pool.longToken.balance
                                                 : pool.longToken.balance.minus(amount)
-                                            : amount.eq(0)
+                                            : amountBN.eq(0)
                                             ? pool.shortToken.balance
                                             : pool.shortToken.balance.minus(amount),
                                         0,
@@ -201,7 +203,7 @@ export default (() => {
                 pool={pool}
                 showBreakdown={showBreakdown}
                 isLong={side === SideEnum.long}
-                amount={amount}
+                amount={amountBN}
                 receiveIn={receiveIn}
             />
 

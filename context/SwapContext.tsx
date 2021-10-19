@@ -15,10 +15,7 @@ interface ContextProps {
 type Market = Record<string, PoolType>;
 
 type SwapState = {
-    // amountShadow and amount are only ever set in through setAmount
-    // this insures there values track eachother
-    amount: BigNumber;
-    amountShadow: string;
+    amount: string;
     invalidAmount: {
         message?: string;
         isInvalid: boolean;
@@ -74,8 +71,7 @@ export const LEVERAGE_OPTIONS = [
 ];
 
 export const swapDefaults: SwapState = {
-    amount: new BigNumber(0),
-    amountShadow: '',
+    amount: '',
     invalidAmount: {
         message: undefined,
         isInvalid: false,
@@ -105,8 +101,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setAmount':
                 return {
                     ...state,
-                    amount: new BigNumber(action.value ?? 0),
-                    amountShadow: action.value,
+                    amount: action.value,
                 };
             case 'setCommitAction':
                 return { ...state, commitAction: action.value };
@@ -241,3 +236,5 @@ export const useSwapContext: () => Partial<ContextProps> = () => {
     }
     return context;
 };
+
+export const useBigNumber: (num: string) => BigNumber = (num) => useMemo(() => new BigNumber(num ?? 0), [num]);
