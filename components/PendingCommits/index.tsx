@@ -1,43 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { Logo } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
-import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
+import { CommitActionEnum, CommitEnum, CommitsFocusEnum } from '@libs/constants';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-
-// import BigNumber from 'bignumber.js';
-// const testCommits:QueuedCommit[] = [
-//     {
-//         pool: '',
-//         id: 0,
-//         type: 0,
-//         amount: new BigNumber (5),
-//         txnHash: '',
-//         token: {
-//             side: 0,
-//             supply: new BigNumber(5),
-//             address: '',
-//             name: '',
-//             symbol: 'test',
-//             balance: new BigNumber(5),
-//             approved: new BigNumber(6),
-//         },
-//         tokenPrice: new BigNumber(30),
-//         nextRebalance: new BigNumber(1),
-//         frontRunningInterval: new BigNumber(10),
-//         updateInterval: new BigNumber(20)
-//     }
-// ]
+import BigNumber from 'bignumber.js';
 
 export default (() => {
     const { provider } = useWeb3();
@@ -56,7 +32,7 @@ export default (() => {
     return (
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
-                <h1 className="text-bold font-size[30px] text-theme-text">
+                <h1 className="text-bold text-2xl text-theme-text">
                     {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
@@ -68,14 +44,14 @@ export default (() => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spend (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
+                            <TableHeaderCell>Spent (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
                             <TableHeaderCell>Receive in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <BuyRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <MintRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 ) : (
@@ -83,22 +59,28 @@ export default (() => {
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Price* (Token)</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Burn in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <SellRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <BurnRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
                         ))}
                     </>
                 )}
             </Table>
+            <div className="absolute bottom-10 left-0 right-0 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
+                * <strong>Token Price</strong> and{' '}
+                <strong>{focus === CommitsFocusEnum.mints ? 'Amount' : 'Return'}</strong> values are indicative only,
+                and represent the estimated values for the next rebalance, given the committed mints and burns and
+                change in price of the underlying asset.
+            </div>
         </TWModal>
     );
 }) as React.FC;
 
-const BuyRow: React.FC<
+const MintRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -115,6 +97,8 @@ const BuyRow: React.FC<
     updateInterval,
     created,
 }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -123,13 +107,17 @@ const BuyRow: React.FC<
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-            <TableRowCell>{amount.div(tokenPrice).toFixed()}</TableRowCell>
+            <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
             <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.mint}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
@@ -145,7 +133,7 @@ const BuyRow: React.FC<
     );
 };
 
-const SellRow: React.FC<
+const BurnRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -162,6 +150,8 @@ const SellRow: React.FC<
     updateInterval,
     created,
 }) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -172,11 +162,15 @@ const SellRow: React.FC<
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
             <TableRowCell>
-                {nextRebalance.toNumber() - created < frontRunningInterval.toNumber() ? (
-                    <TimeLeft targetTime={nextRebalance.toNumber() + updateInterval.toNumber()} />
-                ) : (
-                    <TimeLeft targetTime={nextRebalance.toNumber()} />
-                )}
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.burn}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
@@ -190,4 +184,47 @@ const SellRow: React.FC<
             </TableRowCell>
         </TableRow>
     );
+};
+
+interface ReceiveInProps {
+    pendingUpkeep: boolean;
+    setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
+    actionType: CommitActionEnum;
+    nextRebalance: BigNumber;
+    created: number;
+    frontRunningInterval: BigNumber;
+    updateInterval: BigNumber;
+}
+const ReceiveIn: React.FC<ReceiveInProps> = ({
+    pendingUpkeep,
+    setPendingUpkeep,
+    actionType,
+    nextRebalance,
+    created,
+    frontRunningInterval,
+    updateInterval,
+}: ReceiveInProps) => {
+    if (pendingUpkeep) {
+        return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
+    } else {
+        if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        } else {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        }
+    }
 };
