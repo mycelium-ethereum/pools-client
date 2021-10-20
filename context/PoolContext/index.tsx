@@ -99,7 +99,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 const decimals = pool.quoteToken.decimals;
                 // fetch commits
                 try {
-                    fetchCommits(pool.committer.address, provider, pool.quoteToken.decimals).then((committerInfo) => {
+                    fetchCommits(
+                        {
+                            committer: pool.committer.address,
+                            quoteTokenDecimals: decimals,
+                            lastUpdate: pool.lastUpdate.toNumber(),
+                            address: pool.address,
+                        },
+                        provider,
+                    ).then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
                                 type: 'setPendingAmounts',
@@ -110,22 +118,18 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                             setExpectedPrice(pool);
 
-                            committerInfo.allUnexecutedCommits.map((commit) => {
-                                commit.getTransaction().then((txn) => {
-                                    commitDispatch({
-                                        type: 'addCommit',
-                                        commitInfo: {
-                                            pool: pool.address,
-                                            id: commit.args.commitID.toNumber(),
-                                            amount: new BigNumber(
-                                                ethers.utils.formatUnits(commit.args.amount, decimals),
-                                            ),
-                                            type: commit.args.commitType as CommitEnum,
-                                            from: txn?.from,
-                                            txnHash: txn?.hash,
-                                            created: Date.now() / 1000,
-                                        },
-                                    });
+                            committerInfo.allUnexecutedCommits.map(async (commit) => {
+                                commitDispatch({
+                                    type: 'addCommit',
+                                    commitInfo: {
+                                        pool: pool.address,
+                                        id: commit.commitID,
+                                        amount: commit.amount,
+                                        type: commit.commitType,
+                                        from: commit.from,
+                                        txnHash: commit.txnHash,
+                                        created: commit.timestamp,
+                                    },
                                 });
                             });
                         }
@@ -253,7 +257,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     txnHash: txn.hash,
                                     type: type as CommitEnum,
                                     amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                    created: Date.now() / 1000,
+                                    created: txn.timestamp ?? Date.now() / 1000,
                                 },
                             });
                         }
