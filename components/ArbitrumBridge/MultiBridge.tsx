@@ -312,7 +312,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </span>
                         ) : (
                             <>
-                                <b>Note</b>: withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
+                                <b>Note</b>: Withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
                                 <a
                                     href="https://bridge.arbitrum.io"
                                     target="_blank"
