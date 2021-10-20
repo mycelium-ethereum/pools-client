@@ -72,7 +72,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
 
     useEffect(() => {
         if (provider) {
-            const config = networkConfig[provider.network.chainId];
+            const config = networkConfig[provider.network?.chainId];
             if (config) {
                 const { address, abi } = config?.contracts.poolFactory;
                 if (address) {
@@ -82,9 +82,13 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                     }
                     setContract(contract as PoolFactory);
                 }
+            } else {
+                console.error(
+                    `Could not find provider network config for chainID ${provider.network?.chainId?.toString()}`,
+                );
             }
         }
-    }, [provider]);
+    }, [provider, provider?.network]);
 
     useEffect(() => {
         const fetch = async () => {
