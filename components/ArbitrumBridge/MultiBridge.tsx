@@ -240,7 +240,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <InputContainer className="w-full" error={amountIsInvalid}>
                                 <Input
-                                    type="text"
                                     className="w-full h-full font-normal text-base"
                                     value={amount}
                                     onUserInput={(val) => setAmount(val)}
