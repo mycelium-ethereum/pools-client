@@ -237,4 +237,5 @@ export const useSwapContext: () => Partial<ContextProps> = () => {
     return context;
 };
 
-export const useBigNumber: (num: string) => BigNumber = (num) => useMemo(() => new BigNumber(num ?? 0), [num]);
+export const useBigNumber: (num: string) => BigNumber = (num) =>
+    useMemo(() => (!!num ? new BigNumber(num) : new BigNumber(0)), [num]);
