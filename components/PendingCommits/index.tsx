@@ -4,40 +4,16 @@ import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
 import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
-import { Logo } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
-import { CommitsFocusEnum, CommitEnum } from '@libs/constants';
+import { CommitActionEnum, CommitEnum, CommitsFocusEnum } from '@libs/constants';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import { tokenSymbolToLogoTicker } from '@components/General';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-
-// import BigNumber from 'bignumber.js';
-// const testCommits:QueuedCommit[] = [
-//     {
-//         pool: '',
-//         id: 0,
-//         type: 0,
-//         amount: new BigNumber (5),
-//         txnHash: '',
-//         token: {
-//             side: 0,
-//             supply: new BigNumber(5),
-//             address: '',
-//             name: '',
-//             symbol: 'test',
-//             balance: new BigNumber(5),
-//             approved: new BigNumber(6),
-//         },
-//         tokenPrice: new BigNumber(30),
-//         nextRebalance: new BigNumber(1),
-//         frontRunningInterval: new BigNumber(10),
-//         updateInterval: new BigNumber(20)
-//     }
-// ]
+import BigNumber from 'bignumber.js';
 
 export default (() => {
     const { provider } = useWeb3();
@@ -123,32 +99,6 @@ const MintRow: React.FC<
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
-    const MintReceiveIn = () => {
-        if (pendingUpkeep) {
-            return 'Mint in progress';
-        } else {
-            if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
-                return (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
-                        countdownEnded={() => {
-                            setPendingUpkeep(true);
-                        }}
-                    />
-                );
-            } else {
-                return (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber()}
-                        countdownEnded={() => {
-                            setPendingUpkeep(true);
-                        }}
-                    />
-                );
-            }
-        }
-    };
-
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -158,7 +108,17 @@ const MintRow: React.FC<
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
-            <TableRowCell>{MintReceiveIn()}</TableRowCell>
+            <TableRowCell>
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.mint}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
+            </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
@@ -192,32 +152,6 @@ const BurnRow: React.FC<
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
-    const BurnReceiveIn = () => {
-        if (pendingUpkeep) {
-            return 'Burn in progress';
-        } else {
-            if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
-                return (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
-                        countdownEnded={() => {
-                            setPendingUpkeep(true);
-                        }}
-                    />
-                );
-            } else {
-                return (
-                    <TimeLeft
-                        targetTime={nextRebalance.toNumber()}
-                        countdownEnded={() => {
-                            setPendingUpkeep(true);
-                        }}
-                    />
-                );
-            }
-        }
-    };
-
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -227,7 +161,17 @@ const BurnRow: React.FC<
             <TableRowCell>{amount.toFixed(2)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
-            <TableRowCell>{BurnReceiveIn()}</TableRowCell>
+            <TableRowCell>
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.burn}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
+            </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
                     token={token}
@@ -240,4 +184,47 @@ const BurnRow: React.FC<
             </TableRowCell>
         </TableRow>
     );
+};
+
+interface ReceiveInProps {
+    pendingUpkeep: boolean;
+    setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
+    actionType: CommitActionEnum;
+    nextRebalance: BigNumber;
+    created: number;
+    frontRunningInterval: BigNumber;
+    updateInterval: BigNumber;
+}
+const ReceiveIn: React.FC<ReceiveInProps> = ({
+    pendingUpkeep,
+    setPendingUpkeep,
+    actionType,
+    nextRebalance,
+    created,
+    frontRunningInterval,
+    updateInterval,
+}: ReceiveInProps) => {
+    if (pendingUpkeep) {
+        return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
+    } else {
+        if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        } else {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        }
+    }
 };
