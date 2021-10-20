@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Children, Pool } from '@libs/types/General';
 import { FactoryContext } from '../FactoryContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
@@ -19,9 +19,11 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
-import { useCommitActions } from '@context/UsersCommitContext';
-import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
+import { useCommitActions, useCommits } from '@context/UsersCommitContext';
+import { calcNextValueTransfer, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
+import { useToasts } from 'react-toast-notifications';
+import { isMintCommit, isShortCommit } from '@libs/utils/pools';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -53,12 +55,18 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
+    const { commits = {} } = useCommits();
+    const { addToast } = useToasts();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
     // ref to assist in the ensuring that contracts are not double subscribed
     const subscriptions = useRef<Record<string, boolean>>({});
+
+    useEffect(() => {
+        console.log('COMMITS CHANGED', commits);
+    }, [commits]);
 
     // if the pools from the factory change, re-init them
     useMemo(() => {
@@ -112,6 +120,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                             committerInfo.allUnexecutedCommits.map((commit) => {
                                 commit.getTransaction().then((txn) => {
+                                    console.log('[commit] PENDING COMMIT TRANSACTION', commit, txn, txn.from);
                                     commitDispatch({
                                         type: 'addCommit',
                                         commitInfo: {
@@ -123,7 +132,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                             type: commit.args.commitType as CommitEnum,
                                             from: txn?.from,
                                             txnHash: txn?.hash,
-                                            created: Date.now() / 1000,
+                                            created: Math.floor(Date.now() / 1000),
                                         },
                                     });
                                 });
@@ -215,19 +224,85 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         });
     };
 
+    const notifyOfSuccessfulCommit = useCallback(
+        (id: ethers.BigNumber, pool: string) => {
+            console.debug('[commit toast] Commit EXECUTED', {
+                id,
+            });
+
+            try {
+                console.log('[commit] ALL COMMITS', commits);
+                console.log(`COMMIT KEY: ${pool.toLowerCase()}-${id.toNumber()}`);
+                const knownCommitDetails = commits[`${pool.toLowerCase()}-${id.toNumber()}`];
+                if (!knownCommitDetails) {
+                    console.log('[commit] NO KNOWN COMMIT');
+                    return;
+                }
+
+                console.log('[commit toast] KNOWN COMMIT', knownCommitDetails);
+                if (knownCommitDetails?.from && knownCommitDetails.from.toLowerCase() === account?.toLowerCase()) {
+                    console.log('[commit toast] PREPARING TOAST');
+                    const _isMintCommit = isMintCommit(knownCommitDetails.type);
+                    const _isShortCommit = isShortCommit(knownCommitDetails.type);
+
+                    const poolState = poolsState.pools[pool];
+
+                    const poolToken = _isShortCommit ? poolState.shortToken : poolState.longToken;
+                    const notional = _isShortCommit ? poolState.nextShortBalance : poolState.nextLongBalance;
+                    const pendingBurns = _isShortCommit
+                        ? poolState.committer.pendingShort.burn
+                        : poolState.committer.pendingLong.burn;
+                    const tokenPrice = calcTokenPrice(notional, poolToken.supply.plus(pendingBurns));
+
+                    const poolTokenAmount = _isMintCommit
+                        ? knownCommitDetails.amount.div(tokenPrice)
+                        : knownCommitDetails.amount;
+                    const poolTokenValue = _isMintCommit
+                        ? knownCommitDetails.amount
+                        : knownCommitDetails.amount.times(tokenPrice);
+
+                    console.log('ADDING COMMIT TOAST');
+                    console.log(`
+                                ${_isMintCommit ? 'Minted' : 'Burned'}
+                                ${poolTokenAmount} {poolToken.symbol} (${poolTokenValue}{' '}
+                                ${poolState.quoteToken.symbol})
+                    `);
+                    addToast(
+                        [
+                            `Commit Executed`,
+                            <span key={`commit-executed-${id.toString()}`} className="text-sm">
+                                {_isMintCommit ? 'Minted' : 'Burned'}
+                                {poolTokenAmount} {poolToken.symbol} ({poolTokenValue} {poolState.quoteToken.symbol})
+                            </span>,
+                        ],
+                        {
+                            appearance: 'success',
+                            autoDismiss: true,
+                        },
+                    );
+                }
+            } catch (error) {
+                console.error('Error with ExecuteCommit event listener', error);
+            }
+        },
+        [commits],
+    );
+
     // subscribe to pool events
-    const subscribeToPool = (pool: string) => {
+    const subscribeToPool = async (pool: string) => {
         if (provider && poolsState.pools[pool]) {
             console.debug('Subscribing to pool', pool);
 
             const { committer: committerInfo, keeper } = poolsState.pools[pool];
 
+            const _provider = process.env.NEXT_PUBLIC_WSS_RPC
+                ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
+                : provider;
+
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
-                process.env.NEXT_PUBLIC_WSS_RPC
-                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
-                    : provider,
+                _provider,
             ) as PoolCommitter;
 
             // @ts-ignore
@@ -253,7 +328,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     txnHash: txn.hash,
                                     type: type as CommitEnum,
                                     amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                    created: Date.now() / 1000,
+                                    created: Math.floor(Date.now() / 1000),
                                 },
                             });
                         }
@@ -262,6 +337,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
                     poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
                 });
+
+                console.log('[commit toast] REGISTERING COMMIT EXECUTED EVENT LISTENER', commits);
+                committer.on(committer.filters.ExecuteCommit(), (id) => notifyOfSuccessfulCommit(id, pool));
 
                 subscriptions.current = {
                     ...subscriptions.current,
@@ -301,9 +379,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
                     });
                     updateTokenBalances(poolsState.pools[pool]);
-                    commitDispatch({
-                        type: 'resetCommits',
-                    });
+                    // commitDispatch({
+                    //     type: 'resetCommits',
+                    // });
                 });
                 subscriptions.current = {
                     ...subscriptions.current,

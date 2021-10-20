@@ -48,6 +48,7 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
                 focus: action.focus,
             };
         case 'resetCommits':
+            console.log('[commit] RESETTING COMMITS');
             return {
                 ...state,
                 commits: {},
