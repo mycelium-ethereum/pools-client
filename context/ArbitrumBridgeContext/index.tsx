@@ -73,7 +73,7 @@ const withdrawalToastBody = (
 
 const depositToastBody = (
     <>
-        It may take a couple of minutes to receive your funds on Arbitrum. To view pending deposits, visit the official
+        It may take up to 10 minutes to receive your funds on Arbitrum. To view pending deposits, visit the official
         Arbitrum bridge.
     </>
 );
