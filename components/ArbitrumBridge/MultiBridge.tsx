@@ -11,6 +11,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import Close from '../../public/img/general/close.svg';
 import { BridgeableAssets } from '@libs/utils/bridge';
+import { MAINNET } from '@libs/constants';
 
 interface MultiBridgeProps {
     show: boolean;
@@ -19,7 +20,7 @@ interface MultiBridgeProps {
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
-    onSwitchNetwork: (networkId: Network['id']) => void;
+    onSwitchNetwork: (networkId: Network['id'], callback?: () => void) => void;
     onClose: () => void;
     onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
@@ -45,6 +46,19 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [amount, setAmount] = useState('');
     const [amountIsInvalid, setAmountIsInvalid] = useState(false);
     const [isBridging, setIsBridging] = useState(false);
+
+    // if this is the first time using the bridge, automatically switch them to L1 Mainnet
+    useEffect(() => {
+        if (show) {
+            const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
+            if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
+                // if its the first time using the bridge and they aren't already on L1 Mainnet
+                onSwitchNetwork(MAINNET, () => {
+                    localStorage.setItem('hasUsedBridge', 'true');
+                });
+            }
+        }
+    }, [show]);
 
     const bridgeableAssetList = useMemo(() => {
         if (!fromNetwork) {
