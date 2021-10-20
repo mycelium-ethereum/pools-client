@@ -207,7 +207,6 @@ export default (() => {
                     )}
                 </div>
             </div>
-            {!amountBN.eq(0)}
             <BuySummary
                 showBreakdown={showBreakdown}
                 pool={pool}

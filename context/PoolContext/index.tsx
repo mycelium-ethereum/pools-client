@@ -90,7 +90,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider, pools]);
+    }, [pools]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -223,7 +223,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const { committer: committerInfo, keeper } = poolsState.pools[pool];
 
-            const wssProvider = networkConfig[provider?.network?.chainId].publicWebsocketRPC;
+            const wssProvider = networkConfig[provider?.network?.chainId]?.publicWebsocketRPC;
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,

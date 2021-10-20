@@ -74,7 +74,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                         }
                         commit(selectedPool ?? '', commitType, amountBN, {
                             onSuccess: () => {
-                                swapDispatch?.({ type: 'setAmount', value: '0' });
+                                swapDispatch?.({ type: 'setAmount', value: '' });
                             },
                         });
                     }}
