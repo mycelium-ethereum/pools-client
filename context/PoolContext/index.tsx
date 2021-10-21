@@ -22,7 +22,7 @@ import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -223,7 +223,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const { committer: committerInfo, keeper } = poolsState.pools[pool];
 
-            const wssProvider = networkConfig[provider?.network?.chainId]?.publicWebsocketRPC;
+            const wssProvider =
+                networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
@@ -354,7 +355,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     committer.commit,
                     [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
                     {
-                        network: network,
+                        network: (network ?? '0') as AvailableNetwork,
                         onSuccess: (receipt) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
@@ -367,7 +368,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 body: (
                                     <div
                                         className="text-sm text-tracer-400 underline cursor-pointer"
-                                        onClick={() => openArbiscan(ArbiscanEnum.token, tokenAddress)}
+                                        onClick={() =>
+                                            openArbiscan(
+                                                ArbiscanEnum.token,
+                                                tokenAddress,
+                                                provider?.network?.chainId?.toString() as AvailableNetwork,
+                                            )
+                                        }
                                     >
                                         View token on Arbiscan
                                     </div>
@@ -398,7 +405,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
-                network: network,
+                network: (network ?? '0') as AvailableNetwork,
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({
