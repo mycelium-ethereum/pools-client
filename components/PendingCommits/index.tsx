@@ -19,7 +19,7 @@ export default (() => {
     const { provider } = useWeb3();
     const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
-    const commits = usePendingCommits(focus);
+    const commits = usePendingCommits();
 
     const mintCommits = commits.filter(
         (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,

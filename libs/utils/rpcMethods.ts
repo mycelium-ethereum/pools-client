@@ -1,5 +1,5 @@
 import { tokenSymbolToLogoTicker } from '@components/General';
-import { Network, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, Network, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { calcBptTokenSpotPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -51,7 +51,7 @@ export const watchAsset: (
 
 export const switchNetworks: (
     provider: ethers.providers.JsonRpcProvider | undefined,
-    networkID: string,
+    networkID: AvailableNetwork,
 ) => Promise<boolean> = async (provider, networkID) => {
     const config = networkConfig[networkID];
     try {
@@ -75,6 +75,7 @@ export const switchNetworks: (
                         chainId: config.hex,
                         chainName: config.name,
                         rpcUrls: [config.publicRPC],
+                        blockExplorerUrls: [config.previewUrl],
                     },
                 ]);
                 return true;
@@ -91,14 +92,20 @@ export enum ArbiscanEnum {
     txn = 0,
     token = 1,
 }
+
 // Not really an RPC but thought it kind of belongs here
-export const openArbiscan: (type: ArbiscanEnum, taraget: string) => boolean = (type, target) => {
+export const openArbiscan: (type: ArbiscanEnum, taraget: string, network: AvailableNetwork | undefined) => boolean = (
+    type,
+    target,
+    network,
+) => {
+    const base = !!network ? networkConfig[network] : 'https://arbiscan.io';
     switch (type) {
         case ArbiscanEnum.txn:
-            window.open(`https://arbiscan.io/tx/${target}`, '', 'noreferrer=true,noopener=true');
+            window.open(`${base}/tx/${target}`, '', 'noreferrer=true,noopener=true');
             break;
         case ArbiscanEnum.token:
-            window.open(`https://arbiscan.io/token/${target}`, '', 'noreferrer=true,noopener=true');
+            window.open(`${base}/token/${target}`, '', 'noreferrer=true,noopener=true');
             break;
         default: //nothing
     }
