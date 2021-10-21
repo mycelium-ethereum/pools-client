@@ -65,7 +65,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
             onClose={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
         >
             <div className="flex justify-between pb-6">
-                <div className="font-bold text-2xl text-cool-gray-900">{title || 'Stake Tracer Pool Tokens'}</div>
+                <div className="font-bold text-2xl">{title || 'Stake Tracer Pool Tokens'}</div>
                 {/* <Gas /> */}
                 <div
                     className="w-3 h-3 ml-4 cursor-pointer"
