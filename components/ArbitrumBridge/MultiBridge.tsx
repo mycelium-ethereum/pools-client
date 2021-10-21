@@ -44,6 +44,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
     const [amount, setAmount] = useState('');
+    const [amountsByAsset, setAmountsByAsset] = useState<Record<string, string>>({});
     const [amountIsInvalid, setAmountIsInvalid] = useState(false);
     const [isBridging, setIsBridging] = useState(false);
 
@@ -86,8 +87,19 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     useEffect(() => {
         if (show && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
+            setAmount(amountsByAsset[selectedAsset.symbol] || '');
         }
     }, [selectedAsset]);
+
+    // when selected asset or amount change, sync amount and amountsByAsset
+    useEffect(() => {
+        if (selectedAsset) {
+            setAmountsByAsset((previousValue) => ({
+                ...previousValue,
+                [selectedAsset.symbol]: amount,
+            }));
+        }
+    }, [amount, selectedAsset]);
 
     // refresh asset balance when selected account changes
     useEffect(() => {
