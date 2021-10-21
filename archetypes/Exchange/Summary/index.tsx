@@ -89,21 +89,23 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
-                    <Section label="Power Leverage">
-                        <div>
-                            <span className="opacity-60">{`Gains: `}</span>
-                            <span
-                                className={classNames(
-                                    'mr-2',
-                                    effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
-                                )}
-                            >
-                                {effectiveGains.toFixed(2)}
-                            </span>
-                            <span className="opacity-60">{`Losses: `}</span>
-                            {pool.leverage}
-                        </div>
-                    </Section>
+                    {showBreakdown && !amount.eq(0) ? (
+                        <Section label="Power Leverage">
+                            <div>
+                                <span className="opacity-60">{`Gains: `}</span>
+                                <span
+                                    className={classNames(
+                                        'mr-2',
+                                        effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
+                                    )}
+                                >
+                                    {effectiveGains.toFixed(2)}
+                                </span>
+                                <span className="opacity-60">{`Losses: `}</span>
+                                {pool.leverage}
+                            </div>
+                        </Section>
+                    ) : null}
                     <BalancerLink token={token} isBuy={true} />
                 </Transition>
                 <div className={countdown}>
