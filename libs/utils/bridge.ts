@@ -2,7 +2,9 @@ import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
 import { BridgeableAsset } from '@libs/types/General';
 import { LogoTicker } from '@components/General/Logo';
 
-export const destinationNetworkLookup: { [current: number]: string } = {
+type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;
+
+export const destinationNetworkLookup: Record<string, DestinationNetwork> = {
     [RINKEBY]: ARBITRUM_RINKEBY,
     [ARBITRUM_RINKEBY]: RINKEBY,
     [MAINNET]: ARBITRUM,

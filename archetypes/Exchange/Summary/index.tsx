@@ -16,7 +16,7 @@ import Link from '/public/img/general/link.svg';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
 import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type SummaryProps = {
     pool: Pool;
@@ -168,7 +168,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amoun
     );
 };
 
-const constructBalancerLink = (token: string, network: number, isBuy: boolean) => {
+const constructBalancerLink = (token: string, network: AvailableNetwork, isBuy: boolean) => {
     const { usdcAddress, balancerInfo } = networkConfig[network];
     // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
     return isBuy
@@ -183,9 +183,9 @@ const BalancerLink: React.FC<{
     };
     isBuy: boolean;
 }> = ({ token, isBuy }) => {
-    const { network = 0 } = useWeb3();
+    const { network } = useWeb3();
     const balancerPoolPrices = useBalancerSpotPrices(network);
-    return network === parseInt(ARBITRUM) ? (
+    return network === ARBITRUM ? (
         <div className="text-sm mt-2">
             <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
             <div>

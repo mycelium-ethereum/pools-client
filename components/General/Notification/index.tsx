@@ -95,11 +95,9 @@ const Content = styled((props: any) => (
     </div>
 ))`
     flex-grow: 1;
-    font-size: var(--font-size-medium);
     line-height: 1.4;
     width: 100%;
     margin-top: 0.5rem;
-
     word-break: break-word;
     font-size: 1rem;
 `;
@@ -145,7 +143,8 @@ const Hashie: React.FC<HProps | any> = ({
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <div className="text-theme-text text-base font-bold mb-2">
+            <Close className="absolute h-3 w-3 top-8 right-6 cursor-pointer" onClick={onDismiss}/>
+            <div className="text-theme-text text-base font-bold mr-5 mb-2">
                 <span className="mr-2">
                     {appearance.icon}
                 </span>
@@ -153,7 +152,6 @@ const Hashie: React.FC<HProps | any> = ({
                 <span>
                     {children_[0]}
                 </span>
-                <Close className="absolute h-3 w-3 top-[2rem] right-6 cursor-pointer" onClick={onDismiss}/>
             </div>
             <Content>{children_[1]}</Content>
         </div>

@@ -22,6 +22,7 @@ import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -89,7 +90,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider, pools]);
+    }, [pools]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -152,7 +153,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && account && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances and approvals for each pool
-                updateTokenBalances(pool);
+                updateTokenBalances(pool, provider);
                 updateTokenApprovals(pool);
             });
         } else if (!account && poolsState.poolsInitialised) {
@@ -170,13 +171,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     }, [provider, account, poolsState.poolsInitialised]);
 
     // get and set token balances
-    const updateTokenBalances: (pool: Pool) => void = (pool) => {
-        if (!provider || !account) {
+    const updateTokenBalances: (pool: Pool, provider: ethers.providers.JsonRpcProvider | undefined) => void = (
+        pool,
+        provider_,
+    ) => {
+        if (!provider_ || !account) {
             return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
         const decimals = pool.quoteToken.decimals;
-        fetchTokenBalances(tokens, provider, account, pool.address)
+        fetchTokenBalances(tokens, provider_, account, pool.address)
             .then((balances) => {
                 const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
                 const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
@@ -226,12 +230,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const { committer: committerInfo, keeper } = poolsState.pools[pool];
 
+            const wssProvider =
+                networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
+            const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
+            
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
-                process.env.NEXT_PUBLIC_WSS_RPC
-                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
-                    : provider,
+                subscriptionProvider,
             ) as PoolCommitter;
 
             // @ts-ignore
@@ -278,9 +284,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const keeperInstance = new ethers.Contract(
                 keeper,
                 PoolKeeper__factory.abi,
-                process.env.NEXT_PUBLIC_WSS_RPC
-                    ? new ethers.providers.WebSocketProvider(process.env.NEXT_PUBLIC_WSS_RPC)
-                    : provider,
+                subscriptionProvider,
             ) as PoolKeeper;
 
             if (!subscriptions.current[keeper]) {
@@ -294,7 +298,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     const leveragedPool = new ethers.Contract(
                         pool,
                         LeveragedPool__factory.abi,
-                        provider,
+                        subscriptionProvider,
                     ) as LeveragedPool;
                     leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
                         console.debug(`New last updated: ${lastUpdate}`);
@@ -304,9 +308,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             value: new BigNumber(lastUpdate.toString()),
                         });
                     });
-                    updateTokenBalances(poolsState.pools[pool]);
+                    updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
                     commitDispatch({
                         type: 'resetCommits',
+                        pool: pool,
                     });
                 });
                 subscriptions.current = {
@@ -359,11 +364,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     committer.commit,
                     [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
                     {
-                        network: network,
+                        network: (network ?? '0') as AvailableNetwork,
                         onSuccess: (receipt) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
-                            updateTokenBalances(poolsState.pools[pool]);
+                            updateTokenBalances(poolsState.pools[pool], provider);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
                         statusMessages: {
@@ -372,7 +377,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 body: (
                                     <div
                                         className="text-sm text-tracer-400 underline cursor-pointer"
-                                        onClick={() => openArbiscan(ArbiscanEnum.token, tokenAddress)}
+                                        onClick={() =>
+                                            openArbiscan(
+                                                ArbiscanEnum.token,
+                                                tokenAddress,
+                                                provider?.network?.chainId?.toString() as AvailableNetwork,
+                                            )
+                                        }
                                     >
                                         View token on Arbiscan
                                     </div>
@@ -403,7 +414,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
-                network: network,
+                network: (network ?? '0') as AvailableNetwork,
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({

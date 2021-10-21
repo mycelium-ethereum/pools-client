@@ -79,7 +79,7 @@ const depositToastBody = (
 );
 
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
-    const { account, signer, provider, network = 1 } = useWeb3();
+    const { account, signer, provider, network = MAINNET } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);

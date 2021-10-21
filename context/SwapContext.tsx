@@ -15,7 +15,7 @@ interface ContextProps {
 type Market = Record<string, PoolType>;
 
 type SwapState = {
-    amount: BigNumber;
+    amount: string;
     invalidAmount: {
         message?: string;
         isInvalid: boolean;
@@ -35,7 +35,7 @@ type SwapState = {
 };
 
 export type SwapAction =
-    | { type: 'setAmount'; value: BigNumber }
+    | { type: 'setAmount'; value: string }
     | { type: 'setCommitAction'; value: CommitActionEnum }
     | { type: 'setMarket'; value: string }
     | { type: 'setPoolFromMarket'; market: string }
@@ -71,7 +71,7 @@ export const LEVERAGE_OPTIONS = [
 ];
 
 export const swapDefaults: SwapState = {
-    amount: new BigNumber(0),
+    amount: '',
     invalidAmount: {
         message: undefined,
         isInvalid: false,
@@ -99,7 +99,10 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         let leverage;
         switch (action.type) {
             case 'setAmount':
-                return { ...state, amount: action.value };
+                return {
+                    ...state,
+                    amount: action.value,
+                };
             case 'setCommitAction':
                 return { ...state, commitAction: action.value };
             case 'setSide':
@@ -233,3 +236,6 @@ export const useSwapContext: () => Partial<ContextProps> = () => {
     }
     return context;
 };
+
+export const useBigNumber: (num: string) => BigNumber = (num) =>
+    useMemo(() => (!!num ? new BigNumber(num) : new BigNumber(0)), [num]);

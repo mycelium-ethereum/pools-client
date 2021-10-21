@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { AvailableNetwork, networkConfig } from './Web3Context/Web3Context.Config';
 
 // this is a temp hack to fix fetching pools > 2000 blocks from currentBlock
 type ArbitrumNetwork = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
@@ -65,13 +66,14 @@ export const FactoryContext = React.createContext<Partial<ContextProps>>({});
  * Wrapper store for the FactoryContext.
  */
 export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
-    const { provider, config, account, network } = useWeb3();
+    const { provider, account, network } = useWeb3();
     const [contract, setContract] = useState<PoolFactory | undefined>(undefined);
     const [pools, setPools] = useState<PoolType[]>([]);
 
     useEffect(() => {
         if (provider) {
-            if (config?.contracts.poolFactory) {
+            const config = networkConfig[provider.network?.chainId?.toString() as AvailableNetwork];
+            if (config) {
                 const { address, abi } = config?.contracts.poolFactory;
                 if (address) {
                     let contract = new ethers.Contract(address, abi, provider);
@@ -80,9 +82,13 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                     }
                     setContract(contract as PoolFactory);
                 }
+            } else {
+                console.error(
+                    `Could not find provider network config for chainID ${provider.network?.chainId?.toString()}`,
+                );
             }
         }
-    }, [provider, config]);
+    }, [provider, provider?.network]);
 
     useEffect(() => {
         const fetch = async () => {

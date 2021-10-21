@@ -2,6 +2,7 @@ import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts
 import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
+import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
@@ -15,7 +16,9 @@ type Farm = {
     linkText?: string;
 };
 
+export type AvailableNetwork = typeof ARBITRUM | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof RINKEBY | '0' | '1337';
 export type Network = {
+    id: AvailableNetwork;
     name: string;
     previewUrl: string;
     contracts: {
@@ -28,8 +31,7 @@ export type Network = {
     bptFarms: Farm[];
     hex: string;
     publicRPC: string;
-    graphUri: string;
-    id: string;
+    publicWebsocketRPC?: string;
     balancerVaultAddress: string;
     usdcAddress: string;
     // lookup from known token addresses to Chainink price feed address
@@ -56,7 +58,7 @@ export type Network = {
  *  this config.
  * Do not change the other network configs unless the contract addresses have changed.
  */
-export const networkConfig: Record<string, Network> = {
+export const networkConfig: Record<AvailableNetwork, Network> = {
     '0': {
         id: '0',
         previewUrl: '',
@@ -66,7 +68,6 @@ export const networkConfig: Record<string, Network> = {
         bptFarms: [],
         publicRPC: '',
         hex: '0x0',
-        graphUri: process.env.NEXT_PUBLIC_GRAPH_URI ?? '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         tcrAddress: '',
@@ -76,7 +77,7 @@ export const networkConfig: Record<string, Network> = {
     '421611': {
         id: '421611',
         name: 'Arbitrum Rinkeby',
-        previewUrl: 'https://rinkeby-explorer.arbitrum.io/#',
+        previewUrl: 'https://testnet.arbiscan.io',
         contracts: {
             poolFactory: {
                 address: '0x69D044eCf45500882FdA0A796744231b1Fb5eFD5',
@@ -97,8 +98,8 @@ export const networkConfig: Record<string, Network> = {
         ],
         bptFarms: [],
         hex: '0x66EEB',
-        publicRPC: 'https://rinkeby.arbitrum.io/rpc',
-        graphUri: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/tracer-arbitrum',
+        publicRPC: process.env.NEXT_PUBLIC_TESTNET_RPC ?? 'https://rinkeby.arbitrum.io/rpc',
+        publicWebsocketRPC: process.env.NEXT_PUBLIC_TESTNET_WSS_RPC,
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         tcrAddress: '',
@@ -108,7 +109,7 @@ export const networkConfig: Record<string, Network> = {
     '42161': {
         id: '42161',
         name: 'Arbitrum',
-        previewUrl: 'https://explorer.arbitrum.io/#',
+        previewUrl: 'https://arbiscan.io/',
         contracts: {
             poolFactory: {
                 address: '0x98C58c1cEb01E198F8356763d5CbA8EB7b11e4E2',
@@ -192,8 +193,8 @@ export const networkConfig: Record<string, Network> = {
             },
         ],
         hex: '0xA4B1',
-        publicRPC: 'https://arb1.arbitrum.io/rpc',
-        graphUri: 'TODO',
+        publicRPC: process.env.NEXT_PUBLIC_MAINNET_RPC ?? 'https://arb1.arbitrum.io/rpc',
+        publicWebsocketRPC: process.env.NEXT_PUBLIC_MAINNET_WSS_RPC,
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         knownUSDCPriceFeeds: {
@@ -232,7 +233,6 @@ export const networkConfig: Record<string, Network> = {
         poolFarms: [],
         bptFarms: [],
         publicRPC: '',
-        graphUri: 'http://localhost:8000/subgraphs/name/dospore/tracer-graph',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         knownUSDCPriceFeeds: {},
@@ -254,7 +254,6 @@ export const networkConfig: Record<string, Network> = {
         poolFarms: [],
         bptFarms: [],
         publicRPC: process.env.NEXT_PUBLIC_MAINNET_L1_RPC || '',
-        graphUri: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
@@ -276,7 +275,6 @@ export const networkConfig: Record<string, Network> = {
         poolFarms: [],
         bptFarms: [],
         publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
-        graphUri: '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
         sushiRouterAddress: '',

@@ -2,11 +2,11 @@
 // inspiration from https://github.com/ChainSafe/web3-context
 
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
-import { Network, networkConfig } from './Web3Context.Config';
+import { AvailableNetwork, Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
 import { useTheme } from '@context/ThemeContext';
@@ -34,7 +34,7 @@ type Web3Context = {
     signer?: ethers.Signer;
     ethBalance?: number;
     gasPrice?: number;
-    network?: number;
+    network?: AvailableNetwork;
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
@@ -43,6 +43,9 @@ type Web3Context = {
 
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
 const OnboardContext = React.createContext<OnboardContext | undefined>(undefined);
+
+const DEFAULT_NETWORK = ARBITRUM;
+const DEFAULT_WSS_RPC = networkConfig[DEFAULT_NETWORK].publicWebsocketRPC;
 
 /**
  * Handles connection through BlockNative Onboard library
@@ -56,17 +59,17 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { isDark } = useTheme();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(parseInt(ARBITRUM));
-    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(
-        new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_DEFAULT_RPC),
-    );
+    const [network, setNetwork] = useState<AvailableNetwork | undefined>(undefined);
+    const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[ARBITRUM]);
+    const [config, setConfig] = useState<Network>(networkConfig[0]);
+
+    const usingDefaultProvider = useRef(true);
 
     // Initialize OnboardJS
     useEffect(() => {
@@ -92,7 +95,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 wallet.name &&
                                     cacheWalletSelection &&
                                     localStorage.setItem('onboard.selectedWallet', wallet.name);
+
                                 setWallet(wallet);
+                                usingDefaultProvider.current = false;
                                 setProvider(new ethers.providers.Web3Provider(wallet.provider, 'any'));
                             } else {
                                 setWallet(undefined);
@@ -104,8 +109,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 onboard.config({ networkId: network });
                             }
                             console.info(`Changing network ${network}`);
-                            setNetwork(network);
-                            setConfig(networkConfig[network]);
+                            const network_ = network.toString() as AvailableNetwork;
+                            setNetwork(network_);
+                            setConfig(networkConfig[network_]);
                             checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
                         },
@@ -123,7 +129,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
                 const savedWallet = localStorage.getItem('onboard.selectedWallet');
                 cacheWalletSelection && savedWallet && onboard.walletSelect(savedWallet);
-
                 setOnboard(onboard);
             } catch (error) {
                 console.error('Error initializing onboard', error);
@@ -131,6 +136,30 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         };
 
         initializeOnboard();
+    }, []);
+
+    useEffect(() => {
+        let mounted = true;
+        const waitForDefaultProvider = async () => {
+            if (DEFAULT_WSS_RPC) {
+                const provider_ = new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC);
+                // websocket providers need to initiate
+                console.debug('Waiting for provider', provider_.ready);
+                await provider_.ready;
+                if (usingDefaultProvider.current) {
+                    // if the provider has not been set by onboard
+                    if (mounted) {
+                        setNetwork(DEFAULT_NETWORK);
+                        setConfig(networkConfig[DEFAULT_NETWORK]);
+                        setProvider(provider_);
+                    }
+                }
+            }
+        };
+        waitForDefaultProvider();
+        return () => {
+            mounted = false;
+        };
     }, []);
 
     useEffect(() => {
