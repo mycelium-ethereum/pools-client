@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { PoolFactory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { PoolType } from '@libs/types/General';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { networkConfig } from './Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from './Web3Context/Web3Context.Config';
 
 // this is a temp hack to fix fetching pools > 2000 blocks from currentBlock
 type ArbitrumNetwork = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
@@ -72,7 +72,7 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
 
     useEffect(() => {
         if (provider) {
-            const config = networkConfig[provider.network?.chainId];
+            const config = networkConfig[provider.network?.chainId?.toString() as AvailableNetwork];
             if (config) {
                 const { address, abi } = config?.contracts.poolFactory;
                 if (address) {

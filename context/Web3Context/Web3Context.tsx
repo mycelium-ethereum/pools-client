@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { formatEther } from '@ethersproject/units';
-import { Network, networkConfig } from './Web3Context.Config';
+import { AvailableNetwork, Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { useToasts } from 'react-toast-notifications';
 import { switchNetworks } from '@libs/utils/rpcMethods';
@@ -36,7 +36,7 @@ type Web3Context = {
     signer?: ethers.Signer;
     ethBalance?: number;
     gasPrice?: number;
-    network?: number;
+    network?: AvailableNetwork;
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
@@ -63,7 +63,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { addToast, updateToast } = useToasts();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<number | undefined>(undefined);
+    const [network, setNetwork] = useState<AvailableNetwork | undefined>(undefined);
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(undefined);
     const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
@@ -113,8 +113,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 onboard.config({ networkId: network });
                             }
                             console.info(`Changing network ${network}`);
-                            setNetwork(network);
-                            setConfig(networkConfig[network]);
+                            const network_ = network.toString() as AvailableNetwork;
+                            setNetwork(network_);
+                            setConfig(networkConfig[network_]);
                             checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
                         },
@@ -152,7 +153,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 if (usingDefaultProvider.current) {
                     // if the provider has not been set by onboard
                     if (mounted) {
-                        setNetwork(parseInt(DEFAULT_NETWORK));
+                        setNetwork(DEFAULT_NETWORK);
                         setConfig(networkConfig[DEFAULT_NETWORK]);
                         setProvider(provider_);
                     }
@@ -199,7 +200,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
 
     // unsupported network popup
     useEffect(() => {
-        if (!networkConfig[network ?? -1] && provider && account) {
+        if (!networkConfig[(network ?? '0') as AvailableNetwork] && provider && account) {
             // ignore if we are already showing the error
             if (!errorToastID.current) {
                 // @ts-ignore

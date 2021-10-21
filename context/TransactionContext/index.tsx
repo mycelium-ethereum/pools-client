@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractReceipt, ContractTransaction } from 'ethers';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type Content = {
     title?: React.ReactNode;
@@ -13,7 +13,7 @@ export type Options = {
     onSuccess?: (receipt?: ContractReceipt | Result) => any; // eslint-disable-line
     onError?: (error?: Error | Result) => any;
     afterConfirmation?: (hash: string) => any;
-    network?: number; // network number;
+    network?: AvailableNetwork; // network number;
     statusMessages?: {
         waiting?: Content; // transaction message for when we are waiting for the user to confirm
         error?: Content; // transaction message for when the transaction fails
@@ -77,7 +77,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     statusMessages?.success?.body ?? (
                         <a
                             key={contractReceipt.transactionHash}
-                            href={`${networkConfig[network ?? '0'].previewUrl}/${contractReceipt.transactionHash}`}
+                            href={`${networkConfig[network ?? '0']?.previewUrl}/${contractReceipt.transactionHash}`}
                             className="text-tracer-400 underline"
                             target="_blank"
                             rel="noreferrer"
