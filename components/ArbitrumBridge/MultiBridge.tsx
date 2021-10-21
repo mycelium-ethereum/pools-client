@@ -11,6 +11,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import Close from '../../public/img/general/close.svg';
 import { BridgeableAssets } from '@libs/utils/bridge';
+import { MAINNET } from '@libs/constants';
 
 interface MultiBridgeProps {
     show: boolean;
@@ -19,7 +20,7 @@ interface MultiBridgeProps {
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
-    onSwitchNetwork: (networkId: Network['id']) => void;
+    onSwitchNetwork: (networkId: Network['id'], callback?: () => void) => void;
     onClose: () => void;
     onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
@@ -43,8 +44,22 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
     const [amount, setAmount] = useState('');
+    const [amountsByAsset, setAmountsByAsset] = useState<Record<string, string>>({});
     const [amountIsInvalid, setAmountIsInvalid] = useState(false);
     const [isBridging, setIsBridging] = useState(false);
+
+    // if this is the first time using the bridge, automatically switch them to L1 Mainnet
+    useEffect(() => {
+        if (show) {
+            const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
+            if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
+                // if its the first time using the bridge and they aren't already on L1 Mainnet
+                onSwitchNetwork(MAINNET, () => {
+                    localStorage.setItem('hasUsedBridge', 'true');
+                });
+            }
+        }
+    }, [show]);
 
     const bridgeableAssetList = useMemo(() => {
         if (!fromNetwork) {
@@ -72,8 +87,19 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     useEffect(() => {
         if (show && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
+            setAmount(amountsByAsset[selectedAsset.symbol] || '');
         }
     }, [selectedAsset]);
+
+    // when selected asset or amount change, sync amount and amountsByAsset
+    useEffect(() => {
+        if (selectedAsset) {
+            setAmountsByAsset((previousValue) => ({
+                ...previousValue,
+                [selectedAsset.symbol]: amount,
+            }));
+        }
+    }, [amount, selectedAsset]);
 
     // refresh asset balance when selected account changes
     useEffect(() => {
@@ -226,7 +252,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <InputContainer className="w-full" error={amountIsInvalid}>
                                 <Input
-                                    type="text"
                                     className="w-full h-full font-normal text-base"
                                     value={amount}
                                     onUserInput={(val) => setAmount(val)}
@@ -299,7 +324,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </span>
                         ) : (
                             <>
-                                <b>Note</b>: withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
+                                <b>Note</b>: Withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
                                 <a
                                     href="https://bridge.arbitrum.io"
                                     target="_blank"

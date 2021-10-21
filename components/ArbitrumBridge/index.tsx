@@ -37,8 +37,8 @@ export const ArbitrumBridge: React.FC = (() => {
     const onApproveToken = (tokenAddress: string, spender: string) => approveToken(tokenAddress, spender);
 
     const onSwitchNetwork = useCallback(
-        (networkId: Network['id']) => {
-            switchNetworks(provider, networkId);
+        (networkId: Network['id'], callback?: () => void) => {
+            switchNetworks(provider, networkId).finally(() => callback?.());
         },
         [provider],
     );
