@@ -89,7 +89,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
                             <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
                         </div>
                     </Section>
-                    {showBreakdown && !amount.eq(0) ? (
+                    {/* {showBreakdown && !amount.eq(0) ? ( */}
                         <Section label="Power Leverage">
                             <div>
                                 <span className="opacity-60">{`Gains: `}</span>
@@ -105,7 +105,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
                                 {pool.leverage}
                             </div>
                         </Section>
-                    ) : null}
+                    {/* ) : null} */}
                     <BalancerLink token={token} isBuy={true} />
                 </Transition>
                 <div className={countdown}>
