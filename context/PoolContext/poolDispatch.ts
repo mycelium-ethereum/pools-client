@@ -150,7 +150,10 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 return state;
             }
         case 'addToPending':
-            const committer = state.pools[action.pool].committer;
+            const committer = state.pools[action.pool]?.committer;
+            if (!committer) {
+                return state;
+            }
             switch (action.commitType) {
                 case CommitEnum.short_burn:
                     committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
