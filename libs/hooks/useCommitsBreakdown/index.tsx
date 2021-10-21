@@ -16,7 +16,7 @@ export default (() => {
         if (Object.keys(pools).length && account) {
             let mints = 0,
                 burns = 0,
-                nextUpdate = 0;
+                nextUpdate_ = 0;
             const accountLower = account?.toLowerCase();
             Object.values(commits).map((pool) => {
                 Object.values(pool).map((commit) => {
@@ -30,15 +30,15 @@ export default (() => {
                     }
                     if (pools[commit.pool]) {
                         const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
-                        if (newMin < nextUpdate || nextUpdate === 0) {
-                            nextUpdate = newMin; // set new min
+                        if (newMin < nextUpdate_ || nextUpdate_ === 0) {
+                            nextUpdate_ = newMin; // set new min
                         }
                     }
                 });
             });
             setMints(mints);
             setBurns(burns);
-            setNextUpdate(nextUpdate);
+            setNextUpdate(nextUpdate_);
         }
     }, [commits, pools, account]);
 
