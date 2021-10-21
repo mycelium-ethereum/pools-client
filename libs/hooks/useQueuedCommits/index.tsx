@@ -1,12 +1,12 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
+import { CommitEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
 import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { useCommits } from '@context/UsersCommitContext';
 
-export default ((focus) => {
+export default (() => {
     const { account = '', provider } = useWeb3();
     const { commits = {} } = useCommits();
     const { pools } = usePools();
@@ -21,9 +21,7 @@ export default ((focus) => {
                 for (const commit of Object.values(pool)) {
                     if (
                         !pools[commit.pool] || // pools doesnt exist
-                        commit.from?.toLowerCase() !== accountLower || // not committed by connected account
-                        (focus === CommitsFocusEnum.mints &&
-                            (commit.type === CommitEnum.short_burn || commit.type === CommitEnum.long_burn))
+                        commit.from?.toLowerCase() !== accountLower // not committed by connected account
                     ) {
                         continue;
                     }
@@ -62,7 +60,7 @@ export default ((focus) => {
             }
             setAllQueuedCommits(parsedCommits);
         }
-    }, [pools, commits, provider, account, focus]);
+    }, [pools, commits, provider, account]);
 
     return allQueuedCommits;
-}) as (focus: CommitsFocusEnum) => QueuedCommit[];
+}) as () => QueuedCommit[];
