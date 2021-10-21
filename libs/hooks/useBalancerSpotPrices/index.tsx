@@ -8,15 +8,17 @@ export default ((network) => {
 
     useEffect(() => {
         let mounted = true;
-        getBalancerPrices(networkConfig[network]?.balancerInfo).then((tokenPrices) => {
-            if (mounted) {
-                setTokenPrices(tokenPrices);
-            }
-        });
+        if (network) {
+            getBalancerPrices(networkConfig[network]?.balancerInfo).then((tokenPrices) => {
+                if (mounted) {
+                    setTokenPrices(tokenPrices);
+                }
+            });
+        }
         return () => {
             mounted = false;
         };
     }, []);
 
     return tokenPrices;
-}) as (network: AvailableNetwork) => Record<string, BigNumber>;
+}) as (network: AvailableNetwork | undefined) => Record<string, BigNumber>;

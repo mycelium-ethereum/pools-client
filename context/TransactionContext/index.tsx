@@ -3,6 +3,7 @@ import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractReceipt, ContractTransaction } from 'ethers';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { ARBITRUM } from '@libs/constants';
 
 type Content = {
     title?: React.ReactNode;
@@ -77,7 +78,9 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     statusMessages?.success?.body ?? (
                         <a
                             key={contractReceipt.transactionHash}
-                            href={`${networkConfig[network ?? '0']?.previewUrl}/${contractReceipt.transactionHash}`}
+                            href={`${networkConfig[network ?? ARBITRUM]?.previewUrl}/${
+                                contractReceipt.transactionHash
+                            }`}
                             className="text-tracer-400 underline"
                             target="_blank"
                             rel="noreferrer"

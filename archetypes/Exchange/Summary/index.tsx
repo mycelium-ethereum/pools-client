@@ -183,7 +183,7 @@ const BalancerLink: React.FC<{
     };
     isBuy: boolean;
 }> = ({ token, isBuy }) => {
-    const { network = '0' } = useWeb3();
+    const { network } = useWeb3();
     const balancerPoolPrices = useBalancerSpotPrices(network);
     return network === ARBITRUM ? (
         <div className="text-sm mt-2">
