@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, KeyboardEventHandler } from 'react';
 import { classNames } from '@libs/utils/functions';
-import { KeyboardEventHandler } from 'hoist-non-react-statics/node_modules/@types/react';
 
 // const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 
