@@ -26,13 +26,14 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
     switch (action.type) {
         case 'addCommit':
             const { id, pool } = action.commitInfo;
+            const poolLower = pool.toLowerCase();
             console.debug('Adding commit', action.commitInfo);
             return {
                 ...state,
                 commits: {
                     ...state.commits,
-                    [`${pool.toLowerCase()}`]: {
-                        ...state.commits[`${pool.toLowerCase()}`],
+                    [`${poolLower}`]: {
+                        ...state.commits[`${poolLower}`],
                         [id]: action.commitInfo,
                     },
                 },
