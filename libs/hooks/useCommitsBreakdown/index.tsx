@@ -18,21 +18,23 @@ export default (() => {
                 burns = 0,
                 nextUpdate = 0;
             const accountLower = account?.toLowerCase();
-            Object.values(commits).map((commit) => {
-                if (commit.from?.toLowerCase() !== accountLower) {
-                    return;
-                }
-                if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
-                    mints += 1;
-                } else {
-                    burns += 1;
-                }
-                if (pools[commit.pool]) {
-                    const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
-                    if (newMin < nextUpdate || nextUpdate === 0) {
-                        nextUpdate = newMin; // set new min
+            Object.values(commits).map((pool) => {
+                Object.values(pool).map((commit) => {
+                    if (commit.from?.toLowerCase() !== accountLower) {
+                        return;
                     }
-                }
+                    if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
+                        mints += 1;
+                    } else {
+                        burns += 1;
+                    }
+                    if (pools[commit.pool]) {
+                        const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
+                        if (newMin < nextUpdate || nextUpdate === 0) {
+                            nextUpdate = newMin; // set new min
+                        }
+                    }
+                });
             });
             setMints(mints);
             setBurns(burns);
