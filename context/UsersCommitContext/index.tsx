@@ -7,7 +7,7 @@ interface CommitActionsProps {
     commitDispatch: React.Dispatch<CommitAction>;
 }
 interface CommitContextProps {
-    commits: Record<string, PendingCommitInfo>;
+    commits: Record<string, Record<string, PendingCommitInfo>>;
     showCommits: boolean;
     focus: CommitsFocusEnum;
 }

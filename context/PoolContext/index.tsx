@@ -301,6 +301,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     updateTokenBalances(poolsState.pools[pool]);
                     commitDispatch({
                         type: 'resetCommits',
+                        pool: pool,
                     });
                 });
                 subscriptions.current = {
