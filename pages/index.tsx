@@ -8,6 +8,7 @@ import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from 'vyps-kit';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import WarningBanner from '@components/WarningBanner';
 
 export default (() => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
@@ -26,6 +27,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
+                <WarningBanner />
                 <SwapStore>
                     <Exchange />
                 </SwapStore>

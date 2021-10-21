@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS } from '@context/SwapContext';
+import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS, useBigNumber } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -73,6 +73,8 @@ export default (() => {
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
+    const amountBN = useBigNumber(amount);
+
     const pool = usePool(selectedPool);
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
@@ -90,7 +92,7 @@ export default (() => {
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
-            amount,
+            amountBN,
             pool.quoteToken.balance,
             pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals),
         );
@@ -100,6 +102,10 @@ export default (() => {
             value: invalidAmount,
         });
     }, [amount, pool.quoteToken.balance]);
+
+    // this displays the breakdown on a valid amount
+    // useMemo removes the flash display when !amount && calculating if the value is valid
+    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amountBN.eq(0), [invalidAmount]);
 
     return (
         <>
@@ -158,17 +164,19 @@ export default (() => {
                 <p className="mb-2 ">Amount</p>
                 <InputContainer error={invalidAmount.isInvalid}>
                     <NumericInput
-                        className="w-full h-full text-base font-normal "
-                        value={amount.eq(0) ? '' : amount.toFixed()}
+                        className="w-3/5 h-full text-base font-normal"
+                        value={amount}
                         onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: new BigNumber(val || 0) });
+                            swapDispatch({ type: 'setAmount', value: val || '' });
                         }}
                     />
                     <InnerInputText>
                         <Currency ticker={'USDC'} />
                         <div
                             className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) => swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance })}
+                            onClick={(_e) =>
+                                swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toString() })
+                            }
                         >
                             Max
                         </div>
@@ -188,8 +196,10 @@ export default (() => {
                             <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
                                 {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
                                 <span className="opacity-80">
-                                    {!amount.eq(0)
-                                        ? `>>> ${toApproxCurrency(pool.quoteToken.balance.minus(amount))}`
+                                    {!amountBN.eq(0)
+                                        ? `>>> ${toApproxCurrency(
+                                              BigNumber.max(pool.quoteToken.balance.minus(amount), 0),
+                                          )}`
                                         : ''}
                                 </span>
                             </span>
@@ -197,8 +207,13 @@ export default (() => {
                     )}
                 </div>
             </div>
-
-            <BuySummary pool={pool} amount={amount} isLong={side === SideEnum.long} receiveIn={receiveIn} />
+            <BuySummary
+                showBreakdown={showBreakdown}
+                pool={pool}
+                amount={amountBN}
+                isLong={side === SideEnum.long}
+                receiveIn={receiveIn}
+            />
 
             <FeeNote poolName={pool.name} isMint={true} receiveIn={receiveIn} />
 

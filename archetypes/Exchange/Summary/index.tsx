@@ -16,10 +16,11 @@ import Link from '/public/img/general/link.svg';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
 import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 type SummaryProps = {
     pool: Pool;
+    showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
     receiveIn: number;
@@ -29,7 +30,7 @@ const countdown = 'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-b
 const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
 // const BuySummary
-export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -74,7 +75,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
                     {token.name}
                 </h2>
                 <Transition
-                    show={!amount.eq(0)}
+                    show={showBreakdown}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -115,7 +116,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, amount, isLong, recei
 };
 
 // const SellSummary
-export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, receiveIn }) => {
+export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -145,7 +146,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
                     USDC
                 </h2>
                 <Transition
-                    show={!amount.eq(0)}
+                    show={showBreakdown}
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -167,7 +168,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, amount, isLong, rece
     );
 };
 
-const constructBalancerLink = (token: string, network: number, isBuy: boolean) => {
+const constructBalancerLink = (token: string, network: AvailableNetwork, isBuy: boolean) => {
     const { usdcAddress, balancerInfo } = networkConfig[network];
     // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
     return isBuy
@@ -182,9 +183,9 @@ const BalancerLink: React.FC<{
     };
     isBuy: boolean;
 }> = ({ token, isBuy }) => {
-    const { network = 0 } = useWeb3();
+    const { network } = useWeb3();
     const balancerPoolPrices = useBalancerSpotPrices(network);
-    return network === parseInt(ARBITRUM) ? (
+    return network === ARBITRUM ? (
         <div className="text-sm mt-2">
             <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
             <div>

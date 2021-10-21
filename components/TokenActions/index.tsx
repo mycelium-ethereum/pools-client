@@ -5,6 +5,7 @@ import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
 import { ARBITRUM } from '@libs/constants';
+import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget }) => (
@@ -43,7 +44,13 @@ export default (({ provider, token, arbiscanTarget }) => (
                                 </div>
                                 <div
                                     className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
-                                    onClick={() => openArbiscan(arbiscanTarget.type, arbiscanTarget.target)}
+                                    onClick={() =>
+                                        openArbiscan(
+                                            arbiscanTarget.type,
+                                            arbiscanTarget.target,
+                                            provider?.network?.chainId?.toString() as AvailableNetwork,
+                                        )
+                                    }
                                 >
                                     <Logo className="relative inline mr-2" ticker={ARBITRUM} />
                                     View on Arbiscan
