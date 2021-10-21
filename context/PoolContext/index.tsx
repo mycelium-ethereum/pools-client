@@ -149,7 +149,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && account && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 // get and set token balances and approvals for each pool
-                updateTokenBalances(pool);
+                updateTokenBalances(pool, provider);
                 updateTokenApprovals(pool);
             });
         } else if (!account && poolsState.poolsInitialised) {
@@ -167,13 +167,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     }, [provider, account, poolsState.poolsInitialised]);
 
     // get and set token balances
-    const updateTokenBalances: (pool: Pool) => void = (pool) => {
-        if (!provider || !account) {
+    const updateTokenBalances: (pool: Pool, provider: ethers.providers.JsonRpcProvider | undefined) => void = (
+        pool,
+        provider_,
+    ) => {
+        if (!provider_ || !account) {
             return false;
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
         const decimals = pool.quoteToken.decimals;
-        fetchTokenBalances(tokens, provider, account, pool.address)
+        fetchTokenBalances(tokens, provider_, account, pool.address)
             .then((balances) => {
                 const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
                 const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
@@ -225,10 +228,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const wssProvider =
                 networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
+            const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
+            
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,
-                wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider,
+                subscriptionProvider,
             ) as PoolCommitter;
 
             // @ts-ignore
@@ -275,7 +280,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const keeperInstance = new ethers.Contract(
                 keeper,
                 PoolKeeper__factory.abi,
-                wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider,
+                subscriptionProvider,
             ) as PoolKeeper;
 
             if (!subscriptions.current[keeper]) {
@@ -289,7 +294,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     const leveragedPool = new ethers.Contract(
                         pool,
                         LeveragedPool__factory.abi,
-                        provider,
+                        subscriptionProvider,
                     ) as LeveragedPool;
                     leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
                         console.debug(`New last updated: ${lastUpdate}`);
@@ -299,7 +304,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             value: new BigNumber(lastUpdate.toString()),
                         });
                     });
-                    updateTokenBalances(poolsState.pools[pool]);
+                    updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
                     commitDispatch({
                         type: 'resetCommits',
                         pool: pool,
@@ -359,7 +364,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         onSuccess: (receipt) => {
                             console.debug('Successfully submitted commit txn: ', receipt);
                             // get and set token balances
-                            updateTokenBalances(poolsState.pools[pool]);
+                            updateTokenBalances(poolsState.pools[pool], provider);
                             options?.onSuccess ? options.onSuccess(receipt) : null;
                         },
                         statusMessages: {
