@@ -5,7 +5,6 @@ import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
 import { ARBITRUM } from '@libs/constants';
-import _ from 'lodash';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 // const Actions
