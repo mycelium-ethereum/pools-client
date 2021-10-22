@@ -9,7 +9,7 @@ This client is still in development. It serves as an interface for Tracer Perpet
 
 ## Development and Contributions
 
-Development should branch from development until a staged release into master. When creating a branch use either
+Development should branch from `develop` until a staged release into `master`. When creating a branch use either
 - `update/<BRANCH-NAME-HYPHEN-SEPERATED>`
 - `fix/<BRANCH-NAME-HYPHEN-SEPERATED>`
 - `feature/<BRANCH-NAME-HYPHEN-SEPERATED>`
