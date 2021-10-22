@@ -40,7 +40,7 @@ export const NavBarContent: React.FC<{
     // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
 
-    const linkStyles = 'flex transition-all m-2 p-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
+    const linkStyles = 'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
