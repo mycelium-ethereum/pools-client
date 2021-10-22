@@ -34,8 +34,8 @@ export default (({ account, className }) => {
         setOpen(open);
     };
 
-    const linkStyles = 'w-max text-white my-2 px-5 py-2 cursor-pointer';
-    const selectedStyles = 'bg-black bg-opacity-50 rounded-lg';
+    const linkStyles = 'w-max text-white my-2 px-5 py-2 rounded-lg cursor-pointer';
+    const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
         <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
