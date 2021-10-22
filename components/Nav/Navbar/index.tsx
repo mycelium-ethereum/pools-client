@@ -40,28 +40,33 @@ export const NavBarContent: React.FC<{
     // controls displaying queued commits
     const [showQueued, setShowQueued] = useState(false);
 
-    const linkStyles = 'flex transition-all mx-2 py-2 px-2 text-base hover:opacity-80';
+    const linkStyles = 'flex transition-all m-2 p-2 text-base hover:opacity-80 cursor-pointer';
 
     return (
         <nav className={`container text-base h-[60px]`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
-                    <li className={classNames(linkStyles, route === '' ? 'underline' : '')}>
-                        <Link href="/">
+                    <Link href="/">
+                        <li className={classNames(linkStyles, route === '' ? 'bg-tracer-900 rounded-lg' : '')}>
                             <a className="m-auto">Trade</a>
-                        </Link>
-                    </li>
-                    <li className={classNames(linkStyles, route === 'browse' ? 'underline' : '')}>
-                        <Link href="/browse">
+                        </li>
+                    </Link>
+                    <Link href="/browse">
+                        <li className={classNames(linkStyles, route === 'browse' ? 'bg-tracer-900 rounded-lg' : '')}>
                             <a className="m-auto">Browse</a>
-                        </Link>
-                    </li>
-                    <li className={classNames(linkStyles, route.startsWith('stake') ? ' underline' : '')}>
-                        <Link href="/stakepooltoken">
+                        </li>
+                    </Link>
+                    <Link href="/stakepooltoken">
+                        <li
+                            className={classNames(
+                                linkStyles,
+                                route.startsWith('stake') ? 'bg-tracer-900 rounded-lg' : '',
+                            )}
+                        >
                             <a className="m-auto">Stake</a>
-                        </Link>
-                    </li>
+                        </li>
+                    </Link>
                 </ul>
 
                 {setShowOnboardModal ? (
