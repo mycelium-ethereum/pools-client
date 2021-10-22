@@ -8,13 +8,11 @@ export default ((network) => {
 
     useEffect(() => {
         let mounted = true;
-        if (network) {
-            getBalancerPrices(networkConfig[network]?.balancerInfo).then((tokenPrices) => {
-                if (mounted) {
-                    setTokenPrices(tokenPrices);
-                }
-            });
-        }
+        getBalancerPrices(networkConfig[network ?? '0']?.balancerInfo).then((tokenPrices) => {
+            if (mounted) {
+                setTokenPrices(tokenPrices);
+            }
+        });
         return () => {
             mounted = false;
         };

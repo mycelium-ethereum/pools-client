@@ -8,6 +8,7 @@ import { ARBITRUM } from '@libs/constants';
 type Content = {
     title?: React.ReactNode;
     body?: React.ReactNode;
+    autoDismiss?: boolean;
 };
 
 export type Options = {
@@ -90,7 +91,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     ),
                 ],
                 appearance: 'success',
-                autoDismiss: true,
+                autoDismiss: statusMessages?.success?.autoDismiss ?? true,
             });
 
             setPendingCount((previousValue) => previousValue - 1);

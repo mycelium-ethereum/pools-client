@@ -1,5 +1,6 @@
-import { SideEnum, CommitEnum, MAX_SOL_UINT } from '@libs/constants';
-import { CreatedCommitType, PendingAmounts, Pool, PoolType } from '@libs/types/General';
+import { SideEnum, CommitEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
+import { PendingAmounts, Pool, PoolType } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -163,14 +164,18 @@ export const initPool: (
 };
 
 export const fetchCommits: (
-    committer: string,
+    poolInfo: {
+        address: string;
+        committer: string;
+        lastUpdate: number;
+        quoteTokenDecimals: number;
+    },
     provider: ethers.providers.JsonRpcProvider,
-    quoteTokenDecimals: number,
 ) => Promise<{
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
-    allUnexecutedCommits: CreatedCommitType[];
-}> = async (committer, provider, quoteTokenDecimals) => {
+    allUnexecutedCommits: APICommitReturn[];
+}> = async ({ committer, address: pool, lastUpdate, quoteTokenDecimals }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
     const defaultState = {
         pendingLong: {
@@ -189,37 +194,13 @@ export const fetchCommits: (
     }
 
     const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
-    const earliestUnexecuted = await contract.earliestCommitUnexecuted();
-    if (earliestUnexecuted.eq(MAX_SOL_UINT)) {
-        console.debug('No unexecuted commits');
-        return defaultState;
-    }
 
-    let allUnexecutedCommits: CreatedCommitType[] = [];
-    // current blocknumber alchemy has a 2000 block limit
-    const minBlockCheck = (await provider.getBlockNumber()) - 1800;
-    if (minBlockCheck > 0) {
-        console.debug(`Not checking past ${minBlockCheck}`);
-        // once we have this we can get the block number and query all commits from that block number
-        const earliestUnexecutedCommit = (
-            await contract?.queryFilter(contract.filters.CreateCommit(earliestUnexecuted), minBlockCheck)
-        )?.[0];
-
-        if (earliestUnexecutedCommit) {
-            console.debug(
-                `Found earliestUnececutedCommit at id: ${earliestUnexecutedCommit?.toString()}`,
-                earliestUnexecutedCommit,
-            );
-
-            allUnexecutedCommits = await (contract?.queryFilter(
-                contract.filters.CreateCommit(),
-                Math.max(earliestUnexecutedCommit?.blockNumber ?? 0, minBlockCheck),
-            ) as Promise<CreatedCommitType[]>);
-        } else {
-            console.error('Failed to fetch all commits: earliestUnexecutedCommit undefined');
-        }
-    } else {
-        console.error('Failed to fetch all commits: Min block check less than 0');
+    let allUnexecutedCommits: APICommitReturn[] = [];
+    const network = provider.network.chainId;
+    if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
+        allUnexecutedCommits = await fetchPoolCommits(pool, network.toString() as SourceType, {
+            from: lastUpdate,
+        });
     }
 
     const pendingAmounts = await Promise.all([

@@ -27,14 +27,17 @@ module.exports = {
         ignoreBuildErrors: true,
     },
 
-    webpack(config, { isServer }, options) {
-        // // Fixes npm packages that depend on `fs` module
-        // if (!isServer) {
-        //     config.node = {
-        //         fs: 'empty',
-        //         electron: 'empty',
-        //     };
-        // }
+    webpack(config) {
+        // Fixes npm packages that depend on `fs` module
+        config.resolve.fallback = {
+            fs: false,
+            crypto: false,
+            stream: false,
+            os: false,
+            http: false,
+            https: false,
+            path: false,
+        };
 
         config.module.rules.push(
             {

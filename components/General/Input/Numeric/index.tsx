@@ -1,9 +1,17 @@
+import React, { useCallback, KeyboardEventHandler } from 'react';
 import { classNames } from '@libs/utils/functions';
-import React from 'react';
 
 // const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 
 const defaultClassName = 'p-0 text-2xl bg-transparent';
+
+const defaultPattern = '^[0-9]*[.,]?[0-9]*$';
+
+const defaultCharacterBlacklist: Record<string, boolean> = {
+    '-': true,
+    '+': true,
+    e: true,
+};
 
 export const Input = React.memo(
     ({
@@ -12,6 +20,8 @@ export const Input = React.memo(
         placeholder,
         maxDecimals = 18,
         className = defaultClassName,
+        characterBlacklist = defaultCharacterBlacklist,
+        pattern = defaultPattern,
         ...rest
     }: {
         value: string | number;
@@ -19,7 +29,18 @@ export const Input = React.memo(
         maxDecimals?: number;
         fontSize?: string;
         align?: 'right' | 'left';
+        characterBlacklist?: Record<string, boolean>;
     } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
+        const onKeyPress = useCallback(
+            (e: any) => {
+                const enteredCharacter = String.fromCharCode(e.which);
+                if (characterBlacklist[enteredCharacter]) {
+                    e.preventDefault();
+                }
+            },
+            [characterBlacklist],
+        ) as unknown as KeyboardEventHandler<HTMLInputElement>;
+
         return (
             <input
                 {...rest}
@@ -40,8 +61,9 @@ export const Input = React.memo(
                 autoCorrect="off"
                 // text-specific options
                 type="number"
-                pattern="^[0-9]*[.,]?[0-9]*$"
+                pattern={pattern}
                 placeholder={placeholder || '0.0'}
+                onKeyPress={onKeyPress}
                 min={0}
                 minLength={1}
                 maxLength={80}
