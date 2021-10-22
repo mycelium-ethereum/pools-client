@@ -41,6 +41,7 @@ export const NavBarContent: React.FC<{
     const [showQueued, setShowQueued] = useState(false);
 
     const linkStyles = 'flex transition-all m-2 p-2 text-base hover:opacity-80 cursor-pointer';
+    const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg';
 
     return (
         <nav className={`container text-base h-[60px]`}>
@@ -48,34 +49,17 @@ export const NavBarContent: React.FC<{
                 <HeaderSiteSwitcher />
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
                     <Link href="/">
-                        <li
-                            className={classNames(
-                                linkStyles,
-                                route === '' ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg' : '',
-                            )}
-                        >
+                        <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a className="m-auto">Trade</a>
                         </li>
                     </Link>
                     <Link href="/browse">
-                        <li
-                            className={classNames(
-                                linkStyles,
-                                route === 'browse' ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg' : '',
-                            )}
-                        >
+                        <li className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}>
                             <a className="m-auto">Browse</a>
                         </li>
                     </Link>
                     <Link href="/stakepooltoken">
-                        <li
-                            className={classNames(
-                                linkStyles,
-                                route.startsWith('stake')
-                                    ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg'
-                                    : '',
-                            )}
-                        >
+                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
                             <a className="m-auto">Stake</a>
                         </li>
                     </Link>

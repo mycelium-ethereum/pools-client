@@ -35,6 +35,7 @@ export default (({ account, className }) => {
     };
 
     const linkStyles = 'w-max text-white my-2 px-5 py-2 cursor-pointer';
+    const selectedStyles = 'bg-black bg-opacity-50 rounded-lg';
 
     return (
         <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
@@ -71,20 +72,14 @@ export default (({ account, className }) => {
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="w-full my-4 relative text-center" />
                                         <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route === '' ? 'bg-black bg-opacity-50 rounded-lg' : '',
-                                            )}
+                                            className={classNames(linkStyles, route === '' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
                                             Trade
                                         </div>
                                         <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route === 'browse' ? 'bg-black bg-opacity-50 rounded-lg' : '',
-                                            )}
+                                            className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/browse')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
@@ -93,7 +88,7 @@ export default (({ account, className }) => {
                                         <div
                                             className={classNames(
                                                 linkStyles,
-                                                route.startsWith('stake') ? 'bg-black bg-opacity-50 rounded-lg' : '',
+                                                route.startsWith('stake') ? selectedStyles : '',
                                             )}
                                             onClick={() => handleRoute('/stakepooltoken')}
                                         >
