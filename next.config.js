@@ -5,26 +5,11 @@ module.exports = {
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
-    // // optional
-    // lessVarsFilePath: './styles/antd-variables.less',
-    // // optional https://github.com/webpack-contrib/css-loader#object
-    // cssLoaderOptions: {},
 
     trailingSlash: true,
 
     watchOptions: {
         ignored: ['node_modules', 'public/static'],
-    },
-
-    // resolve: {
-    //     symlinks: true,
-    // },
-    typescript: {
-        // !! WARN !!
-        // Dangerously allow production builds to successfully complete even if
-        // your project has type errors.
-        // !! WARN !!
-        ignoreBuildErrors: true,
     },
 
     webpack(config) {
