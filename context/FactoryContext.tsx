@@ -86,10 +86,14 @@ export const FactoryStore: React.FC<Children> = ({ children }: Children) => {
                 console.error(
                     `Could not find provider network config for chainID ${provider.network?.chainId?.toString()}`,
                 );
+                // reset pools and contract
+                setContract(undefined);
+                setPools([]);
             }
         }
     }, [provider, provider?.network]);
 
+    // fetch pools
     useEffect(() => {
         const fetch = async () => {
             if (contract) {
