@@ -48,12 +48,22 @@ export const NavBarContent: React.FC<{
                 <HeaderSiteSwitcher />
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
                     <Link href="/">
-                        <li className={classNames(linkStyles, route === '' ? 'bg-tracer-900 rounded-lg' : '')}>
+                        <li
+                            className={classNames(
+                                linkStyles,
+                                route === '' ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg' : '',
+                            )}
+                        >
                             <a className="m-auto">Trade</a>
                         </li>
                     </Link>
                     <Link href="/browse">
-                        <li className={classNames(linkStyles, route === 'browse' ? 'bg-tracer-900 rounded-lg' : '')}>
+                        <li
+                            className={classNames(
+                                linkStyles,
+                                route === 'browse' ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg' : '',
+                            )}
+                        >
                             <a className="m-auto">Browse</a>
                         </li>
                     </Link>
@@ -61,7 +71,9 @@ export const NavBarContent: React.FC<{
                         <li
                             className={classNames(
                                 linkStyles,
-                                route.startsWith('stake') ? 'bg-tracer-900 rounded-lg' : '',
+                                route.startsWith('stake')
+                                    ? 'bg-tracer-900 dark:bg-black dark:bg-opacity-50 rounded-lg'
+                                    : '',
                             )}
                         >
                             <a className="m-auto">Stake</a>
