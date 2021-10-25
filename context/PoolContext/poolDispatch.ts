@@ -151,37 +151,38 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             }
         case 'addToPending':
             const committer = state.pools[action.pool]?.committer;
-            if (!committer) {
-                return state;
-            }
-            switch (action.commitType) {
-                case CommitEnum.short_burn:
-                    committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
-                    break;
-                case CommitEnum.short_mint:
-                    committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
-                    break;
-                case CommitEnum.long_burn:
-                    committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
-                    break;
-                case CommitEnum.long_mint:
-                    committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
-                    break;
-                default:
-                    break;
-            }
-            return {
-                ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        committer: {
-                            ...committer,
+            if (committer) {
+                switch (action.commitType) {
+                    case CommitEnum.short_burn:
+                        committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
+                        break;
+                    case CommitEnum.short_mint:
+                        committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
+                        break;
+                    case CommitEnum.long_burn:
+                        committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
+                        break;
+                    case CommitEnum.long_mint:
+                        committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
+                        break;
+                    default:
+                        break;
+                }
+                return {
+                    ...state,
+                    pools: {
+                        ...state.pools,
+                        [action.pool]: {
+                            ...state.pools[action.pool],
+                            committer: {
+                                ...committer,
+                            },
                         },
                     },
-                },
-            };
+                };
+            } else {
+                return state;
+            }
         case 'setPoolsInitialised':
             return {
                 ...state,

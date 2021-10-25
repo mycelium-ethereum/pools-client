@@ -5,10 +5,6 @@ module.exports = {
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
-    // // optional
-    // lessVarsFilePath: './styles/antd-variables.less',
-    // // optional https://github.com/webpack-contrib/css-loader#object
-    // cssLoaderOptions: {},
 
     trailingSlash: true,
 
@@ -16,25 +12,17 @@ module.exports = {
         ignored: ['node_modules', 'public/static'],
     },
 
-    // resolve: {
-    //     symlinks: true,
-    // },
-    typescript: {
-        // !! WARN !!
-        // Dangerously allow production builds to successfully complete even if
-        // your project has type errors.
-        // !! WARN !!
-        ignoreBuildErrors: true,
-    },
-
-    webpack(config, { isServer }, options) {
-        // // Fixes npm packages that depend on `fs` module
-        // if (!isServer) {
-        //     config.node = {
-        //         fs: 'empty',
-        //         electron: 'empty',
-        //     };
-        // }
+    webpack(config) {
+        // Fixes npm packages that depend on `fs` module
+        config.resolve.fallback = {
+            fs: false,
+            crypto: false,
+            stream: false,
+            os: false,
+            http: false,
+            https: false,
+            path: false,
+        };
 
         config.module.rules.push(
             {

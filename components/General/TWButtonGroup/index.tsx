@@ -29,6 +29,7 @@ const SIZE = {
 
 const DISABLED = 'cursor-not-allowed opacity-50';
 const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all no-focus-outline';
+const FULL_WIDTH_BUTTONS = 'w-full justify-center';
 
 type Option = {
     key: number;
@@ -42,10 +43,18 @@ type Option = {
 type Color = 'tracer' | 'default';
 type ButtonSize = 'lg' | 'xl' | 'default';
 
-export default (({ options, value, color = 'default', size = 'default', borderColor = 'default', onClick }) => {
+export default (({
+    options,
+    value,
+    color = 'default',
+    size = 'default',
+    borderColor = 'default',
+    onClick,
+    fullWidthButtons = false,
+}) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
     return (
-        <span className="relative z-0 inline-flex shadow-sm">
+        <span className="relative z-0 inline-flex shadow-sm w-full">
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
@@ -60,6 +69,7 @@ export default (({ options, value, color = 'default', size = 'default', borderCo
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
                                 index === options.length - 1 ? 'rounded-r-md' : '',
+                                fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
                             )}
                         >
                             {option.text}
@@ -75,6 +85,7 @@ export default (({ options, value, color = 'default', size = 'default', borderCo
                             buttonClass,
                             BORDER_COLORS[borderColor],
                             BORDERS,
+                            fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
                         )}
                     >
                         {option.text}
@@ -90,4 +101,5 @@ export default (({ options, value, color = 'default', size = 'default', borderCo
     borderColor?: Color;
     options: Option[];
     value: number; // key
+    fullWidthButtons?: boolean;
 }>;
