@@ -12,8 +12,7 @@ import ThemeSwitcher from '../ThemeSwitcher';
 export default (({ account, className }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
-    const routes = useRouter().asPath.split('/');
-    const route = routes[1];
+    const route = router.asPath.split('/')[1];
 
     const handleRoute = (route: string) => {
         const root = document.getElementById('__next');
