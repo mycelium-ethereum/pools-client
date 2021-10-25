@@ -24,7 +24,7 @@
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
         "tailwindcss-multi-theme": "^1.0.4",
-        "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"
+        "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"
     },
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev -p 3002",
