@@ -229,7 +229,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const wssProvider =
                 networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
             const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
-            
+
             const committer = new ethers.Contract(
                 committerInfo.address,
                 PoolCommitter__factory.abi,

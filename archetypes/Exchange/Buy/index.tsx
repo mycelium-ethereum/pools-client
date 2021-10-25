@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
@@ -103,10 +103,6 @@ export default (() => {
         });
     }, [amount, pool.quoteToken.balance]);
 
-    // this displays the breakdown on a valid amount
-    // useMemo removes the flash display when !amount && calculating if the value is valid
-    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amountBN.eq(0), [invalidAmount]);
-
     return (
         <>
             <div className={`${inputRow} flex justify-between mb-4`}>
@@ -208,7 +204,7 @@ export default (() => {
                 </div>
             </div>
             <BuySummary
-                showBreakdown={showBreakdown}
+                showBreakdown={!invalidAmount.isInvalid}
                 pool={pool}
                 amount={amountBN}
                 isLong={side === SideEnum.long}
