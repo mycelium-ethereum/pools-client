@@ -6,7 +6,7 @@ import { SwapStore } from '@context/SwapContext';
 import Exchange from '@archetypes/Exchange';
 import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
-import { SecurityWidget } from 'vyps-kit';
+import { SecurityWidget } from '@mycelium-ethereum/vyps-kit';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
