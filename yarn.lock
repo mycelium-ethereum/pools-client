@@ -2310,6 +2310,31 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
+"@mycelium-ethereum/vyps-kit@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@mycelium-ethereum/vyps-kit/-/vyps-kit-0.1.0.tgz#064f98e093dca16f60343d3bd8063e0f3a0cef28"
+  integrity sha512-83mrZJvZelJoZRJKnHL8kf75Ho+IKfE+dAZLyOH0iOSwPhF4zdfkS+PaA1acbO8CXuvO0HIKt+dftWB5X48wNw==
+  dependencies:
+    "@compiled/react" "^0.6.13"
+    "@craco/craco" "^6.2.0"
+    "@tailwindcss/forms" "^0.3.3"
+    "@tailwindcss/typography" "^0.4.1"
+    "@testing-library/jest-dom" "^5.11.4"
+    "@testing-library/react" "^11.1.0"
+    "@testing-library/user-event" "^12.1.10"
+    axios "^0.21.4"
+    framer-motion "^4.1.17"
+    prism-react-renderer "^1.2.1"
+    prismjs "^1.24.1"
+    react-color "^2.19.3"
+    react-dom "^17.0.2"
+    react-icons "^4.2.0"
+    react-outside-click-handler "^1.3.0"
+    react-scripts "4.0.3"
+    three "^0.131.3"
+    usehooks-ts "^1.0.1"
+    web-vitals "^1.0.1"
+
 "@napi-rs/triples@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@napi-rs/triples/-/triples-1.0.3.tgz#76d6d0c3f4d16013c61e45dfca5ff1e6c31ae53c"
@@ -18542,30 +18567,6 @@ vm-browserify@1.1.2, vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
   integrity sha512-2ham8XPWTONajOR0ohOKOHXkm3+gaBmGut3SRuu75xLd/RRaY6vqgh8NBYYk7+RW3u5AtzPQZG8F10LHkl0lAQ==
-
-"vyps-kit@git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live":
-  version "0.1.0"
-  resolved "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#3fb603a1197d84c2f532962d20b2f4e9a0d8b167"
-  dependencies:
-    "@compiled/react" "^0.6.13"
-    "@craco/craco" "^6.2.0"
-    "@tailwindcss/forms" "^0.3.3"
-    "@tailwindcss/typography" "^0.4.1"
-    "@testing-library/jest-dom" "^5.11.4"
-    "@testing-library/react" "^11.1.0"
-    "@testing-library/user-event" "^12.1.10"
-    axios "^0.21.4"
-    framer-motion "^4.1.17"
-    prism-react-renderer "^1.2.1"
-    prismjs "^1.24.1"
-    react-color "^2.19.3"
-    react-dom "^17.0.2"
-    react-icons "^4.2.0"
-    react-outside-click-handler "^1.3.0"
-    react-scripts "4.0.3"
-    three "^0.131.3"
-    usehooks-ts "^1.0.1"
-    web-vitals "^1.0.1"
 
 w3c-hr-time@^1.0.2:
   version "1.0.2"
