@@ -3,6 +3,7 @@ import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS, useBigNumber } from '@context/SwapContext';
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -70,6 +71,7 @@ const SIDE_OPTIONS = [
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
+    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -86,9 +88,13 @@ export default (() => {
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
-            localStorage.setItem('showBridgeFunds', 'true');
         }
     }, [account]);
+
+    const onCloseArbitrumModal = () => {
+        setShowModal(false);
+        localStorage.setItem('showBridgeFunds', 'true');
+    };
 
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
@@ -215,17 +221,18 @@ export default (() => {
 
             <ExchangeButton actionType={CommitActionEnum.mint} />
 
-            <TWModal open={showModal} onClose={() => setShowModal(false)}>
+            <TWModal open={showModal} onClose={onCloseArbitrumModal}>
                 <div className="flex justify-between">
                     <div className="text-xl">Bridge Funds to Arbitrum</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="w-3 h-3 cursor-pointer" onClick={onCloseArbitrumModal}>
                         <Close />
                     </div>
                 </div>
                 <br />
                 <div>
-                    Tracer runs on Arbitrum mainnet. Be sure to bridge <b>USDC</b> for collateral, and <b>ETH</b> for
-                    gas. It’s worth noting that there is a 7 day wait to withdraw your funds back to Ethereum Mainnet.
+                    Deposit funds from Ethereum to Arbitrum to get started with Perpetual Pools. Ensure you deposit{' '}
+                    <b>USDC</b> for collateral and <b>ETH</b> for gas. Please note that the withdrawal process from
+                    Arbitrum to Ethereum takes approximately 7 days.
                     <br />
                     <br />
                     If you have any questions, please{' '}
@@ -235,18 +242,31 @@ export default (() => {
                         target="_blank"
                         rel="noreferrer"
                     >
-                        contact us
+                        contact us.
                     </a>
-                    .
                 </div>
                 <br />
                 <Button
                     size="lg"
                     variant="primary"
-                    onClick={() => window.open('https://bridge.arbitrum.io', '_blank', 'noopener')}
+                    onClick={() => {
+                        showBridgeModal();
+                        setShowModal(false);
+                    }}
                 >
-                    Launch Arbitrum Bridge
+                    {`Ok, let's bridge funds`}
                 </Button>
+                <p className="mt-2 text-center">
+                    You can also bridge funds using the{' '}
+                    <a
+                        className="text-tracer-400 underline"
+                        href="https://bridge.arbitrum.io"
+                        target="_blank"
+                        rel="noreferrer"
+                    >
+                        Official Arbitrum Bridge.
+                    </a>
+                </p>
             </TWModal>
         </>
     );

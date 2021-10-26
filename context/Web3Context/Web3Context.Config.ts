@@ -2,7 +2,7 @@ import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts
 import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
@@ -16,8 +16,9 @@ type Farm = {
     linkText?: string;
 };
 
-export type AvailableNetwork = typeof ARBITRUM | typeof ARBITRUM_RINKEBY | '0' | '1337';
+export type AvailableNetwork = typeof ARBITRUM | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof RINKEBY | '0' | '1337';
 export type Network = {
+    id: AvailableNetwork;
     name: string;
     previewUrl: string;
     contracts: {
@@ -48,7 +49,6 @@ export type Network = {
         wPool: string;
     };
 };
-
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
@@ -60,13 +60,14 @@ export type Network = {
  */
 export const networkConfig: Record<AvailableNetwork, Network> = {
     '0': {
+        id: '0',
         previewUrl: '',
         name: 'Unknown',
         contracts: {},
         poolFarms: [],
         bptFarms: [],
         publicRPC: '',
-        hex: '',
+        hex: '0x0',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
         usdcAddress: '',
         tcrAddress: '',
@@ -74,6 +75,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         knownUSDCPriceFeeds: {},
     },
     '421611': {
+        id: '421611',
         name: 'Arbitrum Rinkeby',
         previewUrl: 'https://testnet.arbiscan.io',
         contracts: {
@@ -105,6 +107,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         knownUSDCPriceFeeds: {},
     },
     '42161': {
+        id: '42161',
         name: 'Arbitrum',
         previewUrl: 'https://arbiscan.io/',
         contracts: {
@@ -217,6 +220,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         },
     },
     '1337': {
+        id: '1337',
         name: 'Local',
         previewUrl: '',
         contracts: {
@@ -234,5 +238,47 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         knownUSDCPriceFeeds: {},
         sushiRouterAddress: '',
         tcrAddress: '',
+    },
+    '1': {
+        // TODO: fill this out properly
+        id: '1',
+        name: 'Ethereum',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x1',
+        poolFarms: [],
+        bptFarms: [],
+        publicRPC: process.env.NEXT_PUBLIC_MAINNET_L1_RPC || '',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+        sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
+        tcrAddress: '0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050',
+        knownUSDCPriceFeeds: {},
+    },
+    '4': {
+        // TODO: fill this out properly
+        id: '4',
+        name: 'Rinkeby',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x4',
+        poolFarms: [],
+        bptFarms: [],
+        publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        sushiRouterAddress: '',
+        tcrAddress: '',
+        knownUSDCPriceFeeds: {},
     },
 };

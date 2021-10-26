@@ -3,7 +3,6 @@ import { TWModal } from '@components/General/TWModal';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { useReducer } from 'react';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
-import { Currency } from '@components/General/Currency';
 
 interface ArbitrumBridgeModalProps {
     isOpen: boolean;
@@ -11,6 +10,7 @@ interface ArbitrumBridgeModalProps {
     ETHBalance: number;
     onClose: () => void;
     onBridgeUSDC: (amount: number) => Promise<boolean>;
+    onApproveUSDC: () => Promise<boolean>;
     onBridgeETH: (amount: number) => Promise<boolean>;
 }
 
@@ -54,6 +54,21 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
             // Display error here message if necessary
         } finally {
             dispatch({ type: 'setBridging', status: false });
+        }
+    }
+
+    async function handleApproveUSDC() {
+        dispatch({ type: 'setApproving', status: true });
+        try {
+            const success = await props.onApproveUSDC();
+            if (!success) {
+                throw Error('Approve failed');
+            }
+            dispatch({ type: 'setStep', step: BridgeStepEnum.Gas });
+        } catch (err) {
+            // Display error here message if necessary
+        } finally {
+            dispatch({ type: 'setApproving', status: false });
         }
     }
 
@@ -139,7 +154,6 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                     }
                                 />
                                 <div className="absolute inset-y-0 right-4 flex items-center">
-                                    <Currency ticker={'USDC'} label={'USDC'} />
                                     <button
                                         className="cursor-pointer text-blue-600"
                                         onClick={() => dispatch({ type: 'setUSDC', amount: props.USDCBalance })}
@@ -149,10 +163,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                 </div>
                             </div>
                             <p className="text-base text-gray-500 my-3">
-                                Balance:{' '}
-                                {state.USDCAmount
-                                    ? toApproxCurrency(props.USDCBalance - state.USDCAmount)
-                                    : toApproxCurrency(props.USDCBalance)}
+                                Balance: {toApproxCurrency(props.USDCBalance)}
                             </p>
                             <p className="text-red-500 text-center">{collateralErrorMsg}</p>
                         </div>
@@ -195,16 +206,14 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
 
                 <div className="flex w-full justify-center">
                     <div
-                        className={`rounded-full cursor-pointer bg-blue-800 w-3 h-3 m-2 ${
+                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
                             state.step === BridgeStepEnum.Collateral ? 'ring' : ''
                         }`}
-                        onClick={() => dispatch({ type: 'setStep', step: BridgeStepEnum.Collateral })}
                     />
                     <div
-                        className={`rounded-full cursor-pointer bg-blue-800 w-3 h-3 m-2 ${
+                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
                             state.step === BridgeStepEnum.Gas ? 'ring' : ''
                         }`}
-                        onClick={() => handleClickConnect()}
                     />
                 </div>
 
@@ -215,7 +224,15 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         disabled={!isConnectBtnEnabled()}
                         className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
-                        Ok, let&apos;s connect
+                        Ok, {`let's`} connect
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => handleApproveUSDC()}
+                        disabled={false}
+                        className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
+                    >
+                        Approve USDC
                     </button>
                 </div>
 

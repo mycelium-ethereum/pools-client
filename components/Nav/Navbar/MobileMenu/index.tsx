@@ -12,6 +12,7 @@ import ThemeSwitcher from '../ThemeSwitcher';
 export default (({ account, className }) => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
+    const route = router.asPath.split('/')[1];
 
     const handleRoute = (route: string) => {
         const root = document.getElementById('__next');
@@ -31,6 +32,9 @@ export default (({ account, className }) => {
         }
         setOpen(open);
     };
+
+    const linkStyles = 'w-max text-white my-2 px-5 py-2 rounded-lg cursor-pointer';
+    const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
         <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
@@ -67,21 +71,24 @@ export default (({ account, className }) => {
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="w-full my-4 relative text-center" />
                                         <div
-                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            className={classNames(linkStyles, route === '' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
                                             Trade
                                         </div>
                                         <div
-                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/browse')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
                                             Browse
                                         </div>
                                         <div
-                                            className="text-white py-2 cursor-pointer hover:bg-tracer-900"
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('stake') ? selectedStyles : '',
+                                            )}
                                             onClick={() => handleRoute('/stakepooltoken')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Stake" />

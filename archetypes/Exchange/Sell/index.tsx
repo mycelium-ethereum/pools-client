@@ -107,7 +107,7 @@ export default (() => {
 
     return (
         <>
-            <div className="w-full mb-2">
+            <div className="w-full mb-4">
                 <p className="mb-2 ">Token</p>
                 <Dropdown
                     className="w-full"
@@ -128,7 +128,7 @@ export default (() => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(!!pool.address ? 'block' : 'hidden')}>
+                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'text-sm opacity-70 mt-2')}>
                     Expected Price: {toApproxCurrency(tokenPrice)}
                 </p>
             </div>
