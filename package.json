@@ -7,6 +7,7 @@
         "@ant-design/icons": "^4.6.2",
         "@ensdomains/ensjs": "^2.0.0",
         "@headlessui/react": "^1.4.1",
+        "@heroicons/react": "^1.0.5",
         "@tracer-protocol/onboard": "^2.2.1",
         "@tracer-protocol/perpetual-pools-contracts": "^0.0.4",
         "@tracer-protocol/tracer-pools-utils": "^0.0.6",

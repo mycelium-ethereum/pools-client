@@ -80,7 +80,7 @@ export default (() => {
     );
 }) as React.FC;
 
-const MintRow: React.FC<
+export const MintRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
@@ -133,7 +133,7 @@ const MintRow: React.FC<
     );
 };
 
-const BurnRow: React.FC<
+export const BurnRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
