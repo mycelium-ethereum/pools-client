@@ -17,10 +17,12 @@ const VARIANT: Record<ButtonVariant, string> = {
         'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-transparent border border-tracer-500 dark:border-cool-gray-400 matrix:border-theme-border text-theme-text w-full hover:bg-opacity-50 dark:hover:bg-opacity-50 matrix:hover:opacity-50 disabled:opacity-50',
     transparent:
         'bg-white bg-opacity-20 border border-white text-white w-full disabled:bg-opacity-50 focus:border-solid',
+    unselected:
+        'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg border-none text-white w-full disabled:bg-opacity-50 hover:bg-tracer-500 hover:bg-theme-primary focus:border-none',
 };
 type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
-type ButtonVariant = 'primary' | 'primary-light' | 'transparent' | 'default';
+type ButtonVariant = 'primary' | 'primary-light' | 'transparent' | 'default' | 'unselected';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     size?: ButtonSize;

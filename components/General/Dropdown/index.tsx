@@ -61,6 +61,16 @@ const SIZE = {
     none: 'p-0 text-base',
 };
 
+const VARIANTS: Record<ButtonVariant, string> = {
+    default:
+        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
+    tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
+    unselected:
+        'border-none bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg text-white hover:bg-tracer-500 matrix:hover:bg-theme-primary focus:border-none',
+};
+
+export type ButtonVariant = 'default' | 'tracer' | 'unselected';
+
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
 interface DropdownProps {
@@ -75,6 +85,7 @@ interface DropdownProps {
     onSelect: (option: string) => void;
     size?: ButtonSize;
     className?: string;
+    variant?: ButtonVariant;
 }
 export const Dropdown: React.FC<DropdownProps> = ({
     value,
@@ -83,15 +94,17 @@ export const Dropdown: React.FC<DropdownProps> = ({
     onSelect,
     placeHolderIcon,
     size = 'default',
+    variant = 'default',
     className,
 }) => {
     return (
         <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
             <Menu.Button
                 className={classNames(
-                    `inline-flex justify-between w-full rounded-md border`,
+                    `inline-flex justify-between w-full rounded-md`,
                     SIZE[size],
-                    'font-normal border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:outline-none focus:border-solid hover:ring-1 hover:ring-50',
+                    'font-normal focus:outline-none hover:ring-1 hover:ring-50',
+                    VARIANTS[variant],
                 )}
             >
                 <span className="mr-2 opacity-80">

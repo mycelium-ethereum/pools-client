@@ -62,6 +62,11 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Stake</a>
                         </Link>
                     </li>
+                    <li className={classNames(linkStyles, route.startsWith('portfolio') ? ' underline' : '')}>
+                        <Link href="/portfolio">
+                            <a className="m-auto">Portfolio</a>
+                        </Link>
+                    </li>
                 </ul>
 
                 {setShowOnboardModal ? (
