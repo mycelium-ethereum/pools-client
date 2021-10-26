@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useEnsName from '@libs/hooks/useEnsName';
 import { Logo } from '@components/General';
-import { CopyOutlined } from '@ant-design/icons';
+import { ClipboardCopyIcon } from '@heroicons/react/solid';
 import TWPopup from '@components/General/TWPopup';
 import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
@@ -74,8 +74,8 @@ const AccountDropdownButton = ({ account, ensName, logout, showBridgeModal }: Ac
                     <WalletIcon />
                     <div className="px-2 self-center">{accountLong}</div>
                     <TooltipSelector tooltip={{ content: <>Copy</> }}>
-                        <CopyOutlined
-                            className="self-center copy"
+                        <ClipboardCopyIcon
+                            className="self-center w-5 h-5"
                             onClick={() => {
                                 /* This requires a secure origin, either HTTPS or localhost. */
                                 try {
@@ -85,11 +85,6 @@ const AccountDropdownButton = ({ account, ensName, logout, showBridgeModal }: Ac
                                 }
                             }}
                         />
-                        <style>{`
-                            .copy svg {
-                                vertical-align: 0;
-                            }
-                        `}</style>
                     </TooltipSelector>
                 </div>
             </div>

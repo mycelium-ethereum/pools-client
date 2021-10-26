@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { classNames } from '@libs/utils/functions';
 import { Transition } from '@headlessui/react';
-import Icon from '@ant-design/icons';
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
 // Images
@@ -158,8 +157,7 @@ const DropdownOption: React.FC<{
         rel="noreferrer"
         target="_blank"
     >
-        <Icon
-            component={TracerBox}
+        <TracerBox
             className="box h-[48px] w-[48px] mr-3"
             style={{ color: boxColor }}
             alt="Tracer Box"

@@ -1,9 +1,6 @@
 import React from 'react';
-import Icon, { InfoCircleFilled } from '@ant-design/icons';
+import { CheckCircleIcon, ExclamationCircleIcon, XCircleIcon } from '@heroicons/react/solid'
 import styled from 'styled-components';
-import Error from 'public/img/general/error.svg';
-import Success from 'public/img/general/success.svg';
-import Warning from 'public/img/general/warning.svg';
 import { PENDING_COMMIT } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
@@ -36,7 +33,7 @@ const hashieStates = (placement: PlacementType) => ({
     exited: { transform: 'scale(0.66)', opacity: 0 },
 });
 
-const icon = "text-2xl leading-none text-transparent align-baseline"
+const icon = "w-6 h-6 inline mr-2 "
 
 const appearances: Record<
     string,
@@ -48,13 +45,13 @@ const appearances: Record<
     }
 > = {
     success: {
-        icon: <Icon className={icon} component={Success} />,
+        icon: <CheckCircleIcon className={icon + 'text-green-600'} />,
         text: '#05CB3A',
         fg: '#36B37E',
         bg: '#E3FCEF',
     },
     error: {
-        icon: <Icon className={icon} component={Error} />,
+        icon: <XCircleIcon className={icon + 'text-red-600'} />,
         text: '#F15025',
         fg: '#FF5630',
         bg: '#FFEBE6',
@@ -66,13 +63,13 @@ const appearances: Record<
         bg: '#FFEBE6',
     },
     warning: {
-        icon: <Icon className={icon} component={Warning} />,
+        icon: <ExclamationCircleIcon className={icon + 'text-yellow-600'} />,
         text: '#FF8B00',
         fg: '#FFAB00',
         bg: '#FFFAE6',
     },
     info: {
-        icon: <InfoCircleFilled className={icon} />,
+        icon: <ExclamationCircleIcon className={icon + 'text-tracer-600'} />,
         text: '#505F79',
         fg: '#2684FF',
         bg: '#00156C',

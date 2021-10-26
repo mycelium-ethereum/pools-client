@@ -5,10 +5,7 @@ import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import TWPopup from '@components/General/TWPopup';
-
-// @ts-ignore
-import Error from 'public/img/general/error.svg';
-import Icon from '@ant-design/icons';
+import { XCircleIcon } from '@heroicons/react/solid'
 
 const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
@@ -54,9 +51,8 @@ const NetworkPreview: React.FC<{
             {supported ? (
                 <Logo className={'inline my-auto ml-0 mr-2'} ticker={networkID as LogoTicker} />
             ) : (
-                <Icon
-                    className={'flex items-center h-[22px] text-lg text-transparent my-auto ml-0 mr-2'}
-                    component={Error}
+                <XCircleIcon
+                    className={'flex items-center h-6 text-red-600 my-auto ml-0 mr-2'}
                 />
             )}
 

@@ -13,7 +13,8 @@ import {
     SortByEnum,
     FarmTableRowData,
 } from '../state';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
+import { FilterIcon } from '@heroicons/react/solid'
+import { SearchIcon } from '@heroicons/react/outline'
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
@@ -333,14 +334,14 @@ export default (({
     };
 
     const SearchButton = (
-        <SearchOutlined
-            className="m-2 cursor-pointer md:hidden"
+        <SearchIcon
+            className="m-2 w-6 h-6 cursor-pointer md:hidden"
             onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
         />
     );
     const FilterButton = (
-        <FilterFilled
-            className="m-2 cursor-pointer md:hidden"
+        <FilterIcon
+            className="m-2 w-6 h-6 cursor-pointer md:hidden"
             onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
         />
     );

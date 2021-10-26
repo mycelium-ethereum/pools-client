@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-import { DownOutlined } from '@ant-design/icons';
-import styled from 'styled-components';
+import { ChevronDownIcon } from '@heroicons/react/solid'
 
 const DEFAULT =
     'inline-flex justify-center w-full rounded-md border-white border shadow-sm px-4 py-2 bg-white bg-opacity-20 text-sm font-medium text-white whitespace-nowrap hover:bg-blue-900 focus:outline-none focus:border-solid';
@@ -15,7 +14,7 @@ export default (({ preview, className, buttonClasses, children }) => {
                     {/* Button */}
                     <Popover.Button className={buttonClasses ?? DEFAULT}>
                         {preview}
-                        <Arrow className="self-center ml-1" style={{ transform: open ? 'rotate(180deg)' : '' }} />
+                        <ChevronDownIcon className="z-20 transition-all w-5 h-5 self-center ml-1" style={{ transform: open ? 'rotate(180deg)' : '' }} />
                     </Popover.Button>
 
                     {/* Menu */}
@@ -41,9 +40,3 @@ export default (({ preview, className, buttonClasses, children }) => {
     buttonClasses?: string;
     className?: string;
 }>;
-
-const Arrow = styled(DownOutlined)`
-    transition: all 200ms ease-in-out;
-    z-index: 11;
-    vertical-align: 0;
-`;

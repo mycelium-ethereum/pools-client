@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { Logo } from '@components/General';
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusCircleIcon } from '@heroicons/react/outline';
+import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
@@ -15,8 +16,8 @@ export default (({ provider, token, arbiscanTarget }) => (
                 <>
                     {/* Button */}
                     <Popover.Button className={'focus:border-none focus:outline-none mb-3'}>
-                        <MoreOutlined
-                            className="transition"
+                        <DotsVerticalIcon
+                            className="transition h-5"
                             style={{
                                 transform: open ? 'rotate(-90deg)' : '',
                             }}
@@ -39,7 +40,7 @@ export default (({ provider, token, arbiscanTarget }) => (
                                     className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
                                     onClick={() => watchAsset(provider, token)}
                                 >
-                                    <PlusOutlined className="relative inline mr-2 h-[12px]" />
+                                    <PlusCircleIcon className="relative inline mr-2 h-[12px]" />
                                     Add token to wallet
                                 </div>
                                 <div

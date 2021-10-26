@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
-import { DownOutlined } from '@ant-design/icons';
-
+import { ChevronDownIcon } from '@heroicons/react/solid'
 interface SelectProps {
     value: string;
     options: string[];
@@ -27,7 +26,7 @@ export const Select: React.FC<SelectProps> = ({ value, options, placeholder, onS
                     </option>
                 ))}
             </select>
-            <DownOutlined className="absolute right-3 top-3" />
+            <ChevronDownIcon className="absolute w-5 h-5 right-3 top-3" />
         </div>
     );
 };

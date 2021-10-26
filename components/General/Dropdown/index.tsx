@@ -2,7 +2,8 @@ import React, { Fragment, useEffect, useRef } from 'react';
 import { Children } from 'libs/types/General';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
-import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
+import { ChevronDownIcon } from '@heroicons/react/solid';
 import { classNames } from '@libs/utils/functions';
 import { Logo, LogoTicker } from 'components/General/Logo';
 
@@ -101,7 +102,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     {value === '' ? placeHolder : value}
                 </span>
                 {options.length ? (
-                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                    <ChevronDownIcon className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
                 ) : (
                     <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
                 )}

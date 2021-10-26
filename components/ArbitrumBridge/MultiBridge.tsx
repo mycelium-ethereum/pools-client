@@ -2,7 +2,8 @@ import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
-import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { LoadingOutlined } from '@ant-design/icons';
+import { SwitchHorizontalIcon, ExclamationCircleIcon } from '@heroicons/react/solid'
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
@@ -211,14 +212,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </div>
 
                         <button
-                            className="cursor-pointer p-6 text-xl focus:outline-none"
+                            className="cursor-pointer flex p-6 text-xl focus:outline-none"
                             onClick={() => {
                                 if (toNetwork) {
                                     onSwitchNetwork(toNetwork.id);
                                 }
                             }}
                         >
-                            <SwapOutlined />
+                            <SwitchHorizontalIcon className="mt-auto w-6"/>
                         </button>
 
                         <div className="my-2 mb-2 w-full">
@@ -270,7 +271,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 />
                                 <InnerInputText>
                                     {!approvalRequired && warningText ? (
-                                        <ExclamationCircleFilled className="flex items-center h-auto mr-2 rounded-xl text-yellow-600" />
+                                        <ExclamationCircleIcon className="flex items-center w-6 h-auto mr-2 rounded-xl text-yellow-600" />
                                     ) : null}
                                     {selectedAsset?.symbol ? (
                                         <Currency ticker={selectedAsset.symbol} label={selectedAsset.symbol} />
