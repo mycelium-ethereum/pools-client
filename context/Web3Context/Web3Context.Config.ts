@@ -16,7 +16,13 @@ type Farm = {
     linkText?: string;
 };
 
-export type AvailableNetwork = typeof ARBITRUM | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof RINKEBY | '0' | '1337';
+export type AvailableNetwork =
+    | typeof ARBITRUM
+    | typeof ARBITRUM_RINKEBY
+    | typeof MAINNET
+    | typeof RINKEBY
+    | '0'
+    | '1337';
 export type Network = {
     id: AvailableNetwork;
     name: string;
