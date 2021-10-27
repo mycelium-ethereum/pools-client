@@ -105,10 +105,6 @@ export default (() => {
         }
     }, [side, amount, notional, token, pendingBurns]);
 
-    // this displays the breakdown on a valid amount
-    // useMemo removes the flash display when !amount && calculating if the value is valid
-    const showBreakdown: boolean = useMemo(() => !invalidAmount.isInvalid && !amountBN.eq(0), [invalidAmount]);
-
     return (
         <>
             <div className="w-full mb-4">
@@ -201,7 +197,7 @@ export default (() => {
 
             <SellSummary
                 pool={pool}
-                showBreakdown={showBreakdown}
+                showBreakdown={!invalidAmount.isInvalid}
                 isLong={side === SideEnum.long}
                 amount={amountBN}
                 receiveIn={receiveIn}

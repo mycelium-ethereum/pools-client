@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
-import { SwapOutlined, LoadingOutlined } from '@ant-design/icons';
+import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
@@ -10,7 +10,7 @@ import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import Close from '../../public/img/general/close.svg';
-import { BridgeableAssets } from '@libs/utils/bridge';
+import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
 
 interface MultiBridgeProps {
@@ -46,6 +46,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     const [amount, setAmount] = useState('');
     const [amountsByAsset, setAmountsByAsset] = useState<Record<string, string>>({});
     const [amountIsInvalid, setAmountIsInvalid] = useState(false);
+    const [warningText, setWarningText] = useState<string | null>(null);
     const [isBridging, setIsBridging] = useState(false);
 
     // if this is the first time using the bridge, automatically switch them to L1 Mainnet
@@ -130,8 +131,18 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
             return setAmountIsInvalid(false);
         }
 
+        if (fromNetwork && selectedAsset && bridgeableAssetWarnings[fromNetwork.id]?.[selectedAsset.symbol]) {
+            const warningText = bridgeableAssetWarnings[fromNetwork.id][selectedAsset.symbol]?.getWarningText({
+                amount: new BigNumber(amount),
+            });
+
+            setWarningText(warningText);
+        } else {
+            // no warning checks for selected asset on current network
+            setWarningText(null);
+        }
         setAmountIsInvalid(selectedAssetBalance.balance.lt(amount));
-    }, [amount, selectedAssetBalance]);
+    }, [amount, selectedAssetBalance, fromNetwork]);
 
     const bridgeAsset = () => {
         if (!selectedAsset || !amount) {
@@ -250,13 +261,17 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="amount" className="block mb-2">
                                 Amount
                             </label>
-                            <InputContainer className="w-full" error={amountIsInvalid}>
+                            <InputContainer className="w-full" error={amountIsInvalid} warning={Boolean(warningText)}>
                                 <Input
                                     className="w-full h-full font-normal text-base"
                                     value={amount}
                                     onUserInput={(val) => setAmount(val)}
+                                    disabled={approvalRequired}
                                 />
                                 <InnerInputText>
+                                    {!approvalRequired && warningText ? (
+                                        <ExclamationCircleFilled className="flex items-center h-auto mr-2 rounded-xl text-yellow-600" />
+                                    ) : null}
                                     {selectedAsset?.symbol ? (
                                         <Currency ticker={selectedAsset.symbol} label={selectedAsset.symbol} />
                                     ) : null}
@@ -276,11 +291,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     )}
                                 </InnerInputText>
                             </InputContainer>
+                            {!approvalRequired && warningText ? (
+                                <div className="mt-2 text-sm text-yellow-600">{warningText}</div>
+                            ) : null}
                             {approvalRequired ? (
-                                <div className="mt-2 text-sm opacity-70">Token approval required</div>
+                                <div className="mt-2 text-sm">Token approval required</div>
                             ) : (
                                 <div
-                                    className={`mt-2 text-sm opacity-70 ${
+                                    className={`mt-2 text-sm ${
                                         amountIsInvalid ? 'text-red-500 focus-within:ring-red-500' : ''
                                     }`}
                                 >
