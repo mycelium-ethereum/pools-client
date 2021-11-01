@@ -167,4 +167,5 @@ Hashie.defaultProps = {
     },
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const Notification = ({ children, ...props }: any) => <Hashie {...props}>{children}</Hashie>;
