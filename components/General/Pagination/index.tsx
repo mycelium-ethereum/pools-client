@@ -6,17 +6,17 @@ import { classNames } from '@libs/utils/functions';
 const MIN_SIDE = 3;
 
 const MorePages: React.FC = () => (
-    <span className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+    <span className="relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium text-theme-text">
         ...
     </span>
 );
 
 const pageOption =
-    'text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium';
+    'text-theme-text hover:opacity-80 relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium focus:border-theme-border';
 const mobilePageOption =
-    'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50';
-const selected = 'border-tracer-500';
-const unselected = 'border-gray-300';
+    'relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium rounded-md text-theme-text hover:bg-gray-50';
+const selected = 'border-tracer-500 dark:border-transparent dark:bg-tracer-500 z-10';
+const unselected = 'darK:bg-transparent';
 
 export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
     const isFirstPage = selectedPage <= 1;
@@ -140,7 +140,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                 <div>
                     <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
                         <button
-                            className={pageOption}
+                            className={classNames(pageOption, 'rounded-l')}
                             disabled={isFirstPage}
                             onClick={() =>
                                 onLeft({
@@ -158,7 +158,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                             onClick={() =>
                                 onLeft({
                                     previousPage: selectedPage,
-                                    nextPage: selectedPage - 1,
+                                    nextPage: 1,
                                 })
                             }
                         >
@@ -173,7 +173,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                             onClick={() =>
                                 onRight({
                                     previousPage: selectedPage,
-                                    nextPage: selectedPage + 1,
+                                    nextPage: numPages,
                                 })
                             }
                         >
@@ -187,7 +187,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                                     nextPage: selectedPage + 1,
                                 });
                             }}
-                            className="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                            className={classNames(pageOption, 'rounded-r')}
                         >
                             <span className="sr-only">Next</span>
                             <ChevronRightIcon className="h-5 w-5" aria-hidden="true" />
