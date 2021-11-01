@@ -16,7 +16,53 @@ type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-lef
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
 type TransitionState = 'entering' | 'entered' | 'exiting' | 'exited';
 
-/* eslint-disable */
+const icon = 'text-2xl leading-none text-transparent align-baseline';
+const appearances: Record<
+    string,
+    {
+        icon: any;
+        text: string;
+        fg: string;
+        bg: string;
+    }
+> = {
+    success: {
+        icon: <Icon className={icon} component={Success} />,
+        text: '#05CB3A',
+        fg: '#36B37E',
+        bg: '#E3FCEF',
+    },
+    error: {
+        icon: <Icon className={icon} component={Error} />,
+        text: '#F15025',
+        fg: '#FF5630',
+        bg: '#FFEBE6',
+    },
+    pendingCommit: {
+        icon: <></>, // pending commit notification will have no icon
+        text: '#F15025',
+        fg: '#FF5630',
+        bg: '#FFEBE6',
+    },
+    warning: {
+        icon: <Icon className={icon} component={Warning} />,
+        text: '#FF8B00',
+        fg: '#FFAB00',
+        bg: '#FFFAE6',
+    },
+    info: {
+        icon: <InfoCircleFilled className={icon} />,
+        text: '#505F79',
+        fg: '#2684FF',
+        bg: '#00156C',
+    },
+    loading: {
+        icon: <Icon className={`${icon} text-tracer-700 dark:text-white`} component={Loading} />,
+        text: '#111928',
+        fg: '#2684FF',
+        bg: '#00156C',
+    },
+};
 
 const getTranslate: (placement: PlacementType) => string = (placement: PlacementType) => {
     const pos: string[] = placement.split('-');
@@ -39,11 +85,7 @@ const hashieStates = (placement: PlacementType) => ({
 });
 
 const Content = styled((props: any) => (
-    <div className={classNames(
-            `react-toast-notifications__toast__content`,
-            props.className,
-        )}
-        {...props}>
+    <div className={classNames(`react-toast-notifications__toast__content`, props.className)} {...props}>
         {props.children}
     </div>
 ))`
@@ -81,76 +123,24 @@ const Hashie: React.FC<HProps | any> = ({
     // isRunning,
     children,
 }: HProps) => {
-    const icon = "text-2xl leading-none text-transparent align-baseline"
-    const appearances: Record<
-      string,
-      {
-          icon: any;
-          text: string;
-          fg: string;
-          bg: string;
-      }
-      > = {
-        success: {
-            icon: <Icon className={icon} component={Success} />,
-            text: '#05CB3A',
-            fg: '#36B37E',
-            bg: '#E3FCEF',
-        },
-        error: {
-            icon: <Icon className={icon} component={Error} />,
-            text: '#F15025',
-            fg: '#FF5630',
-            bg: '#FFEBE6',
-        },
-        pendingCommit: {
-            icon: <></>, // pending commit notification will have no icon
-            text: '#F15025',
-            fg: '#FF5630',
-            bg: '#FFEBE6',
-        },
-        warning: {
-            icon: <Icon className={icon} component={Warning} />,
-            text: '#FF8B00',
-            fg: '#FFAB00',
-            bg: '#FFFAE6',
-        },
-        info: {
-            icon: <InfoCircleFilled className={icon} />,
-            text: '#505F79',
-            fg: '#2684FF',
-            bg: '#00156C',
-        },
-        loading: {
-            icon: <Icon className={`${icon} text-tracer-700 dark:text-white`} component={Loading} />,
-            text: '#111928',
-            fg: '#2684FF',
-            bg: '#00156C',
-        },
-    };
     const appearance = appearances[appearance_] ?? appearances['info']; //default info
-    let children_ = React.Children.toArray(children);
+    const children_ = React.Children.toArray(children);
     return (
         <div
             className={classNames(
-                'relative flex  flex-col overflow-hidden rounded-3xl mb-2 mr-2 p-6 w-[25rem] bg-theme-background shadow  '
+                'relative flex  flex-col overflow-hidden rounded-3xl mb-2 mr-2 p-6 w-[25rem] bg-theme-background shadow  ',
             )}
-
             style={{
                 transition: `transform ${transitionDuration}ms cubic-bezier(0.2, 0, 0, 1), opacity ${transitionDuration}ms`,
                 cursor: 'default',
                 ...hashieStates(placement)[transitionState],
             }}
         >
-            <Close className="absolute h-3 w-3 top-8 right-6 cursor-pointer" onClick={onDismiss}/>
+            <Close className="absolute h-3 w-3 top-8 right-6 cursor-pointer" onClick={onDismiss} />
             <div className="text-theme-text text-base font-bold mr-5 mb-2">
-                <span className="mr-2">
-                    {appearance.icon}
-                </span>
+                <span className="mr-2">{appearance.icon}</span>
                 {/* title */}
-                <span>
-                    {children_[0]}
-                </span>
+                <span>{children_[0]}</span>
             </div>
             <Content>{children_[1]}</Content>
         </div>
@@ -172,9 +162,9 @@ Hashie.defaultProps = {
         lastUpdate: new BigNumber(0),
         action: {
             text: '', // button text
-            onClick: () => undefined // on button click
-        }
-    }
+            onClick: () => undefined, // on button click
+        },
+    },
 };
 
 export const Notification = ({ children, ...props }: any) => <Hashie {...props}>{children}</Hashie>;
