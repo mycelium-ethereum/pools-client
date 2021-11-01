@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '@context/ThemeContext';
 import Icon, { InfoCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { PENDING_COMMIT } from '@libs/constants';
@@ -11,8 +10,7 @@ import Close from '/public/img/general/close.svg';
 import Error from 'public/img/general/error.svg';
 import Success from 'public/img/general/success.svg';
 import Warning from 'public/img/general/warning.svg';
-import LoadingWhite from 'public/img/loading-white-large.svg';
-import LoadingBlue from 'public/img/loading-blue-large.svg';
+import Loading from 'public/img/loading-large.svg';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
@@ -83,7 +81,6 @@ const Hashie: React.FC<HProps | any> = ({
     // isRunning,
     children,
 }: HProps) => {
-    const { isDark } = useTheme()
     const icon = "text-2xl leading-none text-transparent align-baseline"
     const appearances: Record<
       string,
@@ -125,7 +122,7 @@ const Hashie: React.FC<HProps | any> = ({
             bg: '#00156C',
         },
         loading: {
-            icon: <Icon className={icon} component={isDark ? LoadingWhite : LoadingBlue} />,
+            icon: <Icon className={`${icon} text-tracer-700 dark:text-white`} component={Loading} />,
             text: '#111928',
             fg: '#2684FF',
             bg: '#00156C',
