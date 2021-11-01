@@ -111,9 +111,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 onboard.config({ networkId: network });
                             }
                             console.info(`Changing network ${network}`);
-                            const network_ = network.toString() as AvailableNetwork;
+                            const network_ = network?.toString() as AvailableNetwork;
                             setNetwork(network_);
-                            setConfig(networkConfig[network_]);
+                            setConfig(networkConfig[network_ ?? 0]);
                             checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
                         },
