@@ -125,7 +125,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     commitInfo: {
                                         pool: pool.address,
                                         id: commit.commitID,
-                                        amount: commit.amount,
+                                        amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
                                         type: commit.commitType,
                                         from: commit.from,
                                         txnHash: commit.txnHash,
@@ -259,7 +259,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 commitInfo: {
                                     id: id.toNumber(),
                                     pool,
-                                    from: txn.from, // from address
+                                    from: txn?.from, // from address
                                     txnHash: txn.hash,
                                     type: type as CommitEnum,
                                     amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),

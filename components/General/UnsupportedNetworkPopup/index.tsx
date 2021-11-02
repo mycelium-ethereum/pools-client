@@ -9,8 +9,7 @@ import { destinationNetworkLookup } from '@libs/utils/bridge';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 const UnsupportedNetwork: React.FC = () => {
-    const errorToastID = React.useRef<string>('');
-    const { account, network, provider } = useWeb3();
+    const { account, network, provider, unsupportedNetworkPopupRef } = useWeb3();
     const { bridgeModalIsOpen } = useArbitrumBridge();
     const { addToast, updateToast, removeToast } = useToasts();
 
@@ -20,9 +19,9 @@ const UnsupportedNetwork: React.FC = () => {
         const hasDismissedInitialArbModal = localStorage.getItem('showBridgeFunds') === 'true';
         if (hasDismissedInitialArbModal && !bridgeModalIsOpen && !isSupportedNetwork(network) && provider && account) {
             // ignore if we are already showing the error
-            if (!errorToastID.current) {
+            if (!unsupportedNetworkPopupRef.current) {
                 // @ts-ignore
-                errorToastID.current = addToast(
+                unsupportedNetworkPopupRef.current = addToast(
                     [
                         'Unsupported Network',
                         <span key="unsupported-network-content" className="text-sm">
@@ -50,19 +49,19 @@ const UnsupportedNetwork: React.FC = () => {
                         appearance: 'error',
                         autoDismiss: false,
                         onDismiss: () => {
-                            errorToastID.current = '';
+                            unsupportedNetworkPopupRef.current = '';
                         },
                     },
                 );
             }
         } else {
-            if (errorToastID.current) {
-                updateToast(errorToastID.current as unknown as string, {
+            if (unsupportedNetworkPopupRef.current) {
+                updateToast(unsupportedNetworkPopupRef.current as unknown as string, {
                     content: 'Switched Network',
                     appearance: 'success',
                     autoDismiss: true,
                 });
-                errorToastID.current = '';
+                unsupportedNetworkPopupRef.current = '';
             }
         }
     }, [network, account]);
@@ -76,9 +75,9 @@ const UnsupportedNetwork: React.FC = () => {
                 const destinationNetwork = networkConfig[destinationNetworkId];
 
                 // ignore if we are already showing the error
-                if (destinationNetwork && !errorToastID.current) {
+                if (destinationNetwork && !unsupportedNetworkPopupRef.current) {
                     // @ts-ignore
-                    errorToastID.current = addToast(
+                    unsupportedNetworkPopupRef.current = addToast(
                         [
                             'Switch back to Arbitrum',
                             <span key="unsupported-network-content" className="text-sm">
@@ -87,8 +86,8 @@ const UnsupportedNetwork: React.FC = () => {
                                     className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                                     onClick={() => {
                                         switchNetworks(provider, destinationNetworkId);
-                                        removeToast(errorToastID.current);
-                                        errorToastID.current = '';
+                                        removeToast(unsupportedNetworkPopupRef.current);
+                                        unsupportedNetworkPopupRef.current = '';
                                     }}
                                 >
                                     Switch back to {destinationNetwork.name}.
@@ -99,7 +98,7 @@ const UnsupportedNetwork: React.FC = () => {
                             appearance: 'error',
                             autoDismiss: false,
                             onDismiss: () => {
-                                errorToastID.current = '';
+                                unsupportedNetworkPopupRef.current = '';
                             },
                         },
                     );

@@ -1,6 +1,4 @@
 import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum } from '@libs/constants';
-import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
@@ -27,7 +25,7 @@ export type Commit = {
 };
 
 export type APICommitReturn = {
-    amount: BigNumber; // unparsed amount
+    amount: string; // unparsed amount
     commitType: CommitEnum;
     txnHash: string;
     timestamp: number; // seconds
@@ -65,7 +63,7 @@ export const fetchPoolCommits: (
             const parsedCommits: APICommitReturn[] = [];
             commits.forEach((commit: Commit, index: number) => {
                 parsedCommits.push({
-                    amount: new BigNumber(ethers.utils.formatUnits(commit.amount)),
+                    amount: commit.amount,
                     commitType: CommitTypeMap[commit.commit_type],
                     from: commit.committer_address,
                     txnHash: commit.transaction_hash,

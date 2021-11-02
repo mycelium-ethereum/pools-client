@@ -39,6 +39,7 @@ type Web3Context = {
     blockNumber: number;
     config?: Network;
     provider?: providers.JsonRpcProvider;
+    unsupportedNetworkPopupRef: React.MutableRefObject<string>;
 };
 
 const Web3Context = React.createContext<Web3Context | undefined>(undefined);
@@ -70,6 +71,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [config, setConfig] = useState<Network>(networkConfig[0]);
 
     const usingDefaultProvider = useRef(true);
+    const unsupportedNetworkPopupRef = useRef<string>('');
 
     // Initialize OnboardJS
     useEffect(() => {
@@ -109,9 +111,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 onboard.config({ networkId: network });
                             }
                             console.info(`Changing network ${network}`);
-                            const network_ = network.toString() as AvailableNetwork;
+                            const network_ = network?.toString() as AvailableNetwork;
                             setNetwork(network_);
-                            setConfig(networkConfig[network_]);
+                            setConfig(networkConfig[network_ ?? 0]);
                             checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
                         },
@@ -233,6 +235,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             gasPrice,
             blockNumber,
             config,
+            unsupportedNetworkPopupRef,
         }),
         [provider, signer, gasPrice, account, network, ethBalance, config, wallet, blockNumber],
     );

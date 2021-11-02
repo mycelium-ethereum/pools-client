@@ -8,6 +8,7 @@
         "@ensdomains/ensjs": "^2.0.0",
         "@headlessui/react": "^1.4.1",
         "@heroicons/react": "^1.0.5",
+        "@mycelium-ethereum/vyps-kit": "^0.1.0",
         "@tracer-protocol/onboard": "^2.2.1",
         "@tracer-protocol/perpetual-pools-contracts": "^0.0.4",
         "@tracer-protocol/tracer-pools-utils": "^0.0.6",
@@ -24,8 +25,7 @@
         "react-toast-notifications": "^2.4.0",
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
-        "tailwindcss-multi-theme": "^1.0.4",
-        "vyps-kit": "git+https://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:x-oauth-basic@github.com/mycelium-ethereum/vyps-kit.git#tracer-live"
+        "tailwindcss-multi-theme": "^1.0.4"
     },
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev -p 3002",

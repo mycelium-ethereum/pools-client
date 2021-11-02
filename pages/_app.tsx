@@ -54,6 +54,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
+
             <ToastProvider components={{ Toast: Notification }}>
                 <ThemeStore>
                     <Web3Store
