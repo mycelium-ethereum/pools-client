@@ -33,6 +33,7 @@ export type APICommitReturn = {
     timestamp: number; // seconds
     from: string;
     commitID: number;
+    pool: string; // pool address
 };
 
 const CommitTypeMap = {
@@ -42,17 +43,22 @@ const CommitTypeMap = {
     ShortMint: CommitEnum.short_mint,
 };
 export const fetchPoolCommits: (
-    pool: string,
     network: SourceType,
     params: {
+        pool?: string;
         from?: number;
         to?: number;
+        account?: string;
     },
-) => Promise<APICommitReturn[]> = async (pool, network, { from, to }) => {
+) => Promise<APICommitReturn[]> = async (network, { pool, from, to, account }) => {
     const commits: APICommitReturn[] = await fetch(
         `${BASE_REPUTATION_API}/commits?source=${SourceMap[network]}&from=${from ?? 0}&to=${
             to ?? Math.round(Date.now() / 1000)
-        }&pool_address=${pool.toLowerCase()}`,
+        }` + !!pool
+            ? `&pool_address=${pool?.toLowerCase()}}`
+            : '' + !!account
+            ? `&account=${account?.toLowerCase()}`
+            : '',
     )
         .then((res) => res.json())
         .then((commits) => {
@@ -66,6 +72,7 @@ export const fetchPoolCommits: (
                     timestamp: parseInt(commit.block_timestamp),
                     // hacky solution while I wait for rep guys to put commitID
                     commitID: index,
+                    pool: commit.pool_address,
                 });
             });
             return parsedCommits;

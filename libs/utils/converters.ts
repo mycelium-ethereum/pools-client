@@ -142,12 +142,29 @@ export const timeTill: (time: number) => {
 };
 
 /**
- * Formats a given date into HH:MM:SS
+ * Formats a given date into YY/MM/DD HH:MM.
+ * Optional to hide either the date or the time string or both (returning an empty string)
  * @param date Object to format
- * @returns string of HH:MM:SS
+ * @param options object containing booleans to hide either the date or time string
+ * @returns string of YY/MM/DD HH:MM
  */
-export const formatDate: (date: Date) => string = (date) =>
-    `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+export const formatDate: (
+    date: Date,
+    options?: {
+        hideTime: boolean;
+        hideDate: boolean;
+    },
+) => string = (
+    date,
+    { hideTime, hideDate } = {
+        hideDate: false,
+        hideTime: false,
+    },
+) => {
+    const dateString = !hideDate ? `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ` : '';
+    const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
+    return dateString + timeString;
+};
 
 /**
  * Checks if a number is an arbitrarily small number. Returns is an approximated value instead

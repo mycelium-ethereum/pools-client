@@ -12,7 +12,7 @@ const MorePages: React.FC = () => (
 );
 
 const pageOption =
-    'text-theme-text hover:opacity-80 relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium focus:border-theme-border';
+    'text-theme-text hover:opacity-80 relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium focus:border-theme-border disabled:cursor-not-allowed';
 const mobilePageOption =
     'relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium rounded-md text-theme-text hover:bg-gray-50';
 const selected = 'border-tracer-500 dark:border-transparent dark:bg-tracer-500 z-10';
@@ -109,7 +109,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
     };
 
     return (
-        <div className="px-4 py-3 flex items-center justify-between sm:px-6">
+        <div className="pt-2 flex items-center justify-between">
             <div className="flex-1 flex justify-between sm:hidden">
                 <button
                     className={mobilePageOption}
@@ -167,18 +167,20 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                         {selectedPage > MIN_SIDE && !notEnoughPages ? <MorePages /> : null}
                         {getMiddleButtons()}
                         {selectedPage < numPages - MIN_SIDE + 1 && !notEnoughPages ? <MorePages /> : null}
-                        <button
-                            className={classNames(pageOption, selectedPage === numPages ? selected : unselected)}
-                            disabled={isLastPage}
-                            onClick={() =>
-                                onRight({
-                                    previousPage: selectedPage,
-                                    nextPage: numPages,
-                                })
-                            }
-                        >
-                            {numPages}
-                        </button>
+                        {numPages !== 1 ? (
+                            <button
+                                className={classNames(pageOption, selectedPage === numPages ? selected : unselected)}
+                                disabled={isLastPage}
+                                onClick={() =>
+                                    onRight({
+                                        previousPage: selectedPage,
+                                        nextPage: numPages,
+                                    })
+                                }
+                            >
+                                {numPages}
+                            </button>
+                        ) : null}
                         <button
                             disabled={isLastPage}
                             onClick={() => {
@@ -207,9 +209,20 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
 
 type OnNavigation = ({ previousPage, nextPage }: { previousPage: number; nextPage: number }) => any;
 
-// <div>
-//   <p className="text-sm text-gray-700">
-//     Showing <span className="font-medium">1</span> to <span className="font-medium">10</span> of{' '}
-//     <span className="font-medium">97</span> results
-//   </p>
-// </div>
+export const PageNumber: React.FC<{
+    page: number;
+    numResults: number;
+    resultsPerPage: number;
+}> = ({ page, numResults, resultsPerPage }) => {
+    const start = (page - 1) * resultsPerPage + 1;
+    const end = Math.min(start + resultsPerPage - 1, numResults);
+
+    return (
+        <div className="text-right">
+            <p className="text-sm text-theme-text">
+                Showing <span className="font-medium">{Math.min(start, numResults)}</span>-
+                <span className="font-medium">{end}</span> of <span className="font-medium">{numResults}</span>
+            </p>
+        </div>
+    );
+};

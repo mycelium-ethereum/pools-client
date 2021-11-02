@@ -114,6 +114,12 @@ export type QueuedCommit = PendingCommitInfo & {
     updateInterval: BigNumber;
 };
 
+export type HistoricCommit = PendingCommitInfo & {
+    token: PoolToken;
+    tokenPrice: BigNumber;
+    fee: BigNumber;
+};
+
 // table heading initialiser
 export type Heading = {
     text: string;

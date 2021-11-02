@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 
 export const PortfolioSideNav: React.FC = () => {
     return (
-        <div className="w-1/4 p-4 pr-8 bg-theme-background min-h-[80vh] text-right">
+        <div className="w-1/5 p-4 pr-8 bg-theme-background min-h-[80vh] text-right">
             <div>Trade Portfolio</div>
             <div>Strategise Portfolio</div>
         </div>
@@ -146,7 +146,7 @@ export default (({ page }) => {
     return (
         <div className="flex">
             <PortfolioSideNav />
-            <div className="w-3/4">
+            <div className="w-4/5">
                 <PortfolioNav page={page} focus={focus} />
                 {renderPage(page)}
             </div>

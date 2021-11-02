@@ -18,7 +18,7 @@ const VARIANT: Record<ButtonVariant, string> = {
     transparent:
         'bg-white bg-opacity-20 border border-white text-white w-full disabled:bg-opacity-50 focus:border-solid',
     unselected:
-        'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg border-none text-white w-full disabled:bg-opacity-50 hover:bg-tracer-500 hover:bg-theme-primary focus:border-none',
+        'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg border-none text-white w-full disabled:bg-opacity-50 hover:ring-1 focus:border-none',
 };
 type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 

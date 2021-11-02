@@ -198,8 +198,9 @@ export const fetchCommits: (
     let allUnexecutedCommits: APICommitReturn[] = [];
     const network = provider.network.chainId;
     if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        allUnexecutedCommits = await fetchPoolCommits(pool, network.toString() as SourceType, {
+        allUnexecutedCommits = await fetchPoolCommits(network.toString() as SourceType, {
             from: lastUpdate,
+            pool,
         });
     }
 
