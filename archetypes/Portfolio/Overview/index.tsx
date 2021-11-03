@@ -1,10 +1,10 @@
 import { Dropdown } from '@components/General';
-import { PoolToken } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
 import BigNumber from 'bignumber.js';
 import React, { useReducer } from 'react';
 import PNLGraph from './PNLGraph';
 import TokenTable from './TokenTable';
+import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 
 export enum LoadingState {
     Idle = 0,
@@ -22,7 +22,10 @@ export enum CurrencyEnum {
 }
 
 export type TokenRowProps = {
-    token: PoolToken;
+    address: string,
+    name: string;
+    decimals: number;
+    symbol: string;
     holdings: BigNumber;
     price: BigNumber;
     deposits: BigNumber; // amount of USDC deposited
@@ -36,7 +39,6 @@ enum KeyEnum {
 
 export interface PortfolioOverviewState {
     pnlHistorics: any[];
-    tokenRows: TokenRowProps[];
     loadingState: LoadingState;
     timeScale: TimescaleEnum;
     currency: CurrencyEnum;
@@ -44,7 +46,6 @@ export interface PortfolioOverviewState {
 
 export type OverviewAction =
     | { type: 'setPnlHistorics'; pnlHistorics: any[] }
-    | { type: 'setTokenRows'; rows: TokenRowProps[] }
     | { type: 'setTimescale'; timeScale: TimescaleEnum }
     | { type: 'setCurrency'; currency: CurrencyEnum }
     | { type: 'setLoadingState'; state: LoadingState }
@@ -52,7 +53,6 @@ export type OverviewAction =
 
 export const initialOverviewState = {
     pnlHistorics: [],
-    tokenRows: [],
     timeScale: TimescaleEnum.AllTime,
     currency: CurrencyEnum.AUD,
     loadingState: LoadingState.Fetching,
@@ -101,6 +101,7 @@ const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl dark:bg-theme-background';
 // const Overview
 export default (() => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
+    const { rows } = useUserTokenOverview()
 
     return (
         <div>
@@ -163,7 +164,7 @@ export default (() => {
             </div>
             <div className={mainCard}>
                 <h1 className="text-theme-text text-xl">Token Breakdown</h1>
-                <TokenTable rows={state.tokenRows} />
+                <TokenTable rows={rows} />
             </div>
         </div>
     );

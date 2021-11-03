@@ -25,7 +25,7 @@ export default (({ rows }) => {
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((token, index) => {
-                    return <TokenRow {...token} index={index} key={token.token.address} provider={provider ?? null} />;
+                    return <TokenRow {...token} index={index} key={token.address} provider={provider ?? null} />;
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
@@ -40,15 +40,15 @@ export const TokenRow: React.FC<
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ token, price, holdings, provider, deposits, index }) => {
+> = ({ symbol, name, address, decimals, price, holdings, provider, deposits, index }) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.name}
+                <Logo ticker={tokenSymbolToLogoTicker(symbol)} className="inline mr-2" />
+                {name}
             </TableRowCell>
             <TableRowCell>{holdings.toFixed(2)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(price)}</TableRowCell>
@@ -59,11 +59,15 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
-                    token={token}
+                    token={{
+                        address,
+                        symbol,
+                        decimals 
+                    }}
                     provider={provider}
                     arbiscanTarget={{
                         type: ArbiscanEnum.token,
-                        target: token.address,
+                        target: address,
                     }}
                 />
             </TableRowCell>
