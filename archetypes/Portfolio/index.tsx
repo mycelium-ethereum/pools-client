@@ -7,17 +7,39 @@ import Button from '@components/General/Button';
 import { Dropdown } from '@components/General';
 import { CommitsFocusEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
+import { classNames } from '@libs/utils/functions';
 
-export const PortfolioSideNav: React.FC = () => {
+export const PortfolioSideNav: React.FC<{
+    page: PortfolioPage;
+}> = ({ page }) => {
     return (
-        <div className="w-1/5 p-4 pr-8 bg-theme-background min-h-[80vh] text-right">
-            <div>Trade Portfolio</div>
-            <div>Strategise Portfolio</div>
+        <div className="flex flex-col w-1/5 p-4 bg-theme-background min-h-[80vh]">
+            <div
+                className={classNames(
+                    page === PortfolioPage.TradePortfolio ? 'bg-tracer-100 dark:bg-cool-gray-800' : '',
+                    'py-2 px-6 w-3/4 ml-auto mr-4 my-3 rounded-lg',
+                )}
+            >
+                Trade Portfolio
+            </div>
+            <div
+                className={classNames(
+                    page === PortfolioPage.StakePortfolio ? 'bg-tracer-100 dark:bg-cool-gray-800' : '',
+                    'py-2 pl-6 w-3/4 ml-auto mr-4 my-3 rounded-lg',
+                )}
+            >
+                Stake Portfolio
+            </div>
         </div>
     );
 };
 
 export enum PortfolioPage {
+    TradePortfolio = 0,
+    StakePortfolio = 1,
+}
+
+export enum TradePortfolioPage {
     Overview = 0,
     History = 1,
     Queued = 2,
@@ -46,14 +68,14 @@ const historyOptions = [
 ];
 
 export const PortfolioNav: React.FC<{
-    page: PortfolioPage;
+    page: TradePortfolioPage;
     focus: CommitsFocusEnum;
 }> = ({ page, focus }) => {
     const router = useRouter();
 
-    const overviewPage = page === PortfolioPage.Overview;
-    const queuedPage = page === PortfolioPage.Queued;
-    const historyPage = page === PortfolioPage.History;
+    const overviewPage = page === TradePortfolioPage.Overview;
+    const queuedPage = page === TradePortfolioPage.Queued;
+    const historyPage = page === TradePortfolioPage.History;
 
     return (
         <div className="flex mt-4">
@@ -132,11 +154,11 @@ export default (({ page }) => {
         }
     }, [router]);
 
-    const renderPage = (page: PortfolioPage) => {
+    const renderPage = (page: TradePortfolioPage) => {
         switch (page) {
-            case PortfolioPage.History:
+            case TradePortfolioPage.History:
                 return <History focus={focus} />;
-            case PortfolioPage.Queued:
+            case TradePortfolioPage.Queued:
                 return <Queued focus={focus} />;
             default:
                 return <Overview />;
@@ -145,7 +167,7 @@ export default (({ page }) => {
 
     return (
         <div className="flex">
-            <PortfolioSideNav />
+            <PortfolioSideNav page={PortfolioPage.TradePortfolio} />
             <div className="w-4/5">
                 <PortfolioNav page={page} focus={focus} />
                 {renderPage(page)}
@@ -153,5 +175,5 @@ export default (({ page }) => {
         </div>
     );
 }) as React.FC<{
-    page: PortfolioPage;
+    page: TradePortfolioPage;
 }>;

@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import Portfolio, { PortfolioPage } from '@archetypes/Portfolio';
+import Portfolio, { TradePortfolioPage } from '@archetypes/Portfolio';
 import { PoolStore } from '@context/PoolContext';
 import PendingCommits from '@components/PendingCommits';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
@@ -14,7 +14,7 @@ export default (() => {
             <PoolStore>
                 <ArbitrumBridgeStore>
                     <NavBar />
-                    <Portfolio page={PortfolioPage.Overview} />
+                    <Portfolio page={TradePortfolioPage.Overview} />
                     <PendingCommits />
                     <ArbitrumBridge />
                     <UnsupportedNetworkPopup />
