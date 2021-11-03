@@ -65,7 +65,7 @@ export const NavBarContent: React.FC<{
                     </Link>
                     <Link href="/portfolio">
                         <li className={classNames(linkStyles, route.startsWith('portfolio') ? ' underline' : '')}>
-                                <a className="m-auto">Portfolio</a>
+                            <a className="m-auto">Portfolio</a>
                         </li>
                     </Link>
                 </ul>
