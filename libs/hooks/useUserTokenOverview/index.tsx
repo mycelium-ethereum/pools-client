@@ -77,10 +77,10 @@ export default (() => {
             4: '3L-BTC/USD',
             5: '3S-BTC/USD',
             6: '3L-ETH/USD',
-            7: '3S-ETH/USD'
-        }
+            7: '3S-ETH/USD',
+        };
         for (let i = 0; i < 8; i++) {
-            const balance = new BigNumber(Math.random() * 100000)
+            const balance = new BigNumber(Math.random() * 100000);
             const tokenSupply = new BigNumber(Math.random() * 1000000);
             rows.push({
                 address: '',
@@ -89,17 +89,17 @@ export default (() => {
                 name: tokens[i],
                 price: calcTokenPrice(balance, tokenSupply),
                 holdings: new BigNumber(Math.random() * 1000),
-                deposits: new BigNumber(Math.random() * 10000)
-            })
+                deposits: new BigNumber(Math.random() * 10000),
+            });
         }
-        setRows(rows)
+        setRows(rows);
         setLoading(false);
-    }, [])
+    }, []);
     return {
         rows,
-        loading
+        loading,
     };
 }) as () => {
-    rows: TokenRowProps[],
-    loading: boolean
-}
+    rows: TokenRowProps[];
+    loading: boolean;
+};

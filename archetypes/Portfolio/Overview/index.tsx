@@ -22,7 +22,7 @@ export enum CurrencyEnum {
 }
 
 export type TokenRowProps = {
-    address: string,
+    address: string;
     name: string;
     decimals: number;
     symbol: string;
@@ -101,7 +101,7 @@ const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl dark:bg-theme-background';
 // const Overview
 export default (() => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
-    const { rows } = useUserTokenOverview()
+    const { rows } = useUserTokenOverview();
 
     return (
         <div>

@@ -62,7 +62,7 @@ export const TokenRow: React.FC<
                     token={{
                         address,
                         symbol,
-                        decimals 
+                        decimals,
                     }}
                     provider={provider}
                     arbiscanTarget={{
