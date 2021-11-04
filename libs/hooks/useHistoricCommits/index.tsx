@@ -55,47 +55,44 @@ export default (() => {
 
     useMemo(() => {
         let mounted = true;
-        console.log(provider, "provider")
         if (account && provider) {
-            console.log("fetching")
             const fetchHistoricCommits = async () => {
-                console.log("Trying")
                 try {
                     await provider.ready;
                     const network = provider.network.chainId;
                     const checkSummed = ethers.utils.getAddress(account);
-                    console.log(network, "network")
                     const commits = await fetchPoolCommits(network.toString() as SourceType, {
-                    	account: checkSummed
+                        account: checkSummed,
                     });
-                    console.log("woooo commits", commits)
+                    console.debug('All user commits', commits);
                     const allUserCommits: HistoricCommit[] = [];
                     for (const commit of commits) {
-                    	const {
-                    		shortToken,
-                    		longToken,
-                    		nextShortBalance,
-                            quoteToken: {
-                                decimals
+                        const {
+                            shortToken,
+                            longToken,
+                            nextShortBalance,
+                            quoteToken: { decimals },
+                            nextLongBalance,
+                            committer: {
+                                pendingLong: { burn: pendingLongBurn },
+                                pendingShort: { burn: pendingShortBurn },
                             },
-                    		nextLongBalance,
-                    		committer: {
-                    			pendingLong: { burn: pendingLongBurn },
-                    			pendingShort: { burn: pendingShortBurn },
-                    		},
-                    	} = pools?.[commit.pool] ?? DEFAULT_POOLSTATE;
+                        } = pools?.[commit.pool] ?? DEFAULT_POOLSTATE;
 
-                    	let token;
+                        let token;
                         let tokenPrice: BigNumber = new BigNumber(0);
-                    	if (commit.commitType === CommitEnum.short_mint || commit.commitType === CommitEnum.short_burn) {
-                    		token = shortToken;
-                    		tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
-                    	} else {
-                    		token = longToken;
-                    		tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
-                    	}
+                        if (
+                            commit.commitType === CommitEnum.short_mint ||
+                            commit.commitType === CommitEnum.short_burn
+                        ) {
+                            token = shortToken;
+                            tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
+                        } else {
+                            token = longToken;
+                            tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
+                        }
 
-                    	allUserCommits.push({
+                        allUserCommits.push({
                             id: commit.commitID,
                             type: commit.commitType,
                             pool: commit.pool,
@@ -104,11 +101,10 @@ export default (() => {
                             txnHash: commit.txnHash,
                             created: commit.timestamp,
                             tokenPrice: tokenPrice,
-                    		fee: new BigNumber(0),
-                    		token,
-                    	});
+                            fee: new BigNumber(0),
+                            token,
+                        });
                     }
-                    console.log("all commits", allUserCommits)
                     if (mounted) {
                         dispatch({ type: 'setCommits', commits: allUserCommits });
                         dispatch({ type: 'setLoadingState', state: LoadingState.HasFetched });

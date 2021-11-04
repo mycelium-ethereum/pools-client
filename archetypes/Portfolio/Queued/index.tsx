@@ -101,7 +101,6 @@ export default (({ focus }) => {
                             setPage(nextPage);
                         }}
                         onDirect={({ nextPage }) => {
-                            console.log(nextPage);
                             setPage(nextPage);
                         }}
                         numPages={numPages}
