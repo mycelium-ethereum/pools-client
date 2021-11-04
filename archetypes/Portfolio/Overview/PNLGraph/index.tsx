@@ -7,12 +7,13 @@ import { scaleTime, scaleLinear } from '@visx/scale';
 import { GridRows } from '@visx/grid';
 import { AxisLeft, AxisBottom } from '@visx/axis';
 import bitcoinPrice, { BitcoinPrice } from '@visx/mock-data/lib/mocks/bitcoinPrice';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import { useTooltip, useTooltipInPortal, defaultStyles } from '@visx/tooltip';
 // @ts-ignore
 import { bisector, extent } from 'd3-array';
 
 import { localPoint } from '@visx/event';
+import { classNames } from '@libs/utils/functions';
 
 export const background = '#f3f3f3';
 
@@ -38,18 +39,7 @@ const priceScale = scaleLinear<number>({
 
 const defaultMargin = { top: 20, right: 20, bottom: 30, left: 60 };
 
-const TRACER_BLUE = '#3DA8F5';
-// const COLORS = {
-// 	darkText: '#374151',
-// 	lightText: '#FAFAFA'
-// }
-
-const tooltipStyles = {
-    ...defaultStyles,
-    background,
-    border: '1px solid white',
-    color: 'black',
-};
+const TRACER_BLUE = '#5555E9';
 
 export type ThresholdProps = {
     width: number;
@@ -59,12 +49,10 @@ export type ThresholdProps = {
 
 export default (({ margin = defaultMargin }) => {
     const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<BitcoinPrice>();
-    // If you don't want to use a Portal, simply replace `TooltipInPortal` below with
-    // `Tooltip` or `TooltipWithBounds` and remove `containerRef`
+    const userDeposits = 1200;
+
     const { containerRef, TooltipInPortal } = useTooltipInPortal({
-        // use TooltipWithBounds
         detectBounds: true,
-        // when tooltip containers are scrolled, this will correctly update the Tooltip position
         scroll: true,
     });
 
@@ -127,7 +115,7 @@ export default (({ margin = defaultMargin }) => {
                                     scale={priceScale}
                                     width={xMax}
                                     className={'grid-line'}
-                                    numTicks={4}
+                                    numTicks={3}
                                     strokeWidth={1}
                                 />
                                 <LinePath
@@ -148,62 +136,95 @@ export default (({ margin = defaultMargin }) => {
                                     onMouseMove={handleTooltip}
                                     onMouseLeave={() => hideTooltip()}
                                 />
+                                <Line
+                                    from={{ x: 0, y: priceScale(userDeposits) }}
+                                    to={{ x: xMax, y: priceScale(userDeposits) }}
+                                    stroke={'#A6A6F2'}
+                                    strokeWidth={2}
+                                    pointerEvents="none"
+                                    strokeDasharray="5,2"
+                                />
                                 {tooltipData && (
                                     <g>
-                                        <Line
-                                            from={{ x: tooltipLeft, y: 0 }}
-                                            to={{ x: tooltipLeft, y: yMax }}
-                                            stroke={background}
-                                            strokeWidth={2}
-                                            pointerEvents="none"
-                                            strokeDasharray="5,2"
-                                        />
                                         <circle
                                             cx={tooltipLeft}
-                                            cy={tooltipTop ?? 0 + 1}
-                                            r={4}
-                                            fill="black"
-                                            fillOpacity={0.1}
-                                            stroke="black"
-                                            strokeOpacity={0.1}
+                                            cy={tooltipTop}
+                                            r={3}
+                                            fill={parseInt(tooltipData.price) < userDeposits ? '#F05252' : '#0E9F6E'}
                                             strokeWidth={2}
                                             pointerEvents="none"
                                         />
                                         <circle
                                             cx={tooltipLeft}
                                             cy={tooltipTop}
-                                            r={4}
-                                            fill={background}
-                                            stroke="white"
+                                            r={5}
+                                            fillOpacity={0.5}
+                                            fill={parseInt(tooltipData.price) < userDeposits ? '#F05252' : '#0E9F6E'}
                                             strokeWidth={2}
                                             pointerEvents="none"
                                         />
                                     </g>
                                 )}
                             </Group>
-                            <style>{`
-			.axis-ticks text {
-				fill: var(--text);
-			}
-			.grid-line line {
-				stroke: #9CA3AF;
-			}
-			html.dark .grid-line line {
-				stroke: #1F2A37;
-			}
-		`}</style>
                         </svg>
-                        {tooltipOpen && (
-                            <TooltipInPortal
-                                // set this to random so it correctly updates with parent bounds
-                                // key={Math.random()}
-                                top={tooltipTop}
-                                left={tooltipLeft}
-                                style={tooltipStyles}
-                            >
-                                Data value <strong>{tooltipData?.price}</strong>
-                            </TooltipInPortal>
-                        )}
+                        {tooltipOpen &&
+                            (() => {
+                                const difference = calcPercentageDifference(
+                                    parseInt(tooltipData?.price ?? '0'),
+                                    userDeposits,
+                                );
+                                return (
+                                    <TooltipInPortal
+                                        // set this to random so it correctly updates with parent bounds
+                                        key={Math.random()}
+                                        applyPositionStyle
+                                        top={tooltipTop}
+                                        offsetTop={-80}
+                                        left={tooltipLeft}
+                                        className={'py-4 px-8 rounded-lg bg-white dark:bg-cool-gray-800'}
+                                        style={{
+                                            ...defaultStyles,
+                                        }}
+                                    >
+                                        <p className="text-sm text-cool-gray-400">
+                                            {new Date(tooltipData?.time ?? Date.now()).toLocaleDateString()}
+                                        </p>
+                                        <p className={'text-lg font-semibold text-cool-gray-900 dark:text-white'}>
+                                            {toApproxCurrency(parseInt(tooltipData?.price ?? '0'))}
+                                        </p>
+                                        <p
+                                            className={classNames(
+                                                'text-sm',
+                                                difference >= 0 ? 'text-green-500' : 'text-red-500',
+                                            )}
+                                        >
+                                            {difference.toFixed(2)}%
+                                        </p>
+                                        <div className="arrow-down border-t-white dark:border-t-cool-gray-800" />
+                                    </TooltipInPortal>
+                                );
+                            })()}
+                        <style>{`
+                            .axis-ticks text {
+                                fill: var(--text);
+                            }
+                            .grid-line line {
+                                stroke: #9CA3AF;
+                            }
+                            html.dark .grid-line line {
+                                stroke: #1F2A37;
+                            }
+                            .arrow-down {
+                                position: absolute;
+                                width: 0; 
+                                height: 0; 
+                                top: 100%;
+                                left: calc(50% - 10px);
+                                border-left: 10px solid transparent;
+                                border-right: 10px solid transparent;
+                                border-top: 10px solid;
+                            }
+                        `}</style>
                     </>
                 );
             }}
