@@ -3246,10 +3246,10 @@
     memory-cache "^0.2.0"
     web3-utils "^1.6.0"
 
-"@tracer-protocol/onboard@^2.2.1":
-  version "2.2.1"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.1.tgz#618e6e1c510891dee267aa39a7b507c714bf8d77"
-  integrity sha512-9vMsEIPXTScLPhd82jgQ0DSxv1CPa3UN9I1E2KqZkqMIauEQ37HJgE4jdkaQoeeivI+eUEp0vI2E9oMCcerAiA==
+"@tracer-protocol/onboard@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/onboard/-/onboard-2.2.2.tgz#8aa6958fac249a0e23c7a49c6de6ca960647717a"
+  integrity sha512-W8XCmJjI6B3CdZBM413XrOxp9z1FYttWwDQA3p5IaxzMRz1XQoR4yLI7DZ2E3oy8PdESdlNAQvzhmKUbRmYapQ==
   dependencies:
     "@cvbb/eth-keyring" "^1.1.0"
     "@ethereumjs/common" "^2.0.0"
