@@ -2,7 +2,8 @@ import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum } from '@libs/constants';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
-const BASE_REPUTATION_API = 'https://api.dev.reputation.link/protocol/tracer';
+const BASE_REPUTATION_API = process.env.NEXT_PUBLIC_BASE_REPUTATION_API;
+
 
 const SourceMap: Record<SourceType, string> = {
     [ARBITRUM]: 'Arbitrum',
