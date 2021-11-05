@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children, Pool } from '@libs/types/General';
-import { FactoryContext } from '../FactoryContext';
+import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
@@ -23,6 +22,7 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { poolList } from '@libs/constants/poolLists';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -50,8 +50,8 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  * Wrapper store for all pools information
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
-    const { pools } = useContext(FactoryContext);
-    const { provider, account, signer } = useWeb3();
+    const [pools, setPools] = useState<StaticPoolInfo[]>([]);
+    const { provider, network, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
@@ -60,6 +60,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const hasSetPools = useRef(false);
     // ref to assist in the ensuring that contracts are not double subscribed
     const subscriptions = useRef<Record<string, boolean>>({});
+
+    useEffect(() => {
+        if (network && provider) {
+            setPools(poolList[network as AvailableNetwork]);
+        }
+    }, [network]);
 
     // if the pools from the factory change, re-init them
     useMemo(() => {
