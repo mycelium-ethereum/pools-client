@@ -136,7 +136,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             longToken: {
                 name: '3-LONG-BTC/USD',
                 address: '0x09c6EF9215ce74Fd8f9991D24ad32e6aF710d1B6',
-                symbol: '3-BTC/USD',
+                symbol: '3L-BTC/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
             shortToken: {
@@ -163,7 +163,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             longToken: {
                 name: '1-LONG-ETH/USD',
                 address: '0x34966D8A3Ff227f13A5F8471FE6fa9D33a7f0B85',
-                symbol: '1-ETH/USD',
+                symbol: '1L-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
             shortToken: {
@@ -190,7 +190,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             longToken: {
                 name: '3-LONG-ETH/USD',
                 address: '0x67d4101350F2494564D9FA6281E23152dC561249',
-                symbol: '3-ETH/USD',
+                symbol: '3L-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
             shortToken: {
