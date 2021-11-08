@@ -56,7 +56,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div>
                     <h3 className="mb-1 text-theme-text">Side</h3>
                     <Dropdown
-                        value={state.side}
+                        value={sideState ?? state.side}
                         options={Object.values(SideFilterEnum).map((key) => ({ key }))}
                         onSelect={(val) => {
                             sessionStorage.setItem('setSide', val);
@@ -69,7 +69,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div>
                     <h3 className="mb-1 text-theme-text">Sort</h3>
                     <Dropdown
-                        value={state.sortBy}
+                        value={sortByState ?? state.sortBy}
                         options={Object.values(SortByEnum).map((key) => ({ key: key }))}
                         onSelect={(val) => {
                             sessionStorage.setItem('setSortBy', val);
