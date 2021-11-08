@@ -16,6 +16,8 @@ import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { fetchPool } from '@libs/constants/poolLists';
+import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -97,7 +99,16 @@ export const FarmStore: React.FC<
                 } else {
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
-                    [usdcPrice] = await fetchTokenPrice(pool, [address], provider);
+
+                    const poolInfo = fetchPool(
+                        (provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork,
+                        pool,
+                    );
+                    if (!poolInfo) {
+                        console.error('Failed to find pool in poolList');
+                        return;
+                    }
+                    [usdcPrice] = await fetchTokenPrice(poolInfo, [address], provider);
                     isPoolToken = true;
                 }
 
@@ -228,9 +239,19 @@ export const FarmStore: React.FC<
                                 ? undefined
                                 : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
+                            const poolInfo = fetchPool(
+                                (provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork,
+                                pool,
+                            );
+                            if (!poolInfo) {
+                                console.error('Failed to find pool in poolList');
+                                return;
+                            }
                             const poolDetails = isPoolTokenFarm
                                 ? {
-                                      poolTokenPrice: (await fetchTokenPrice(pool, [stakingTokenAddress], provider))[0],
+                                      poolTokenPrice: (
+                                          await fetchTokenPrice(poolInfo, [stakingTokenAddress], provider)
+                                      )[0],
                                   }
                                 : undefined;
 

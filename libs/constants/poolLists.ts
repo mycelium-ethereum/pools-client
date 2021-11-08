@@ -228,3 +228,8 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
     '4': [],
     '1337': [],
 };
+
+export const fetchPool: (network: AvailableNetwork, address: string) => StaticPoolInfo | undefined = (
+    network,
+    address,
+) => poolList[network].find((pool) => pool.address === address);

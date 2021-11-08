@@ -29,11 +29,21 @@ export const initPool: (
     const contract = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
 
     const [lastUpdate, shortBalance, longBalance, oraclePrice, poolCommitter] = await Promise.all([
-        contract.lastPriceTimestamp(),
-        contract.shortBalance(),
-        contract.longBalance(),
-        contract.getOraclePrice(),
-        contract.poolCommitter(),
+        contract.lastPriceTimestamp({
+            blockTag: 'latest',
+        }),
+        contract.shortBalance({
+            blockTag: 'latest',
+        }),
+        contract.longBalance({
+            blockTag: 'latest',
+        }),
+        contract.getOraclePrice({
+            blockTag: 'latest',
+        }),
+        contract.poolCommitter({
+            blockTag: 'latest',
+        }),
     ]);
 
     console.debug(`LastUpdate: ${lastUpdate.toNumber()}`);
@@ -50,8 +60,12 @@ export const initPool: (
         provider,
     ) as PoolToken;
     const [longTokenSupply, shortTokenSupply] = await Promise.all([
-        longTokenInstance.totalSupply(),
-        shortTokenInstance.totalSupply(),
+        longTokenInstance.totalSupply({
+            blockTag: 'latest',
+        }),
+        shortTokenInstance.totalSupply({
+            blockTag: 'latest',
+        }),
     ]);
 
     // fetch minimum commit size
@@ -60,12 +74,16 @@ export const initPool: (
         PoolCommitter__factory.abi,
         provider,
     ) as PoolCommitter;
-    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
+    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize({
+        blockTag: 'latest',
+    });
 
     // fetch last keeper price
     const keeperInstance = new ethers.Contract(pool.keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
-    const lastPrice = await keeperInstance.executionPrice(pool.address);
+    const lastPrice = await keeperInstance.executionPrice(pool.address, {
+        blockTag: 'latest',
+    });
 
     const quoteTokenDecimals = pool.quoteToken.decimals;
 
@@ -196,7 +214,9 @@ export const fetchTokenBalances: (
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.balanceOf(account);
+            return tokenContract.balanceOf(account, {
+                blockTag: 'latest',
+            });
         }),
     );
 };
@@ -210,7 +230,9 @@ export const fetchTokenApprovals: (
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.allowance(account, pool);
+            return tokenContract.allowance(account, pool, {
+                blockTag: 'latest',
+            });
         }),
     );
 };

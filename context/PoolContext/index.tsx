@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
+import { Children, Pool } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
@@ -50,8 +50,7 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  * Wrapper store for all pools information
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
-    const [pools, setPools] = useState<StaticPoolInfo[]>([]);
-    const { provider, network, account, signer } = useWeb3();
+    const { provider, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
@@ -61,16 +60,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     // ref to assist in the ensuring that contracts are not double subscribed
     const subscriptions = useRef<Record<string, boolean>>({});
 
-    useEffect(() => {
-        if (network && provider) {
-            setPools(poolList[network as AvailableNetwork]);
-        }
-    }, [network]);
-
     // if the pools from the factory change, re-init them
     useMemo(() => {
         let mounted = true;
-        if (pools && provider) {
+        console.debug('Attempting to initialise pools');
+        if (provider) {
+            const network = provider.network?.chainId?.toString();
+            const pools = poolList[network as AvailableNetwork];
+            console.debug(`Initialising pools ${network.slice()}`, pools);
             poolsDispatch({ type: 'resetPools' });
             hasSetPools.current = false;
             Promise.all(pools.map((pool) => initPool(pool, provider)))
@@ -92,11 +89,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         poolsDispatch({ type: 'setPoolsInitialised', value: false });
                     }
                 });
+        } else {
+            console.error('Skipped pools initialisation, provider not ready');
         }
         return () => {
             mounted = false;
         };
-    }, [pools]);
+    }, [provider]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -105,16 +104,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             Object.values(poolsState.pools).map((pool) => {
                 const decimals = pool.quoteToken.decimals;
                 // fetch commits
-                try {
-                    fetchCommits(
-                        {
-                            committer: pool.committer.address,
-                            quoteTokenDecimals: decimals,
-                            lastUpdate: pool.lastUpdate.toNumber(),
-                            address: pool.address,
-                        },
-                        provider,
-                    ).then((committerInfo) => {
+                fetchCommits(
+                    {
+                        committer: pool.committer.address,
+                        quoteTokenDecimals: decimals,
+                        lastUpdate: pool.lastUpdate.toNumber(),
+                        address: pool.address,
+                    },
+                    provider,
+                )
+                    .then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
                                 type: 'setPendingAmounts',
@@ -140,11 +139,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 });
                             });
                         }
+                    })
+                    .catch((err) => {
+                        console.error('Failed to initialise committer', err);
                     });
-                } catch (err) {
-                    console.error('Failed to initialise committer', err);
-                }
-
                 // subscribe
                 subscribeToPool(pool.address);
             });
@@ -218,15 +216,19 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
         const decimals = pool.quoteToken.decimals;
-        fetchTokenApprovals(tokens, provider, account, pool.address).then((approvals) => {
-            poolsDispatch({
-                type: 'setTokenApprovals',
-                pool: pool.address,
-                shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
-                longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
-                quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+        fetchTokenApprovals(tokens, provider, account, pool.address)
+            .then((approvals) => {
+                poolsDispatch({
+                    type: 'setTokenApprovals',
+                    pool: pool.address,
+                    shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
+                    longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
+                    quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+                });
+            })
+            .catch((err) => {
+                console.error('Failed to fetch token allowances', err);
             });
-        });
     };
 
     // subscribe to pool events

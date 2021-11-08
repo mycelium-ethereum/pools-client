@@ -98,9 +98,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                     cacheWalletSelection &&
                                     localStorage.setItem('onboard.selectedWallet', wallet.name);
 
-                                setWallet(wallet);
-                                usingDefaultProvider.current = false;
-                                setProvider(new ethers.providers.Web3Provider(wallet.provider, 'any'));
+                                const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');
+                                console.debug('Waiting for injected wallet provider');
+                                provider_.ready.then(() => {
+                                    console.debug('Injected wallet provider ready');
+                                    setWallet(wallet);
+                                    usingDefaultProvider.current = false;
+                                    setProvider(provider_);
+                                });
                             } else {
                                 setWallet(undefined);
                             }
