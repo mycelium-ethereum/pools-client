@@ -1,6 +1,6 @@
+import React, { useEffect, useState } from 'react';
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
-import React from 'react';
 import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
@@ -10,6 +10,13 @@ interface FilterSelectsProps {
 }
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
+    const [leverageState, setLeverageState] = useState<string | null>();
+    useEffect(() => {
+        if (sessionStorage.getItem('setLeverage') !== null) {
+            setLeverageState(sessionStorage.getItem('setLeverage'));
+            dispatch({ type: 'setLeverage', leverage: leverageState as LeverageFilterEnum });
+        }
+    }, []);
     return (
         <section className="container px-0">
             <div className="flex w-full mb-2">
@@ -26,9 +33,13 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     </TooltipSelector>
                     <Dropdown
                         className="w-full"
-                        value={state.leverage}
+                        value={leverageState ?? state.leverage}
                         options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
+                        onSelect={(val) => {
+                            sessionStorage.setItem('setLeverage', val);
+                            setLeverageState(val);
+                            dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum });
+                        }}
                     />
                 </div>
                 <div>
