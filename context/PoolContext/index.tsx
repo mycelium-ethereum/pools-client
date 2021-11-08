@@ -64,7 +64,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useMemo(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
-        if (provider) {
+        if (provider && provider.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             const pools = poolList[network as AvailableNetwork];
             console.debug(`Initialising pools ${network.slice()}`, pools);
@@ -91,11 +91,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 });
         } else {
             console.error('Skipped pools initialisation, provider not ready');
+            poolsDispatch({ type: 'resetPools' });
         }
         return () => {
             mounted = false;
         };
-    }, [provider]);
+    }, [provider, provider?.network.chainId]);
 
     // fetch all pending commits
     useEffect(() => {

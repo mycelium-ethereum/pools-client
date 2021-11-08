@@ -66,7 +66,10 @@ export const initPool: (
         shortTokenInstance.totalSupply({
             blockTag: 'latest',
         }),
-    ]);
+    ]).catch((err) => {
+        console.log('Failed to fetch short and long supply', err);
+        return [ethers.BigNumber.from(0), ethers.BigNumber.from(0)];
+    });
 
     // fetch minimum commit size
     const poolCommitterInstance = new ethers.Contract(
