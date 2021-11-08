@@ -1,7 +1,8 @@
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
-import { StaticPoolInfo } from 'libs/types/General';
+import { StaticPoolInfo, StaticTokenInfo } from 'libs/types/General';
 import BigNumber from 'bignumber.js';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '.';
+import { tokenMap } from './tokenList';
 
 const ONE_HOUR = new BigNumber(3600); // seconds
 const FIVE_MINUTES = new BigNumber(300); // seconds
@@ -30,12 +31,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '1S-BTC/USD',
                 decimals: USDC_TOKEN_DECIMALS,
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-                decimals: USDC_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
             name: '3-BTC/USD',
@@ -56,12 +52,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '3S-BTC/USD',
                 decimals: USDC_TOKEN_DECIMALS,
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-                decimals: USDC_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
             name: '1-ETH/USD',
@@ -82,12 +73,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '1S-ETH/USD',
                 decimals: USDC_TOKEN_DECIMALS,
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-                decimals: USDC_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
             name: '3-ETH/USD',
@@ -108,12 +94,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '3S-ETH/USD',
                 decimals: USDC_TOKEN_DECIMALS,
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-                decimals: USDC_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
         },
     ],
     [ARBITRUM_RINKEBY]: [
@@ -232,7 +213,38 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
     '1337': [],
 };
 
-export const fetchPool: (network: AvailableNetwork, address: string) => StaticPoolInfo | undefined = (
-    network,
-    address,
-) => poolList[network].find((pool) => pool.address === address);
+// construct pool map so it is easier to access specific pools
+export const poolMap = Object.assign({}, 
+    ...Object.keys(poolList).map(
+        (key) => ({
+            [key]:
+                Object.assign(
+                {}, 
+                ...poolList[key as AvailableNetwork].map((poolInfo) => ({
+                    [poolInfo.address]: {
+                        ...poolInfo
+                    }
+                }))
+            )
+        })
+    )
+);
+
+// construct token list from the assets listed within the poolsList
+export const poolTokenList: Record<AvailableNetwork, Record<string, StaticTokenInfo>> = Object.assign({}, 
+    ...Object.keys(poolList).map(
+        (key) => ({
+            [key]: Object.assign(
+                {}, 
+                ...poolList[key as AvailableNetwork].map((poolInfo) => ({
+                    [poolInfo.shortToken.address]: {
+                        ...poolInfo.shortToken
+                    },
+                    [poolInfo.longToken.address]: {
+                        ...poolInfo.longToken
+                    },
+                }))
+            )
+        })
+    )
+);

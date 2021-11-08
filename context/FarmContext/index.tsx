@@ -16,7 +16,7 @@ import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
-import { fetchPool } from '@libs/constants/poolLists';
+import { poolMap } from '@libs/constants/poolLists';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 type FarmsLookup = { [address: string]: Farm };
@@ -100,10 +100,7 @@ export const FarmStore: React.FC<
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
 
-                    const poolInfo = fetchPool(
-                        (provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork,
-                        pool,
-                    );
+                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool]
                     if (!poolInfo) {
                         console.error('Failed to find pool in poolList');
                         return;
@@ -239,10 +236,7 @@ export const FarmStore: React.FC<
                                 ? undefined
                                 : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
-                            const poolInfo = fetchPool(
-                                (provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork,
-                                pool,
-                            );
+                            const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool]
                             if (!poolInfo) {
                                 console.error('Failed to find pool in poolList');
                                 return;

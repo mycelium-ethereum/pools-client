@@ -2,6 +2,7 @@ import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
 import { BridgeableAsset } from '@libs/types/General';
 import { LogoTicker } from '@components/General/Logo';
 import BigNumber from 'bignumber.js';
+import { tokenMap } from '@libs/constants/tokenList';
 
 type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;
 
@@ -18,9 +19,6 @@ export const bridgeableTickers: { [symbol: string]: LogoTicker } = {
 };
 
 const usdcSharedDetails = {
-    name: 'USDC',
-    symbol: bridgeableTickers.USDC as LogoTicker,
-    decimals: 6,
     displayDecimals: 2,
 };
 
@@ -36,47 +34,35 @@ export type BridgeableAssets = {
     [networkId: string]: BridgeableAsset[];
 };
 
-type KnownAssetAddressesByNetwork = { [networkId: string]: { [ticker: string]: string } };
-const knownAssetAddressesByNetwork: KnownAssetAddressesByNetwork = {
-    [ARBITRUM]: {
-        [bridgeableTickers.USDC]: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
-    },
-    [ARBITRUM_RINKEBY]: {
-        [bridgeableTickers.USDC]: '0x1E77ad77925Ac0075CF61Fb76bA35D884985019d',
-    },
-    [MAINNET]: {
-        [bridgeableTickers.USDC]: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-    },
-    [RINKEBY]: {
-        [bridgeableTickers.USDC]: '0x4DBCdF9B62e891a7cec5A2568C3F4FAF9E8Abe2b',
-    },
-};
-
 export const bridgeableAssets: BridgeableAssets = {
     [ARBITRUM]: [
         {
-            address: knownAssetAddressesByNetwork[ARBITRUM][bridgeableTickers.USDC],
+            ...tokenMap[ARBITRUM][bridgeableTickers.USDC],
+            symbol: tokenMap[ARBITRUM][bridgeableTickers.USDC].symbol as LogoTicker,
             ...usdcSharedDetails,
         },
         BRIDGEABLE_ASSET_ETH,
     ],
     [ARBITRUM_RINKEBY]: [
         {
-            address: knownAssetAddressesByNetwork[ARBITRUM_RINKEBY][bridgeableTickers.USDC],
+            ...tokenMap[ARBITRUM_RINKEBY][bridgeableTickers.USDC],
+            symbol: tokenMap[ARBITRUM_RINKEBY][bridgeableTickers.USDC].symbol as LogoTicker,
             ...usdcSharedDetails,
         },
         BRIDGEABLE_ASSET_ETH,
     ],
     [MAINNET]: [
         {
-            address: knownAssetAddressesByNetwork[MAINNET][bridgeableTickers.USDC],
+            ...tokenMap[MAINNET][bridgeableTickers.USDC],
+            symbol: tokenMap[MAINNET][bridgeableTickers.USDC].symbol as LogoTicker,
             ...usdcSharedDetails,
         },
         BRIDGEABLE_ASSET_ETH,
     ],
     [RINKEBY]: [
         {
-            address: knownAssetAddressesByNetwork[RINKEBY][bridgeableTickers.USDC],
+            ...tokenMap[RINKEBY][bridgeableTickers.USDC],
+            symbol: tokenMap[RINKEBY][bridgeableTickers.USDC].symbol as LogoTicker,
             ...usdcSharedDetails,
         },
         BRIDGEABLE_ASSET_ETH,
