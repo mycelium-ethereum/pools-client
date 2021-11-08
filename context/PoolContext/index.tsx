@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children, Pool } from '@libs/types/General';
-import { FactoryContext } from '../FactoryContext';
+import { Children, Pool } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
@@ -23,6 +22,7 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { poolList } from '@libs/constants/poolLists';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -50,7 +50,6 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  * Wrapper store for all pools information
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
-    const { pools } = useContext(FactoryContext);
     const { provider, account, signer } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
@@ -64,7 +63,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     // if the pools from the factory change, re-init them
     useMemo(() => {
         let mounted = true;
-        if (pools && provider) {
+        console.debug('Attempting to initialise pools');
+        if (provider?.network?.chainId) {
+            const network = provider.network?.chainId?.toString();
+            const pools = poolList[network as AvailableNetwork];
+            console.debug(`Initialising pools ${network.slice()}`, pools);
             poolsDispatch({ type: 'resetPools' });
             hasSetPools.current = false;
             Promise.all(pools.map((pool) => initPool(pool, provider)))
@@ -84,13 +87,18 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     console.error('Failed to initialise pools', err);
                     if (mounted) {
                         poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                        // this will stop incrementing at MAX_RETRY_COUNT specified in ./poolDispatch
+                        poolsDispatch({ type: 'incrementRetryCount' });
                     }
                 });
+        } else {
+            console.error('Skipped pools initialisation, provider not ready');
+            poolsDispatch({ type: 'resetPools' });
         }
         return () => {
             mounted = false;
         };
-    }, [pools]);
+    }, [provider?.network.chainId, poolsState.retryCount]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -99,16 +107,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             Object.values(poolsState.pools).map((pool) => {
                 const decimals = pool.quoteToken.decimals;
                 // fetch commits
-                try {
-                    fetchCommits(
-                        {
-                            committer: pool.committer.address,
-                            quoteTokenDecimals: decimals,
-                            lastUpdate: pool.lastUpdate.toNumber(),
-                            address: pool.address,
-                        },
-                        provider,
-                    ).then((committerInfo) => {
+                fetchCommits(
+                    {
+                        committer: pool.committer.address,
+                        quoteTokenDecimals: decimals,
+                        lastUpdate: pool.lastUpdate.toNumber(),
+                        address: pool.address,
+                    },
+                    provider,
+                )
+                    .then((committerInfo) => {
                         if (mounted) {
                             poolsDispatch({
                                 type: 'setPendingAmounts',
@@ -134,11 +142,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 });
                             });
                         }
+                    })
+                    .catch((err) => {
+                        console.error('Failed to initialise committer', err);
                     });
-                } catch (err) {
-                    console.error('Failed to initialise committer', err);
-                }
-
                 // subscribe
                 subscribeToPool(pool.address);
             });
@@ -212,15 +219,19 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
         const decimals = pool.quoteToken.decimals;
-        fetchTokenApprovals(tokens, provider, account, pool.address).then((approvals) => {
-            poolsDispatch({
-                type: 'setTokenApprovals',
-                pool: pool.address,
-                shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
-                longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
-                quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+        fetchTokenApprovals(tokens, provider, account, pool.address)
+            .then((approvals) => {
+                poolsDispatch({
+                    type: 'setTokenApprovals',
+                    pool: pool.address,
+                    shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
+                    longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
+                    quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+                });
+            })
+            .catch((err) => {
+                console.error('Failed to fetch token allowances', err);
             });
-        });
     };
 
     // subscribe to pool events

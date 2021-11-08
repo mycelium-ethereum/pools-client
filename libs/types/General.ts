@@ -33,13 +33,15 @@ export type PoolType = {
     address: string;
 };
 
-export type Token = {
+export type StaticTokenInfo = {
     address: string;
     name: string;
     symbol: string;
+    decimals: number;
+};
+export type Token = StaticTokenInfo & {
     balance: BigNumber;
     approvedAmount: BigNumber;
-    decimals: number;
 };
 
 export type TokenBreakdown = PoolToken & {
@@ -73,24 +75,33 @@ export type CreatedCommitType = TypedEvent<
     }
 >;
 
-export type Pool = {
+export type StaticPoolInfo = {
     address: string;
     name: string;
     updateInterval: BigNumber;
     frontRunningInterval: BigNumber;
+    leverage: number;
+    keeper: string;
+    committer: {
+        address: string;
+    };
+    shortToken: StaticTokenInfo;
+    longToken: StaticTokenInfo;
+    quoteToken: StaticTokenInfo;
+};
+
+export type Pool = StaticPoolInfo & {
     lastUpdate: BigNumber;
     lastPrice: BigNumber;
     shortBalance: BigNumber;
     longBalance: BigNumber;
     nextShortBalance: BigNumber;
     nextLongBalance: BigNumber;
-    leverage: number;
     oraclePrice: BigNumber;
     quoteToken: Token;
     shortToken: PoolToken;
     longToken: PoolToken;
     committer: Committer;
-    keeper: string;
     subscribed: boolean;
 };
 

@@ -23,6 +23,7 @@ export type AvailableNetwork =
     | typeof RINKEBY
     | '0'
     | '1337';
+
 export type Network = {
     id: AvailableNetwork;
     name: string;

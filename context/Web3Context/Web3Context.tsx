@@ -1,11 +1,9 @@
 // https://choosealicense.com/licenses/lgpl-3.0/
 // inspiration from https://github.com/ChainSafe/web3-context
 
-import * as React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import React, { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { formatEther } from '@ethersproject/units';
 import { AvailableNetwork, Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
@@ -32,7 +30,6 @@ type OnboardContext = {
 type Web3Context = {
     account?: string;
     signer?: ethers.Signer;
-    ethBalance?: number;
     gasPrice?: number;
     network?: AvailableNetwork;
     wallet?: Wallet;
@@ -42,8 +39,8 @@ type Web3Context = {
     unsupportedNetworkPopupRef: React.MutableRefObject<string>;
 };
 
-const Web3Context = React.createContext<Web3Context | undefined>(undefined);
-const OnboardContext = React.createContext<OnboardContext | undefined>(undefined);
+const Web3Context = createContext<Web3Context | undefined>(undefined);
+const OnboardContext = createContext<OnboardContext | undefined>(undefined);
 
 const DEFAULT_NETWORK = ARBITRUM;
 const DEFAULT_WSS_RPC = networkConfig[DEFAULT_NETWORK].publicWebsocketRPC;
@@ -62,7 +59,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<AvailableNetwork | undefined>(undefined);
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(undefined);
-    const [ethBalance, setEthBalance] = useState<number | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
@@ -87,20 +83,26 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                         address: (address) => {
                             console.info(`Changing address: ${address}`);
                             setAccount(address);
-                            checkIsReady();
                             onboardConfig?.subscriptions?.address && onboardConfig?.subscriptions?.address(address);
                         },
                         wallet: (wallet) => {
                             console.debug('Detected wallet change');
                             if (wallet.provider) {
                                 console.debug('Setting wallet provider');
-                                wallet.name &&
-                                    cacheWalletSelection &&
-                                    localStorage.setItem('onboard.selectedWallet', wallet.name);
-
-                                setWallet(wallet);
-                                usingDefaultProvider.current = false;
-                                setProvider(new ethers.providers.Web3Provider(wallet.provider, 'any'));
+                                if (wallet.name && cacheWalletSelection) {
+                                    window.localStorage.setItem('onboard.selectedWallet', wallet.name);
+                                }
+                                const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');
+                                console.debug('Waiting for injected wallet provider');
+                                provider_.ready.then(() => {
+                                    console.debug('Injected wallet provider ready');
+                                    setWallet(wallet);
+                                    usingDefaultProvider.current = false;
+                                    setProvider(provider_);
+                                    if (provider_?.network.chainId) {
+                                        setNetwork(provider_.network.chainId.toString() as AvailableNetwork);
+                                    }
+                                });
                             } else {
                                 setWallet(undefined);
                             }
@@ -114,24 +116,21 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                             const network_ = network?.toString() as AvailableNetwork;
                             setNetwork(network_);
                             setConfig(networkConfig[network_ ?? 0]);
-                            checkIsReady();
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
-                        },
-                        balance: (balance) => {
-                            try {
-                                const bal = Number(formatEther(balance));
-                                !isNaN(bal) ? setEthBalance(bal) : setEthBalance(0);
-                            } catch (error) {
-                                setEthBalance(0);
-                            }
-                            onboardConfig?.subscriptions?.balance && onboardConfig.subscriptions.balance(balance);
                         },
                     },
                 });
 
-                const savedWallet = localStorage.getItem('onboard.selectedWallet');
-                cacheWalletSelection && savedWallet && onboard.walletSelect(savedWallet);
-                setOnboard(onboard);
+                const savedWallet = window.localStorage.getItem('onboard.selectedWallet');
+                if (cacheWalletSelection && savedWallet) {
+                    (async () => {
+                        await onboard.walletSelect(savedWallet);
+                        await onboard.walletCheck();
+                        setOnboard(onboard);
+                    })();
+                } else {
+                    setOnboard(onboard);
+                }
             } catch (error) {
                 console.error('Error initializing onboard', error);
             }
@@ -158,11 +157,13 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 }
             }
         };
-        waitForDefaultProvider();
+        if (onboard && checkIsReady()) {
+            waitForDefaultProvider();
+        }
         return () => {
             mounted = false;
         };
-    }, []);
+    }, [onboard]);
 
     useEffect(() => {
         if (onboard) {
@@ -175,7 +176,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
         setSigner(signer);
     }, [provider, account]);
 
-    React.useMemo(() => {
+    useMemo(() => {
         let mounted = true;
         if (provider) {
             provider.getBlockNumber().then((num) => {
@@ -197,16 +198,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     }, [provider, network]);
 
     const checkIsReady = async () => {
-        const isReady = await onboard?.walletCheck();
+        const isReady = await onboard?.walletCheck().catch((_err) => false);
+        console.debug('Wallet is ready', isReady);
         setIsReady(!!isReady);
-        if (!isReady) {
-            setEthBalance(0);
-        }
         return !!isReady;
     };
 
     const resetOnboard = async () => {
-        localStorage.setItem('onboard.selectedWallet', '');
+        window.localStorage.setItem('onboard.selectedWallet', '');
         setIsReady(false);
         await onboard?.walletReset();
     };
@@ -229,7 +228,6 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             account: account,
             signer: signer,
             network: network,
-            ethBalance: ethBalance,
             provider: provider,
             wallet: wallet,
             gasPrice,
@@ -237,7 +235,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             config,
             unsupportedNetworkPopupRef,
         }),
-        [provider, signer, gasPrice, account, network, ethBalance, config, wallet, blockNumber],
+        [provider, signer, gasPrice, account, network, config, wallet, blockNumber],
     );
 
     const onboardState = onboard?.getState();
