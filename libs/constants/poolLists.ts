@@ -214,37 +214,34 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
 };
 
 // construct pool map so it is easier to access specific pools
-export const poolMap = Object.assign({}, 
-    ...Object.keys(poolList).map(
-        (key) => ({
-            [key]:
-                Object.assign(
-                {}, 
-                ...poolList[key as AvailableNetwork].map((poolInfo) => ({
-                    [poolInfo.address]: {
-                        ...poolInfo
-                    }
-                }))
-            )
-        })
-    )
+export const poolMap = Object.assign(
+    {},
+    ...Object.keys(poolList).map((key) => ({
+        [key]: Object.assign(
+            {},
+            ...poolList[key as AvailableNetwork].map((poolInfo) => ({
+                [poolInfo.address]: {
+                    ...poolInfo,
+                },
+            })),
+        ),
+    })),
 );
 
 // construct token list from the assets listed within the poolsList
-export const poolTokenList: Record<AvailableNetwork, Record<string, StaticTokenInfo>> = Object.assign({}, 
-    ...Object.keys(poolList).map(
-        (key) => ({
-            [key]: Object.assign(
-                {}, 
-                ...poolList[key as AvailableNetwork].map((poolInfo) => ({
-                    [poolInfo.shortToken.address]: {
-                        ...poolInfo.shortToken
-                    },
-                    [poolInfo.longToken.address]: {
-                        ...poolInfo.longToken
-                    },
-                }))
-            )
-        })
-    )
+export const poolTokenList: Record<AvailableNetwork, Record<string, StaticTokenInfo>> = Object.assign(
+    {},
+    ...Object.keys(poolList).map((key) => ({
+        [key]: Object.assign(
+            {},
+            ...poolList[key as AvailableNetwork].map((poolInfo) => ({
+                [poolInfo.shortToken.address]: {
+                    ...poolInfo.shortToken,
+                },
+                [poolInfo.longToken.address]: {
+                    ...poolInfo.longToken,
+                },
+            })),
+        ),
+    })),
 );

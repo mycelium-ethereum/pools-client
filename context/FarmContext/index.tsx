@@ -100,7 +100,7 @@ export const FarmStore: React.FC<
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
 
-                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool]
+                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
                     if (!poolInfo) {
                         console.error('Failed to find pool in poolList');
                         return;
@@ -236,7 +236,8 @@ export const FarmStore: React.FC<
                                 ? undefined
                                 : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
-                            const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool]
+                            const poolInfo =
+                                poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
                             if (!poolInfo) {
                                 console.error('Failed to find pool in poolList');
                                 return;
