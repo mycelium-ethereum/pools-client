@@ -67,7 +67,7 @@ export const initPool: (
             blockTag: 'latest',
         }),
     ]).catch((err) => {
-        console.log('Failed to fetch short and long supply', err);
+        console.error('Failed to fetch short and long supply', err);
         return [ethers.BigNumber.from(0), ethers.BigNumber.from(0)];
     });
 
