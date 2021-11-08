@@ -28,7 +28,7 @@ export const initPool: (
 ) => Promise<Pool> = async (pool, provider) => {
     const contract = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
 
-    const [lastUpdate, shortBalance, longBalance, oraclePrice, poolCommitter] = await Promise.all([
+    const [lastUpdate, shortBalance, longBalance, oraclePrice] = await Promise.all([
         contract.lastPriceTimestamp({
             blockTag: 'latest',
         }),
@@ -39,9 +39,6 @@ export const initPool: (
             blockTag: 'latest',
         }),
         contract.getOraclePrice({
-            blockTag: 'latest',
-        }),
-        contract.poolCommitter({
             blockTag: 'latest',
         }),
     ]);
@@ -73,7 +70,7 @@ export const initPool: (
 
     // fetch minimum commit size
     const poolCommitterInstance = new ethers.Contract(
-        poolCommitter,
+        pool.committer.address,
         PoolCommitter__factory.abi,
         provider,
     ) as PoolCommitter;
@@ -102,7 +99,8 @@ export const initPool: (
         nextLongBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
         committer: {
-            address: poolCommitter,
+            address: pool.committer.address,
+            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
             pendingLong: {
                 mint: new BigNumber(0),
                 burn: new BigNumber(0),
@@ -112,7 +110,6 @@ export const initPool: (
                 burn: new BigNumber(0),
             },
             allUnexecutedCommits: [],
-            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,
