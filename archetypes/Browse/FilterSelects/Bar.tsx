@@ -3,6 +3,7 @@ import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import useBrowsePools from '@libs/hooks/useBrowsePools';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -11,12 +12,22 @@ interface FilterSelectsProps {
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const [leverageState, setLeverageState] = useState<string | null>();
+    const [sideState, setSideState] = useState<string | null>();
+    const [sortByState, setSortByState] = useState<string | null>();
     useEffect(() => {
         if (sessionStorage.getItem('setLeverage') !== null) {
             setLeverageState(sessionStorage.getItem('setLeverage'));
             dispatch({ type: 'setLeverage', leverage: leverageState as LeverageFilterEnum });
         }
-    }, []);
+        if (sessionStorage.getItem('setSide') !== null) {
+            setSideState(sessionStorage.getItem('setSide'));
+            dispatch({ type: 'setSide', side: sideState as SideFilterEnum });
+        }
+        if (sessionStorage.getItem('setSortBy') !== null) {
+            setSortByState(sessionStorage.getItem('setSortBy'));
+            dispatch({ type: 'setSortBy', sortBy: sortByState as SortByEnum });
+        }
+    }, [useBrowsePools()]);
     return (
         <section className="container px-0">
             <div className="flex w-full mb-2">
@@ -47,7 +58,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <Dropdown
                         value={state.side}
                         options={Object.values(SideFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
+                        onSelect={(val) => {
+                            sessionStorage.setItem('setSide', val);
+                            setSideState(val);
+                            dispatch({ type: 'setSide', side: val as SideFilterEnum });
+                        }}
                     />
                 </div>
                 <div className="flex-grow" />
@@ -56,7 +71,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <Dropdown
                         value={state.sortBy}
                         options={Object.values(SortByEnum).map((key) => ({ key: key }))}
-                        onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
+                        onSelect={(val) => {
+                            sessionStorage.setItem('setSortBy', val);
+                            setSortByState(val);
+                            dispatch({ type: 'setSortBy', sortBy: val as SortByEnum });
+                        }}
                     />
                 </div>
             </div>
