@@ -2,17 +2,21 @@ import { CommitEnum } from '@libs/constants';
 import { PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
+const MAX_RETRY_COUNT = 5;
+
 export type PoolState = {
     pools: Record<string, Pool>;
     subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
     poolsInitialised: boolean;
+    retryCount: number;
 };
 
 export const initialPoolState: PoolState = {
     pools: {},
     selectedPool: undefined,
     poolsInitialised: false,
+    retryCount: 0,
     subscriptions: {},
 };
 
@@ -33,6 +37,7 @@ export type PoolAction =
           longTokenAmount: BigNumber;
       }
     | { type: 'setPoolsInitialised'; value: boolean }
+    | { type: 'incrementRetryCount' }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
@@ -51,12 +56,23 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     [action.key]: action.pool,
                 },
             };
+        case 'incrementRetryCount': {
+            if (state.retryCount >= MAX_RETRY_COUNT) {
+                return state;
+            } else {
+                return {
+                    ...state,
+                    retryCount: state.retryCount + 1,
+                };
+            }
+        }
         case 'resetPools':
             return {
                 ...state,
                 pools: {},
                 poolsInitialised: false,
                 subscriptions: {},
+                retryInit: false,
             };
         case 'setNextPoolBalances':
             return {

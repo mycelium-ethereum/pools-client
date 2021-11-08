@@ -64,7 +64,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useMemo(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
-        if (provider && provider.network?.chainId) {
+        if (provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             const pools = poolList[network as AvailableNetwork];
             console.debug(`Initialising pools ${network.slice()}`, pools);
@@ -87,6 +87,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     console.error('Failed to initialise pools', err);
                     if (mounted) {
                         poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                        // this will stop incrementing at MAX_RETRY_COUNT specified in ./poolDispatch
+                        poolsDispatch({ type: 'incrementRetryCount' });
                     }
                 });
         } else {
@@ -96,7 +98,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider, provider?.network.chainId]);
+    }, [provider?.network.chainId, poolsState.retryCount]);
 
     // fetch all pending commits
     useEffect(() => {

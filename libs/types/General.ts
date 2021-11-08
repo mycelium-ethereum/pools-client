@@ -82,6 +82,9 @@ export type StaticPoolInfo = {
     frontRunningInterval: BigNumber;
     leverage: number;
     keeper: string;
+    committer: {
+        address: string;
+    };
     shortToken: StaticTokenInfo;
     longToken: StaticTokenInfo;
     quoteToken: StaticTokenInfo;
