@@ -306,24 +306,35 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         Old price: ${ethers.utils.formatEther(startPrice)}
                         New price: ${ethers.utils.formatEther(endPrice)}
                     `);
-                    const leveragedPool = new ethers.Contract(
-                        pool,
-                        LeveragedPool__factory.abi,
-                        subscriptionProvider,
-                    ) as LeveragedPool;
-                    leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
-                        console.debug(`New last updated: ${lastUpdate}`);
-                        poolsDispatch({
-                            type: 'setLastUpdate',
-                            pool: pool,
-                            value: new BigNumber(lastUpdate.toString()),
+                    if (subscriptionProvider.network.chainId !== provider.network.chainId) {
+                        console.error('Stale upkeep detected: Networks do not match. Removing all listners');
+                        // remove all listeners as we are no longer connected to this network
+                        keeperInstance.removeAllListeners();
+                        // remove from list of subscriptions
+                        subscriptions.current = {
+                            ...subscriptions.current,
+                            [keeper]: false,
+                        };
+                    } else {
+                        const leveragedPool = new ethers.Contract(
+                            pool,
+                            LeveragedPool__factory.abi,
+                            subscriptionProvider,
+                        ) as LeveragedPool;
+                        leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
+                            console.debug(`New last updated: ${lastUpdate}`);
+                            poolsDispatch({
+                                type: 'setLastUpdate',
+                                pool: pool,
+                                value: new BigNumber(lastUpdate.toString()),
+                            });
                         });
-                    });
-                    updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
-                    commitDispatch({
-                        type: 'resetCommits',
-                        pool: pool,
-                    });
+                        updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
+                        commitDispatch({
+                            type: 'resetCommits',
+                            pool: pool,
+                        });
+                    }
                 });
                 subscriptions.current = {
                     ...subscriptions.current,
