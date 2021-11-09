@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children, Pool } from 'libs/types/General';
+import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
@@ -66,7 +66,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         console.debug('Attempting to initialise pools');
         if (provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
-            const pools = poolList[network as AvailableNetwork];
+            const pools: StaticPoolInfo[] = poolList[network as AvailableNetwork] ?? [];
             console.debug(`Initialising pools ${network.slice()}`, pools);
             poolsDispatch({ type: 'resetPools' });
             hasSetPools.current = false;
