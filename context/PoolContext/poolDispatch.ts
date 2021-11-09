@@ -75,6 +75,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 retryInit: false,
             };
         case 'setNextPoolBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -87,6 +90,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setTokenBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -109,6 +115,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setTokenApprovals':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -118,22 +127,22 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         shortToken: {
                             ...state.pools[action.pool].shortToken,
                             approvedAmount: action.shortTokenAmount,
-                            // .gte(state.pools[action.pool].shortToken.balance),
                         },
                         longToken: {
                             ...state.pools[action.pool].longToken,
                             approvedAmount: action.longTokenAmount,
-                            // gte(state.pools[action.pool].longToken.balance),
                         },
                         quoteToken: {
                             ...state.pools[action.pool].quoteToken,
                             approvedAmount: action.quoteTokenAmount,
-                            // .gte(state.pools[action.pool].quoteToken.balance),
                         },
                     },
                 },
             };
         case 'setLastUpdate':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -205,6 +214,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 poolsInitialised: action.value,
             };
         case 'setTokenApproved':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
