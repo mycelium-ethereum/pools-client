@@ -250,7 +250,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 PoolCommitter__factory.abi,
                 subscriptionProvider,
             ) as PoolCommitter;
-            provider.removeAllListeners();
 
             // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
