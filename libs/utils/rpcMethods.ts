@@ -121,11 +121,12 @@ export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Prom
 
     const data = {
         query: `{
-                leveragedPools: pools(where: { 
+                leveragedPools: pools(where: {
                     address_in: ${JSON.stringify(balancerInfo.leveragedPools)}
                 }) {
                     id
                     address
+                    swapFee
                     tokens {
                         address
                         balance
@@ -134,11 +135,12 @@ export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Prom
                         symbol
                     }
                 },
-                nonLeveragedPools: pools(where: { 
+                nonLeveragedPools: pools(where: {
                     address_in: ${JSON.stringify(balancerInfo.pools)}
                 }) {
                     id
                     address
+                    swapFee
                     tokens {
                         address
                         balance
@@ -152,6 +154,7 @@ export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Prom
                 }) {
                     id
                     address
+                    swapFee
                     tokens {
                         address
                         balance
@@ -178,6 +181,7 @@ export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Prom
         pools: {
             id: string;
             address: string;
+            swapFee: string;
             tokens: {
                 address: string;
                 balance: string;
@@ -205,6 +209,7 @@ export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Prom
                         balance: new BigNumber(token.balance),
                         weight: new BigNumber(token.weight),
                     },
+                    new BigNumber(pool.swapFee),
                 );
             }
         }
