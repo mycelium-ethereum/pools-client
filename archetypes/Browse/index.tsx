@@ -124,7 +124,7 @@ export const Browse: React.FC = () => {
                     <section className="hidden md:block">
                         <h1 className="font-bold text-3xl mb-2 text-theme-text hidden md:block">Pool Tokens</h1>
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
-                        <FilterBar state={state} dispatch={dispatch} />
+                        <FilterBar state={state} dispatch={dispatch} tokens={tokens} />
                     </section>
                     <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
                 </div>
