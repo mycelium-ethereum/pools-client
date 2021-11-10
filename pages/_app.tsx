@@ -9,7 +9,6 @@ import '../styles/index.css';
 import { ToastProvider } from 'react-toast-notifications';
 import { Notification } from '@components/General/Notification';
 import { TransactionStore } from '@context/TransactionContext';
-import { FactoryStore } from '@context/FactoryContext';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 import { ThemeStore } from '@context/ThemeContext';
@@ -54,6 +53,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
+
             <ToastProvider components={{ Toast: Notification }}>
                 <ThemeStore>
                     <Web3Store
@@ -79,13 +79,11 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                             },
                         }}
                     >
-                        <FactoryStore>
-                            <TransactionStore>
-                                <UsersCommitStore>
-                                    <Component {...pageProps} />
-                                </UsersCommitStore>
-                            </TransactionStore>
-                        </FactoryStore>
+                        <TransactionStore>
+                            <UsersCommitStore>
+                                <Component {...pageProps} />
+                            </UsersCommitStore>
+                        </TransactionStore>
                     </Web3Store>
                 </ThemeStore>
             </ToastProvider>

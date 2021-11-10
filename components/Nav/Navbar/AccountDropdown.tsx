@@ -195,8 +195,7 @@ const accountDescriptionLong: (account: string, ensName: string) => string = (ac
 };
 
 const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
-    // return `${account.slice(0, 5)}..`
-    console.debug(ensName, 'ens name');
+    console.debug(`Found ens name: ${ensName}`);
     if (ensName) {
         const len = ensName.length;
         if (len > 14) {

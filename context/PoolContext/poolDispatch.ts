@@ -2,17 +2,21 @@ import { CommitEnum } from '@libs/constants';
 import { PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
+const MAX_RETRY_COUNT = 5;
+
 export type PoolState = {
     pools: Record<string, Pool>;
     subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
     poolsInitialised: boolean;
+    retryCount: number;
 };
 
 export const initialPoolState: PoolState = {
     pools: {},
     selectedPool: undefined,
     poolsInitialised: false,
+    retryCount: 0,
     subscriptions: {},
 };
 
@@ -33,6 +37,7 @@ export type PoolAction =
           longTokenAmount: BigNumber;
       }
     | { type: 'setPoolsInitialised'; value: boolean }
+    | { type: 'incrementRetryCount' }
     | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
@@ -51,14 +56,28 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     [action.key]: action.pool,
                 },
             };
+        case 'incrementRetryCount': {
+            if (state.retryCount >= MAX_RETRY_COUNT) {
+                return state;
+            } else {
+                return {
+                    ...state,
+                    retryCount: state.retryCount + 1,
+                };
+            }
+        }
         case 'resetPools':
             return {
                 ...state,
                 pools: {},
                 poolsInitialised: false,
                 subscriptions: {},
+                retryInit: false,
             };
         case 'setNextPoolBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -71,6 +90,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setTokenBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -93,6 +115,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 },
             };
         case 'setTokenApprovals':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -102,22 +127,22 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                         shortToken: {
                             ...state.pools[action.pool].shortToken,
                             approvedAmount: action.shortTokenAmount,
-                            // .gte(state.pools[action.pool].shortToken.balance),
                         },
                         longToken: {
                             ...state.pools[action.pool].longToken,
                             approvedAmount: action.longTokenAmount,
-                            // gte(state.pools[action.pool].longToken.balance),
                         },
                         quoteToken: {
                             ...state.pools[action.pool].quoteToken,
                             approvedAmount: action.quoteTokenAmount,
-                            // .gte(state.pools[action.pool].quoteToken.balance),
                         },
                     },
                 },
             };
         case 'setLastUpdate':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {
@@ -189,6 +214,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 poolsInitialised: action.value,
             };
         case 'setTokenApproved':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
             return {
                 ...state,
                 pools: {

@@ -22,6 +22,7 @@ export default (() => {
                     nextLongBalance,
                     leverage,
                 } = pool;
+
                 const {
                     pendingLong: { burn: pendingLongBurn },
                     pendingShort: { burn: pendingShortBurn },

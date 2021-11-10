@@ -2,23 +2,19 @@ import { initPool, fetchCommits } from '@context/PoolContext/helpers';
 import { calcNextValueTransfer, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { StaticPoolInfo } from '@libs/types/General';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 
 export const fetchTokenPrice: (
-    pool: string,
+    poolInfo: StaticPoolInfo,
     tokenAddresses: [string] | [string, string],
     provider: ethers.providers.JsonRpcProvider | undefined,
-) => Promise<BigNumber[]> = async (pool, tokenAddresses, provider) => {
-    if (!provider) {
+) => Promise<BigNumber[]> = async (poolInfo_, tokenAddresses, provider) => {
+    if (!provider || !poolInfo_) {
         return [new BigNumber(1)];
     }
 
-    const poolInfo = await initPool(
-        {
-            name: '',
-            address: pool,
-        },
-        provider,
-    );
+    const poolInfo = await initPool(poolInfo_, provider);
 
     const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
         poolInfo.lastPrice,
@@ -33,12 +29,20 @@ export const fetchTokenPrice: (
     const committerInfo = await fetchCommits(
         {
             committer: poolInfo.committer.address,
-            address: pool,
+            address: poolInfo.address,
             lastUpdate: poolInfo.lastUpdate.toNumber(),
             quoteTokenDecimals: poolInfo.quoteToken.decimals,
         },
         provider,
-    );
+    ).catch((err) => {
+        console.error('Failed to fetchCommits', err);
+        const { pendingLong, pendingShort, allUnexecutedCommits } = DEFAULT_POOLSTATE.committer;
+        return {
+            pendingLong,
+            pendingShort,
+            allUnexecutedCommits,
+        };
+    });
 
     return tokenAddresses.map((tokenAddress) => {
         const isLong: boolean = tokenAddress.toLowerCase() === poolInfo.longToken.address.toLowerCase();
