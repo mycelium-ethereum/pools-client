@@ -186,7 +186,7 @@ export const FarmStore: React.FC<
                 Promise.all(
                     config[farmContext].map(async ({ address, abi, pool, balancerPoolId, link, linkText }) => {
                         try {
-                            const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
+                            const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
 
                             const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
                                 await Promise.all([
@@ -200,12 +200,12 @@ export const FarmStore: React.FC<
                             const stakingToken = new ethers.Contract(
                                 stakingTokenAddress,
                                 ERC20__factory.abi,
-                                signer,
+                                provider,
                             ) as ERC20;
                             const rewardsToken = new ethers.Contract(
                                 rewardsTokenAddress,
                                 ERC20__factory.abi,
-                                signer,
+                                provider,
                             ) as ERC20;
 
                             const [
@@ -308,7 +308,7 @@ export const FarmStore: React.FC<
     );
 
     const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress) {
+        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !provider) {
             // leave it as the default value
             return;
         }
@@ -337,7 +337,7 @@ export const FarmStore: React.FC<
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
-    }, [signer, config, account]);
+    }, [provider, config, account]);
 
     return (
         <FarmContext.Provider
