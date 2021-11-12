@@ -308,7 +308,7 @@ export const FarmStore: React.FC<
     );
 
     const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress) {
+        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !provider) {
             // leave it as the default value
             return;
         }
@@ -337,7 +337,7 @@ export const FarmStore: React.FC<
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
-    }, [signer, config, account]);
+    }, [provider, config, account]);
 
     return (
         <FarmContext.Provider
