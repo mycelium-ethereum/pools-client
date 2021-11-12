@@ -177,7 +177,7 @@ export const FarmStore: React.FC<
 
     const fetchFarms = useCallback(
         async ({ reset }: { reset: boolean }) => {
-            if (provider && config && account) {
+            if (signer && provider && config && account) {
                 if (reset) {
                     setFarms({});
                     setFetchingFarms(true);
@@ -186,7 +186,7 @@ export const FarmStore: React.FC<
                 Promise.all(
                     config[farmContext].map(async ({ address, abi, pool, balancerPoolId, link, linkText }) => {
                         try {
-                            const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
+                            const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
                             const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
                                 await Promise.all([
@@ -200,12 +200,12 @@ export const FarmStore: React.FC<
                             const stakingToken = new ethers.Contract(
                                 stakingTokenAddress,
                                 ERC20__factory.abi,
-                                provider,
+                                signer,
                             ) as ERC20;
                             const rewardsToken = new ethers.Contract(
                                 rewardsTokenAddress,
                                 ERC20__factory.abi,
-                                provider,
+                                signer,
                             ) as ERC20;
 
                             const [
@@ -304,18 +304,18 @@ export const FarmStore: React.FC<
                 });
             }
         },
-        [provider, config, account],
+        [signer, provider, config, account],
     );
 
     const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !provider) {
+        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !signer) {
             // leave it as the default value
             return;
         }
         const sushiRouter = new ethers.Contract(
             config?.sushiRouterAddress,
             UniswapV2Router02__factory.abi,
-            provider,
+            signer,
         ) as UniswapV2Router02;
 
         const oneTcr = new BigNumber('1').times(10 ** TCR_DECIMALS);
@@ -337,7 +337,7 @@ export const FarmStore: React.FC<
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
-    }, [provider, config, account]);
+    }, [signer, config, account]);
 
     return (
         <FarmContext.Provider
