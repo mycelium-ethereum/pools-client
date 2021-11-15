@@ -103,7 +103,7 @@ const MintRow: React.FC<
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.symbol}
+                {token.name}
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
@@ -156,7 +156,7 @@ const BurnRow: React.FC<
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.symbol}
+                {token.name}
             </TableRowCell>
             <TableRowCell>{amount.toFixed(2)}</TableRowCell>
             <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
