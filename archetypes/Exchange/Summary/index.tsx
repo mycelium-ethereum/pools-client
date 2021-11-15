@@ -72,7 +72,7 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
             <div className="relative border-box px-4 pt-4 pb-2">
                 <h2 className="text-theme-text">
                     <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                    {token.name}
+                    {token.symbol}
                 </h2>
                 <Transition
                     show={showBreakdown}
