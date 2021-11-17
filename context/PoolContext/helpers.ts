@@ -1,9 +1,6 @@
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
-import {
-    ERC20__factory,
-    ERC20,
-} from '@tracer-protocol/perpetual-pools-contracts/types';
+import { ERC20__factory, ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 
 export const fetchCommits: (
@@ -20,7 +17,7 @@ export const fetchCommits: (
 
     if (!provider || !committer) {
         return {
-            allUnexecutedCommits: []
+            allUnexecutedCommits: [],
         };
     }
 

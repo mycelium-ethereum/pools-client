@@ -122,7 +122,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 )
                     .then((committerInfo) => {
                         if (mounted) {
-
                             setExpectedPrice(pool.poolInstance);
 
                             committerInfo.allUnexecutedCommits.map(async (commit) => {

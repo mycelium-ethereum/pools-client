@@ -18,7 +18,7 @@ export const fetchTokenPrice: (
         provider,
     });
 
-    const { shortValueTransfer, longValueTransfer } = poolInfo.getNextValueTransfer()
+    const { shortValueTransfer, longValueTransfer } = poolInfo.getNextValueTransfer();
 
     const nextLongBalance = poolInfo.longBalance.plus(longValueTransfer);
     const nextShortBalance = poolInfo.shortBalance.plus(shortValueTransfer);
@@ -27,7 +27,9 @@ export const fetchTokenPrice: (
         const isLong: boolean = tokenAddress.toLowerCase() === poolInfo.longToken.address.toLowerCase();
         const token = isLong ? poolInfo.longToken : poolInfo.shortToken;
         const notional: BigNumber = isLong ? nextLongBalance : nextShortBalance;
-        const pendingBurns: BigNumber = isLong ? poolInfo.committer.pendingLong.burn : poolInfo.committer.pendingShort.burn;
+        const pendingBurns: BigNumber = isLong
+            ? poolInfo.committer.pendingLong.burn
+            : poolInfo.committer.pendingShort.burn;
 
         return calcTokenPrice(notional, token.supply.plus(pendingBurns));
     });
