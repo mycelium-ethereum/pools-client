@@ -8,12 +8,13 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
-import { CommitActionEnum, CommitEnum, CommitsFocusEnum } from '@libs/constants';
+import { CommitActionEnum, CommitsFocusEnum } from '@libs/constants';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
+import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 export default (() => {
     const { provider } = useWeb3();
@@ -22,11 +23,11 @@ export default (() => {
     const commits = usePendingCommits();
 
     const mintCommits = commits.filter(
-        (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
+        (commit) => commit.type === CommitEnum.longMint || commit.type === CommitEnum.shortMint,
     );
 
     const burnCommits = commits.filter(
-        (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
+        (commit) => commit.type === CommitEnum.longBurn || commit.type === CommitEnum.shortBurn,
     );
 
     return (

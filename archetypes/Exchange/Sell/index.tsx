@@ -5,11 +5,11 @@ import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { useSwapContext, swapDefaults, noDispatch, useBigNumber } from '@context/SwapContext';
 import { usePool } from '@context/PoolContext';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
@@ -17,6 +17,7 @@ import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import FeeNote from '@archetypes/Exchange/FeeNote';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -62,14 +63,21 @@ export default (() => {
 
     const amountBN = useBigNumber(amount);
 
-    const pool = usePool(selectedPool);
+    const { poolInstance: pool, userBalances } = usePool(selectedPool);
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+
+    const { shortValueTransfer, longValueTransfer } = useMemo(
+        () => pool.getNextValueTransfer(),
+        [pool.lastPrice, pool.oraclePrice, pool.longBalance, pool.shortBalance],
     );
+
+    const notional = useMemo(
+        () => (isLong ? pool.longBalance.plus(longValueTransfer) : pool.shortBalance.plus(shortValueTransfer)),
+        [isLong, longValueTransfer, shortValueTransfer],
+    );
+
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
@@ -77,7 +85,7 @@ export default (() => {
 
     const tokenPrice = useMemo(
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
+        [token, pool.committer.pendingLong.burn, pool.committer.pendingShort],
     );
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
@@ -94,7 +102,8 @@ export default (() => {
             );
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+            const currentBalance =
+                side === SideEnum.long ? userBalances.longToken.balance : userBalances.shortToken.balance;
 
             const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice);
 
@@ -152,7 +161,10 @@ export default (() => {
                                 !!selectedPool &&
                                 swapDispatch({
                                     type: 'setAmount',
-                                    value: side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance,
+                                    value:
+                                        side === SideEnum.long
+                                            ? userBalances.longToken.balance
+                                            : userBalances.shortToken.balance,
                                 })
                             }
                         >
@@ -173,19 +185,19 @@ export default (() => {
                             {`Available: `}
                             {`${
                                 side === SideEnum.long
-                                    ? pool.longToken.balance.toFixed(2)
-                                    : pool.shortToken.balance.toFixed(2)
+                                    ? userBalances.longToken.balance.toFixed(2)
+                                    : userBalances.shortToken.balance.toFixed(2)
                             } `}
                             {amountBN.gt(0) ? (
                                 <span className="opacity-80">
                                     {`>>> ${BigNumber.max(
                                         side === SideEnum.long
                                             ? amountBN.eq(0)
-                                                ? pool.longToken.balance
-                                                : pool.longToken.balance.minus(amount)
+                                                ? userBalances.longToken.balance
+                                                : userBalances.shortToken.balance.minus(amount)
                                             : amountBN.eq(0)
-                                            ? pool.shortToken.balance
-                                            : pool.shortToken.balance.minus(amount),
+                                            ? userBalances.shortToken.balance
+                                            : userBalances.shortToken.balance.minus(amount),
                                         0,
                                     ).toFixed(2)}`}
                                 </span>

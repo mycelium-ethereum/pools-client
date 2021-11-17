@@ -2,8 +2,9 @@ import React from 'react';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useBigNumber, useSwapContext } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
+import { CommitEnum, SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
@@ -32,7 +33,8 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
             );
         }
         if (
-            (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) &&
+            (!pool.userBalances.quoteToken.approvedAmount?.gte(pool.userBalances.quoteToken.balance) ||
+                pool.userBalances.quoteToken.approvedAmount.eq(0)) &&
             commitAction !== CommitActionEnum.burn
         ) {
             return (
@@ -67,10 +69,10 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                             return;
                         }
                         if (actionType === CommitActionEnum.mint) {
-                            commitType = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
+                            commitType = side === SideEnum.long ? CommitEnum.longMint : CommitEnum.shortMint;
                         } else {
                             // actionType === CommitActionEnum.burn
-                            commitType = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
+                            commitType = side === SideEnum.long ? CommitEnum.longBurn : CommitEnum.shortBurn;
                         }
                         commit(selectedPool ?? '', commitType, amountBN, {
                             onSuccess: () => {

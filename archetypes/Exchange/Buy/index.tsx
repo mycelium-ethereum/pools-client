@@ -4,7 +4,7 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
 import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS, useBigNumber } from '@context/SwapContext';
 import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { BuySummary } from '../Summary';
@@ -22,6 +22,7 @@ import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
 import { LogoTicker } from '@components/General';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 const inputRow = 'relative my-2 ';
 
@@ -77,7 +78,7 @@ export default (() => {
 
     const amountBN = useBigNumber(amount);
 
-    const pool = usePool(selectedPool);
+    const { poolInstance: pool, userBalances } = usePool(selectedPool);
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
@@ -99,7 +100,7 @@ export default (() => {
     useEffect(() => {
         const invalidAmount = isInvalidAmount(
             amountBN,
-            pool.quoteToken.balance,
+            userBalances.quoteToken.balance,
             pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals),
         );
 
@@ -107,7 +108,7 @@ export default (() => {
             type: 'setInvalidAmount',
             value: invalidAmount,
         });
-    }, [amount, pool.quoteToken.balance]);
+    }, [amount, userBalances.quoteToken.balance]);
 
     return (
         <>
@@ -177,7 +178,7 @@ export default (() => {
                         <div
                             className="m-auto cursor-pointer hover:underline"
                             onClick={(_e) =>
-                                swapDispatch({ type: 'setAmount', value: pool.quoteToken.balance.toString() })
+                                swapDispatch({ type: 'setAmount', value: userBalances.quoteToken.balance.toString() })
                             }
                         >
                             Max
@@ -196,11 +197,11 @@ export default (() => {
                     ) : (
                         <>
                             <span className={`${!!pool.name ? 'inline' : 'hidden'}`}>
-                                {`Available: ${toApproxCurrency(pool.quoteToken.balance)} `}
+                                {`Available: ${toApproxCurrency(userBalances.quoteToken.balance)} `}
                                 <span className="opacity-80">
                                     {!amountBN.eq(0)
                                         ? `>>> ${toApproxCurrency(
-                                              BigNumber.max(pool.quoteToken.balance.minus(amount), 0),
+                                              BigNumber.max(userBalances.quoteToken.balance.minus(amount), 0),
                                           )}`
                                         : ''}
                                 </span>

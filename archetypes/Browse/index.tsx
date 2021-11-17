@@ -12,9 +12,10 @@ import {
 } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { calcPercentageDifference } from '@libs/utils/converters';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();

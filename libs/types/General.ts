@@ -1,9 +1,11 @@
 import React from 'react';
-import { CommitEnum, SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
 import { LogoTicker } from '@components/General';
+import PoolToken from '@tracer-protocol/pools-js/dist/entities/poolToken';
+import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { StaticTokenInfo } from '@tracer-protocol/pools-js/dist/types/types';
 
 /**
  * Can be used when component passes down children
@@ -33,38 +35,14 @@ export type PoolType = {
     address: string;
 };
 
-export type StaticTokenInfo = {
-    address: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-};
-export type Token = StaticTokenInfo & {
-    balance: BigNumber;
-    approvedAmount: BigNumber;
-};
-
 export type TokenBreakdown = PoolToken & {
     tokenPrice: BigNumber;
     pool: string;
 };
 
-export type PoolToken = Omit<Token, 'symbol'> & {
-    side: SideEnum;
-    supply: BigNumber;
-    symbol: string;
-};
-
 export type PendingAmounts = {
     mint: BigNumber; // amount of USDC pending in commit
     burn: BigNumber; // amount of tokens burned in commits
-};
-export type Committer = {
-    address: string;
-    pendingLong: PendingAmounts;
-    pendingShort: PendingAmounts;
-    allUnexecutedCommits: CreatedCommitType[];
-    minimumCommitSize: BigNumber;
 };
 
 export type CreatedCommitType = TypedEvent<
@@ -88,21 +66,6 @@ export type StaticPoolInfo = {
     shortToken: StaticTokenInfo;
     longToken: StaticTokenInfo;
     quoteToken: StaticTokenInfo;
-};
-
-export type Pool = StaticPoolInfo & {
-    lastUpdate: BigNumber;
-    lastPrice: BigNumber;
-    shortBalance: BigNumber;
-    longBalance: BigNumber;
-    nextShortBalance: BigNumber;
-    nextLongBalance: BigNumber;
-    oraclePrice: BigNumber;
-    quoteToken: Token;
-    shortToken: PoolToken;
-    longToken: PoolToken;
-    committer: Committer;
-    subscribed: boolean;
 };
 
 // for mint the amount is the amount of collateral spent

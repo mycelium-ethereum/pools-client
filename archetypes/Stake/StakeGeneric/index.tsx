@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
+import { MAX_SOL_UINT } from '@libs/constants';
 import {
     stakeReducer,
     StakeAction,
@@ -20,6 +20,7 @@ import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo, LogoTicker } from '@components/General/Logo';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];

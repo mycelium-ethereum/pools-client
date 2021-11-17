@@ -1,12 +1,6 @@
-import { PoolToken } from '@libs/types/General';
-import BigNumber from 'bignumber.js';
+import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 import { ethers } from 'ethers';
 
-// side types
-export enum SideEnum {
-    long = 0,
-    short = 1,
-}
 export const SIDE_MAP: Record<SideEnum, string> = {
     [SideEnum.long]: 'Long',
     [SideEnum.short]: 'Short',
@@ -18,14 +12,6 @@ export enum CommitActionEnum {
     burn = 1,
 }
 
-// Commit type enum
-export enum CommitEnum {
-    short_mint = 0,
-    short_burn = 1,
-    long_mint = 2,
-    long_burn = 3,
-}
-
 // Focused on either buys or shorts when viewing pending commits
 export enum CommitsFocusEnum {
     mints = 0,
@@ -35,22 +21,22 @@ export enum CommitsFocusEnum {
 export const PENDING_COMMIT = 1;
 
 export const COMMIT_TYPE_MAP: Record<CommitEnum, string> = {
-    [CommitEnum.short_mint]: 'Buying',
-    [CommitEnum.short_burn]: 'Selling',
-    [CommitEnum.long_mint]: 'Buying',
-    [CommitEnum.long_burn]: 'Selling',
+    [CommitEnum.shortMint]: 'Buying',
+    [CommitEnum.shortBurn]: 'Selling',
+    [CommitEnum.longMint]: 'Buying',
+    [CommitEnum.longBurn]: 'Selling',
 };
 
-export const EMPTY_TOKEN: PoolToken = {
-    name: '',
-    symbol: '',
-    decimals: 18,
-    address: '',
-    balance: new BigNumber(0),
-    supply: new BigNumber(0),
-    approvedAmount: new BigNumber(0),
-    side: SideEnum.short,
-};
+// export const EMPTY_TOKEN: PoolToken = {
+//     name: '',
+//     symbol: '',
+//     decimals: 18,
+//     address: '',
+//     balance: new BigNumber(0),
+//     supply: new BigNumber(0),
+//     approvedAmount: new BigNumber(0),
+//     side: SideEnum.short,
+// };
 
 // networks
 export const ARBITRUM_RINKEBY = '421611';

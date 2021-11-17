@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePools } from '@context/PoolContext';
-import { SideEnum } from '@libs/constants';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 type TokenRow = {
     side: SideEnum;
@@ -25,21 +25,21 @@ export default (() => {
             const _tokenMap: TokenMap = {};
             Object.values(pools).forEach((pool) => {
                 const shortToken = {
-                    symbol: pool.shortToken.symbol,
+                    symbol: pool.poolInstance.shortToken.symbol,
                     side: SideEnum.short,
-                    pool: pool.address,
-                    leverage: pool.leverage,
+                    pool: pool.poolInstance.address,
+                    leverage: pool.poolInstance.leverage,
                 };
 
                 const longToken = {
-                    symbol: pool.longToken.symbol,
+                    symbol: pool.poolInstance.longToken.symbol,
                     side: SideEnum.long,
-                    pool: pool.address,
-                    leverage: pool.leverage,
+                    pool: pool.poolInstance.address,
+                    leverage: pool.poolInstance.leverage,
                 };
                 _tokens.push(shortToken, longToken);
-                _tokenMap[pool.shortToken.address] = shortToken;
-                _tokenMap[pool.longToken.address] = longToken;
+                _tokenMap[pool.poolInstance.shortToken.address] = shortToken;
+                _tokenMap[pool.poolInstance.longToken.address] = longToken;
             });
 
             setTokens(_tokens);

@@ -1,4 +1,5 @@
-import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
@@ -34,10 +35,10 @@ export type APICommitReturn = {
 };
 
 const CommitTypeMap = {
-    LongBurn: CommitEnum.long_burn,
-    LongMint: CommitEnum.long_mint,
-    ShortBurn: CommitEnum.short_burn,
-    ShortMint: CommitEnum.short_mint,
+    LongBurn: CommitEnum.longBurn,
+    LongMint: CommitEnum.longMint,
+    ShortBurn: CommitEnum.shortBurn,
+    ShortMint: CommitEnum.shortMint,
 };
 export const fetchPoolCommits: (
     pool: string,

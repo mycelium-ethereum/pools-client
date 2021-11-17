@@ -1,12 +1,13 @@
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
-import { StaticPoolInfo, StaticTokenInfo } from 'libs/types/General';
-import BigNumber from 'bignumber.js';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '.';
 import { tokenMap } from './tokenList';
+import { StaticPoolInfo } from '@tracer-protocol/pools-js/dist/entities/pool';
+import { TokenInfo } from '@tracer-protocol/pools-js/dist/entities/token';
+import { StaticTokenInfo } from '@tracer-protocol/pools-js/dist/types/types';
 
-const ONE_HOUR = new BigNumber(3600); // seconds
-const FIVE_MINUTES = new BigNumber(300); // seconds
-const THIRTY_SECONDS = new BigNumber(30); // seconds
+const ONE_HOUR = 3600; // seconds
+const FIVE_MINUTES = 300; // seconds
+const THIRTY_SECONDS = 30; // seconds
 
 const USDC_TOKEN_DECIMALS = 6;
 const TEST_TOKEN_DECIMALS = 18;
@@ -259,14 +260,20 @@ export const poolTokenList: Record<AvailableNetwork, Record<string, StaticTokenI
     ...Object.keys(poolList).map((key) => ({
         [key]: Object.assign(
             {},
-            ...poolList[key as AvailableNetwork].map((poolInfo) => ({
-                [poolInfo.shortToken.address]: {
-                    ...poolInfo.shortToken,
-                },
-                [poolInfo.longToken.address]: {
-                    ...poolInfo.longToken,
-                },
-            })),
+            ...poolList[key as AvailableNetwork].map((poolInfo) => {
+                const obj: Record<string, TokenInfo> = {};
+                if (poolInfo.shortToken) {
+                    obj[poolInfo.shortToken.address] = {
+                        ...poolInfo.shortToken,
+                    };
+                }
+                if (poolInfo.longToken) {
+                    obj[poolInfo.longToken.address] = {
+                        ...poolInfo.longToken,
+                    };
+                }
+                return obj;
+            }),
         ),
     })),
 );

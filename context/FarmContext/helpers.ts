@@ -1,9 +1,10 @@
-import { initPool, fetchCommits } from '@context/PoolContext/helpers';
-import { calcNextValueTransfer, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { fetchCommits } from '@context/PoolContext/helpers';
+import { calcNextValueTransfer, calcTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { StaticPoolInfo } from '@libs/types/General';
+// import { StaticPoolInfo } from '@libs/types/General';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
+import Pool, { StaticPoolInfo } from '@tracer-protocol/pools-js/dist/entities/pool';
 
 export const fetchTokenPrice: (
     poolInfo: StaticPoolInfo,
@@ -14,7 +15,10 @@ export const fetchTokenPrice: (
         return [new BigNumber(1)];
     }
 
-    const poolInfo = await initPool(poolInfo_, provider);
+    const poolInfo = await Pool.Create({
+        ...poolInfo_,
+        provider,
+    });
 
     const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
         poolInfo.lastPrice,
@@ -36,11 +40,14 @@ export const fetchTokenPrice: (
         provider,
     ).catch((err) => {
         console.error('Failed to fetchCommits', err);
-        const { pendingLong, pendingShort, allUnexecutedCommits } = DEFAULT_POOLSTATE.committer;
+        const {
+            poolInstance: {
+                committer: { pendingLong, pendingShort },
+            },
+        } = DEFAULT_POOLSTATE;
         return {
             pendingLong,
             pendingShort,
-            allUnexecutedCommits,
         };
     });
 

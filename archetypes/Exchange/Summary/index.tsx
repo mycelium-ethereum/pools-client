@@ -1,14 +1,13 @@
 import React, { useMemo } from 'react';
 import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
-import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import {
     calcEffectiveLongGain,
     calcEffectiveShortGain,
     calcNotionalValue,
     calcTokenPrice,
-} from '@tracer-protocol/tracer-pools-utils';
+} from '@tracer-protocol/pools-js/dist/utils';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
@@ -17,9 +16,10 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ARBITRUM } from '@libs/constants';
 import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { PoolInfo } from '@context/PoolContext/poolDispatch';
 
 type SummaryProps = {
-    pool: Pool;
+    pool: PoolInfo['poolInstance'];
     showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
@@ -32,10 +32,17 @@ const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px
 // const BuySummary
 export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+
+    const { shortValueTransfer, longValueTransfer } = useMemo(
+        () => pool.getNextValueTransfer(),
+        [pool.lastPrice, pool.oraclePrice, pool.longBalance, pool.shortBalance],
     );
+
+    const notional = useMemo(
+        () => (isLong ? pool.longBalance.plus(longValueTransfer) : pool.shortBalance.plus(shortValueTransfer)),
+        [isLong, longValueTransfer, shortValueTransfer],
+    );
+
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
@@ -46,8 +53,14 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
     );
 
     const balancesAfter = {
-        longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
-        shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
+        longBalance: pool.longBalance
+            .plus(longValueTransfer)
+            .plus(isLong ? amount : 0)
+            .plus(pool.committer.pendingLong.mint),
+        shortBalance: pool.shortBalance
+            .plus(shortValueTransfer)
+            .plus(isLong ? 0 : amount)
+            .plus(pool.committer.pendingShort.mint),
     };
 
     const effectiveGains = useMemo(() => {
@@ -118,10 +131,17 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
 // const SellSummary
 export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+
+    const { shortValueTransfer, longValueTransfer } = useMemo(
+        () => pool.getNextValueTransfer(),
+        [pool.lastPrice, pool.oraclePrice, pool.longBalance, pool.shortBalance],
     );
+
+    const notional = useMemo(
+        () => (isLong ? pool.longBalance.plus(longValueTransfer) : pool.shortBalance.plus(shortValueTransfer)),
+        [isLong, longValueTransfer, shortValueTransfer],
+    );
+
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],

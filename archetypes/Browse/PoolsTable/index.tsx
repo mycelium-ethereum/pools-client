@@ -1,7 +1,7 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { SideEnum } from '@libs/constants';
+import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';

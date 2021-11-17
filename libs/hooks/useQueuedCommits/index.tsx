@@ -1,9 +1,8 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@libs/constants';
+import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
 import { QueuedCommit } from '@libs/types/General';
-import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { useCommits } from '@context/UsersCommitContext';
 
 export default (() => {
@@ -25,27 +24,18 @@ export default (() => {
                     ) {
                         continue;
                     }
-                    const {
-                        shortToken,
-                        longToken,
-                        nextShortBalance,
-                        nextLongBalance,
-                        lastUpdate,
-                        updateInterval,
-                        committer: {
-                            pendingLong: { burn: pendingLongBurn },
-                            pendingShort: { burn: pendingShortBurn },
-                        },
-                    } = pools[commit.pool];
+                    const pool = pools[commit.pool].poolInstance;
+                    const { shortToken, longToken, lastUpdate, updateInterval, frontRunningInterval } =
+                        pools[commit.pool].poolInstance;
 
                     let token, tokenPrice;
 
-                    if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
+                    if (commit.type === CommitEnum.shortMint || commit.type === CommitEnum.shortBurn) {
                         token = shortToken;
-                        tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
+                        tokenPrice = pool.getNextLongTokenPrice();
                     } else {
                         token = longToken;
-                        tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
+                        tokenPrice = pool.getNextShortTokenPrice();
                     }
 
                     parsedCommits.push({
@@ -53,7 +43,7 @@ export default (() => {
                         token,
                         tokenPrice,
                         nextRebalance: lastUpdate.plus(updateInterval),
-                        frontRunningInterval: pools[commit.pool].frontRunningInterval,
+                        frontRunningInterval: frontRunningInterval,
                         updateInterval: updateInterval,
                     });
                 }
