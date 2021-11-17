@@ -4,7 +4,6 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances } from './helpers';
 import { ethers } from 'ethers';
-// import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
 import {
     PoolCommitter,
@@ -80,7 +79,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 .then((res) => {
                     if (!hasSetPools.current && mounted) {
                         res.forEach((pool) => {
-                            // console.log(pool)
                             poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
                         });
                         if (res.length) {
@@ -117,7 +115,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 fetchCommits(
                     {
                         committer: pool.poolInstance.committer.address,
-                        quoteTokenDecimals: decimals,
                         lastUpdate: pool.poolInstance.lastUpdate.toNumber(),
                         address: pool.poolInstance.address,
                     },
@@ -125,12 +122,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 )
                     .then((committerInfo) => {
                         if (mounted) {
-                            // poolsDispatch({
-                            //     type: 'setPendingAmounts',
-                            //     pool: pool.poolInstance.address,
-                            //     pendingLong: committerInfo.pendingLong,
-                            //     pendingShort: committerInfo.pendingShort,
-                            // });
 
                             setExpectedPrice(pool.poolInstance);
 
