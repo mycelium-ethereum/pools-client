@@ -3099,10 +3099,10 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
-"@tracer-protocol/pools-js@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.1.tgz#ccfdab06328aff8102430bf0cc29be0c673c247b"
-  integrity sha512-7Qk63n+L9VebzISDzmwcCK4nmuEChnUiyTvV/ps1crKF/cSRjN4WyjWJELXUSxK62YtKwaVm25CouCwzc52GBg==
+"@tracer-protocol/pools-js@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.3.tgz#1baa6b1fe17285ba187a1ad0e7b058a809325ac5"
+  integrity sha512-u7LZ+STGW+IVEIfRv8PKXGgoakPK/eh8pKqn6hWJ7cjW/6kmvJwRwcug+tQ27AWeomVaBW5qQDDOUXTdhIuSAw==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "0.0.11"
     bignumber.js "^9.0.1"
