@@ -5,22 +5,15 @@ import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import { fetchCommits, fetchTokenApprovals, fetchTokenBalances } from './helpers';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import {
-    PoolCommitter,
-    PoolCommitter__factory,
-    PoolKeeper,
-    PoolKeeper__factory,
-    PoolToken,
-    PoolToken__factory,
-} from '@tracer-protocol/perpetual-pools-contracts/types';
+import { PoolCommitter__factory, PoolKeeper__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { poolList } from '@libs/constants/poolLists';
-import { default as Pool, StaticPoolInfo } from '@tracer-protocol/pools-js/dist/entities/pool';
+import { default as Pool, StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -29,6 +22,7 @@ type Options = {
 interface ContextProps {
     pools: Record<string, PoolInfo>;
     poolsInitialised: boolean;
+    triggerUpdate: boolean;
 }
 
 interface ActionContextProps {
@@ -144,7 +138,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         console.error('Failed to initialise committer', err);
                     });
                 // subscribe
-                console.log('Subscribing to pool');
+                console.debug('Subscribing to pool');
                 subscribeToPool(pool.poolInstance.address);
             });
         }
@@ -176,61 +170,60 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     }, [provider, account, poolsState.poolsInitialised]);
 
     // get and set token balances
-    const updateTokenBalances: (pool: Pool, provider: ethers.providers.JsonRpcProvider | undefined) => void = (
-        pool,
-        provider_,
-    ) => {
-        if (!provider_ || !account) {
-            return false;
-        }
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        const decimals = pool.quoteToken.decimals;
-        fetchTokenBalances(tokens, provider_, account, pool.address)
-            .then((balances) => {
-                console.log(balances);
-                const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
-                const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
-                const quoteTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
+    const updateTokenBalances: (pool: Pool, provider: ethers.providers.JsonRpcProvider | undefined) => Promise<void> =
+        async (pool, provider_) => {
+            if (!provider_ || !account) {
+                return;
+            }
+            // connect this provider
+            pool.connect(provider_);
 
-                console.debug('Balances', {
-                    shortTokenBalance,
-                    longTokenBalance,
-                    quoteTokenBalance,
-                });
+            const tokens = [pool.shortToken, pool.longToken, pool.quoteToken];
 
-                poolsDispatch({
-                    type: 'setTokenBalances',
-                    pool: pool.address,
-                    shortTokenBalance,
-                    longTokenBalance,
-                    quoteTokenBalance,
-                });
-            })
-            .catch((err) => {
+            const [shortTokenBalance, longTokenBalance, quoteTokenBalance] = await fetchTokenBalances(
+                tokens,
+                account,
+            ).catch((err) => {
                 console.error('Failed to fetch token balances', err);
+                return [new BigNumber(0), new BigNumber(0), new BigNumber(0)];
             });
-    };
+
+            console.debug('Balances', {
+                shortTokenBalance,
+                longTokenBalance,
+                quoteTokenBalance,
+            });
+
+            poolsDispatch({
+                type: 'setTokenBalances',
+                pool: pool.address,
+                shortTokenBalance,
+                longTokenBalance,
+                quoteTokenBalance,
+            });
+        };
 
     // get and set approvals
-    const updateTokenApprovals: (pool: Pool) => void = (pool) => {
+    const updateTokenApprovals: (pool: Pool) => Promise<void> = async (pool) => {
         if (!provider || !account) {
             return;
         }
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        const decimals = pool.quoteToken.decimals;
-        fetchTokenApprovals(tokens, provider, account, pool.address)
-            .then((approvals) => {
-                poolsDispatch({
-                    type: 'setTokenApprovals',
-                    pool: pool.address,
-                    shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
-                    longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
-                    quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
-                });
-            })
-            .catch((err) => {
-                console.error('Failed to fetch token allowances', err);
-            });
+        const tokens = [pool.shortToken, pool.longToken, pool.quoteToken];
+        const [shortTokenApproval, longTokenApproval, quoteTokenApproval] = await fetchTokenApprovals(
+            tokens,
+            account,
+            pool.address,
+        ).catch((err) => {
+            console.error('Failed to fetch token allowances', err);
+            return [new BigNumber(0), new BigNumber(0), new BigNumber(0)];
+        });
+        poolsDispatch({
+            type: 'setTokenApprovals',
+            pool: pool.address,
+            shortTokenAmount: shortTokenApproval,
+            longTokenAmount: longTokenApproval,
+            quoteTokenAmount: quoteTokenApproval,
+        });
     };
 
     // subscribe to pool events
@@ -238,18 +231,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && poolsState.pools[pool]) {
             console.debug('Subscribing to pool', pool);
 
-            const poolInstance = poolsState.pools[pool].poolInstance;
+            const poolInstance: Pool = poolsState.pools[pool].poolInstance;
             const { committer: committerInfo, keeper } = poolInstance;
 
             const wssProvider =
                 networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
             const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
 
-            const committer = new ethers.Contract(
-                committerInfo.address,
-                PoolCommitter__factory.abi,
-                subscriptionProvider,
-            ) as PoolCommitter;
+            const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
 
             // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
@@ -292,11 +281,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
             }
 
-            const keeperInstance = new ethers.Contract(
-                keeper,
-                PoolKeeper__factory.abi,
-                subscriptionProvider,
-            ) as PoolKeeper;
+            const keeperInstance = PoolKeeper__factory.connect(keeper, subscriptionProvider);
 
             if (!subscriptions.current[keeper]) {
                 console.debug(`Subscribing keeper: ${keeper.slice()}`);
@@ -316,13 +301,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        // const leveragedPool = new ethers.Contract(
-                        //     pool,
-                        //     LeveragedPool__factory.abi,
-                        //     subscriptionProvider,
-                        // ) as LeveragedPool;
+                        const poolInstance = poolsState.pools[pool].poolInstance;
+                        poolInstance.connect(subscriptionProvider);
                         poolInstance.fetchLastPriceTimestamp().then((lastUpdate) => {
-                            console.debug(`New last updated: ${lastUpdate}`);
+                            console.debug(`New last updated: ${lastUpdate.toString()}`);
+                            poolsDispatch({ type: 'triggerUpdate' });
                         });
                         updateTokenBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
                         commitDispatch({
@@ -350,18 +333,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      */
     const commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void> =
         async (pool, commitType, amount, options) => {
-            const committerAddress = poolsState.pools[pool].poolInstance.committer.address;
+            const committer = poolsState.pools[pool].poolInstance.committer;
+            // committer.connect(signer as ethers.providers.JsonRpcSigner)
             const quoteTokenDecimals = poolsState.pools[pool].poolInstance.quoteToken.decimals;
-            if (!committerAddress) {
+            if (!committer.address) {
                 console.error('Committer address undefined when trying to mint');
                 // TODO handle error
             }
             const network = await signer?.getChainId();
-            const committer = new ethers.Contract(
-                committerAddress,
-                PoolCommitter__factory.abi,
-                signer,
-            ) as PoolCommitter;
+
             console.debug(
                 `Creating commit. Amount: ${ethers.utils.parseUnits(
                     amount.toFixed(),
@@ -377,44 +357,40 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                 const type =
                     commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint ? 'Mint' : 'Burn';
-                handleTransaction(
-                    committer.commit,
-                    [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
-                    {
-                        network: (network ?? '0') as AvailableNetwork,
-                        onSuccess: (receipt) => {
-                            console.debug('Successfully submitted commit txn: ', receipt);
-                            // get and set token balances
-                            updateTokenBalances(poolsState.pools[pool].poolInstance, provider);
-                            options?.onSuccess ? options.onSuccess(receipt) : null;
+                handleTransaction(committer.commit, [commitType, amount], {
+                    network: (network ?? '0') as AvailableNetwork,
+                    onSuccess: (receipt) => {
+                        console.debug('Successfully submitted commit txn: ', receipt);
+                        // get and set token balances
+                        updateTokenBalances(poolsState.pools[pool].poolInstance, provider);
+                        options?.onSuccess ? options.onSuccess(receipt) : null;
+                    },
+                    statusMessages: {
+                        waiting: {
+                            title: `Queueing ${poolName} ${type}`,
+                            body: (
+                                <div
+                                    className="text-sm text-tracer-400 underline cursor-pointer"
+                                    onClick={() =>
+                                        openArbiscan(
+                                            ArbiscanEnum.token,
+                                            tokenAddress,
+                                            provider?.network?.chainId?.toString() as AvailableNetwork,
+                                        )
+                                    }
+                                >
+                                    View token on Arbiscan
+                                </div>
+                            ),
                         },
-                        statusMessages: {
-                            waiting: {
-                                title: `Queueing ${poolName} ${type}`,
-                                body: (
-                                    <div
-                                        className="text-sm text-tracer-400 underline cursor-pointer"
-                                        onClick={() =>
-                                            openArbiscan(
-                                                ArbiscanEnum.token,
-                                                tokenAddress,
-                                                provider?.network?.chainId?.toString() as AvailableNetwork,
-                                            )
-                                        }
-                                    >
-                                        View token on Arbiscan
-                                    </div>
-                                ),
-                            },
-                            success: {
-                                title: `${poolName} ${type} Queued`,
-                            },
-                            error: {
-                                title: `${type} ${poolName} Failed`,
-                            },
+                        success: {
+                            title: `${poolName} ${type} Queued`,
+                        },
+                        error: {
+                            title: `${type} ${poolName} Failed`,
                         },
                     },
-                );
+                });
             }
         };
 
@@ -423,11 +399,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * @param pool address to approve
      */
     const approve: (pool: string) => Promise<void> = async (pool) => {
-        const token = new ethers.Contract(
-            poolsState.pools[pool].poolInstance.quoteToken.address,
-            PoolToken__factory.abi,
-            signer,
-        ) as PoolToken;
+        const token = poolsState.pools[pool].poolInstance.quoteToken;
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
@@ -490,6 +462,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             value={{
                 pools: poolsState.pools,
                 poolsInitialised: poolsState.poolsInitialised,
+                triggerUpdate: poolsState.triggerUpdate,
             }}
         >
             <PoolsActionsContext.Provider

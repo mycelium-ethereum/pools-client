@@ -4,7 +4,7 @@ import { swapDefaults, useBigNumber, useSwapContext } from '@context/SwapContext
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
-import { CommitEnum, SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum, SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();

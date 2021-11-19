@@ -1,7 +1,8 @@
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
-import { ERC20__factory, ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { ethers, BigNumber as EthersBigNumber } from 'ethers';
+import { PoolToken, Token } from '@tracer-protocol/pools-js';
+import BigNumber from 'bignumber.js';
+import { ethers } from 'ethers';
 
 export const fetchCommits: (
     poolInfo: {
@@ -36,34 +37,25 @@ export const fetchCommits: (
     };
 };
 
-export const fetchTokenBalances: (
-    tokens: string[],
-    provider: ethers.providers.JsonRpcProvider,
-    account: string,
-    pool: string,
-) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
+export const fetchTokenBalances: (tokens: (PoolToken | Token)[], account: string) => Promise<BigNumber[]> = (
+    tokens,
+    account,
+) => {
     return Promise.all(
         tokens.map((token) => {
-            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.balanceOf(account, {
-                blockTag: 'latest',
-            });
+            return token.fetchBalance(account);
         }),
     );
 };
 
 export const fetchTokenApprovals: (
-    tokens: string[],
-    provider: ethers.providers.JsonRpcProvider,
+    tokens: (PoolToken | Token)[],
     account: string,
     pool: string,
-) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
+) => Promise<BigNumber[]> = (tokens, account, pool) => {
     return Promise.all(
         tokens.map((token) => {
-            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.allowance(account, pool, {
-                blockTag: 'latest',
-            });
+            return token.fetchAllowance(account, pool);
         }),
     );
 };

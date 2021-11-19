@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
 import { CommitActionEnum } from '@libs/constants';
-import { CommitEnum, SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum, SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 /**
  * Simple func to convert a number to a percentage by multiplying

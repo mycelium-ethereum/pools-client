@@ -1,5 +1,5 @@
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 

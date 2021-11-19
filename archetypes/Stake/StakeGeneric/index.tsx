@@ -20,7 +20,7 @@ import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo, LogoTicker } from '@components/General/Logo';
-import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];

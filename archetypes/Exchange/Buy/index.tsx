@@ -22,7 +22,7 @@ import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
 import { LogoTicker } from '@components/General';
-import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 const inputRow = 'relative my-2 ';
 

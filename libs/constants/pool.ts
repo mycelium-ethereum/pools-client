@@ -1,5 +1,5 @@
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
-import Pool from '@tracer-protocol/pools-js/dist/entities/pool';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { BigNumber } from 'bignumber.js';
 
 export const DEFAULT_POOLSTATE: PoolInfo = {

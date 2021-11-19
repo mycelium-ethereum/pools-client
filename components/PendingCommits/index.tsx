@@ -14,7 +14,7 @@ import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 
 export default (() => {
     const { provider } = useWeb3();

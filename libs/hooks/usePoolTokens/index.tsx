@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { usePools } from '@context/PoolContext';
-import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 type TokenRow = {
     side: SideEnum;

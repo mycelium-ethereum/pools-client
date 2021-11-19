@@ -15,7 +15,7 @@ import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
+import { calcBptTokenPrice } from '@tracer-protocol/pools-js/utils';
 import { poolMap } from '@libs/constants/poolLists';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 

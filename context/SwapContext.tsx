@@ -4,7 +4,7 @@ import { Children, PoolType } from '@libs/types/General';
 import { CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { usePools } from './PoolContext';
-import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 interface ContextProps {
     swapState: SwapState;

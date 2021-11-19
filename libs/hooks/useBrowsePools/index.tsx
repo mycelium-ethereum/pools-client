@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { BrowseTableRowData } from '@archetypes/Browse/state';
 import { usePools } from '@context/PoolContext';
-import { calcEffectiveLongGain, calcEffectiveShortGain, calcTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcTokenPrice } from '@tracer-protocol/pools-js/utils';
 import { BigNumber } from 'bignumber.js';
 
 // const useBrowsePools
 export default (() => {
-    const { pools } = usePools();
+    const { pools, triggerUpdate } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     useEffect(() => {
         if (pools) {
@@ -57,6 +57,7 @@ export default (() => {
             });
             setRows(rows);
         }
-    }, [pools]);
+    }, [pools, triggerUpdate]);
+
     return rows;
 }) as () => BrowseTableRowData[];

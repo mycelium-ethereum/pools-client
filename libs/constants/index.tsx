@@ -1,4 +1,4 @@
-import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 import { ethers } from 'ethers';
 
 export const SIDE_MAP: Record<SideEnum, string> = {

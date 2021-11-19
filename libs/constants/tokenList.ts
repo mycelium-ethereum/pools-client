@@ -1,6 +1,6 @@
 import { LogoTicker } from '@components/General';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
-import { StaticTokenInfo } from '@tracer-protocol/pools-js/dist/types/types';
+import { StaticTokenInfo } from '@tracer-protocol/pools-js/types/types';
 import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '.';
 
 const tokenList: Record<AvailableNetwork, StaticTokenInfo[]> = {

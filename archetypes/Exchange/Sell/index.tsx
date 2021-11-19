@@ -9,7 +9,7 @@ import { CommitActionEnum } from '@libs/constants';
 import { SellSummary } from '../Summary';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
+import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/pools-js/utils';
 
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
@@ -17,7 +17,7 @@ import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import FeeNote from '@archetypes/Exchange/FeeNote';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
-import { SideEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { SideEnum } from '@tracer-protocol/pools-js/types/enums';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (

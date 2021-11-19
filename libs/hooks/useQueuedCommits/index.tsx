@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 import { QueuedCommit } from '@libs/types/General';
 import { useCommits } from '@context/UsersCommitContext';
 

@@ -1,8 +1,8 @@
-import { calcTokenPrice } from '@tracer-protocol/pools-js/dist/utils';
+import { calcTokenPrice } from '@tracer-protocol/pools-js/utils';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 // import { StaticPoolInfo } from '@libs/types/General';
-import Pool, { StaticPoolInfo } from '@tracer-protocol/pools-js/dist/entities/pool';
+import Pool, { StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
 
 export const fetchTokenPrice: (
     poolInfo: StaticPoolInfo,

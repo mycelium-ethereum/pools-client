@@ -1,9 +1,9 @@
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '.';
 import { tokenMap } from './tokenList';
-import { StaticPoolInfo } from '@tracer-protocol/pools-js/dist/entities/pool';
-import { TokenInfo } from '@tracer-protocol/pools-js/dist/entities/token';
-import { StaticTokenInfo } from '@tracer-protocol/pools-js/dist/types/types';
+import { StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
+import { TokenInfo } from '@tracer-protocol/pools-js/entities/token';
+import { StaticTokenInfo } from '@tracer-protocol/pools-js/types/types';
 
 const ONE_HOUR = 3600; // seconds
 const FIVE_MINUTES = 300; // seconds

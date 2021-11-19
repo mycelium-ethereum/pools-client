@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useCommits } from '@context/UsersCommitContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
 
 export default (() => {
     const { account = '' } = useWeb3();

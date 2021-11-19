@@ -1,5 +1,5 @@
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
-import Pool from '@tracer-protocol/pools-js/dist/entities/pool';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { BigNumber } from 'bignumber.js';
 
 const MAX_RETRY_COUNT = 5;
@@ -23,6 +23,7 @@ export type PoolState = {
     subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
     poolsInitialised: boolean;
+    triggerUpdate: boolean;
     retryCount: number;
 };
 
@@ -30,6 +31,7 @@ export const initialPoolState: PoolState = {
     pools: {},
     selectedPool: undefined,
     poolsInitialised: false,
+    triggerUpdate: false,
     retryCount: 0,
     subscriptions: {},
 };
@@ -55,6 +57,7 @@ export type PoolAction =
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
     // | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
+    | { type: 'triggerUpdate' }
     // | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
@@ -196,6 +199,11 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
             return {
                 ...state,
                 poolsInitialised: action.value,
+            };
+        case 'triggerUpdate':
+            return {
+                ...state,
+                triggerUpdate: !state.triggerUpdate,
             };
         case 'setTokenApproved':
             if (!state.pools[action.pool]) {

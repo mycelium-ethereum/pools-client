@@ -3,9 +3,9 @@ import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
 import { LogoTicker } from '@components/General';
-import PoolToken from '@tracer-protocol/pools-js/dist/entities/poolToken';
-import { CommitEnum } from '@tracer-protocol/pools-js/dist/types/enums';
-import { StaticTokenInfo } from '@tracer-protocol/pools-js/dist/types/types';
+import PoolToken from '@tracer-protocol/pools-js/entities/poolToken';
+import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
+import { StaticTokenInfo } from '@tracer-protocol/pools-js/types/types';
 
 /**
  * Can be used when component passes down children

@@ -7,7 +7,7 @@ import {
     calcEffectiveShortGain,
     calcNotionalValue,
     calcTokenPrice,
-} from '@tracer-protocol/pools-js/dist/utils';
+} from '@tracer-protocol/pools-js/utils';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
