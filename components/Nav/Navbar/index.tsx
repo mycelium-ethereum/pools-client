@@ -54,7 +54,7 @@ export const NavBarContent: React.FC<{
                         </li>
                     </Link>
                     <Link href="/balancer-buy-sell">
-                        <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
+                        <li className={classNames(linkStyles, route === 'balancer-buy-sell' ? selectedStyles : '')}>
                             <a className="m-auto">Buy / Sell</a>
                         </li>
                     </Link>
