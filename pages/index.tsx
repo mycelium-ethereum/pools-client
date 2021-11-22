@@ -40,7 +40,6 @@ export default (() => {
                 showOnboardModal={showOnboardModal}
                 setShowOnboardModal={() => {
                     setShowOnboardModal(false);
-                    localStorage.setItem('onboard.completedTradeTutorial', 'true');
                     setTimeout(() => {
                         setOnboardStep(1);
                     }, 1000);

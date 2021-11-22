@@ -38,7 +38,6 @@ export default (() => {
                 showOnboardModal={showOnboardModal}
                 setShowOnboardModal={() => {
                     setShowOnboardModal(false);
-                    localStorage.setItem('onboard.completedStakeTutorial', 'true');
                     setTimeout(() => {
                         setOnboardStep(1);
                     }, 1000);
