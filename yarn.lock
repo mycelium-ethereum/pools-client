@@ -3073,18 +3073,10 @@
     walletlink "^2.1.11"
     web3-provider-engine "^15.0.4"
 
-"@tracer-protocol/perpetual-pools-contracts@0.0.11":
-  version "0.0.11"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.11.tgz#527930b0dbe5e689afe0e60d08cf6b21f880f62e"
-  integrity sha512-RtkLNA7/VYvFDUIb5i4jEbJD0+3OO+xhugHpzzouS4hOIR8Xo3tiSF92zOJ+C2x9pwWbJZprjLKxtKqJWVp31Q==
-  dependencies:
-    "@chainlink/contracts" "^0.2.1"
-    "@openzeppelin/contracts" "^4.2.0"
-    abdk-libraries-solidity "^3.0.0"
-    hardhat "^2.6.0"
-    hardhat-log-remover "^2.0.2"
-    solidity-coverage "^0.7.16"
-    ts-command-line-args "^2.1.0"
+"@tracer-protocol/perpetual-pools-contracts@0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.12.tgz#6ead00421142394bfd44c64529e496a892d70943"
+  integrity sha512-89zMpllR2PCS1DZ21viR6Zdqv70ZnEShIX+2cFB5cKfixl1DovIf+eU4H5ih6C4VnfYOazbrMRdWZsLtZy73Xg==
 
 "@tracer-protocol/perpetual-pools-contracts@^0.0.4":
   version "0.0.4"
@@ -3099,15 +3091,14 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
-"@tracer-protocol/pools-js@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.3.tgz#1baa6b1fe17285ba187a1ad0e7b058a809325ac5"
-  integrity sha512-u7LZ+STGW+IVEIfRv8PKXGgoakPK/eh8pKqn6hWJ7cjW/6kmvJwRwcug+tQ27AWeomVaBW5qQDDOUXTdhIuSAw==
+"@tracer-protocol/pools-js@0.0.16":
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.16.tgz#5b00c25041497eb9d2acc0ea4b457664449381e5"
+  integrity sha512-gqnKGEF0BY9JESkfl0fdPsfBy5ZdI29mrvfEz+ckMBSDJJPtzEVLIXpMBVhf9D4PkTKtjCWr24Q0T5p5Ony1vg==
   dependencies:
-    "@tracer-protocol/perpetual-pools-contracts" "0.0.11"
+    "@tracer-protocol/perpetual-pools-contracts" "0.0.12"
     bignumber.js "^9.0.1"
     ethers "^5.5.1"
-    glob "^7.2.0"
 
 "@truffle/error@^0.0.14":
   version "0.0.14"
@@ -9528,7 +9519,7 @@ glob@^5.0.15:
     once "^1.3.0"
     path-is-absolute "^1.0.0"
 
-glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@^7.2.0:
+glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.2.0.tgz#d15535af7732e02e948f4c41628bd910293f6023"
   integrity sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==
