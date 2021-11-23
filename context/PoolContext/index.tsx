@@ -10,10 +10,10 @@ import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { poolList } from '@libs/constants/poolLists';
+import { poolList, CommitEnum, KnownNetwork } from '@tracer-protocol/pools-js';
 import { default as Pool, StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
-import { CommitEnum } from '@tracer-protocol/pools-js/types/enums';
+import { ARBITRUM } from '@libs/constants';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -58,7 +58,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         console.debug('Attempting to initialise pools');
         if (provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
-            const pools: StaticPoolInfo[] = poolList[network as AvailableNetwork] ?? [];
+            const pools: StaticPoolInfo[] = poolList[network as KnownNetwork] ?? [];
             console.debug(`Initialising pools ${network.slice()}`, pools);
             poolsDispatch({ type: 'resetPools' });
             hasSetPools.current = false;
@@ -358,7 +358,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 const type =
                     commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint ? 'Mint' : 'Burn';
                 handleTransaction(committer.commit, [commitType, amount], {
-                    network: (network ?? '0') as AvailableNetwork,
+                    network: (network ?? ARBITRUM) as AvailableNetwork,
                     onSuccess: (receipt) => {
                         console.debug('Successfully submitted commit txn: ', receipt);
                         // get and set token balances
@@ -403,7 +403,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
-                network: (network ?? '0') as AvailableNetwork,
+                network: (network ?? ARBITRUM) as AvailableNetwork,
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({

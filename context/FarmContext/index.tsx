@@ -11,13 +11,11 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
 import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
-import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
+import { ARBITRUM, TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@tracer-protocol/pools-js/utils';
-import { poolMap } from '@libs/constants/poolLists';
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+import { calcBptTokenPrice, KnownNetwork, poolMap } from '@tracer-protocol/pools-js';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -100,7 +98,8 @@ export const FarmStore: React.FC<
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
 
-                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                    const poolInfo =
+                        poolMap[(provider?.network?.chainId?.toString() ?? ARBITRUM) as KnownNetwork][pool];
                     if (!poolInfo) {
                         console.error('Failed to find pool in poolList');
                         return;
@@ -237,7 +236,7 @@ export const FarmStore: React.FC<
                                 : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
                             const poolInfo =
-                                poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                                poolMap[(provider?.network?.chainId?.toString() ?? ARBITRUM) as KnownNetwork][pool];
                             if (!poolInfo) {
                                 console.error('Failed to find pool in poolList');
                                 return;

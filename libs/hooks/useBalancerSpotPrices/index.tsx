@@ -2,13 +2,14 @@ import { useEffect, useState } from 'react';
 import { getBalancerPrices } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { ARBITRUM } from '@libs/constants';
 
 export default ((network) => {
     const [tokenPrices, setTokenPrices] = useState<Record<string, BigNumber>>({});
 
     useEffect(() => {
         let mounted = true;
-        getBalancerPrices(networkConfig[network ?? '0']?.balancerInfo).then((tokenPrices) => {
+        getBalancerPrices(networkConfig[network ?? ARBITRUM]?.balancerInfo).then((tokenPrices) => {
             if (mounted) {
                 setTokenPrices(tokenPrices);
             }
