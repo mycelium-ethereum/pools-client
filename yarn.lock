@@ -3086,23 +3086,15 @@
     solidity-coverage "^0.7.16"
     ts-command-line-args "^2.1.0"
 
-"@tracer-protocol/perpetual-pools-contracts@^0.0.4":
-  version "0.0.4"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.4.tgz#ab45eb3f9be11729d83fd4e54b2393788cc50751"
-  integrity sha512-WtPcWInkRPjKog8U+AN1Bsvj8ogLTFAyyan6o18TrA1iPQsgq95LSSerS8AWLEtc98z7p6jzKwn5XmLcQb5iWw==
-  dependencies:
-    "@chainlink/contracts" "^0.2.1"
-    "@openzeppelin/contracts" "^4.2.0"
-    abdk-libraries-solidity "^3.0.0"
-    hardhat "^2.6.0"
-    hardhat-log-remover "^2.0.2"
-    solidity-coverage "^0.7.16"
-    ts-command-line-args "^2.1.0"
+"@tracer-protocol/perpetual-pools-contracts@^0.0.12":
+  version "0.0.12"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.12.tgz#6ead00421142394bfd44c64529e496a892d70943"
+  integrity sha512-89zMpllR2PCS1DZ21viR6Zdqv70ZnEShIX+2cFB5cKfixl1DovIf+eU4H5ih6C4VnfYOazbrMRdWZsLtZy73Xg==
 
-"@tracer-protocol/pools-js@^0.0.3":
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.3.tgz#1baa6b1fe17285ba187a1ad0e7b058a809325ac5"
-  integrity sha512-u7LZ+STGW+IVEIfRv8PKXGgoakPK/eh8pKqn6hWJ7cjW/6kmvJwRwcug+tQ27AWeomVaBW5qQDDOUXTdhIuSAw==
+"@tracer-protocol/pools-js@^0.0.15":
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.15.tgz#5e3d6e461dd0f8d534f0e682b8a9ff689d7b2c5b"
+  integrity sha512-Bqi7gDAHm09/t9PTaCbuhss1Cs0AH4GS1u+oRdiF2E46qa0r+cXvDlw7nNBxLIFlL7B5EA/da1+1VPybuL/nJQ==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "0.0.11"
     bignumber.js "^9.0.1"
