@@ -12,18 +12,8 @@ import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup
 
 export default (() => {
     const router = useRouter();
-
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
-
-    useEffect(() => {
-        if (localStorage.getItem('onboard.completedStakeTutorial') !== 'true') {
-            const timeout = setTimeout(() => {
-                setShowOnboardModal(true);
-            }, 3000);
-            return () => clearTimeout(timeout);
-        }
-    }, []);
 
     useEffect(() => {
         router.prefetch('/stakebpt');
@@ -48,7 +38,6 @@ export default (() => {
                 showOnboardModal={showOnboardModal}
                 setShowOnboardModal={() => {
                     setShowOnboardModal(false);
-                    localStorage.setItem('onboard.completedStakeTutorial', 'true');
                     setTimeout(() => {
                         setOnboardStep(1);
                     }, 1000);

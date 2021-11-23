@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
@@ -16,15 +16,6 @@ import WarningBanner from '@components/WarningBanner';
 export default (() => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
-
-    useEffect(() => {
-        if (localStorage.getItem('onboard.completedTradeTutorial') !== 'true') {
-            const timeout = setTimeout(() => {
-                setShowOnboardModal(true);
-            }, 3000);
-            return () => clearTimeout(timeout);
-        }
-    }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
@@ -49,7 +40,6 @@ export default (() => {
                 showOnboardModal={showOnboardModal}
                 setShowOnboardModal={() => {
                     setShowOnboardModal(false);
-                    localStorage.setItem('onboard.completedTradeTutorial', 'true');
                     setTimeout(() => {
                         setOnboardStep(1);
                     }, 1000);
