@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
@@ -184,8 +183,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     }, [selectedAsset, selectedAssetBalance?.allowance]);
 
     return (
-        <TWModal open={show} onClose={() => onClose()}>
-            <div>
+        <div>
+            <div className="bg-theme-background w-full max-w-screen-md md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-12 md:mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
                     <div className="w-3 h-3 ml-4 cursor-pointer" onClick={() => onClose()}>
@@ -357,6 +356,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                     </p>
                 </div>
             </div>
-        </TWModal>
+        </div>
     );
 };
