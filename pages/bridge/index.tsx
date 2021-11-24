@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import { useRouter } from 'next/router';
 import { PoolStore } from '@context/PoolContext';
-import { SwapStore } from '@context/SwapContext';
-import Exchange from '@archetypes/Exchange';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 
+// const Bridge
 export default (() => {
-    const router = useRouter();
-    useEffect(() => {
-        router.prefetch('/');
-    }, []);
-
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
-                <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <SwapStore>
-                    <Exchange />
-                </SwapStore>
+                <ArbitrumBridgeStore>
+                    <NavBar setShowOnboardModal={setShowOnboardModal} />
+                    <ArbitrumBridge />
+                </ArbitrumBridgeStore>
             </PoolStore>
             <Footer />
 

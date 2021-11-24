@@ -5,8 +5,6 @@ import StakeBPT from '@archetypes/Stake/StakeBPT';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
-import { ArbitrumBridge } from '@components/ArbitrumBridge';
-import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardStakeModal from '@components/OnboardModal/Stake';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
@@ -21,14 +19,11 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <ArbitrumBridgeStore>
-                <FarmStore farmContext="bptFarms">
-                    <NavBar setShowOnboardModal={setShowOnboardModal} />
-                    <StakeBPT />
-                </FarmStore>
-                <ArbitrumBridge />
-                <UnsupportedNetworkPopup />
-            </ArbitrumBridgeStore>
+            <FarmStore farmContext="bptFarms">
+                <NavBar setShowOnboardModal={setShowOnboardModal} />
+                <StakeBPT />
+            </FarmStore>
+            <UnsupportedNetworkPopup />
             <Footer />
             <PendingCommits />
 
