@@ -34,7 +34,7 @@ const CorWidget: React.FC = () => (
             right
             color={'#3E58C9'}
             textColor={'#ffffff'}
-            url={'https://beta.reputation.link/protocols/tracer/?network=Arbitrum'}
+            url={'https://reputation.link/protocols/tracer/?network=Arbitrum'}
         />
         <style>{`
             #cor-widget a {
