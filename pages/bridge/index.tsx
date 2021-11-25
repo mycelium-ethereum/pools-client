@@ -5,6 +5,7 @@ import { PoolStore } from '@context/PoolContext';
 import { ArbitrumBridge } from '@components/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 // const Bridge
 export default (() => {
@@ -18,6 +19,7 @@ export default (() => {
                     <NavBar setShowOnboardModal={setShowOnboardModal} />
                     <ArbitrumBridge />
                 </ArbitrumBridgeStore>
+                <UnsupportedNetworkPopup />
             </PoolStore>
             <Footer />
 

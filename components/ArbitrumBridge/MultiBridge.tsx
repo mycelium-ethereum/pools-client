@@ -8,19 +8,16 @@ import { Currency } from '@components/General/Currency';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
-import Close from '../../public/img/general/close.svg';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
 
 interface MultiBridgeProps {
-    show: boolean;
     fromNetwork: Network;
     toNetwork?: Network;
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
     onSwitchNetwork: (networkId: Network['id'], callback?: () => void) => void;
-    onClose: () => void;
     onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
     account?: string;
@@ -35,8 +32,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onSwitchNetwork,
         refreshBridgeableBalance,
         onBridgeAsset,
-        show,
-        onClose,
         onApproveToken,
         account,
     } = props;
@@ -50,16 +45,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // if this is the first time using the bridge, automatically switch them to L1 Mainnet
     useEffect(() => {
-        if (show) {
-            const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
-            if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
-                // if its the first time using the bridge and they aren't already on L1 Mainnet
-                onSwitchNetwork(MAINNET, () => {
-                    localStorage.setItem('hasUsedBridge', 'true');
-                });
-            }
+        const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
+        if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
+            // if its the first time using the bridge and they aren't already on L1 Mainnet
+            onSwitchNetwork(MAINNET, () => {
+                localStorage.setItem('hasUsedBridge', 'true');
+            });
         }
-    }, [show]);
+    }, []);
 
     const bridgeableAssetList = useMemo(() => {
         if (!fromNetwork) {
@@ -78,14 +71,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // fetch balance when modal initially shows
     useEffect(() => {
-        if (show && fromNetwork?.id && selectedAsset) {
+        if (fromNetwork?.id && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
-    }, [show]);
+    }, []);
 
     // refresh asset balance when selectedAsset changes
     useEffect(() => {
-        if (show && selectedAsset) {
+        if (selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
             setAmount(amountsByAsset[selectedAsset.symbol] || '');
         }
@@ -103,14 +96,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // refresh asset balance when selected account changes
     useEffect(() => {
-        if (show && selectedAsset && account) {
+        if (selectedAsset && account) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [account]);
 
     // refresh asset balance when selected network changes
     useEffect(() => {
-        if (show && selectedAsset && fromNetwork) {
+        if (selectedAsset && fromNetwork) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [fromNetwork]);
@@ -187,9 +180,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
             <div className="bg-theme-background w-full max-w-screen-md md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-12 md:mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
-                    <div className="w-3 h-3 ml-4 cursor-pointer" onClick={() => onClose()}>
-                        <Close />
-                    </div>
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">

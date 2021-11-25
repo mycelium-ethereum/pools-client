@@ -6,6 +6,7 @@ import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import Exchange from '@archetypes/Exchange';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const router = useRouter();
@@ -23,6 +24,7 @@ export default (() => {
                 <SwapStore>
                     <Exchange />
                 </SwapStore>
+                <UnsupportedNetworkPopup />
             </PoolStore>
             <Footer />
 
