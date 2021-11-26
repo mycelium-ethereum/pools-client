@@ -1,21 +1,21 @@
 import React from 'react';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useBigNumber, useSwapContext } from '@context/SwapContext';
-import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
+import { useDex, useDexActions } from '@context/1InchContext';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
-    const { swapState = swapDefaults, swapDispatch } = useSwapContext();
-    const { selectedPool, side, amount, invalidAmount, commitAction } = swapState;
+    const { swapState = swapDefaults } = useSwapContext();
+    const { selectedPool, amount, invalidAmount } = swapState;
 
     const amountBN = useBigNumber(amount);
 
-    const pool = usePool(selectedPool);
-
-    const { commit, approve } = usePoolActions();
+    const { usdcApproved } = useDex();
+    console.log(usdcApproved)
+    const { approve, makeTrade } = useDexActions();
 
     const ButtonContent = () => {
         if (!account) {
@@ -32,8 +32,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
             );
         }
         if (
-            (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) &&
-            commitAction !== CommitActionEnum.burn
+            !usdcApproved
         ) {
             return (
                 <>
@@ -45,7 +44,7 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                             if (!approve) {
                                 return;
                             }
-                            approve(selectedPool ?? '');
+                            approve()
                         }}
                     >
                         Unlock USDC
@@ -62,21 +61,10 @@ const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType
                     variant="primary"
                     disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}
                     onClick={(_e) => {
-                        let commitType;
-                        if (!commit) {
+                        if (!makeTrade) {
                             return;
                         }
-                        if (actionType === CommitActionEnum.mint) {
-                            commitType = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
-                        } else {
-                            // actionType === CommitActionEnum.burn
-                            commitType = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
-                        }
-                        commit(selectedPool ?? '', commitType, amountBN, {
-                            onSuccess: () => {
-                                swapDispatch?.({ type: 'setAmount', value: '' });
-                            },
-                        });
+                        makeTrade()
                     }}
                 >
                     Ok, let&apos;s {actionType === CommitActionEnum.mint ? 'mint' : 'burn'}

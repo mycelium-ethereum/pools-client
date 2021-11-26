@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
-import { ContractReceipt, ContractTransaction } from 'ethers';
+import { ContractReceipt, ContractTransaction, ethers } from 'ethers';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM } from '@libs/constants';
 
@@ -24,7 +24,7 @@ export type Options = {
 };
 type HandleTransactionType =
     | ((
-          callMethod: (...args: any) => Promise<ContractTransaction>,
+          callMethod: (...args: any) => Promise<ContractTransaction> | Promise<ethers.providers.TransactionResponse>,
           params: any[], // eslint-disable-line
           options?: Options,
       ) => void)
@@ -66,21 +66,22 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         );
 
         setPendingCount((previousValue) => previousValue + 1);
+        console.log(callMethod, params)
         const res = callMethod(...params);
 
         res.then(async (contractTransaction) => {
             afterConfirmation ? afterConfirmation(contractTransaction.hash) : null;
 
-            const contractReceipt = await contractTransaction.wait();
-
+            // const contractReceipt = await contractTransaction?.wait();
+            let contractReceipt: any = {};
             updateToast(toastId as unknown as string, {
                 content: [
                     statusMessages?.success?.title ?? 'Transaction Successful',
                     statusMessages?.success?.body ?? (
                         <a
-                            key={contractReceipt.transactionHash}
+                            key={contractReceipt?.transactionHash ?? contractTransaction.hash}
                             href={`${networkConfig[network ?? ARBITRUM]?.previewUrl}/${
-                                contractReceipt.transactionHash
+                                contractReceipt?.transactionHash ?? contractTransaction.hash
                             }`}
                             className="text-tracer-400 underline"
                             target="_blank"
@@ -93,6 +94,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 appearance: 'success',
                 autoDismiss: statusMessages?.success?.autoDismiss ?? true,
             });
+
 
             setPendingCount((previousValue) => previousValue - 1);
             onSuccess ? onSuccess(contractReceipt) : null;
