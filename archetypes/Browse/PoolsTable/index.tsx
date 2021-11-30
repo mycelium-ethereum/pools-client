@@ -94,6 +94,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
 
+const calcPercentage: (value: number, total: number) => number = (value, total) => ((value / total) * 100)
 const PoolRow: React.FC<{
     pool: BrowseTableRowData;
     index: number;
@@ -126,7 +127,9 @@ const PoolRow: React.FC<{
             <TableRowCell rowSpan={2}>
                 {toApproxCurrency(pool.longToken.tvl + pool.shortToken.tvl)}
             </TableRowCell>
-            <TableRowCell rowSpan={2}>
+            <TableRowCell rowSpan={2} className={'relative bg-opacity-0 z-[1]'}>
+                <LongBalance width={calcPercentage(pool.longToken.tvl, pool.longToken.tvl + pool.shortToken.tvl)} />
+                <ShortBalance />
                 {pool.skew.toFixed(2)}
             </TableRowCell>
             <TableRowCell rowSpan={2}>
@@ -179,6 +182,12 @@ const PoolRow: React.FC<{
     );
 };
 
+const LongBalance: React.FC<{ width: number }> = ({ width }) => (<div style={{ width: `${width}%`}} className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green`}></div>)
+const ShortBalance = () => (<div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red`}></div>)
+
+const longStyles = 'bg-green-50 dark:bg-dark-green'
+const shortStyles = 'bg-red-50 dark:bg-dark-red'
+
 const TokenRows: React.FC<{
     side: SideEnum,
     tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken']
@@ -198,27 +207,29 @@ const TokenRows: React.FC<{
     onClickBuy,
     onClickSell
 }) => {
+    const styles = side === SideEnum.long ? longStyles : shortStyles;
+
     return (
         <>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {side === SideEnum.long ? 'Long' : 'Short'}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {toApproxCurrency(tokenInfo.tvl)}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {tokenInfo.effectiveGain.toFixed(2)}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {leverage}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {toApproxCurrency(tokenInfo.lastTCRPrice)}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             {toApproxCurrency(tokenInfo.lastTCRPrice)}
         </TableRowCell>
-        <TableRowCell>
+        <TableRowCell className={styles}>
             <Button
                 className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                 size="sm"
