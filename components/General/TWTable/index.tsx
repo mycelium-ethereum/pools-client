@@ -29,6 +29,7 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { twAlign?:
     children,
     className,
     twAlign = 'top',
+    ...props
 }) => (
     <th
         scope="col"
@@ -37,6 +38,7 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { twAlign?:
             `align-${twAlign}`,
             'px-4 pt-4 pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
         )}
+        {...props}
     >
         {children}
     </th>

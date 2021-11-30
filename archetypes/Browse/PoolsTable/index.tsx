@@ -15,7 +15,6 @@ import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
-import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
 
@@ -26,24 +25,33 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         <>
             <Table>
                 <TableHeader>
-                    <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap align-top">{'Token Price (USDC) *'}</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap pr-0">
-                        <div className="mb-4">Power Leverage</div>
-                        <div className="flex font-normal">
-                            <span className="mt-auto">For Gains</span>
-                            <span className="cursor-pointer ml-1" onClick={() => setShowModalEffectiveGain(true)}>
-                                <QuestionMark />
-                            </span>
-                        </div>
-                    </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap font-normal pl-0" twAlign="bottom">
-                        For Losses
-                    </TableHeaderCell>
-                    <TableHeaderCell>Commitment Ends In</TableHeaderCell>
-                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
-                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
-                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    <tr>
+                        {/* Pools  Cols */}
+                        <TableHeaderCell>Pool</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">{'TVL (USDC)'}</TableHeaderCell>
+                        <TableHeaderCell>{'Skew'}</TableHeaderCell>
+                        <TableHeaderCell>{'Rebalancing Rate'}</TableHeaderCell>
+                        <TableHeaderCell>{'Commitment Window'}</TableHeaderCell>
+
+                        {/* Token Cols */}
+                        <TableHeaderCell>{'Side'}</TableHeaderCell>
+                        <TableHeaderCell className={'whitespace-nowrap'}>{'TVL (USDC)'}</TableHeaderCell>
+                        <TableHeaderCell colSpan={2} className={'whitespace-nowrap'}>{'Effective Leverage'}</TableHeaderCell>
+                        <TableHeaderCell colSpan={2} className={'whitespace-nowrap'}>{'Token Price (USD)'}</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </tr>
+                    <tr>
+                        {/* Pools  Cols */}
+                        <TableHeaderCell colSpan={4}/>
+                        <TableHeaderCell>{'Ends in'}</TableHeaderCell>
+
+                        {/* Token Cols */}
+                        <TableHeaderCell colSpan={2}/>
+                        <TableHeaderCell>{'On Gains'}</TableHeaderCell>
+                        <TableHeaderCell>{'On Losses'}</TableHeaderCell>
+                        <TableHeaderCell>{'On Tracer'}</TableHeaderCell>
+                        <TableHeaderCell>{'On Balancer'}</TableHeaderCell>
+                    </tr>
                 </TableHeader>
                 {rows.map((token, index) => {
                     return (
