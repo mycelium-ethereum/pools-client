@@ -168,7 +168,7 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amoun
     );
 };
 
-export const constructBalancerLink: (token: string, network: AvailableNetwork, isBuy: boolean) => string = (
+export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
     token,
     network,
     isBuy,
