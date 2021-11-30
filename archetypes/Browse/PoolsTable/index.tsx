@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
@@ -16,7 +16,7 @@ import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelect
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 
 import Close from '/public/img/general/close.svg';
-import { classNames } from '@libs/utils/functions';
+// import { classNames } from '@libs/utils/functions';
 
 export default (({ rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -51,16 +51,17 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                         <TableHeaderCell>{'On Losses'}</TableHeaderCell>
                         <TableHeaderCell>{'On Tracer'}</TableHeaderCell>
                         <TableHeaderCell>{'On Balancer'}</TableHeaderCell>
+                        <TableHeaderCell />
                     </tr>
                 </TableHeader>
-                {rows.map((token, index) => {
+                {rows.map((pool, index) => {
                     return (
-                        <TokenRow
-                            token={token}
+                        <PoolRow
+                            pool={pool}
                             onClickBuy={onClickBuy}
                             onClickSell={onClickSell}
                             index={index}
-                            key={token.address}
+                            key={pool.address}
                             provider={provider}
                         />
                     );
@@ -93,18 +94,18 @@ export default (({ rows, onClickBuy, onClickSell }) => {
     onClickSell: (pool: string, side: SideEnum) => void;
 }>;
 
-const TokenRow: React.FC<{
-    token: BrowseTableRowData;
+const PoolRow: React.FC<{
+    pool: BrowseTableRowData;
     index: number;
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
     provider: ethers.providers.JsonRpcProvider | undefined;
-}> = ({ token, onClickBuy, onClickSell, index, provider }) => {
+}> = ({ pool, onClickBuy, onClickSell, index, provider }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
-    const hasHoldings = useMemo(() => token.myHoldings > 0, [token.myHoldings]);
+    // const hasHoldings = useMemo(() => pool.myHoldings > 0, [pool.myHoldings]);
 
-    const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
+    const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
 
     // const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
 
@@ -115,17 +116,23 @@ const TokenRow: React.FC<{
     }, [isBeforeFrontRunning]);
 
     return (
+        <>
         <TableRow rowNumber={index}>
-            <TableRowCell>
-                <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.name)} />
-                {/* {token.symbol} */}
+            {/** Pool rows */}
+            <TableRowCell rowSpan={2}>
+                <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(pool.name)} />
+                {pool.name}
             </TableRowCell>
-            <TableRowCell>
+            <TableRowCell rowSpan={2}>
+                {toApproxCurrency(pool.longToken.tvl + pool.shortToken.tvl)}
             </TableRowCell>
-            <TableRowCell className={classNames('pr-0')}>
+            <TableRowCell rowSpan={2}>
+                {pool.skew.toFixed(2)}
             </TableRowCell>
-            <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}`}</TableRowCell>
-            <TableRowCell>
+            <TableRowCell rowSpan={2}>
+                {pool.skew.toFixed(2)}
+            </TableRowCell>
+            <TableRowCell rowSpan={2}>
                 {!isBeforeFrontRunning ? (
                     <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
                         <div>Front-running interval reached</div>
@@ -133,7 +140,7 @@ const TokenRow: React.FC<{
                             {'Mint and burn in '}
                             {!pendingUpkeep ? (
                                 <TimeLeft
-                                    targetTime={token.nextRebalance}
+                                    targetTime={pool.nextRebalance}
                                     countdownEnded={() => {
                                         setPendingUpkeep(true);
                                     }}
@@ -144,45 +151,103 @@ const TokenRow: React.FC<{
                         </div>
                     </TooltipSelector>
                 ) : (
-                    <TimeLeft targetTime={token.nextRebalance - token.frontRunning} />
+                    <TimeLeft targetTime={pool.nextRebalance - pool.frontRunning} />
                 )}
             </TableRowCell>
-            <TableRowCell>{toApproxCurrency(token.totalValueLocked)}</TableRowCell>
-            <TableRowCell>
-                <div>{`${token.myHoldings.toFixed(2)}`}</div>
-                {/* <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div> */}
-            </TableRowCell>
-            <TableRowCell>
-                <Button
-                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                    size="sm"
-                    variant="primary-light"
-                    onClick={() => onClickBuy(token.address, SideEnum.long)}
-                >
-                    Mint
-                </Button>
-                <Button
-                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                    size="sm"
-                    variant="primary-light"
-                    disabled={!hasHoldings}
-                    onClick={() => onClickSell(token.address, SideEnum.long)}
-                >
-                    Burn
-                </Button>
-                <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
-                    token={{
-                        address: token.address,
-                        decimals: token.decimals,
-                        symbol: token.longToken.symbol,
-                    }}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.token,
-                        target: token.address,
-                    }}
-                />
-            </TableRowCell>
+
+            {/** Token rows */}
+            <TokenRows 
+                side={SideEnum.long}
+                provider={provider}
+                onClickBuy={onClickBuy}
+                onClickSell={onClickSell}
+                tokenInfo={pool.longToken}
+                {...pool}
+            />
         </TableRow>
+        <TableRow rowNumber={index}>
+            <TokenRows 
+                side={SideEnum.short}
+                provider={provider}
+                onClickBuy={onClickBuy}
+                onClickSell={onClickSell}
+                tokenInfo={pool.shortToken}
+                {...pool}
+            />
+        </TableRow>
+        </>
     );
 };
+
+const TokenRows: React.FC<{
+    side: SideEnum,
+    tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken']
+    leverage: number,
+    address: string,
+    decimals: number,
+    onClickBuy: (pool: string, side: SideEnum) => void;
+    onClickSell: (pool: string, side: SideEnum) => void;
+    provider: ethers.providers.JsonRpcProvider | undefined;
+}> = ({ 
+    side,
+    tokenInfo,
+    leverage,
+    address: poolAddress,
+    decimals,
+    provider,
+    onClickBuy,
+    onClickSell
+}) => {
+    return (
+        <>
+        <TableRowCell>
+            {side === SideEnum.long ? 'Long' : 'Short'}
+        </TableRowCell>
+        <TableRowCell>
+            {toApproxCurrency(tokenInfo.tvl)}
+        </TableRowCell>
+        <TableRowCell>
+            {tokenInfo.effectiveGain.toFixed(2)}
+        </TableRowCell>
+        <TableRowCell>
+            {leverage}
+        </TableRowCell>
+        <TableRowCell>
+            {toApproxCurrency(tokenInfo.lastTCRPrice)}
+        </TableRowCell>
+        <TableRowCell>
+            {toApproxCurrency(tokenInfo.lastTCRPrice)}
+        </TableRowCell>
+        <TableRowCell>
+            <Button
+                className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                size="sm"
+                variant="primary-light"
+                onClick={() => onClickBuy(poolAddress, side)}
+            >
+                Mint
+            </Button>
+            <Button
+                className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
+                size="sm"
+                variant="primary-light"
+                onClick={() => onClickSell(poolAddress, side)}
+            >
+                Burn
+            </Button>
+            <Actions
+                provider={provider as ethers.providers.JsonRpcProvider}
+                token={{
+                    address: poolAddress,
+                    decimals: decimals,
+                    symbol: tokenInfo.symbol,
+                }}
+                arbiscanTarget={{
+                    type: ArbiscanEnum.token,
+                    target: poolAddress,
+                }}
+            />
+        </TableRowCell>
+        </>
+    )
+}

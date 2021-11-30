@@ -32,13 +32,13 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { twAlign?:
     ...props
 }) => (
     <th
+        {...props}
         scope="col"
         className={classNames(
             className ?? '',
             `align-${twAlign}`,
             'px-4 pt-4 pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
         )}
-        {...props}
     >
         {children}
     </th>
@@ -62,6 +62,6 @@ export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
     );
 };
 
-export const TableRowCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className }) => (
-    <td className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')}>{children}</td>
+export const TableRowCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className, ...props}) => (
+    <td {...props} className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')} >{children}</td>
 );
