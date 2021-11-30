@@ -9,11 +9,16 @@ import {
     calcTokenPrice,
 } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
+import useBalancerSpotPrices from '../useBalancerSpotPrices';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
 
 // const useBrowsePools
 export default (() => {
+    const { network } = useWeb3();
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
+    const balancerPoolPrices = useBalancerSpotPrices(network);
+
     useEffect(() => {
         if (pools) {
             const poolValues = Object.values(pools);
@@ -79,12 +84,9 @@ export default (() => {
                         effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)).toNumber(),
                         nextTCRPrice: nextShortTokenPrice.toNumber(),
-                        balancerPrice: calcTokenPrice(
-                            shortBalance,
-                            shortToken.supply.plus(pendingShortBurn),
-                        ).toNumber(),
                         tvl: shortBalance.toNumber(),
                         nextTvl: nextShortBalance.toNumber(),
+                        balancerPrice: balancerPoolPrices[shortToken.symbol]?.toNumber() ?? 0,
                     },
                     longToken: {
                         address: longToken.address,
@@ -92,9 +94,9 @@ export default (() => {
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
                         nextTCRPrice: nextLongTokenPrice.toNumber(),
-                        balancerPrice: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
                         tvl: longBalance.toNumber(),
                         nextTvl: nextLongBalance.toNumber(),
+                        balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
                     },
                     nextRebalance: lastUpdate.plus(updateInterval).toNumber(),
                     myHoldings: shortToken.balance.toNumber(),
@@ -104,5 +106,23 @@ export default (() => {
             setRows(rows);
         }
     }, [pools]);
+
+    useEffect(() => {
+        console.log(balancerPoolPrices, 'Changed');
+        setRows((rows) =>
+            rows.map((row) => ({
+                ...row,
+                longToken: {
+                    ...row.longToken,
+                    balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
+                },
+                shortToken: {
+                    ...row.shortToken,
+                    balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
+                },
+            })),
+        );
+    }, [balancerPoolPrices]);
+
     return rows;
 }) as () => BrowseTableRowData[];

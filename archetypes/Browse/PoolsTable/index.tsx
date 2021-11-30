@@ -7,7 +7,7 @@ import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, LogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
@@ -135,7 +135,11 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(pool.name)} />
+                    <Logo
+                        className="inline mr-2"
+                        size={'md'}
+                        ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
+                    />
                     {pool.name}
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
@@ -287,10 +291,12 @@ const TokenRows: React.FC<
                 {leverage}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                {toApproxCurrency(tokenInfo.lastTCRPrice)}
+                {showNextRebalance
+                    ? toApproxCurrency(tokenInfo.nextTCRPrice)
+                    : toApproxCurrency(tokenInfo.lastTCRPrice)}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                {toApproxCurrency(tokenInfo.lastTCRPrice)}
+                {toApproxCurrency(tokenInfo.balancerPrice)}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 <Button
