@@ -18,17 +18,27 @@ export enum SortByEnum {
     MyHoldings = 'My Holdings',
 }
 
+interface BrowseTableTokenData {
+    address: string;
+    symbol: string;
+    effectiveGain: number;
+    lastTCRPrice: number;
+    nextTCRPrice: number;
+    balancerPrice: number;
+    tvl: number;
+    nextTvl: number;
+}
 export interface BrowseTableRowData {
+    name: string;
     address: string;
     decimals: number;
-    pool: string;
-    symbol: string;
+
     leverage: number;
-    side: 'short' | 'long';
-    lastPrice: number;
-    nextPrice: number;
-    effectiveGain: number;
-    // rebalanceRate: number;
+    skew: number;
+
+    shortToken: BrowseTableTokenData;
+    longToken: BrowseTableTokenData;
+
     totalValueLocked: number;
     myHoldings: number;
     nextRebalance: number;
