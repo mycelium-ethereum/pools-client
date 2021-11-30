@@ -62,6 +62,13 @@ export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
     );
 };
 
-export const TableRowCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className, ...props}) => (
-    <td {...props} className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')} >{children}</td>
+const SIZES = {
+    'default': 'p-4',
+    'sm': 'px-2 py-1'
+};
+
+type Size = 'default' | 'sm';
+
+export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size }> = ({ children, className, size = 'default', ...props}) => (
+    <td {...props} className={classNames(className ?? '', SIZES[size], 'whitespace-nowrap text-sm text-theme-text')} >{children}</td>
 );

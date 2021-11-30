@@ -211,28 +211,28 @@ const TokenRows: React.FC<{
 
     return (
         <>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {side === SideEnum.long ? 'Long' : 'Short'}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {toApproxCurrency(tokenInfo.tvl)}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {tokenInfo.effectiveGain.toFixed(2)}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {leverage}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {toApproxCurrency(tokenInfo.lastTCRPrice)}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             {toApproxCurrency(tokenInfo.lastTCRPrice)}
         </TableRowCell>
-        <TableRowCell className={styles}>
+        <TableRowCell size={'sm'} className={styles}>
             <Button
                 className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                size="sm"
+                size="xs"
                 variant="primary-light"
                 onClick={() => onClickBuy(poolAddress, side)}
             >
@@ -240,7 +240,7 @@ const TokenRows: React.FC<{
             </Button>
             <Button
                 className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                size="sm"
+                size="xs"
                 variant="primary-light"
                 onClick={() => onClickSell(poolAddress, side)}
             >

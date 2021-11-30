@@ -53,8 +53,8 @@ export default (() => {
                             shortBalance,
                             shortToken.supply.plus(pendingShortBurn),
                         ).toNumber(),
-                        tvl: pool.longBalance.toNumber(),
-                        nextTvl: nextLongBalance.toNumber(),
+                        tvl: pool.shortBalance.toNumber(),
+                        nextTvl: nextShortBalance.toNumber(),
                     },
                     longToken: {
                         address: longToken.address,
