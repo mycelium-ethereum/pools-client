@@ -299,34 +299,36 @@ const TokenRows: React.FC<
                 {toApproxCurrency(tokenInfo.balancerPrice)}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                <Button
-                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickBuy(poolAddress, side)}
-                >
-                    Mint
-                </Button>
-                <Button
-                    className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickSell(poolAddress, side)}
-                >
-                    Burn
-                </Button>
-                <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
-                    token={{
-                        address: poolAddress,
-                        decimals: decimals,
-                        symbol: tokenInfo.symbol,
-                    }}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.token,
-                        target: poolAddress,
-                    }}
-                />
+                <div className="flex">
+                    <Button
+                        className="mx-1 w-[70px] my-auto font-bold uppercase "
+                        size="xs"
+                        variant="primary-light"
+                        onClick={() => onClickBuy(poolAddress, side)}
+                    >
+                        Mint
+                    </Button>
+                    <Button
+                        className="mx-1 w-[70px] my-auto font-bold uppercase "
+                        size="xs"
+                        variant="primary-light"
+                        onClick={() => onClickSell(poolAddress, side)}
+                    >
+                        Burn
+                    </Button>
+                    <Actions
+                        provider={provider as ethers.providers.JsonRpcProvider}
+                        token={{
+                            address: poolAddress,
+                            decimals: decimals,
+                            symbol: tokenInfo.symbol,
+                        }}
+                        arbiscanTarget={{
+                            type: ArbiscanEnum.token,
+                            target: poolAddress,
+                        }}
+                    />
+                </div>
             </TableRowCell>
         </>
     );
