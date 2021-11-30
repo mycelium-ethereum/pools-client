@@ -2,7 +2,14 @@ import React, { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS, useBigNumber } from '@context/SwapContext';
+import {
+    swapDefaults,
+    useSwapContext,
+    noDispatch,
+    LEVERAGE_OPTIONS,
+    SIDE_OPTIONS,
+    useBigNumber,
+} from '@context/SwapContext';
 import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
@@ -57,17 +64,6 @@ const isInvalidAmount: (
     };
 };
 
-const SIDE_OPTIONS = [
-    {
-        key: SideEnum.long,
-        text: 'Long',
-    },
-    {
-        key: SideEnum.short,
-        text: 'Short',
-    },
-];
-
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
@@ -84,7 +80,8 @@ export default (() => {
     useEffect(() => {
         if (
             (localStorage.getItem('onboard.selectedWallet') === 'MetaMask' ||
-                localStorage.getItem('onboard.selectedWallet') === 'Torus') &&
+                localStorage.getItem('onboard.selectedWallet') === 'Torus' ||
+                localStorage.getItem('onboard.selectedWallet') === 'WalletConnect') &&
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
