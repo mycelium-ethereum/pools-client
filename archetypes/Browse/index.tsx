@@ -7,6 +7,7 @@ import {
     BrowseState,
     BrowseTableRowData,
     LeverageFilterEnum,
+    RebalanceEnum,
     SideFilterEnum,
     SortByEnum,
 } from './state';
@@ -14,7 +15,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
-import { calcPercentageDifference } from '@libs/utils/converters';
+// import { calcPercentageDifference } from '@libs/utils/converters';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -25,6 +26,7 @@ export const Browse: React.FC = () => {
         search: '',
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
+        rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filterModalOpen: false,
     } as BrowseState);
@@ -82,7 +84,7 @@ export const Browse: React.FC = () => {
             //         calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
             //     );
             case SortByEnum.TotalValueLocked:
-                return tokenB.totalValueLocked - tokenA.totalValueLocked;
+                return tokenB.tvl - tokenA.tvl;
             case SortByEnum.MyHoldings:
                 return tokenB.myHoldings - tokenA.myHoldings;
             default:
@@ -126,7 +128,12 @@ export const Browse: React.FC = () => {
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
-                    <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <PoolsTable
+                        rows={sortedFilteredTokens}
+                        onClickBuy={handleBuyToken}
+                        onClickSell={handleSellToken}
+                        showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
+                    />
                 </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />

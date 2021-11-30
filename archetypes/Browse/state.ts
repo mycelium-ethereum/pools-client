@@ -10,6 +10,11 @@ export enum SideFilterEnum {
     Long = 'Long',
 }
 
+export enum RebalanceEnum {
+    next = 0,
+    last = 1,
+}
+
 export enum SortByEnum {
     Name = 'Token',
     Price = 'Price',
@@ -32,14 +37,20 @@ export interface BrowseTableRowData {
     name: string;
     address: string;
     decimals: number;
-
     leverage: number;
+
     skew: number;
+    nextSkew: number;
+
+    tvl: number;
+    nextTVL: number;
 
     shortToken: BrowseTableTokenData;
     longToken: BrowseTableTokenData;
 
-    totalValueLocked: number;
+    rebalanceRate: number;
+    nextRebalanceRate: number;
+
     myHoldings: number;
     nextRebalance: number;
     frontRunning: number;
@@ -49,6 +60,7 @@ export interface BrowseState {
     search: string;
     leverage: LeverageFilterEnum;
     side: SideFilterEnum;
+    rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
     filterModalOpen: boolean;
 }
@@ -56,6 +68,7 @@ export interface BrowseState {
 export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
+    | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
     | { type: 'setSide'; side: SideFilterEnum }
     | { type: 'setModalOpen'; open: boolean }
     | { type: 'setSortBy'; sortBy: SortByEnum };
@@ -66,6 +79,11 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
             return {
                 ...state,
                 leverage: action.leverage,
+            };
+        case 'setRebalanceFocus':
+            return {
+                ...state,
+                rebalanceFocus: action.focus,
             };
         case 'setSearch':
             return {
