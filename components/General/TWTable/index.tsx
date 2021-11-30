@@ -15,26 +15,26 @@ export const Table: React.FC<{ className?: string }> = ({ className, children })
     );
 };
 
-export const TableHeader: React.FC<{ className?: string }> = ({ children, className }) => {
+export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children, className }) => {
     return (
         <thead
             className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg', className ?? '')}
         >
-            <tr>{children}</tr>
+            {children}
         </thead>
     );
 };
 
-export const TableHeaderCell: React.FC<{ className?: string; align?: 'bottom' }> = ({
+export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { twAlign?: 'bottom'}> = ({
     children,
     className,
-    align = 'top',
+    twAlign = 'top',
 }) => (
     <th
         scope="col"
         className={classNames(
             className ?? '',
-            `align-${align}`,
+            `align-${twAlign}`,
             'px-4 pt-4 pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
         )}
     >
@@ -42,13 +42,12 @@ export const TableHeaderCell: React.FC<{ className?: string; align?: 'bottom' }>
     </th>
 );
 
-interface TableRowProps {
+type TableRowProps = JSX.IntrinsicElements['tr'] & {
     rowNumber: number;
 }
 
 export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
     return (
-        <tbody>
             <tr
                 className={
                     rowNumber % 2 === 0
@@ -58,10 +57,9 @@ export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
             >
                 {children}
             </tr>
-        </tbody>
     );
 };
 
-export const TableRowCell: React.FC<{ className?: string }> = ({ children, className }) => (
+export const TableRowCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className }) => (
     <td className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')}>{children}</td>
 );
