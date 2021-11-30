@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { SideEnum } from '@libs/constants';
-import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -37,7 +37,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                             </span>
                         </div>
                     </TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap font-normal pl-0" align="bottom">
+                    <TableHeaderCell className="whitespace-nowrap font-normal pl-0" twAlign="bottom">
                         For Losses
                     </TableHeaderCell>
                     <TableHeaderCell>Commitment Ends In</TableHeaderCell>
@@ -98,7 +98,7 @@ const TokenRow: React.FC<{
 
     const isBeforeFrontRunning = useIntervalCheck(token.nextRebalance, token.frontRunning);
 
-    const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
+    // const priceDelta = calcPercentageDifference(token.nextPrice, token.lastPrice);
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
@@ -109,27 +109,12 @@ const TokenRow: React.FC<{
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
-                <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                {token.symbol}
+                <Logo className="inline mr-2" size={'md'} ticker={tokenSymbolToLogoTicker(token.name)} />
+                {/* {token.symbol} */}
             </TableRowCell>
             <TableRowCell>
-                <div>{toApproxCurrency(token.nextPrice, 3)}</div>
-                <div className="opacity-80">
-                    {Math.abs(priceDelta) <= 0.01 ? (
-                        'Minimal change'
-                    ) : (
-                        <span className={priceDelta >= 0 ? 'text-green-500' : 'text-red-500'}>
-                            {priceDelta > 0 ? '+' : ''}
-                            {`${toApproxCurrency(token.nextPrice - token.lastPrice, 3)} (${priceDelta.toFixed(2)}%)`}
-                        </span>
-                    )}
-                    {` since last rebalance`}
-                </div>
             </TableRowCell>
             <TableRowCell className={classNames('pr-0')}>
-                <span className={token.effectiveGain >= token.leverage ? 'text-green-500' : 'text-red-500'}>
-                    {`${token.effectiveGain.toFixed(2)}`}
-                </span>
             </TableRowCell>
             <TableRowCell className="pl-0">{`${token.leverage.toFixed(2)}`}</TableRowCell>
             <TableRowCell>
@@ -157,14 +142,14 @@ const TokenRow: React.FC<{
             <TableRowCell>{toApproxCurrency(token.totalValueLocked)}</TableRowCell>
             <TableRowCell>
                 <div>{`${token.myHoldings.toFixed(2)}`}</div>
-                <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div>
+                {/* <div className="opacity-50">{toApproxCurrency(token.myHoldings * token.lastPrice)}</div> */}
             </TableRowCell>
             <TableRowCell>
                 <Button
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
-                    onClick={() => onClickBuy(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                    onClick={() => onClickBuy(token.address, SideEnum.long)}
                 >
                     Mint
                 </Button>
@@ -173,7 +158,7 @@ const TokenRow: React.FC<{
                     size="sm"
                     variant="primary-light"
                     disabled={!hasHoldings}
-                    onClick={() => onClickSell(token.pool, token.side === 'short' ? SideEnum.short : SideEnum.long)}
+                    onClick={() => onClickSell(token.address, SideEnum.long)}
                 >
                     Burn
                 </Button>
@@ -182,7 +167,7 @@ const TokenRow: React.FC<{
                     token={{
                         address: token.address,
                         decimals: token.decimals,
-                        symbol: token.symbol,
+                        symbol: token.longToken.symbol,
                     }}
                     arbiscanTarget={{
                         type: ArbiscanEnum.token,

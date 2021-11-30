@@ -52,35 +52,35 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const sideFilter = (pool: BrowseTableRowData): boolean => {
+    const sideFilter = (_pool: BrowseTableRowData): boolean => {
         switch (state.side) {
             case SideFilterEnum.All:
                 return true;
-            case SideFilterEnum.Long:
-                return pool.side === 'long';
-            case SideFilterEnum.Short:
-                return pool.side === 'short';
+            // case SideFilterEnum.Long:
+            //     return pool.side === 'long';
+            // case SideFilterEnum.Short:
+            //     return pool.side === 'short';
             default:
                 return false;
         }
     };
 
-    const searchFilter = (token: BrowseTableRowData): boolean => {
+    const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(token.symbol.toLowerCase().match(searchString));
+        return Boolean(pool.name.toLowerCase().match(searchString));
     };
 
     const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
         switch (state.sortBy) {
-            case SortByEnum.Name:
-                return tokenA.symbol.split('-')[1].localeCompare(tokenB.symbol.split('-')[1]);
-            case SortByEnum.Price:
-                return tokenB.lastPrice - tokenA.lastPrice;
-            case SortByEnum.EffectiveGain:
-                return (
-                    calcPercentageDifference(tokenB.effectiveGain, tokenB.leverage) -
-                    calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
-                );
+            // case SortByEnum.Name:
+            //     return tokenA.symbol.split('-')[1].localeCompare(tokenB.symbol.split('-')[1]);
+            // case SortByEnum.Price:
+            //     return tokenB.lastPrice - tokenA.lastPrice;
+            // case SortByEnum.EffectiveGain:
+            //     return (
+            //         calcPercentageDifference(tokenB.effectiveGain, tokenB.leverage) -
+            //         calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
+            //     );
             case SortByEnum.TotalValueLocked:
                 return tokenB.totalValueLocked - tokenA.totalValueLocked;
             case SortByEnum.MyHoldings:
