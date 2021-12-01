@@ -228,7 +228,7 @@ export default (() => {
                 <div>
                     Deposit funds from Ethereum to Arbitrum to get started with Perpetual Pools. Ensure you deposit{' '}
                     <b>USDC</b> for collateral and <b>ETH</b> for gas. Please note that the withdrawal process from
-                    Arbitrum to Ethereum takes approximately 7 days.
+                    Arbitrum to Ethereum takes approximately 8 days.
                     <br />
                     <br />
                     If you have any questions, please{' '}
