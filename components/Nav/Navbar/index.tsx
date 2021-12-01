@@ -53,11 +53,6 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Buy/Sell</a>
                         </li>
                     </Link>
-                    <Link href="/mint-burn">
-                        <li className={classNames(linkStyles, route === 'mint-burn' ? selectedStyles : '')}>
-                            <a className="m-auto">Mint/Burn</a>
-                        </li>
-                    </Link>
                     <Link href="/pools">
                         <li className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}>
                             <a className="m-auto">Pools</a>
