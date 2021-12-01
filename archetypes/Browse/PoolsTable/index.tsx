@@ -19,7 +19,7 @@ import QuestionMark from '/public/img/general/question-mark-circle.svg';
 import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
 
-export default (({ rows, onClickBuy, onClickSell }) => {
+export default (({ loading, rows, onClickBuy, onClickSell }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider } = useWeb3();
     return (
@@ -58,7 +58,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
                     );
                 })}
             </Table>
-            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
+            {loading ? <Loading className="w-10 mx-auto my-8" /> : null}
             <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
                 * <strong>Token Price</strong> values indicative only, and represent the estimated values for the next
                 rebalance, given the committed mints and burns and change in price of the underlying asset.
@@ -80,6 +80,7 @@ export default (({ rows, onClickBuy, onClickSell }) => {
         </>
     );
 }) as React.FC<{
+    loading: boolean;
     rows: BrowseTableRowData[];
     onClickBuy: (pool: string, side: SideEnum) => void;
     onClickSell: (pool: string, side: SideEnum) => void;
