@@ -33,7 +33,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="flex-grow" />
-                <div className="mr-4">
+                <div className="hidden md:block mr-4">
                     <h3 className="mb-1 text-theme-text">Side</h3>
                     <Dropdown
                         value={state.side}
@@ -41,32 +41,13 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
                     />
                 </div>
-                <div className="mr-4 flex-grow flex items-end" style={{ maxWidth: '20rem' }}>
+                <div className="hidden md:flex mr-4 flex-grow items-end" style={{ maxWidth: '20rem' }}>
                     <SearchInput
                         placeholder="Search"
                         value={state.search}
                         onChange={(search) => dispatch({ type: 'setSearch', search })}
                     />
                 </div>
-                {/* <div className="mr-6">
-                    <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
-                        <h3 className="mb-1">Power Leverage</h3>
-                    </TooltipSelector>
-                    <Dropdown
-                        className="w-full"
-                        value={state.leverage}
-                        options={Object.values(LeverageFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
-                    />
-                </div> */}
-                {/* <div>
-                    <h3 className="mb-1 text-theme-text">Sort</h3>
-                    <Dropdown
-                        value={state.sortBy}
-                        options={Object.values(SortByEnum).map((key) => ({ key: key }))}
-                        onSelect={(val) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum })}
-                    />
-                </div> */}
             </div>
         </section>
     );
