@@ -126,7 +126,12 @@ export const Browse: React.FC = () => {
                         <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
-                    <PoolsTable rows={sortedFilteredTokens} onClickBuy={handleBuyToken} onClickSell={handleSellToken} />
+                    <PoolsTable
+                        tokens={tokens}
+                        rows={sortedFilteredTokens}
+                        onClickBuy={handleBuyToken}
+                        onClickSell={handleSellToken}
+                    />
                 </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />
