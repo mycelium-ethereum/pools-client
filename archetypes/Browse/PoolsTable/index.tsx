@@ -161,6 +161,7 @@ const TokenRow: React.FC<{
             </TableRowCell>
             <TableRowCell>
                 <Button
+                    id="browse-mint"
                     className="mx-1 w-[70px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
