@@ -5,10 +5,10 @@ import Exchange from '@archetypes/Exchange';
 export default (({ open, onClose }) => {
     return (
         <TWModal open={open} onClose={onClose}>
-			<Exchange />
+            <Exchange />
         </TWModal>
     );
 }) as React.FC<{
-	open: boolean;
-	onClose: () => any;
+    open: boolean;
+    onClose: () => any;
 }>;

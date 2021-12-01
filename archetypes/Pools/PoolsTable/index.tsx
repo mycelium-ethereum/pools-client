@@ -100,10 +100,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, onMintBurnClose, mi
                     depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
-            <MintBurnModal
-                open={mintBurnOpen}
-                onClose={onMintBurnClose}
-            />
+            <MintBurnModal open={mintBurnOpen} onClose={onMintBurnClose} />
         </>
     );
 }) as React.FC<
@@ -257,16 +254,7 @@ const TokenRows: React.FC<
         decimals: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({
-    side,
-    tokenInfo,
-    leverage,
-    address: poolAddress,
-    decimals,
-    provider,
-    onClickMintBurn,
-    showNextRebalance,
-}) => {
+> = ({ side, tokenInfo, leverage, address: poolAddress, decimals, provider, onClickMintBurn, showNextRebalance }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
     const tvlDelta = calcPercentageDifference(tokenInfo.nextTvl, tokenInfo.tvl);
 

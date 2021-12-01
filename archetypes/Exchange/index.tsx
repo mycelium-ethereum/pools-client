@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
-import { SwapContext } from '@context/SwapContext';
-import { CommitActionEnum } from '@libs/constants';
+import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import Gas from './Gas';
-import Buy from './Buy';
-import Sell from './Sell';
+import Inputs from './Inputs';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
+import ExchangeButton from '@components/General/Button/ExchangeButton';
+import Summary from './Summary';
+import FeeNote from './FeeNote';
+import { usePool } from '@context/PoolContext';
+import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 
 const TRADE_OPTIONS = [
     {
@@ -19,7 +23,11 @@ const TRADE_OPTIONS = [
 ];
 
 export default (() => {
-    const { swapState, swapDispatch } = useContext(SwapContext);
+    const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
+    const pool = usePool(swapState.selectedPool);
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
+
+    const amountBN = useBigNumber(swapState.amount);
 
     return (
         <div className="w-full justify-center sm:mt-14">
@@ -44,7 +52,24 @@ export default (() => {
                 <Divider className="my-8" />
 
                 {/** Inputs */}
-                {swapState?.commitAction === CommitActionEnum.burn ? <Sell /> : <Buy />}
+                <Inputs pool={pool} swapDispatch={swapDispatch} swapState={swapState} />
+
+                <Summary
+                    pool={pool}
+                    showBreakdown={!swapState.invalidAmount.isInvalid}
+                    isLong={swapState.side === SideEnum.long}
+                    amount={amountBN}
+                    receiveIn={receiveIn}
+                    isMint={swapState.commitAction === CommitActionEnum.mint}
+                />
+
+                <FeeNote
+                    poolName={pool.name}
+                    isMint={swapState.commitAction === CommitActionEnum.mint}
+                    receiveIn={receiveIn}
+                />
+
+                <ExchangeButton actionType={CommitActionEnum.burn} />
             </div>
         </div>
     );

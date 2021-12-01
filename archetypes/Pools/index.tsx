@@ -18,7 +18,7 @@ import { noDispatch, useSwapContext } from '@context/SwapContext';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
-    const { swapDispatch = noDispatch } = useSwapContext()
+    const { swapDispatch = noDispatch } = useSwapContext();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
@@ -27,7 +27,7 @@ export const Browse: React.FC = () => {
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filterModalOpen: false,
-        mintBurnModalOpen: false
+        mintBurnModalOpen: false,
     } as BrowseState);
 
     useEffect(() => {
@@ -99,10 +99,10 @@ export const Browse: React.FC = () => {
             ${commitAction === CommitActionEnum.mint ? 'Buying/minting ' : 'Burning/selling '}
             ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}
         `);
-        swapDispatch({ type: 'setSelectedPool', value: pool })
-        swapDispatch({ type: 'setSide', value: side })
-        swapDispatch({ type: 'setCommitAction', value: commitAction})
-        dispatch({ type: 'setMintBurnModalOpen', open: true })
+        swapDispatch({ type: 'setSelectedPool', value: pool });
+        swapDispatch({ type: 'setSide', value: side });
+        swapDispatch({ type: 'setCommitAction', value: commitAction });
+        dispatch({ type: 'setMintBurnModalOpen', open: true });
         // router.push({
         //     pathname: '/',
         //     query: {
@@ -115,9 +115,10 @@ export const Browse: React.FC = () => {
 
     const handleModalClose = () => {
         dispatch({
-            type: 'setMintBurnModalOpen', open: false
-        })
-    }
+            type: 'setMintBurnModalOpen',
+            open: false,
+        });
+    };
 
     return (
         <>

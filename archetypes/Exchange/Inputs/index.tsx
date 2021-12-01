@@ -3,20 +3,16 @@ import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
-import { useSwapContext, swapDefaults, noDispatch, useBigNumber } from '@context/SwapContext';
-import { usePool } from '@context/PoolContext';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
-import { SellSummary } from '../Summary';
+import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
+import { SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
-import ExchangeButton from '@components/General/Button/ExchangeButton';
 import { Currency } from '@components/General/Currency';
 import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
-import FeeNote from '@archetypes/Exchange/FeeNote';
-import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import { Pool } from '@libs/types/General';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
@@ -54,15 +50,12 @@ const isInvalidAmount: (
     };
 };
 
-export default (() => {
-    const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
+export default (({ pool, swapState, swapDispatch }) => {
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
+    const { amount, side, selectedPool, invalidAmount } = swapState;
 
     const amountBN = useBigNumber(amount);
-
-    const pool = usePool(selectedPool);
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
@@ -79,8 +72,6 @@ export default (() => {
         () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
         [notional, token, pendingBurns],
     );
-
-    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     useEffect(() => {
         if (pool) {
@@ -152,7 +143,10 @@ export default (() => {
                                 !!selectedPool &&
                                 swapDispatch({
                                     type: 'setAmount',
-                                    value: side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance,
+                                    value:
+                                        side === SideEnum.long
+                                            ? pool.longToken.balance.toString()
+                                            : pool.shortToken.balance.toString(),
                                 })
                             }
                         >
@@ -194,18 +188,10 @@ export default (() => {
                     )}
                 </p>
             </div>
-
-            <SellSummary
-                pool={pool}
-                showBreakdown={!invalidAmount.isInvalid}
-                isLong={side === SideEnum.long}
-                amount={amountBN}
-                receiveIn={receiveIn}
-            />
-
-            <FeeNote poolName={pool.name} isMint={commitAction === CommitActionEnum.mint} receiveIn={receiveIn} />
-
-            <ExchangeButton actionType={CommitActionEnum.burn} />
         </>
     );
-}) as React.FC;
+}) as React.FC<{
+    pool: Pool;
+    swapState: SwapState;
+    swapDispatch: React.Dispatch<SwapAction>;
+}>;

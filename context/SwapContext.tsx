@@ -14,7 +14,7 @@ interface ContextProps {
 // this allows access through Markets[selectedMarket][selectedLeverage]
 type Market = Record<string, PoolType>;
 
-type SwapState = {
+export type SwapState = {
     amount: string;
     invalidAmount: {
         message?: string;
@@ -43,7 +43,7 @@ export type SwapAction =
     | { type: 'setLeverage'; value: number }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
-    | { type: 'setInvalidAmount'; value: { message: string; isInvalid: boolean } }
+    | { type: 'setInvalidAmount'; value: { message?: string; isInvalid: boolean } }
     | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
 
