@@ -10,6 +10,7 @@ import Summary from './Summary';
 import FeeNote from './FeeNote';
 import { usePool } from '@context/PoolContext';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import Close from '/public/img/general/close.svg';
 
 const TRADE_OPTIONS = [
     {
@@ -22,7 +23,7 @@ const TRADE_OPTIONS = [
     },
 ];
 
-export default (() => {
+export default (({ onClose }) => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const pool = usePool(swapState.selectedPool);
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
@@ -31,46 +32,48 @@ export default (() => {
 
     return (
         <div className="w-full justify-center sm:mt-14">
-            <div className="bg-theme-background w-full md:w-[611px] md:shadow-xl sm:rounded-3xl py-8 px-4 md:py-8 md:px-12 md:my-8 md:mx-auto ">
-                <div className="flex">
-                    <TWButtonGroup
-                        value={swapState?.commitAction ?? CommitActionEnum.mint}
-                        size={'xl'}
-                        color={'tracer'}
-                        onClick={(val) => {
-                            if (swapDispatch) {
-                                swapDispatch({ type: 'setAmount', value: '' });
-                                swapDispatch({ type: 'setLeverage', value: 1 });
-                                swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
-                            }
-                        }}
-                        options={TRADE_OPTIONS}
-                    />
-                    <Gas />
-                </div>
+            <Close onClick={onClose} className="absolute right-4 top-4 sm:right-10 sm:top-10 w-3 h-3 cursor-pointer" />
 
-                <Divider className="my-8" />
-
-                {/** Inputs */}
-                <Inputs pool={pool} swapDispatch={swapDispatch} swapState={swapState} />
-
-                <Summary
-                    pool={pool}
-                    showBreakdown={!swapState.invalidAmount.isInvalid}
-                    isLong={swapState.side === SideEnum.long}
-                    amount={amountBN}
-                    receiveIn={receiveIn}
-                    isMint={swapState.commitAction === CommitActionEnum.mint}
+            <div className="flex">
+                <TWButtonGroup
+                    value={swapState?.commitAction ?? CommitActionEnum.mint}
+                    size={'xl'}
+                    color={'tracer'}
+                    onClick={(val) => {
+                        if (swapDispatch) {
+                            swapDispatch({ type: 'setAmount', value: '' });
+                            swapDispatch({ type: 'setLeverage', value: 1 });
+                            swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
+                        }
+                    }}
+                    options={TRADE_OPTIONS}
                 />
-
-                <FeeNote
-                    poolName={pool.name}
-                    isMint={swapState.commitAction === CommitActionEnum.mint}
-                    receiveIn={receiveIn}
-                />
-
-                <ExchangeButton actionType={CommitActionEnum.burn} />
+                <Gas />
             </div>
+
+            <Divider className="my-8" />
+
+            {/** Inputs */}
+            <Inputs pool={pool} swapDispatch={swapDispatch} swapState={swapState} />
+
+            <Summary
+                pool={pool}
+                showBreakdown={!swapState.invalidAmount.isInvalid}
+                isLong={swapState.side === SideEnum.long}
+                amount={amountBN}
+                receiveIn={receiveIn}
+                isMint={swapState.commitAction === CommitActionEnum.mint}
+            />
+
+            <FeeNote
+                poolName={pool.name}
+                isMint={swapState.commitAction === CommitActionEnum.mint}
+                receiveIn={receiveIn}
+            />
+
+            <ExchangeButton actionType={CommitActionEnum.burn} />
         </div>
     );
-}) as React.FC;
+}) as React.FC<{
+    onClose: () => void;
+}>;

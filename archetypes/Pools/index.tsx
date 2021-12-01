@@ -15,6 +15,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
+import MintBurnModal from './MintBurnModal';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -132,13 +133,12 @@ export const Browse: React.FC = () => {
                     <PoolsTable
                         rows={sortedFilteredTokens}
                         onClickMintBurn={handleMintBurn}
-                        onMintBurnClose={handleModalClose}
-                        mintBurnOpen={state.mintBurnModalOpen}
                         showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
                     />
                 </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />
+            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </>
     );
 };

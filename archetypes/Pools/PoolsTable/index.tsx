@@ -18,8 +18,6 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import { classNames } from '@libs/utils/functions';
-import MintBurnModal from '../MintBurnModal';
-// import { classNames } from '@libs/utils/functions';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -27,7 +25,7 @@ type TProps = {
     showNextRebalance: boolean;
 };
 
-export default (({ rows, onClickMintBurn, showNextRebalance, onMintBurnClose, mintBurnOpen }) => {
+export default (({ rows, onClickMintBurn, showNextRebalance }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider } = useWeb3();
     return (
@@ -100,14 +98,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, onMintBurnClose, mi
                     depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
-            <MintBurnModal open={mintBurnOpen} onClose={onMintBurnClose} />
         </>
     );
 }) as React.FC<
     {
         rows: BrowseTableRowData[];
-        mintBurnOpen: boolean;
-        onMintBurnClose: () => void;
     } & TProps
 >;
 
