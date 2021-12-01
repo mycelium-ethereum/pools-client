@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import { Browse } from '@archetypes/Browse';
+import { Browse } from '@archetypes/Pools';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
