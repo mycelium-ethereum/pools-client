@@ -21,8 +21,6 @@ export const ArbitrumBridge: React.FC = (() => {
         toNetwork,
         bridgeableAssets,
         bridgeableBalances,
-        hideBridgeModal,
-        bridgeModalIsOpen,
     } = useArbitrumBridge();
 
     const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => {
@@ -45,8 +43,6 @@ export const ArbitrumBridge: React.FC = (() => {
 
     return (
         <MultiBridge
-            show={bridgeModalIsOpen}
-            onClose={hideBridgeModal}
             fromNetwork={fromNetwork}
             toNetwork={toNetwork}
             bridgeableAssets={bridgeableAssets}

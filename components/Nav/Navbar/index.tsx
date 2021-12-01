@@ -68,6 +68,11 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Stake</a>
                         </li>
                     </Link>
+                    <Link href="/bridge">
+                        <li className={classNames(linkStyles, route.startsWith('bridge') ? selectedStyles : '')}>
+                            <a className="m-auto">Bridge</a>
+                        </li>
+                    </Link>
                 </ul>
 
                 {setShowOnboardModal ? (
