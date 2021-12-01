@@ -2,7 +2,7 @@ import React from 'react';
 import { SearchInput } from '@components/General/SearchInput';
 import { Select } from '@components/General/Select';
 import { TWModal } from '@components/General/TWModal';
-import { BrowseAction, BrowseState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
+import { BrowseAction, BrowseState, MarketFilterEnum, SortByEnum } from '../state';
 
 interface FilterModalProps {
     state: BrowseState;
@@ -27,21 +27,12 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Power Leverage</h4>
+                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Market</h4>
                     <Select
                         className="w-1/2"
-                        value={state.leverage}
-                        options={Object.values(LeverageFilterEnum)}
-                        onSelect={(val) => dispatch({ type: 'setLeverage', leverage: val as LeverageFilterEnum })}
-                    />
-                </div>
-                <div className="my-2">
-                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Side</h4>
-                    <Select
-                        className="w-1/2"
-                        value={state.side}
-                        options={Object.values(SideFilterEnum)}
-                        onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
+                        value={state.marketFilter}
+                        options={Object.values(MarketFilterEnum)}
+                        onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                     />
                 </div>
                 <div className="my-2">

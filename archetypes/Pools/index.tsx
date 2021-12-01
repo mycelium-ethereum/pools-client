@@ -2,15 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
-import {
-    browseReducer,
-    BrowseState,
-    BrowseTableRowData,
-    LeverageFilterEnum,
-    RebalanceEnum,
-    SideFilterEnum,
-    SortByEnum,
-} from './state';
+import { browseReducer, BrowseState, BrowseTableRowData, MarketFilterEnum, RebalanceEnum, SortByEnum } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
@@ -23,8 +15,7 @@ export const Browse: React.FC = () => {
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
-        leverage: LeverageFilterEnum.All,
-        side: SideFilterEnum.All,
+        marketFilter: MarketFilterEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filterModalOpen: false,
@@ -40,28 +31,13 @@ export const Browse: React.FC = () => {
     // parse the pools rows
     const tokens = useBrowsePools();
 
-    // TODO make these dynamic with a list of leverages given by pools
-    const leverageFilter = (pool: BrowseTableRowData): boolean => {
-        switch (state.leverage) {
-            case LeverageFilterEnum.All:
+    const marketFilter = (pool: BrowseTableRowData): boolean => {
+        switch (state.marketFilter) {
+            case MarketFilterEnum.All:
                 return true;
-            case LeverageFilterEnum.One:
-                return pool.leverage === 1;
-            case LeverageFilterEnum.Three:
-                return pool.leverage === 3;
-            default:
-                return false;
-        }
-    };
-
-    const sideFilter = (_pool: BrowseTableRowData): boolean => {
-        switch (state.side) {
-            case SideFilterEnum.All:
-                return true;
-            // case SideFilterEnum.Long:
-            //     return pool.side === 'long';
-            // case SideFilterEnum.Short:
-            //     return pool.side === 'short';
+            case MarketFilterEnum.ETH:
+            case MarketFilterEnum.BTC:
+                return pool.name.replace(/.\-/g, '').split('/')[0] === state.marketFilter;
             default:
                 return false;
         }
@@ -74,15 +50,6 @@ export const Browse: React.FC = () => {
 
     const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
         switch (state.sortBy) {
-            // case SortByEnum.Name:
-            //     return tokenA.symbol.split('-')[1].localeCompare(tokenB.symbol.split('-')[1]);
-            // case SortByEnum.Price:
-            //     return tokenB.lastPrice - tokenA.lastPrice;
-            // case SortByEnum.EffectiveGain:
-            //     return (
-            //         calcPercentageDifference(tokenB.effectiveGain, tokenB.leverage) -
-            //         calcPercentageDifference(tokenA.effectiveGain, tokenA.leverage)
-            //     );
             case SortByEnum.TotalValueLocked:
                 return tokenB.tvl - tokenA.tvl;
             case SortByEnum.MyHoldings:
@@ -92,7 +59,7 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = tokens.filter(marketFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {

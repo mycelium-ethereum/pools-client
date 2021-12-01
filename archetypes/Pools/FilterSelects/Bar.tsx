@@ -1,7 +1,7 @@
 import { Dropdown } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
-import { BrowseAction, BrowseState, RebalanceEnum, SideFilterEnum } from '../state';
+import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum } from '../state';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 
 interface FilterSelectsProps {
@@ -34,11 +34,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 </div>
                 <div className="flex-grow" />
                 <div className="hidden md:block mr-4">
-                    <h3 className="mb-1 text-theme-text">Side</h3>
+                    <h3 className="mb-1 text-theme-text">Market</h3>
                     <Dropdown
-                        value={state.side}
-                        options={Object.values(SideFilterEnum).map((key) => ({ key }))}
-                        onSelect={(val) => dispatch({ type: 'setSide', side: val as SideFilterEnum })}
+                        value={state.marketFilter}
+                        options={Object.values(MarketFilterEnum).map((key) => ({ key }))}
+                        onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                     />
                 </div>
                 <div className="hidden md:flex mr-4 flex-grow items-end" style={{ maxWidth: '20rem' }}>

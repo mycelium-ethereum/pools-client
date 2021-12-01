@@ -1,13 +1,7 @@
-export enum LeverageFilterEnum {
+export enum MarketFilterEnum {
     All = 'All',
-    One = '1',
-    Three = '3',
-}
-
-export enum SideFilterEnum {
-    All = 'All',
-    Short = 'Short',
-    Long = 'Long',
+    ETH = 'ETH',
+    BTC = 'BTC',
 }
 
 export enum RebalanceEnum {
@@ -58,8 +52,7 @@ export interface BrowseTableRowData {
 
 export interface BrowseState {
     search: string;
-    leverage: LeverageFilterEnum;
-    side: SideFilterEnum;
+    marketFilter: MarketFilterEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
     filterModalOpen: boolean;
@@ -68,20 +61,14 @@ export interface BrowseState {
 
 export type BrowseAction =
     | { type: 'setSearch'; search: string }
-    | { type: 'setLeverage'; leverage: LeverageFilterEnum }
     | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
-    | { type: 'setSide'; side: SideFilterEnum }
+    | { type: 'setMarketFilter'; market: MarketFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
     switch (action.type) {
-        case 'setLeverage':
-            return {
-                ...state,
-                leverage: action.leverage,
-            };
         case 'setRebalanceFocus':
             return {
                 ...state,
@@ -92,10 +79,10 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 search: action.search,
             };
-        case 'setSide':
+        case 'setMarketFilter':
             return {
                 ...state,
-                side: action.side,
+                marketFilter: action.market,
             };
         case 'setSortBy':
             return {
