@@ -1,33 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import StakeBPT from '@archetypes/Stake/StakeBPT';
-import { FarmStore } from '@context/FarmContext';
-import { useRouter } from 'next/router';
-import PendingCommits from '@components/PendingCommits';
-import OnboardStakeModal from '@components/OnboardModal/Stake';
+import { PoolStore } from '@context/PoolContext';
+import { ArbitrumBridge } from '@components/ArbitrumBridge';
+import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
+import OnboardTradeModal from '@components/OnboardModal/Trade';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
+// const Bridge
 export default (() => {
-    const router = useRouter();
     const [showOnboardModal, setShowOnboardModal] = useState(false);
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
-    useEffect(() => {
-        router.prefetch('/stakebpt');
-    }, []);
-
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <FarmStore farmContext="bptFarms">
-                <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <StakeBPT />
-            </FarmStore>
-            <UnsupportedNetworkPopup />
+            <PoolStore>
+                <ArbitrumBridgeStore>
+                    <NavBar setShowOnboardModal={setShowOnboardModal} />
+                    <ArbitrumBridge />
+                </ArbitrumBridgeStore>
+                <UnsupportedNetworkPopup />
+            </PoolStore>
             <Footer />
-            <PendingCommits />
 
-            <OnboardStakeModal
+            <OnboardTradeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}
                 showOnboardModal={showOnboardModal}

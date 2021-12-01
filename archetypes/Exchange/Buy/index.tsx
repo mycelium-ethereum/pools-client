@@ -10,7 +10,6 @@ import {
     SIDE_OPTIONS,
     useBigNumber,
 } from '@context/SwapContext';
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -29,6 +28,7 @@ import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
 import { LogoTicker } from '@components/General';
+import Link from 'next/link';
 
 const inputRow = 'relative my-2 ';
 
@@ -67,7 +67,6 @@ const isInvalidAmount: (
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -243,16 +242,11 @@ export default (() => {
                     </a>
                 </div>
                 <br />
-                <Button
-                    size="lg"
-                    variant="primary"
-                    onClick={() => {
-                        showBridgeModal();
-                        setShowModal(false);
-                    }}
-                >
-                    {`Ok, let's bridge funds`}
-                </Button>
+                <Link href="/bridge">
+                    <Button size="lg" variant="primary">
+                        {`Ok, let's bridge funds`}
+                    </Button>
+                </Link>
                 <p className="mt-2 text-center">
                     You can also bridge funds using the{' '}
                     <a

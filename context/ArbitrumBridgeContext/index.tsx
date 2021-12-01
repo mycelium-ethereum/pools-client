@@ -33,9 +33,6 @@ interface ArbitrumBridgeProps {
     toNetwork: Network;
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
-    showBridgeModal: () => void;
-    hideBridgeModal: () => void;
-    bridgeModalIsOpen: boolean;
 }
 
 export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
@@ -51,9 +48,6 @@ export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
     toNetwork: networkConfig[ARBITRUM],
     bridgeableAssets: {},
     bridgeableBalances: {},
-    showBridgeModal: () => console.debug('arbitrumBridge.showBridgeModal not ready'),
-    hideBridgeModal: () => console.debug('arbitrumBridge.hideBridgeModal not ready'),
-    bridgeModalIsOpen: false,
 });
 
 const BRIDGEABLE_ASSET_ETH = {
@@ -82,7 +76,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = MAINNET } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
-    const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);
     const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
 
     const fromNetwork = useMemo(() => networkConfig[network], [network]);
@@ -431,9 +424,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         }
     };
 
-    const showBridgeModal = () => setBridgeModalIsOpen(true);
-    const hideBridgeModal = () => setBridgeModalIsOpen(false);
-
     return (
         <ArbitrumBridgeContext.Provider
             value={{
@@ -445,9 +435,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 toNetwork,
                 bridgeableAssets,
                 bridgeableBalances,
-                showBridgeModal,
-                hideBridgeModal,
-                bridgeModalIsOpen,
             }}
         >
             {children}
