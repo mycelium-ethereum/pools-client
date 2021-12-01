@@ -81,7 +81,7 @@ export default (() => {
                     shortToken: {
                         address: shortToken.address,
                         symbol: shortToken.symbol,
-                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)).toNumber(),
                         nextTCRPrice: nextShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
@@ -91,7 +91,7 @@ export default (() => {
                     longToken: {
                         address: longToken.address,
                         symbol: longToken.symbol,
-                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
                         nextTCRPrice: nextLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),
@@ -99,7 +99,7 @@ export default (() => {
                         balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
                     },
                     nextRebalance: lastUpdate.plus(updateInterval).toNumber(),
-                    myHoldings: shortToken.balance.toNumber(),
+                    myHoldings: shortToken.balance.plus(longToken.balance).toNumber(),
                     frontRunning: frontRunningInterval.toNumber(),
                 });
             });

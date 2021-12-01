@@ -48,12 +48,12 @@ export const Browse: React.FC = () => {
         return Boolean(pool.name.toLowerCase().match(searchString));
     };
 
-    const sorter = (tokenA: BrowseTableRowData, tokenB: BrowseTableRowData): number => {
+    const sorter = (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {
         switch (state.sortBy) {
             case SortByEnum.TotalValueLocked:
-                return tokenB.tvl - tokenA.tvl;
+                return poolB.tvl - poolA.tvl;
             case SortByEnum.MyHoldings:
-                return tokenB.myHoldings - tokenA.myHoldings;
+                return poolB.myHoldings - poolA.myHoldings;
             default:
                 return 0;
         }
