@@ -127,7 +127,7 @@ export const Browse: React.FC = () => {
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable
-                        tokens={tokens}
+                        loading={tokens.length === 0}
                         rows={sortedFilteredTokens}
                         onClickBuy={handleBuyToken}
                         onClickSell={handleSellToken}
