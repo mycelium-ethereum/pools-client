@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowseTableRowData } from '@archetypes/Browse/state';
+import { BrowseTableRowData } from '@archetypes/Pools/state';
 import { usePools } from '@context/PoolContext';
 import {
     calcEffectiveLongGain,

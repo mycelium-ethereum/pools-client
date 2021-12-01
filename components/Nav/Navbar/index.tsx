@@ -58,9 +58,9 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Mint/Burn</a>
                         </li>
                     </Link>
-                    <Link href="/browse">
-                        <li className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}>
-                            <a className="m-auto">Browse</a>
+                    <Link href="/pools">
+                        <li className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}>
+                            <a className="m-auto">Pools</a>
                         </li>
                     </Link>
                     <Link href="/stakepooltoken">

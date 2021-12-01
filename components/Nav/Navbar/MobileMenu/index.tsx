@@ -89,10 +89,10 @@ export default (({ account, className }) => {
                                         </div>
                                         <div
                                             className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
-                                            onClick={() => handleRoute('/browse')}
+                                            onClick={() => handleRoute('/pools')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
-                                            Browse
+                                            Pools
                                         </div>
                                         <div
                                             className={classNames(
