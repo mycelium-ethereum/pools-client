@@ -5,9 +5,8 @@ import { useRouter } from 'next/router';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import Exchange from '@archetypes/Exchange';
-import { ArbitrumBridge } from '@components/ArbitrumBridge';
-import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
 export default (() => {
     const router = useRouter();
@@ -21,13 +20,11 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
-                <ArbitrumBridgeStore>
-                    <NavBar setShowOnboardModal={setShowOnboardModal} />
-                    <SwapStore>
-                        <Exchange />
-                    </SwapStore>
-                    <ArbitrumBridge />
-                </ArbitrumBridgeStore>
+                <NavBar setShowOnboardModal={setShowOnboardModal} />
+                <SwapStore>
+                    <Exchange />
+                </SwapStore>
+                <UnsupportedNetworkPopup />
             </PoolStore>
             <Footer />
 

@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Input as NumericInput } from '@components/General/Input/Numeric';
-import { swapDefaults, useSwapContext, noDispatch, LEVERAGE_OPTIONS, useBigNumber } from '@context/SwapContext';
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import {
+    swapDefaults,
+    useSwapContext,
+    noDispatch,
+    LEVERAGE_OPTIONS,
+    SIDE_OPTIONS,
+    useBigNumber,
+} from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { usePool } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -22,6 +28,7 @@ import Close from '/public/img/general/close.svg';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import { classNames } from '@libs/utils/functions';
 import { LogoTicker } from '@components/General';
+import Link from 'next/link';
 
 const inputRow = 'relative my-2 ';
 
@@ -57,21 +64,9 @@ const isInvalidAmount: (
     };
 };
 
-const SIDE_OPTIONS = [
-    {
-        key: SideEnum.long,
-        text: 'Long',
-    },
-    {
-        key: SideEnum.short,
-        text: 'Short',
-    },
-];
-
 export default (() => {
     const { account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
-    const { showBridgeModal } = useArbitrumBridge();
     const { leverage, selectedPool, side, amount, invalidAmount, market, markets } = swapState;
     const [showModal, setShowModal] = useState(false);
 
@@ -84,7 +79,8 @@ export default (() => {
     useEffect(() => {
         if (
             (localStorage.getItem('onboard.selectedWallet') === 'MetaMask' ||
-                localStorage.getItem('onboard.selectedWallet') === 'Torus') &&
+                localStorage.getItem('onboard.selectedWallet') === 'Torus' ||
+                localStorage.getItem('onboard.selectedWallet') === 'WalletConnect') &&
             localStorage.getItem('showBridgeFunds') !== 'true'
         ) {
             setShowModal(true);
@@ -232,7 +228,7 @@ export default (() => {
                 <div>
                     Deposit funds from Ethereum to Arbitrum to get started with Perpetual Pools. Ensure you deposit{' '}
                     <b>USDC</b> for collateral and <b>ETH</b> for gas. Please note that the withdrawal process from
-                    Arbitrum to Ethereum takes approximately 7 days.
+                    Arbitrum to Ethereum takes approximately 8 days.
                     <br />
                     <br />
                     If you have any questions, please{' '}
@@ -246,16 +242,11 @@ export default (() => {
                     </a>
                 </div>
                 <br />
-                <Button
-                    size="lg"
-                    variant="primary"
-                    onClick={() => {
-                        showBridgeModal();
-                        setShowModal(false);
-                    }}
-                >
-                    {`Ok, let's bridge funds`}
-                </Button>
+                <Link href="/bridge">
+                    <Button size="lg" variant="primary">
+                        {`Ok, let's bridge funds`}
+                    </Button>
+                </Link>
                 <p className="mt-2 text-center">
                     You can also bridge funds using the{' '}
                     <a
