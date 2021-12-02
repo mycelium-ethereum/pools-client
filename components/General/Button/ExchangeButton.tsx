@@ -3,7 +3,7 @@ import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { swapDefaults, useBigNumber, useSwapContext } from '@context/SwapContext';
 import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
-import { useDex, useDexActions } from '@context/1InchContext';
+import { useDex, useDexActions } from '@context/BalancerContext';
 
 const ExchangeButton: React.FC<{ actionType: CommitActionEnum }> = ({ actionType }) => {
     const { account } = useWeb3();

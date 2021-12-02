@@ -9,6 +9,17 @@ import { swapDefaults, useSwapContext } from '@context/SwapContext';
 import { poolMap } from '@libs/constants/poolLists';
 import { ERC20__factory, ERC20 } from '@libs/staking/typechain';
 import { useTransactionContext } from '@context/TransactionContext';
+import { SOR } from '@balancer-labs/sor';
+// import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+
+
+// const config: Record<AvailableNetwork, {
+//     proxyAddress: string,
+// }> = {
+//     [ARBITRUM]: {
+//         proxyAddress: ''
+//     }
+// }
 
 
 interface ContextProps {
@@ -29,18 +40,43 @@ const BASE_1INCH_API = 'https://api.1inch.exchange/v3.0';
 const V3_1INCH_AGGREGATOR = '0x11111112542d85b3ef69ae05771c2dccff4faa26';
 const ARBITRUM_USDC = tokenMap[ARBITRUM].USDC;
 
+const POOLS_URL = `/static/pools.json`;
+// 'http://localhost:3002/static/pools.json'
+
 /**
  * Wrapper store for all pools information
  */
 export const DexStore: React.FC<Children> = ({ children }: Children) => {
     const { network, signer, provider, account } = useWeb3();
     const [contract, setContract] = useState<ERC20 | undefined>();
+    const [_sor, setSor] = useState<SOR | undefined>();
     const { swapState: {
         selectedPool,
         side,
         amount,
-        // amount
     } = swapDefaults } = useSwapContext();
+
+    useEffect(() => {
+        if (provider) {
+            console.log("here")
+            switch (network) {
+                case ARBITRUM:
+                    console.log("not here")
+                    const sor = new SOR(provider, parseInt(ARBITRUM), POOLS_URL);
+                    console.log(sor.provider.getNetwork())
+                    sor.fetchPools().then((res) => {
+                        console.log("fetched pools", res);
+                    }).catch((err) => {
+                        console.log('Failed to fetch pools', err)
+                    })
+                    break
+                default:
+                    console.log("Lots here")
+                    setSor(undefined)
+            }
+        }
+    }, [network, provider])
+
     const pool: StaticPoolInfo | undefined = poolMap[ARBITRUM][selectedPool ?? 0] // 0 pool does not exist
 
     const token = useMemo(() => side === SideEnum.long ? pool?.longToken : pool?.shortToken, [pool, side])

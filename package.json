@@ -5,6 +5,7 @@
     "type": "esnext",
     "dependencies": {
         "@ant-design/icons": "^4.6.2",
+        "@balancer-labs/sor": "^2.0.0-beta.8",
         "@ensdomains/ensjs": "^2.0.0",
         "@headlessui/react": "^1.4.1",
         "@mycelium-ethereum/vyps-kit": "^0.1.0",
@@ -15,6 +16,7 @@
         "arb-ts": "^1.0.0-beta.4",
         "bignumber.js": "^9.0.1",
         "ethers": "^5.5.1",
+        "import": "^0.0.6",
         "next": "^11.1.1",
         "path": "^0.12.7",
         "react": "^16.13.1",

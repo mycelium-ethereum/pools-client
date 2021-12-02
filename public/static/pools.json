@@ -1,0 +1,534 @@
+{
+    "pools": [
+      {
+        "id": "0x088f073c4fc2f5d7af474cbb37fbe16b17fc2239000200000000000000000015",
+        "swapFee": "0.01",
+        "tokens": [
+          {
+            "address": "0x3509f19581afedeff07c53592bc0ca84e4855475",
+            "decimals": 18,
+            "name": "xDollar Stablecoin",
+            "weight": "0.2"
+          },
+          {
+            "address": "0x9ef758ac000a354479e538b8b2f01b917b8e89e7",
+            "decimals": 18,
+            "name": "xDollar",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x3509f19581afedeff07c53592bc0ca84e4855475",
+          "0x9ef758ac000a354479e538b8b2f01b917b8e89e7"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x0c2b3e31639bbc8c7ee3f1dcf86adbe658377e50000200000000000000000005",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x2e9a6df78e42a30712c10a9dc4b1c8656f8f2879",
+            "decimals": 18,
+            "name": "4d616b6572000000000000000000000000000000000000000000000000000000",
+            "weight": "0.8"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          }
+        ],
+        "tokensList": [
+          "0x2e9a6df78e42a30712c10a9dc4b1c8656f8f2879",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x1533a3278f3f9141d5f820a184ea4b017fce2382000000000000000000000016",
+        "swapFee": "0.0003",
+        "tokens": [
+          {
+            "address": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+            "decimals": 18,
+            "name": "Dai Stablecoin",
+            "weight": null
+          },
+          {
+            "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+            "decimals": 6,
+            "name": "Tether USD",
+            "weight": null
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": null
+          }
+        ],
+        "tokensList": [
+          "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+          "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "0"
+      },
+      {
+        "id": "0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d",
+        "swapFee": "0.002999999999999999",
+        "tokens": [
+          {
+            "address": "0x052814194f459af30edb6a506eabfc85a4d99501",
+            "decimals": 6,
+            "name": "1S-BTC/USD",
+            "weight": "0.333"
+          },
+          {
+            "address": "0x1616bf7bbd60e57f961e83a602b6b9abb6e6cafc",
+            "decimals": 6,
+            "name": "1L-BTC/USD",
+            "weight": "0.333"
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": "0.334"
+          }
+        ],
+        "tokensList": [
+          "0x052814194f459af30edb6a506eabfc85a4d99501",
+          "0x1616bf7bbd60e57f961e83a602b6b9abb6e6cafc",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x26d23ec319cad4ad99e237511e792ee326ca1070000100000000000000000014",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+            "decimals": 8,
+            "name": "Wrapped BTC",
+            "weight": "0.333333333333333333"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.333333333333333334"
+          },
+          {
+            "address": "0xdeba25af35e4097146d7629055e0ec3c71706324",
+            "decimals": 18,
+            "name": "DEFI Top 5 Tokens Index",
+            "weight": "0.333333333333333333"
+          }
+        ],
+        "tokensList": [
+          "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xdeba25af35e4097146d7629055e0ec3c71706324"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x281979d31844ff4cc6d94daf8d78ee293561efff00010000000000000000001b",
+        "swapFee": "0.002999999999999999",
+        "tokens": [
+          {
+            "address": "0x052814194f459af30edb6a506eabfc85a4d99501",
+            "decimals": 6,
+            "name": "1S-BTC/USD",
+            "weight": "0.5"
+          },
+          {
+            "address": "0x1616bf7bbd60e57f961e83a602b6b9abb6e6cafc",
+            "decimals": 6,
+            "name": "1L-BTC/USD",
+            "weight": "0.25"
+          },
+          {
+            "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+            "decimals": 8,
+            "name": "Wrapped BTC",
+            "weight": "0.25"
+          }
+        ],
+        "tokensList": [
+          "0x052814194f459af30edb6a506eabfc85a4d99501",
+          "0x1616bf7bbd60e57f961e83a602b6b9abb6e6cafc",
+          "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x386b5d43ba8b97c43d4afb4cdae7877a1b295e8a000000000000000000000020",
+        "swapFee": "0.0004",
+        "tokens": [
+          {
+            "address": "0x4d15a3a2286d883af0aa1b3f21367843fac63e07",
+            "decimals": 18,
+            "name": "TrueUSD",
+            "weight": null
+          },
+          {
+            "address": "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+            "decimals": 18,
+            "name": "Dai Stablecoin",
+            "weight": null
+          },
+          {
+            "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+            "decimals": 6,
+            "name": "Tether USD",
+            "weight": null
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": null
+          }
+        ],
+        "tokensList": [
+          "0x4d15a3a2286d883af0aa1b3f21367843fac63e07",
+          "0xda10009cbd5d07dd0cecc66161fc93d7c9000da1",
+          "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "0"
+      },
+      {
+        "id": "0x4a3a22a3e7fee0ffbb66f1c28bfac50f75546fc7000200000000000000000008",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          },
+          {
+            "address": "0xa0b862f60edef4452f25b4160f177db44deb6cf1",
+            "decimals": 18,
+            "name": "Gnosis Token",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xa0b862f60edef4452f25b4160f177db44deb6cf1"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x53c7940728ef895069a4f5a6b30e60c6652c910c000200000000000000000004",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          },
+          {
+            "address": "0xf4d48ce3ee1ac3651998971541badbb9a14d7234",
+            "decimals": 18,
+            "name": "Cream",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xf4d48ce3ee1ac3651998971541badbb9a14d7234"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x54764f180d9e6a1dbb0ec957c0b54b423f51e94700010000000000000000001a",
+        "swapFee": "0.002999999999999999",
+        "tokens": [
+          {
+            "address": "0x38c0a5443c7427e65a9bf15ae746a28bb9a052cc",
+            "decimals": 6,
+            "name": "1L-ETH/USD",
+            "weight": "0.25"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.25"
+          },
+          {
+            "address": "0xf581571dbcced3a59aaacbf90448e7b3e1704dcd",
+            "decimals": 6,
+            "name": "1S-ETH/USD",
+            "weight": "0.5"
+          }
+        ],
+        "tokensList": [
+          "0x38c0a5443c7427e65a9bf15ae746a28bb9a052cc",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xf581571dbcced3a59aaacbf90448e7b3e1704dcd"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x5ced962afbfb7e13fb215defc2b027678237aa3a000200000000000000000011",
+        "swapFee": "0.0079",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          },
+          {
+            "address": "0xb965029343d55189c25a7f3e0c9394dc0f5d41b1",
+            "decimals": 18,
+            "name": "Indexed",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xb965029343d55189c25a7f3e0c9394dc0f5d41b1"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x64541216bafffeec8ea535bb71fbc927831d0595000100000000000000000002",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+            "decimals": 8,
+            "name": "Wrapped BTC",
+            "weight": "0.333333333333333333"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.333333333333333334"
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": "0.333333333333333333"
+          }
+        ],
+        "tokensList": [
+          "0x2f2a2543b76a4166549f7aab2e75bef0aefc5b0f",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x651e00ffd5ecfa7f3d4f33d62ede0a97cf62ede2000200000000000000000006",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          },
+          {
+            "address": "0xf97f4df75117a78c1a5a0dbb814af92458539fb4",
+            "decimals": 18,
+            "name": "ChainLink Token",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xf97f4df75117a78c1a5a0dbb814af92458539fb4"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x68a4e50d9966a98d35bbeed35ef586d1de5eb23200020000000000000000001f",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.5"
+          },
+          {
+            "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+            "decimals": 6,
+            "name": "Tether USD",
+            "weight": "0.5"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c",
+        "swapFee": "0.002999999999999999",
+        "tokens": [
+          {
+            "address": "0x38c0a5443c7427e65a9bf15ae746a28bb9a052cc",
+            "decimals": 6,
+            "name": "1L-ETH/USD",
+            "weight": "0.333"
+          },
+          {
+            "address": "0xf581571dbcced3a59aaacbf90448e7b3e1704dcd",
+            "decimals": 6,
+            "name": "1S-ETH/USD",
+            "weight": "0.333"
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": "0.334"
+          }
+        ],
+        "tokensList": [
+          "0x38c0a5443c7427e65a9bf15ae746a28bb9a052cc",
+          "0xf581571dbcced3a59aaacbf90448e7b3e1704dcd",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x8a9f8b5334dacb052cd62797e2bdf68d89c0bfd8000200000000000000000013",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x8038f3c971414fd1fc220ba727f2d4a0fc98cb65",
+            "decimals": 18,
+            "name": "dHedge DAO Token",
+            "weight": "0.8"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          }
+        ],
+        "tokensList": [
+          "0x8038f3c971414fd1fc220ba727f2d4a0fc98cb65",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x8cea55571c2f0ae6b215aaad8a5dff4d9e29dd2f00020000000000000000000f",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8",
+            "decimals": 18,
+            "name": "Balancer",
+            "weight": "0.5"
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": "0.5"
+          }
+        ],
+        "tokensList": [
+          "0x040d1edc9569d4bab2d15287dc5a4f10f56a56b8",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x96a6ad4531b853d874ab7507fa1203ddcf10477100020000000000000000000c",
+        "swapFee": "0.0025",
+        "tokens": [
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.2"
+          },
+          {
+            "address": "0x82e3a8f066a6989666b031d916c43672085b1582",
+            "decimals": 18,
+            "name": "yearn.finance",
+            "weight": "0.8"
+          }
+        ],
+        "tokensList": [
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0x82e3a8f066a6989666b031d916c43672085b1582"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018",
+        "swapFee": "0.01",
+        "tokens": [
+          {
+            "address": "0x7d7e4f49a29dda8b1ecdcf8a8bc85edcb234e997",
+            "decimals": 6,
+            "name": "3S-ETH/USD",
+            "weight": "0.3333"
+          },
+          {
+            "address": "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+            "decimals": 18,
+            "name": "Wrapped Ether",
+            "weight": "0.5"
+          },
+          {
+            "address": "0xaa846004dc01b532b63feaa0b7a0cb0990f19ed9",
+            "decimals": 6,
+            "name": "3L-ETH/USD",
+            "weight": "0.1667"
+          }
+        ],
+        "tokensList": [
+          "0x7d7e4f49a29dda8b1ecdcf8a8bc85edcb234e997",
+          "0x82af49447d8a07e3bd95bd0d56f35241523fbab1",
+          "0xaa846004dc01b532b63feaa0b7a0cb0990f19ed9"
+        ],
+        "totalWeight": "1"
+      },
+      {
+        "id": "0x9be7de742865d021c0e8fb9d64311b2c040c1ec1000200000000000000000012",
+        "swapFee": "0.0003",
+        "tokens": [
+          {
+            "address": "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+            "decimals": 6,
+            "name": "Tether USD",
+            "weight": null
+          },
+          {
+            "address": "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8",
+            "decimals": 6,
+            "name": "USD Coin (Arb1)",
+            "weight": null
+          }
+        ],
+        "tokensList": [
+          "0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9",
+          "0xff970a61a04b1ca14834a43f5de4533ebddb5cc8"
+        ],
+        "totalWeight": "0"
+      }
+    ]
+}
