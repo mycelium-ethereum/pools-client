@@ -4,7 +4,6 @@ import { usePools } from '@context/PoolContext';
 import {
     calcEffectiveLongGain,
     calcEffectiveShortGain,
-    calcRebalanceRate,
     calcSkew,
     calcTokenPrice,
 } from '@tracer-protocol/tracer-pools-utils';
@@ -74,9 +73,6 @@ export default (() => {
 
                     tvl: shortBalance.plus(longBalance).toNumber(),
                     nextTVL: nextLongBalance.plus(nextShortBalance).toNumber(),
-
-                    rebalanceRate: calcRebalanceRate(shortBalance, longBalance).toNumber(),
-                    nextRebalanceRate: calcRebalanceRate(nextShortBalance, nextLongBalance).toNumber(),
 
                     shortToken: {
                         address: shortToken.address,

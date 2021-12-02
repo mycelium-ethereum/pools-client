@@ -1,7 +1,7 @@
 export enum MarketFilterEnum {
     All = 'All',
-    ETH = 'ETH',
-    BTC = 'BTC',
+    ETH = 'Ethereum',
+    BTC = 'Bitcoin',
 }
 
 export enum RebalanceEnum {
@@ -41,9 +41,6 @@ export interface BrowseTableRowData {
 
     shortToken: BrowseTableTokenData;
     longToken: BrowseTableTokenData;
-
-    rebalanceRate: number;
-    nextRebalanceRate: number;
 
     myHoldings: number;
     nextRebalance: number;

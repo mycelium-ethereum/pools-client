@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
-import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
+import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
+import { calcPercentageDifference, tickerToName, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -14,16 +14,38 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
+import { LinkOutlined } from '@ant-design/icons';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import { classNames } from '@libs/utils/functions';
+import { constructBalancerLink } from '@archetypes/Exchange/Summary';
+import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+import { StyledTooltip } from '@components/Tooltips';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
     // onClickSell: (pool: string, side: SideEnum) => void;
     showNextRebalance: boolean;
 };
+
+const SkewTip: React.FC = ({ children }) => (
+    <StyledTooltip title="An indication of the difference between collateral in the long and short side of the pool. Pool Skew is calculated by dividing the TVL in the long side by the TVL in the short side.">
+        {children}
+    </StyledTooltip>
+);
+
+const EffectiveLeverageTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The leverage you will receive at the next rebalance depending on if the price of the underlying asset increases or decreases since the last rebalance.">
+        {children}
+    </StyledTooltip>
+);
+
+const CommittmentTip: React.FC = ({ children }) => (
+    <StyledTooltip title="You must commit your mint or burn before the end of this countdown to have your order filled at the upcoming rebalance.">
+        {children}
+    </StyledTooltip>
+);
 
 export default (({ rows, onClickMintBurn, showNextRebalance }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
@@ -36,16 +58,27 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                         {/* Pools  Cols */}
                         <TableHeaderCell>Pool</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">{'TVL (USDC)'}</TableHeaderCell>
-                        <TableHeaderCell>{'Skew'}</TableHeaderCell>
-                        <TableHeaderCell>{'Rebalancing Rate'}</TableHeaderCell>
-                        {showNextRebalance ? <TableHeaderCell>{'Commitment Window'}</TableHeaderCell> : null}
+                        <TableHeaderCell>
+                            <SkewTip>
+                                <div>{'Skew'}</div>
+                            </SkewTip>
+                        </TableHeaderCell>
+                        {showNextRebalance ? (
+                            <TableHeaderCell>
+                                <CommittmentTip>
+                                    <div>{'Commitment Window'}</div>
+                                </CommittmentTip>
+                            </TableHeaderCell>
+                        ) : null}
                         {/* Token Cols */}
                         <TableHeaderCell size="sm">{'Side'}</TableHeaderCell>
                         <TableHeaderCell size="sm" className={'whitespace-nowrap'}>
                             {'TVL (USDC)'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap'}>
-                            {'Effective Leverage'}
+                            <EffectiveLeverageTip>
+                                <div>{'Effective Leverage'}</div>
+                            </EffectiveLeverageTip>
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
@@ -54,15 +87,15 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={4} />
+                        <TableHeaderCell colSpan={3} />
                         {showNextRebalance ? <TableHeaderCell>{'Ends in'}</TableHeaderCell> : null}
 
                         {/* Token Cols */}
                         <TableHeaderCell size="sm" colSpan={2} />
-                        <TableHeaderCell size="sm">{'On Gains'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'On Losses'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'On Tracer'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'On Balancer'}</TableHeaderCell>
+                        <TableHeaderCell size="sm">{'Gains'}</TableHeaderCell>
+                        <TableHeaderCell size="sm">{'Losses'}</TableHeaderCell>
+                        <TableHeaderCell size="sm">{'Tracer'}</TableHeaderCell>
+                        <TableHeaderCell size="sm">{'Balancer'}</TableHeaderCell>
                         <TableHeaderCell />
                     </tr>
                 </TableHeader>
@@ -80,10 +113,12 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
-                * <strong>Token Price</strong> values indicative only, and represent the estimated values for the next
-                rebalance, given the committed mints and burns and change in price of the underlying asset.
-            </p>
+            {showNextRebalance ? (
+                <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
+                    Values are indicative only. They are estimates given the committed mints and burns, and change in
+                    price of the underlying market. All values are subject to change at the next rebalance of each pool.
+                </p>
+            ) : null}
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
@@ -120,7 +155,6 @@ const PoolRow: React.FC<
 
     const skewDelta = calcPercentageDifference(pool.nextSkew, pool.skew);
     const tvlDelta = calcPercentageDifference(pool.nextTVL, pool.tvl);
-    const rebalanceRateDelta = calcPercentageDifference(pool.nextRebalanceRate, pool.rebalanceRate);
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
@@ -133,12 +167,17 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <Logo
-                        className="inline mr-2"
-                        size={'md'}
-                        ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
-                    />
-                    {pool.name}
+                    <div className="flex">
+                        <Logo
+                            className="inline mr-2"
+                            size={'md'}
+                            ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
+                        />
+                        <div>
+                            <div className="font-bold">{tickerToName(pool.name)}</div>
+                            <div className="text-xs">{pool.name.split('-')[1]}</div>
+                        </div>
+                    </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
@@ -164,18 +203,6 @@ const PoolRow: React.FC<
                         </>
                     ) : (
                         <div>{pool.skew.toFixed(2)}</div>
-                    )}
-                </TableRowCell>
-                <TableRowCell rowSpan={2}>
-                    {showNextRebalance ? (
-                        <>
-                            <div>{pool.nextRebalanceRate.toFixed(2)}</div>
-                            <div className="mt-1">
-                                <UpOrDown value={rebalanceRateDelta} />
-                            </div>
-                        </>
-                    ) : (
-                        <div>{pool.rebalanceRate.toFixed(2)}</div>
                     )}
                 </TableRowCell>
                 {showNextRebalance ? (
@@ -206,6 +233,7 @@ const PoolRow: React.FC<
                 {/** Token rows */}
                 <TokenRows
                     side={SideEnum.long}
+                    isBuy={true}
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
@@ -216,6 +244,7 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 <TokenRows
                     side={SideEnum.short}
+                    isBuy={false}
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
@@ -243,6 +272,7 @@ const shortStyles = 'bg-red-50 dark:bg-dark-red';
 const TokenRows: React.FC<
     {
         side: SideEnum;
+        isBuy: boolean;
         tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken'];
         leverage: number;
         address: string;
@@ -271,7 +301,17 @@ const TokenRows: React.FC<
                 )}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                {tokenInfo.effectiveGain.toFixed(2)}
+                <div
+                    className={
+                        tokenInfo.effectiveGain > leverage
+                            ? 'text-green-600'
+                            : tokenInfo.effectiveGain < leverage
+                            ? 'text-red-600'
+                            : ''
+                    }
+                >
+                    {tokenInfo.effectiveGain.toFixed(2)}
+                </div>
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 {leverage}
@@ -283,11 +323,23 @@ const TokenRows: React.FC<
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 {toApproxCurrency(tokenInfo.balancerPrice)}
+                <LinkOutlined
+                    className="align-middle ml-1"
+                    onClick={() =>
+                        open(
+                            constructBalancerLink(
+                                tokenInfo.address,
+                                (provider?.network ?? ARBITRUM) as AvailableNetwork,
+                                side === SideEnum.long,
+                            ),
+                        )
+                    }
+                />
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 <div className="flex">
                     <Button
-                        className="mx-1 w-[70px] my-auto font-bold uppercase "
+                        className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
                         size="xs"
                         variant="primary-light"
                         onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}

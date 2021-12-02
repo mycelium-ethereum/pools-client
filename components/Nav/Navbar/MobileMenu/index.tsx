@@ -75,7 +75,7 @@ export default (({ account, className }) => {
                                             onClick={() => handleRoute('/')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
-                                            Buy/Sell
+                                            Tokens
                                         </div>
                                         <div
                                             className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}

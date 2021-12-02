@@ -12,6 +12,7 @@ import { poolMap } from '@libs/constants/poolLists';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { StaticPoolInfo } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
+import { StyledTooltip } from '@components/Tooltips';
 
 export default (() => {
     const { network = ARBITRUM } = useWeb3();
@@ -26,7 +27,7 @@ export default (() => {
     return (
         <div className="w-full justify-center sm:mt-14">
             <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-8 md:mx-auto">
-                <div className="text-xl font-bold mb-6">Trade pool tokens on Balancer</div>
+                <div className="text-xl font-bold mb-6">Trade Pool Tokens on Balancer</div>
                 <div className="text-base text-cool-gray-400 mt-2">
                     Looking for leveraged exposure? There is no need to mint and burn. There are already pool tokens on
                     Balancer.
@@ -102,14 +103,31 @@ export default (() => {
                     </div>
                 </HiddenExpand>
                 <div className="mt-8">
-                    <Button
-                        size="lg"
-                        variant="primary"
-                        onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
-                        disabled={!valid}
-                    >
-                        Take me to Balancer
-                    </Button>
+                    {!valid ? (
+                        <StyledTooltip title="Select the market, side, and power leverage you're after.">
+                            <div>
+                                <Button
+                                    size="lg"
+                                    variant="primary"
+                                    onClick={() =>
+                                        open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')
+                                    }
+                                    disabled={!valid}
+                                >
+                                    Take me to Balancer
+                                </Button>
+                            </div>
+                        </StyledTooltip>
+                    ) : (
+                        <Button
+                            size="lg"
+                            variant="primary"
+                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                            disabled={!valid}
+                        >
+                            Take me to Balancer
+                        </Button>
+                    )}
                 </div>
             </div>
         </div>

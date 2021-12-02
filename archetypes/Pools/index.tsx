@@ -36,8 +36,9 @@ export const Browse: React.FC = () => {
             case MarketFilterEnum.All:
                 return true;
             case MarketFilterEnum.ETH:
+                return pool.name.replace(/.\-/g, '').split('/')[0] === 'ETH';
             case MarketFilterEnum.BTC:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === state.marketFilter;
+                return pool.name.replace(/.\-/g, '').split('/')[0] === 'BTC';
             default:
                 return false;
         }
@@ -93,8 +94,8 @@ export const Browse: React.FC = () => {
             <div className="container mt-0 md:mt-20">
                 <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
                     <section className="">
-                        <h1 className="font-bold text-3xl mb-2 text-theme-text">Pool Tokens</h1>
-                        <p className="mb-1 text-gray-500">Browse the available Tracer Pool Tokens.</p>
+                        <h1 className="font-bold text-3xl mb-2 text-theme-text">Pool</h1>
+                        <p className="mb-1 text-cool-gray-300">Browse the available Tracer Pools and Pool Tokens.</p>
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable
