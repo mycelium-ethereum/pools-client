@@ -10,6 +10,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
+import { Logo } from '@components/General';
 
 interface MultiBridgeProps {
     fromNetwork: Network;
@@ -183,19 +184,15 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="from" className="block mb-2">
                                 From
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="fromNetwork"
-                                    id="fromNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={fromNetwork?.name || 'Unsupported Network'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={fromNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {fromNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
 
@@ -210,19 +207,15 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <ArrowRightOutlined />
                         </button>
 
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="to" className="block mb-2">
                                 To
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="toNetwork"
-                                    id="toNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={toNetwork?.name || 'N/A'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={toNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {toNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
                     </div>
