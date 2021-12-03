@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Network } from '@context/Web3Context/Web3Context.Config';
-import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
@@ -10,6 +10,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
+import { Logo } from '@components/General';
 
 interface MultiBridgeProps {
     fromNetwork: Network;
@@ -176,53 +177,45 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     }, [selectedAsset, selectedAssetBalance?.allowance]);
 
     return (
-        <div>
-            <div className="bg-theme-background w-full max-w-screen-md md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-12 md:mx-auto">
+        <div className="sm:mt-14">
+            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 sm:my-8 mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="from" className="block mb-2">
                                 From
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="fromNetwork"
-                                    id="fromNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={fromNetwork?.name || 'Unsupported Network'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={fromNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {fromNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
 
                         <button
-                            className="cursor-pointer p-6 text-xl focus:outline-none"
+                            className="cursor-pointer mx-6 mb-6 mt-auto text-xl focus:outline-none"
                             onClick={() => {
                                 if (toNetwork) {
                                     onSwitchNetwork(toNetwork.id);
                                 }
                             }}
                         >
-                            <SwapOutlined />
+                            <ArrowRightOutlined />
                         </button>
 
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="to" className="block mb-2">
                                 To
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="toNetwork"
-                                    id="toNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={toNetwork?.name || 'N/A'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={toNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {toNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
                     </div>
