@@ -178,7 +178,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     return (
         <div className="sm:mt-14">
-            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-8 md:mx-auto">
+            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 sm:my-8 mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
                 </div>
