@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Network } from '@context/Web3Context/Web3Context.Config';
-import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
@@ -177,7 +177,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     return (
         <div>
-            <div className="bg-theme-background w-full max-w-screen-md md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-12 md:mx-auto">
+            <div className="bg-theme-background w-full md:w-[611px] md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-12 md:mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
                 </div>
@@ -200,14 +200,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </div>
 
                         <button
-                            className="cursor-pointer p-6 text-xl focus:outline-none"
+                            className="cursor-pointer mx-6 mb-6 mt-auto text-xl focus:outline-none"
                             onClick={() => {
                                 if (toNetwork) {
                                     onSwitchNetwork(toNetwork.id);
                                 }
                             }}
                         >
-                            <SwapOutlined />
+                            <ArrowRightOutlined />
                         </button>
 
                         <div className="my-2 mb-2 w-full">
