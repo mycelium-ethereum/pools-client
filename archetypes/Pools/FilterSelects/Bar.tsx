@@ -1,4 +1,4 @@
-import { Dropdown } from '@components/General';
+import { Dropdown, LogoTicker } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
 import React from 'react';
 import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum } from '../state';
@@ -27,8 +27,9 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div className="mt-auto">
                     <TWButtonGroup
                         value={state.rebalanceFocus}
+                        size="lg"
                         onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
-                        borderColor={'tracer'}
+                        color={'tracer'}
                         options={REBALANCE_OPTIONS}
                     />
                 </div>
@@ -37,7 +38,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <h3 className="mb-1 text-theme-text">Market</h3>
                     <Dropdown
                         value={state.marketFilter}
-                        options={Object.values(MarketFilterEnum).map((key) => ({ key }))}
+                        className="w-32"
+                        options={Object.keys(MarketFilterEnum).map((key) => ({
+                            key: (MarketFilterEnum as any)[key],
+                            ticker: (key !== 'All' ? key : '') as LogoTicker,
+                        }))}
                         onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                     />
                 </div>

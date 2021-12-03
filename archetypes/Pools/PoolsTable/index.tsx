@@ -20,7 +20,6 @@ import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 import { StyledTooltip } from '@components/Tooltips';
 
 type TProps = {
@@ -55,6 +54,14 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
             <Table>
                 <TableHeader>
                     <tr>
+                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={4}>
+                            <div className="capitalize text-lg">{'POOLS'}</div>
+                        </TableHeaderCell>
+                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>
+                            <div className="capitalize text-lg">{'POOL TOKENS'}</div>
+                        </TableHeaderCell>
+                    </tr>
+                    <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell>Pool</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">{'TVL (USDC)'}</TableHeaderCell>
@@ -71,7 +78,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
-                        <TableHeaderCell size="sm">{'Side'}</TableHeaderCell>
+                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm">
+                            {'Side'}
+                        </TableHeaderCell>
                         <TableHeaderCell size="sm" className={'whitespace-nowrap'}>
                             {'TVL (USDC)'}
                         </TableHeaderCell>
@@ -80,7 +89,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                                 <div>{'Effective Leverage'}</div>
                             </EffectiveLeverageTip>
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap'}>
+                        <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
                         </TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
@@ -88,14 +97,28 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell colSpan={3} />
-                        {showNextRebalance ? <TableHeaderCell>{'Ends in'}</TableHeaderCell> : null}
+                        {showNextRebalance ? (
+                            <TableHeaderCell className="text-cool-gray-400">
+                                <div className="text-cool-gray-400 capitalize">{'Ends in'}</div>
+                            </TableHeaderCell>
+                        ) : null}
 
                         {/* Token Cols */}
-                        <TableHeaderCell size="sm" colSpan={2} />
-                        <TableHeaderCell size="sm">{'Gains'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'Losses'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'Tracer'}</TableHeaderCell>
-                        <TableHeaderCell size="sm">{'Balancer'}</TableHeaderCell>
+                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm" colSpan={2} />
+                        <TableHeaderCell size="sm">
+                            <div className="text-cool-gray-400 capitalize">{'Gains'}</div>
+                        </TableHeaderCell>
+                        <TableHeaderCell className="text-cool-gray-400" size="sm">
+                            <div className="text-cool-gray-400 capitalize">{'Losses'}</div>
+                        </TableHeaderCell>
+                        <TableHeaderCell className="text-cool-gray-400" size="sm">
+                            <div className="text-cool-gray-400 capitalize">{'Tracer'}</div>
+                        </TableHeaderCell>
+                        {showNextRebalance ? (
+                            <TableHeaderCell className="text-cool-gray-400" size="sm">
+                                <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
+                            </TableHeaderCell>
+                        ) : null}
                         <TableHeaderCell />
                     </tr>
                 </TableHeader>
@@ -114,7 +137,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             {showNextRebalance ? (
-                <p className="mt-3 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
+                <p className="mt-3 text-sm text-theme-text opacity-80 text-left">
                     Values are indicative only. They are estimates given the committed mints and burns, and change in
                     price of the underlying market. All values are subject to change at the next rebalance of each pool.
                 </p>
@@ -191,7 +214,10 @@ const PoolRow: React.FC<
                         <div>{toApproxCurrency(pool.tvl)}</div>
                     )}
                 </TableRowCell>
-                <TableRowCell rowSpan={2} className={'relative bg-opacity-0 z-[1]'}>
+                <TableRowCell
+                    rowSpan={2}
+                    className={classNames('relative bg-opacity-0 z-[1]', !showNextRebalance ? 'w-1/6' : '')}
+                >
                     <LongBalance width={calcPercentage(pool.longToken.tvl, pool.tvl)} />
                     <ShortBalance />
                     {showNextRebalance ? (
@@ -233,7 +259,6 @@ const PoolRow: React.FC<
                 {/** Token rows */}
                 <TokenRows
                     side={SideEnum.long}
-                    isBuy={true}
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
@@ -244,7 +269,6 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 <TokenRows
                     side={SideEnum.short}
-                    isBuy={false}
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
@@ -259,20 +283,19 @@ const PoolRow: React.FC<
 const LongBalance: React.FC<{ width: number }> = ({ width }) => (
     <div
         style={{ width: `${width}%` }}
-        className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green`}
+        className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green matrix:bg-dark-green`}
     ></div>
 );
 const ShortBalance = () => (
-    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red`}></div>
+    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`}></div>
 );
 
-const longStyles = 'bg-green-50 dark:bg-dark-green';
-const shortStyles = 'bg-red-50 dark:bg-dark-red';
+const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
+const shortStyles = 'bg-red-50 dark:bg-dark-red matrix:bg-dark-red';
 
 const TokenRows: React.FC<
     {
         side: SideEnum;
-        isBuy: boolean;
         tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken'];
         leverage: number;
         address: string;
@@ -285,7 +308,7 @@ const TokenRows: React.FC<
 
     return (
         <>
-            <TableRowCell size={'sm'} className={styles}>
+            <TableRowCell size={'sm'} className={classNames(styles, 'border-l-2 border-theme-background')}>
                 {side === SideEnum.long ? 'Long' : 'Short'}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
@@ -321,52 +344,50 @@ const TokenRows: React.FC<
                     ? toApproxCurrency(tokenInfo.nextTCRPrice)
                     : toApproxCurrency(tokenInfo.lastTCRPrice)}
             </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
-                {toApproxCurrency(tokenInfo.balancerPrice)}
-                <LinkOutlined
-                    className="align-middle ml-1"
-                    onClick={() =>
-                        open(
-                            constructBalancerLink(
-                                tokenInfo.address,
-                                (provider?.network ?? ARBITRUM) as AvailableNetwork,
-                                side === SideEnum.long,
-                            ),
-                        )
-                    }
-                />
-            </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
-                <div className="flex">
-                    <Button
-                        className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
-                        size="xs"
-                        variant="primary-light"
-                        onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
-                    >
-                        Mint
-                    </Button>
-                    <Button
-                        className="mx-1 w-[70px] my-auto font-bold uppercase "
-                        size="xs"
-                        variant="primary-light"
-                        onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
-                    >
-                        Burn
-                    </Button>
-                    <Actions
-                        provider={provider as ethers.providers.JsonRpcProvider}
-                        token={{
-                            address: poolAddress,
-                            decimals: decimals,
-                            symbol: tokenInfo.symbol,
-                        }}
-                        arbiscanTarget={{
-                            type: ArbiscanEnum.token,
-                            target: poolAddress,
+            {showNextRebalance ? (
+                <TableRowCell size={'sm'} className={styles}>
+                    {toApproxCurrency(tokenInfo.balancerPrice)}
+                    <LinkOutlined
+                        className="align-middle ml-1"
+                        onClick={() => {
+                            open(constructBalancerLink(tokenInfo.address, ARBITRUM, true), 'blank');
                         }}
                     />
-                </div>
+                </TableRowCell>
+            ) : null}
+            <TableRowCell size={'sm'} className={styles}>
+                {showNextRebalance ? (
+                    <div className="flex">
+                        <Button
+                            className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
+                            size="xs"
+                            variant="primary-light"
+                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
+                        >
+                            Mint
+                        </Button>
+                        <Button
+                            className="mx-1 w-[70px] my-auto font-bold uppercase "
+                            size="xs"
+                            variant="primary-light"
+                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
+                        >
+                            Burn
+                        </Button>
+                        <Actions
+                            provider={provider as ethers.providers.JsonRpcProvider}
+                            token={{
+                                address: poolAddress,
+                                decimals: decimals,
+                                symbol: tokenInfo.symbol,
+                            }}
+                            arbiscanTarget={{
+                                type: ArbiscanEnum.token,
+                                target: poolAddress,
+                            }}
+                        />
+                    </div>
+                ) : null}
             </TableRowCell>
         </>
     );
