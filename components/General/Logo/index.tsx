@@ -84,5 +84,5 @@ const SIZES: Record<Size, string> = {
 
 export const Logo: React.FC<LProps> = ({ className, ticker, size = 'sm' }: LProps) => {
     const LogoImage = logos[ticker] ?? logos['ETH'];
-    return <LogoImage className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')} />;
+    return <LogoImage className={classNames(SIZES[size], className ?? '')} />;
 };

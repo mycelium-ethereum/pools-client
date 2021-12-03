@@ -3,6 +3,7 @@ import { StakingRewards__factory } from '@libs/staking/typechain/factories/Staki
 
 import { ethers } from 'ethers';
 import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
+import { LogoTicker } from '@components/General';
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
@@ -27,6 +28,7 @@ export type AvailableNetwork =
 export type Network = {
     id: AvailableNetwork;
     name: string;
+    logoTicker: LogoTicker;
     previewUrl: string;
     contracts: {
         [name: string]: {
@@ -70,6 +72,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         id: '0',
         previewUrl: '',
         name: 'Unknown',
+        logoTicker: 'ETH',
         contracts: {},
         poolFarms: [],
         bptFarms: [],
@@ -84,6 +87,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '421611': {
         id: '421611',
         name: 'Arbitrum Rinkeby',
+        logoTicker: ARBITRUM,
         previewUrl: 'https://testnet.arbiscan.io',
         contracts: {
             poolFactory: {
@@ -116,6 +120,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '42161': {
         id: '42161',
         name: 'Arbitrum',
+        logoTicker: ARBITRUM,
         previewUrl: 'https://arbiscan.io/',
         contracts: {
             poolFactory: {
@@ -229,6 +234,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '1337': {
         id: '1337',
         name: 'Local',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -250,6 +256,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         // TODO: fill this out properly
         id: '1',
         name: 'Ethereum',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -271,6 +278,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         // TODO: fill this out properly
         id: '4',
         name: 'Rinkeby',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {
