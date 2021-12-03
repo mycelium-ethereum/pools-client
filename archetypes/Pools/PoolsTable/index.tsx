@@ -54,7 +54,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
             <Table>
                 <TableHeader>
                     <tr>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={4}>
+                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 4 : 3}>
                             <div className="capitalize text-lg">{'POOLS'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>
@@ -63,28 +63,28 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell>Pool</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">{'TVL (USDC)'}</TableHeaderCell>
-                        <TableHeaderCell>
+                        <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USDC)'}</TableHeaderCell>
+                        <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
                                 <div>{'Skew'}</div>
                             </SkewTip>
                         </TableHeaderCell>
                         {showNextRebalance ? (
-                            <TableHeaderCell>
+                            <TableHeaderCell className="w-2/12">
                                 <CommittmentTip>
                                     <div>{'Commitment Window'}</div>
                                 </CommittmentTip>
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
-                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm">
+                        <TableHeaderCell className="border-l-2 border-theme-background w-16" size="sm">
                             {'Side'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" className={'whitespace-nowrap'}>
+                        <TableHeaderCell size="sm" className={'whitespace-nowrap w-2/12'}>
                             {'TVL (USDC)'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap'}>
+                        <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap w-[12%]'}>
                             <EffectiveLeverageTip>
                                 <div>{'Effective Leverage'}</div>
                             </EffectiveLeverageTip>
@@ -190,13 +190,13 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div className="flex">
+                    <div style={{ minHeight: '3rem' }} className="flex">
                         <Logo
-                            className="inline mr-2"
+                            className="inline mr-2 my-auto"
                             size={'md'}
                             ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
                         />
-                        <div>
+                        <div className="my-auto">
                             <div className="font-bold">{tickerToName(pool.name)}</div>
                             <div className="text-xs">{pool.name.split('-')[1]}</div>
                         </div>
@@ -311,7 +311,7 @@ const TokenRows: React.FC<
             <TableRowCell size={'sm'} className={classNames(styles, 'border-l-2 border-theme-background')}>
                 {side === SideEnum.long ? 'Long' : 'Short'}
             </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
+            <TableRowCell size={'sm'} className={classNames(styles)}>
                 {showNextRebalance ? (
                     <>
                         <div className="flex">
