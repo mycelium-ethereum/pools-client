@@ -25,8 +25,8 @@ export default (() => {
     const token = side === SideEnum.long ? pool?.longToken : pool?.shortToken;
 
     return (
-        <div className="w-full justify-center sm:mt-14">
-            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:my-8 md:mx-auto">
+        <div className="w-full justify-center sm:mt-20">
+            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 md:mx-auto">
                 <div className="text-xl font-bold mb-6">Trade Pool Tokens on Balancer</div>
                 <div className="text-base text-cool-gray-400 mt-2">
                     Looking for leveraged exposure? There is no need to mint and burn. There are already pool tokens on

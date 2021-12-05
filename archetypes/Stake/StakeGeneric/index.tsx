@@ -348,7 +348,7 @@ export default (({
     return (
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
-            <div className="container mt-0 md:mt-[100px]">
+            <div className="container mt-0 md:mt-7">
                 <div className="p-0 md:py-20 md:px-16 shadow-xl bg-theme-background border-3xl rounded-3xl">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
