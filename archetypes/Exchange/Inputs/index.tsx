@@ -4,7 +4,7 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
-import { SideEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -53,7 +53,7 @@ const isInvalidAmount: (
 export default (({ pool, swapState, swapDispatch }) => {
     const { tokens } = usePoolTokens();
 
-    const { amount, side, selectedPool, invalidAmount } = swapState;
+    const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
 
     const amountBN = useBigNumber(amount);
 
@@ -77,12 +77,15 @@ export default (({ pool, swapState, swapDispatch }) => {
         if (pool) {
             const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
-            const minimumTokens = calcMinAmountIn(
-                token.supply.plus(pendingBurns),
-                notional,
-                minimumCommitSize,
-                pendingBurns,
-            );
+            const minimumTokens: BigNumber = commitAction === CommitActionEnum.mint
+                ? new BigNumber(minimumCommitSize.toString())
+                : calcMinAmountIn(
+                    token.supply.plus(pendingBurns),
+                    notional,
+                    minimumCommitSize,
+                    pendingBurns,
+                );
+
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
             const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
