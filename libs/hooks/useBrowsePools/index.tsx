@@ -10,6 +10,7 @@ import {
 import { BigNumber } from 'bignumber.js';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useUpkeeps } from '../useUpkeeps';
 
 // const useBrowsePools
 export default (() => {
@@ -17,7 +18,8 @@ export default (() => {
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const balancerPoolPrices = useBalancerSpotPrices(network);
-
+    const upkeeps = useUpkeeps(network);
+    console.log("Upkeeps final", upkeeps);
     useEffect(() => {
         if (pools) {
             const poolValues = Object.values(pools);
