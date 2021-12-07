@@ -8,7 +8,7 @@ export default (({ toggleValue, value }) => {
         <div onClick={toggleValue} className={'relative inline-block w-12 h-6 my-auto mx-0'}>
             <span
                 className={classNames(
-                    'absolute inset-0 rounded-3xl transition-all bg-tracer-600 dark:bg-cool-gray-700 cursor-pointer text-cool-gray-800',
+                    'absolute inset-0 rounded-3xl transition-all bg-tracer-600 dark:bg-cool-gray-700 cursor-pointer text-cool-gray-800 text-sm',
                     "before:absolute before:content-[''] before:h-6 before:w-6 before:right-0 before:bg-white before:transition-all before:rounded-[50%]",
                     value ? 'before:-translate-x-6' : 'before:translate-x-0',
                 )}

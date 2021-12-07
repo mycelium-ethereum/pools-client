@@ -45,7 +45,7 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (
     useEffect(() => {
         let mounted = true;
         const poolInfo: StaticPoolInfo = poolList[(network ?? ARBITRUM) as AvailableNetwork][0];
-        const USDC_DECIMALS = poolInfo.quoteToken.decimals;
+        const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
             // const now = Date.now() / 1000;
             // times to make sure to get past 2 upkeep
@@ -61,7 +61,6 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (
                     return [];
                 });
 
-            console.log('Raw upkeeps', rawUpkeeps);
             if (rawUpkeeps.message) {
                 console.info('Fetched upkeeps', rawUpkeeps.message);
             } else if (rawUpkeeps.data) {
