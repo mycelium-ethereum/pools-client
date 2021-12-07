@@ -1,3 +1,5 @@
+import { Upkeep } from '@libs/hooks/useUpkeeps';
+
 export enum MarketFilterEnum {
     All = 'All',
     ETH = 'Ethereum',
@@ -33,6 +35,9 @@ export interface BrowseTableRowData {
     decimals: number;
     leverage: number;
 
+    lastPrice: number;
+    oraclePrice: number;
+
     skew: number;
     nextSkew: number;
 
@@ -45,6 +50,8 @@ export interface BrowseTableRowData {
     myHoldings: number;
     nextRebalance: number;
     frontRunning: number;
+
+    pastUpkeep: Upkeep;
 }
 
 export interface BrowseState {

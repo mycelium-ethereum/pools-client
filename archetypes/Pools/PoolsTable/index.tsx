@@ -54,7 +54,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
             <Table>
                 <TableHeader>
                     <tr>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 4 : 3}>
+                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>
                             <div className="capitalize text-lg">{'POOLS'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>
@@ -64,6 +64,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'BASE PRICE'}</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USDC)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
@@ -96,7 +97,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={3} />
+                        <TableHeaderCell colSpan={4} />
                         {showNextRebalance ? (
                             <TableHeaderCell className="text-cool-gray-400">
                                 <div className="text-cool-gray-400 capitalize">{'Ends in'}</div>
@@ -176,8 +177,11 @@ const PoolRow: React.FC<
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
 
+    console.log(pool, 'Final pool');
+
     const skewDelta = calcPercentageDifference(pool.nextSkew, pool.skew);
     const tvlDelta = calcPercentageDifference(pool.nextTVL, pool.tvl);
+    const basePriceDelta = calcPercentageDifference(pool.lastPrice, pool.oraclePrice);
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
@@ -201,6 +205,28 @@ const PoolRow: React.FC<
                             <div className="text-xs">{pool.name.split('-')[1]}</div>
                         </div>
                     </div>
+                </TableRowCell>
+                <TableRowCell rowSpan={2}>
+                    {showNextRebalance ? (
+                        <>
+                            <div>{toApproxCurrency(pool.lastPrice)}</div>
+                            <div className="mt-1">
+                                <UpOrDown value={basePriceDelta} />
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
+                            <div className="mt-1">
+                                <UpOrDown
+                                    value={calcPercentageDifference(
+                                        pool.pastUpkeep.newPrice.toNumber(),
+                                        pool.pastUpkeep.oldPrice.toNumber(),
+                                    )}
+                                />
+                            </div>
+                        </>
+                    )}
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (

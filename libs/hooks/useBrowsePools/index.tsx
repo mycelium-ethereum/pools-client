@@ -11,6 +11,7 @@ import { BigNumber } from 'bignumber.js';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useUpkeeps } from '../useUpkeeps';
+import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 // const useBrowsePools
 export default (() => {
@@ -19,7 +20,7 @@ export default (() => {
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const balancerPoolPrices = useBalancerSpotPrices(network);
     const upkeeps = useUpkeeps(network);
-    console.log("Upkeeps final", upkeeps);
+
     useEffect(() => {
         if (pools) {
             const poolValues = Object.values(pools);
@@ -64,16 +65,21 @@ export default (() => {
                     .plus(pendingShortMint)
                     .minus(nextShortTokenPrice.times(pendingShortBurn));
 
+                const tvl = shortBalance.plus(longBalance).toNumber();
+
                 rows.push({
                     address: address,
                     name: name,
                     leverage: leverage,
                     decimals: quoteToken.decimals,
 
+                    lastPrice: pool.lastPrice.toNumber(),
+                    oraclePrice: pool.oraclePrice.toNumber(),
+
                     skew: calcSkew(shortBalance, longBalance).toNumber(),
                     nextSkew: calcSkew(nextShortBalance, nextLongBalance).toNumber(),
 
-                    tvl: shortBalance.plus(longBalance).toNumber(),
+                    tvl: tvl,
                     nextTVL: nextLongBalance.plus(nextShortBalance).toNumber(),
 
                     shortToken: {
@@ -99,6 +105,18 @@ export default (() => {
                     nextRebalance: lastUpdate.plus(updateInterval).toNumber(),
                     myHoldings: shortToken.balance.plus(longToken.balance).toNumber(),
                     frontRunning: frontRunningInterval.toNumber(),
+                    pastUpkeep: {
+                        pool: address,
+                        network: network as AvailableNetwork,
+                        timestamp: lastUpdate.toNumber(),
+                        tvl: new BigNumber(tvl),
+                        newPrice: new BigNumber(0),
+                        oldPrice: new BigNumber(0),
+                        longTokenBalance: new BigNumber(0),
+                        shortTokenBalance: new BigNumber(0),
+                        longTokenSupply: new BigNumber(0),
+                        shortTokenSupply: new BigNumber(0),
+                    },
                 });
             });
             setRows(rows);
@@ -121,6 +139,28 @@ export default (() => {
             })),
         );
     }, [balancerPoolPrices]);
+
+    useEffect(() => {
+        console.log(upkeeps, 'Final upkeeps');
+        // n^2 way of doing this
+        // but rows and upkeeps will only ever
+        // be relatively small
+        setRows(
+            rows.map((row) => {
+                const lowerCaseAddress = row.address.toLowerCase();
+                for (const upkeep of upkeeps) {
+                    if (upkeep.pool.toLowerCase() === lowerCaseAddress) {
+                        return {
+                            ...row,
+                            pastUpkeep: upkeep,
+                        };
+                    }
+                }
+                // else
+                return row;
+            }),
+        );
+    }, [upkeeps]);
 
     return rows;
 }) as () => BrowseTableRowData[];

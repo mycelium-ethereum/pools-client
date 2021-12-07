@@ -77,14 +77,10 @@ export default (({ pool, swapState, swapDispatch }) => {
         if (pool) {
             const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
-            const minimumTokens: BigNumber = commitAction === CommitActionEnum.mint
-                ? new BigNumber(minimumCommitSize.toString())
-                : calcMinAmountIn(
-                    token.supply.plus(pendingBurns),
-                    notional,
-                    minimumCommitSize,
-                    pendingBurns,
-                );
+            const minimumTokens: BigNumber =
+                commitAction === CommitActionEnum.mint
+                    ? new BigNumber(minimumCommitSize.toString())
+                    : calcMinAmountIn(token.supply.plus(pendingBurns), notional, minimumCommitSize, pendingBurns);
 
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
