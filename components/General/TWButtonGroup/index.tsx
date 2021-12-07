@@ -22,7 +22,7 @@ const BORDER_COLORS = {
 const BORDERS = 'first:rounded-l-md last:rounded-r-md';
 
 const SIZE = {
-    default: 'px-4 py-2 text-sm font-medium ',
+    default: 'px-4 py-2.5 text-sm font-medium ',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
     xl: 'py-3 px-16 md:px-18 text-base font-normal',
 };

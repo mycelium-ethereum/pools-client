@@ -50,17 +50,12 @@ export const NavBarContent: React.FC<{
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
-                            <a className="m-auto">Buy/Sell</a>
+                            <a className="m-auto">Tokens</a>
                         </li>
                     </Link>
-                    <Link href="/mint-burn">
-                        <li className={classNames(linkStyles, route === 'mint-burn' ? selectedStyles : '')}>
-                            <a className="m-auto">Mint/Burn</a>
-                        </li>
-                    </Link>
-                    <Link href="/browse">
-                        <li className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}>
-                            <a className="m-auto">Browse</a>
+                    <Link href="/pools">
+                        <li className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}>
+                            <a className="m-auto">Pools</a>
                         </li>
                     </Link>
                     <Link href="/stakepooltoken">

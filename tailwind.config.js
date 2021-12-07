@@ -40,6 +40,8 @@ module.exports = {
                     800: '#1F2A37',
                     900: '#111928',
                 },
+                'dark-green': '#032018',
+                'dark-red': '#230F0F',
                 theme: {
                     background: 'var(--background)',
                     ['background-secondary']: 'var(--background-secondary)',

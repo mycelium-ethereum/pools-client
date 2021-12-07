@@ -14,7 +14,7 @@ const VARIANT: Record<ButtonVariant, string> = {
     primary:
         'bg-tracer-500 matrix:bg-theme-primary matrix:text-theme-background dark:bg-tracer-500 text-white w-full hover:bg-opacity-70 dark:hover:bg-opacity-70 matrix:hover:bg-opacity-70 dark:disabled:hover:bg-tracer-500 matrix:disabled:hover:bg-theme-primary disabled:hover:bg-tracer-500 disabled:opacity-50 focus:ring focus:ring-tracer-300',
     'primary-light':
-        'bg-tracer-100 dark:bg-cool-gray-700 matrix:bg-transparent border border-tracer-500 dark:border-cool-gray-400 matrix:border-theme-border text-theme-text w-full hover:bg-opacity-50 dark:hover:bg-opacity-50 matrix:hover:opacity-50 disabled:opacity-50',
+        'bg-tracer-100 dark:bg-tracer-800 matrix:bg-transparent border border-tracer-500 matrix:border-theme-border text-theme-text w-full hover:bg-opacity-50 dark:hover:bg-opacity-50 matrix:hover:opacity-50 disabled:opacity-50',
     transparent:
         'bg-white bg-opacity-20 border border-white text-white w-full disabled:bg-opacity-50 focus:border-solid',
     unselected:
