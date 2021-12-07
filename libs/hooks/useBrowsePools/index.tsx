@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { BrowseTableRowData } from '@archetypes/Pools/state';
 import { usePools } from '@context/PoolContext';
 import {
@@ -120,35 +120,30 @@ export default (() => {
                     },
                 });
             });
+
             setRows(rows);
         }
     }, [pools]);
 
-    useEffect(() => {
-        console.log(balancerPoolPrices, 'Changed');
-        setRows((rows) =>
-            rows.map((row) => ({
-                ...row,
-                longToken: {
-                    ...row.longToken,
-                    balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
-                },
-                shortToken: {
-                    ...row.shortToken,
-                    balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
-                },
-            })),
-        );
-    }, [balancerPoolPrices]);
+    const attachedBalancerPrices: BrowseTableRowData[] = useMemo(() => {
+        return rows.map((row) => ({
+            ...row,
+            longToken: {
+                ...row.longToken,
+                balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
+            },
+            shortToken: {
+                ...row.shortToken,
+                balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
+            },
+        }));
+    }, [rows, balancerPoolPrices]);
 
-    useEffect(() => {
-        console.log(upkeeps, 'Final upkeeps');
-        // n^2 way of doing this
-        // but rows and upkeeps will only ever
-        // be relatively small
-        setRows(
-            rows.map((row) => {
+    const finalRows: BrowseTableRowData[] = useMemo(
+        () =>
+            attachedBalancerPrices.map((row) => {
                 const lowerCaseAddress = row.address.toLowerCase();
+                console.log(upkeeps, '???');
                 for (const upkeep of upkeeps) {
                     if (upkeep.pool.toLowerCase() === lowerCaseAddress) {
                         return {
@@ -160,8 +155,8 @@ export default (() => {
                 // else
                 return row;
             }),
-        );
-    }, [upkeeps]);
+        [attachedBalancerPrices, upkeeps],
+    );
 
-    return rows;
+    return finalRows;
 }) as () => BrowseTableRowData[];

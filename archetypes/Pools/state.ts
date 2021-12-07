@@ -1,10 +1,14 @@
 import { Upkeep } from '@libs/hooks/useUpkeeps';
-import BigNumber from 'bignumber.js';
 
 export enum MarketFilterEnum {
     All = 'All',
     ETH = 'Ethereum',
     BTC = 'Bitcoin',
+}
+
+export enum DeltaEnum {
+    Percentile = 0,
+    Numeric = 1,
 }
 
 export enum RebalanceEnum {
@@ -30,6 +34,7 @@ interface BrowseTableTokenData {
     tvl: number;
     nextTvl: number;
 }
+
 export interface BrowseTableRowData {
     name: string;
     address: string;
@@ -52,13 +57,12 @@ export interface BrowseTableRowData {
     nextRebalance: number;
     frontRunning: number;
 
-    pastUpkeep: Upkeep & {
-        antecedentTVL: BigNumber;
-    };
+    pastUpkeep: Upkeep;
 }
 
 export interface BrowseState {
     search: string;
+    deltaDenotion: DeltaEnum;
     marketFilter: MarketFilterEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
@@ -72,6 +76,7 @@ export type BrowseAction =
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
     | { type: 'setFilterModalOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
+    | { type: 'setDenotion'; denotion: DeltaEnum }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
@@ -85,6 +90,11 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
             return {
                 ...state,
                 search: action.search,
+            };
+        case 'setDenotion':
+            return {
+                ...state,
+                deltaDenotion: action.denotion,
             };
         case 'setMarketFilter':
             return {

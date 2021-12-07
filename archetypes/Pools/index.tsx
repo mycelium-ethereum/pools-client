@@ -2,7 +2,15 @@ import React, { useEffect, useReducer } from 'react';
 import FilterBar from './FilterSelects/Bar';
 import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
-import { browseReducer, BrowseState, BrowseTableRowData, MarketFilterEnum, RebalanceEnum, SortByEnum } from './state';
+import {
+    browseReducer,
+    BrowseState,
+    BrowseTableRowData,
+    DeltaEnum,
+    MarketFilterEnum,
+    RebalanceEnum,
+    SortByEnum,
+} from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
@@ -20,6 +28,7 @@ export const Browse: React.FC = () => {
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filterModalOpen: false,
         mintBurnModalOpen: false,
+        deltaDenotion: DeltaEnum.Percentile,
     } as BrowseState);
 
     useEffect(() => {
@@ -72,14 +81,6 @@ export const Browse: React.FC = () => {
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: commitAction });
         dispatch({ type: 'setMintBurnModalOpen', open: true });
-        // router.push({
-        //     pathname: '/',
-        //     query: {
-        //         pool: pool,
-        //         type: CommitActionEnum.mint,
-        //         side: side,
-        //     },
-        // });
     };
 
     const handleModalClose = () => {
@@ -102,6 +103,7 @@ export const Browse: React.FC = () => {
                     </section>
                     <PoolsTable
                         rows={sortedFilteredTokens}
+                        deltaDenotion={state.deltaDenotion}
                         onClickMintBurn={handleMintBurn}
                         showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
                     />

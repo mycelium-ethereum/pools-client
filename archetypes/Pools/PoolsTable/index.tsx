@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
 import { calcPercentageDifference, tickerToName, toApproxCurrency } from '@libs/utils/converters';
-import { BrowseTableRowData } from '../state';
+import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
@@ -24,8 +24,8 @@ import { StyledTooltip } from '@components/Tooltips';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
-    // onClickSell: (pool: string, side: SideEnum) => void;
     showNextRebalance: boolean;
+    deltaDenotion: DeltaEnum;
 };
 
 const SkewTip: React.FC = ({ children }) => (
@@ -46,7 +46,7 @@ const CommittmentTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-export default (({ rows, onClickMintBurn, showNextRebalance }) => {
+export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider } = useWeb3();
     return (
@@ -132,6 +132,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance }) => {
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             provider={provider}
+                            deltaDenotion={deltaDenotion}
                         />
                     );
                 })}
@@ -172,24 +173,11 @@ const PoolRow: React.FC<
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({ pool, onClickMintBurn, index, provider, showNextRebalance }) => {
+> = ({ pool, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
-
-    console.log(pool, 'Final pool');
-
-    const skewDelta = calcPercentageDifference(pool.nextSkew, pool.skew);
-    const tvlDelta = calcPercentageDifference(pool.nextTVL, pool.tvl);
-    const pastTvlDelta = calcPercentageDifference(
-        pool.pastUpkeep.tvl.toNumber(),
-        pool.pastUpkeep.antecedentTVL.toNumber(),
-    );
-    const basePriceDelta = calcPercentageDifference(pool.lastPrice, pool.oraclePrice);
-    const pastBasePriceDelta = calcPercentageDifference(
-        pool.pastUpkeep.newPrice.toNumber(),
-        pool.pastUpkeep.oldPrice.toNumber(),
-    );
+    console.log(pool, 'Ppoool just before it gets in');
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
@@ -219,14 +207,22 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.lastPrice)}</div>
                             <div className="mt-1">
-                                <UpOrDown value={basePriceDelta} />
+                                <UpOrDown
+                                    oldValue={pool.lastPrice}
+                                    newValue={pool.oraclePrice}
+                                    deltaDenotion={deltaDenotion}
+                                />
                             </div>
                         </>
                     ) : (
                         <>
                             <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
                             <div className="mt-1">
-                                <UpOrDown value={pastBasePriceDelta} />
+                                <UpOrDown
+                                    oldValue={pool.pastUpkeep.oldPrice.toNumber()}
+                                    newValue={pool.pastUpkeep.newPrice.toNumber()}
+                                    deltaDenotion={deltaDenotion}
+                                />
                             </div>
                         </>
                     )}
@@ -236,14 +232,18 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.nextTVL)}</div>
                             <div className="mt-1">
-                                <UpOrDown value={tvlDelta} />
+                                <UpOrDown oldValue={pool.tvl} newValue={pool.nextTVL} deltaDenotion={deltaDenotion} />
                             </div>
                         </>
                     ) : (
                         <>
                             <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
                             <div className="mt-1">
-                                <UpOrDown value={pastTvlDelta} />
+                                <UpOrDown
+                                    oldValue={pool.pastUpkeep.antecedentTVL.toNumber()}
+                                    newValue={pool.pastUpkeep.tvl.toNumber()}
+                                    deltaDenotion={deltaDenotion}
+                                />
                             </div>
                         </>
                     )}
@@ -258,7 +258,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{pool.skew.toFixed(2)}</div>
                             <div className="mt-1">
-                                <UpOrDown value={skewDelta} />
+                                <UpOrDown oldValue={pool.skew} newValue={pool.nextSkew} deltaDenotion={deltaDenotion} />
                             </div>
                         </>
                     ) : (
@@ -297,6 +297,7 @@ const PoolRow: React.FC<
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
                     tokenInfo={pool.longToken}
+                    deltaDenotion={deltaDenotion}
                     {...pool}
                 />
             </TableRow>
@@ -307,6 +308,7 @@ const PoolRow: React.FC<
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
                     tokenInfo={pool.shortToken}
+                    deltaDenotion={deltaDenotion}
                     {...pool}
                 />
             </TableRow>
@@ -336,9 +338,18 @@ const TokenRows: React.FC<
         decimals: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({ side, tokenInfo, leverage, address: poolAddress, decimals, provider, onClickMintBurn, showNextRebalance }) => {
+> = ({
+    side,
+    tokenInfo,
+    leverage,
+    address: poolAddress,
+    decimals,
+    provider,
+    onClickMintBurn,
+    showNextRebalance,
+    deltaDenotion,
+}) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
-    const tvlDelta = calcPercentageDifference(tokenInfo.nextTvl, tokenInfo.tvl);
 
     return (
         <>
@@ -350,7 +361,11 @@ const TokenRows: React.FC<
                     <>
                         <div className="flex">
                             <div className="mr-1">{toApproxCurrency(tokenInfo.nextTvl)}</div>
-                            <UpOrDown value={tvlDelta} />
+                            <UpOrDown
+                                oldValue={tokenInfo.tvl}
+                                newValue={tokenInfo.nextTvl}
+                                deltaDenotion={deltaDenotion}
+                            />
                         </div>
                     </>
                 ) : (
@@ -427,11 +442,22 @@ const TokenRows: React.FC<
     );
 };
 
-const UpOrDown: React.FC<{ value: number }> = ({ value }) => (
-    <div className={classNames(value > 0 ? 'text-green-600' : 'text-red-600', 'flex')}>
-        <div className="mr-1">
-            <ArrowDown className={value > 0 ? 'rotate-180' : ''} />
+const UpOrDown: React.FC<{ oldValue: number; newValue: number; deltaDenotion: DeltaEnum }> = ({
+    oldValue,
+    newValue,
+    deltaDenotion,
+}) => {
+    const value = useMemo(
+        () =>
+            deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
+        [deltaDenotion, oldValue, newValue],
+    );
+    return (
+        <div className={classNames(value > 0 ? 'text-green-600' : 'text-red-600', 'flex')}>
+            <div className="mr-1">
+                <ArrowDown className={value > 0 ? 'rotate-180' : ''} />
+            </div>
+            <div>{deltaDenotion === DeltaEnum.Numeric ? toApproxCurrency(value) : `${value.toFixed(2)}%`}</div>
         </div>
-        <div>{value.toFixed(2)}%</div>
-    </div>
-);
+    );
+};
