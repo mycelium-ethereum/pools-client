@@ -163,7 +163,7 @@ export default (() => {
                 </div>
             </div>
             <div className={mainCard}>
-                <h1 className="text-theme-text text-xl">Token Breakdown</h1>
+                <h1 className="text-theme-text text-xl">Token Holdings</h1>
                 <TokenTable rows={rows} />
             </div>
         </div>
