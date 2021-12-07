@@ -8,26 +8,20 @@ import Button from '@components/General/Button';
 import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { ARBITRUM } from '@libs/constants';
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import Identicon from '@components/Nav/Navbar/Identicon';
+import Link from 'next/link';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
 
 export default (({ account, className }) => {
     const { resetOnboard, handleConnect } = useWeb3Actions();
-    const { showBridgeModal } = useArbitrumBridge();
     const ensName = useEnsName(account ?? '');
 
     return (
         <div className={`${className} relative inline-block text-left`}>
             {!!account ? (
-                <AccountDropdownButton
-                    account={account}
-                    ensName={ensName}
-                    logout={resetOnboard}
-                    showBridgeModal={showBridgeModal}
-                />
+                <AccountDropdownButton account={account} ensName={ensName} logout={resetOnboard} />
             ) : (
                 <ConnectWalletButton handleConnect={handleConnect} />
             )}
@@ -54,10 +48,9 @@ interface AccountDropdownButtonProps {
     account: string;
     ensName: string;
     logout: () => void;
-    showBridgeModal: () => void;
 }
 
-const AccountDropdownButton = ({ account, ensName, logout, showBridgeModal }: AccountDropdownButtonProps) => {
+const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButtonProps) => {
     const accountLong = useMemo(() => accountDescriptionLong(account, ensName), [account, ensName]);
     const accountShort = useMemo(() => accountDescriptionShort(account, ensName), [account, ensName]);
     return (
@@ -96,7 +89,7 @@ const AccountDropdownButton = ({ account, ensName, logout, showBridgeModal }: Ac
 
             <div className="py-1 px-4 mb-2">
                 <ViewOnArbiscanOption account={account} />
-                <BridgeFundsOption showBridgeModal={showBridgeModal} />
+                <BridgeFundsOption />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -156,18 +149,14 @@ const WalletIcon: React.FC<{
 
 const BridgeFundsOption: React.FC<{
     className?: string;
-    showBridgeModal: () => void;
-}> = ({ className, showBridgeModal }) => {
+}> = ({ className }) => {
     return (
-        <>
-            <button
-                className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover mt-3 text-sm w-full')}
-                onClick={showBridgeModal}
-            >
+        <Link href="/bridge">
+            <button className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover mt-3 text-sm w-full')}>
                 <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
                 Bridge Funds
             </button>
-        </>
+        </Link>
     );
 };
 
@@ -195,8 +184,7 @@ const accountDescriptionLong: (account: string, ensName: string) => string = (ac
 };
 
 const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
-    // return `${account.slice(0, 5)}..`
-    console.debug(ensName, 'ens name');
+    console.debug(`Found ens name: ${ensName}`);
     if (ensName) {
         const len = ensName.length;
         if (len > 14) {

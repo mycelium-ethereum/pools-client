@@ -16,6 +16,8 @@ import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { poolMap } from '@libs/constants/poolLists';
+import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
@@ -97,7 +99,13 @@ export const FarmStore: React.FC<
                 } else {
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
-                    [usdcPrice] = await fetchTokenPrice(pool, [address], provider);
+
+                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                    if (!poolInfo) {
+                        console.error('Failed to find pool in poolList');
+                        return;
+                    }
+                    [usdcPrice] = await fetchTokenPrice(poolInfo, [address], provider);
                     isPoolToken = true;
                 }
 
@@ -169,7 +177,7 @@ export const FarmStore: React.FC<
 
     const fetchFarms = useCallback(
         async ({ reset }: { reset: boolean }) => {
-            if (provider && config && account) {
+            if (signer && provider && config && account) {
                 if (reset) {
                     setFarms({});
                     setFetchingFarms(true);
@@ -228,9 +236,17 @@ export const FarmStore: React.FC<
                                 ? undefined
                                 : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
+                            const poolInfo =
+                                poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                            if (!poolInfo) {
+                                console.error('Failed to find pool in poolList');
+                                return;
+                            }
                             const poolDetails = isPoolTokenFarm
                                 ? {
-                                      poolTokenPrice: (await fetchTokenPrice(pool, [stakingTokenAddress], provider))[0],
+                                      poolTokenPrice: (
+                                          await fetchTokenPrice(poolInfo, [stakingTokenAddress], provider)
+                                      )[0],
                                   }
                                 : undefined;
 
@@ -288,18 +304,18 @@ export const FarmStore: React.FC<
                 });
             }
         },
-        [provider, config, account],
+        [signer, provider, config, account],
     );
 
     const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress) {
+        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !signer) {
             // leave it as the default value
             return;
         }
         const sushiRouter = new ethers.Contract(
             config?.sushiRouterAddress,
             UniswapV2Router02__factory.abi,
-            provider,
+            signer,
         ) as UniswapV2Router02;
 
         const oneTcr = new BigNumber('1').times(10 ** TCR_DECIMALS);

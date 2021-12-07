@@ -1,27 +1,24 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import { TWModal } from '@components/General/TWModal';
 import { Network } from '@context/Web3Context/Web3Context.Config';
-import { SwapOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
-import Close from '../../public/img/general/close.svg';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
+import { Logo } from '@components/General';
 
 interface MultiBridgeProps {
-    show: boolean;
     fromNetwork: Network;
     toNetwork?: Network;
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
     refreshBridgeableBalance: (asset: BridgeableAsset) => Promise<void>;
     onSwitchNetwork: (networkId: Network['id'], callback?: () => void) => void;
-    onClose: () => void;
     onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
     account?: string;
@@ -36,8 +33,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onSwitchNetwork,
         refreshBridgeableBalance,
         onBridgeAsset,
-        show,
-        onClose,
         onApproveToken,
         account,
     } = props;
@@ -51,16 +46,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // if this is the first time using the bridge, automatically switch them to L1 Mainnet
     useEffect(() => {
-        if (show) {
-            const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
-            if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
-                // if its the first time using the bridge and they aren't already on L1 Mainnet
-                onSwitchNetwork(MAINNET, () => {
-                    localStorage.setItem('hasUsedBridge', 'true');
-                });
-            }
+        const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
+        if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
+            // if its the first time using the bridge and they aren't already on L1 Mainnet
+            onSwitchNetwork(MAINNET, () => {
+                localStorage.setItem('hasUsedBridge', 'true');
+            });
         }
-    }, [show]);
+    }, []);
 
     const bridgeableAssetList = useMemo(() => {
         if (!fromNetwork) {
@@ -79,14 +72,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // fetch balance when modal initially shows
     useEffect(() => {
-        if (show && fromNetwork?.id && selectedAsset) {
+        if (fromNetwork?.id && selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
         }
-    }, [show]);
+    }, []);
 
     // refresh asset balance when selectedAsset changes
     useEffect(() => {
-        if (show && selectedAsset) {
+        if (selectedAsset) {
             refreshBridgeableBalance(selectedAsset);
             setAmount(amountsByAsset[selectedAsset.symbol] || '');
         }
@@ -104,14 +97,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // refresh asset balance when selected account changes
     useEffect(() => {
-        if (show && selectedAsset && account) {
+        if (selectedAsset && account) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [account]);
 
     // refresh asset balance when selected network changes
     useEffect(() => {
-        if (show && selectedAsset && fromNetwork) {
+        if (selectedAsset && fromNetwork) {
             refreshBridgeableBalance(selectedAsset);
         }
     }, [fromNetwork]);
@@ -184,56 +177,45 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     }, [selectedAsset, selectedAssetBalance?.allowance]);
 
     return (
-        <TWModal open={show} onClose={() => onClose()}>
-            <div>
+        <div className="sm:mt-14">
+            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl md:rounded-3xl py-12 px-4 md:py-16 md:px-20 sm:my-8 mx-auto">
                 <div className="flex justify-between items-center mb-6">
                     <div className="font-bold text-2xl">Bridge Funds</div>
-                    <div className="w-3 h-3 ml-4 cursor-pointer" onClick={() => onClose()}>
-                        <Close />
-                    </div>
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="from" className="block mb-2">
                                 From
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="fromNetwork"
-                                    id="fromNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={fromNetwork?.name || 'Unsupported Network'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={fromNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {fromNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
 
                         <button
-                            className="cursor-pointer p-6 text-xl focus:outline-none"
+                            className="cursor-pointer mx-6 mb-6 mt-auto text-xl focus:outline-none"
                             onClick={() => {
                                 if (toNetwork) {
                                     onSwitchNetwork(toNetwork.id);
                                 }
                             }}
                         >
-                            <SwapOutlined />
+                            <ArrowRightOutlined />
                         </button>
 
-                        <div className="my-2 mb-2 w-full">
+                        <div className="my-2 mb-2 w-full font-bold">
                             <label htmlFor="to" className="block mb-2">
                                 To
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
-                                <input
-                                    disabled
-                                    type="text"
-                                    name="toNetwork"
-                                    id="toNetwork"
-                                    className="block w-full p-4 sm:text-sm rounded-md border-2 font-normal border-theme-border bg-theme-button-bg text-theme-text"
-                                    value={toNetwork?.name || 'N/A'}
-                                />
+                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                                    <Logo className="inline mr-2 my-0" ticker={toNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {toNetwork?.name || 'Unsupported Network'}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -342,7 +324,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </span>
                         ) : (
                             <>
-                                <b>Note</b>: Withdrawals from Arbitrum take approximately 7 days to complete. Visit the{' '}
+                                <b>Note</b>: Withdrawals from Arbitrum take approximately 8 days to complete. Visit the{' '}
                                 <a
                                     href="https://bridge.arbitrum.io"
                                     target="_blank"
@@ -357,6 +339,6 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                     </p>
                 </div>
             </div>
-        </TWModal>
+        </div>
     );
 };

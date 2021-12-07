@@ -70,6 +70,17 @@ export const LEVERAGE_OPTIONS = [
     },
 ];
 
+export const SIDE_OPTIONS = [
+    {
+        key: SideEnum.long,
+        text: 'Long',
+    },
+    {
+        key: SideEnum.short,
+        text: 'Short',
+    },
+];
+
 export const swapDefaults: SwapState = {
     amount: '',
     invalidAmount: {
@@ -78,7 +89,7 @@ export const swapDefaults: SwapState = {
     },
     commitAction: CommitActionEnum.mint,
     selectedPool: undefined,
-    side: SideEnum.long,
+    side: NaN,
     leverage: NaN,
     market: '',
     markets: {},
@@ -95,8 +106,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
-        let pool;
-        let leverage;
+        let pool, leverage, side;
         switch (action.type) {
             case 'setAmount':
                 return {
@@ -130,15 +140,18 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 };
             case 'setPoolFromMarket':
                 console.debug(`Setting market: ${action.market}`);
+                // set leverage if its not already
                 leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
+                // set the side to long if its not already
+                side = !Number.isNaN(state.side) ? state.side : SideEnum.long;
                 pool = state.markets?.[action.market]?.[leverage]?.address;
                 console.debug(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
                     market: action.market,
                     selectedPool: pool,
-                    // set leverage if its not already
                     leverage: leverage,
+                    side: side,
                 };
             case 'setMarkets':
                 return {
@@ -204,7 +217,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 const { leverage, name } = pools[router.query.pool as string];
                 swapDispatch({
                     type: 'setMarket',
-                    // eg 3-BTC/USDC -> BTC/USDC
+                    // eg 3-BTC/USD -> BTC/USD
                     value: name.split('-')[1],
                 });
                 swapDispatch({

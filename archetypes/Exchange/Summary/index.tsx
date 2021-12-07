@@ -168,9 +168,13 @@ export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amoun
     );
 };
 
-const constructBalancerLink = (token: string, network: AvailableNetwork, isBuy: boolean) => {
+export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
+    token,
+    network,
+    isBuy,
+) => {
     const { usdcAddress, balancerInfo } = networkConfig[network];
-    // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
+    // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
     return isBuy
         ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
         : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;

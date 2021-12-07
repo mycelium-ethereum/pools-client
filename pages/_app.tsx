@@ -9,10 +9,11 @@ import '../styles/index.css';
 import { ToastProvider } from 'react-toast-notifications';
 import { Notification } from '@components/General/Notification';
 import { TransactionStore } from '@context/TransactionContext';
-import { FactoryStore } from '@context/FactoryContext';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 import { ThemeStore } from '@context/ThemeContext';
+import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET } from '@libs/constants';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -68,10 +69,14 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                                     { walletName: 'torus' },
                                     // { walletName: "binance" },
 
-                                    // {
-                                    //     walletName: "walletConnect",
-                                    //     infuraKey: INFURA_KEY
-                                    // },
+                                    {
+                                        walletName: 'walletConnect',
+                                        rpc: {
+                                            [ARBITRUM]: networkConfig[ARBITRUM].publicRPC,
+                                            [ARBITRUM_RINKEBY]: networkConfig[ARBITRUM_RINKEBY].publicRPC,
+                                            [MAINNET]: networkConfig[MAINNET].publicRPC,
+                                        },
+                                    },
                                 ],
                                 // agreement: {
                                 //     version: '1.0',
@@ -80,13 +85,11 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                             },
                         }}
                     >
-                        <FactoryStore>
-                            <TransactionStore>
-                                <UsersCommitStore>
-                                    <Component {...pageProps} />
-                                </UsersCommitStore>
-                            </TransactionStore>
-                        </FactoryStore>
+                        <TransactionStore>
+                            <UsersCommitStore>
+                                <Component {...pageProps} />
+                            </UsersCommitStore>
+                        </TransactionStore>
                     </Web3Store>
                 </ThemeStore>
             </ToastProvider>

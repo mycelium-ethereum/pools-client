@@ -1,6 +1,6 @@
 import { SideEnum, CommitEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
-import { PendingAmounts, Pool, PoolType } from '@libs/types/General';
+import { PendingAmounts, Pool, StaticPoolInfo } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -10,7 +10,6 @@ import {
     PoolCommitter,
     LeveragedPool,
     PoolToken,
-    TestToken,
     PoolKeeper__factory,
     PoolKeeper,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
@@ -24,89 +23,74 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
  * @returns a Pool object
  */
 export const initPool: (
-    pool: PoolType,
+    pool: StaticPoolInfo,
     provider: ethers.providers.JsonRpcProvider | ethers.providers.WebSocketProvider,
 ) => Promise<Pool> = async (pool, provider) => {
     const contract = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
 
-    const [
-        updateInterval,
-        lastUpdate,
-        shortBalance,
-        longBalance,
-        oraclePrice,
-        quoteToken,
-        longToken,
-        shortToken,
-        poolCommitter,
-        leverageAmount,
-    ] = await Promise.all([
-        contract.updateInterval(),
-        contract.lastPriceTimestamp(),
-        contract.shortBalance(),
-        contract.longBalance(),
-        contract.getOraclePrice(),
-        contract.quoteToken(),
-        contract.tokens(0),
-        contract.tokens(1),
-        contract.poolCommitter(),
-        contract.leverageAmount(),
+    const [lastUpdate, shortBalance, longBalance, oraclePrice] = await Promise.all([
+        contract.lastPriceTimestamp({
+            blockTag: 'latest',
+        }),
+        contract.shortBalance({
+            blockTag: 'latest',
+        }),
+        contract.longBalance({
+            blockTag: 'latest',
+        }),
+        contract.getOraclePrice({
+            blockTag: 'latest',
+        }),
     ]);
 
-    const [frontRunningInterval, keeper, name] = await Promise.all([
-        contract.frontRunningInterval(),
-        contract.keeper(),
-        contract.poolName(),
-    ]);
-
-    console.debug(
-        `Update interval: ${updateInterval}, lastUpdate: ${lastUpdate.toNumber()}, frontRunningInterval: ${frontRunningInterval}`,
-    );
+    console.debug(`LastUpdate: ${lastUpdate.toNumber()}`);
 
     // fetch short and long tokeninfo
-    const shortTokenInstance = new ethers.Contract(shortToken, TestToken__factory.abi, provider) as PoolToken;
-    const [shortTokenName, shortTokenSymbol, shortTokenSupply, shortTokenDecimals] = await Promise.all([
-        shortTokenInstance.name(),
-        shortTokenInstance.symbol(),
-        shortTokenInstance.totalSupply(),
-        shortTokenInstance.decimals(),
-    ]);
-
-    const longTokenInstance = new ethers.Contract(longToken, TestToken__factory.abi, provider) as PoolToken;
-    const [longTokenName, longTokenSymbol, longTokenSupply, longTokenDecimals] = await Promise.all([
-        longTokenInstance.name(),
-        longTokenInstance.symbol(),
-        longTokenInstance.totalSupply(),
-        longTokenInstance.decimals(),
-    ]);
-
-    // fetch quote token info
-    const quoteTokenInstance = new ethers.Contract(quoteToken, TestToken__factory.abi, provider) as TestToken;
-    const [quoteTokenName, quoteTokenSymbol, quoteTokenDecimals] = await Promise.all([
-        quoteTokenInstance.name(),
-        quoteTokenInstance.symbol(),
-        quoteTokenInstance.decimals(),
-    ]);
+    const shortTokenInstance = new ethers.Contract(
+        pool.shortToken.address,
+        TestToken__factory.abi,
+        provider,
+    ) as PoolToken;
+    const longTokenInstance = new ethers.Contract(
+        pool.longToken.address,
+        TestToken__factory.abi,
+        provider,
+    ) as PoolToken;
+    const [longTokenSupply, shortTokenSupply] = await Promise.all([
+        longTokenInstance.totalSupply({
+            blockTag: 'latest',
+        }),
+        shortTokenInstance.totalSupply({
+            blockTag: 'latest',
+        }),
+    ]).catch((err) => {
+        console.error('Failed to fetch short and long supply', err);
+        return [ethers.BigNumber.from(0), ethers.BigNumber.from(0)];
+    });
 
     // fetch minimum commit size
     const poolCommitterInstance = new ethers.Contract(
-        poolCommitter,
+        pool.committer.address,
         PoolCommitter__factory.abi,
         provider,
     ) as PoolCommitter;
-    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize();
+    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize({
+        blockTag: 'latest',
+    });
 
     // fetch last keeper price
-    const keeperInstance = new ethers.Contract(keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
+    const keeperInstance = new ethers.Contract(pool.keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
 
-    const lastPrice = await keeperInstance.executionPrice(pool.address);
+    const lastPrice = await keeperInstance.executionPrice(pool.address, {
+        blockTag: 'latest',
+    });
 
-    console.debug('Leverage still whack', new BigNumber(leverageAmount).toNumber());
+    const quoteTokenDecimals = pool.quoteToken.decimals;
+
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
-    const leverage = parseInt(name.split('-')?.[0] ?? 1);
+    const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
     return {
         ...pool,
-        updateInterval: new BigNumber(updateInterval.toString()),
         lastUpdate: new BigNumber(lastUpdate.toString()),
         lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
         shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
@@ -114,9 +98,9 @@ export const initPool: (
         nextShortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
         nextLongBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
-        frontRunningInterval: new BigNumber(frontRunningInterval.toString()),
         committer: {
-            address: poolCommitter,
+            address: pool.committer.address,
+            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
             pendingLong: {
                 mint: new BigNumber(0),
                 burn: new BigNumber(0),
@@ -126,36 +110,25 @@ export const initPool: (
                 burn: new BigNumber(0),
             },
             allUnexecutedCommits: [],
-            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
         },
-        keeper,
         // leverage: new BigNumber(leverageAmount.toString()), //TODO add this back when they change the units
         leverage: leverage,
         longToken: {
-            address: longToken,
-            name: longTokenName,
-            symbol: longTokenSymbol,
-            decimals: longTokenDecimals,
+            ...pool.longToken,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatUnits(longTokenSupply, quoteTokenDecimals)),
             side: SideEnum.long,
         },
         shortToken: {
-            address: shortToken,
-            name: shortTokenName,
-            symbol: shortTokenSymbol,
-            decimals: shortTokenDecimals,
+            ...pool.shortToken,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
             supply: new BigNumber(ethers.utils.formatUnits(shortTokenSupply, quoteTokenDecimals)),
             side: SideEnum.short,
         },
         quoteToken: {
-            address: quoteToken,
-            name: quoteTokenName,
-            symbol: quoteTokenSymbol,
-            decimals: quoteTokenDecimals,
+            ...pool.quoteToken,
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
@@ -242,7 +215,9 @@ export const fetchTokenBalances: (
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.balanceOf(account);
+            return tokenContract.balanceOf(account, {
+                blockTag: 'latest',
+            });
         }),
     );
 };
@@ -256,7 +231,9 @@ export const fetchTokenApprovals: (
     return Promise.all(
         tokens.map((token) => {
             const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
-            return tokenContract.allowance(account, pool);
+            return tokenContract.allowance(account, pool, {
+                blockTag: 'latest',
+            });
         }),
     );
 };

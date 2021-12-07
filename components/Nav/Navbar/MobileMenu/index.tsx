@@ -75,7 +75,17 @@ export default (({ account, className }) => {
                                             onClick={() => handleRoute('/')}
                                         >
                                             <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
-                                            Trade
+                                            Buy/Sell
+                                        </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route === 'mint-burn' ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/mint-burn')}
+                                        >
+                                            <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
+                                            Mint/Burn
                                         </div>
                                         <div
                                             className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
@@ -93,6 +103,16 @@ export default (({ account, className }) => {
                                         >
                                             <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Stake" />
                                             Stake
+                                        </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('bridge') ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/bridge')}
+                                        >
+                                            <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Bridge" />
+                                            Bridge
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
