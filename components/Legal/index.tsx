@@ -1,6 +1,6 @@
 import React from 'react';
 import NavBar from '@components/Nav';
-import Footer from '@components/Footer';
+import Footer from '@organisms/Footer';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import TWPopup from '@components/General/TWPopup';

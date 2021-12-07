@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
+import Footer from '@organisms/Footer';
 import { PoolStore } from '@context/PoolContext';
 import { ArbitrumBridge } from '@archetypes/ArbitrumBridge';
 import { ArbitrumBridgeStore } from '@context/ArbitrumBridgeContext';

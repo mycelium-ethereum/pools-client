@@ -29,6 +29,15 @@
       "@components/*": [
         "components/*"
       ],
+      "@atoms/*": [
+        "atoms/*"
+      ],
+      "@organisms/*": [
+        "organisms/*"
+      ],
+      "@molecules/*": [
+        "molecules/*"
+      ],
       "@types/*": [
         "types/*"
       ],

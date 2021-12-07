@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
+import Footer from '@organisms/Footer';
 import { Browse } from '@archetypes/Browse';
 import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';

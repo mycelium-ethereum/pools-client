@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
+import Footer from '@organisms/Footer';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 import StakePool from '@archetypes/Stake/StakePool';
