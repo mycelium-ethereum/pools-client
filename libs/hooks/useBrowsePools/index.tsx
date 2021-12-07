@@ -110,6 +110,7 @@ export default (() => {
                         network: network as AvailableNetwork,
                         timestamp: lastUpdate.toNumber(),
                         tvl: new BigNumber(tvl),
+                        antecedentTVL: new BigNumber(tvl),
                         newPrice: new BigNumber(0),
                         oldPrice: new BigNumber(0),
                         longTokenBalance: new BigNumber(0),

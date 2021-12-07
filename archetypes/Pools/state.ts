@@ -1,4 +1,5 @@
 import { Upkeep } from '@libs/hooks/useUpkeeps';
+import BigNumber from 'bignumber.js';
 
 export enum MarketFilterEnum {
     All = 'All',
@@ -51,7 +52,9 @@ export interface BrowseTableRowData {
     nextRebalance: number;
     frontRunning: number;
 
-    pastUpkeep: Upkeep;
+    pastUpkeep: Upkeep & {
+        antecedentTVL: BigNumber;
+    };
 }
 
 export interface BrowseState {

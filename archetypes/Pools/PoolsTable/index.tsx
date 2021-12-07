@@ -181,7 +181,15 @@ const PoolRow: React.FC<
 
     const skewDelta = calcPercentageDifference(pool.nextSkew, pool.skew);
     const tvlDelta = calcPercentageDifference(pool.nextTVL, pool.tvl);
+    const pastTvlDelta = calcPercentageDifference(
+        pool.pastUpkeep.tvl.toNumber(),
+        pool.pastUpkeep.antecedentTVL.toNumber(),
+    );
     const basePriceDelta = calcPercentageDifference(pool.lastPrice, pool.oraclePrice);
+    const pastBasePriceDelta = calcPercentageDifference(
+        pool.pastUpkeep.newPrice.toNumber(),
+        pool.pastUpkeep.oldPrice.toNumber(),
+    );
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
@@ -218,12 +226,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
                             <div className="mt-1">
-                                <UpOrDown
-                                    value={calcPercentageDifference(
-                                        pool.pastUpkeep.newPrice.toNumber(),
-                                        pool.pastUpkeep.oldPrice.toNumber(),
-                                    )}
-                                />
+                                <UpOrDown value={pastBasePriceDelta} />
                             </div>
                         </>
                     )}
@@ -237,7 +240,12 @@ const PoolRow: React.FC<
                             </div>
                         </>
                     ) : (
-                        <div>{toApproxCurrency(pool.tvl)}</div>
+                        <>
+                            <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
+                            <div className="mt-1">
+                                <UpOrDown value={pastTvlDelta} />
+                            </div>
+                        </>
                     )}
                 </TableRowCell>
                 <TableRowCell
