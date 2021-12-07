@@ -143,7 +143,6 @@ export default (() => {
         () =>
             attachedBalancerPrices.map((row) => {
                 const lowerCaseAddress = row.address.toLowerCase();
-                console.log(upkeeps, '???');
                 for (const upkeep of upkeeps) {
                     if (upkeep.pool.toLowerCase() === lowerCaseAddress) {
                         return {

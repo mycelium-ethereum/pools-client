@@ -15,10 +15,18 @@ export default (({ toggleValue, value }) => {
             />
 
             <div className={classNames(icon, value ? 'opacity-100' : 'opacity-0', 'left-[0.35rem] cursor-pointer')}>
-                %
+                <svg viewBox="0 0 20 20" className="h-4">
+                    <text x="0" y="20">
+                        %
+                    </text>
+                </svg>
             </div>
             <div className={classNames(icon, value ? 'opacity-0' : 'opacity-100', 'right-[0.4rem] cursor-pointer')}>
-                #
+                <svg viewBox="0 0 20 20" className="h-4">
+                    <text x="7" y="20">
+                        #
+                    </text>
+                </svg>
             </div>
         </div>
     );
