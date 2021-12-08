@@ -3,6 +3,9 @@ import BigNumber from 'bignumber.js';
 import React, { useReducer } from 'react';
 import TokenTable from './TokenTable';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+
+import CTABackground from '@public/img/cta-bg.svg';
 
 export enum LoadingState {
     Idle = 0,
@@ -92,69 +95,119 @@ const overviewCard = 'xl:w-2/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme
 
 const guideCard = 'sm:w-1/2 xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background';
 
+const ctaCard = 'relative overflow-hidden sm:w-1/2 xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50';
+
 const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
 
 // const Overview
 export default (() => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
     const { rows } = useUserTokenOverview();
+    const { account } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
 
-    return (
-        <div className="mt-3">
-            <div className="flex mb-5 flex-col xl:flex-row">
-                <div className={overviewCard}>
-                    <h1 className="relative text-theme-text text-xl mr-[20px]">
-                        Trade Portfolio Overview
-                        <div className="absolute right-0 top-0">
-                            <Dropdown
-                                className="mr-2"
-                                size={'xs'}
-                                value={state.timeScale.toString()}
-                                options={Object.keys(TimescaleEnum).map((key) => ({
-                                    key: key,
-                                    text: TimescaleEnum[key as keyof typeof TimescaleEnum],
-                                }))}
-                                onSelect={(val) => dispatch({ type: 'setTimescale', timeScale: val as TimescaleEnum })}
-                            />
-                            <Dropdown
-                                size={'xs'}
-                                value={state.currency}
-                                options={Object.keys(CurrencyEnum).map((key) => ({
-                                    key: key,
-                                    text: CurrencyEnum[key as keyof typeof CurrencyEnum],
-                                }))}
-                                onSelect={(val) => dispatch({ type: 'setCurrency', currency: val as CurrencyEnum })}
-                            />
+    const emptyState = () => {
+        return (
+            <div className="mt-3">
+                <div className="flex mb-5 flex-col xl:flex-row">
+                    <div className={overviewCard}>
+                        <h1 className="relative text-theme-text text-xl mr-[20px]">Trade Portfolio Overview</h1>
+                        <div className="flex flex-col lg:flex-row justify-between my-2">
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl opacity-50">0.00</div>
+                                <div className="text-md opacity-50">Portfolio Valuation</div>
+                            </div>
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl opacity-50">0.00</div>
+                                <div className="text-md opacity-50">Unrealised Profit and Loss</div>
+                            </div>
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl opacity-50">0.00</div>
+                                <div className="text-md opacity-50">Net Acquisition Costs</div>
+                            </div>
                         </div>
-                    </h1>
-                    <div className="flex flex-col lg:flex-row justify-between my-2">
-                        <div className={infoCard}>
-                            <div className="font-bold text-2xl">$400,000</div>
-                            <div className="text-md">Portfolio Valuation</div>
-                        </div>
-                        <div className={infoCard}>
-                            <div className="font-bold text-2xl">$40,000</div>
-                            <div className="text-md">Unrealised Profit and Loss</div>
-                        </div>
-                        <div className={infoCard}>
-                            <div className="font-bold text-2xl">$360,000</div>
-                            <div className="text-md">Net Acquisition Costs</div>
+                    </div>
+                    <div className={ctaCard}>
+                        <CTABackground className="w-full absolute bottom-0 right-0" />
+                        <div className="relative flex flex-col justify-center items-center p-10">
+                            <div className="text-white mb-10 text-2xl text-center">
+                                Connect to Arbitrum to get started with Perpetual Pools
+                            </div>
+                            <div
+                                className="bg-blue-600 flex items-center justify-center rounded-lg h-12 w-48 text-white cursor-pointer"
+                                onClick={handleConnect}
+                            >
+                                Connect Wallet
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className={guideCard}>
-                    <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                    <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
-                    <div className="mb-3">
-                        A step-by-step on minting and burning tokens using the Perpetual Pools interface.
+            </div>
+        );
+    };
+
+    const filledState = () => {
+        return (
+            <div className="mt-3">
+                <div className="flex mb-5 flex-col xl:flex-row">
+                    <div className={overviewCard}>
+                        <h1 className="relative text-theme-text text-xl mr-[20px]">
+                            Trade Portfolio Overview
+                            <div className="absolute right-0 top-0">
+                                <Dropdown
+                                    className="mr-2"
+                                    size={'xs'}
+                                    value={state.timeScale.toString()}
+                                    options={Object.keys(TimescaleEnum).map((key) => ({
+                                        key: key,
+                                        text: TimescaleEnum[key as keyof typeof TimescaleEnum],
+                                    }))}
+                                    onSelect={(val) =>
+                                        dispatch({ type: 'setTimescale', timeScale: val as TimescaleEnum })
+                                    }
+                                />
+                                <Dropdown
+                                    size={'xs'}
+                                    value={state.currency}
+                                    options={Object.keys(CurrencyEnum).map((key) => ({
+                                        key: key,
+                                        text: CurrencyEnum[key as keyof typeof CurrencyEnum],
+                                    }))}
+                                    onSelect={(val) => dispatch({ type: 'setCurrency', currency: val as CurrencyEnum })}
+                                />
+                            </div>
+                        </h1>
+                        <div className="flex flex-col lg:flex-row justify-between my-2">
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl">$400,000</div>
+                                <div className="text-md">Portfolio Valuation</div>
+                            </div>
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl">$40,000</div>
+                                <div className="text-md">Unrealised Profit and Loss</div>
+                            </div>
+                            <div className={infoCard}>
+                                <div className="font-bold text-2xl">$360,000</div>
+                                <div className="text-md">Net Acquisition Costs</div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="text-tracer-400 underline">Read guide</div>
+                    <div className={guideCard}>
+                        <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
+                        <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
+                        <div className="mb-3">
+                            A step-by-step on minting and burning tokens using the Perpetual Pools interface.
+                        </div>
+                        <div className="text-tracer-400 underline">Read guide</div>
+                    </div>
+                </div>
+                <div className={mainCard}>
+                    <h1 className="text-theme-text text-xl">Token Holdings</h1>
+                    <TokenTable rows={rows} />
                 </div>
             </div>
-            <div className={mainCard}>
-                <h1 className="text-theme-text text-xl">Token Holdings</h1>
-                <TokenTable rows={rows} />
-            </div>
-        </div>
-    );
+        );
+    };
+
+    return <>{account ? filledState() : emptyState()}</>;
 }) as React.FC;
