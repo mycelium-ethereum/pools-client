@@ -6,8 +6,9 @@ import { TokenRowProps } from '..';
 import { ethers } from 'ethers';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { tickerToName, toApproxCurrency } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import Button from '@components/General/Button';
 
 export default (({ rows }) => {
     const { provider } = useWeb3();
@@ -17,11 +18,10 @@ export default (({ rows }) => {
             <Table>
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell>Holdings (Tokens)</TableHeaderCell>
-                    <TableHeaderCell>Last Price (USDC)</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Net Value (USDC)</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Deposits (USDC)</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Profits And Losses</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((token, index) => {
@@ -47,17 +47,37 @@ export const TokenRow: React.FC<
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(symbol)} className="inline mr-2" />
-                {name}
+                <div className="flex">
+                    <Logo ticker={tokenSymbolToLogoTicker(symbol)} size="md" className="inline mr-2 my-auto" />
+                    <div className="my-auto">
+                        <div className="font-bold">{tickerToName(name)}</div>
+                        <div className="text-xs">{name.split('-')[1]}</div>
+                    </div>
+                </div>
             </TableRowCell>
-            <TableRowCell>{holdings.toFixed(2)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(price)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(netValue)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(deposits)}</TableRowCell>
+            <TableRowCell>
+                <div>{toApproxCurrency(netValue)}</div>
+                <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
+            </TableRowCell>
+            <TableRowCell>
+                <div>{toApproxCurrency(deposits)}</div>
+                <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
+            </TableRowCell>
             <TableRowCell className={pnl.gt(0) ? 'text-green-500' : 'text-red-500'}>
                 {toApproxCurrency(pnl)}
             </TableRowCell>
-            <TableRowCell className="flex text-right">
+            <TableRowCell>{/*Notional Value Cell*/}</TableRowCell>
+            <TableRowCell className="flex">
+                <Button
+                    className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
+                    size="xs"
+                    variant="primary-light"
+                >
+                    Stake
+                </Button>
+                <Button className="mx-1 w-[70px] my-auto font-bold uppercase " size="xs" variant="primary-light">
+                    Burn
+                </Button>
                 <Actions
                     token={{
                         address,
