@@ -4,6 +4,7 @@ import React from 'react';
 import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum, DeltaEnum } from '../state';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import DenotionToggle from './DenotionToggle';
+import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -35,20 +36,26 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="flex-grow" />
-                <div className="hidden md:block mr-4">
-                    <h3 className="mb-1 text-theme-text">Denotion</h3>
-                    <DenotionToggle
-                        toggleValue={() => {
-                            dispatch({
-                                type: 'setDenotion',
-                                denotion:
-                                    state.deltaDenotion === DeltaEnum.Numeric
-                                        ? DeltaEnum.Percentile
-                                        : DeltaEnum.Numeric,
-                            });
-                        }}
-                        value={state.deltaDenotion === DeltaEnum.Numeric}
-                    />
+                <div className="hidden md:flex mr-4 flex-col">
+                    <span className="inline-flex">
+                        <ArrowDown className={'rotate-180 text-green-600'} />
+                        <ArrowDown className="text-red-600 mr-1" />
+                        <h3 className="mb-1 text-theme-text">Denotion</h3>
+                    </span>
+                    <div className="mt-auto ml-auto">
+                        <DenotionToggle
+                            toggleValue={() => {
+                                dispatch({
+                                    type: 'setDenotion',
+                                    denotion:
+                                        state.deltaDenotion === DeltaEnum.Numeric
+                                            ? DeltaEnum.Percentile
+                                            : DeltaEnum.Numeric,
+                                });
+                            }}
+                            value={state.deltaDenotion === DeltaEnum.Numeric}
+                        />
+                    </div>
                 </div>
                 <div className="hidden md:block mr-4">
                     <h3 className="mb-1 text-theme-text">Market</h3>

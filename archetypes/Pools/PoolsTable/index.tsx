@@ -177,7 +177,6 @@ const PoolRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
-    console.log(pool, 'Ppoool just before it gets in');
 
     useEffect(() => {
         if (isBeforeFrontRunning) {
