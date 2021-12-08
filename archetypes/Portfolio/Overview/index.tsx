@@ -29,12 +29,6 @@ export type TokenRowProps = {
     deposits: BigNumber; // amount of USDC deposited
 };
 
-// enum KeyEnum {
-//     Deposits = 0,
-//     Profit = 1,
-//     Loss = 2,
-// }
-
 export interface PortfolioOverviewState {
     pnlHistorics: any[];
     loadingState: LoadingState;
@@ -141,21 +135,10 @@ export default (() => {
                         <div className={infoCard}>
                             <div className="font-bold text-2xl">$40,000</div>
                             <div className="text-md">Unrealised Profit and Loss</div>
-                            {/*<div className="text-xs inline-flex justify-center">*/}
-                            {/*    <CircleKey className={`mr-1 bg-${COLOR_MAP[KeyEnum.Deposits]}`} /> Deposits*/}
-                            {/*</div>*/}
                         </div>
                         <div className={infoCard}>
                             <div className="font-bold text-2xl">$360,000</div>
                             <div className="text-md">Net Acquisition Costs</div>
-                            {/*<div className="text-xs">*/}
-                            {/*    <span className="inline-flex justify-center">*/}
-                            {/*        <CircleKey className={`mr-1 bg-${COLOR_MAP[KeyEnum.Profit]}`} /> Profits*/}
-                            {/*    </span>*/}
-                            {/*    <span className="ml-2 inline-flex justify-center">*/}
-                            {/*        <CircleKey className={`mr-1 bg-${COLOR_MAP[KeyEnum.Loss]}`} /> Losses*/}
-                            {/*    </span>*/}
-                            {/*</div>*/}
                         </div>
                     </div>
                 </div>
@@ -175,13 +158,3 @@ export default (() => {
         </div>
     );
 }) as React.FC;
-
-// const COLOR_MAP: Record<KeyEnum, string> = {
-//     [KeyEnum.Loss]: 'red-500',
-//     [KeyEnum.Profit]: 'green-500',
-//     [KeyEnum.Deposits]: 'tracer-400',
-// };
-//
-// const CircleKey: React.FC<{
-//     className?: string;
-// }> = ({ className }) => <div className={classNames(`rounded-full h-1 w-1 inline-block m-auto`, className ?? '')} />;
