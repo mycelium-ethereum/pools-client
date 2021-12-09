@@ -11,7 +11,6 @@ import { BigNumber } from 'bignumber.js';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useUpkeeps } from '../useUpkeeps';
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 // const useBrowsePools
 export default (() => {
@@ -107,16 +106,27 @@ export default (() => {
                     frontRunning: frontRunningInterval.toNumber(),
                     pastUpkeep: {
                         pool: address,
-                        network: network as AvailableNetwork,
                         timestamp: lastUpdate.toNumber(),
-                        tvl: new BigNumber(tvl),
-                        antecedentTVL: new BigNumber(tvl),
-                        newPrice: new BigNumber(0),
-                        oldPrice: new BigNumber(0),
-                        longTokenBalance: new BigNumber(0),
-                        shortTokenBalance: new BigNumber(0),
-                        longTokenSupply: new BigNumber(0),
-                        shortTokenSupply: new BigNumber(0),
+                        tvl: tvl,
+                        newPrice: 0,
+                        oldPrice: 0,
+                        longTokenBalance: 0,
+                        shortTokenBalance: 0,
+                        longTokenSupply: 0,
+                        shortTokenSupply: 0,
+                        skew: 1,
+                    },
+                    antecedentUpkeep: {
+                        pool: address,
+                        timestamp: lastUpdate.toNumber(),
+                        tvl: tvl,
+                        newPrice: 0,
+                        oldPrice: 0,
+                        longTokenBalance: 0,
+                        shortTokenBalance: 0,
+                        longTokenSupply: 0,
+                        shortTokenSupply: 0,
+                        skew: 1,
                     },
                 });
             });
@@ -143,11 +153,12 @@ export default (() => {
         () =>
             attachedBalancerPrices.map((row) => {
                 const lowerCaseAddress = row.address.toLowerCase();
-                for (const upkeep of upkeeps) {
-                    if (upkeep.pool.toLowerCase() === lowerCaseAddress) {
+                for (const pool of Object.keys(upkeeps)) {
+                    if (pool === lowerCaseAddress) {
                         return {
                             ...row,
-                            pastUpkeep: upkeep,
+                            pastUpkeep: upkeeps[pool][0],
+                            antecedentUpkeep: upkeeps[pool][1],
                         };
                     }
                 }

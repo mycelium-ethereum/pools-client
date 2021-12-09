@@ -5,19 +5,21 @@ import { useEffect, useState } from 'react';
 import { poolList } from '@libs/constants/poolLists';
 import { StaticPoolInfo } from '@libs/types/General';
 import { ARBITRUM } from '@libs/constants';
+import { calcSkew, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 export type Upkeep = {
     pool: string;
-    network: AvailableNetwork;
     timestamp: number;
-    newPrice: BigNumber;
-    oldPrice: BigNumber;
-    tvl: BigNumber;
-    antecedentTVL: BigNumber;
-    longTokenBalance: BigNumber;
-    longTokenSupply: BigNumber;
-    shortTokenBalance: BigNumber;
-    shortTokenSupply: BigNumber;
+    newPrice: number;
+    oldPrice: number;
+    tvl: number;
+    longTokenBalance: number;
+    longTokenSupply: number;
+    shortTokenBalance: number;
+    shortTokenSupply: number;
+    longTokenPrice: number;
+    shortTokenPrice: number;
+    skew: number;
 };
 
 type RawUpkeep = {
@@ -32,15 +34,12 @@ type RawUpkeep = {
     block_timestamp: string;
 };
 
-// some arbitrary buffer since the timestamps arent exact
-const TIMESTAMP_BUFFER = 100;
-
 const POOLS_API = 'http://dev.api.tracer.finance/pools/upkeeps';
 // https://dev.api.tracer.finance/pools/upkeeps?network=chain_id&poolAddress=pool_address&committerAddress=committer_address
 
 // const useUpkeeps
-export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (network) => {
-    const [upkeeps, setUpkeeps] = useState<Upkeep[]>([]);
+export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
+    const [upkeeps, setUpkeeps] = useState<Record<string, Upkeep[]>>({});
 
     useEffect(() => {
         let mounted = true;
@@ -52,6 +51,7 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (
             // const from = now - (poolInfo.updateInterval.times(2).toNumber());
             // TODO remove this is for testing
             const from = 1638826512;
+
             const rawUpkeeps = await fetch(`${POOLS_API}?network=${network}&from=${from}`)
                 .then((res) => {
                     return res.json();
@@ -65,52 +65,21 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (
                 console.info('Fetched upkeeps', rawUpkeeps.message);
             } else if (rawUpkeeps.data) {
                 if (mounted) {
-                    const lastUpkeep = from + poolInfo.updateInterval.toNumber() - TIMESTAMP_BUFFER;
-
-                    const oldestUpkeeps: Record<string, RawUpkeep> = {};
-                    const pastUpkeeps: RawUpkeep[] = [];
+                    const upkeepMapping: Record<string, Upkeep[]> = {};
 
                     for (const upkeep of rawUpkeeps.data) {
-                        if (parseInt(upkeep.block_timestamp) < lastUpkeep) {
-                            oldestUpkeeps[upkeep.pool_address] = upkeep;
+                        if (upkeepMapping[upkeep.pool_address]) {
+                            upkeepMapping[upkeep.pool_address].push(parseUpkeep(upkeep, USDC_DECIMALS));
                         } else {
-                            pastUpkeeps.push(upkeep);
+                            upkeepMapping[upkeep.pool_address] = [parseUpkeep(upkeep, USDC_DECIMALS)];
                         }
                     }
 
-                    setUpkeeps(
-                        pastUpkeeps.map((upkeep: RawUpkeep) => {
-                            const antecedentUpkeep = oldestUpkeeps[upkeep.pool_address] ?? upkeep;
-                            const longTokenBalance = new BigNumber(
-                                ethers.utils.formatUnits(upkeep.long_balance, USDC_DECIMALS),
-                            );
-                            const shortTokenBalance = new BigNumber(
-                                ethers.utils.formatUnits(upkeep.short_balance, USDC_DECIMALS),
-                            );
-                            const antecedentLongTokenBalance = new BigNumber(
-                                ethers.utils.formatUnits(antecedentUpkeep.long_balance, USDC_DECIMALS),
-                            );
-                            const antecedentShortTokenBalance = new BigNumber(
-                                ethers.utils.formatUnits(antecedentUpkeep.short_balance, USDC_DECIMALS),
-                            );
-                            // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
-                            return {
-                                pool: upkeep.pool_address,
-                                oldPrice: new BigNumber(ethers.utils.formatEther(upkeep.old_price)),
-                                newPrice: new BigNumber(ethers.utils.formatEther(upkeep.new_price)),
-                                tvl: longTokenBalance.plus(shortTokenBalance),
-                                antecedentTVL: antecedentLongTokenBalance.plus(antecedentShortTokenBalance),
-                                longTokenBalance: longTokenBalance,
-                                longTokenSupply: new BigNumber(
-                                    ethers.utils.formatUnits(upkeep.long_token_supply, USDC_DECIMALS),
-                                ),
-                                shortTokenBalance: shortTokenBalance,
-                                shortTokenSupply: new BigNumber(
-                                    ethers.utils.formatUnits(upkeep.short_token_supply, USDC_DECIMALS),
-                                ),
-                            } as Upkeep;
-                        }),
-                    );
+                    for (const pool of Object.keys(upkeepMapping)) {
+                        // array is sorted by newest to oldest such that we can trim the last 2 upkeeps
+                        upkeepMapping[pool] = upkeepMapping[pool].sort((a, b) => b.timestamp - a.timestamp);
+                    }
+                    setUpkeeps(upkeepMapping);
                 }
             }
         };
@@ -125,4 +94,33 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Upkeep[] = (
     }, [network]);
 
     return upkeeps;
+};
+
+const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, decimals) => {
+    const longTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.long_balance, decimals));
+
+    const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.short_balance, decimals));
+
+    const shortTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.short_token_supply, decimals));
+
+    const longTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.long_token_supply, decimals));
+
+    const longTokenPrice = calcTokenPrice(longTokenBalance, longTokenSupply);
+    const shortTokenPrice = calcTokenPrice(shortTokenBalance, shortTokenSupply);
+
+    // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
+    return {
+        pool: upkeep.pool_address,
+        timestamp: parseInt(upkeep.block_timestamp),
+        oldPrice: new BigNumber(ethers.utils.formatEther(upkeep.old_price)).toNumber(),
+        newPrice: new BigNumber(ethers.utils.formatEther(upkeep.new_price)).toNumber(),
+        tvl: longTokenBalance.plus(shortTokenBalance).toNumber(),
+        longTokenBalance: longTokenBalance.toNumber(),
+        longTokenSupply: longTokenSupply.toNumber(),
+        shortTokenBalance: shortTokenBalance.toNumber(),
+        shortTokenSupply: shortTokenSupply.toNumber(),
+        longTokenPrice: longTokenPrice.toNumber(),
+        shortTokenPrice: shortTokenPrice.toNumber(),
+        skew: calcSkew(shortTokenBalance, longTokenBalance).toNumber(),
+    };
 };

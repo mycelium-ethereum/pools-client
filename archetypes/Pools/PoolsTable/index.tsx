@@ -218,8 +218,8 @@ const PoolRow: React.FC<
                             <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
                             <div className="mt-1">
                                 <UpOrDown
-                                    oldValue={pool.pastUpkeep.oldPrice.toNumber()}
-                                    newValue={pool.pastUpkeep.newPrice.toNumber()}
+                                    oldValue={pool.pastUpkeep.oldPrice}
+                                    newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotion={deltaDenotion}
                                 />
                             </div>
@@ -239,8 +239,8 @@ const PoolRow: React.FC<
                             <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
                             <div className="mt-1">
                                 <UpOrDown
-                                    oldValue={pool.pastUpkeep.antecedentTVL.toNumber()}
-                                    newValue={pool.pastUpkeep.tvl.toNumber()}
+                                    oldValue={pool.antecedentUpkeep.tvl}
+                                    newValue={pool.pastUpkeep.tvl}
                                     deltaDenotion={deltaDenotion}
                                 />
                             </div>
@@ -261,7 +261,16 @@ const PoolRow: React.FC<
                             </div>
                         </>
                     ) : (
-                        <div>{pool.skew.toFixed(2)}</div>
+                        <>
+                            <div>{pool.skew.toFixed(2)}</div>
+                            <div className="mt-1">
+                                <UpOrDown
+                                    oldValue={pool.antecedentUpkeep.skew}
+                                    newValue={pool.pastUpkeep.skew}
+                                    deltaDenotion={deltaDenotion}
+                                />
+                            </div>
+                        </>
                     )}
                 </TableRowCell>
                 {showNextRebalance ? (
@@ -295,20 +304,40 @@ const PoolRow: React.FC<
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
+                    antecedentUpkeepTokenInfo={{
+                        tokenPrice: pool.antecedentUpkeep.longTokenPrice,
+                        tokenBalance: pool.antecedentUpkeep.longTokenBalance,
+                    }}
+                    pastUpkeepTokenInfo={{
+                        tokenPrice: pool.pastUpkeep.longTokenPrice,
+                        tokenBalance: pool.pastUpkeep.longTokenBalance,
+                    }}
                     tokenInfo={pool.longToken}
                     deltaDenotion={deltaDenotion}
-                    {...pool}
+                    leverage={pool.leverage}
+                    address={pool.address}
+                    decimals={pool.decimals}
                 />
             </TableRow>
             <TableRow rowNumber={index}>
                 <TokenRows
                     side={SideEnum.short}
                     provider={provider}
-                    showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
+                    showNextRebalance={showNextRebalance}
+                    antecedentUpkeepTokenInfo={{
+                        tokenPrice: pool.antecedentUpkeep.shortTokenPrice,
+                        tokenBalance: pool.antecedentUpkeep.shortTokenBalance,
+                    }}
+                    pastUpkeepTokenInfo={{
+                        tokenPrice: pool.pastUpkeep.shortTokenPrice,
+                        tokenBalance: pool.pastUpkeep.shortTokenBalance,
+                    }}
                     tokenInfo={pool.shortToken}
                     deltaDenotion={deltaDenotion}
-                    {...pool}
+                    leverage={pool.leverage}
+                    address={pool.address}
+                    decimals={pool.decimals}
                 />
             </TableRow>
         </>
@@ -335,6 +364,14 @@ const TokenRows: React.FC<
         leverage: number;
         address: string;
         decimals: number;
+        pastUpkeepTokenInfo: {
+            tokenPrice: number;
+            tokenBalance: number;
+        };
+        antecedentUpkeepTokenInfo: {
+            tokenPrice: number;
+            tokenBalance: number;
+        };
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
 > = ({
@@ -347,6 +384,8 @@ const TokenRows: React.FC<
     onClickMintBurn,
     showNextRebalance,
     deltaDenotion,
+    antecedentUpkeepTokenInfo,
+    pastUpkeepTokenInfo,
 }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
@@ -368,7 +407,16 @@ const TokenRows: React.FC<
                         </div>
                     </>
                 ) : (
-                    toApproxCurrency(tokenInfo.tvl)
+                    <>
+                        <div className="flex">
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenBalance)}</div>
+                            <UpOrDown
+                                oldValue={antecedentUpkeepTokenInfo.tokenBalance}
+                                newValue={pastUpkeepTokenInfo.tokenBalance}
+                                deltaDenotion={deltaDenotion}
+                            />
+                        </div>
+                    </>
                 )}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
@@ -388,9 +436,20 @@ const TokenRows: React.FC<
                 {leverage}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                {showNextRebalance
-                    ? toApproxCurrency(tokenInfo.nextTCRPrice)
-                    : toApproxCurrency(tokenInfo.lastTCRPrice)}
+                {showNextRebalance ? (
+                    toApproxCurrency(tokenInfo.nextTCRPrice)
+                ) : (
+                    <>
+                        <div className="flex">
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice)}</div>
+                            <UpOrDown
+                                oldValue={antecedentUpkeepTokenInfo.tokenPrice}
+                                newValue={pastUpkeepTokenInfo.tokenPrice}
+                                deltaDenotion={deltaDenotion}
+                            />
+                        </div>
+                    </>
+                )}
             </TableRowCell>
             {showNextRebalance ? (
                 <TableRowCell size={'sm'} className={styles}>
