@@ -481,7 +481,7 @@ const TokenRows: React.FC<
                         {
                             tokenInfo.userHoldings === 0
                                 ? '-'
-                                : tokenInfo.userHoldings
+                                : tokenInfo.userHoldings.toFixed(2)
                         }
                     </div>
                     <div className="flex">
