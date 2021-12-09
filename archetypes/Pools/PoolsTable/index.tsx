@@ -216,6 +216,9 @@ const PoolRow: React.FC<
                                     oldValue={pool.lastPrice}
                                     newValue={pool.oraclePrice}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -227,6 +230,9 @@ const PoolRow: React.FC<
                                     oldValue={pool.pastUpkeep.oldPrice}
                                     newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -237,7 +243,14 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.nextTVL)}</div>
                             <div className="mt-1">
-                                <UpOrDown oldValue={pool.tvl} newValue={pool.nextTVL} deltaDenotion={deltaDenotion} />
+                                <UpOrDown
+                                    oldValue={pool.tvl}
+                                    newValue={pool.nextTVL}
+                                    deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.TVL}
+                                    showNextRebalance={showNextRebalance}
+                                />
                             </div>
                         </>
                     ) : (
@@ -248,6 +261,9 @@ const PoolRow: React.FC<
                                     oldValue={pool.antecedentUpkeep.tvl}
                                     newValue={pool.pastUpkeep.tvl}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.TVL}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -268,6 +284,9 @@ const PoolRow: React.FC<
                                     currency={false}
                                     newValue={pool.nextSkew}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.Skew}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -279,7 +298,10 @@ const PoolRow: React.FC<
                                     oldValue={pool.antecedentUpkeep.skew}
                                     newValue={pool.pastUpkeep.skew}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.Skew}
                                     currency={false}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -329,6 +351,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    poolTicker={pool.name}
                 />
             </TableRow>
             <TableRow rowNumber={index}>
@@ -350,6 +373,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    poolTicker={pool.name}
                 />
             </TableRow>
         </>
@@ -384,6 +408,7 @@ const TokenRows: React.FC<
             tokenPrice: number;
             tokenBalance: number;
         };
+        poolTicker: string;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
 > = ({
@@ -398,6 +423,7 @@ const TokenRows: React.FC<
     deltaDenotion,
     antecedentUpkeepTokenInfo,
     pastUpkeepTokenInfo,
+    poolTicker,
 }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
@@ -415,6 +441,10 @@ const TokenRows: React.FC<
                                 oldValue={tokenInfo.tvl}
                                 newValue={tokenInfo.nextTvl}
                                 deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TVL}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
                             />
                         </div>
                     </>
@@ -426,6 +456,10 @@ const TokenRows: React.FC<
                                 oldValue={antecedentUpkeepTokenInfo.tokenBalance}
                                 newValue={pastUpkeepTokenInfo.tokenBalance}
                                 deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TVL}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
                             />
                         </div>
                     </>
@@ -458,6 +492,10 @@ const TokenRows: React.FC<
                                 oldValue={antecedentUpkeepTokenInfo.tokenPrice}
                                 newValue={pastUpkeepTokenInfo.tokenPrice}
                                 deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TokenPrice}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
                             />
                         </div>
                     </>
@@ -478,19 +516,13 @@ const TokenRows: React.FC<
                 <TableRowCell size={'sm'} className={styles}>
                     <div className="flex">
                         <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
-                        {
-                            tokenInfo.userHoldings === 0
-                                ? '-'
-                                : tokenInfo.userHoldings.toFixed(2)
-                        }
+                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(2)}
                     </div>
                     <div className="flex">
                         <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
-                        {
-                            tokenInfo.userHoldings === 0
-                                ? '-'
-                                : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)
-                        }
+                        {tokenInfo.userHoldings === 0
+                            ? '-'
+                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)}
                     </div>
                 </TableRowCell>
             ) : null}
@@ -532,12 +564,47 @@ const TokenRows: React.FC<
     );
 };
 
-const UpOrDown: React.FC<{ oldValue: number; newValue: number; currency?: boolean; deltaDenotion: DeltaEnum }> = ({
-    oldValue,
-    newValue,
-    deltaDenotion,
-    currency = true,
-}) => {
+enum UpOrDownTipMetric {
+    TVL = 'TVL',
+    TokenPrice = 'Token Price',
+    Skew = 'Skew',
+    BasePrice = 'Base Price',
+}
+
+const UpOrDownTip: React.FC<{
+    metric: UpOrDownTipMetric;
+    currency: boolean;
+    side?: 'Long' | 'Short';
+    valueText: string;
+    value: number;
+    poolTicker: string;
+    showNextRebalance: boolean
+}> = ({ metric, side, valueText, value, showNextRebalance, poolTicker, children }) => {
+    const message = showNextRebalance
+        ? `The ${side ? side : ''} ${metric} is currently ${valueText} ${
+            value > 0 ? 'greater than' : 'less than'
+        } it was at the last rebalance for the ${poolTicker} pool.`
+            : `The ${side ? side : ''} ${metric} ${value > 0 ? 'increased' : 'decreased'} by ${valueText} during the last rebalance for the ${poolTicker} pool.`
+    return (
+
+        <StyledTooltip
+            title={message}
+        >
+            {children}
+        </StyledTooltip>
+    )
+};
+
+const UpOrDown: React.FC<{
+    oldValue: number;
+    newValue: number;
+    tokenMetricSide?: SideEnum;
+    poolTicker: string;
+    tooltipMetric: UpOrDownTipMetric;
+    showNextRebalance: boolean;
+    currency?: boolean;
+    deltaDenotion: DeltaEnum;
+}> = ({ oldValue, newValue, deltaDenotion, tooltipMetric, showNextRebalance, poolTicker, tokenMetricSide, currency = true }) => {
     const value = useMemo(
         () =>
             deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
@@ -545,26 +612,42 @@ const UpOrDown: React.FC<{ oldValue: number; newValue: number; currency?: boolea
     );
     const approxValue = Math.abs(parseFloat(value.toFixed(2)));
     return (
-        <div
-            className={classNames(
-                approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
-                'flex',
-            )}
-        >
-            <div className="mr-1 flex">
-                {approxValue === 0 ? (
-                    <Equal className="h-5 my-auto" />
-                ) : (
-                    <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
-                )}
-            </div>
-            <div>
-                {deltaDenotion === DeltaEnum.Numeric
+        <UpOrDownTip
+            metric={tooltipMetric}
+            valueText={
+                deltaDenotion === DeltaEnum.Numeric
                     ? currency
                         ? toApproxCurrency(value).replace('-', '')
-                        : approxValue
-                    : `${approxValue}%`}
+                        : approxValue.toString()
+                    : `${approxValue}%`
+            }
+            side={tokenMetricSide === SideEnum.long ? 'Long' : 'Short'}
+            value={value}
+            currency={currency}
+            poolTicker={poolTicker}
+            showNextRebalance={showNextRebalance} 
+        >
+            <div
+                className={classNames(
+                    approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
+                    'flex',
+                )}
+            >
+                <div className="mr-1 flex">
+                    {approxValue === 0 ? (
+                        <Equal className="h-5 my-auto" />
+                    ) : (
+                        <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
+                    )}
+                </div>
+                <div>
+                    {deltaDenotion === DeltaEnum.Numeric
+                        ? currency
+                            ? toApproxCurrency(value).replace('-', '')
+                            : approxValue
+                        : `${approxValue}%`}
+                </div>
             </div>
-        </div>
+        </UpOrDownTip>
     );
 };
