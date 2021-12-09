@@ -478,11 +478,19 @@ const TokenRows: React.FC<
                 <TableRowCell size={'sm'} className={styles}>
                     <div className="flex">
                         <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
-                        {tokenInfo.userHoldings}
+                        {
+                            tokenInfo.userHoldings === 0
+                                ? '-'
+                                : tokenInfo.userHoldings
+                        }
                     </div>
                     <div className="flex">
                         <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
-                        {toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)}
+                        {
+                            tokenInfo.userHoldings === 0
+                                ? '-'
+                                : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)
+                        }
                     </div>
                 </TableRowCell>
             ) : null}
