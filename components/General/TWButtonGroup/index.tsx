@@ -7,24 +7,36 @@ const SELECTED = {
     tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
     default:
         'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
+    greyed: 'z-10 bg-theme-background hover:bg-theme-background matrix:bg-theme-primary matrix:text-black text-white matrix:border-theme-primary rounded-full focus:border-solid',
 };
 
 const UNSELECTED = {
     tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
+    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 focus:border-transparent',
 };
 
 const BORDER_COLORS = {
     default: '',
+    greyed: 'border border-cool-gray-600',
     tracer: 'border border-theme-border focus:border-solid',
 };
 
-const BORDERS = 'first:rounded-l-md last:rounded-r-md';
+const BORDERS = {
+    rounded: 'first:rounded-l-full last:rounded-r-full',
+    default: 'first:rounded-l-md last:rounded-r-md',
+};
 
 const SIZE = {
     default: 'px-4 py-2.5 text-sm font-medium ',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
     xl: 'py-3 px-16 md:px-18 text-base font-normal',
+};
+
+const OVERALL_BACKGROUND = {
+    default: '',
+    tracer: '',
+    greyed: 'bg-cool-gray-600 rounded-full',
 };
 
 const DISABLED = 'cursor-not-allowed opacity-50';
@@ -40,7 +52,8 @@ type Option = {
     };
 };
 
-type Color = 'tracer' | 'default';
+type Color = 'tracer' | 'greyed' | 'default';
+type Borders = 'rounded' | 'default';
 type ButtonSize = 'lg' | 'xl' | 'default';
 
 export default (({
@@ -49,12 +62,13 @@ export default (({
     color = 'default',
     size = 'default',
     borderColor = 'default',
+    border = 'default',
     onClick,
     fullWidthButtons = false,
 }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
     return (
-        <span className="relative z-0 inline-flex shadow-sm w-full">
+        <span className={classNames('relative z-0 inline-flex shadow-sm w-full', OVERALL_BACKGROUND[color])}>
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
@@ -84,7 +98,7 @@ export default (({
                             value === option.key ? SELECTED[color] : UNSELECTED[color],
                             buttonClass,
                             BORDER_COLORS[borderColor],
-                            BORDERS,
+                            BORDERS[border],
                             fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
                         )}
                     >
@@ -99,6 +113,7 @@ export default (({
     color?: Color;
     size?: ButtonSize;
     borderColor?: Color;
+    border?: Borders;
     options: Option[];
     value: number; // key
     fullWidthButtons?: boolean;

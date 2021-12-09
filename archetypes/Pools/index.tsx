@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer } from 'react';
 import FilterBar from './FilterSelects/Bar';
-import FilterModal from './FilterSelects/Modal';
 import PoolsTable from './PoolsTable';
 import {
     browseReducer,
@@ -26,7 +25,7 @@ export const Browse: React.FC = () => {
         marketFilter: MarketFilterEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
-        filterModalOpen: false,
+        filtersOpen: false,
         mintBurnModalOpen: false,
         deltaDenotion: DeltaEnum.Percentile,
     } as BrowseState);
@@ -109,7 +108,6 @@ export const Browse: React.FC = () => {
                     />
                 </div>
             </div>
-            <FilterModal state={state} dispatch={dispatch} />
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </>
     );
