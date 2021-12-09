@@ -33,6 +33,7 @@ interface BrowseTableTokenData {
     balancerPrice: number;
     tvl: number;
     nextTvl: number;
+    userHoldings: number;
 }
 
 export interface BrowseTableRowData {
@@ -58,6 +59,7 @@ export interface BrowseTableRowData {
     frontRunning: number;
 
     pastUpkeep: Upkeep;
+    antecedentUpkeep: Upkeep;
 }
 
 export interface BrowseState {

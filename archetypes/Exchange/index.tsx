@@ -71,7 +71,7 @@ export default (({ onClose }) => {
                 receiveIn={receiveIn}
             />
 
-            <ExchangeButton actionType={CommitActionEnum.burn} />
+            <ExchangeButton actionType={swapState.commitAction} />
         </div>
     );
 }) as React.FC<{

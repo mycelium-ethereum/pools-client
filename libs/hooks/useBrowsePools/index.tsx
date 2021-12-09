@@ -66,6 +66,21 @@ export default (() => {
 
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
+                const defaultUpkeep = {
+                    pool: address,
+                    timestamp: lastUpdate.toNumber(),
+                    tvl: tvl,
+                    newPrice: 0,
+                    oldPrice: 0,
+                    longTokenBalance: 0,
+                    shortTokenBalance: 0,
+                    longTokenSupply: 0,
+                    shortTokenSupply: 0,
+                    longTokenPrice: 0,
+                    shortTokenPrice: 0,
+                    skew: 1,
+                };
+
                 rows.push({
                     address: address,
                     name: name,
@@ -90,6 +105,7 @@ export default (() => {
                         tvl: shortBalance.toNumber(),
                         nextTvl: nextShortBalance.toNumber(),
                         balancerPrice: balancerPoolPrices[shortToken.symbol]?.toNumber() ?? 0,
+                        userHoldings: pool.shortToken.balance.toNumber(),
                     },
                     longToken: {
                         address: longToken.address,
@@ -100,34 +116,13 @@ export default (() => {
                         tvl: longBalance.toNumber(),
                         nextTvl: nextLongBalance.toNumber(),
                         balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
+                        userHoldings: pool.longToken.balance.toNumber(),
                     },
                     nextRebalance: lastUpdate.plus(updateInterval).toNumber(),
                     myHoldings: shortToken.balance.plus(longToken.balance).toNumber(),
                     frontRunning: frontRunningInterval.toNumber(),
-                    pastUpkeep: {
-                        pool: address,
-                        timestamp: lastUpdate.toNumber(),
-                        tvl: tvl,
-                        newPrice: 0,
-                        oldPrice: 0,
-                        longTokenBalance: 0,
-                        shortTokenBalance: 0,
-                        longTokenSupply: 0,
-                        shortTokenSupply: 0,
-                        skew: 1,
-                    },
-                    antecedentUpkeep: {
-                        pool: address,
-                        timestamp: lastUpdate.toNumber(),
-                        tvl: tvl,
-                        newPrice: 0,
-                        oldPrice: 0,
-                        longTokenBalance: 0,
-                        shortTokenBalance: 0,
-                        longTokenSupply: 0,
-                        shortTokenSupply: 0,
-                        skew: 1,
-                    },
+                    pastUpkeep: defaultUpkeep,
+                    antecedentUpkeep: defaultUpkeep,
                 });
             });
 

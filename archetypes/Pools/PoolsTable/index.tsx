@@ -7,7 +7,7 @@ import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, LogoTicker } from '@components/General';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
@@ -18,6 +18,7 @@ import { LinkOutlined } from '@ant-design/icons';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
+import Equal from '/public/img/general/circle-equal.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
@@ -93,6 +94,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
                         </TableHeaderCell>
+                        {showNextRebalance ? (
+                            <TableHeaderCell size="sm">
+                                <div className="capitalize">{'My Holdings (TOKENS/USDC)'}</div>
+                            </TableHeaderCell>
+                        ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                     <tr>
@@ -120,7 +126,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                                 <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
                             </TableHeaderCell>
                         ) : null}
-                        <TableHeaderCell />
+                        <TableHeaderCell colSpan={showNextRebalance ? 2 : 1} />
                     </tr>
                 </TableHeader>
                 {rows.map((pool, index) => {
@@ -257,7 +263,12 @@ const PoolRow: React.FC<
                         <>
                             <div>{pool.skew.toFixed(2)}</div>
                             <div className="mt-1">
-                                <UpOrDown oldValue={pool.skew} newValue={pool.nextSkew} deltaDenotion={deltaDenotion} />
+                                <UpOrDown
+                                    oldValue={pool.skew}
+                                    currency={false}
+                                    newValue={pool.nextSkew}
+                                    deltaDenotion={deltaDenotion}
+                                />
                             </div>
                         </>
                     ) : (
@@ -268,6 +279,7 @@ const PoolRow: React.FC<
                                     oldValue={pool.antecedentUpkeep.skew}
                                     newValue={pool.pastUpkeep.skew}
                                     deltaDenotion={deltaDenotion}
+                                    currency={false}
                                 />
                             </div>
                         </>
@@ -462,6 +474,18 @@ const TokenRows: React.FC<
                     />
                 </TableRowCell>
             ) : null}
+            {showNextRebalance ? (
+                <TableRowCell size={'sm'} className={styles}>
+                    <div className="flex">
+                        <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
+                        {tokenInfo.userHoldings}
+                    </div>
+                    <div className="flex">
+                        <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
+                        {toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)}
+                    </div>
+                </TableRowCell>
+            ) : null}
             <TableRowCell size={'sm'} className={styles}>
                 {showNextRebalance ? (
                     <div className="flex">
@@ -500,22 +524,39 @@ const TokenRows: React.FC<
     );
 };
 
-const UpOrDown: React.FC<{ oldValue: number; newValue: number; deltaDenotion: DeltaEnum }> = ({
+const UpOrDown: React.FC<{ oldValue: number; newValue: number; currency?: boolean; deltaDenotion: DeltaEnum }> = ({
     oldValue,
     newValue,
     deltaDenotion,
+    currency = true,
 }) => {
     const value = useMemo(
         () =>
             deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
         [deltaDenotion, oldValue, newValue],
     );
+    const approxValue = Math.abs(parseFloat(value.toFixed(2)));
     return (
-        <div className={classNames(value > 0 ? 'text-green-600' : 'text-red-600', 'flex')}>
-            <div className="mr-1">
-                <ArrowDown className={value > 0 ? 'rotate-180' : ''} />
+        <div
+            className={classNames(
+                approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
+                'flex',
+            )}
+        >
+            <div className="mr-1 flex">
+                {approxValue === 0 ? (
+                    <Equal className="h-5 my-auto" />
+                ) : (
+                    <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
+                )}
             </div>
-            <div>{deltaDenotion === DeltaEnum.Numeric ? toApproxCurrency(value) : `${value.toFixed(2)}%`}</div>
+            <div>
+                {deltaDenotion === DeltaEnum.Numeric
+                    ? currency
+                        ? toApproxCurrency(value).replace('-', '')
+                        : approxValue
+                    : `${approxValue}%`}
+            </div>
         </div>
     );
 };

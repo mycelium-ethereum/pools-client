@@ -50,8 +50,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div className="flex-grow" />
                 <div className="hidden lg:flex mx-4 flex-col">
                     <span className="inline-flex">
-                        <ArrowDown className="rotate-180 text-green-600" />
-                        <ArrowDown className="text-red-600 mr-1" />
+                        <ArrowDown className="rotate-180 text-green-600 h-6" />
+                        <ArrowDown className="text-red-600 mr-1 h-6" />
                         <h3 className="mb-1 text-theme-text">Denotion</h3>
                     </span>
                     <div className="mt-auto ml-auto">
@@ -99,8 +99,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <div className="flex">
                         <div className="flex mr-4 flex-col">
                             <span className="inline-flex">
-                                <ArrowDown className="rotate-180 text-green-600" />
-                                <ArrowDown className="text-red-600 mr-1" />
+                                <ArrowDown className="rotate-180 text-green-600 h-6" />
+                                <ArrowDown className="text-red-600 mr-1 h-6" />
                                 <h3 className="mb-1 text-theme-text">Denotion</h3>
                             </span>
                             <div className="mt-auto ml-auto">
