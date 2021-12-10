@@ -566,33 +566,35 @@ const TokenRows: React.FC<
 
 enum UpOrDownTipMetric {
     TVL = 'TVL',
-    TokenPrice = 'Token Price',
-    Skew = 'Skew',
-    BasePrice = 'Base Price',
+    TokenPrice = 'token price',
+    Skew = 'skew',
+    BasePrice = 'base price',
 }
 
 const UpOrDownTip: React.FC<{
     metric: UpOrDownTipMetric;
     currency: boolean;
-    side?: 'Long' | 'Short';
+    side?: 'long' | 'short';
     valueText: string;
     value: number;
     poolTicker: string;
-    showNextRebalance: boolean
+    showNextRebalance: boolean;
 }> = ({ metric, side, valueText, value, showNextRebalance, poolTicker, children }) => {
-    const message = showNextRebalance
-        ? `The ${side ? side : ''} ${metric} is currently ${valueText} ${
-            value > 0 ? 'greater than' : 'less than'
-        } it was at the last rebalance for the ${poolTicker} pool.`
-            : `The ${side ? side : ''} ${metric} ${value > 0 ? 'increased' : 'decreased'} by ${valueText} during the last rebalance for the ${poolTicker} pool.`
-    return (
-
-        <StyledTooltip
-            title={message}
-        >
-            {children}
-        </StyledTooltip>
-    )
+    let message;
+    if (parseFloat(value.toFixed(2)) === 0) {
+        message = showNextRebalance
+            ? `The ${side ? side : ''} ${metric} has not changed since the last rebalance of the ${poolTicker} pool.`
+            : `The ${side ? side : ''} ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
+    } else {
+        message = showNextRebalance
+            ? `The ${side ? side : ''} ${metric} is currently ${valueText} ${
+                  value > 0 ? 'greater than' : 'less than'
+              } it was at the last rebalance of the ${poolTicker} pool.`
+            : `The ${side ? side : ''} ${metric} ${
+                  value > 0 ? 'increased' : 'decreased'
+              } by ${valueText} during the last rebalance of the ${poolTicker} pool.`;
+    }
+    return <StyledTooltip title={message}>{children}</StyledTooltip>;
 };
 
 const UpOrDown: React.FC<{
@@ -604,7 +606,16 @@ const UpOrDown: React.FC<{
     showNextRebalance: boolean;
     currency?: boolean;
     deltaDenotion: DeltaEnum;
-}> = ({ oldValue, newValue, deltaDenotion, tooltipMetric, showNextRebalance, poolTicker, tokenMetricSide, currency = true }) => {
+}> = ({
+    oldValue,
+    newValue,
+    deltaDenotion,
+    tooltipMetric,
+    showNextRebalance,
+    poolTicker,
+    tokenMetricSide,
+    currency = true,
+}) => {
     const value = useMemo(
         () =>
             deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
@@ -625,7 +636,7 @@ const UpOrDown: React.FC<{
             value={value}
             currency={currency}
             poolTicker={poolTicker}
-            showNextRebalance={showNextRebalance} 
+            showNextRebalance={showNextRebalance}
         >
             <div
                 className={classNames(
