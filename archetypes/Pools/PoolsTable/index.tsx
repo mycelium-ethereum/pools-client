@@ -639,7 +639,7 @@ const UpOrDown: React.FC<{
                         : approxValue.toString()
                     : `${approxValue}%`
             }
-            side={tokenMetricSide === SideEnum.long ? 'long' : 'short'}
+            side={!!tokenMetricSide ? undefined : tokenMetricSide === SideEnum.long ? 'long' : 'short'}
             value={value}
             currency={currency}
             poolTicker={poolTicker}
