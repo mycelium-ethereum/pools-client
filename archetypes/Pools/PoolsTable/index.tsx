@@ -581,23 +581,28 @@ enum UpOrDownTipMetric {
 const UpOrDownTip: React.FC<{
     metric: UpOrDownTipMetric;
     currency: boolean;
-    side?: 'long' | 'short';
+    side?: SideEnum;
     valueText: string;
     value: number;
     poolTicker: string;
     showNextRebalance: boolean;
 }> = ({ metric, side, valueText, value, showNextRebalance, poolTicker, children }) => {
     let message;
+    const sideText = side === SideEnum.long ? 'long' : 'short';
     if (parseFloat(value.toFixed(3)) === 0) {
         message = showNextRebalance
-            ? `The ${side ? side : ''} ${metric} has not changed since the last rebalance of the ${poolTicker} pool.`
-            : `The ${side ? side : ''} ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
+            ? `The ${
+                  side !== undefined ? sideText : ''
+              } ${metric} has not changed since the last rebalance of the ${poolTicker} pool.`
+            : `The ${
+                  side !== undefined ? sideText : ''
+              } ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
     } else {
         message = showNextRebalance
-            ? `The ${side ? side : ''} ${metric} is currently ${valueText} ${
+            ? `The ${side !== undefined ? sideText : ''} ${metric} is currently ${valueText} ${
                   value > 0 ? 'greater than' : 'less than'
               } it was at the last rebalance of the ${poolTicker} pool.`
-            : `The ${side ? side : ''} ${metric} ${
+            : `The ${side !== undefined ? sideText : ''} ${metric} ${
                   value > 0 ? 'increased' : 'decreased'
               } by ${valueText} during the last rebalance of the ${poolTicker} pool.`;
     }
@@ -639,7 +644,7 @@ const UpOrDown: React.FC<{
                         : approxValue.toString()
                     : `${approxValue}%`
             }
-            side={tokenMetricSide === SideEnum.long ? 'long' : 'short'}
+            side={tokenMetricSide}
             value={value}
             currency={currency}
             poolTicker={poolTicker}
