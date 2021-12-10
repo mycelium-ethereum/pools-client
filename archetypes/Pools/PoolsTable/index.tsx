@@ -49,11 +49,11 @@ const CommittmentTip: React.FC = ({ children }) => (
 
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
-    const { provider } = useWeb3();
+    const { provider, account } = useWeb3();
     return (
         <>
             <Table>
-                <TableHeader>
+                <TableHeader className="align-baseline">
                     <tr>
                         <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>
                             <div className="capitalize text-lg">{'POOLS'}</div>
@@ -94,9 +94,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
                         </TableHeaderCell>
-                        {showNextRebalance ? (
+                        {showNextRebalance && !!account ? (
                             <TableHeaderCell size="sm">
-                                <div className="capitalize">{'My Holdings (TOKENS/USDC)'}</div>
+                                <div className="capitalize">{'MY HOLDINGS (TOKENS/USDC)'}</div>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
@@ -126,7 +126,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                                 <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
                             </TableHeaderCell>
                         ) : null}
-                        <TableHeaderCell colSpan={showNextRebalance ? 2 : 1} />
+                        <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                     </tr>
                 </TableHeader>
                 {rows.map((pool, index) => {
@@ -137,6 +137,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
+                            account={account}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
                         />
@@ -176,10 +177,11 @@ const calcPercentage: (value: number, total: number) => number = (value, total) 
 const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
+        account: string | undefined;
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({ pool, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -277,7 +279,7 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.skew.toFixed(2)}</div>
+                            <div>{pool.skew.toFixed(3)}</div>
                             <div className="mt-1">
                                 <UpOrDown
                                     oldValue={pool.skew}
@@ -292,7 +294,7 @@ const PoolRow: React.FC<
                         </>
                     ) : (
                         <>
-                            <div>{pool.skew.toFixed(2)}</div>
+                            <div>{pool.skew.toFixed(3)}</div>
                             <div className="mt-1">
                                 <UpOrDown
                                     oldValue={pool.antecedentUpkeep.skew}
@@ -346,6 +348,7 @@ const PoolRow: React.FC<
                         tokenPrice: pool.pastUpkeep.longTokenPrice,
                         tokenBalance: pool.pastUpkeep.longTokenBalance,
                     }}
+                    account={account}
                     tokenInfo={pool.longToken}
                     deltaDenotion={deltaDenotion}
                     leverage={pool.leverage}
@@ -360,6 +363,7 @@ const PoolRow: React.FC<
                     provider={provider}
                     onClickMintBurn={onClickMintBurn}
                     showNextRebalance={showNextRebalance}
+                    account={account}
                     antecedentUpkeepTokenInfo={{
                         tokenPrice: pool.antecedentUpkeep.shortTokenPrice,
                         tokenBalance: pool.antecedentUpkeep.shortTokenBalance,
@@ -400,6 +404,7 @@ const TokenRows: React.FC<
         leverage: number;
         address: string;
         decimals: number;
+        account: string | undefined;
         pastUpkeepTokenInfo: {
             tokenPrice: number;
             tokenBalance: number;
@@ -416,6 +421,7 @@ const TokenRows: React.FC<
     tokenInfo,
     leverage,
     address: poolAddress,
+    account,
     decimals,
     provider,
     onClickMintBurn,
@@ -475,7 +481,7 @@ const TokenRows: React.FC<
                             : ''
                     }
                 >
-                    {tokenInfo.effectiveGain.toFixed(2)}
+                    {tokenInfo.effectiveGain.toFixed(3)}
                 </div>
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
@@ -512,11 +518,11 @@ const TokenRows: React.FC<
                     />
                 </TableRowCell>
             ) : null}
-            {showNextRebalance ? (
+            {showNextRebalance && !!account ? (
                 <TableRowCell size={'sm'} className={styles}>
                     <div className="flex">
                         <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
-                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(2)}
+                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
                     </div>
                     <div className="flex">
                         <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
@@ -541,6 +547,7 @@ const TokenRows: React.FC<
                             className="mx-1 w-[70px] my-auto font-bold uppercase "
                             size="xs"
                             variant="primary-light"
+                            disabled={!tokenInfo.userHoldings}
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
                         >
                             Burn
@@ -581,7 +588,7 @@ const UpOrDownTip: React.FC<{
     showNextRebalance: boolean;
 }> = ({ metric, side, valueText, value, showNextRebalance, poolTicker, children }) => {
     let message;
-    if (parseFloat(value.toFixed(2)) === 0) {
+    if (parseFloat(value.toFixed(3)) === 0) {
         message = showNextRebalance
             ? `The ${side ? side : ''} ${metric} has not changed since the last rebalance of the ${poolTicker} pool.`
             : `The ${side ? side : ''} ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
@@ -621,7 +628,7 @@ const UpOrDown: React.FC<{
             deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
         [deltaDenotion, oldValue, newValue],
     );
-    const approxValue = Math.abs(parseFloat(value.toFixed(2)));
+    const approxValue = Math.abs(parseFloat(value.toFixed(3)));
     return (
         <UpOrDownTip
             metric={tooltipMetric}
@@ -632,7 +639,7 @@ const UpOrDown: React.FC<{
                         : approxValue.toString()
                     : `${approxValue}%`
             }
-            side={tokenMetricSide === SideEnum.long ? 'Long' : 'Short'}
+            side={tokenMetricSide === SideEnum.long ? 'long' : 'short'}
             value={value}
             currency={currency}
             poolTicker={poolTicker}

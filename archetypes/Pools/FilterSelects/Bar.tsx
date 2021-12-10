@@ -29,7 +29,7 @@ const DENOTION_OPTIONS = [
     },
     {
         key: DeltaEnum.Numeric,
-        text: 'Numerical',
+        text: 'Number',
     },
 ];
 
