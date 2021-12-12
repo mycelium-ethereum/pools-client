@@ -33,6 +33,7 @@ interface BrowseTableTokenData {
     balancerPrice: number;
     tvl: number;
     nextTvl: number;
+    userHoldings: number;
 }
 
 export interface BrowseTableRowData {
@@ -58,6 +59,7 @@ export interface BrowseTableRowData {
     frontRunning: number;
 
     pastUpkeep: Upkeep;
+    antecedentUpkeep: Upkeep;
 }
 
 export interface BrowseState {
@@ -66,7 +68,7 @@ export interface BrowseState {
     marketFilter: MarketFilterEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
-    filterModalOpen: boolean;
+    filtersOpen: boolean;
     mintBurnModalOpen: boolean;
 }
 
@@ -74,7 +76,7 @@ export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
-    | { type: 'setFilterModalOpen'; open: boolean }
+    | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
     | { type: 'setDenotion'; denotion: DeltaEnum }
     | { type: 'setSortBy'; sortBy: SortByEnum };
@@ -106,10 +108,10 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 sortBy: action.sortBy,
             };
-        case 'setFilterModalOpen':
+        case 'setFiltersOpen':
             return {
                 ...state,
-                filterModalOpen: action.open,
+                filtersOpen: action.open,
             };
         case 'setMintBurnModalOpen':
             return {

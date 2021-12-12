@@ -7,7 +7,7 @@ import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, LogoTicker } from '@components/General';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
@@ -18,6 +18,7 @@ import { LinkOutlined } from '@ant-design/icons';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
+import Equal from '/public/img/general/circle-equal.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
@@ -48,11 +49,11 @@ const CommittmentTip: React.FC = ({ children }) => (
 
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
-    const { provider } = useWeb3();
+    const { provider, account } = useWeb3();
     return (
         <>
             <Table>
-                <TableHeader>
+                <TableHeader className="align-baseline">
                     <tr>
                         <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>
                             <div className="capitalize text-lg">{'POOLS'}</div>
@@ -93,6 +94,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
                         </TableHeaderCell>
+                        {showNextRebalance && !!account ? (
+                            <TableHeaderCell size="sm">
+                                <div className="capitalize">{'MY HOLDINGS (TOKENS/USDC)'}</div>
+                            </TableHeaderCell>
+                        ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                     <tr>
@@ -120,7 +126,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                                 <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
                             </TableHeaderCell>
                         ) : null}
-                        <TableHeaderCell />
+                        <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                     </tr>
                 </TableHeader>
                 {rows.map((pool, index) => {
@@ -131,6 +137,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
+                            account={account}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
                         />
@@ -170,10 +177,11 @@ const calcPercentage: (value: number, total: number) => number = (value, total) 
 const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
+        account: string | undefined;
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({ pool, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -210,6 +218,9 @@ const PoolRow: React.FC<
                                     oldValue={pool.lastPrice}
                                     newValue={pool.oraclePrice}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -218,9 +229,12 @@ const PoolRow: React.FC<
                             <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
                             <div className="mt-1">
                                 <UpOrDown
-                                    oldValue={pool.pastUpkeep.oldPrice.toNumber()}
-                                    newValue={pool.pastUpkeep.newPrice.toNumber()}
+                                    oldValue={pool.pastUpkeep.oldPrice}
+                                    newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -231,7 +245,14 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.nextTVL)}</div>
                             <div className="mt-1">
-                                <UpOrDown oldValue={pool.tvl} newValue={pool.nextTVL} deltaDenotion={deltaDenotion} />
+                                <UpOrDown
+                                    oldValue={pool.tvl}
+                                    newValue={pool.nextTVL}
+                                    deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.TVL}
+                                    showNextRebalance={showNextRebalance}
+                                />
                             </div>
                         </>
                     ) : (
@@ -239,9 +260,12 @@ const PoolRow: React.FC<
                             <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
                             <div className="mt-1">
                                 <UpOrDown
-                                    oldValue={pool.pastUpkeep.antecedentTVL.toNumber()}
-                                    newValue={pool.pastUpkeep.tvl.toNumber()}
+                                    oldValue={pool.antecedentUpkeep.tvl}
+                                    newValue={pool.pastUpkeep.tvl}
                                     deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.TVL}
+                                    showNextRebalance={showNextRebalance}
                                 />
                             </div>
                         </>
@@ -255,13 +279,34 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.skew.toFixed(2)}</div>
+                            <div>{pool.skew.toFixed(3)}</div>
                             <div className="mt-1">
-                                <UpOrDown oldValue={pool.skew} newValue={pool.nextSkew} deltaDenotion={deltaDenotion} />
+                                <UpOrDown
+                                    oldValue={pool.skew}
+                                    currency={false}
+                                    newValue={pool.nextSkew}
+                                    deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.Skew}
+                                    showNextRebalance={showNextRebalance}
+                                />
                             </div>
                         </>
                     ) : (
-                        <div>{pool.skew.toFixed(2)}</div>
+                        <>
+                            <div>{pool.skew.toFixed(3)}</div>
+                            <div className="mt-1">
+                                <UpOrDown
+                                    oldValue={pool.antecedentUpkeep.skew}
+                                    newValue={pool.pastUpkeep.skew}
+                                    deltaDenotion={deltaDenotion}
+                                    poolTicker={pool.name}
+                                    tooltipMetric={UpOrDownTipMetric.Skew}
+                                    currency={false}
+                                    showNextRebalance={showNextRebalance}
+                                />
+                            </div>
+                        </>
                     )}
                 </TableRowCell>
                 {showNextRebalance ? (
@@ -295,20 +340,44 @@ const PoolRow: React.FC<
                     provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
+                    antecedentUpkeepTokenInfo={{
+                        tokenPrice: pool.antecedentUpkeep.longTokenPrice,
+                        tokenBalance: pool.antecedentUpkeep.longTokenBalance,
+                    }}
+                    pastUpkeepTokenInfo={{
+                        tokenPrice: pool.pastUpkeep.longTokenPrice,
+                        tokenBalance: pool.pastUpkeep.longTokenBalance,
+                    }}
+                    account={account}
                     tokenInfo={pool.longToken}
                     deltaDenotion={deltaDenotion}
-                    {...pool}
+                    leverage={pool.leverage}
+                    address={pool.address}
+                    decimals={pool.decimals}
+                    poolTicker={pool.name}
                 />
             </TableRow>
             <TableRow rowNumber={index}>
                 <TokenRows
                     side={SideEnum.short}
                     provider={provider}
-                    showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
+                    showNextRebalance={showNextRebalance}
+                    account={account}
+                    antecedentUpkeepTokenInfo={{
+                        tokenPrice: pool.antecedentUpkeep.shortTokenPrice,
+                        tokenBalance: pool.antecedentUpkeep.shortTokenBalance,
+                    }}
+                    pastUpkeepTokenInfo={{
+                        tokenPrice: pool.pastUpkeep.shortTokenPrice,
+                        tokenBalance: pool.pastUpkeep.shortTokenBalance,
+                    }}
                     tokenInfo={pool.shortToken}
                     deltaDenotion={deltaDenotion}
-                    {...pool}
+                    leverage={pool.leverage}
+                    address={pool.address}
+                    decimals={pool.decimals}
+                    poolTicker={pool.name}
                 />
             </TableRow>
         </>
@@ -335,6 +404,16 @@ const TokenRows: React.FC<
         leverage: number;
         address: string;
         decimals: number;
+        account: string | undefined;
+        pastUpkeepTokenInfo: {
+            tokenPrice: number;
+            tokenBalance: number;
+        };
+        antecedentUpkeepTokenInfo: {
+            tokenPrice: number;
+            tokenBalance: number;
+        };
+        poolTicker: string;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
 > = ({
@@ -342,11 +421,15 @@ const TokenRows: React.FC<
     tokenInfo,
     leverage,
     address: poolAddress,
+    account,
     decimals,
     provider,
     onClickMintBurn,
     showNextRebalance,
     deltaDenotion,
+    antecedentUpkeepTokenInfo,
+    pastUpkeepTokenInfo,
+    poolTicker,
 }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
@@ -364,11 +447,28 @@ const TokenRows: React.FC<
                                 oldValue={tokenInfo.tvl}
                                 newValue={tokenInfo.nextTvl}
                                 deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TVL}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
                             />
                         </div>
                     </>
                 ) : (
-                    toApproxCurrency(tokenInfo.tvl)
+                    <>
+                        <div className="flex">
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenBalance)}</div>
+                            <UpOrDown
+                                oldValue={antecedentUpkeepTokenInfo.tokenBalance}
+                                newValue={pastUpkeepTokenInfo.tokenBalance}
+                                deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TVL}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
+                            />
+                        </div>
+                    </>
                 )}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
@@ -381,16 +481,31 @@ const TokenRows: React.FC<
                             : ''
                     }
                 >
-                    {tokenInfo.effectiveGain.toFixed(2)}
+                    {tokenInfo.effectiveGain.toFixed(3)}
                 </div>
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 {leverage}
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
-                {showNextRebalance
-                    ? toApproxCurrency(tokenInfo.nextTCRPrice)
-                    : toApproxCurrency(tokenInfo.lastTCRPrice)}
+                {showNextRebalance ? (
+                    toApproxCurrency(tokenInfo.nextTCRPrice)
+                ) : (
+                    <>
+                        <div className="flex">
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice)}</div>
+                            <UpOrDown
+                                oldValue={antecedentUpkeepTokenInfo.tokenPrice}
+                                newValue={pastUpkeepTokenInfo.tokenPrice}
+                                deltaDenotion={deltaDenotion}
+                                poolTicker={poolTicker}
+                                tooltipMetric={UpOrDownTipMetric.TokenPrice}
+                                tokenMetricSide={side}
+                                showNextRebalance={showNextRebalance}
+                            />
+                        </div>
+                    </>
+                )}
             </TableRowCell>
             {showNextRebalance ? (
                 <TableRowCell size={'sm'} className={styles}>
@@ -401,6 +516,20 @@ const TokenRows: React.FC<
                             open(constructBalancerLink(tokenInfo.address, ARBITRUM, true), 'blank');
                         }}
                     />
+                </TableRowCell>
+            ) : null}
+            {showNextRebalance && !!account ? (
+                <TableRowCell size={'sm'} className={styles}>
+                    <div className="flex">
+                        <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
+                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
+                    </div>
+                    <div className="flex">
+                        <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
+                        {tokenInfo.userHoldings === 0
+                            ? '-'
+                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)}
+                    </div>
                 </TableRowCell>
             ) : null}
             <TableRowCell size={'sm'} className={styles}>
@@ -418,6 +547,7 @@ const TokenRows: React.FC<
                             className="mx-1 w-[70px] my-auto font-bold uppercase "
                             size="xs"
                             variant="primary-light"
+                            disabled={!tokenInfo.userHoldings}
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
                         >
                             Burn
@@ -441,22 +571,101 @@ const TokenRows: React.FC<
     );
 };
 
-const UpOrDown: React.FC<{ oldValue: number; newValue: number; deltaDenotion: DeltaEnum }> = ({
+enum UpOrDownTipMetric {
+    TVL = 'TVL',
+    TokenPrice = 'token price',
+    Skew = 'skew',
+    BasePrice = 'base price',
+}
+
+const UpOrDownTip: React.FC<{
+    metric: UpOrDownTipMetric;
+    currency: boolean;
+    side?: 'long' | 'short';
+    valueText: string;
+    value: number;
+    poolTicker: string;
+    showNextRebalance: boolean;
+}> = ({ metric, side, valueText, value, showNextRebalance, poolTicker, children }) => {
+    let message;
+    if (parseFloat(value.toFixed(3)) === 0) {
+        message = showNextRebalance
+            ? `The ${side ? side : ''} ${metric} has not changed since the last rebalance of the ${poolTicker} pool.`
+            : `The ${side ? side : ''} ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
+    } else {
+        message = showNextRebalance
+            ? `The ${side ? side : ''} ${metric} is currently ${valueText} ${
+                  value > 0 ? 'greater than' : 'less than'
+              } it was at the last rebalance of the ${poolTicker} pool.`
+            : `The ${side ? side : ''} ${metric} ${
+                  value > 0 ? 'increased' : 'decreased'
+              } by ${valueText} during the last rebalance of the ${poolTicker} pool.`;
+    }
+    return <StyledTooltip title={message}>{children}</StyledTooltip>;
+};
+
+const UpOrDown: React.FC<{
+    oldValue: number;
+    newValue: number;
+    tokenMetricSide?: SideEnum;
+    poolTicker: string;
+    tooltipMetric: UpOrDownTipMetric;
+    showNextRebalance: boolean;
+    currency?: boolean;
+    deltaDenotion: DeltaEnum;
+}> = ({
     oldValue,
     newValue,
     deltaDenotion,
+    tooltipMetric,
+    showNextRebalance,
+    poolTicker,
+    tokenMetricSide,
+    currency = true,
 }) => {
     const value = useMemo(
         () =>
             deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
         [deltaDenotion, oldValue, newValue],
     );
+    const approxValue = Math.abs(parseFloat(value.toFixed(3)));
     return (
-        <div className={classNames(value > 0 ? 'text-green-600' : 'text-red-600', 'flex')}>
-            <div className="mr-1">
-                <ArrowDown className={value > 0 ? 'rotate-180' : ''} />
+        <UpOrDownTip
+            metric={tooltipMetric}
+            valueText={
+                deltaDenotion === DeltaEnum.Numeric
+                    ? currency
+                        ? toApproxCurrency(value).replace('-', '')
+                        : approxValue.toString()
+                    : `${approxValue}%`
+            }
+            side={!!tokenMetricSide ? undefined : tokenMetricSide === SideEnum.long ? 'long' : 'short'}
+            value={value}
+            currency={currency}
+            poolTicker={poolTicker}
+            showNextRebalance={showNextRebalance}
+        >
+            <div
+                className={classNames(
+                    approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
+                    'flex',
+                )}
+            >
+                <div className="mr-1 flex">
+                    {approxValue === 0 ? (
+                        <Equal className="h-5 my-auto" />
+                    ) : (
+                        <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
+                    )}
+                </div>
+                <div>
+                    {deltaDenotion === DeltaEnum.Numeric
+                        ? currency
+                            ? toApproxCurrency(value).replace('-', '')
+                            : approxValue
+                        : `${approxValue}%`}
+                </div>
             </div>
-            <div>{deltaDenotion === DeltaEnum.Numeric ? toApproxCurrency(value) : `${value.toFixed(2)}%`}</div>
-        </div>
+        </UpOrDownTip>
     );
 };
