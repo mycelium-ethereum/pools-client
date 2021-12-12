@@ -4,7 +4,6 @@ import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
 import { TokenRowProps } from '@archetypes/Portfolio/Overview';
 
-// const useBrowsePools
 export default (() => {
     const { pools } = usePools();
     const [loading, setLoading] = useState<boolean>(true);
@@ -48,33 +47,6 @@ export default (() => {
             setLoading(false);
         }
     }, [pools]);
-    // useEffect(() => {
-    //     const tokens: Record<number, string> = {
-    //         0: '1L-BTC/USD',
-    //         1: '1S-BTC/USD',
-    //         2: '1L-ETH/USD',
-    //         3: '1S-ETH/USD',
-    //         4: '3L-BTC/USD',
-    //         5: '3S-BTC/USD',
-    //         6: '3L-ETH/USD',
-    //         7: '3S-ETH/USD',
-    //     };
-    //     for (let i = 0; i < 8; i++) {
-    //         const balance = new BigNumber(Math.random() * 100000);
-    //         const tokenSupply = new BigNumber(Math.random() * 1000000);
-    //         rows.push({
-    //             address: '',
-    //             decimals: 6,
-    //             symbol: tokens[i],
-    //             name: tokens[i],
-    //             price: calcTokenPrice(balance, tokenSupply),
-    //             holdings: new BigNumber(Math.random() * 1000),
-    //             deposits: new BigNumber(Math.random() * 10000),
-    //         });
-    //     }
-    //     setRows(rows);
-    //     setLoading(false);
-    // }, []);
     return {
         rows,
         loading,
