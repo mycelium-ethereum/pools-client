@@ -6,6 +6,7 @@ import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
 import CTABackground from '@public/img/cta-bg.svg';
+import BVector from '@public/img/b-vector.svg';
 
 export enum LoadingState {
     Idle = 0,
@@ -93,9 +94,9 @@ const infoCard = 'xl:w-1/3 mr-4 my-2 px-16 py-10 rounded-xl bg-cool-gray-50 dark
 
 const overviewCard = 'xl:w-2/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
 
-const guideCard = 'sm:w-1/2 xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background';
+const guideCard = 'xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background';
 
-const ctaCard = 'relative overflow-hidden sm:w-1/2 xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50';
+const ctaCard = 'relative overflow-hidden xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50';
 
 const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
 
@@ -139,6 +140,61 @@ export default (() => {
                             >
                                 Connect Wallet
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="flex mb-5 flex-col xl:flex-row">
+                    <div className="xl:w-2/3 mx-4 flex flex-col xl:flex-row">
+                        <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
+                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
+                            <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
+                            <div className="mb-3">
+                                A step-by-step on minting and burning tokens using the Perpetual Pools interface.
+                            </div>
+                            <div className="text-tracer-400 underline">Read guide</div>
+                        </div>
+                        <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
+                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
+                            <div className="mb-3 text-2xl font-semibold">
+                                Leveraged Token Designs: Compare the Market
+                            </div>
+                            <div className="mb-3">
+                                {`Find out how Tracer's Pool tokens stack up to similar products and how you can benefit from the novel design.`}
+                            </div>
+                            <div className="text-tracer-400 underline">Read article</div>
+                        </div>
+                        <div className="my-2 xl:w-1/3 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
+                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
+                            <div className="mb-3 text-2xl font-semibold">Skew Farming: How To</div>
+                            <div className="mb-3">
+                                Know this strategy to recognise opportunities for excess risk-adjusted returns. Take
+                                advantage of the skew in Perpetual Pools.
+                            </div>
+                            <div className="text-tracer-400 underline">Read guide</div>
+                        </div>
+                    </div>
+                    <div className="my-2 xl:w-1/3 flex flex-col mx-4">
+                        <div className="relative overflow-hidden rounded-t-xl">
+                            <CTABackground className="w-full absolute bottom-0 right-0" />
+                            <div className="relative flex">
+                                <div
+                                    className="p-16"
+                                    style={{
+                                        background:
+                                            'linear-gradient(90deg, rgba(0, 0, 0, 0.23) 6.59%, rgba(0, 0, 0, 0.73) 96.04%)',
+                                    }}
+                                >
+                                    <BVector />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="px-4 py-6 rounded-b-xl shadow-md bg-tracer-50 dark:bg-theme-background">
+                            <div className="mb-3 text-2xl font-semibold">Skew Farming Opportunity: 3-BTC/USDC</div>
+                            <div className="mb-3">
+                                Take a position in 3S-BTC/USDC and also take the opposite position of equal magnitude on
+                                another platform.
+                            </div>
+                            <div className="text-tracer-400 underline">Learn how to skew farm</div>
                         </div>
                     </div>
                 </div>
