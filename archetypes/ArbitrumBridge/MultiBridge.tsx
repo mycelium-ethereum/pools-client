@@ -222,7 +222,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     <div className="flex flex-row">
                         <div className="my-2 mb-2 flex-grow">
-                            <label htmlFor="asset" className="block mb-2">
+                            <label htmlFor="asset" className="font-bold block mb-2">
                                 Asset
                             </label>
                             <TWButtonGroup
@@ -240,7 +240,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     <div className="flex flex-row">
                         <div className="my-2 mb-2 flex-grow">
-                            <label htmlFor="amount" className="block mb-2">
+                            <label htmlFor="amount" className="font-bold block mb-2">
                                 Amount
                             </label>
                             <InputContainer className="w-full" error={amountIsInvalid} warning={Boolean(warningText)}>
