@@ -6,6 +6,7 @@ import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import { WarningBanners } from '@components/WarningBanner';
 
 export default (() => {
     const router = useRouter();
@@ -18,6 +19,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar />
+                <WarningBanners banners={['decayWarning']} />
                 <Browse />
                 <PendingCommits />
                 <UnsupportedNetworkPopup />
