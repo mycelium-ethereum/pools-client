@@ -7,7 +7,7 @@ import PendingCommits from '@components/PendingCommits';
 // @ts-ignore
 import { SecurityWidget } from '@mycelium-ethereum/vyps-kit';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
-import WarningBanner from '@components/WarningBanner';
+import { WarningBanners } from '@components/WarningBanner';
 import BalancerBuySell from '@archetypes/BalancerBuySell';
 
 export default (() => {
@@ -15,7 +15,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar />
-                <WarningBanner />
+                <WarningBanners />
                 <SwapStore>
                     <BalancerBuySell />
                 </SwapStore>
