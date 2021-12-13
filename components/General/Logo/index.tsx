@@ -66,7 +66,7 @@ const logos: Record<LogoTicker, any> = {
     BALANCER: BALANCER,
 };
 
-type Size = 'xs' | 'sm' | 'md' | 'full';
+type Size = 'xs' | 'sm' | 'md' | 'lg' | 'full';
 interface LProps {
     className?: string;
     ticker: LogoTicker;
@@ -77,6 +77,7 @@ const SIZES: Record<Size, string> = {
     xs: 'w-4 h-4',
     sm: 'w-[20px] h-[20px]',
     md: 'w-6 h-6',
+    lg: 'w-10 h-10',
     full: 'h-full',
 };
 

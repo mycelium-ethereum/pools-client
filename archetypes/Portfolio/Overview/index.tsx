@@ -1,9 +1,10 @@
-import { Dropdown } from '@components/General';
+import { Dropdown, Logo, tokenSymbolToLogoTicker } from '@components/General';
 import BigNumber from 'bignumber.js';
 import React, { useReducer } from 'react';
 import TokenTable from './TokenTable';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import useBrowsePools from '@libs/hooks/useBrowsePools';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
@@ -104,8 +105,11 @@ const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background d
 export default (() => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
     const { rows } = useUserTokenOverview();
+    const tokens = useBrowsePools();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
+
+    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
     const emptyState = () => {
         return (
@@ -144,7 +148,7 @@ export default (() => {
                     </div>
                 </div>
                 <div className="flex mb-5 flex-col xl:flex-row">
-                    <div className="xl:w-2/3 mx-4 flex flex-col xl:flex-row">
+                    <div className={`${maxSkew === undefined ? '' : 'xl:w-2/3'} mx-4 flex flex-col xl:flex-row`}>
                         <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
                             <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
                             <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
@@ -173,30 +177,62 @@ export default (() => {
                             <div className="text-tracer-400 underline">Read guide</div>
                         </div>
                     </div>
-                    <div className="my-2 xl:w-1/3 flex flex-col mx-4">
-                        <div className="relative overflow-hidden rounded-t-xl">
-                            <CTABackground className="w-full absolute bottom-0 right-0" />
-                            <div className="relative flex">
-                                <div
-                                    className="p-16"
-                                    style={{
-                                        background:
-                                            'linear-gradient(90deg, rgba(0, 0, 0, 0.23) 6.59%, rgba(0, 0, 0, 0.73) 96.04%)',
-                                    }}
-                                >
-                                    <BVector />
+                    {maxSkew === undefined ? null : (
+                        <div className="my-2 xl:w-1/3 flex flex-col mx-4">
+                            <div className="relative overflow-hidden rounded-t-xl">
+                                <CTABackground className="w-full absolute bottom-0 right-0" />
+                                <div className="relative flex">
+                                    <div
+                                        className="p-16"
+                                        style={{
+                                            background:
+                                                'linear-gradient(90deg, rgba(0, 0, 0, 0.23) 6.59%, rgba(0, 0, 0, 0.73) 96.04%)',
+                                        }}
+                                    >
+                                        <BVector />
+                                    </div>
+                                    <div className="m-auto">
+                                        <div className="flex mb-5">
+                                            <Logo
+                                                size="lg"
+                                                ticker={tokenSymbolToLogoTicker(maxSkew?.longToken?.symbol)}
+                                                className="mr-5 my-auto"
+                                            />
+                                            <div className="my-auto text-white">
+                                                <div>{maxSkew?.longToken?.symbol}</div>
+                                                <div>
+                                                    Leverage on gains: {maxSkew?.longToken?.effectiveGain.toFixed(3)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="flex">
+                                            <Logo
+                                                size="lg"
+                                                ticker={tokenSymbolToLogoTicker(maxSkew?.shortToken?.symbol)}
+                                                className="mr-5 my-auto"
+                                            />
+                                            <div className="my-auto text-white">
+                                                <div>{maxSkew?.shortToken?.symbol}</div>
+                                                <div>
+                                                    Leverage on gains: {maxSkew?.shortToken?.effectiveGain.toFixed(3)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="px-4 py-6 rounded-b-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                            <div className="mb-3 text-2xl font-semibold">Skew Farming Opportunity: 3-BTC/USDC</div>
-                            <div className="mb-3">
-                                Take a position in 3S-BTC/USDC and also take the opposite position of equal magnitude on
-                                another platform.
+                            <div className="px-4 py-6 rounded-b-xl shadow-md bg-tracer-50 dark:bg-theme-background">
+                                <div className="mb-3 text-2xl font-semibold">
+                                    Skew Farming Opportunity: {maxSkew?.name}
+                                </div>
+                                <div className="mb-3">
+                                    Take a position in {maxSkew?.name} and also take the opposite position of equal
+                                    magnitude on another platform.
+                                </div>
+                                <div className="text-tracer-400 underline">Learn how to skew farm</div>
                             </div>
-                            <div className="text-tracer-400 underline">Learn how to skew farm</div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         );
