@@ -18,6 +18,9 @@ module.exports = {
         },
         extend: {
             colors: {
+                orange: {
+                    400: '#FF8A4C'
+                },
                 tracer: {
                     50: '#F0F0FF',
                     100: '#DEDEFF',
