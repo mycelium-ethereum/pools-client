@@ -15,7 +15,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar />
-                <WarningBanners />
+                <WarningBanners banners={['auditWarning', 'decayWarning']} />
                 <SwapStore>
                     <BalancerBuySell />
                 </SwapStore>

@@ -36,7 +36,7 @@ const warningInfo: Record<
             <>
                 <span className="font-semibold">WARNING:</span>&nbsp;Tracer Pool Tokens v1 experience{' '}
                 <a
-                    href="https://tracer.finance/radar/sigma-prime-audit-response/"
+                    href="https://tracer.finance/radar/volatility-decay/"
                     target="_blank"
                     rel="noreferrer"
                     className="underline text-tracer-400"
@@ -92,12 +92,15 @@ const WarningBanner: React.FC<{
  * Allows for easily stacking the banners
  *
  */
-export const WarningBanners: React.FC = () => {
+export const WarningBanners: React.FC<{
+    banners: Warning[];
+}> = ({ banners }) => {
     return (
         <div className="container relative">
             <div className="absolute top-0 left-5 right-5 sm:left-0 sm:right-0 3xl:left-20 3xl:right-20 z-10">
-                <WarningBanner warning="auditWarning" />
-                <WarningBanner warning="decayWarning" />
+                {banners.map((banner) => (
+                    <WarningBanner key={banner} warning={banner} />
+                ))}
             </div>
         </div>
     );
