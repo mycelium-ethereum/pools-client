@@ -34,7 +34,7 @@ type RawUpkeep = {
     block_timestamp: string;
 };
 
-const POOLS_API = 'http://dev.api.tracer.finance/pools/upkeeps';
+const POOLS_API = 'https://dev.api.tracer.finance/pools/upkeeps';
 // https://dev.api.tracer.finance/pools/upkeeps?network=chain_id&poolAddress=pool_address&committerAddress=committer_address
 
 // const useUpkeeps
