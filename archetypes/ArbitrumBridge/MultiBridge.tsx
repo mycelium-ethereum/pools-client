@@ -14,6 +14,7 @@ import { Logo } from '@components/General';
 
 import Error from 'public/img/general/error.svg';
 import { StyledTooltip } from '@components/Tooltips';
+import { ethers } from 'ethers';
 
 interface MultiBridgeProps {
     fromNetwork: Network;
@@ -25,6 +26,7 @@ interface MultiBridgeProps {
     onBridgeAsset: (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => void;
     onApproveToken: (tokenAddress: string, spender: string) => void;
     account?: string;
+    provider?: ethers.providers.JsonRpcProvider;
 }
 
 export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
@@ -38,6 +40,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onBridgeAsset,
         onApproveToken,
         account,
+        provider,
     } = props;
 
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
@@ -100,10 +103,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // refresh asset balance when selected account changes
     useEffect(() => {
-        if (selectedAsset && account) {
+        if (selectedAsset && account && !!provider) {
             refreshBridgeableBalance(selectedAsset);
         }
-    }, [account]);
+    }, [account, provider]);
 
     // refresh asset balance when selected network changes
     useEffect(() => {
