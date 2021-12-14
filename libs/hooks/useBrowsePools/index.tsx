@@ -139,7 +139,7 @@ export default (() => {
             },
             shortToken: {
                 ...row.shortToken,
-                balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
+                balancerPrice: balancerPoolPrices[row.shortToken.symbol]?.toNumber() ?? 0,
             },
         }));
     }, [rows, balancerPoolPrices]);
