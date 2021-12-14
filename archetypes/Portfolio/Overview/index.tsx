@@ -8,6 +8,7 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
+import { SideEnum } from '@libs/constants';
 
 export enum LoadingState {
     Idle = 0,
@@ -25,10 +26,12 @@ export enum CurrencyEnum {
 }
 
 export type TokenRowProps = {
+    poolAddress: string;
     address: string;
     name: string;
     decimals: number;
     symbol: string;
+    side: number;
     holdings: BigNumber;
     price: BigNumber;
     deposits: BigNumber; // amount of USDC deposited
@@ -102,7 +105,7 @@ const ctaCard = 'relative overflow-hidden xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-x
 const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
 
 // const Overview
-export default (() => {
+export default (({ onClickBurn }) => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
     const { rows } = useUserTokenOverview();
     const tokens = useBrowsePools();
@@ -295,11 +298,13 @@ export default (() => {
                 </div>
                 <div className={mainCard}>
                     <h1 className="text-theme-text text-xl">Token Holdings</h1>
-                    <TokenTable rows={rows} />
+                    <TokenTable rows={rows} onClickBurn={onClickBurn} />
                 </div>
             </div>
         );
     };
 
     return <>{account ? filledState() : emptyState()}</>;
-}) as React.FC;
+}) as React.FC<{
+    onClickBurn: (pool: string, side: SideEnum) => void;
+}>;

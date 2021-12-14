@@ -24,18 +24,22 @@ export default (() => {
                 rows.push(
                     {
                         name: shortToken.name,
+                        poolAddress: pool.address,
                         address: shortToken.address,
                         decimals: shortToken.decimals,
                         symbol: shortToken.symbol,
+                        side: shortToken.side,
                         price: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)),
                         holdings: shortToken.balance,
                         deposits: new BigNumber(0),
                     },
                     {
                         name: longToken.name,
+                        poolAddress: pool.address,
                         address: longToken.address,
                         decimals: longToken.decimals,
                         symbol: longToken.symbol,
+                        side: longToken.side,
                         price: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)),
                         holdings: longToken.balance,
                         deposits: new BigNumber(0),

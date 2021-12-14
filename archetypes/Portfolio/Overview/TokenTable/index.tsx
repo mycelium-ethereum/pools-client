@@ -9,8 +9,9 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { tickerToName, toApproxCurrency } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
+import { SideEnum } from '@libs/constants';
 
-export default (({ rows }) => {
+export default (({ rows, onClickBurn }) => {
     const { provider } = useWeb3();
 
     return (
@@ -25,7 +26,15 @@ export default (({ rows }) => {
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
                 {rows.map((token, index) => {
-                    return <TokenRow {...token} index={index} key={token.address} provider={provider ?? null} />;
+                    return (
+                        <TokenRow
+                            {...token}
+                            index={index}
+                            key={token.address}
+                            provider={provider ?? null}
+                            onClickBurn={onClickBurn}
+                        />
+                    );
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
@@ -33,14 +42,29 @@ export default (({ rows }) => {
     );
 }) as React.FC<{
     rows: TokenRowProps[];
+    onClickBurn: (pool: string, side: SideEnum) => void;
 }>;
 
 export const TokenRow: React.FC<
     TokenRowProps & {
+        onClickBurn: (pool: string, side: SideEnum) => void;
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
     }
-> = ({ symbol, name, address, decimals, price, holdings, provider, deposits, index }) => {
+> = ({
+    symbol,
+    name,
+    address,
+    poolAddress,
+    decimals,
+    side,
+    price,
+    holdings,
+    provider,
+    deposits,
+    index,
+    onClickBurn,
+}) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
@@ -75,7 +99,12 @@ export const TokenRow: React.FC<
                 >
                     Stake
                 </Button>
-                <Button className="mx-1 w-[70px] my-auto font-bold uppercase " size="xs" variant="primary-light">
+                <Button
+                    className="mx-1 w-[70px] my-auto font-bold uppercase "
+                    size="xs"
+                    variant="primary-light"
+                    onClick={() => onClickBurn(poolAddress, side)}
+                >
                     Burn
                 </Button>
                 <Actions

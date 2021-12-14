@@ -3,6 +3,7 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import Portfolio, { TradePortfolioPage } from '@archetypes/Portfolio';
 import { PoolStore } from '@context/PoolContext';
+import { SwapStore } from '@context/SwapContext';
 import { useRouter } from 'next/router';
 import PendingCommits from '@components/PendingCommits';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
@@ -20,7 +21,9 @@ export default (() => {
             <PoolStore>
                 <NavBar />
                 <WarningBanners banners={['decayWarning']} />
-                <Portfolio page={TradePortfolioPage.Overview} />
+                <SwapStore>
+                    <Portfolio page={TradePortfolioPage.Overview} />
+                </SwapStore>
                 <PendingCommits />
                 <UnsupportedNetworkPopup />
             </PoolStore>
