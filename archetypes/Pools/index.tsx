@@ -54,7 +54,12 @@ export const Browse: React.FC = () => {
 
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(pool.name.toLowerCase().match(searchString));
+        return Boolean(
+            pool.name.toLowerCase().match(searchString) ||
+                pool.shortToken.symbol.toLowerCase().match(searchString) ||
+                pool.longToken.symbol.toLowerCase().match(searchString) ||
+                pool.market.toLowerCase().match(searchString),
+        );
     };
 
     const sorter = (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {

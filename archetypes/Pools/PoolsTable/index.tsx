@@ -35,6 +35,22 @@ const SkewTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
+const MarketPriceTip: React.FC = ({ children }) => (
+    <StyledTooltip
+        title={
+            <>
+                The market price of the asset tracked by the pool, supplied by an oracle.{' '}
+                <a href="https://docs.tracer.finance/tracer/markets" target="_blank" rel="noreferrer noopener">
+                    Learn more
+                </a>
+                .
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
 const EffectiveLeverageTip: React.FC = ({ children }) => (
     <StyledTooltip title="The leverage you will receive at the next rebalance depending on if the price of the underlying asset increases or decreases since the last rebalance.">
         {children}
@@ -65,7 +81,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'BASE PRICE'}</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap w-1/12">
+                            <MarketPriceTip>{'MARKET PRICE'}</MarketPriceTip>
+                        </TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USDC)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
@@ -219,7 +237,7 @@ const PoolRow: React.FC<
                                     newValue={pool.oraclePrice}
                                     deltaDenotion={deltaDenotion}
                                     poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    tooltipMetric={UpOrDownTipMetric.MarketPrice}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -233,7 +251,7 @@ const PoolRow: React.FC<
                                     newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotion={deltaDenotion}
                                     poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.BasePrice}
+                                    tooltipMetric={UpOrDownTipMetric.MarketPrice}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -489,11 +507,11 @@ const TokenRows: React.FC<
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 {showNextRebalance ? (
-                    toApproxCurrency(tokenInfo.nextTCRPrice)
+                    toApproxCurrency(tokenInfo.nextTCRPrice, 3)
                 ) : (
                     <>
                         <div className="flex">
-                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice)}</div>
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice, 3)}</div>
                             <UpOrDown
                                 oldValue={antecedentUpkeepTokenInfo.tokenPrice}
                                 newValue={pastUpkeepTokenInfo.tokenPrice}
@@ -509,7 +527,7 @@ const TokenRows: React.FC<
             </TableRowCell>
             {showNextRebalance ? (
                 <TableRowCell size={'sm'} className={styles}>
-                    {toApproxCurrency(tokenInfo.balancerPrice)}
+                    {toApproxCurrency(tokenInfo.balancerPrice, 3)}
                     <LinkOutlined
                         className="align-middle ml-1"
                         onClick={() => {
@@ -528,7 +546,7 @@ const TokenRows: React.FC<
                         <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
                         {tokenInfo.userHoldings === 0
                             ? '-'
-                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice)}
+                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}
                     </div>
                 </TableRowCell>
             ) : null}
@@ -575,7 +593,7 @@ enum UpOrDownTipMetric {
     TVL = 'TVL',
     TokenPrice = 'token price',
     Skew = 'skew',
-    BasePrice = 'base price',
+    MarketPrice = 'market price',
 }
 
 const UpOrDownTip: React.FC<{

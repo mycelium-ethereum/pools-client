@@ -11,6 +11,7 @@ import { BigNumber } from 'bignumber.js';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useUpkeeps } from '../useUpkeeps';
+import { tickerToName } from '@libs/utils/converters';
 
 // const useBrowsePools
 export default (() => {
@@ -84,6 +85,7 @@ export default (() => {
                 rows.push({
                     address: address,
                     name: name,
+                    market: tickerToName(name),
                     leverage: leverage,
                     decimals: quoteToken.decimals,
 
