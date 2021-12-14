@@ -14,11 +14,10 @@ import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import { Pool } from '@libs/types/General';
 
-
 type InvalidAmount = {
     isInvalid: boolean;
     message?: string;
-}
+};
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
     amount: BigNumber,
@@ -130,31 +129,29 @@ export default (({ pool, swapState, swapDispatch }) => {
             <div className="w-full">
                 <p className="mb-2 ">Amount</p>
 
-                {
-                    commitAction === CommitActionEnum.mint
-                        ? <AmountInput 
-                            invalidAmount={invalidAmount}
-                            amount={amount}
-                            amountBN={amountBN}
-                            balance={pool.quoteToken.balance}
-                            tokenSymbol={pool.quoteToken.symbol}
-                            swapDispatch={swapDispatch}
-                            selectedPool={selectedPool}
-                            isPoolToken={false}
-                        />
-
-                        : <AmountInput 
-                            invalidAmount={invalidAmount}
-                            amount={amount}
-                            amountBN={amountBN}
-                            balance={token.balance}
-                            tokenSymbol={token.symbol}
-                            swapDispatch={swapDispatch}
-                            selectedPool={selectedPool}
-                            isPoolToken={true}
-                        />
-                }
-
+                {commitAction === CommitActionEnum.mint ? (
+                    <AmountInput
+                        invalidAmount={invalidAmount}
+                        amount={amount}
+                        amountBN={amountBN}
+                        balance={pool.quoteToken.balance}
+                        tokenSymbol={pool.quoteToken.symbol}
+                        swapDispatch={swapDispatch}
+                        selectedPool={selectedPool}
+                        isPoolToken={false}
+                    />
+                ) : (
+                    <AmountInput
+                        invalidAmount={invalidAmount}
+                        amount={amount}
+                        amountBN={amountBN}
+                        balance={token.balance}
+                        tokenSymbol={token.symbol}
+                        swapDispatch={swapDispatch}
+                        selectedPool={selectedPool}
+                        isPoolToken={true}
+                    />
+                )}
             </div>
         </>
     );
@@ -163,7 +160,6 @@ export default (({ pool, swapState, swapDispatch }) => {
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }>;
-
 
 type AmountProps = {
     invalidAmount: InvalidAmount;
@@ -174,7 +170,7 @@ type AmountProps = {
     balance: BigNumber;
     tokenSymbol: string;
     isPoolToken: boolean;
-}
+};
 
 const AmountInput: React.FC<AmountProps> = ({
     invalidAmount,
@@ -184,9 +180,8 @@ const AmountInput: React.FC<AmountProps> = ({
     swapDispatch,
     balance,
     tokenSymbol,
-    isPoolToken
+    isPoolToken,
 }) => {
-
     return (
         <>
             <InputContainer error={invalidAmount.isInvalid} className="w-full">
@@ -207,7 +202,7 @@ const AmountInput: React.FC<AmountProps> = ({
                             !!selectedPool &&
                             swapDispatch({
                                 type: 'setAmount',
-                                value: balance.toString()
+                                value: balance.toString(),
                             })
                         }
                     >
@@ -224,60 +219,36 @@ const AmountInput: React.FC<AmountProps> = ({
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
-                    <Available 
-                        balance={balance}
-                        amountBN={amountBN}
-                        isPoolToken={isPoolToken}
-                    />
+                    <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
                 )}
             </p>
         </>
-    )
-}
+    );
+};
 
 const Available: React.FC<{
-    amountBN: BigNumber,
-    balance: BigNumber,
-    isPoolToken: boolean
-}> = ({
-    amountBN,
-    balance,
-    isPoolToken 
-}) => {
-    const balanceAfter = BigNumber.max(
-        amountBN.eq(0)
-            ? balance
-            : balance.minus(amountBN),
-        0,
-    )
+    amountBN: BigNumber;
+    balance: BigNumber;
+    isPoolToken: boolean;
+}> = ({ amountBN, balance, isPoolToken }) => {
+    const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
 
     return (
         <>
             {`Available: `}
-            {isPoolToken
-                ?
-                    <>
-                        {`${
-                            balance.toFixed(2)
-                        } `}
-                        {amountBN.gt(0) ? (
-                            <span className="opacity-80">
-                                {`>>> ${toApproxCurrency(balanceAfter)}`}
-                            </span>
-                        ) : null}
-                    </>
-                : 
-                    <>
-                        {`${
-                            toApproxCurrency(balance)
-                        } `}
-                        {amountBN.gt(0) ? (
-                            <span className="opacity-80">
-                                {`>>> ${balanceAfter.toFixed(2)}`}
-                            </span>
-                        ) : null}
-                    </>
-            }
+            {isPoolToken ? (
+                <>
+                    {`${balance.toFixed(2)} `}
+                    {amountBN.gt(0) ? (
+                        <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
+                    ) : null}
+                </>
+            ) : (
+                <>
+                    {`${toApproxCurrency(balance)} `}
+                    {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(2)}`}</span> : null}
+                </>
+            )}
         </>
-    )
-}
+    );
+};
