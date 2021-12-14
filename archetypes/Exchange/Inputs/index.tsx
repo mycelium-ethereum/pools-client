@@ -14,13 +14,18 @@ import { tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import { Pool } from '@libs/types/General';
 
+
+type InvalidAmount = {
+    isInvalid: boolean;
+    message?: string;
+}
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (
     amount: BigNumber,
     balance: BigNumber,
     minimumTokens: BigNumber,
     tokenPrice: BigNumber,
-) => { isInvalid: boolean; message?: string } = (amount, balance, minimumTokens, tokenPrice) => {
+) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -111,7 +116,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                         text: token.symbol,
                         ticker: tokenSymbolToLogoTicker(token.symbol),
                     }))}
-                    value={side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol}
+                    value={token.symbol}
                     onSelect={(option) => {
                         const [pool, side] = option.split('-');
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
@@ -124,68 +129,32 @@ export default (({ pool, swapState, swapDispatch }) => {
             </div>
             <div className="w-full">
                 <p className="mb-2 ">Amount</p>
-                <InputContainer error={invalidAmount.isInvalid} className="w-full">
-                    <Input
-                        className="w-3/5 h-full font-normal text-base"
-                        value={amount}
-                        onUserInput={(val) => {
-                            swapDispatch({ type: 'setAmount', value: val || '' });
-                        }}
-                    />
-                    <InnerInputText>
-                        {token.symbol ? (
-                            <Currency ticker={tokenSymbolToLogoTicker(token.symbol)} label={token.symbol} />
-                        ) : null}
-                        <div
-                            className="m-auto cursor-pointer hover:underline"
-                            onClick={(_e) =>
-                                !!selectedPool &&
-                                swapDispatch({
-                                    type: 'setAmount',
-                                    value:
-                                        side === SideEnum.long
-                                            ? pool.longToken.balance.toString()
-                                            : pool.shortToken.balance.toString(),
-                                })
-                            }
-                        >
-                            Max
-                        </div>
-                    </InnerInputText>
-                </InputContainer>
-                <p
-                    className={classNames(
-                        invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
-                        'opacity-70 text-sm mt-2',
-                    )}
-                >
-                    {invalidAmount.isInvalid && invalidAmount.message ? (
-                        invalidAmount.message
-                    ) : (
-                        <>
-                            {`Available: `}
-                            {`${
-                                side === SideEnum.long
-                                    ? pool.longToken.balance.toFixed(2)
-                                    : pool.shortToken.balance.toFixed(2)
-                            } `}
-                            {amountBN.gt(0) ? (
-                                <span className="opacity-80">
-                                    {`>>> ${BigNumber.max(
-                                        side === SideEnum.long
-                                            ? amountBN.eq(0)
-                                                ? pool.longToken.balance
-                                                : pool.longToken.balance.minus(amount)
-                                            : amountBN.eq(0)
-                                            ? pool.shortToken.balance
-                                            : pool.shortToken.balance.minus(amount),
-                                        0,
-                                    ).toFixed(2)}`}
-                                </span>
-                            ) : null}
-                        </>
-                    )}
-                </p>
+
+                {
+                    commitAction === CommitActionEnum.mint
+                        ? <AmountInput 
+                            invalidAmount={invalidAmount}
+                            amount={amount}
+                            amountBN={amountBN}
+                            balance={pool.quoteToken.balance}
+                            tokenSymbol={pool.quoteToken.symbol}
+                            swapDispatch={swapDispatch}
+                            selectedPool={selectedPool}
+                            isPoolToken={false}
+                        />
+
+                        : <AmountInput 
+                            invalidAmount={invalidAmount}
+                            amount={amount}
+                            amountBN={amountBN}
+                            balance={token.balance}
+                            tokenSymbol={token.symbol}
+                            swapDispatch={swapDispatch}
+                            selectedPool={selectedPool}
+                            isPoolToken={true}
+                        />
+                }
+
             </div>
         </>
     );
@@ -194,3 +163,121 @@ export default (({ pool, swapState, swapDispatch }) => {
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }>;
+
+
+type AmountProps = {
+    invalidAmount: InvalidAmount;
+    amountBN: BigNumber;
+    amount: string;
+    selectedPool: string | undefined;
+    swapDispatch: React.Dispatch<SwapAction>;
+    balance: BigNumber;
+    tokenSymbol: string;
+    isPoolToken: boolean;
+}
+
+const AmountInput: React.FC<AmountProps> = ({
+    invalidAmount,
+    selectedPool,
+    amount,
+    amountBN,
+    swapDispatch,
+    balance,
+    tokenSymbol,
+    isPoolToken
+}) => {
+
+    return (
+        <>
+            <InputContainer error={invalidAmount.isInvalid} className="w-full">
+                <Input
+                    className="w-3/5 h-full font-normal text-base"
+                    value={amount}
+                    onUserInput={(val) => {
+                        swapDispatch({ type: 'setAmount', value: val || '' });
+                    }}
+                />
+                <InnerInputText>
+                    {tokenSymbol ? (
+                        <Currency ticker={tokenSymbolToLogoTicker(tokenSymbol)} label={tokenSymbol} />
+                    ) : null}
+                    <div
+                        className="m-auto cursor-pointer hover:underline"
+                        onClick={(_e) =>
+                            !!selectedPool &&
+                            swapDispatch({
+                                type: 'setAmount',
+                                value: balance.toString()
+                            })
+                        }
+                    >
+                        Max
+                    </div>
+                </InnerInputText>
+            </InputContainer>
+            <p
+                className={classNames(
+                    invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
+                    'opacity-70 text-sm mt-2',
+                )}
+            >
+                {invalidAmount.isInvalid && invalidAmount.message ? (
+                    invalidAmount.message
+                ) : (
+                    <Available 
+                        balance={balance}
+                        amountBN={amountBN}
+                        isPoolToken={isPoolToken}
+                    />
+                )}
+            </p>
+        </>
+    )
+}
+
+const Available: React.FC<{
+    amountBN: BigNumber,
+    balance: BigNumber,
+    isPoolToken: boolean
+}> = ({
+    amountBN,
+    balance,
+    isPoolToken 
+}) => {
+    const balanceAfter = BigNumber.max(
+        amountBN.eq(0)
+            ? balance
+            : balance.minus(amountBN),
+        0,
+    )
+
+    return (
+        <>
+            {`Available: `}
+            {isPoolToken
+                ?
+                    <>
+                        {`${
+                            balance.toFixed(2)
+                        } `}
+                        {amountBN.gt(0) ? (
+                            <span className="opacity-80">
+                                {`>>> ${toApproxCurrency(balanceAfter)}`}
+                            </span>
+                        ) : null}
+                    </>
+                : 
+                    <>
+                        {`${
+                            toApproxCurrency(balance)
+                        } `}
+                        {amountBN.gt(0) ? (
+                            <span className="opacity-80">
+                                {`>>> ${balanceAfter.toFixed(2)}`}
+                            </span>
+                        ) : null}
+                    </>
+            }
+        </>
+    )
+}
