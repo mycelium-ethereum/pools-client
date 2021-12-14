@@ -37,7 +37,7 @@ export default (({ account, className }) => {
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative ml-4 my-auto overflow-hidden xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -51,7 +51,7 @@ export default (({ account, className }) => {
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
-                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full lg:hidden">
+                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full xl:hidden">
                             <Transition.Child
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"

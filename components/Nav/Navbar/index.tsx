@@ -87,7 +87,7 @@ export const NavBarContent: React.FC<{
                 ) : null}
 
                 {/* DESKTOP */}
-                <span className="hidden lg:flex">
+                <span className="hidden xl:flex">
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
