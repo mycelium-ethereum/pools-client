@@ -12,6 +12,9 @@ import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
 import { Logo } from '@components/General';
 
+import Error from 'public/img/general/error.svg';
+import { StyledTooltip } from '@components/Tooltips';
+
 interface MultiBridgeProps {
     fromNetwork: Network;
     toNetwork?: Network;
@@ -57,7 +60,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     const bridgeableAssetList = useMemo(() => {
         if (!fromNetwork) {
-            return [];
+            return bridgeableAssets.DEFAULT;
         }
 
         return bridgeableAssets[fromNetwork.id];
@@ -176,6 +179,40 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         return selectedAssetBalance.allowance.eq(0);
     }, [selectedAsset, selectedAssetBalance?.allowance]);
 
+    const displayButton: () => React.ReactNode = () => {
+        if (!fromNetwork?.logoTicker) {
+            // unsupported network
+            return (
+                <StyledTooltip title="Connect to Arbitrum or Ethereum to bridge funds.">
+                    <div className="mt-2">
+                        <Button variant="primary" size="lg" disabled={true}>
+                            Unsupported Network
+                        </Button>
+                    </div>
+                </StyledTooltip>
+            );
+        } else if (approvalRequired) {
+            return (
+                <Button variant="primary" size="lg" onClick={approveToken} className="mt-2">
+                    Unlock {selectedAsset?.symbol}
+                </Button>
+            );
+        } else {
+            return (
+                <Button
+                    variant="primary"
+                    size="lg"
+                    onClick={bridgeAsset}
+                    className="mt-2"
+                    disabled={!(Number(amount) > 0) || amountIsInvalid}
+                >
+                    Bridge {toNetwork ? `to ${toNetwork.name}` : 'Funds'}
+                    {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
+                </Button>
+            );
+        }
+    };
+
     return (
         <div className="sm:mt-20">
             <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl sm:rounded-3xl py-12 px-4 md:py-16 md:px-20 mx-auto">
@@ -190,7 +227,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
-                                    <Logo className="inline mr-2 my-0" ticker={fromNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {fromNetwork?.logoTicker ? (
+                                        <Logo
+                                            className="inline mr-2 my-0"
+                                            ticker={fromNetwork?.logoTicker ?? 'DEFAULT'}
+                                        />
+                                    ) : (
+                                        <Error className="inline h-5 mr-1" />
+                                    )}
                                     {fromNetwork?.name || 'Unsupported Network'}
                                 </div>
                             </div>
@@ -213,7 +257,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
-                                    <Logo className="inline mr-2 my-0" ticker={toNetwork?.logoTicker ?? 'DEFAULT'} />
+                                    {fromNetwork?.logoTicker ? (
+                                        <Logo
+                                            className="inline mr-2 my-0"
+                                            ticker={fromNetwork?.logoTicker ?? 'DEFAULT'}
+                                        />
+                                    ) : (
+                                        <Error className="inline h-5 mr-1" />
+                                    )}
                                     {toNetwork?.name || 'Unsupported Network'}
                                 </div>
                             </div>
@@ -299,22 +350,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </div>
                     </div>
 
-                    {approvalRequired ? (
-                        <Button variant="primary" size="lg" onClick={approveToken} className="mt-2">
-                            Unlock {selectedAsset?.symbol}
-                        </Button>
-                    ) : (
-                        <Button
-                            variant="primary"
-                            size="lg"
-                            onClick={bridgeAsset}
-                            className="mt-2"
-                            disabled={!(Number(amount) > 0) || amountIsInvalid}
-                        >
-                            Bridge {toNetwork ? `to ${toNetwork.name}` : 'Funds'}
-                            {isBridging ? <LoadingOutlined className="ml-2" aria-hidden="true" /> : null}
-                        </Button>
-                    )}
+                    {displayButton()}
 
                     <p className="text-center w-full mt-4 text-sm">
                         {approvalRequired ? (

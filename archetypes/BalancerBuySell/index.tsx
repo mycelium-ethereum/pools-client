@@ -18,7 +18,7 @@ export default (() => {
     const { network = ARBITRUM } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
-    const pool: StaticPoolInfo | undefined = poolMap[network][selectedPool ?? ''];
+    const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];
 
     const valid = !Number.isNaN(leverage) && !!market && !Number.isNaN(side);
 
