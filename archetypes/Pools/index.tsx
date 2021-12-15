@@ -81,7 +81,6 @@ export const Browse: React.FC = () => {
             ${commitAction === CommitActionEnum.mint ? 'Buying/minting ' : 'Burning/selling '}
             ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}
         `);
-        console.log('from here!!!');
         swapDispatch({ type: 'setSelectedPool', value: pool });
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: commitAction });

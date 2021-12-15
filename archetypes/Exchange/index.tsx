@@ -26,7 +26,6 @@ const TRADE_OPTIONS = [
 export default (({ onClose }) => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const pool = usePool(swapState.selectedPool);
-    console.log(swapState.selectedPool);
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     const amountBN = useBigNumber(swapState.amount);

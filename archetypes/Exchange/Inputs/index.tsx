@@ -99,8 +99,6 @@ export default (({ pool, swapState, swapDispatch }) => {
 
             const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice);
 
-            console.log('invalidAmount', invalidAmount);
-
             swapDispatch({
                 type: 'setInvalidAmount',
                 value: invalidAmount,
@@ -127,7 +125,6 @@ export default (({ pool, swapState, swapDispatch }) => {
                     value={token.symbol}
                     onSelect={(option) => {
                         const [pool, side] = option.split('-');
-                        console.log('Setting pool from here', pool, side);
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}

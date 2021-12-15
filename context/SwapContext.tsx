@@ -132,7 +132,6 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                     leverage: action.value,
                 };
             case 'setSelectedPool':
-                console.log('Setting pool');
                 return { ...state, selectedPool: action.value };
             case 'setInvalidAmount':
                 return { ...state, invalidAmount: action.value };
@@ -180,7 +179,6 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     useEffect(() => {
         if (swapDispatch) {
             if (router.query.pool) {
-                console.log('From here?/');
                 swapDispatch({ type: 'setSelectedPool', value: router.query.pool as string });
             }
             if (router.query.type) {

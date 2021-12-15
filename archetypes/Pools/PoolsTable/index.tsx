@@ -617,7 +617,7 @@ const UpOrDownTip: React.FC<{
               } ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
     } else {
         message = showNextRebalance
-            ? `The ${side !== undefined ? sideText : ''} ${metric} is currently ${valueText} ${
+            ? `The expected ${side !== undefined ? sideText : ''} ${metric} is currently ${valueText} ${
                   value > 0 ? 'greater than' : 'less than'
               } it was at the last rebalance of the ${poolTicker} pool.`
             : `The ${side !== undefined ? sideText : ''} ${metric} ${
