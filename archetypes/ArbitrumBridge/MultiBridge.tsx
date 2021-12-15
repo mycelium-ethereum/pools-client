@@ -40,6 +40,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
         onBridgeAsset,
         onApproveToken,
         account,
+        provider,
     } = props;
 
     const [selectedAssetIndex, setSelectedAssetIndex] = useState(0);
@@ -102,10 +103,11 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     // refresh asset balance when selected account changes
     useEffect(() => {
-        if (selectedAsset && account) {
+        console.debug('Checking if ready to refresh balance', provider);
+        if (selectedAsset && account && !!provider) {
             refreshBridgeableBalance(selectedAsset);
         }
-    }, [account]);
+    }, [account, provider]);
 
     // refresh asset balance when selected network changes
     useEffect(() => {

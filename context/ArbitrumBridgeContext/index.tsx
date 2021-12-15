@@ -387,6 +387,8 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
         }
 
+        console.debug('Fetching bridge balances');
+
         // ensure the network and account entries are initialised
         newBridgeableBalances[fromNetwork.id] = newBridgeableBalances[fromNetwork.id] || {};
         newBridgeableBalances[fromNetwork.id][account] = newBridgeableBalances[fromNetwork.id][account] || {};

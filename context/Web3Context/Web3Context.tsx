@@ -96,6 +96,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 console.debug('Waiting for injected wallet provider');
                                 provider_.ready.then(() => {
                                     console.debug('Injected wallet provider ready');
+                                    console.debug('Setting injected wallet provider', provider_);
                                     setWallet(wallet);
                                     usingDefaultProvider.current = false;
                                     setProvider(provider_);
@@ -147,6 +148,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                 // websocket providers need to initiate
                 console.debug('Waiting for provider', provider_.ready);
                 await provider_.ready;
+                console.debug('Provider ready, setting provider', usingDefaultProvider.current);
                 if (usingDefaultProvider.current) {
                     // if the provider has not been set by onboard
                     if (mounted) {
