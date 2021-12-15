@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { SwapStore } from '@context/SwapContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import PendingCommits from '@components/PendingCommits';
 
 export default (() => {
     const router = useRouter();
@@ -25,6 +26,7 @@ export default (() => {
                     <Browse />
                 </SwapStore>
                 <UnsupportedNetworkPopup />
+                <PendingCommits />
             </PoolStore>
             <OnboardTradeModal
                 onboardStep={onboardStep}
