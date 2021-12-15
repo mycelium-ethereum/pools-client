@@ -165,5 +165,9 @@ export default (() => {
         [attachedBalancerPrices, upkeeps],
     );
 
-    return finalRows;
-}) as () => BrowseTableRowData[];
+    return {
+        rows: finalRows,
+    };
+}) as () => {
+    rows: BrowseTableRowData[];
+};

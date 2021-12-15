@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } f
 import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
-import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
+import { fetchCommits, fetchPoolBalances, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -36,6 +36,7 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
+    triggerUpdate: (pool: string) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -232,6 +233,27 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             .catch((err) => {
                 console.error('Failed to fetch token allowances', err);
             });
+    };
+
+    const triggerUpdate = (pool: string) => {
+        if (provider && poolsState.pools[pool]) {
+            const pool_ = poolsState.pools[pool];
+            fetchPoolBalances(
+                {
+                    address: pool_.address,
+                    keeper: pool_.keeper,
+                    quoteTokenDecimals: pool_.quoteToken.decimals,
+                },
+                provider,
+            ).then((poolBalances) => {
+                console.debug('Fetched updated bool balances');
+                poolsDispatch({
+                    type: 'setUpdatedPoolBalances',
+                    pool: pool,
+                    ...poolBalances,
+                });
+            });
+        }
     };
 
     // subscribe to pool events
@@ -507,6 +529,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
+                    triggerUpdate,
                 }}
             >
                 {children}

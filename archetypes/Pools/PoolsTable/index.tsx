@@ -63,7 +63,7 @@ const CommittmentTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
+export default (({ rows, onClickMintBurn, triggerTableUpdate, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider, account } = useWeb3();
     return (
@@ -156,6 +156,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             account={account}
+                            triggerTableUpdate={triggerTableUpdate}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
                         />
@@ -188,6 +189,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
 }) as React.FC<
     {
         rows: BrowseTableRowData[];
+        triggerTableUpdate: (pool: string) => void;
     } & TProps
 >;
 
@@ -197,9 +199,10 @@ const PoolRow: React.FC<
         pool: BrowseTableRowData;
         account: string | undefined;
         index: number;
+        triggerTableUpdate: (pool: string) => void;
         provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
-> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({ pool, account, onClickMintBurn, index, triggerTableUpdate, provider, showNextRebalance, deltaDenotion }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -207,6 +210,7 @@ const PoolRow: React.FC<
     useEffect(() => {
         if (isBeforeFrontRunning) {
             setPendingUpkeep(false);
+            triggerTableUpdate(pool.address);
         }
     }, [isBeforeFrontRunning]);
 
