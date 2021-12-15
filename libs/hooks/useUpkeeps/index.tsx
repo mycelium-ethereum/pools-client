@@ -34,8 +34,7 @@ type RawUpkeep = {
     block_timestamp: string;
 };
 
-const POOLS_API = 'https://dev.api.tracer.finance/pools/upkeeps';
-// https://dev.api.tracer.finance/pools/upkeeps?network=chain_id&poolAddress=pool_address&committerAddress=committer_address
+const POOLS_API = process.env.NEXT_PUBLIC_POOLS_API;
 
 // const useUpkeeps
 export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
@@ -52,7 +51,7 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
             // TODO remove this is for testing
             const from = 1638826512;
 
-            const rawUpkeeps = await fetch(`${POOLS_API}?network=${network}&from=${from}`)
+            const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
                 .then((res) => {
                     return res.json();
                 })
