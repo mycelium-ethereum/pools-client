@@ -81,6 +81,7 @@ export default (() => {
                         }))}
                         onClick={(index) => {
                             swapDispatch({ type: 'setLeverage', value: index });
+                            swapDispatch({ type: 'setPoolFromLeverage', value: index });
                         }}
                     />
                 </div>

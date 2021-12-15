@@ -81,23 +81,32 @@ export default (({ pool, swapState, swapDispatch }) => {
         if (pool) {
             const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
-            const minimumTokens: BigNumber =
-                commitAction === CommitActionEnum.mint
-                    ? new BigNumber(minimumCommitSize.toString())
-                    : calcMinAmountIn(token.supply.plus(pendingBurns), notional, minimumCommitSize, pendingBurns);
-
             const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
 
-            const currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+            let currentBalance: BigNumber, minimumTokens: BigNumber;
+            if (commitAction === CommitActionEnum.mint) {
+                currentBalance = pool.quoteToken.balance;
+                minimumTokens = new BigNumber(minimumCommitSize.toString());
+            } else {
+                currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+                minimumTokens = calcMinAmountIn(
+                    token.supply.plus(pendingBurns),
+                    notional,
+                    minimumCommitSize,
+                    pendingBurns,
+                );
+            }
 
             const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice);
+
+            console.log('invalidAmount', invalidAmount);
 
             swapDispatch({
                 type: 'setInvalidAmount',
                 value: invalidAmount,
             });
         }
-    }, [side, amount, notional, token, pendingBurns]);
+    }, [side, commitAction, amount, notional, token, pendingBurns]);
 
     return (
         <>
@@ -118,6 +127,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                     value={token.symbol}
                     onSelect={(option) => {
                         const [pool, side] = option.split('-');
+                        console.log('Setting pool from here', pool, side);
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
@@ -239,14 +249,14 @@ const Available: React.FC<{
             {isPoolToken ? (
                 <>
                     {`${balance.toFixed(2)} `}
-                    {amountBN.gt(0) ? (
-                        <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
-                    ) : null}
+                    {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(2)}`}</span> : null}
                 </>
             ) : (
                 <>
                     {`${toApproxCurrency(balance)} `}
-                    {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(2)}`}</span> : null}
+                    {amountBN.gt(0) ? (
+                        <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
+                    ) : null}
                 </>
             )}
         </>
