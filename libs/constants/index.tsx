@@ -26,6 +26,13 @@ export enum CommitEnum {
     long_burn = 3,
 }
 
+export const CommitTypeMap = {
+    LongBurn: CommitEnum.long_burn,
+    LongMint: CommitEnum.long_mint,
+    ShortBurn: CommitEnum.short_burn,
+    ShortMint: CommitEnum.short_mint,
+};
+
 // Focused on either buys or shorts when viewing pending commits
 export enum CommitsFocusEnum {
     mints = 0,

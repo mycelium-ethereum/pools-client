@@ -1,32 +1,33 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
-import useHistoricCommits from '@libs/hooks/useHistoricCommits';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { HistoricCommit } from '@libs/types/General';
 import { formatDate, toApproxCurrency } from '@libs/utils/converters';
-import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-import Actions from '@components/TokenActions';
-import { ethers } from 'ethers';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
+import fetchTradeHistory, { TradeHistory } from '@archetypes/Portfolio/tradeHistoryAPI';
+// import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+// import Actions from '@components/TokenActions';
 
-// const Queued
 export default (({ focus }) => {
     const { provider } = useWeb3();
-    const { commits } = useHistoricCommits();
+    const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
+
+    useEffect(() => {
+        fetchTradeHistory({ account: '0x0000000000f04d1aA0A4017cDdba341e802fD416' }).then((r) => setTradeHistory(r));
+    }, [provider]);
 
     const { mintCommits, burnCommits } = useMemo(
         () => ({
-            mintCommits: commits.filter(
+            mintCommits: tradeHistory.filter(
                 (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
             ),
-            burnCommits: commits.filter(
+            burnCommits: tradeHistory.filter(
                 (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
             ),
         }),
-        [commits],
+        [tradeHistory],
     );
 
     const { setPage, page, paginatedArray, numPages } = usePagination(
@@ -37,7 +38,7 @@ export default (({ focus }) => {
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
             <div className="flex justify-between">
                 <h1 className="text-bold text-2xl text-theme-text">
-                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
+                    {`${focus === CommitsFocusEnum.mints ? 'Mint' : 'Burn'} History`}
                 </h1>
             </div>
             <Table>
@@ -49,8 +50,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Spent (USDC)</TableHeaderCell>
                             <TableHeaderCell>Received (Tokens) *</TableHeaderCell>
                             <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Fees</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
                         {paginatedArray.map((commit, index) => (
                             <CommitRow
@@ -70,8 +70,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
                             <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
                             <TableHeaderCell>Return (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Fees</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
                         {paginatedArray.map((commit, index) => (
                             <CommitRow
@@ -120,43 +119,41 @@ export default (({ focus }) => {
 }>;
 
 const CommitRow: React.FC<
-    HistoricCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
+    TradeHistory & {
         index: number;
         burnRow: number;
     }
-> = ({ token, txnHash, tokenPrice, amount, provider, index, created, fee, burnRow }) => {
+> = ({ date, tokenName, tokenAmount, tokenPrice, tokenSymbol, index, burnRow }) => {
     return (
-        <TableRow key={txnHash} rowNumber={index}>
-            <TableRowCell>{formatDate(new Date(created * 1000))}</TableRowCell>
+        <TableRow key={index} rowNumber={index}>
+            <TableRowCell>{formatDate(new Date(date * 1000))}</TableRowCell>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.name}
+                <Logo ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline mr-2" />
+                {tokenName}
             </TableRowCell>
             {burnRow ? (
                 <>
-                    <TableRowCell>{amount.toFixed(2)}</TableRowCell>
+                    <TableRowCell>{tokenAmount.toFixed(2)}</TableRowCell>
                     <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-                    <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))}</TableRowCell>
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
-                    <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenAmount)}</TableRowCell>
+                    <TableRowCell>{tokenAmount.div(tokenPrice).toFixed(2)}</TableRowCell>
                     <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
                 </>
             )}
-            <TableRowCell>{toApproxCurrency(fee)}</TableRowCell>
-            <TableRowCell className="flex text-right">
-                <Actions
-                    token={token}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
-                        target: txnHash,
-                    }}
-                />
-            </TableRowCell>
+            {/*<TableRowCell className="flex text-right">*/}
+            {/*    <Actions*/}
+            {/*        token={token}*/}
+            {/*        provider={provider}*/}
+            {/*        arbiscanTarget={{*/}
+            {/*            type: ArbiscanEnum.txn,*/}
+            {/*            target: txnHash,*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*</TableRowCell>*/}
         </TableRow>
     );
 };

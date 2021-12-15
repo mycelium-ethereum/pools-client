@@ -1,78 +1,64 @@
-import { CommitEnum } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum, CommitTypeMap } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 
 // Base API URL
-const BASE_TRADE_HISTORY_API = 'https://api.tracer.finance/pools/tradeHistory';
+const BASE_TRADE_HISTORY_API = 'https://dev.api.tracer.finance/pools/tradeHistory';
+
+type NetworkType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
 // Raw API return types
 type Result = {
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    data: [
-        {
-            type: CommitEnum;
-            source: 'tracer' | 'balancer';
-            date: number;
-            tokenAddress: string;
-            tokenName: string;
-            tokenAmount: BigNumber;
-            collateralAmount: BigNumber;
-            fee: BigNumber;
-        },
-    ];
+    collateralAmount: string;
+    date: number;
+    tokenAddress: string;
+    tokenAmount: string;
+    tokenName: string;
+    tokenPrice: string;
+    tokenSymbol: string;
+    type: 'LongBurn' | 'LongMint' | 'ShortMint' | 'ShortBurn';
+    userAddress: string;
 };
 
 // Parsed types
-type TradeHistory = {
-    totalResults: number;
-    page: number;
-    pageSize: number;
-    data: [
-        {
-            type: CommitEnum;
-            source: 'tracer' | 'balancer';
-            date: number;
-            tokenAddress: string;
-            tokenName: string;
-            tokenAmount: BigNumber;
-            collateralAmount: BigNumber;
-            fee: BigNumber;
-        },
-    ];
+export type TradeHistory = {
+    date: number;
+    type: CommitEnum;
+    tokenName: string;
+    collateralAmount: BigNumber;
+    tokenAmount: BigNumber;
+    tokenPrice: BigNumber;
+    tokenSymbol: string;
 };
 
-const fetchTradeHistory: (params: {
-    page: number;
-    pageSize: number;
-    sort: Date;
-    sortDirection: 'ASC' | 'DESC';
-    network: string;
-    poolAddress?: string;
-}) => Promise<TradeHistory[]> = async () => {
-    // TODO: Update the route to include the params
-    const route = `${BASE_TRADE_HISTORY_API}`;
-    const commits: TradeHistory[] = await fetch(route)
+const fetchTradeHistory: (params: { network?: NetworkType; account: string }) => Promise<TradeHistory[]> = async ({
+    network,
+    account,
+}) => {
+    const route = `${BASE_TRADE_HISTORY_API}?network=${network ?? ARBITRUM}&userAddress=${account}`;
+    const fetchedTradeHistory: TradeHistory[] = await fetch(route)
         .then((res) => res.json())
         .then((results) => {
-            const parsedCommits: TradeHistory[] = [];
-            results.forEach((result: Result) => {
+            const parsedResults: TradeHistory[] = [];
+            results.rows.forEach((row: Result) => {
                 // Parse the raw results to the types you want,
                 // which you can adjust in the TradeHistory type
-                parsedCommits.push({
-                    totalResults: result.totalResults,
-                    page: result.page,
-                    pageSize: result.pageSize,
-                    data: result.data,
+                parsedResults.push({
+                    date: row.date,
+                    type: CommitTypeMap[row.type],
+                    tokenName: row.tokenName,
+                    collateralAmount: new BigNumber(row.collateralAmount),
+                    tokenAmount: new BigNumber(row.tokenAmount),
+                    tokenPrice: new BigNumber(row.tokenPrice),
+                    tokenSymbol: row.tokenSymbol,
                 });
             });
-            return parsedCommits;
+            return parsedResults;
         })
         .catch((err) => {
             console.error('Failed to fetch trade history', err);
             return [];
         });
-    return commits;
+    return fetchedTradeHistory;
 };
 
 export default fetchTradeHistory;

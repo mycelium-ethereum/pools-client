@@ -1,4 +1,4 @@
-import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum, CommitTypeMap } from '@libs/constants';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
@@ -34,12 +34,6 @@ export type APICommitReturn = {
     pool: string; // pool address
 };
 
-const CommitTypeMap = {
-    LongBurn: CommitEnum.long_burn,
-    LongMint: CommitEnum.long_mint,
-    ShortBurn: CommitEnum.short_burn,
-    ShortMint: CommitEnum.short_mint,
-};
 export const fetchPoolCommits: (
     network: SourceType,
     params: {
