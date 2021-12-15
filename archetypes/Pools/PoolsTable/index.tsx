@@ -234,7 +234,7 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
                         <>
-                            <div>{toApproxCurrency(pool.lastPrice)}</div>
+                            <div>{toApproxCurrency(pool.oraclePrice)}</div>
                             <div className="mt-1">
                                 <UpOrDown
                                     oldValue={pool.lastPrice}
