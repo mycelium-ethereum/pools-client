@@ -261,10 +261,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             </label>
                             <div className="mt-1 relative rounded-md shadow-sm">
                                 <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
-                                    {fromNetwork?.logoTicker ? (
+                                    {toNetwork?.logoTicker ? (
                                         <Logo
                                             className="inline mr-2 my-0"
-                                            ticker={fromNetwork?.logoTicker ?? 'DEFAULT'}
+                                            ticker={toNetwork?.logoTicker ?? 'DEFAULT'}
                                         />
                                     ) : (
                                         <Error className="inline h-5 mr-1" />
