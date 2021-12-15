@@ -71,7 +71,7 @@ export default (({ onClose }) => {
                 receiveIn={receiveIn}
             />
 
-            <ExchangeButton swapState={swapState} swapDispatch={swapDispatch} />
+            <ExchangeButton onClose={onClose} swapState={swapState} swapDispatch={swapDispatch} />
         </div>
     );
 }) as React.FC<{

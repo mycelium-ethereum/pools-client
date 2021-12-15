@@ -5,10 +5,11 @@ import { usePool, usePoolActions } from '@context/PoolContext';
 import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 
-const ExchangeButton: React.FC<{ swapState: SwapState; swapDispatch: React.Dispatch<SwapAction> }> = ({
-    swapState,
-    swapDispatch,
-}) => {
+const ExchangeButton: React.FC<{
+    onClose: () => void;
+    swapState: SwapState;
+    swapDispatch: React.Dispatch<SwapAction>;
+}> = ({ onClose, swapState, swapDispatch }) => {
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { selectedPool, side, amount, invalidAmount, commitAction } = swapState;
@@ -75,6 +76,7 @@ const ExchangeButton: React.FC<{ swapState: SwapState; swapDispatch: React.Dispa
                     commit(selectedPool ?? '', commitType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
+                            onClose();
                         },
                     });
                 }}

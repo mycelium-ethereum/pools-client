@@ -98,7 +98,7 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                             <Section label="Expected number of tokens">
                                 <div>
                                     <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
-                                    <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
+                                    <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1, 3)}`}</span>
                                 </div>
                             </Section>
                             <Section label="Power Leverage">
@@ -120,7 +120,7 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                     ) : (
                         <>
                             <Section label="Expected return">
-                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
+                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`}
                             </Section>
                         </>
                     )}
@@ -169,6 +169,7 @@ const BalancerLink: React.FC<{
                 >
                     {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
                         balancerPoolPrices[token.symbol],
+                        3,
                     )}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>
