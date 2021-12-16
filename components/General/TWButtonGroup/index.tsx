@@ -68,7 +68,7 @@ export default (({
 }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
     return (
-        <span className={classNames('relative z-0 inline-flex shadow-sm w-full', OVERALL_BACKGROUND[color])}>
+        <span className={classNames('relative z-0 inline-flex w-full', OVERALL_BACKGROUND[color])}>
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
