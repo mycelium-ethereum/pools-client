@@ -49,17 +49,29 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
             const from = now - (poolInfo?.updateInterval || ONE_HOUR).times(2).toNumber();
 
             const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
-                .then((res) => {
-                    return res.json();
+                .then(async (res) => {
+                    const response = await res.json()
+                    if (res.ok) {
+                        return response
+                    } else {
+                        return {
+                            message: response?.message ?? 'Unknown error',
+                            data: null
+                        }
+                    }
                 })
                 .catch((error) => {
                     console.error('Failed to fetch upkeeps', error);
-                    return [];
+                    return {
+                        message: error,
+                        data: null
+                    } 
                 });
 
             if (rawUpkeeps.message) {
                 console.info('Fetched upkeeps', rawUpkeeps.message);
-            } else if (rawUpkeeps.data) {
+            }
+            if (rawUpkeeps.data) {
                 if (mounted) {
                     const upkeepMapping: Record<string, Upkeep[]> = {};
 
