@@ -15,12 +15,10 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
-import { usePoolActions } from '@context/PoolContext';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
     const { swapDispatch = noDispatch } = useSwapContext();
-    const { triggerUpdate } = usePoolActions();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
@@ -96,12 +94,6 @@ export const Browse: React.FC = () => {
         });
     };
 
-    const triggerTableUpdate: (pool: string) => void = (pool) => {
-        if (triggerUpdate) {
-            triggerUpdate(pool);
-        }
-    };
-
     return (
         <>
             <div className="container mt-0 md:mt-20">
@@ -118,7 +110,6 @@ export const Browse: React.FC = () => {
                         deltaDenotion={state.deltaDenotion}
                         onClickMintBurn={handleMintBurn}
                         showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
-                        triggerTableUpdate={triggerTableUpdate}
                     />
                 </div>
             </div>

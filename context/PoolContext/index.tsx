@@ -36,7 +36,6 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string) => void;
-    triggerUpdate: (pool: string) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -235,26 +234,25 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
     };
 
-    const triggerUpdate = (pool: string) => {
-        if (provider && poolsState.pools[pool]) {
-            const pool_ = poolsState.pools[pool];
-            fetchPoolBalances(
-                {
-                    address: pool_.address,
-                    keeper: pool_.keeper,
-                    quoteTokenDecimals: pool_.quoteToken.decimals,
-                },
-                provider,
-            ).then((poolBalances) => {
-                console.debug('Fetched updated bool balances');
+    const updatePoolBalances: (pool: Pool, provider_: ethers.providers.JsonRpcProvider | undefined) => void = (pool, provider_) => {
+        if (provider_ && pool) {
+            fetchPoolBalances({
+                address: pool.address,
+                keeper: pool.keeper,
+                quoteTokenDecimals: pool.quoteToken.decimals,
+            }, provider_)
+            .then((poolBalances) => {
+                console.debug("Fetched updated bool balances")
                 poolsDispatch({
                     type: 'setUpdatedPoolBalances',
-                    pool: pool,
-                    ...poolBalances,
-                });
-            });
+                    pool: pool.address,
+                    ...poolBalances
+                })
+            })
+        } else {
+            console.debug(`Skipping pool balance update: Provider: ${provider}, pool: ${pool?.address}`)
         }
-    };
+    }
 
     // subscribe to pool events
     const subscribeToPool = (pool: string) => {
@@ -352,6 +350,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             });
                         });
                         updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
+                        updatePoolBalances(poolsState.pools[pool], subscriptionProvider);
                         commitDispatch({
                             type: 'resetCommits',
                             pool: pool,
@@ -529,7 +528,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
-                    triggerUpdate,
                 }}
             >
                 {children}
