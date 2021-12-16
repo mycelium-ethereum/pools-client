@@ -35,11 +35,11 @@ const SkewTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-const MarketPriceTip: React.FC = ({ children }) => (
+const IndexPriceTip: React.FC = ({ children }) => (
     <StyledTooltip
         title={
             <>
-                The market price of the asset tracked by the pool, supplied by an oracle.{' '}
+                The index price of the asset tracked by the pool, supplied by an oracle.{' '}
                 <a href="https://docs.tracer.finance/tracer/markets" target="_blank" rel="noreferrer noopener">
                     Learn more
                 </a>
@@ -82,7 +82,8 @@ export default (({ rows, onClickMintBurn, triggerTableUpdate, showNextRebalance,
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">
-                            <MarketPriceTip>{'MARKET PRICE'}</MarketPriceTip>
+                            {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
+                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USDC)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
@@ -241,7 +242,7 @@ const PoolRow: React.FC<
                                     newValue={pool.oraclePrice}
                                     deltaDenotion={deltaDenotion}
                                     poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.MarketPrice}
+                                    tooltipMetric={UpOrDownTipMetric.IndexPrice}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -255,7 +256,7 @@ const PoolRow: React.FC<
                                     newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotion={deltaDenotion}
                                     poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.MarketPrice}
+                                    tooltipMetric={UpOrDownTipMetric.IndexPrice}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -598,7 +599,7 @@ enum UpOrDownTipMetric {
     TokenPrice = 'token price',
     Skew = 'skew',
     ExpectedSkew = 'expected skew',
-    MarketPrice = 'market price',
+    IndexPrice = 'index price',
 }
 
 const UpOrDownTip: React.FC<{
