@@ -309,7 +309,7 @@ const PoolRow: React.FC<
                                     newValue={pool.nextSkew}
                                     deltaDenotion={deltaDenotion}
                                     poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.Skew}
+                                    tooltipMetric={UpOrDownTipMetric.ExpectedSkew}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -597,6 +597,7 @@ enum UpOrDownTipMetric {
     TVL = 'TVL',
     TokenPrice = 'token price',
     Skew = 'skew',
+    ExpectedSkew = 'expected skew',
     MarketPrice = 'market price',
 }
 
@@ -621,7 +622,7 @@ const UpOrDownTip: React.FC<{
               } ${metric} did not change during the last rebalance of the ${poolTicker} pool.`;
     } else {
         message = showNextRebalance
-            ? `The expected ${side !== undefined ? sideText : ''} ${metric} is currently ${valueText} ${
+            ? `The ${side !== undefined ? sideText : ''} ${metric} is currently ${valueText} ${
                   value > 0 ? 'greater than' : 'less than'
               } it was at the last rebalance of the ${poolTicker} pool.`
             : `The ${side !== undefined ? sideText : ''} ${metric} ${
