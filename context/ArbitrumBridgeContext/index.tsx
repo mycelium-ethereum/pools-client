@@ -83,14 +83,17 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
     const getBridge = useCallback(async () => {
         if (!provider) {
+            console.info('Void getBridge return: provider not defined');
             return;
         }
 
         if (!account) {
+            console.debug('Void getBridge return: account not defined');
             return;
         }
 
         if (!fromNetwork || !toNetwork) {
+            console.debug('Void getBridge return: from or to network not defined');
             return;
         }
 
@@ -116,7 +119,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         }));
 
         return bridge;
-    }, [fromNetwork?.id, account]);
+    }, [fromNetwork?.id, toNetwork?.id, account, provider]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
         if (!handleTransaction) {
@@ -384,6 +387,8 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
         }
 
+        console.debug('Fetching bridge balances');
+
         // ensure the network and account entries are initialised
         newBridgeableBalances[fromNetwork.id] = newBridgeableBalances[fromNetwork.id] || {};
         newBridgeableBalances[fromNetwork.id][account] = newBridgeableBalances[fromNetwork.id][account] || {};
@@ -420,7 +425,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
             setBridgeableBalances(newBridgeableBalances);
         } catch (error) {
-            console.error(error);
+            console.error('Fauled to fetch bridge balances', error);
         }
     };
 

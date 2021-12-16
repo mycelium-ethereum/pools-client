@@ -30,6 +30,14 @@ const BRIDGEABLE_ASSET_ETH = {
     decimals: 18,
 };
 
+const BRIDGEABLE_ASSET_USDC = {
+    name: 'USDC',
+    symbol: bridgeableTickers.USDC,
+    address: null,
+    displayDecimals: 6,
+    decimals: 6,
+};
+
 export type BridgeableAssets = {
     [networkId: string]: BridgeableAsset[];
 };
@@ -67,6 +75,7 @@ export const bridgeableAssets: BridgeableAssets = {
         },
         BRIDGEABLE_ASSET_ETH,
     ],
+    DEFAULT: [BRIDGEABLE_ASSET_USDC, BRIDGEABLE_ASSET_ETH],
 };
 
 const minUSDCWarning =

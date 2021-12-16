@@ -37,7 +37,7 @@ export const Browse: React.FC = () => {
     }, [account]);
 
     // parse the pools rows
-    const tokens = useBrowsePools();
+    const { rows: tokens } = useBrowsePools();
 
     const marketFilter = (pool: BrowseTableRowData): boolean => {
         switch (state.marketFilter) {
@@ -54,7 +54,12 @@ export const Browse: React.FC = () => {
 
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
-        return Boolean(pool.name.toLowerCase().match(searchString));
+        return Boolean(
+            pool.name.toLowerCase().match(searchString) ||
+                pool.shortToken.symbol.toLowerCase().match(searchString) ||
+                pool.longToken.symbol.toLowerCase().match(searchString) ||
+                pool.market.toLowerCase().match(searchString),
+        );
     };
 
     const sorter = (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {
@@ -95,7 +100,7 @@ export const Browse: React.FC = () => {
                 <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
                     <section className="mb-8">
                         <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
-                        <p className="mb-1 text-cool-gray-300 matrix:text-theme-text-secondary">
+                        <p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">
                             Browse the available Tracer Pools and Pool Tokens.
                         </p>
                         <FilterBar state={state} dispatch={dispatch} />

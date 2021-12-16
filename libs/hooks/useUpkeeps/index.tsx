@@ -2,7 +2,7 @@ import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { poolList } from '@libs/constants/poolLists';
+import { poolList, ONE_HOUR } from '@libs/constants/poolLists';
 import { StaticPoolInfo } from '@libs/types/General';
 import { ARBITRUM } from '@libs/constants';
 import { calcSkew, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -34,8 +34,7 @@ type RawUpkeep = {
     block_timestamp: string;
 };
 
-const POOLS_API = 'http://dev.api.tracer.finance/pools/upkeeps';
-// https://dev.api.tracer.finance/pools/upkeeps?network=chain_id&poolAddress=pool_address&committerAddress=committer_address
+const POOLS_API = process.env.NEXT_PUBLIC_POOLS_API;
 
 // const useUpkeeps
 export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
@@ -46,24 +45,33 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
         const poolInfo: StaticPoolInfo = poolList[(network ?? ARBITRUM) as AvailableNetwork][0];
         const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
-            // const now = Date.now() / 1000;
-            // times to make sure to get past 2 upkeep
-            // const from = now - (poolInfo.updateInterval.times(2).toNumber());
-            // TODO remove this is for testing
-            const from = 1638826512;
+            const now = Math.floor(Date.now() / 1000);
+            const from = now - (poolInfo?.updateInterval || ONE_HOUR).times(2).toNumber();
 
-            const rawUpkeeps = await fetch(`${POOLS_API}?network=${network}&from=${from}`)
-                .then((res) => {
-                    return res.json();
+            const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
+                .then(async (res) => {
+                    const response = await res.json()
+                    if (res.ok) {
+                        return response
+                    } else {
+                        return {
+                            message: response?.message ?? 'Unknown error',
+                            data: null
+                        }
+                    }
                 })
                 .catch((error) => {
                     console.error('Failed to fetch upkeeps', error);
-                    return [];
+                    return {
+                        message: error,
+                        data: null
+                    } 
                 });
 
             if (rawUpkeeps.message) {
                 console.info('Fetched upkeeps', rawUpkeeps.message);
-            } else if (rawUpkeeps.data) {
+            }
+            if (rawUpkeeps.data) {
                 if (mounted) {
                     const upkeepMapping: Record<string, Upkeep[]> = {};
 

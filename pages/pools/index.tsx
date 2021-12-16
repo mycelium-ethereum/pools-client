@@ -7,6 +7,8 @@ import { useRouter } from 'next/router';
 import { SwapStore } from '@context/SwapContext';
 import OnboardTradeModal from '@components/OnboardModal/Trade';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import PendingCommits from '@components/PendingCommits';
+import { WarningBanners } from '@components/WarningBanner';
 
 export default (() => {
     const router = useRouter();
@@ -21,10 +23,12 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
+                <WarningBanners banners={['auditWarning', 'decayWarning']} />
                 <SwapStore>
                     <Browse />
                 </SwapStore>
                 <UnsupportedNetworkPopup />
+                <PendingCommits />
             </PoolStore>
             <OnboardTradeModal
                 onboardStep={onboardStep}

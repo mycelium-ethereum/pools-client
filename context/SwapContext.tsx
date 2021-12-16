@@ -41,6 +41,7 @@ export type SwapAction =
     | { type: 'setPoolFromMarket'; market: string }
     | { type: 'setMarkets'; markets: Record<string, Market> }
     | { type: 'setLeverage'; value: number }
+    | { type: 'setPoolFromLeverage'; value: number }
     | { type: 'setSelectedPool'; value: string }
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: { message?: string; isInvalid: boolean } }
@@ -117,14 +118,18 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 return { ...state, commitAction: action.value };
             case 'setSide':
                 return { ...state, side: action.value };
+            case 'setPoolFromLeverage':
+                pool = state.markets?.[state.market]?.[action.value]?.address;
+                console.debug(`Setting pool from leverage: ${pool?.slice()}`);
+                return {
+                    ...state,
+                    selectedPool: pool,
+                };
             case 'setLeverage':
                 console.debug(`Setting leverage: ${action.value}`);
-                pool = state.markets?.[state.market]?.[action.value]?.address;
-                console.debug(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
                     leverage: action.value,
-                    selectedPool: pool,
                 };
             case 'setSelectedPool':
                 return { ...state, selectedPool: action.value };

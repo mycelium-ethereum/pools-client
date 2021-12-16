@@ -7,18 +7,18 @@ const SELECTED = {
     tracer: 'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
     default:
         'z-10 bg-tracer-500 hover:bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white border-tracer-500 matrix:border-theme-primary',
-    greyed: 'z-10 bg-theme-background hover:bg-theme-background matrix:bg-theme-primary matrix:text-black text-white matrix:border-theme-primary rounded-full focus:border-solid',
+    greyed: 'z-10 bg-theme-background hover:bg-theme-background matrix:bg-theme-primary text-cool-gray-600 dark:text-white matrix:text-black matrix:border-theme-primary rounded-full focus:border-solid',
 };
 
 const UNSELECTED = {
     tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
-    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 focus:border-transparent',
+    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg text-cool-gray-400 dark:text-cool-gray-800 focus:border-transparent',
 };
 
 const BORDER_COLORS = {
     default: '',
-    greyed: 'border border-cool-gray-600',
+    greyed: 'border border-cool-gray-100 dark:border-cool-gray-600 matrix:border-theme-button-bg',
     tracer: 'border border-theme-border focus:border-solid',
 };
 
@@ -36,7 +36,7 @@ const SIZE = {
 const OVERALL_BACKGROUND = {
     default: '',
     tracer: '',
-    greyed: 'bg-cool-gray-600 rounded-full',
+    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg rounded-full',
 };
 
 const DISABLED = 'cursor-not-allowed opacity-50';

@@ -38,6 +38,7 @@ interface BrowseTableTokenData {
 
 export interface BrowseTableRowData {
     name: string;
+    market: string;
     address: string;
     decimals: number;
     leverage: number;

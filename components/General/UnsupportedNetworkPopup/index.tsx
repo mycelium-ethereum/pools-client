@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
+import { isSupportedNetwork, isSupportedBridgeNetwork } from '@libs/utils/supportedNetworks';
 import { ARBITRUM } from '@libs/constants';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { useToasts } from 'react-toast-notifications';
@@ -9,14 +9,15 @@ import { useRouter } from 'next/router';
 const UnsupportedNetwork: React.FC = () => {
     const router = useRouter();
     const { account, network, provider, unsupportedNetworkPopupRef } = useWeb3();
-    const { addToast, updateToast, removeToast } = useToasts();
+    const { addToast, updateToast } = useToasts();
     // unsupported network popup
     useEffect(() => {
         const bridgePage = router.pathname.startsWith('/bridge');
-        if (bridgePage) {
-            removeToast(unsupportedNetworkPopupRef.current);
-            unsupportedNetworkPopupRef.current = '';
-        } else if (!isSupportedNetwork(network) && !!provider && !!account) {
+        if (
+            ((bridgePage && !isSupportedBridgeNetwork(network)) || (!bridgePage && !isSupportedNetwork(network))) &&
+            !!provider &&
+            !!account
+        ) {
             // ignore if we are already showing the error
             if (!unsupportedNetworkPopupRef.current) {
                 // @ts-ignore

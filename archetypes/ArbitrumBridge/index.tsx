@@ -51,6 +51,7 @@ export const ArbitrumBridge: React.FC = (() => {
             onBridgeAsset={onBridgeAsset}
             onApproveToken={onApproveToken}
             account={account}
+            provider={provider}
         />
     );
 }) as React.FC;

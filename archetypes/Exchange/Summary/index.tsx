@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
+import { HiddenExpand, Logo, LogoTicker, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -71,9 +71,18 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
             )}
         >
             <div className="relative border-box px-4 pt-4 pb-2">
-                <h2 className="text-theme-text">
-                    <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                    {token.name}
+                <h2 className="text-theme-text mb-2">
+                    {isMint ? (
+                        <>
+                            <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                            {token.name}
+                        </>
+                    ) : (
+                        <>
+                            <Logo className="inline mr-2" size="md" ticker={pool.quoteToken.symbol as LogoTicker} />
+                            {pool.quoteToken.symbol}
+                        </>
+                    )}
                 </h2>
                 <Transition
                     show={showBreakdown}
@@ -89,7 +98,7 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                             <Section label="Expected number of tokens">
                                 <div>
                                     <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
-                                    <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
+                                    <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1, 3)}`}</span>
                                 </div>
                             </Section>
                             <Section label="Power Leverage">
@@ -111,7 +120,7 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                     ) : (
                         <>
                             <Section label="Expected return">
-                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
+                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`}
                             </Section>
                         </>
                     )}
@@ -160,6 +169,7 @@ const BalancerLink: React.FC<{
                 >
                     {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
                         balancerPoolPrices[token.symbol],
+                        3,
                     )}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>

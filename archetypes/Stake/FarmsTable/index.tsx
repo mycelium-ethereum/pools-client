@@ -114,8 +114,8 @@ const PoolRow: React.FC<{
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>
-            <TableRowCell className="flex flex-wrap">
-                <div>
+            <TableRowCell>
+                <div className="inline">
                     {farm?.bptDetails ? (
                         <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
                     ) : (
@@ -127,7 +127,7 @@ const PoolRow: React.FC<{
                         />
                     )}
                 </div>
-                <div className="flex flex-col justify-center">
+                <div className="inline-flex flex-col justify-center">
                     {farm.link ? (
                         <>
                             <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">

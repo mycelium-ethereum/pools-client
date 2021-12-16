@@ -62,11 +62,11 @@ const WarningBanner: React.FC<{
     }, []);
 
     return (
-        <div className={`${showWarning ? 'container relative' : 'hidden'}`}>
+        <div className={`${showWarning ? 'relative' : 'hidden'}`}>
             <div
                 className={classNames(
                     'flex items-center rounded-lg text-sm lg:text-base px-5 py-3 dark:bg-cool-gray-700 text-theme-text bg-cool-gray-200',
-                    'mt-3 mx-5 sm:mx-0 3xl:mx-20',
+                    'mt-3 sm:mx-4 md:mx-0',
                 )}
             >
                 <div className="mr-2">
