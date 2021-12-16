@@ -160,8 +160,8 @@ export default (() => {
                     if (pool === row.address) {
                         const defualtUpkeep = {
                             ...STATIC_DEFAULT_UPKEEP,
-                            pool
-                        }
+                            pool,
+                        };
 
                         const pastUpkeep = upkeeps[pool][0] ?? defualtUpkeep;
                         const antecedentUpkeep = upkeeps[pool][1] ?? pastUpkeep;
@@ -169,7 +169,7 @@ export default (() => {
                         return {
                             ...row,
                             pastUpkeep: pastUpkeep,
-                            antecedentUpkeep: antecedentUpkeep
+                            antecedentUpkeep: antecedentUpkeep,
                         };
                     }
                 }
