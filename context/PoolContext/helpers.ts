@@ -26,22 +26,16 @@ export const initPool: (
     pool: StaticPoolInfo,
     provider: ethers.providers.JsonRpcProvider | ethers.providers.WebSocketProvider,
 ) => Promise<Pool> = async (pool, provider) => {
-    const contract = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
+    const quoteTokenDecimals = pool.quoteToken.decimals;
 
-    const [lastUpdate, shortBalance, longBalance, oraclePrice] = await Promise.all([
-        contract.lastPriceTimestamp({
-            blockTag: 'latest',
-        }),
-        contract.shortBalance({
-            blockTag: 'latest',
-        }),
-        contract.longBalance({
-            blockTag: 'latest',
-        }),
-        contract.getOraclePrice({
-            blockTag: 'latest',
-        }),
-    ]);
+    const { lastUpdate, shortBalance, longBalance, oraclePrice, lastPrice } = await fetchPoolBalances(
+        {
+            address: pool.address,
+            keeper: pool.keeper,
+            quoteTokenDecimals,
+        },
+        provider,
+    );
 
     console.debug(`LastUpdate: ${lastUpdate.toNumber()}`);
 
@@ -78,26 +72,17 @@ export const initPool: (
         blockTag: 'latest',
     });
 
-    // fetch last keeper price
-    const keeperInstance = new ethers.Contract(pool.keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
-
-    const lastPrice = await keeperInstance.executionPrice(pool.address, {
-        blockTag: 'latest',
-    });
-
-    const quoteTokenDecimals = pool.quoteToken.decimals;
-
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
     const leverage = parseInt(pool.name.split('-')?.[0] ?? 1);
     return {
         ...pool,
-        lastUpdate: new BigNumber(lastUpdate.toString()),
-        lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
-        shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
-        longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
-        nextShortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, quoteTokenDecimals)),
-        nextLongBalance: new BigNumber(ethers.utils.formatUnits(longBalance, quoteTokenDecimals)),
-        oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
+        lastUpdate: lastUpdate,
+        lastPrice: lastPrice,
+        shortBalance: shortBalance,
+        longBalance: longBalance,
+        nextShortBalance: shortBalance,
+        nextLongBalance: longBalance,
+        oraclePrice: oraclePrice,
         committer: {
             address: pool.committer.address,
             minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
@@ -133,6 +118,52 @@ export const initPool: (
             balance: new BigNumber(0),
         },
         subscribed: false,
+    };
+};
+
+export const fetchPoolBalances: (
+    poolInfo: {
+        keeper: string;
+        address: string;
+        quoteTokenDecimals: number;
+    },
+    provider: ethers.providers.JsonRpcProvider | ethers.providers.WebSocketProvider,
+) => Promise<{
+    lastUpdate: BigNumber;
+    lastPrice: BigNumber;
+    shortBalance: BigNumber;
+    longBalance: BigNumber;
+    oraclePrice: BigNumber;
+}> = async (poolInfo, provider) => {
+    const contract = new ethers.Contract(poolInfo.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
+
+    // fetch last keeper price
+    const keeperInstance = new ethers.Contract(poolInfo.keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
+
+    const [lastUpdate, shortBalance, longBalance, oraclePrice, lastPrice] = await Promise.all([
+        contract.lastPriceTimestamp({
+            blockTag: 'latest',
+        }),
+        contract.shortBalance({
+            blockTag: 'latest',
+        }),
+        contract.longBalance({
+            blockTag: 'latest',
+        }),
+        contract.getOraclePrice({
+            blockTag: 'latest',
+        }),
+        keeperInstance.executionPrice(poolInfo.address, {
+            blockTag: 'latest',
+        }),
+    ]);
+
+    return {
+        lastUpdate: new BigNumber(lastUpdate.toString()),
+        lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
+        shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, poolInfo.quoteTokenDecimals)),
+        longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, poolInfo.quoteTokenDecimals)),
+        oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
     };
 };
 

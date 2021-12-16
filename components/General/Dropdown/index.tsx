@@ -128,7 +128,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             'block px-4 py-2 text-sm w-full text-left',
                                         )}
                                     >
-                                        {option?.ticker ? <Logo ticker={option.ticker} className="inline mr-3" /> : ''}
+                                        {option?.ticker ? (
+                                            <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                        ) : (
+                                            ''
+                                        )}
                                         {option?.text ?? option.key}
                                     </button>
                                 )}
