@@ -13,6 +13,21 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useUpkeeps } from '../useUpkeeps';
 import { tickerToName } from '@libs/utils/converters';
 
+const STATIC_DEFAULT_UPKEEP = {
+    pool: '',
+    lastUpdate: 0,
+    tvl: 0,
+    newPrice: 0,
+    oldPrice: 0,
+    longTokenBalance: 0,
+    shortTokenBalance: 0,
+    longTokenSupply: 0,
+    shortTokenSupply: 0,
+    longTokenPrice: 0,
+    shortTokenPrice: 0,
+    skew: 1,
+};
+
 // const useBrowsePools
 export default (() => {
     const { network } = useWeb3();
@@ -68,18 +83,10 @@ export default (() => {
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
                 const defaultUpkeep = {
+                    ...STATIC_DEFAULT_UPKEEP,
                     pool: address,
                     timestamp: lastUpdate.toNumber(),
                     tvl: tvl,
-                    newPrice: 0,
-                    oldPrice: 0,
-                    longTokenBalance: 0,
-                    shortTokenBalance: 0,
-                    longTokenSupply: 0,
-                    shortTokenSupply: 0,
-                    longTokenPrice: 0,
-                    shortTokenPrice: 0,
-                    skew: 1,
                 };
 
                 rows.push({
@@ -151,10 +158,18 @@ export default (() => {
             attachedBalancerPrices.map((row) => {
                 for (const pool of Object.keys(upkeeps)) {
                     if (pool === row.address) {
+                        const defualtUpkeep = {
+                            ...STATIC_DEFAULT_UPKEEP,
+                            pool
+                        }
+
+                        const pastUpkeep = upkeeps[pool][0] ?? defualtUpkeep;
+                        const antecedentUpkeep = upkeeps[pool][1] ?? pastUpkeep;
+
                         return {
                             ...row,
-                            pastUpkeep: upkeeps[pool][0],
-                            antecedentUpkeep: upkeeps[pool][1],
+                            pastUpkeep: pastUpkeep,
+                            antecedentUpkeep: antecedentUpkeep
                         };
                     }
                 }
