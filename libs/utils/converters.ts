@@ -201,4 +201,14 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
  * @returns the percentage difference between the two given values
  */
 export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
-    ((newValue - oldValue) / oldValue) * 100;
+    Number.isNaN(oldValue) || !oldValue ? 0 : ((newValue - oldValue) / oldValue) * 100;
+
+const names: Record<string, string> = {
+    'ETH/USD': 'Ethereum',
+    'BTC/USD': 'Bitcoin',
+};
+
+export const tickerToName: (ticker: string) => string = (ticker) => {
+    const [leverage, market] = ticker.split('-');
+    return `${leverage}-${names[market]}`;
+};

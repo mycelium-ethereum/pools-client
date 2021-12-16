@@ -12,6 +12,7 @@ import ETH from '@public/img/logos/currencies/eth.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
+import USDC from '@public/img/logos/currencies/usdc.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -29,10 +30,6 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
         return 'DEFAULT';
     }
 };
-
-const USDCLogo: React.FC<{
-    className: string;
-}> = ({ className }) => <img className={className} src="/img/logos/currencies/usdc.png" alt={'USDC'} />;
 
 export type LogoTicker =
     | 'ETHERSCAN'
@@ -55,7 +52,7 @@ const logos: Record<LogoTicker, any> = {
     [ARBITRUM]: Arbitrum,
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
-    USDC: USDCLogo,
+    USDC: USDC,
     DEFAULT: ETH,
     ETH_L: ETH_L,
     BTC_L: BTC_L,
@@ -69,7 +66,7 @@ const logos: Record<LogoTicker, any> = {
     BALANCER: BALANCER,
 };
 
-type Size = 'sm' | 'md' | 'full';
+type Size = 'xs' | 'sm' | 'md' | 'full';
 interface LProps {
     className?: string;
     ticker: LogoTicker;
@@ -77,6 +74,7 @@ interface LProps {
 }
 
 const SIZES: Record<Size, string> = {
+    xs: 'w-4 h-4',
     sm: 'w-[20px] h-[20px]',
     md: 'w-6 h-6',
     full: 'h-full',
@@ -84,5 +82,5 @@ const SIZES: Record<Size, string> = {
 
 export const Logo: React.FC<LProps> = ({ className, ticker, size = 'sm' }: LProps) => {
     const LogoImage = logos[ticker] ?? logos['ETH'];
-    return <LogoImage className={classNames(SIZES[size], 'my-2 mx-0', className ?? '')} />;
+    return <LogoImage className={classNames(SIZES[size], className ?? '')} />;
 };

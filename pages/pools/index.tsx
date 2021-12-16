@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
-import StakeBPT from '@archetypes/Stake/StakeBPT';
-import { FarmStore } from '@context/FarmContext';
+import { Browse } from '@archetypes/Pools';
+import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
-import PendingCommits from '@components/PendingCommits';
-import OnboardStakeModal from '@components/OnboardModal/Stake';
+import { SwapStore } from '@context/SwapContext';
+import OnboardTradeModal from '@components/OnboardModal/Trade';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import PendingCommits from '@components/PendingCommits';
+import { WarningBanners } from '@components/WarningBanner';
 
 export default (() => {
     const router = useRouter();
@@ -14,20 +16,21 @@ export default (() => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     useEffect(() => {
-        router.prefetch('/stakebpt');
+        router.prefetch('/');
     }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <FarmStore farmContext="bptFarms">
+            <PoolStore>
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <StakeBPT />
-            </FarmStore>
-            <UnsupportedNetworkPopup />
-            <Footer />
-            <PendingCommits />
-
-            <OnboardStakeModal
+                <WarningBanners banners={['auditWarning', 'decayWarning']} />
+                <SwapStore>
+                    <Browse />
+                </SwapStore>
+                <UnsupportedNetworkPopup />
+                <PendingCommits />
+            </PoolStore>
+            <OnboardTradeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}
                 showOnboardModal={showOnboardModal}
@@ -38,6 +41,7 @@ export default (() => {
                     }, 1000);
                 }}
             />
+            <Footer />
         </div>
     );
 }) as React.FC;

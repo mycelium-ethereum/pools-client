@@ -3,7 +3,6 @@ import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { MultiBridge } from './MultiBridge';
-// import { SwapOutlined } from '@ant-design/icons';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import { BridgeableAsset } from '@libs/types/General';
@@ -21,8 +20,6 @@ export const ArbitrumBridge: React.FC = (() => {
         toNetwork,
         bridgeableAssets,
         bridgeableBalances,
-        hideBridgeModal,
-        bridgeModalIsOpen,
     } = useArbitrumBridge();
 
     const onBridgeAsset = (asset: BridgeableAsset, amount: BigNumber, callback: () => void) => {
@@ -45,8 +42,6 @@ export const ArbitrumBridge: React.FC = (() => {
 
     return (
         <MultiBridge
-            show={bridgeModalIsOpen}
-            onClose={hideBridgeModal}
             fromNetwork={fromNetwork}
             toNetwork={toNetwork}
             bridgeableAssets={bridgeableAssets}
@@ -56,6 +51,7 @@ export const ArbitrumBridge: React.FC = (() => {
             onBridgeAsset={onBridgeAsset}
             onApproveToken={onApproveToken}
             account={account}
+            provider={provider}
         />
     );
 }) as React.FC;
