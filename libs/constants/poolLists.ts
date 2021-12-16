@@ -109,6 +109,54 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             },
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
+        {
+            name: '1-EUR/USD',
+            address: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
+            leverage: 1,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0x539Bf88D729B65F8eC25896cFc7a5f44bbf1816b',
+            },
+            longToken: {
+                name: '1L-EUR/USD',
+                address: '0x1616bF7bbd60E57f961E83A602B6b9Abb6E6CAFc',
+                symbol: '1L-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            shortToken: {
+                name: '1S-EUR/USD',
+                address: '0x052814194f459aF30EdB6a506eABFc85a4D99501',
+                symbol: '1S-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
+        },
+        {
+            name: '3-EUR/USD',
+            address: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
+            leverage: 3,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0xFDE5D7B7596AF6aC5df7C56d76E14518A9F578dF',
+            },
+            longToken: {
+                name: '3L-EUR/USD',
+                address: '0x05A131B3Cd23Be0b4F7B274B3d237E73650e543d',
+                symbol: '3L-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            shortToken: {
+                name: '3S-EUR/USD',
+                address: '0x85700dC0bfD128DD0e7B9eD38496A60baC698fc8',
+                symbol: '3S-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
+        },
     ],
     [ARBITRUM_RINKEBY]: [
         {
