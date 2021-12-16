@@ -24,7 +24,8 @@ const isInvalidAmount: (
     balance: BigNumber,
     minimumTokens: BigNumber,
     tokenPrice: BigNumber,
-) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice) => {
+    isMint: boolean
+) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice, isMint) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -42,9 +43,12 @@ const isInvalidAmount: (
     // need to sell an amount of tokens worth minimumCommitSize or more
     if (minimumTokens.gt(amount)) {
         return {
-            message: `The minimum order size is ${minimumTokens.toFixed(2)} (${toApproxCurrency(
-                minimumTokens.times(tokenPrice),
-            )})`,
+            message: `
+                The minimum order size is 
+                ${isMint 
+                    ? toApproxCurrency(minimumTokens)
+                    : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
+                }`,
             isInvalid: true,
         };
     }
@@ -97,7 +101,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                 );
             }
 
-            const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice);
+            const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice, commitAction === CommitActionEnum.mint);
 
             swapDispatch({
                 type: 'setInvalidAmount',
