@@ -149,9 +149,8 @@ export default (() => {
     const finalRows: BrowseTableRowData[] = useMemo(
         () =>
             attachedBalancerPrices.map((row) => {
-                const lowerCaseAddress = row.address.toLowerCase();
                 for (const pool of Object.keys(upkeeps)) {
-                    if (pool === lowerCaseAddress) {
+                    if (pool === row.address) {
                         return {
                             ...row,
                             pastUpkeep: upkeeps[pool][0],

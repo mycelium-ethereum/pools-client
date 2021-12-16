@@ -2,7 +2,7 @@ import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { poolList } from '@libs/constants/poolLists';
+import { poolList, ONE_HOUR } from '@libs/constants/poolLists';
 import { StaticPoolInfo } from '@libs/types/General';
 import { ARBITRUM } from '@libs/constants';
 import { calcSkew, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
@@ -45,11 +45,8 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
         const poolInfo: StaticPoolInfo = poolList[(network ?? ARBITRUM) as AvailableNetwork][0];
         const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
-            // const now = Date.now() / 1000;
-            // times to make sure to get past 2 upkeep
-            // const from = now - (poolInfo.updateInterval.times(2).toNumber());
-            // TODO remove this is for testing
-            const from = 1638826512;
+            const now = Math.floor(Date.now() / 1000);
+            const from = now - (poolInfo?.updateInterval || ONE_HOUR).times(2).toNumber();
 
             const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
                 .then((res) => {

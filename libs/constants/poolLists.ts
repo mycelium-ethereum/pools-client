@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '.';
 import { tokenMap } from './tokenList';
 
-const ONE_HOUR = new BigNumber(3600); // seconds
+export const ONE_HOUR = new BigNumber(3600); // seconds
 const FIVE_MINUTES = new BigNumber(300); // seconds
 const THIRTY_SECONDS = new BigNumber(30); // seconds
 
