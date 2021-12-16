@@ -4,7 +4,6 @@ import Overview from './Overview';
 import Queued from './Queued';
 import Link from 'next/link';
 import Button from '@components/General/Button';
-import { Dropdown } from '@components/General';
 import { CommitActionEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
@@ -22,32 +21,9 @@ export enum TradePortfolioPage {
     Queued = 2,
 }
 
-const queuedOptions = [
-    {
-        key: CommitsFocusEnum.mints.toString(),
-        text: 'Queued Mints',
-    },
-    {
-        key: CommitsFocusEnum.burns.toString(),
-        text: 'Queued Burns',
-    },
-];
-
-const historyOptions = [
-    {
-        key: CommitsFocusEnum.mints.toString(),
-        text: 'Mint History',
-    },
-    {
-        key: CommitsFocusEnum.burns.toString(),
-        text: 'Burn History',
-    },
-];
-
 export const PortfolioNav: React.FC<{
     page: TradePortfolioPage;
-    focus: CommitsFocusEnum;
-}> = ({ page, focus }) => {
+}> = ({ page }) => {
     const router = useRouter();
 
     const overviewPage = page === TradePortfolioPage.Overview;
@@ -62,58 +38,28 @@ export const PortfolioNav: React.FC<{
                 </Link>
             </div>
             <div className="mx-4">
-                <Dropdown
-                    size="lg"
-                    variant={queuedPage ? 'tracer' : 'unselected'}
-                    value={queuedPage ? queuedOptions[focus].text : `Queued Trades (6)`}
-                    options={queuedOptions}
-                    onSelect={(val) => {
-                        switch (parseInt(val)) {
-                            case CommitsFocusEnum.burns:
-                                router.push({
-                                    pathname: '/portfolio/commits',
-                                    query: {
-                                        focus: 'burns',
-                                    },
-                                });
-                                break;
-                            default:
-                                router.push({
-                                    pathname: '/portfolio/commits',
-                                    query: {
-                                        focus: 'mints',
-                                    },
-                                });
-                        }
-                    }}
-                />
+                <Button
+                    variant={queuedPage ? 'primary' : 'unselected'}
+                    onClick={() =>
+                        router.push({
+                            pathname: '/portfolio/commits',
+                        })
+                    }
+                >
+                    Queued Trades
+                </Button>
             </div>
             <div className="mx-4">
-                <Dropdown
-                    size={'lg'}
-                    variant={historyPage ? 'tracer' : 'unselected'}
-                    value={historyPage ? historyOptions[focus].text : 'Trade History'}
-                    options={historyOptions}
-                    onSelect={(val) => {
-                        switch (parseInt(val)) {
-                            case CommitsFocusEnum.burns:
-                                router.push({
-                                    pathname: '/portfolio/history',
-                                    query: {
-                                        focus: 'burns',
-                                    },
-                                });
-                                break;
-                            default:
-                                router.push({
-                                    pathname: '/portfolio/history',
-                                    query: {
-                                        focus: 'mints',
-                                    },
-                                });
-                        }
-                    }}
-                />
+                <Button
+                    variant={historyPage ? 'primary' : 'unselected'}
+                    onClick={() =>
+                        router.push({
+                            pathname: '/portfolio/history',
+                        })
+                    }
+                >
+                    Trade History
+                </Button>
             </div>
         </div>
     );
@@ -163,7 +109,7 @@ export default (({ page }) => {
 
     return (
         <div className="container">
-            <PortfolioNav page={page} focus={focus} />
+            <PortfolioNav page={page} />
             {renderPage(page)}
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </div>

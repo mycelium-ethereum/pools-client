@@ -1,15 +1,27 @@
 import React, { useMemo } from 'react';
 import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
-
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell } from '@components/General/TWTable';
 import { CommitRow } from '@components/PendingCommits';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+import { useRouter } from 'next/router';
 
-// const Queued
+const queuedOptions = [
+    {
+        key: CommitsFocusEnum.mints,
+        text: 'Queued Mints',
+    },
+    {
+        key: CommitsFocusEnum.burns,
+        text: 'Queued Burns',
+    },
+];
+
 export default (({ focus }) => {
+    const router = useRouter();
     const { provider } = useWeb3();
 
     const commits = usePendingCommits();
@@ -32,10 +44,20 @@ export default (({ focus }) => {
 
     return (
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
-            <div className="flex justify-between">
-                <h1 className="text-bold text-2xl text-theme-text">
-                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
-                </h1>
+            <div className="my-4">
+                <TWButtonGroup
+                    value={focus}
+                    size="lg"
+                    onClick={(option) =>
+                        router.push({
+                            query: {
+                                focus: option === CommitsFocusEnum.mints ? 'mints' : 'burns',
+                            },
+                        })
+                    }
+                    color={'tracer'}
+                    options={queuedOptions}
+                />
             </div>
             <Table>
                 {focus === CommitsFocusEnum.mints ? (

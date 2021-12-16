@@ -7,15 +7,29 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { formatDate, toApproxCurrency } from '@libs/utils/converters';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
 import fetchTradeHistory, { TradeHistory } from '@archetypes/Portfolio/tradeHistoryAPI';
+import TWButtonGroup from '@components/General/TWButtonGroup';
+import { useRouter } from 'next/router';
 // import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 // import Actions from '@components/TokenActions';
 
+const historyOptions = [
+    {
+        key: CommitsFocusEnum.mints,
+        text: 'Mint History',
+    },
+    {
+        key: CommitsFocusEnum.burns,
+        text: 'Burn History',
+    },
+];
+
 export default (({ focus }) => {
+    const router = useRouter();
     const { provider } = useWeb3();
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
 
     useEffect(() => {
-        fetchTradeHistory({ account: '0x0000000000f04d1aA0A4017cDdba341e802fD416' }).then((r) => setTradeHistory(r));
+        fetchTradeHistory({ account: '0x36b26d2aF84d7B80e48d31d549eE56bDB0a0BBaE' }).then((r) => setTradeHistory(r));
     }, [provider]);
 
     const { mintCommits, burnCommits } = useMemo(
@@ -36,10 +50,20 @@ export default (({ focus }) => {
 
     return (
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
-            <div className="flex justify-between">
-                <h1 className="text-bold text-2xl text-theme-text">
-                    {`${focus === CommitsFocusEnum.mints ? 'Mint' : 'Burn'} History`}
-                </h1>
+            <div className="my-4">
+                <TWButtonGroup
+                    value={focus}
+                    size="lg"
+                    onClick={(option) =>
+                        router.push({
+                            query: {
+                                focus: option === CommitsFocusEnum.mints ? 'mints' : 'burns',
+                            },
+                        })
+                    }
+                    color={'tracer'}
+                    options={historyOptions}
+                />
             </div>
             <Table>
                 {focus === CommitsFocusEnum.mints ? (
