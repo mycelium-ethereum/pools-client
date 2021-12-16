@@ -108,7 +108,7 @@ const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background d
 export default (({ onClickBurn }) => {
     const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
     const { rows } = useUserTokenOverview();
-    const tokens = useBrowsePools();
+    const { rows: tokens } = useBrowsePools();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
 
