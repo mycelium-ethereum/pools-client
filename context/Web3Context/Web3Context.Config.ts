@@ -171,12 +171,12 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
             },
             {
                 address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
-                pool: '0x2c740eee739098ab8e90f5af78ac1d07835d225b',
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
             },
             {
                 address: '0x2E7584FCd6f909BFa7A21aEb1a4894674C16e4Cd', // 1-EUR/USDC-short
-                pool: '0x2c740eee739098ab8e90f5af78ac1d07835d225b',
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
             },
             {
