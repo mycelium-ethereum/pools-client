@@ -169,6 +169,26 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
             },
+            {
+                address: '0x04c9CFDAf9dE4d06611dD7987f6bD240ecf70f54', // 1-EUR/USDC-long
+                pool: '0xfCbF80Eba760576d6Aa4402Bb781321158289E9C',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x6B277ceB7Bc188f8bE95eEb82766212672De3e06', // 1-EUR/USDC-short
+                pool: '0xfCbF80Eba760576d6Aa4402Bb781321158289E9C',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x66c7Ef099BF61Cd7aedfcb9Fb9E86798222aE94b', // 3-EUR/USDC-long
+                pool: '0x98DbD6eFdCdCf0394Ca36BB5dd4E63D78D1697f3',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0xC54Ff7679c917FfF9994299c33C29Af034F4D000', // 3-EUR/USDC-short
+                pool: '0x98DbD6eFdCdCf0394Ca36BB5dd4E63D78D1697f3',
+                abi: StakingRewards__factory.abi,
+            },
         ],
         bptFarms: [
             {
