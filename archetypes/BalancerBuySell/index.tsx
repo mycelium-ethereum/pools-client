@@ -48,7 +48,7 @@ export default (() => {
                 <StyledTooltip
                     title={
                         <>
-                            There are no Balancer pools for pool tokens tracking the EUR/USD market yet.{' '}
+                            {`There are no Balancer pools for pool tokens tracking the ${market} market yet. `}
                             <Link href="/pools">Mint/burn here.</Link>
                         </>
                     }
