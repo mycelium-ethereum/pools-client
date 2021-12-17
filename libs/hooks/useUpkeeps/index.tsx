@@ -50,22 +50,22 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
 
             const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
                 .then(async (res) => {
-                    const response = await res.json()
+                    const response = await res.json();
                     if (res.ok) {
-                        return response
+                        return response;
                     } else {
                         return {
                             message: response?.message ?? 'Unknown error',
-                            data: null
-                        }
+                            data: null,
+                        };
                     }
                 })
                 .catch((error) => {
                     console.error('Failed to fetch upkeeps', error);
                     return {
                         message: error,
-                        data: null
-                    } 
+                        data: null,
+                    };
                 });
 
             if (rawUpkeeps.message) {
