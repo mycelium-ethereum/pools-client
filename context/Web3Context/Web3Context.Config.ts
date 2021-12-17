@@ -170,23 +170,23 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x04c9CFDAf9dE4d06611dD7987f6bD240ecf70f54', // 1-EUR/USDC-long
-                pool: '0xfCbF80Eba760576d6Aa4402Bb781321158289E9C',
+                address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x6B277ceB7Bc188f8bE95eEb82766212672De3e06', // 1-EUR/USDC-short
-                pool: '0xfCbF80Eba760576d6Aa4402Bb781321158289E9C',
+                address: '0x2E7584FCd6f909BFa7A21aEb1a4894674C16e4Cd', // 1-EUR/USDC-short
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x66c7Ef099BF61Cd7aedfcb9Fb9E86798222aE94b', // 3-EUR/USDC-long
-                pool: '0x98DbD6eFdCdCf0394Ca36BB5dd4E63D78D1697f3',
+                address: '0x44b42E7ef481F6d1ff8d0fd7BFF6b3C8bD25a581', // 3-EUR/USDC-long
+                pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0xC54Ff7679c917FfF9994299c33C29Af034F4D000', // 3-EUR/USDC-short
-                pool: '0x98DbD6eFdCdCf0394Ca36BB5dd4E63D78D1697f3',
+                address: '0x0450959a393c3D6E6E37b65A6e836F59C47E24D0', // 3-EUR/USDC-short
+                pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
                 abi: StakingRewards__factory.abi,
             },
         ],

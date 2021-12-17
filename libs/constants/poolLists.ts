@@ -111,7 +111,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         },
         {
             name: '1-EUR/USD',
-            address: '0x2c740eee739098ab8e90f5af78ac1d07835d225b',
+            address: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
             leverage: 1,
             updateInterval: ONE_HOUR,
             frontRunningInterval: FIVE_MINUTES,
