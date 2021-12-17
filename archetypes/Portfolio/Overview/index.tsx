@@ -153,12 +153,17 @@ export default (({ onClickBurn }) => {
                 <div className="flex mb-5 flex-col xl:flex-row">
                     <div className={`${maxSkew === undefined ? '' : 'xl:w-2/3'} mx-4 flex flex-col xl:flex-row`}>
                         <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                            <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
-                            <div className="mb-3">
-                                A step-by-step on minting and burning tokens using the Perpetual Pools interface.
-                            </div>
-                            <div className="text-tracer-400 underline">Read guide</div>
+                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">TIP</div>
+                            <div className="mb-3 text-2xl font-semibold">Earn TCR Now!</div>
+                            <div className="mb-3">Do you hold pool tokens? Stake them now to earn APY in TCR!</div>
+                            <a
+                                href="https://pools.tracer.finance/stakepooltoken/"
+                                target="_blank"
+                                className="text-tracer-400 underline"
+                                rel="noreferrer"
+                            >
+                                View staking pools
+                            </a>
                         </div>
                         <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
                             <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
@@ -168,7 +173,14 @@ export default (({ onClickBurn }) => {
                             <div className="mb-3">
                                 {`Find out how Tracer's Pool tokens stack up to similar products and how you can benefit from the novel design.`}
                             </div>
-                            <div className="text-tracer-400 underline">Read article</div>
+                            <a
+                                href="https://tracer.finance/radar/leveraged-tokens/"
+                                target="_blank"
+                                className="text-tracer-400 underline"
+                                rel="noreferrer"
+                            >
+                                Read article
+                            </a>
                         </div>
                         <div className="my-2 xl:w-1/3 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
                             <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
@@ -177,7 +189,14 @@ export default (({ onClickBurn }) => {
                                 Know this strategy to recognise opportunities for excess risk-adjusted returns. Take
                                 advantage of the skew in Perpetual Pools.
                             </div>
-                            <div className="text-tracer-400 underline">Read guide</div>
+                            <a
+                                href="https://tracer.finance/radar/skew-farming-explained/"
+                                target="_blank"
+                                className="text-tracer-400 underline"
+                                rel="noreferrer"
+                            >
+                                Read guide
+                            </a>
                         </div>
                     </div>
                     {maxSkew === undefined ? null : (
@@ -289,11 +308,19 @@ export default (({ onClickBurn }) => {
                     </div>
                     <div className={guideCard}>
                         <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                        <div className="mb-3 text-2xl font-semibold">Minting and Burning Pool Tokens Guide</div>
+                        <div className="mb-3 text-2xl font-semibold">Skew Farming: How To</div>
                         <div className="mb-3">
-                            A step-by-step on minting and burning tokens using the Perpetual Pools interface.
+                            Know this strategy to recognise opportunities for excess risk-adjusted returns. Take
+                            advantage of the skew in Perpetual Pools.
                         </div>
-                        <div className="text-tracer-400 underline">Read guide</div>
+                        <a
+                            href="https://tracer.finance/radar/skew-farming-explained/"
+                            target="_blank"
+                            className="text-tracer-400 underline"
+                            rel="noreferrer"
+                        >
+                            Read guide
+                        </a>
                     </div>
                 </div>
                 <div className={mainCard}>
