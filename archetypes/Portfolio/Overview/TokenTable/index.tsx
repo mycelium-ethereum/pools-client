@@ -20,8 +20,8 @@ export default (({ rows, onClickBurn }) => {
                 <TableHeader>
                     <TableHeaderCell>Token</TableHeaderCell>
                     <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
+                    {/*<TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>*/}
+                    {/*<TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>*/}
                     <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
@@ -61,12 +61,13 @@ export const TokenRow: React.FC<
     price,
     holdings,
     provider,
-    deposits,
+    // deposits,
     index,
     onClickBurn,
+    oraclePrice,
 }) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
-    const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
+    // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
     return (
         <TableRow rowNumber={index}>
@@ -83,14 +84,16 @@ export const TokenRow: React.FC<
                 <div>{toApproxCurrency(netValue)}</div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
             </TableRowCell>
+            {/*<TableRowCell>*/}
+            {/*    <div>{toApproxCurrency(deposits)}</div>*/}
+            {/*    <div className="opacity-80">{holdings.toFixed(2)} tokens</div>*/}
+            {/*</TableRowCell>*/}
+            {/*<TableRowCell className={pnl.gt(0) ? 'text-green-500' : 'text-red-500'}>*/}
+            {/*    {toApproxCurrency(pnl)}*/}
+            {/*</TableRowCell>*/}
             <TableRowCell>
-                <div>{toApproxCurrency(deposits)}</div>
-                <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
+                {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)} {name.split('-')[1].split('/')[0]}
             </TableRowCell>
-            <TableRowCell className={pnl.gt(0) ? 'text-green-500' : 'text-red-500'}>
-                {toApproxCurrency(pnl)}
-            </TableRowCell>
-            <TableRowCell>{/*Notional Value Cell*/}</TableRowCell>
             <TableRowCell className="flex">
                 <Button
                     className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "

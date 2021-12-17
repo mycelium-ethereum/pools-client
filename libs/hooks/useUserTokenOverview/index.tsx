@@ -32,6 +32,7 @@ export default (() => {
                         price: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)),
                         holdings: shortToken.balance,
                         deposits: new BigNumber(0),
+                        oraclePrice: pool.oraclePrice,
                     },
                     {
                         name: longToken.name,
@@ -43,6 +44,7 @@ export default (() => {
                         price: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)),
                         holdings: longToken.balance,
                         deposits: new BigNumber(0),
+                        oraclePrice: pool.oraclePrice,
                     },
                 );
             });

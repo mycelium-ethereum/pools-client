@@ -1,14 +1,19 @@
-import { Dropdown, Logo, tokenSymbolToLogoTicker } from '@components/General';
+import {
+    // Dropdown,
+    Logo,
+    tokenSymbolToLogoTicker,
+} from '@components/General';
 import BigNumber from 'bignumber.js';
-import React, { useReducer } from 'react';
+import React from 'react'; // useReducer
 import TokenTable from './TokenTable';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
+import { SideEnum } from '@libs/constants';
+import { toApproxCurrency } from '@libs/utils/converters';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
-import { SideEnum } from '@libs/constants';
 
 export enum LoadingState {
     Idle = 0,
@@ -35,6 +40,7 @@ export type TokenRowProps = {
     holdings: BigNumber;
     price: BigNumber;
     deposits: BigNumber; // amount of USDC deposited
+    oraclePrice: BigNumber;
 };
 
 export interface PortfolioOverviewState {
@@ -106,11 +112,19 @@ const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background d
 
 // const Overview
 export default (({ onClickBurn }) => {
-    const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
+    // const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
     const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
+
+    const totalValuation = function () {
+        let total = 0;
+        for (let i = 0; i < rows.length; i++) {
+            total = total + rows[i].holdings.times(rows[i].price).toNumber();
+        }
+        return total;
+    };
 
     const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
@@ -125,14 +139,14 @@ export default (({ onClickBurn }) => {
                                 <div className="font-bold text-2xl opacity-50">0.00</div>
                                 <div className="text-md opacity-50">Portfolio Valuation</div>
                             </div>
-                            <div className={infoCard}>
-                                <div className="font-bold text-2xl opacity-50">0.00</div>
-                                <div className="text-md opacity-50">Unrealised Profit and Loss</div>
-                            </div>
-                            <div className={infoCard}>
-                                <div className="font-bold text-2xl opacity-50">0.00</div>
-                                <div className="text-md opacity-50">Net Acquisition Costs</div>
-                            </div>
+                            {/*<div className={infoCard}>*/}
+                            {/*    <div className="font-bold text-2xl opacity-50">0.00</div>*/}
+                            {/*    <div className="text-md opacity-50">Unrealised Profit and Loss</div>*/}
+                            {/*</div>*/}
+                            {/*<div className={infoCard}>*/}
+                            {/*    <div className="font-bold text-2xl opacity-50">0.00</div>*/}
+                            {/*    <div className="text-md opacity-50">Net Acquisition Costs</div>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                     <div className={ctaCard}>
@@ -251,7 +265,14 @@ export default (({ onClickBurn }) => {
                                     Take a position in {maxSkew?.name} and also take the opposite position of equal
                                     magnitude on another platform.
                                 </div>
-                                <div className="text-tracer-400 underline">Learn how to skew farm</div>
+                                <a
+                                    href="https://tracer.finance/radar/skew-farming-explained/"
+                                    target="_blank"
+                                    className="text-tracer-400 underline"
+                                    rel="noreferrer"
+                                >
+                                    Learn how to skew farm
+                                </a>
                             </div>
                         </div>
                     )}
@@ -267,43 +288,43 @@ export default (({ onClickBurn }) => {
                     <div className={overviewCard}>
                         <h1 className="relative text-theme-text text-xl mr-[20px]">
                             Trade Portfolio Overview
-                            <div className="absolute right-0 top-0">
-                                <Dropdown
-                                    className="mr-2"
-                                    size={'xs'}
-                                    value={state.timeScale.toString()}
-                                    options={Object.keys(TimescaleEnum).map((key) => ({
-                                        key: key,
-                                        text: TimescaleEnum[key as keyof typeof TimescaleEnum],
-                                    }))}
-                                    onSelect={(val) =>
-                                        dispatch({ type: 'setTimescale', timeScale: val as TimescaleEnum })
-                                    }
-                                />
-                                <Dropdown
-                                    size={'xs'}
-                                    value={state.currency}
-                                    options={Object.keys(CurrencyEnum).map((key) => ({
-                                        key: key,
-                                        text: CurrencyEnum[key as keyof typeof CurrencyEnum],
-                                    }))}
-                                    onSelect={(val) => dispatch({ type: 'setCurrency', currency: val as CurrencyEnum })}
-                                />
-                            </div>
+                            {/*<div className="absolute right-0 top-0">*/}
+                            {/*    <Dropdown*/}
+                            {/*        className="mr-2"*/}
+                            {/*        size={'xs'}*/}
+                            {/*        value={state.timeScale.toString()}*/}
+                            {/*        options={Object.keys(TimescaleEnum).map((key) => ({*/}
+                            {/*            key: key,*/}
+                            {/*            text: TimescaleEnum[key as keyof typeof TimescaleEnum],*/}
+                            {/*        }))}*/}
+                            {/*        onSelect={(val) =>*/}
+                            {/*            dispatch({ type: 'setTimescale', timeScale: val as TimescaleEnum })*/}
+                            {/*        }*/}
+                            {/*    />*/}
+                            {/*    <Dropdown*/}
+                            {/*        size={'xs'}*/}
+                            {/*        value={state.currency}*/}
+                            {/*        options={Object.keys(CurrencyEnum).map((key) => ({*/}
+                            {/*            key: key,*/}
+                            {/*            text: CurrencyEnum[key as keyof typeof CurrencyEnum],*/}
+                            {/*        }))}*/}
+                            {/*        onSelect={(val) => dispatch({ type: 'setCurrency', currency: val as CurrencyEnum })}*/}
+                            {/*    />*/}
+                            {/*</div>*/}
                         </h1>
                         <div className="flex flex-col lg:flex-row justify-between my-2">
                             <div className={infoCard}>
-                                <div className="font-bold text-2xl">$400,000</div>
+                                <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
                                 <div className="text-md">Portfolio Valuation</div>
                             </div>
-                            <div className={infoCard}>
-                                <div className="font-bold text-2xl">$40,000</div>
-                                <div className="text-md">Unrealised Profit and Loss</div>
-                            </div>
-                            <div className={infoCard}>
-                                <div className="font-bold text-2xl">$360,000</div>
-                                <div className="text-md">Net Acquisition Costs</div>
-                            </div>
+                            {/*<div className={infoCard}>*/}
+                            {/*    <div className="font-bold text-2xl">$40,000</div>*/}
+                            {/*    <div className="text-md">Unrealised Profit and Loss</div>*/}
+                            {/*</div>*/}
+                            {/*<div className={infoCard}>*/}
+                            {/*    <div className="font-bold text-2xl">$360,000</div>*/}
+                            {/*    <div className="text-md">Net Acquisition Costs</div>*/}
+                            {/*</div>*/}
                         </div>
                     </div>
                     <div className={guideCard}>
