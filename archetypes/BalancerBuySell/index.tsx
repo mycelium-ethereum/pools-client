@@ -13,6 +13,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { StaticPoolInfo } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
 import { StyledTooltip } from '@components/Tooltips';
+import Link from 'next/link';
 
 export default (() => {
     const { network = ARBITRUM } = useWeb3();
@@ -22,7 +23,61 @@ export default (() => {
 
     const valid = !Number.isNaN(leverage) && !!market && !Number.isNaN(side);
 
+    const hasBalancerPool = market && (market === 'ETH/USD' || market === 'BTC/USD');
+
     const token = side === SideEnum.long ? pool?.longToken : pool?.shortToken;
+
+    const button = () => {
+        if (!valid) {
+            return (
+                <StyledTooltip title="Select the market, side, and power leverage you're after.">
+                    <div>
+                        <Button
+                            size="lg"
+                            variant="primary"
+                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                            disabled={true}
+                        >
+                            Take me to Balancer
+                        </Button>
+                    </div>
+                </StyledTooltip>
+            );
+        } else if (!hasBalancerPool) {
+            return (
+                <StyledTooltip
+                    title={
+                        <>
+                            {`There are no Balancer pools for pool tokens tracking the ${market} market yet. `}
+                            <Link href="/pools">Mint/burn here.</Link>
+                        </>
+                    }
+                >
+                    <div>
+                        <Button
+                            size="lg"
+                            variant="primary"
+                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                            disabled={true}
+                        >
+                            Take me to Balancer
+                        </Button>
+                    </div>
+                </StyledTooltip>
+            );
+        } else {
+            return (
+                <Button
+                    size="lg"
+                    variant="primary"
+                    onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                    disabled={!valid}
+                >
+                    Take me to Balancer
+                </Button>
+            );
+        }
+    };
 
     return (
         <div className="w-full justify-center sm:mt-20">
@@ -103,33 +158,7 @@ export default (() => {
                         </div>
                     </div>
                 </HiddenExpand>
-                <div className="mt-8">
-                    {!valid ? (
-                        <StyledTooltip title="Select the market, side, and power leverage you're after.">
-                            <div>
-                                <Button
-                                    size="lg"
-                                    variant="primary"
-                                    onClick={() =>
-                                        open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')
-                                    }
-                                    disabled={!valid}
-                                >
-                                    Take me to Balancer
-                                </Button>
-                            </div>
-                        </StyledTooltip>
-                    ) : (
-                        <Button
-                            size="lg"
-                            variant="primary"
-                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
-                            disabled={!valid}
-                        >
-                            Take me to Balancer
-                        </Button>
-                    )}
-                </div>
+                <div className="mt-8">{button()}</div>
             </div>
         </div>
     );

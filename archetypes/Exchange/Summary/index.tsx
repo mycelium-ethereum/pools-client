@@ -156,7 +156,7 @@ const BalancerLink: React.FC<{
 }> = ({ token, isBuy }) => {
     const { network } = useWeb3();
     const balancerPoolPrices = useBalancerSpotPrices(network);
-    return network === ARBITRUM ? (
+    return network === ARBITRUM && balancerPoolPrices[token?.symbol] ? (
         <div className="text-sm mt-2">
             <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
             <div>

@@ -63,6 +63,12 @@ const CommittmentTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
+const NoBalancerPoolTip: React.FC = ({ children }) => (
+    <StyledTooltip title="There are no Balancer pools for pool tokens tracking the EUR/USD market yet.">
+        {children}
+    </StyledTooltip>
+);
+
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const { provider, account } = useWeb3();
@@ -528,13 +534,21 @@ const TokenRows: React.FC<
             </TableRowCell>
             {showNextRebalance ? (
                 <TableRowCell size={'sm'} className={styles}>
-                    {toApproxCurrency(tokenInfo.balancerPrice, 3)}
-                    <LinkOutlined
-                        className="align-middle ml-1"
-                        onClick={() => {
-                            open(constructBalancerLink(tokenInfo.address, ARBITRUM, true), 'blank');
-                        }}
-                    />
+                    {tokenInfo.balancerPrice ? (
+                        <>
+                            {toApproxCurrency(tokenInfo.balancerPrice, 3)}
+                            <LinkOutlined
+                                className="align-middle ml-1"
+                                onClick={() => {
+                                    open(constructBalancerLink(tokenInfo.address, ARBITRUM, true), 'blank');
+                                }}
+                            />
+                        </>
+                    ) : (
+                        <>
+                            <NoBalancerPoolTip>-</NoBalancerPoolTip>
+                        </>
+                    )}
                 </TableRowCell>
             ) : null}
             {showNextRebalance && !!account ? (

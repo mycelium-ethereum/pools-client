@@ -234,25 +234,30 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
     };
 
-    const updatePoolBalances: (pool: Pool, provider_: ethers.providers.JsonRpcProvider | undefined) => void = (pool, provider_) => {
+    const updatePoolBalances: (pool: Pool, provider_: ethers.providers.JsonRpcProvider | undefined) => void = (
+        pool,
+        provider_,
+    ) => {
         if (provider_ && pool) {
-            fetchPoolBalances({
-                address: pool.address,
-                keeper: pool.keeper,
-                quoteTokenDecimals: pool.quoteToken.decimals,
-            }, provider_)
-            .then((poolBalances) => {
-                console.debug("Fetched updated bool balances")
+            fetchPoolBalances(
+                {
+                    address: pool.address,
+                    keeper: pool.keeper,
+                    quoteTokenDecimals: pool.quoteToken.decimals,
+                },
+                provider_,
+            ).then((poolBalances) => {
+                console.debug('Fetched updated bool balances');
                 poolsDispatch({
                     type: 'setUpdatedPoolBalances',
                     pool: pool.address,
-                    ...poolBalances
-                })
-            })
+                    ...poolBalances,
+                });
+            });
         } else {
-            console.debug(`Skipping pool balance update: Provider: ${provider}, pool: ${pool?.address}`)
+            console.debug(`Skipping pool balance update: Provider: ${provider}, pool: ${pool?.address}`);
         }
-    }
+    };
 
     // subscribe to pool events
     const subscribeToPool = (pool: string) => {
