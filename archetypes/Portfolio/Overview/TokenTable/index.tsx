@@ -85,7 +85,16 @@ export const TokenRow: React.FC<
                 </div>
             </TableRowCell>
             <TableRowCell>
-                <div>{toApproxCurrency(netValue)}</div>
+                <div>
+                    {denotedIn === DenotedInEnum.Base ? (
+                        <>
+                            {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)}{' '}
+                            {name.split('-')[1].split('/')[0]}
+                        </>
+                    ) : (
+                        toApproxCurrency(netValue)
+                    )}
+                </div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
             </TableRowCell>
             {/*<TableRowCell>*/}
