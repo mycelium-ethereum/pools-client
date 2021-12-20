@@ -379,7 +379,7 @@ export default (({ onClickBurn }) => {
                                 />
                             </div>
                             <div className="flex">
-                                <div className="mr-2">Denoted in</div>
+                                <div className="mr-2">Denote in</div>
                                 <Dropdown
                                     size={'xs'}
                                     value={denotedIn}
