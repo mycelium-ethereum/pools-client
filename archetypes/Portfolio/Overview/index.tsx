@@ -360,7 +360,7 @@ export default (({ onClickBurn }) => {
                         <h1 className="text-theme-text text-xl">Token Holdings</h1>
                         <div className="flex">
                             <div className="flex mr-5">
-                                <div className="mr-2">Priced by</div>
+                                <div className="mr-2">Price by</div>
                                 <Dropdown
                                     className="mr-2"
                                     size={'xs'}
