@@ -322,8 +322,11 @@ export default (({ onClickBurn }) => {
                         </h1>
                         <div className="flex flex-col lg:flex-row justify-between my-2">
                             <div className={infoCard}>
-                                <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
-                                <div className="text-md">Portfolio Valuation</div>
+                                <div className="flex">
+                                    <Logo size="md" ticker="USDC" className="mr-1 my-auto" />
+                                    <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
+                                </div>
+                                <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USDC)</div>
                             </div>
                             {/*<div className={infoCard}>*/}
                             {/*    <div className="font-bold text-2xl">$40,000</div>*/}
