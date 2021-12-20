@@ -25,11 +25,11 @@ const historyOptions = [
 
 export default (({ focus }) => {
     const router = useRouter();
-    const { provider } = useWeb3();
+    const { provider, account } = useWeb3();
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
 
     useEffect(() => {
-        fetchTradeHistory({ account: '0x36b26d2aF84d7B80e48d31d549eE56bDB0a0BBaE' }).then((r) => setTradeHistory(r));
+        fetchTradeHistory({ account: account ?? '0' }).then((r) => setTradeHistory(r));
     }, [provider]);
 
     const { mintCommits, burnCommits } = useMemo(
