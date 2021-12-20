@@ -5,6 +5,7 @@ import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo, LogoTicker } from 'components/General/Logo';
+import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -80,6 +81,8 @@ interface DropdownProps {
         key: string;
         text?: string;
         ticker?: LogoTicker;
+        disabled?: boolean;
+        tooltip?: TooltipSelectorProps;
     }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;
@@ -131,23 +134,42 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
-                            <Menu.Item key={option.key}>
-                                {({ active }) => (
-                                    <button
-                                        onClick={() => onSelect(option.key)}
-                                        className={classNames(
-                                            active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
-                                            'block px-4 py-2 text-sm w-full text-left',
-                                        )}
-                                    >
-                                        {option?.ticker ? (
-                                            <Logo ticker={option.ticker} className="inline my-0 mr-3" />
-                                        ) : (
-                                            ''
-                                        )}
-                                        {option?.text ?? option.key}
-                                    </button>
-                                )}
+                            <Menu.Item key={option.key} disabled={option.disabled}>
+                                {({ active }) =>
+                                    option.tooltip ? (
+                                        <TooltipSelector tooltip={option.tooltip}>
+                                            <button
+                                                onClick={() => onSelect(option.key)}
+                                                className={classNames(
+                                                    active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
+                                                    'block px-4 py-2 text-sm w-full text-left',
+                                                )}
+                                            >
+                                                {option?.ticker ? (
+                                                    <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                                ) : (
+                                                    ''
+                                                )}
+                                                {option?.text ?? option.key}
+                                            </button>
+                                        </TooltipSelector>
+                                    ) : (
+                                        <button
+                                            onClick={() => onSelect(option.key)}
+                                            className={classNames(
+                                                active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
+                                                'block px-4 py-2 text-sm w-full text-left',
+                                            )}
+                                        >
+                                            {option?.ticker ? (
+                                                <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                            ) : (
+                                                ''
+                                            )}
+                                            {option?.text ?? option.key}
+                                        </button>
+                                    )
+                                }
                             </Menu.Item>
                         ))}
                     </div>

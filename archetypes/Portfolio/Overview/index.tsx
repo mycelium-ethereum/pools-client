@@ -1,16 +1,13 @@
-import {
-    // Dropdown,
-    Logo,
-    tokenSymbolToLogoTicker,
-} from '@components/General';
+import { Dropdown, Logo, tokenSymbolToLogoTicker } from '@components/General';
 import BigNumber from 'bignumber.js';
-import React from 'react'; // useReducer
+import React, { useState } from 'react'; // userReducer
 import TokenTable from './TokenTable';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
+import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
@@ -28,6 +25,16 @@ export enum TimescaleEnum {
 export enum CurrencyEnum {
     USD = 'USD',
     AUD = 'AUD',
+}
+
+enum PriceByEnum {
+    Tracer = 'Tracer',
+    Balancer = 'Balancer',
+}
+
+export enum DenotedInEnum {
+    Base = 'Base',
+    USDC = 'USDC',
 }
 
 export type TokenRowProps = {
@@ -117,6 +124,7 @@ export default (({ onClickBurn }) => {
     const { rows: tokens } = useBrowsePools();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
+    const [denotedIn, setDenotedIn] = useState<DenotedInEnum>(DenotedInEnum.Base);
 
     const totalValuation = function () {
         let total = 0;
@@ -345,8 +353,43 @@ export default (({ onClickBurn }) => {
                     </div>
                 </div>
                 <div className={mainCard}>
-                    <h1 className="text-theme-text text-xl">Token Holdings</h1>
-                    <TokenTable rows={rows} onClickBurn={onClickBurn} />
+                    <div className="flex justify-between">
+                        <h1 className="text-theme-text text-xl">Token Holdings</h1>
+                        <div className="flex">
+                            <div className="flex mr-5">
+                                <div className="mr-2">Priced by</div>
+                                <Dropdown
+                                    className="mr-2"
+                                    size={'xs'}
+                                    value={'Tracer'}
+                                    options={[
+                                        { key: PriceByEnum.Tracer },
+                                        {
+                                            key: PriceByEnum.Balancer,
+                                            disabled: true,
+                                            tooltip: { key: TooltipKeys.ComingSoon },
+                                        },
+                                    ]}
+                                    onSelect={(val) => {
+                                        console.debug(val);
+                                    }}
+                                />
+                            </div>
+                            <div className="flex">
+                                <div className="mr-2">Denoted in</div>
+                                <Dropdown
+                                    size={'xs'}
+                                    value={denotedIn}
+                                    options={Object.keys(DenotedInEnum).map((key) => ({
+                                        key: key,
+                                        text: DenotedInEnum[key as keyof typeof DenotedInEnum],
+                                    }))}
+                                    onSelect={(val) => setDenotedIn(val as DenotedInEnum)}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <TokenTable rows={rows} onClickBurn={onClickBurn} denotedIn={denotedIn} />
                 </div>
             </div>
         );

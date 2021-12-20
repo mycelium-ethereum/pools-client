@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
-import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Loading from '@components/General/Loading';
-import { TokenRowProps } from '..';
+import { DenotedInEnum, TokenRowProps } from '..';
 import { ethers } from 'ethers';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
@@ -11,7 +11,7 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
 import { SideEnum } from '@libs/constants';
 
-export default (({ rows, onClickBurn }) => {
+export default (({ rows, onClickBurn, denotedIn }) => {
     const { provider } = useWeb3();
 
     return (
@@ -33,6 +33,7 @@ export default (({ rows, onClickBurn }) => {
                             key={token.address}
                             provider={provider ?? null}
                             onClickBurn={onClickBurn}
+                            denotedIn={denotedIn}
                         />
                     );
                 })}
@@ -43,6 +44,7 @@ export default (({ rows, onClickBurn }) => {
 }) as React.FC<{
     rows: TokenRowProps[];
     onClickBurn: (pool: string, side: SideEnum) => void;
+    denotedIn: DenotedInEnum;
 }>;
 
 export const TokenRow: React.FC<
@@ -50,6 +52,7 @@ export const TokenRow: React.FC<
         onClickBurn: (pool: string, side: SideEnum) => void;
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
+        denotedIn: DenotedInEnum;
     }
 > = ({
     symbol,
@@ -65,6 +68,7 @@ export const TokenRow: React.FC<
     index,
     onClickBurn,
     oraclePrice,
+    denotedIn,
 }) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
@@ -92,7 +96,13 @@ export const TokenRow: React.FC<
             {/*    {toApproxCurrency(pnl)}*/}
             {/*</TableRowCell>*/}
             <TableRowCell>
-                {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)} {name.split('-')[1].split('/')[0]}
+                {denotedIn === DenotedInEnum.Base ? (
+                    <>
+                        {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)} {name.split('-')[1].split('/')[0]}
+                    </>
+                ) : (
+                    toApproxCurrency(netValue)
+                )}
             </TableRowCell>
             <TableRowCell className="flex">
                 <Button
