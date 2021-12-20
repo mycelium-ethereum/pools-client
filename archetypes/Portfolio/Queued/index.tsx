@@ -1,13 +1,18 @@
-import React, { useMemo } from 'react';
-import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
+import React, { useMemo, useState } from 'react';
+import { CommitActionEnum, CommitEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { Table, TableHeader, TableHeaderCell } from '@components/General/TWTable';
-import { CommitRow } from '@components/PendingCommits';
-import Pagination, { PageNumber } from '@components/General/Pagination';
-import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { useRouter } from 'next/router';
+import { QueuedCommit } from '@libs/types/General';
+import { ethers } from 'ethers';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { toApproxCurrency } from '@libs/utils/converters';
+import Actions from '@components/TokenActions';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import BigNumber from 'bignumber.js';
+import TimeLeft from '@components/TimeLeft';
 
 const queuedOptions = [
     {
@@ -38,10 +43,6 @@ export default (({ focus }) => {
         [commits],
     );
 
-    const { setPage, page, paginatedArray, numPages } = usePagination(
-        focus === CommitsFocusEnum.mints ? mintCommits : burnCommits,
-    );
-
     return (
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
             <div className="my-4">
@@ -64,13 +65,12 @@ export default (({ focus }) => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spent (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
-                            <TableHeaderCell>Receive in</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Tokens / Price *</TableHeaderCell>
+                            <TableHeaderCell>Mint In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {paginatedArray.map((commit, index) => (
+                        {mintCommits.map((commit, index) => (
                             <CommitRow
                                 key={`pcr-${index}`}
                                 index={index}
@@ -84,13 +84,12 @@ export default (({ focus }) => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Burn in</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Return / Price *</TableHeaderCell>
+                            <TableHeaderCell>Burn In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {paginatedArray.map((commit, index) => (
+                        {burnCommits.map((commit, index) => (
                             <CommitRow
                                 key={`pcr-${index}`}
                                 index={index}
@@ -109,29 +108,134 @@ export default (({ focus }) => {
                     only, and represent the estimated values for the next rebalance, given the committed mints and burns
                     and change in price of the underlying asset.
                 </div>
-                <div className="ml-auto mt-auto px-4 sm:px-6 py-3">
-                    <PageNumber
-                        page={page}
-                        numResults={focus === CommitsFocusEnum.mints ? mintCommits.length : burnCommits.length}
-                        resultsPerPage={PAGE_ENTRIES}
-                    />
-                    <Pagination
-                        onLeft={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        onRight={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        onDirect={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        numPages={numPages}
-                        selectedPage={page}
-                    />
-                </div>
             </div>
         </div>
     );
 }) as React.FC<{
     focus: CommitsFocusEnum;
 }>;
+
+const CommitRow: React.FC<
+    QueuedCommit & {
+        provider: ethers.providers.JsonRpcProvider | null;
+        index: number;
+        burnRow: boolean; // is burnRow
+    }
+> = ({
+    token,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+    burnRow,
+}) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    return (
+        <TableRow key={txnHash} rowNumber={index}>
+            <TableRowCell>
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div className="flex text-xl">
+                            <div>
+                                {token.symbol.split('-')[0][0]}-
+                                {token.symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                            </div>
+                            &nbsp;
+                            <div className={`${token.side === SideEnum.long ? 'green' : 'red'}`}>
+                                {token.side === SideEnum.long ? 'Long' : 'Short'}
+                            </div>
+                        </div>
+                        <div className="text-cool-gray-500">{token.name} </div>
+                    </div>
+                </div>
+            </TableRowCell>
+            {burnRow ? (
+                <>
+                    <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
+                    <TableRowCell>
+                        <div>{toApproxCurrency(amount.times(tokenPrice))} USDC</div>
+                        <div>at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                    </TableRowCell>
+                </>
+            ) : (
+                <>
+                    <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
+                    <TableRowCell>
+                        <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                    </TableRowCell>
+                </>
+            )}
+            <TableRowCell>
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.mint}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
+                <Actions
+                    token={token}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
+            </TableRowCell>
+        </TableRow>
+    );
+};
+interface ReceiveInProps {
+    pendingUpkeep: boolean;
+    setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
+    actionType: CommitActionEnum;
+    nextRebalance: BigNumber;
+    created: number;
+    frontRunningInterval: BigNumber;
+    updateInterval: BigNumber;
+}
+const ReceiveIn: React.FC<ReceiveInProps> = ({
+    pendingUpkeep,
+    setPendingUpkeep,
+    actionType,
+    nextRebalance,
+    created,
+    frontRunningInterval,
+    updateInterval,
+}: ReceiveInProps) => {
+    if (pendingUpkeep) {
+        return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
+    } else {
+        if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        } else {
+            return (
+                <TimeLeft
+                    targetTime={nextRebalance.toNumber()}
+                    countdownEnded={() => {
+                        setPendingUpkeep(true);
+                    }}
+                />
+            );
+        }
+    }
+};
