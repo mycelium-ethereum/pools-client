@@ -128,6 +128,7 @@ export const TokenRow: React.FC<
                     className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
                     size="xs"
                     variant="primary-light"
+                    disabled={!netValue.toNumber()}
                 >
                     Stake
                 </Button>
@@ -135,6 +136,7 @@ export const TokenRow: React.FC<
                     className="mx-1 w-[70px] my-auto font-bold uppercase "
                     size="xs"
                     variant="primary-light"
+                    disabled={!netValue.toNumber()}
                     onClick={() => onClickBurn(poolAddress, side)}
                 >
                     Burn
