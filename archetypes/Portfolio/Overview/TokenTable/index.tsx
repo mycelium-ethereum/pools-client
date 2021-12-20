@@ -10,6 +10,7 @@ import { tickerToName, toApproxCurrency } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
 import { SideEnum } from '@libs/constants';
+import BigNumber from 'bignumber.js';
 
 export default (({ rows, onClickBurn, denotedIn }) => {
     const { provider } = useWeb3();
@@ -73,6 +74,16 @@ export const TokenRow: React.FC<
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
+    const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, name: string) => {
+        if (netValue.eq(0)) {
+            return netValue.toFixed(2);
+        } else if (name.split('-')[1].split('/')[0] === 'BTC') {
+            return (netValue.toNumber() / oraclePrice.toNumber()).toFixed(8);
+        } else if (name.split('-')[1].split('/')[0] === 'ETH') {
+            return (netValue.toNumber() / oraclePrice.toNumber()).toFixed(6);
+        }
+    };
+
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
@@ -88,8 +99,7 @@ export const TokenRow: React.FC<
                 <div>
                     {denotedIn === DenotedInEnum.Base ? (
                         <>
-                            {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)}{' '}
-                            {name.split('-')[1].split('/')[0]}
+                            {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
                         </>
                     ) : (
                         `${toApproxCurrency(netValue)} USDC`
@@ -107,7 +117,7 @@ export const TokenRow: React.FC<
             <TableRowCell>
                 {denotedIn === DenotedInEnum.Base ? (
                     <>
-                        {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)} {name.split('-')[1].split('/')[0]}
+                        {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
                     </>
                 ) : (
                     `${toApproxCurrency(netValue)} USDC`
