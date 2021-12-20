@@ -107,7 +107,7 @@ export const historicsReducer: (state: PortfolioOverviewState, action: OverviewA
     }
 };
 
-const infoCard = 'xl:w-1/3 mr-4 my-2 px-16 py-10 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary';
+const infoCard = 'xl:w-1/3 mr-4 my-2 px-5 py-10 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary';
 
 const overviewCard = 'xl:w-2/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
 
