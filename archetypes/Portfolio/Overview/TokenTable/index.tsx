@@ -92,7 +92,7 @@ export const TokenRow: React.FC<
                             {name.split('-')[1].split('/')[0]}
                         </>
                     ) : (
-                        toApproxCurrency(netValue)
+                        `${toApproxCurrency(netValue)} USDC`
                     )}
                 </div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
@@ -110,7 +110,7 @@ export const TokenRow: React.FC<
                         {(netValue.toNumber() / oraclePrice.toNumber()).toFixed(2)} {name.split('-')[1].split('/')[0]}
                     </>
                 ) : (
-                    toApproxCurrency(netValue)
+                    `${toApproxCurrency(netValue)} USDC`
                 )}
             </TableRowCell>
             <TableRowCell className="flex">
