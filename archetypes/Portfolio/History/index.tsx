@@ -69,11 +69,10 @@ export default (({ focus }) => {
                 {focus === CommitsFocusEnum.mints ? (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Date / Time</TableHeaderCell>
+                            <TableHeaderCell>Time / Date</TableHeaderCell>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spent (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Received (Tokens) *</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Token / Price</TableHeaderCell>
                             {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
                         {paginatedArray.map((commit, index) => (
@@ -89,11 +88,10 @@ export default (({ focus }) => {
                 ) : (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Date / Time</TableHeaderCell>
+                            <TableHeaderCell>Time / Date</TableHeaderCell>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Amount / Price</TableHeaderCell>
+                            <TableHeaderCell>Return</TableHeaderCell>
                             {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
                         {paginatedArray.map((commit, index) => (
@@ -108,33 +106,25 @@ export default (({ focus }) => {
                     </>
                 )}
             </Table>
-            <div className="flex">
-                <div className="mt-8 max-w-2xl text-sm text-theme-text opacity-80">
-                    * <strong>Token Price</strong> and{' '}
-                    <strong>{focus === CommitsFocusEnum.mints ? 'Amount' : 'Return'}</strong> values are indicative
-                    only, and represent the estimated values for the next rebalance, given the committed mints and burns
-                    and change in price of the underlying asset.
-                </div>
-                <div className="ml-auto mt-auto px-4 sm:px-6 py-3">
-                    <PageNumber
-                        page={page}
-                        numResults={focus === CommitsFocusEnum.mints ? mintCommits.length : burnCommits.length}
-                        resultsPerPage={PAGE_ENTRIES}
-                    />
-                    <Pagination
-                        onLeft={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        onRight={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        onDirect={({ nextPage }) => {
-                            setPage(nextPage);
-                        }}
-                        numPages={numPages}
-                        selectedPage={page}
-                    />
-                </div>
+            <div className="ml-auto mt-auto px-4 sm:px-6 py-3">
+                <PageNumber
+                    page={page}
+                    numResults={focus === CommitsFocusEnum.mints ? mintCommits.length : burnCommits.length}
+                    resultsPerPage={PAGE_ENTRIES}
+                />
+                <Pagination
+                    onLeft={({ nextPage }) => {
+                        setPage(nextPage);
+                    }}
+                    onRight={({ nextPage }) => {
+                        setPage(nextPage);
+                    }}
+                    onDirect={({ nextPage }) => {
+                        setPage(nextPage);
+                    }}
+                    numPages={numPages}
+                    selectedPage={page}
+                />
             </div>
         </div>
     );
@@ -148,24 +138,32 @@ const CommitRow: React.FC<
         burnRow: number;
     }
 > = ({ date, tokenName, tokenAmount, tokenPrice, tokenSymbol, index, burnRow }) => {
+    const { timeString, dateString } = formatDate(new Date(date * 1000));
     return (
         <TableRow key={index} rowNumber={index}>
-            <TableRowCell>{formatDate(new Date(date * 1000))}</TableRowCell>
+            <TableRowCell>
+                <div>{timeString}</div>
+                <div>{dateString}</div>
+            </TableRowCell>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline mr-2" />
                 {tokenName}
             </TableRowCell>
             {burnRow ? (
                 <>
-                    <TableRowCell>{tokenAmount.toFixed(2)}</TableRowCell>
-                    <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))}</TableRowCell>
+                    <TableRowCell>
+                        <div>{tokenAmount.toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                    </TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))} USDC</TableRowCell>
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(tokenAmount)}</TableRowCell>
-                    <TableRowCell>{tokenAmount.div(tokenPrice).toFixed(2)}</TableRowCell>
-                    <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenAmount)} USDC</TableRowCell>
+                    <TableRowCell>
+                        <div>{tokenAmount.div(tokenPrice).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                    </TableRowCell>
                 </>
             )}
             {/*<TableRowCell className="flex text-right">*/}

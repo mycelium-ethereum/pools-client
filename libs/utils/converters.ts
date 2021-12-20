@@ -154,7 +154,7 @@ export const formatDate: (
         hideTime: boolean;
         hideDate: boolean;
     },
-) => string = (
+) => { timeString: string; dateString: string } = (
     date,
     { hideTime, hideDate } = {
         hideDate: false,
@@ -163,7 +163,7 @@ export const formatDate: (
 ) => {
     const dateString = !hideDate ? `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ` : '';
     const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
-    return dateString + timeString;
+    return { timeString, dateString };
 };
 
 /**
