@@ -20,7 +20,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <PoolStore>
                 <NavBar />
-                <WarningBanners banners={['decayWarning']} />
+                <WarningBanners banners={['auditWarning', 'decayWarning']} />
                 <SwapStore>
                     <Portfolio page={TradePortfolioPage.Overview} />
                 </SwapStore>

@@ -131,7 +131,10 @@ export const TokenRow: React.FC<
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
-                    onClick={() => router.push('/stakepooltoken')}
+                    onClick={() => {
+                        router.push('/stakepooltoken');
+                        sessionStorage.setItem('portfolio.selectedToken', address);
+                    }}
                 >
                     Stake
                 </Button>
