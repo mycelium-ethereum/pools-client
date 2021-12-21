@@ -11,6 +11,7 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
 import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
+import { useRouter } from 'next/router';
 
 export default (({ rows, onClickBurn, denotedIn }) => {
     const { provider } = useWeb3();
@@ -71,6 +72,7 @@ export const TokenRow: React.FC<
     oraclePrice,
     denotedIn,
 }) => {
+    const router = useRouter();
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
@@ -129,6 +131,7 @@ export const TokenRow: React.FC<
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
+                    onClick={() => router.push('/stakepooltoken')}
                 >
                     Stake
                 </Button>
