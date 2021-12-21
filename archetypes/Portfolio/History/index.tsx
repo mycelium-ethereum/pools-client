@@ -6,7 +6,7 @@ import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { formatDate, toApproxCurrency } from '@libs/utils/converters';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
-import fetchTradeHistory, { TradeHistory } from '@archetypes/Portfolio/tradeHistoryAPI';
+import fetchTradeHistory, { TradeHistory } from '@libs/utils/tradeHistoryAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { useRouter } from 'next/router';
 // import { ArbiscanEnum } from '@libs/utils/rpcMethods';

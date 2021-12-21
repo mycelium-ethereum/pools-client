@@ -2,7 +2,7 @@ import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum, CommitTypeMap } from '@libs/con
 import BigNumber from 'bignumber.js';
 
 // Base API URL
-const BASE_TRADE_HISTORY_API = 'https://dev.api.tracer.finance/pools/tradeHistory';
+const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
 
 type NetworkType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
