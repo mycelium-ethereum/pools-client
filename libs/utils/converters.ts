@@ -222,6 +222,7 @@ export const calcPercentageDifference: (newValue: number, oldValue: number) => n
 
 const names: Record<string, string> = {
     'ETH/USD': 'Ethereum',
+    'EUR/USD': 'Euro',
     'BTC/USD': 'Bitcoin',
 };
 

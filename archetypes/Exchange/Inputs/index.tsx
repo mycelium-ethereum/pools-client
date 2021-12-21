@@ -24,7 +24,7 @@ const isInvalidAmount: (
     balance: BigNumber,
     minimumTokens: BigNumber,
     tokenPrice: BigNumber,
-    isMint: boolean
+    isMint: boolean,
 ) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice, isMint) => {
     if (amount.eq(0)) {
         return {
@@ -45,10 +45,11 @@ const isInvalidAmount: (
         return {
             message: `
                 The minimum order size is 
-                ${isMint
-                ? toApproxCurrency(minimumTokens)
-                : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
-            }`,
+                ${
+                    isMint
+                        ? toApproxCurrency(minimumTokens)
+                        : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
+                }`,
             isInvalid: true,
         };
     }
@@ -101,7 +102,13 @@ export default (({ pool, swapState, swapDispatch }) => {
                 );
             }
 
-            const invalidAmount = isInvalidAmount(amountBN, currentBalance, minimumTokens, tokenPrice, commitAction === CommitActionEnum.mint);
+            const invalidAmount = isInvalidAmount(
+                amountBN,
+                currentBalance,
+                minimumTokens,
+                tokenPrice,
+                commitAction === CommitActionEnum.mint,
+            );
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -184,15 +191,15 @@ type AmountProps = {
 };
 
 const AmountInput: React.FC<AmountProps> = ({
-                                                invalidAmount,
-                                                selectedPool,
-                                                amount,
-                                                amountBN,
-                                                swapDispatch,
-                                                balance,
-                                                tokenSymbol,
-                                                isPoolToken,
-                                            }) => {
+    invalidAmount,
+    selectedPool,
+    amount,
+    amountBN,
+    swapDispatch,
+    balance,
+    tokenSymbol,
+    isPoolToken,
+}) => {
     return (
         <>
             <InputContainer error={invalidAmount.isInvalid} className="w-full">

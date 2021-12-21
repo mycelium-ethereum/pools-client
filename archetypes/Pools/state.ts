@@ -4,6 +4,7 @@ export enum MarketFilterEnum {
     All = 'All',
     ETH = 'Ethereum',
     BTC = 'Bitcoin',
+    EUR = 'Euro',
 }
 
 export enum DeltaEnum {

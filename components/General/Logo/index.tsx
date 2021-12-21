@@ -6,9 +6,12 @@ import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
 import Etherscan from '@public/img/logos/currencies/etherscan.svg';
 import ETH_L from '@public/img/logos/currencies/eth_long.svg';
 import ETH_S from '@public/img/logos/currencies/eth_short.svg';
+import EUR_L from '@public/img/logos/currencies/eur_long.svg';
+import EUR_S from '@public/img/logos/currencies/eur_short.svg';
 import BTC_L from '@public/img/logos/currencies/btc_long.svg';
 import BTC_S from '@public/img/logos/currencies/btc_short.svg';
 import ETH from '@public/img/logos/currencies/eth.svg';
+import EUR from '@public/img/logos/currencies/eur.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
@@ -16,7 +19,7 @@ import USDC from '@public/img/logos/currencies/usdc.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
-type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'DEFAULT';
+type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'EUR_L' | 'EUR_S' | 'DEFAULT';
 export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
@@ -35,10 +38,13 @@ export type LogoTicker =
     | 'ETHERSCAN'
     | 'USDC'
     | 'ETH_L'
+    | 'EUR_L'
     | 'BTC_L'
     | 'ETH_S'
+    | 'EUR_S'
     | 'BTC_S'
     | 'ETH'
+    | 'EUR'
     | 'WETH'
     | 'BTC'
     | 'WBTC'
@@ -55,9 +61,12 @@ const logos: Record<LogoTicker, any> = {
     USDC: USDC,
     DEFAULT: ETH,
     ETH_L: ETH_L,
+    EUR_L: EUR_L,
     BTC_L: BTC_L,
     ETH_S: ETH_S,
+    EUR_S: EUR_S,
     BTC_S: BTC_S,
+    EUR: EUR,
     ETH: ETH,
     WETH: ETH,
     BTC: BTC,
