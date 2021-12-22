@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } f
 import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
-import { fetchCommits, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
+import { fetchCommits, fetchPoolBalances, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -234,6 +234,31 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             });
     };
 
+    const updatePoolBalances: (pool: Pool, provider_: ethers.providers.JsonRpcProvider | undefined) => void = (
+        pool,
+        provider_,
+    ) => {
+        if (provider_ && pool) {
+            fetchPoolBalances(
+                {
+                    address: pool.address,
+                    keeper: pool.keeper,
+                    quoteTokenDecimals: pool.quoteToken.decimals,
+                },
+                provider_,
+            ).then((poolBalances) => {
+                console.debug('Fetched updated bool balances');
+                poolsDispatch({
+                    type: 'setUpdatedPoolBalances',
+                    pool: pool.address,
+                    ...poolBalances,
+                });
+            });
+        } else {
+            console.debug(`Skipping pool balance update: Provider: ${provider}, pool: ${pool?.address}`);
+        }
+    };
+
     // subscribe to pool events
     const subscribeToPool = (pool: string) => {
         if (provider && poolsState.pools[pool]) {
@@ -330,6 +355,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             });
                         });
                         updateTokenBalances(poolsState.pools[pool], subscriptionProvider);
+                        updatePoolBalances(poolsState.pools[pool], subscriptionProvider);
                         commitDispatch({
                             type: 'resetCommits',
                             pool: pool,

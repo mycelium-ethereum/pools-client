@@ -43,6 +43,15 @@ export type PoolAction =
     | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
     | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
+    | {
+          type: 'setUpdatedPoolBalances';
+          pool: string;
+          lastPrice: BigNumber;
+          oraclePrice: BigNumber;
+          longBalance: BigNumber;
+          shortBalance: BigNumber;
+          lastUpdate: BigNumber;
+      }
     | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
@@ -73,6 +82,26 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 poolsInitialised: false,
                 subscriptions: {},
                 retryInit: false,
+            };
+        case 'setUpdatedPoolBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        lastUpdate: action.lastUpdate,
+                        lastPrice: action.lastPrice,
+                        longBalance: action.longBalance,
+                        shortBalance: action.shortBalance,
+                        nextLongBalance: action.longBalance,
+                        nextShortBalance: action.shortBalance,
+                        oraclePrice: action.oraclePrice,
+                    },
+                },
             };
         case 'setNextPoolBalances':
             if (!state.pools[action.pool]) {

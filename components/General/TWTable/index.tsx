@@ -15,53 +15,77 @@ export const Table: React.FC<{ className?: string }> = ({ className, children })
     );
 };
 
-export const TableHeader: React.FC<{ className?: string }> = ({ children, className }) => {
+export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children, className }) => {
     return (
         <thead
             className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg', className ?? '')}
         >
-            <tr>{children}</tr>
+            {children}
         </thead>
     );
 };
 
-export const TableHeaderCell: React.FC<{ className?: string; align?: 'bottom' }> = ({
+const HEADER_CELL_SIZES = {
+    default: 'p-4',
+    sm: 'px-2 py-4',
+};
+
+type Size = 'default' | 'sm';
+
+export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Size; twAlign?: 'bottom' }> = ({
     children,
     className,
-    align = 'top',
+    twAlign = 'top',
+    size = 'default',
+    ...props
 }) => (
     <th
+        {...props}
         scope="col"
         className={classNames(
             className ?? '',
-            `align-${align}`,
-            'px-4 pt-4 pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
+            `align-${twAlign}`,
+            HEADER_CELL_SIZES[size],
+            'pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
         )}
     >
         {children}
     </th>
 );
 
-interface TableRowProps {
+type TableRowProps = JSX.IntrinsicElements['tr'] & {
     rowNumber: number;
-}
+};
 
 export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
     return (
-        <tbody>
-            <tr
-                className={
-                    rowNumber % 2 === 0
-                        ? 'bg-theme-background'
-                        : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
-                }
-            >
-                {children}
-            </tr>
-        </tbody>
+        <tr
+            className={
+                rowNumber % 2 === 0
+                    ? 'bg-theme-background'
+                    : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
+            }
+        >
+            {children}
+        </tr>
     );
 };
 
-export const TableRowCell: React.FC<{ className?: string }> = ({ children, className }) => (
-    <td className={classNames(className ?? '', 'px-4 py-4 whitespace-nowrap text-sm text-theme-text')}>{children}</td>
+const CELL_SIZES = {
+    default: 'p-4',
+    sm: 'px-2 py-1',
+};
+
+export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size }> = ({
+    children,
+    className,
+    size = 'default',
+    ...props
+}) => (
+    <td
+        {...props}
+        className={classNames(className ?? '', CELL_SIZES[size], 'whitespace-nowrap text-sm text-theme-text')}
+    >
+        {children}
+    </td>
 );

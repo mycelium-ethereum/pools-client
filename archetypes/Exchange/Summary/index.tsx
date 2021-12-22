@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { HiddenExpand, Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
+import { HiddenExpand, Logo, LogoTicker, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -23,14 +23,15 @@ type SummaryProps = {
     showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
+    isMint: boolean;
     receiveIn: number;
 };
 
 const countdown = 'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-background';
 const timeLeft = 'inline bg-theme-button-bg border border-theme-border ml-1.5 px-1.5 py-1 rounded-lg';
 
-// const BuySummary
-export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
+// const Summary
+export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const notional = useMemo(
         () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
@@ -70,9 +71,18 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
             )}
         >
             <div className="relative border-box px-4 pt-4 pb-2">
-                <h2 className="text-theme-text">
-                    <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                    {token.name}
+                <h2 className="text-theme-text mb-2">
+                    {isMint ? (
+                        <>
+                            <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
+                            {token.name}
+                        </>
+                    ) : (
+                        <>
+                            <Logo className="inline mr-2" size="md" ticker={pool.quoteToken.symbol as LogoTicker} />
+                            {pool.quoteToken.symbol}
+                        </>
+                    )}
                 </h2>
                 <Transition
                     show={showBreakdown}
@@ -83,28 +93,38 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    <Section label="Expected number of tokens">
-                        <div>
-                            <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
-                            <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1)}`}</span>
-                        </div>
-                    </Section>
-                    <Section label="Power Leverage">
-                        <div>
-                            <span className="opacity-60">{`Gains: `}</span>
-                            <span
-                                className={classNames(
-                                    'mr-2',
-                                    effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
-                                )}
-                            >
-                                {effectiveGains.toFixed(2)}
-                            </span>
-                            <span className="opacity-60">{`Losses: `}</span>
-                            {pool.leverage}
-                        </div>
-                    </Section>
-                    <BalancerLink token={token} isBuy={true} />
+                    {isMint ? (
+                        <>
+                            <Section label="Expected number of tokens">
+                                <div>
+                                    <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
+                                    <span className="opacity-50">{` @ ${toApproxCurrency(tokenPrice ?? 1, 3)}`}</span>
+                                </div>
+                            </Section>
+                            <Section label="Power Leverage">
+                                <div>
+                                    <span className="opacity-60">{`Gains: `}</span>
+                                    <span
+                                        className={classNames(
+                                            'mr-2',
+                                            effectiveGains.gt(pool.leverage) ? 'text-green-500' : 'text-red-500',
+                                        )}
+                                    >
+                                        {effectiveGains.toFixed(2)}
+                                    </span>
+                                    <span className="opacity-60">{`Losses: `}</span>
+                                    {pool.leverage}
+                                </div>
+                            </Section>
+                        </>
+                    ) : (
+                        <>
+                            <Section label="Expected return">
+                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`}
+                            </Section>
+                        </>
+                    )}
+                    <BalancerLink token={token} isBuy={isMint} />
                 </Transition>
                 <div className={countdown}>
                     {'Receive In'}
@@ -113,64 +133,15 @@ export const BuySummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount
             </div>
         </HiddenExpand>
     );
-};
+}) as React.FC<SummaryProps>;
 
-// const SellSummary
-export const SellSummary: React.FC<SummaryProps> = ({ pool, showBreakdown, amount, isLong, receiveIn }) => {
-    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
-    );
-    const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
-    );
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
-
-    return (
-        <HiddenExpand
-            defaultHeight={0}
-            open={!!pool.name}
-            className={classNames(
-                'border-2x border text-base',
-                !!pool.name ? 'border-theme-border' : 'border-transparent',
-            )}
-        >
-            <div className="relative border-box px-4 pt-4 pb-2">
-                <h2 className="text-theme-text">
-                    <Logo className="inline mr-2" size={'md'} ticker="USDC" />
-                    USDC
-                </h2>
-                <Transition
-                    show={showBreakdown}
-                    enter="transition-opacity duration-50 delay-100"
-                    enterFrom="opacity-0"
-                    enterTo="opacity-100"
-                    leave="transition-opacity duration-150"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                >
-                    <Section label="Expected return">
-                        {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount))}`}
-                    </Section>
-                    <BalancerLink token={token} isBuy={false} />
-                </Transition>
-                <div className={countdown}>
-                    {'Receive In'}
-                    <TimeLeft className={timeLeft} targetTime={receiveIn} />
-                </div>
-            </div>
-        </HiddenExpand>
-    );
-};
-
-const constructBalancerLink = (token: string, network: AvailableNetwork, isBuy: boolean) => {
+export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
+    token,
+    network,
+    isBuy,
+) => {
     const { usdcAddress, balancerInfo } = networkConfig[network];
-    // balancerInfo will not be undefined due to the netwok === ARBITRUM in BalancerLink
+    // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
     return isBuy
         ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
         : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
@@ -185,7 +156,7 @@ const BalancerLink: React.FC<{
 }> = ({ token, isBuy }) => {
     const { network } = useWeb3();
     const balancerPoolPrices = useBalancerSpotPrices(network);
-    return network === ARBITRUM ? (
+    return network === ARBITRUM && balancerPoolPrices[token?.symbol] ? (
         <div className="text-sm mt-2">
             <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
             <div>
@@ -198,6 +169,7 @@ const BalancerLink: React.FC<{
                 >
                     {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
                         balancerPoolPrices[token.symbol],
+                        3,
                     )}`}
                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
                 </a>

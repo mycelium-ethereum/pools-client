@@ -3,6 +3,7 @@ import { StakingRewards__factory } from '@libs/staking/typechain/factories/Staki
 
 import { ethers } from 'ethers';
 import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
+import { LogoTicker } from '@components/General';
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
@@ -27,6 +28,7 @@ export type AvailableNetwork =
 export type Network = {
     id: AvailableNetwork;
     name: string;
+    logoTicker: LogoTicker;
     previewUrl: string;
     contracts: {
         [name: string]: {
@@ -70,6 +72,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         id: '0',
         previewUrl: '',
         name: 'Unknown',
+        logoTicker: 'ETH',
         contracts: {},
         poolFarms: [],
         bptFarms: [],
@@ -84,6 +87,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '421611': {
         id: '421611',
         name: 'Arbitrum Rinkeby',
+        logoTicker: ARBITRUM,
         previewUrl: 'https://testnet.arbiscan.io',
         contracts: {
             poolFactory: {
@@ -116,6 +120,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '42161': {
         id: '42161',
         name: 'Arbitrum',
+        logoTicker: ARBITRUM,
         previewUrl: 'https://arbiscan.io/',
         contracts: {
             poolFactory: {
@@ -162,6 +167,26 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
             {
                 address: '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC', // 3-ETH/USDC-short
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x2E7584FCd6f909BFa7A21aEb1a4894674C16e4Cd', // 1-EUR/USDC-short
+                pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x44b42E7ef481F6d1ff8d0fd7BFF6b3C8bD25a581', // 3-EUR/USDC-long
+                pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x0450959a393c3D6E6E37b65A6e836F59C47E24D0', // 3-EUR/USDC-short
+                pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
                 abi: StakingRewards__factory.abi,
             },
         ],
@@ -229,6 +254,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
     '1337': {
         id: '1337',
         name: 'Local',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -250,6 +276,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         // TODO: fill this out properly
         id: '1',
         name: 'Ethereum',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {
@@ -271,6 +298,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         // TODO: fill this out properly
         id: '4',
         name: 'Rinkeby',
+        logoTicker: 'ETH',
         previewUrl: '',
         contracts: {
             poolFactory: {

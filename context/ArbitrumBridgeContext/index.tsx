@@ -33,9 +33,6 @@ interface ArbitrumBridgeProps {
     toNetwork: Network;
     bridgeableAssets: BridgeableAssets;
     bridgeableBalances: BridgeableBalances;
-    showBridgeModal: () => void;
-    hideBridgeModal: () => void;
-    bridgeModalIsOpen: boolean;
 }
 
 export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
@@ -51,9 +48,6 @@ export const ArbitrumBridgeContext = React.createContext<ArbitrumBridgeProps>({
     toNetwork: networkConfig[ARBITRUM],
     bridgeableAssets: {},
     bridgeableBalances: {},
-    showBridgeModal: () => console.debug('arbitrumBridge.showBridgeModal not ready'),
-    hideBridgeModal: () => console.debug('arbitrumBridge.hideBridgeModal not ready'),
-    bridgeModalIsOpen: false,
 });
 
 const BRIDGEABLE_ASSET_ETH = {
@@ -66,7 +60,7 @@ const BRIDGEABLE_ASSET_ETH = {
 
 const withdrawalToastBody = (
     <>
-        It will take approximately 7 days to receive your funds on Ethereum. To view pending withdrawals, visit the
+        It will take approximately 8 days to receive your funds on Ethereum. To view pending withdrawals, visit the
         official Arbitrum bridge.
     </>
 );
@@ -82,7 +76,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = MAINNET } = useWeb3();
     const { handleTransaction } = useTransactionContext();
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
-    const [bridgeModalIsOpen, setBridgeModalIsOpen] = useState(false);
     const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
 
     const fromNetwork = useMemo(() => networkConfig[network], [network]);
@@ -90,14 +83,17 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
     const getBridge = useCallback(async () => {
         if (!provider) {
+            console.info('Void getBridge return: provider not defined');
             return;
         }
 
         if (!account) {
+            console.debug('Void getBridge return: account not defined');
             return;
         }
 
         if (!fromNetwork || !toNetwork) {
+            console.debug('Void getBridge return: from or to network not defined');
             return;
         }
 
@@ -123,7 +119,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         }));
 
         return bridge;
-    }, [fromNetwork?.id, account]);
+    }, [fromNetwork?.id, toNetwork?.id, account, provider]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
         if (!handleTransaction) {
@@ -391,6 +387,8 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             console.error('Failed to refresh bridgeable balance: fromNetwork is unavailable');
         }
 
+        console.debug('Fetching bridge balances');
+
         // ensure the network and account entries are initialised
         newBridgeableBalances[fromNetwork.id] = newBridgeableBalances[fromNetwork.id] || {};
         newBridgeableBalances[fromNetwork.id][account] = newBridgeableBalances[fromNetwork.id][account] || {};
@@ -427,12 +425,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
             setBridgeableBalances(newBridgeableBalances);
         } catch (error) {
-            console.error(error);
+            console.error('Fauled to fetch bridge balances', error);
         }
     };
-
-    const showBridgeModal = () => setBridgeModalIsOpen(true);
-    const hideBridgeModal = () => setBridgeModalIsOpen(false);
 
     return (
         <ArbitrumBridgeContext.Provider
@@ -445,9 +440,6 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 toNetwork,
                 bridgeableAssets,
                 bridgeableBalances,
-                showBridgeModal,
-                hideBridgeModal,
-                bridgeModalIsOpen,
             }}
         >
             {children}

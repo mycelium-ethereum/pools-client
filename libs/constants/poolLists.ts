@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '.';
 import { tokenMap } from './tokenList';
 
-const ONE_HOUR = new BigNumber(3600); // seconds
+export const ONE_HOUR = new BigNumber(3600); // seconds
 const FIVE_MINUTES = new BigNumber(300); // seconds
 const THIRTY_SECONDS = new BigNumber(30); // seconds
 
@@ -14,7 +14,7 @@ const TEST_TOKEN_DECIMALS = 18;
 export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
     [ARBITRUM]: [
         {
-            name: '1-BTC/USDC',
+            name: '1-BTC/USD',
             address: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
             leverage: 1,
             updateInterval: ONE_HOUR,
@@ -38,7 +38,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
-            name: '3-BTC/USDC',
+            name: '3-BTC/USD',
             address: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
             leverage: 3,
             updateInterval: ONE_HOUR,
@@ -62,7 +62,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
-            name: '1-ETH/USDC',
+            name: '1-ETH/USD',
             address: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
             leverage: 1,
             updateInterval: ONE_HOUR,
@@ -86,7 +86,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
-            name: '3-ETH/USDC',
+            name: '3-ETH/USD',
             address: '0x54114e9e1eEf979070091186D7102805819e916B',
             leverage: 3,
             updateInterval: ONE_HOUR,
@@ -109,11 +109,59 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             },
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
+        {
+            name: '1-EUR/USD',
+            address: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
+            leverage: 1,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0xb894D3775862FFdE084eD31f9e42388e592E3137',
+            },
+            longToken: {
+                name: '1L-EUR/USD',
+                address: '0x6F680d315545309307F42840b234412090C0bBe8',
+                symbol: '1L-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            shortToken: {
+                name: '1S-EUR/USD',
+                address: '0x7C5C24C5F3DbF4A99DDa5127D44e55b9a797eC4d',
+                symbol: '1S-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
+        },
+        {
+            name: '3-EUR/USD',
+            address: '0xA45B53547EC002403531D453c118AC41c03B3346',
+            leverage: 3,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0x149BDeAC3E90522D8043452910Ef41f7cb75E3f3',
+            },
+            longToken: {
+                name: '3L-EUR/USD',
+                address: '0x316C96E328071DC6403587c243130712A9D03fF3',
+                symbol: '3L-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            shortToken: {
+                name: '3S-EUR/USD',
+                address: '0xA8C483D29bFaD4Ea159C1a002f4769C33F808A1e',
+                symbol: '3S-EUR/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
+        },
     ],
     [ARBITRUM_RINKEBY]: [
         {
             // 1x
-            name: '1-BTC/USDC',
+            name: '1-BTC/USD',
             address: '0x1b9A08Bd1b976fd91a355625509FbFcbbF34fb20',
             leverage: 1,
             updateInterval: FIVE_MINUTES,
@@ -143,7 +191,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         },
         {
             // 3x
-            name: '3-BTC/USDC',
+            name: '3-BTC/USD',
             address: '0xd0983C3E9E4Af753E6e74D741a39c3053b06dFcf',
             leverage: 3,
             updateInterval: FIVE_MINUTES,
@@ -173,7 +221,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         },
         {
             // 1x
-            name: '1-ETH/USDC',
+            name: '1-ETH/USD',
             address: '0x34eE510e1d51904C50d9CD03199dE5147A4E15eD',
             leverage: 1,
             updateInterval: FIVE_MINUTES,
@@ -203,7 +251,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         },
         {
             // 3x
-            name: '3-ETH/USDC',
+            name: '3-ETH/USD',
             address: '0xe3cAD84c29775399a25c6Ff040FE141b4eD10047',
             leverage: 3,
             updateInterval: FIVE_MINUTES,

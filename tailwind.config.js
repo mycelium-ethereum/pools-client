@@ -18,6 +18,9 @@ module.exports = {
         },
         extend: {
             colors: {
+                orange: {
+                    400: '#FF8A4C'
+                },
                 tracer: {
                     50: '#F0F0FF',
                     100: '#DEDEFF',
@@ -35,11 +38,14 @@ module.exports = {
                     200: '#E5E7EB',
                     300: '#D1D5DB',
                     400: '#9CA3AF',
+                    500: '#6B7280',
                     600: '#6B7280',
                     700: '#374151',
                     800: '#1F2A37',
                     900: '#111928',
                 },
+                'dark-green': '#032018',
+                'dark-red': '#230F0F',
                 theme: {
                     background: 'var(--background)',
                     ['background-secondary']: 'var(--background-secondary)',
