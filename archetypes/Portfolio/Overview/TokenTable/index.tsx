@@ -76,13 +76,17 @@ export const TokenRow: React.FC<
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
-    const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, name: string) => {
+    const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, name: string, leverage?: number) => {
         if (netValue.eq(0)) {
             return netValue.toFixed(2);
         } else if (name.split('-')[1].split('/')[0] === 'BTC') {
-            return (netValue.toNumber() / oraclePrice.toNumber()).toFixed(8);
+            return leverage
+                ? ((netValue.toNumber() / oraclePrice.toNumber()) * leverage).toFixed(8)
+                : (netValue.toNumber() / oraclePrice.toNumber()).toFixed(8);
         } else if (name.split('-')[1].split('/')[0] === 'ETH') {
-            return (netValue.toNumber() / oraclePrice.toNumber()).toFixed(6);
+            return leverage
+                ? ((netValue.toNumber() / oraclePrice.toNumber()) * leverage).toFixed(6)
+                : (netValue.toNumber() / oraclePrice.toNumber()).toFixed(6);
         }
     };
 
@@ -119,7 +123,8 @@ export const TokenRow: React.FC<
             <TableRowCell>
                 {denotedIn === DenotedInEnum.Base ? (
                     <>
-                        {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
+                        {BaseNumDenote(netValue, oraclePrice, name, parseInt(name.split('-')[0][0]))}{' '}
+                        {name.split('-')[1].split('/')[0]}
                     </>
                 ) : (
                     `${toApproxCurrency(netValue)} USDC`
