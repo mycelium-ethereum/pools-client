@@ -12,6 +12,8 @@ import { useRouter } from 'next/router';
 // import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 // import Actions from '@components/TokenActions';
 
+import NoQueued from '@public/img/no-queued.svg';
+
 const historyOptions = [
     {
         key: CommitsFocusEnum.mints,
@@ -48,6 +50,44 @@ export default (({ focus }) => {
         focus === CommitsFocusEnum.mints ? mintCommits : burnCommits,
     );
 
+    const mintRows = (mintCommits: TradeHistory[]) => {
+        if (mintCommits.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={4}>
+                        <div className="my-20 text-center">
+                            <NoQueued className="mx-auto mb-5" />
+                            <div className="text-cool-gray-500">You have no mint history.</div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else {
+            return paginatedArray.map((commit, index) => (
+                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={false} />
+            ));
+        }
+    };
+
+    const burnRows = (burnCommits: TradeHistory[]) => {
+        if (burnCommits.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={4}>
+                        <div className="my-20 text-center">
+                            <NoQueued className="mx-auto mb-5" />
+                            <div className="text-cool-gray-500">You have no burn history.</div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else {
+            return paginatedArray.map((commit, index) => (
+                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+            ));
+        }
+    };
+
     return (
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
             <div className="my-4">
@@ -75,15 +115,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Token / Price</TableHeaderCell>
                             {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
-                        {paginatedArray.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={false}
-                            />
-                        ))}
+                        {mintRows(paginatedArray)}
                     </>
                 ) : (
                     <>
@@ -94,15 +126,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Return</TableHeaderCell>
                             {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
-                        {paginatedArray.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={true}
-                            />
-                        ))}
+                        {burnRows(paginatedArray)}
                     </>
                 )}
             </Table>
@@ -143,11 +167,27 @@ const CommitRow: React.FC<
         <TableRow key={index} rowNumber={index}>
             <TableRowCell>
                 <div>{timeString}</div>
-                <div>{dateString}</div>
+                <div className="text-cool-gray-500">{dateString}</div>
             </TableRowCell>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline mr-2" />
-                {tokenName}
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div className="flex text-lg">
+                            <div>
+                                {tokenSymbol.split('-')[0][0]}-
+                                {tokenSymbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                            </div>
+                            &nbsp;
+                            <div className={`${tokenName.split('-')[1] === 'LONG' ? 'green' : 'red'}`}>
+                                {tokenName.split('-')[1].toLowerCase()}
+                            </div>
+                        </div>
+                        <div className="text-cool-gray-500">{`${tokenName.split('-')[0]}${
+                            tokenName.split('-')[1] === 'LONG' ? 'L' : 'S'
+                        }-${tokenName.split('-')[2]}`}</div>
+                    </div>
+                </div>
             </TableRowCell>
             {burnRow ? (
                 <>

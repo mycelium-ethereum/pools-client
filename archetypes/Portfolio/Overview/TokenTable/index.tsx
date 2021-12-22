@@ -6,7 +6,7 @@ import { DenotedInEnum, TokenRowProps } from '..';
 import { ethers } from 'ethers';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { tickerToName, toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
 import { SideEnum } from '@libs/constants';
@@ -95,11 +95,27 @@ export const TokenRow: React.FC<
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
-                <div className="flex">
-                    <Logo ticker={tokenSymbolToLogoTicker(symbol)} size="md" className="inline mr-2 my-auto" />
-                    <div className="my-auto">
-                        <div className="font-bold">{tickerToName(name)}</div>
-                        <div className="text-xs">{name.split('-')[1]}</div>
+                {/*<div className="flex">*/}
+                {/*    <Logo ticker={tokenSymbolToLogoTicker(symbol)} size="md" className="inline mr-2 my-auto" />*/}
+                {/*    <div className="my-auto">*/}
+                {/*        <div className="font-bold">{tickerToName(name)}</div>*/}
+                {/*        <div className="text-xs">{name.split('-')[1]}</div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(symbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div className="flex text-lg">
+                            <div>
+                                {symbol.split('-')[0][0]}-
+                                {symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                            </div>
+                            &nbsp;
+                            <div className={`${side === SideEnum.long ? 'green' : 'red'}`}>
+                                {side === SideEnum.long ? 'Long' : 'Short'}
+                            </div>
+                        </div>
+                        <div className="text-cool-gray-500">{name} </div>
                     </div>
                 </div>
             </TableRowCell>

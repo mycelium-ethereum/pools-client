@@ -14,6 +14,8 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
+import NoQueued from '@public/img/no-queued.svg';
+
 const queuedOptions = [
     {
         key: CommitsFocusEnum.mints,
@@ -43,6 +45,44 @@ export default (({ focus }) => {
         [commits],
     );
 
+    const mintRows = (mintCommits: QueuedCommit[]) => {
+        if (mintCommits.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={4}>
+                        <div className="my-20 text-center">
+                            <NoQueued className="mx-auto mb-5" />
+                            <div className="text-cool-gray-500">You have no queued mints.</div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else {
+            return mintCommits.map((commit, index) => (
+                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={false} />
+            ));
+        }
+    };
+
+    const burnRows = (burnCommits: QueuedCommit[]) => {
+        if (burnCommits.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={4}>
+                        <div className="my-20 text-center">
+                            <NoQueued className="mx-auto mb-5" />
+                            <div className="text-cool-gray-500">You have no queued burns.</div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else {
+            return burnCommits.map((commit, index) => (
+                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+            ));
+        }
+    };
+
     return (
         <div className="bg-theme-background rounded-xl shadow m-4 p-4">
             <div className="my-4">
@@ -70,15 +110,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Mint In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {mintCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={false}
-                            />
-                        ))}
+                        {mintRows(mintCommits)}
                     </>
                 ) : (
                     <>
@@ -89,15 +121,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Burn In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {burnCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={true}
-                            />
-                        ))}
+                        {burnRows(burnCommits)}
                     </>
                 )}
             </Table>
@@ -142,7 +166,7 @@ const CommitRow: React.FC<
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline my-auto mr-2" />
                     <div>
-                        <div className="flex text-xl">
+                        <div className="flex text-lg">
                             <div>
                                 {token.symbol.split('-')[0][0]}-
                                 {token.symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
