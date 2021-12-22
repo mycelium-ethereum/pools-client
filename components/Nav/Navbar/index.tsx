@@ -55,7 +55,9 @@ export const NavBarContent: React.FC<{
                     </Link>
                     <Link href="/pools">
                         <li className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}>
-                            <a className="m-auto">Pools</a>
+                            <a id="browse-pools" className="m-auto">
+                                Pools
+                            </a>
                         </li>
                     </Link>
                     <Link href="/stakepooltoken">
