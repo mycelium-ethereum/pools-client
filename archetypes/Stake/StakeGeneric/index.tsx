@@ -87,6 +87,7 @@ export default (({
             poolDetails: farm.poolDetails,
             link: farm.link,
             linkText: farm.linkText,
+            rewardsEnded: farm.rewardsEnded,
         };
     });
 
