@@ -15,6 +15,7 @@ type Farm = {
     balancerPoolId?: string;
     link?: string;
     linkText?: string;
+    rewardsEnded?: boolean;
 };
 
 export type AvailableNetwork =
@@ -173,21 +174,25 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
                 pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x2E7584FCd6f909BFa7A21aEb1a4894674C16e4Cd', // 1-EUR/USDC-short
                 pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x44b42E7ef481F6d1ff8d0fd7BFF6b3C8bD25a581', // 3-EUR/USDC-long
                 pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x0450959a393c3D6E6E37b65A6e836F59C47E24D0', // 3-EUR/USDC-short
                 pool: '0xA45B53547EC002403531D453c118AC41c03B3346',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
         ],
         bptFarms: [
