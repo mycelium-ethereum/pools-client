@@ -21,7 +21,7 @@ export const APYTip: React.FC = ({ children }) => {
 };
 
 export const RewardsEndedTip: React.FC = ({ children }) => {
-    const Content = 'Staking rewards have ended for this pool';
+    const Content = 'Staking rewards have ended for this pool.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
