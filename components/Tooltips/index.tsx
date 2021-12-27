@@ -20,6 +20,11 @@ export const APYTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
+export const RewardsEndedTip: React.FC = ({ children }) => {
+    const Content = 'Staking rewards have ended for this pool';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const LockTip: React.FC = ({ children }) => {
     const Content = (
         <>
