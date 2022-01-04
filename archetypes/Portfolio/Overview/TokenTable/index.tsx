@@ -92,6 +92,10 @@ export const TokenRow: React.FC<
         }
     };
 
+    const NotionalDenote = (netValue: BigNumber, leverage?: number) => {
+        return leverage ? toApproxCurrency(netValue.toNumber() * leverage) : toApproxCurrency(netValue);
+    };
+
     return (
         <TableRow rowNumber={index}>
             <TableRowCell>
@@ -145,7 +149,7 @@ export const TokenRow: React.FC<
                         {name.split('-')[1].split('/')[0]}
                     </>
                 ) : (
-                    `${toApproxCurrency(netValue)} USDC`
+                    `${NotionalDenote(netValue, parseInt(name.split('-')[0][0]))} USDC`
                 )}
             </TableRowCell>
             <TableRowCell className="flex">
