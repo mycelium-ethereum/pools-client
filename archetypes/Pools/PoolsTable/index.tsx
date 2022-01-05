@@ -63,10 +63,8 @@ const CommittmentTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-const NoBalancerPoolTip: React.FC = ({ children }) => (
-    <StyledTooltip title="There are no Balancer pools for pool tokens tracking the EUR/USD market yet.">
-        {children}
-    </StyledTooltip>
+const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) => (
+    <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
@@ -546,7 +544,7 @@ const TokenRows: React.FC<
                         </>
                     ) : (
                         <>
-                            <NoBalancerPoolTip>-</NoBalancerPoolTip>
+                            <NoBalancerPoolTip market={poolTicker}>-</NoBalancerPoolTip>
                         </>
                     )}
                 </TableRowCell>

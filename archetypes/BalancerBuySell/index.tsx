@@ -125,7 +125,7 @@ export default (() => {
                     <TWButtonGroup
                         value={leverage}
                         borderColor={'tracer'}
-                        options={LEVERAGE_OPTIONS.map((option) => ({
+                        options={LEVERAGE_OPTIONS(market).map((option) => ({
                             key: option.leverage,
                             text: `${option.leverage}`,
                             disabled: option.disabled
