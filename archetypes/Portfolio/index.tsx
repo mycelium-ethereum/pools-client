@@ -31,7 +31,7 @@ export const PortfolioNav: React.FC<{
     const historyPage = page === TradePortfolioPage.History;
 
     return (
-        <div className="flex mt-4">
+        <div className="flex mt-4 overflow-x-auto whitespace-nowrap pb-2">
             <div className="mx-4">
                 <Link href="/portfolio">
                     <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>

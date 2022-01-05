@@ -173,7 +173,7 @@ const CommitRow: React.FC<
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline my-auto mr-2" />
                     <div>
-                        <div className="flex text-lg">
+                        <div className="flex">
                             <div>
                                 {tokenSymbol.split('-')[0][0]}-
                                 {tokenSymbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
