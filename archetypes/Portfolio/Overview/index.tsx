@@ -356,13 +356,12 @@ export default (({ onClickBurn }) => {
                     </div>
                 </div>
                 <div className={mainCard}>
-                    <div className="flex justify-between overflow-x-auto whitespace-nowrap">
-                        <h1 className="text-theme-text text-xl mr-10">Token Holdings</h1>
+                    <div className="sm:flex sm:justify-between whitespace-nowrap">
+                        <h1 className="text-theme-text text-xl mb-2">Token Holdings</h1>
                         <div className="flex">
-                            <div className="flex mr-5">
+                            <div className="flex mr-2 sm:mr-5">
                                 <div className="mr-2">Price by</div>
                                 <Dropdown
-                                    className="mr-2"
                                     size={'xs'}
                                     value={'Tracer'}
                                     options={[
