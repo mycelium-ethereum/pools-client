@@ -171,6 +171,16 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 abi: StakingRewards__factory.abi,
             },
             {
+                address: '0x2c8373688d20b87e492F9860c7639997a0Cb968B', // 1-TOKE/USDC-long
+                pool: '0xc11B9Dc0F566B5084FC48Be1F821a8298fc900bC',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0xaD27FD92C77331b4cD687556d581F72cA5342316', // 1-TOKE/USDC-short
+                pool: '0xc11B9Dc0F566B5084FC48Be1F821a8298fc900bC',
+                abi: StakingRewards__factory.abi,
+            },
+            {
                 address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
                 pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
