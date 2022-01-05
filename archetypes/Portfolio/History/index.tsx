@@ -180,7 +180,8 @@ const CommitRow: React.FC<
                             </div>
                             &nbsp;
                             <div className={`${tokenName.split('-')[1] === 'LONG' ? 'green' : 'red'}`}>
-                                {tokenName.split('-')[1].toLowerCase()}
+                                {tokenName.split('-')[1].toLowerCase().charAt(0).toUpperCase() +
+                                    tokenName.split('-')[1].toLowerCase().slice(1)}
                             </div>
                         </div>
                         <div className="text-cool-gray-500">{`${tokenName.split('-')[0]}${
