@@ -112,7 +112,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Time / Date</TableHeaderCell>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Token / Price</TableHeaderCell>
+                            <TableHeaderCell>Tokens / Price</TableHeaderCell>
                             {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
                         </TableHeader>
                         {mintRows(paginatedArray)}
