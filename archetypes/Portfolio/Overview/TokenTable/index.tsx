@@ -109,7 +109,7 @@ export const TokenRow: React.FC<
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(symbol)} className="inline my-auto mr-2" />
                     <div>
-                        <div className="flex text-lg">
+                        <div className="flex">
                             <div>
                                 {symbol.split('-')[0][0]}-
                                 {symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
