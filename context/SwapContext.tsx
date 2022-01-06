@@ -48,10 +48,10 @@ export type SwapAction =
     | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
 
-export const LEVERAGE_OPTIONS = [
+export const LEVERAGE_OPTIONS = (market: string): { leverage: number; disabled: boolean }[] => [
     {
         leverage: 1,
-        disabled: false,
+        disabled: market === 'TOKE/USD',
     },
     {
         leverage: 2,

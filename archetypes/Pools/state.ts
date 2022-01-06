@@ -4,6 +4,7 @@ export enum MarketFilterEnum {
     All = 'All',
     ETH = 'Ethereum',
     BTC = 'Bitcoin',
+    TOKE = 'Tokemak',
     EUR = 'Euro',
 }
 
