@@ -10,9 +10,12 @@ import EUR_L from '@public/img/logos/currencies/eur_long.svg';
 import EUR_S from '@public/img/logos/currencies/eur_short.svg';
 import BTC_L from '@public/img/logos/currencies/btc_long.svg';
 import BTC_S from '@public/img/logos/currencies/btc_short.svg';
+import TOKE_L from '@public/img/logos/currencies/toke_long.svg';
+import TOKE_S from '@public/img/logos/currencies/toke_short.svg';
 import ETH from '@public/img/logos/currencies/eth.svg';
 import EUR from '@public/img/logos/currencies/eur.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
+import TOKE from '@public/img/logos/currencies/toke.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
@@ -40,13 +43,16 @@ export type LogoTicker =
     | 'ETH_L'
     | 'EUR_L'
     | 'BTC_L'
+    | 'TOKE_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
+    | 'TOKE_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
     | 'BTC'
+    | 'TOKE'
     | 'WBTC'
     | 'SUSHI'
     | 'BALANCER'
@@ -63,13 +69,16 @@ const logos: Record<LogoTicker, any> = {
     ETH_L: ETH_L,
     EUR_L: EUR_L,
     BTC_L: BTC_L,
+    TOKE_L: TOKE_L,
     ETH_S: ETH_S,
     EUR_S: EUR_S,
     BTC_S: BTC_S,
+    TOKE_S: TOKE_S,
     EUR: EUR,
     ETH: ETH,
     WETH: ETH,
     BTC: BTC,
+    TOKE: TOKE,
     WBTC: BTC,
     SUSHI: SUSHI,
     BALANCER: BALANCER,

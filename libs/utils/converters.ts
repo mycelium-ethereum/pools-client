@@ -224,6 +224,7 @@ const names: Record<string, string> = {
     'ETH/USD': 'Ethereum',
     'EUR/USD': 'Euro',
     'BTC/USD': 'Bitcoin',
+    'TOKE/USD': 'Tokemak',
 };
 
 export const tickerToName: (ticker: string) => string = (ticker) => {

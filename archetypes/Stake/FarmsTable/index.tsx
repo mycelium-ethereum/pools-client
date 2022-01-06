@@ -10,7 +10,7 @@ import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/L
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
-import { APYTip } from '@components/Tooltips';
+import { APYTip, RewardsEndedTip } from '@components/Tooltips';
 import { TokenToFarmAddressMap } from '@libs/constants';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
@@ -153,7 +153,13 @@ const PoolRow: React.FC<{
                     )}
                 </div>
             </TableRowCell>
-            <TableRowCell>{`${apy.times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`}</TableRowCell>
+            <TableRowCell>
+                {farm.rewardsEnded ? (
+                    <RewardsEndedTip>N/A</RewardsEndedTip>
+                ) : (
+                    `${apy.times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`
+                )}
+            </TableRowCell>
             <TableRowCell>
                 <TableRowCell>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</TableRowCell>
             </TableRowCell>
@@ -170,7 +176,7 @@ const PoolRow: React.FC<{
             </TableRowCell>
             <TableRowCell>
                 <Button
-                    disabled={farm.stakingTokenBalance.eq(0)}
+                    disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
                     size="sm"
                     variant="primary-light"
