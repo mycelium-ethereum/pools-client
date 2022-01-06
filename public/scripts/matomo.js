@@ -1,7 +1,11 @@
 // Matomo Setup
 const _paq = (window._paq = window._paq || []);
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-_paq.push(['setCookieDomain', '*.tracer.finance']);
+_paq.push([
+    'setDomains',
+    ['*.tracer.finance', '*.docs.tracer.finance', '*.pools.tracer.finance', '*.vote.tracer.finance/'],
+]);
+_paq.push(['enableCrossDomainLinking']);
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function () {
