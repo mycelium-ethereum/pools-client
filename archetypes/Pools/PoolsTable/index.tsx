@@ -115,11 +115,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             </EffectiveLeverageTip>
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
-                            {'Token Price (USD)'}
+                            {'Token Price (USDC)'}
                         </TableHeaderCell>
                         {showNextRebalance && !!account ? (
                             <TableHeaderCell size="sm">
-                                <div className="capitalize">{'MY HOLDINGS (TOKENS/USDC)'}</div>
+                                <div className="capitalize">{'MY HOLDINGS'}</div>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
