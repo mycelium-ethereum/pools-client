@@ -161,7 +161,7 @@ export const formatDate: (
         hideTime: false,
     },
 ) => {
-    const dateString = !hideDate ? `${date.getFullYear()}/${date.getMonth()}/${date.getDate()} ` : '';
+    const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
     const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
     return { timeString, dateString };
 };
