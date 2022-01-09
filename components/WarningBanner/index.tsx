@@ -4,7 +4,7 @@ import Exclamation from '@public/img/general/exclamation-circle.svg';
 import Close from '@public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
 
-type Warning = 'auditWarning' | 'decayWarning';
+type Warning = 'auditWarning' | 'decayWarning' | 'arbitrumOutageWarning';
 
 const warningInfo: Record<
     Warning,
@@ -45,6 +45,16 @@ const warningInfo: Record<
                 </a>
                 , and are therefore not suitable for long-term holding. The tokens are designed for short-term
                 directional bets.
+            </>
+        ),
+    },
+    arbitrumOutageWarning: {
+        exclamationClassName: 'text-red-500',
+        content: (
+            <>
+                <span className="font-semibold">WARNING:</span>&nbsp;The Arbitrum network has been experiencing outages
+                which may prevent transactions from being processed. All funds in pools are safe, but you may not be
+                able to withdraw your funds until the network is back up.
             </>
         ),
     },
