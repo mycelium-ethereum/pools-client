@@ -41,18 +41,19 @@ const isInvalidAmount: (
     }
 
     // need to sell an amount of tokens worth minimumCommitSize or more
-    if (minimumTokens.gt(amount)) {
-        return {
-            message: `
-                The minimum order size is 
-                ${
-                    isMint
-                        ? toApproxCurrency(minimumTokens)
-                        : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
-                }`,
-            isInvalid: true,
-        };
-    }
+    console.info(`Minimum commit size is ${minimumTokens} tokens`)
+    // if (minimumTokens.gt(amount)) {
+        // return {
+            // message: `
+                // The minimum order size is 
+                // ${
+                    // isMint
+                        // ? toApproxCurrency(minimumTokens)
+                        // : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
+                // }`,
+            // isInvalid: true,
+        // };
+    // }
     return {
         message: undefined,
         isInvalid: false,
