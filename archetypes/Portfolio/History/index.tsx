@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { CommitEnum, CommitsFocusEnum } from '@libs/constants';
+import { ARBITRUM, CommitEnum, CommitsFocusEnum } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 // import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
+import { SourceType } from '@libs/utils/reputationAPI';
 
 const historyOptions = [
     {
@@ -27,11 +28,13 @@ const historyOptions = [
 
 export default (({ focus }) => {
     const router = useRouter();
-    const { provider, account } = useWeb3();
+    const { provider, account, network } = useWeb3();
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
 
     useEffect(() => {
-        fetchTradeHistory({ account: account ?? '0' }).then((r) => setTradeHistory(r));
+        fetchTradeHistory({ account: account ?? '0', network: (network as SourceType) ?? ARBITRUM }).then((r) =>
+            setTradeHistory(r),
+        );
     }, [provider]);
 
     const { mintCommits, burnCommits } = useMemo(
