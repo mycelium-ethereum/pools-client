@@ -5,6 +5,7 @@ import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum, DeltaEnum }
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Filters from '/public/img/general/filters.svg';
+import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -19,6 +20,13 @@ const REBALANCE_OPTIONS = [
     {
         key: RebalanceEnum.last,
         text: 'Last Rebalance',
+    },
+    {
+        key: RebalanceEnum.historic,
+        text: 'Historic Data',
+        disabled: {
+            optionKey: TooltipKeys.ComingSoon,
+        },
     },
 ];
 

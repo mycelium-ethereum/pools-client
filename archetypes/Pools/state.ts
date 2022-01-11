@@ -16,6 +16,7 @@ export enum DeltaEnum {
 export enum RebalanceEnum {
     next = 0,
     last = 1,
+    historic = 2,
 }
 
 export enum SortByEnum {
