@@ -168,12 +168,12 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                 })}
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            {showNextRebalance ? (
-                <p className="mt-3 text-sm text-theme-text opacity-80 text-left">
-                    Values are indicative only. They are estimates given the committed mints and burns, and change in
-                    price of the underlying market. All values are subject to change at the next rebalance of each pool.
-                </p>
-            ) : null}
+            {/*{showNextRebalance ? (*/}
+            {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
+            {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}
+            {/*        price of the underlying market. All values are subject to change at the next rebalance of each pool.*/}
+            {/*    </p>*/}
+            {/*) : null}*/}
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
