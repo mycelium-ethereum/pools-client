@@ -74,14 +74,14 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
         <>
             <Table>
                 <TableHeader className="align-baseline">
-                    <tr>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>
-                            <div className="capitalize text-lg">{'POOLS'}</div>
-                        </TableHeaderCell>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>
-                            <div className="capitalize text-lg">{'POOL TOKENS'}</div>
-                        </TableHeaderCell>
-                    </tr>
+                    {/*<tr>*/}
+                    {/*    <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>*/}
+                    {/*        <div className="capitalize text-lg">{'POOLS'}</div>*/}
+                    {/*    </TableHeaderCell>*/}
+                    {/*    <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>*/}
+                    {/*        <div className="capitalize text-lg">{'POOL TOKENS'}</div>*/}
+                    {/*    </TableHeaderCell>*/}
+                    {/*</tr>*/}
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
