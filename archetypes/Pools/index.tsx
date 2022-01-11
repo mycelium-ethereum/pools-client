@@ -6,13 +6,14 @@ import {
     BrowseState,
     BrowseTableRowData,
     DeltaEnum,
+    LeverageEnum,
     MarketFilterEnum,
     RebalanceEnum,
     SortByEnum,
 } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 
@@ -23,6 +24,7 @@ export const Browse: React.FC = () => {
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         marketFilter: MarketFilterEnum.All,
+        leverageFilter: LeverageEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
@@ -56,6 +58,19 @@ export const Browse: React.FC = () => {
         }
     };
 
+    const leverageFilter = (pool: BrowseTableRowData): boolean => {
+        switch (state.leverageFilter) {
+            case LeverageEnum.All:
+                return true;
+            case LeverageEnum.One:
+                return pool.name.split('-')[0] === '1';
+            case LeverageEnum.Three:
+                return pool.name.split('-')[0] === '3';
+            default:
+                return false;
+        }
+    };
+
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
         return Boolean(
@@ -77,7 +92,7 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter(marketFilter).filter(searchFilter);
+    const filteredTokens = tokens.filter(marketFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {

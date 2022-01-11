@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, HiddenExpand, LogoTicker } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
-import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum, DeltaEnum } from '../state';
+import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum, DeltaEnum, LeverageEnum } from '../state';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Filters from '/public/img/general/filters.svg';
@@ -85,7 +85,19 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                     />
                 </div>
-                <div className="hidden lg:flex mr-4 flex-grow items-end" style={{ maxWidth: '20rem' }}>
+                <div className="hidden lg:flex mr-4 flex-col">
+                    <h3 className="mb-1 text-theme-text">Power Leverage</h3>
+                    <Dropdown
+                        value={state.leverageFilter}
+                        className="w-32 mt-auto"
+                        options={Object.keys(LeverageEnum).map((key) => ({
+                            key: (LeverageEnum as any)[key],
+                            ticker: (key !== 'All' ? key : '') as LogoTicker,
+                        }))}
+                        onSelect={(val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })}
+                    />
+                </div>
+                <div className="hidden lg:flex mr-4 flex-grow items-end" style={{ maxWidth: '10rem' }}>
                     <SearchInput
                         placeholder="Search"
                         value={state.search}
