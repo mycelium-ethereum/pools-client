@@ -104,9 +104,9 @@ export const Browse: React.FC = () => {
                 <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
                     <section className="mb-8">
                         <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
-                        <p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">
-                            Browse the available Tracer Pools and Pool Tokens.
-                        </p>
+                        {/*<p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">*/}
+                        {/*    Browse the available Tracer Pools and Pool Tokens.*/}
+                        {/*</p>*/}
                         <FilterBar state={state} dispatch={dispatch} />
                     </section>
                     <PoolsTable
