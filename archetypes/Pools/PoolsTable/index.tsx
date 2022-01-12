@@ -11,7 +11,6 @@ import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
@@ -167,7 +166,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     );
                 })}
             </Table>
-            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
             {/*{showNextRebalance ? (*/}
             {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
             {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}

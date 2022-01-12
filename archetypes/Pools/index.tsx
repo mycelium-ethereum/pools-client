@@ -16,6 +16,8 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
+import Loading from '@components/General/Loading';
+import { Logo, LogoTicker } from '@components/General';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -95,6 +97,15 @@ export const Browse: React.FC = () => {
     const filteredTokens = tokens.filter(marketFilter).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
+    const groupedSortedFilteredTokens = sortedFilteredTokens.reduce((groups, item) => {
+        // @ts-ignore
+        const group = groups[item.name.split('-')[1]] || [];
+        group.push(item);
+        // @ts-ignore
+        groups[item.name.split('-')[1]] = group;
+        return groups;
+    }, []);
+
     const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {
         console.debug(`
             ${commitAction === CommitActionEnum.mint ? 'Buying/minting ' : 'Burning/selling '}
@@ -116,20 +127,40 @@ export const Browse: React.FC = () => {
     return (
         <>
             <div className="container mt-0 md:mt-20">
+                <section className="mb-8">
+                    <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
+                    {/*<p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">*/}
+                    {/*    Browse the available Tracer Pools and Pool Tokens.*/}
+                    {/*</p>*/}
+                    <FilterBar state={state} dispatch={dispatch} />
+                </section>
                 <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
-                    <section className="mb-8">
-                        <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
-                        {/*<p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">*/}
-                        {/*    Browse the available Tracer Pools and Pool Tokens.*/}
-                        {/*</p>*/}
-                        <FilterBar state={state} dispatch={dispatch} />
-                    </section>
-                    <PoolsTable
-                        rows={sortedFilteredTokens}
-                        deltaDenotion={state.deltaDenotion}
-                        onClickMintBurn={handleMintBurn}
-                        showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
-                    />
+                    {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
+                    {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
+                        return (
+                            <>
+                                <div className="w-full h-20 my-5 p-5 bg-cool-gray-50 dark:bg-theme-background-secondary">
+                                    <div style={{ minHeight: '3rem' }} className="flex">
+                                        <Logo
+                                            className="inline mr-3 my-auto"
+                                            size="lg"
+                                            ticker={key.split('/')[0] as LogoTicker}
+                                        />
+                                        <div className="my-auto">
+                                            <div className="font-bold text-lg">{key}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <PoolsTable
+                                    key={index}
+                                    rows={groupedSortedFilteredTokens[key as any]}
+                                    deltaDenotion={state.deltaDenotion}
+                                    onClickMintBurn={handleMintBurn}
+                                    showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
+                                />
+                            </>
+                        );
+                    })}
                 </div>
             </div>
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
