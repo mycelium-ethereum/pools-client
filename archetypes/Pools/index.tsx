@@ -131,34 +131,34 @@ export const Browse: React.FC = () => {
                     <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
                     <FilterBar state={state} dispatch={dispatch} />
                 </section>
-                <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
-                    {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
-                    {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
-                        return (
-                            <>
-                                <div className="w-full h-20 my-5 p-5 bg-cool-gray-50 dark:bg-theme-background-secondary">
-                                    <div style={{ minHeight: '3rem' }} className="flex">
-                                        <Logo
-                                            className="inline mr-3 my-auto"
-                                            size="lg"
-                                            ticker={key.split('/')[0] as LogoTicker}
-                                        />
-                                        <div className="my-auto">
-                                            <div className="font-bold text-lg">{key}</div>
-                                        </div>
+                {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
+                {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
+                    return (
+                        <div
+                            key={index}
+                            className="p-4 md:p-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
+                        >
+                            <div className="w-full h-20 my-5 p-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                                <div style={{ minHeight: '3rem' }} className="flex">
+                                    <Logo
+                                        className="inline mr-3 my-auto"
+                                        size="lg"
+                                        ticker={key.split('/')[0] as LogoTicker}
+                                    />
+                                    <div className="my-auto">
+                                        <div className="font-bold text-lg">{key}</div>
                                     </div>
                                 </div>
-                                <PoolsTable
-                                    key={index}
-                                    rows={groupedSortedFilteredTokens[key as any]}
-                                    deltaDenotion={state.deltaDenotion}
-                                    onClickMintBurn={handleMintBurn}
-                                    showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
-                                />
-                            </>
-                        );
-                    })}
-                </div>
+                            </div>
+                            <PoolsTable
+                                rows={groupedSortedFilteredTokens[key as any]}
+                                deltaDenotion={state.deltaDenotion}
+                                onClickMintBurn={handleMintBurn}
+                                showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
+                            />
+                        </div>
+                    );
+                })}
             </div>
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </>
