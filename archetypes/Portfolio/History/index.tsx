@@ -92,7 +92,7 @@ export default (({ focus }) => {
     };
 
     return (
-        <div className="bg-theme-background rounded-xl shadow m-4 p-4">
+        <div className="bg-theme-background rounded-xl shadow my-4 p-4">
             <div className="my-4">
                 <TWButtonGroup
                     value={focus}

@@ -19,6 +19,7 @@ import TOKE from '@public/img/logos/currencies/toke.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
+import BASE from '@public/img/logos/currencies/base.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -56,6 +57,7 @@ export type LogoTicker =
     | 'WBTC'
     | 'SUSHI'
     | 'BALANCER'
+    | 'BASE'
     | typeof ARBITRUM
     | typeof ARBITRUM_RINKEBY
     | 'DEFAULT';
@@ -82,20 +84,21 @@ const logos: Record<LogoTicker, any> = {
     WBTC: BTC,
     SUSHI: SUSHI,
     BALANCER: BALANCER,
+    BASE: BASE,
 };
 
-type Size = 'xs' | 'sm' | 'md' | 'lg' | 'full';
+export type LogoSize = 'xs' | 'sm' | 'md' | 'lg' | 'full';
 interface LProps {
     className?: string;
     ticker: LogoTicker;
-    size?: Size;
+    size?: LogoSize;
 }
 
-const SIZES: Record<Size, string> = {
-    xs: 'w-4 h-4',
+const SIZES: Record<LogoSize, string> = {
+    xs: 'h-4',
     sm: 'w-[20px] h-[20px]',
-    md: 'w-6 h-6',
-    lg: 'w-10 h-10',
+    md: 'h-6',
+    lg: 'h-10',
     full: 'h-full',
 };
 

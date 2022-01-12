@@ -45,7 +45,7 @@ const FULL_WIDTH_BUTTONS = 'w-full justify-center';
 
 type Option = {
     key: number;
-    text: string;
+    text: string | React.ReactNode;
     color?: '';
     disabled?: {
         optionKey: TooltipKeys;
