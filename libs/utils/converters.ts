@@ -208,6 +208,7 @@ const names: Record<string, string> = {
     'EUR/USD': 'Euro',
     'BTC/USD': 'Bitcoin',
     'TOKE/USD': 'Tokemak',
+    'LINK/USD': 'Chainlink',
 };
 
 export const tickerToName: (ticker: string) => string = (ticker) => {

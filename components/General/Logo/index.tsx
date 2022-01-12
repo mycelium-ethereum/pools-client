@@ -16,6 +16,7 @@ import ETH from '@public/img/logos/currencies/eth.svg';
 import EUR from '@public/img/logos/currencies/eur.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import TOKE from '@public/img/logos/currencies/toke.svg';
+import LINK from '@public/img/logos/currencies/link.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
@@ -53,6 +54,7 @@ export type LogoTicker =
     | 'WETH'
     | 'BTC'
     | 'TOKE'
+    | 'LINK'
     | 'WBTC'
     | 'SUSHI'
     | 'BALANCER'
@@ -79,6 +81,7 @@ const logos: Record<LogoTicker, any> = {
     WETH: ETH,
     BTC: BTC,
     TOKE: TOKE,
+    LINK: LINK,
     WBTC: BTC,
     SUSHI: SUSHI,
     BALANCER: BALANCER,
