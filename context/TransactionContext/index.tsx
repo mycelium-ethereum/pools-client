@@ -2,8 +2,13 @@ import React, { createContext, useContext, useState } from 'react';
 import { AppearanceTypes, useToasts } from 'react-toast-notifications';
 import { Children, Result } from '@libs/types/General';
 import { ContractReceipt, ContractTransaction } from 'ethers';
-import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM } from '@libs/constants';
+import {
+    AvailableNetwork,
+    // networkConfig
+} from '@context/Web3Context/Web3Context.Config';
+// import { ARBITRUM, CommitsFocusEnum } from '@libs/constants';
+import TimeLeft from '@components/TimeLeft';
+import { useRouter } from 'next/router';
 
 type Content = {
     title?: React.ReactNode;
@@ -20,6 +25,9 @@ export type Options = {
         waiting?: Content; // transaction message for when we are waiting for the user to confirm
         error?: Content; // transaction message for when the transaction fails
         success?: Content; // transaction message for when the transaction succeeds
+        nextRebalance?: number;
+        poolName?: string;
+        type?: 'Mint' | 'Burn';
     };
 };
 type HandleTransactionType =
@@ -50,12 +58,27 @@ export const TransactionActionsContext = createContext<Partial<TransactionAction
  * TODO populate the current pending transactions when the user visits the page
  */
 export const TransactionStore: React.FC = ({ children }: Children) => {
+    const router = useRouter();
     const { addToast, updateToast } = useToasts();
     const [pendingCount, setPendingCount] = useState(0);
 
+    const handleClick = (focus: 'Mint' | 'Burn') =>
+        router.push({
+            pathname: '/portfolio/commits',
+            query: {
+                focus: focus === 'Mint' ? 'mints' : 'burns',
+            },
+        });
+
     /** Specifically handles transactions */
     const handleTransaction: HandleTransactionType = async (callMethod, params, options) => {
-        const { onError, onSuccess, afterConfirmation, network = 0, statusMessages } = options ?? {};
+        const {
+            onError,
+            onSuccess,
+            afterConfirmation,
+            // network = 0,
+            statusMessages,
+        } = options ?? {};
 
         const toastId: unknown = addToast(
             [statusMessages?.waiting?.title ?? 'Pending Transaction', statusMessages?.waiting?.body ?? ''],
@@ -75,23 +98,41 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
             updateToast(toastId as unknown as string, {
                 content: [
-                    statusMessages?.success?.title ?? 'Transaction Successful',
+                    statusMessages?.success?.title ?? 'Order Submitted to Queue',
                     statusMessages?.success?.body ?? (
-                        <a
-                            key={contractReceipt.transactionHash}
-                            href={`${networkConfig[network ?? ARBITRUM]?.previewUrl}/${
-                                contractReceipt.transactionHash
-                            }`}
-                            className="text-tracer-400 underline"
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            View transaction
-                        </a>
+                        <>
+                            <div className="mb-2">
+                                {`${statusMessages?.poolName} in `}
+                                <TimeLeft targetTime={statusMessages?.nextRebalance ?? 0} />
+                            </div>
+                            {/*<div>*/}
+                            {/*    <a*/}
+                            {/*        key={contractReceipt.transactionHash}*/}
+                            {/*        href={`${networkConfig[network ?? ARBITRUM]?.previewUrl}/${*/}
+                            {/*            contractReceipt.transactionHash*/}
+                            {/*        }`}*/}
+                            {/*        className="text-tracer-400 underline"*/}
+                            {/*        target="_blank"*/}
+                            {/*        rel="noreferrer"*/}
+                            {/*    >*/}
+                            {/*        View order*/}
+                            {/*    </a>*/}
+                            {/*</div>*/}
+                            <div
+                                className="text-tracer-400 underline cursor-pointer"
+                                onClick={() => handleClick(statusMessages?.type ?? 'Mint')}
+                            >
+                                View order
+                            </div>
+                        </>
                     ),
                 ],
                 appearance: 'success',
                 autoDismiss: statusMessages?.success?.autoDismiss ?? true,
+                autoDismissTimeout:
+                    statusMessages?.nextRebalance !== undefined
+                        ? (statusMessages?.nextRebalance - Date.now() / 1000) * 1000
+                        : 0,
             });
 
             setPendingCount((previousValue) => previousValue - 1);
