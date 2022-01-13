@@ -422,20 +422,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         statusMessages: {
                             waiting: {
                                 title: `Queueing ${poolName} ${type}`,
-                                body: (
-                                    <div
-                                        className="text-sm text-tracer-400 underline cursor-pointer"
-                                        onClick={() =>
-                                            openArbiscan(
-                                                ArbiscanEnum.token,
-                                                tokenAddress,
-                                                provider?.network?.chainId?.toString() as AvailableNetwork,
-                                            )
-                                        }
-                                    >
-                                        View token on Arbiscan
-                                    </div>
-                                ),
                             },
                             success: {
                                 title: `${poolName} ${type} Queued`,
