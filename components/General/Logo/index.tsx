@@ -12,10 +12,13 @@ import BTC_L from '@public/img/logos/currencies/btc_long.svg';
 import BTC_S from '@public/img/logos/currencies/btc_short.svg';
 import TOKE_L from '@public/img/logos/currencies/toke_long.svg';
 import TOKE_S from '@public/img/logos/currencies/toke_short.svg';
+import LINK_L from '@public/img/logos/currencies/link_long.svg';
+import LINK_S from '@public/img/logos/currencies/link_short.svg';
 import ETH from '@public/img/logos/currencies/eth.svg';
 import EUR from '@public/img/logos/currencies/eur.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import TOKE from '@public/img/logos/currencies/toke.svg';
+import LINK from '@public/img/logos/currencies/link.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
@@ -45,15 +48,18 @@ export type LogoTicker =
     | 'EUR_L'
     | 'BTC_L'
     | 'TOKE_L'
+    | 'LINK_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
     | 'TOKE_S'
+    | 'LINK_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
     | 'BTC'
     | 'TOKE'
+    | 'LINK'
     | 'WBTC'
     | 'SUSHI'
     | 'BALANCER'
@@ -72,15 +78,18 @@ const logos: Record<LogoTicker, any> = {
     EUR_L: EUR_L,
     BTC_L: BTC_L,
     TOKE_L: TOKE_L,
+    LINK_L: LINK_L,
     ETH_S: ETH_S,
     EUR_S: EUR_S,
     BTC_S: BTC_S,
     TOKE_S: TOKE_S,
+    LINK_S: LINK_S,
     EUR: EUR,
     ETH: ETH,
     WETH: ETH,
     BTC: BTC,
     TOKE: TOKE,
+    LINK: LINK,
     WBTC: BTC,
     SUSHI: SUSHI,
     BALANCER: BALANCER,
