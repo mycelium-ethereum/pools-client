@@ -89,7 +89,6 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
 
             <div className="py-1 px-4 mb-2">
                 <ViewOnArbiscanOption account={account} />
-                <BridgeFundsOption />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -145,19 +144,6 @@ const WalletIcon: React.FC<{
     };
 
     return <>{IconContent()}</>;
-};
-
-const BridgeFundsOption: React.FC<{
-    className?: string;
-}> = ({ className }) => {
-    return (
-        <Link href="/bridge">
-            <button className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover mt-3 text-sm w-full')}>
-                <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
-                Bridge Funds
-            </button>
-        </Link>
-    );
 };
 
 // const AddTCROption = styled(({ className }) => {
