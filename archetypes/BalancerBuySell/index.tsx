@@ -30,7 +30,7 @@ export default (() => {
     const button = () => {
         if (!account) {
             return (
-                <Button size="lg" variant="primary" disabled={true}>
+                <Button size="lg" variant="primary">
                     Connect Wallet
                 </Button>
             );
