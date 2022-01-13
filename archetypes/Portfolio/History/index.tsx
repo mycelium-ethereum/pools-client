@@ -1,16 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { ARBITRUM, CommitEnum, CommitsFocusEnum } from '@libs/constants';
+import { ethers } from 'ethers';
+import { useRouter } from 'next/router';
+import React, { useEffect, useState } from 'react';
+import { ARBITRUM, CommitsFocusEnum } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
+import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { formatDate, toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '@libs/utils/converters';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
 import fetchTradeHistory, { TradeHistory } from '@libs/utils/tradeHistoryAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import { useRouter } from 'next/router';
-// import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-// import Actions from '@components/TokenActions';
+import Loading from '@components/General/Loading';
+import { marketSymbolToAssetName } from '@libs/utils/converters';
+import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
 import { SourceType } from '@libs/utils/reputationAPI';
@@ -30,70 +33,33 @@ export default (({ focus }) => {
     const router = useRouter();
     const { provider, account, network } = useWeb3();
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
+    const [totalRecords, setTotalRecords] = useState<number>(0);
+    const [loading, setLoading] = useState(false);
+
+    const { setPage, page } = usePagination(tradeHistory);
 
     useEffect(() => {
-        fetchTradeHistory({ account: account ?? '0', network: (network as SourceType) ?? ARBITRUM }).then((r) =>
-            setTradeHistory(r),
-        );
-    }, [provider]);
-
-    const { mintCommits, burnCommits } = useMemo(
-        () => ({
-            mintCommits: tradeHistory.filter(
-                (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
-            ),
-            burnCommits: tradeHistory.filter(
-                (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
-            ),
-        }),
-        [tradeHistory],
-    );
-
-    const { setPage, page, paginatedArray, numPages } = usePagination(
-        focus === CommitsFocusEnum.mints ? mintCommits : burnCommits,
-    );
-
-    const mintRows = (mintCommits: TradeHistory[]) => {
-        if (mintCommits.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={4}>
-                        <div className="my-20 text-center">
-                            <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no mint history.</div>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return paginatedArray.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={false} />
-            ));
+        setLoading(true);
+        if (account) {
+            fetchTradeHistory({
+                account: account ?? '0',
+                network: (network as SourceType) ?? ARBITRUM,
+                type: focus === CommitsFocusEnum.mints ? 'mint' : 'burn',
+                page,
+                pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
+            }).then((r) => {
+                setLoading(false);
+                setTradeHistory(r.results);
+                setTotalRecords(r.totalRecords);
+            });
         }
-    };
+    }, [focus, page, account]);
 
-    const burnRows = (burnCommits: TradeHistory[]) => {
-        if (burnCommits.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={4}>
-                        <div className="my-20 text-center">
-                            <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no burn history.</div>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return paginatedArray.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
-            ));
-        }
-    };
+    const isMintHistory = focus === CommitsFocusEnum.mints;
 
     return (
-        <div className="bg-theme-background rounded-xl shadow my-4 p-4">
-            <div className="my-4">
+        <div className="bg-theme-background rounded-xl shadow mt-5 p-5">
+            <div className="mb-5">
                 <TWButtonGroup
                     value={focus}
                     size="lg"
@@ -109,49 +75,59 @@ export default (({ focus }) => {
                 />
             </div>
             <Table>
-                {focus === CommitsFocusEnum.mints ? (
-                    <>
-                        <TableHeader>
-                            <TableHeaderCell>Time / Date</TableHeaderCell>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Tokens / Price</TableHeaderCell>
-                            {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
-                        </TableHeader>
-                        {mintRows(paginatedArray)}
-                    </>
+                <TableHeader>
+                    <TableHeaderCell>Time / Date</TableHeaderCell>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell>{isMintHistory ? 'Amount' : 'Amount / Price'}</TableHeaderCell>
+                    <TableHeaderCell>{isMintHistory ? 'Tokens / Price' : 'Return'}</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column *!/ */}</TableHeaderCell>
+                </TableHeader>
+                {loading ? (
+                    <tr>
+                        <td colSpan={5}>
+                            <div className="my-20 text-center">
+                                <Loading className="w-10 mx-auto my-8" />
+                            </div>
+                        </td>
+                    </tr>
                 ) : (
-                    <>
-                        <TableHeader>
-                            <TableHeaderCell>Time / Date</TableHeaderCell>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount / Price</TableHeaderCell>
-                            <TableHeaderCell>Return</TableHeaderCell>
-                            {/*<TableHeaderCell>/!* Empty header for buttons column *!/</TableHeaderCell>*/}
-                        </TableHeader>
-                        {burnRows(paginatedArray)}
-                    </>
+                    <tbody>
+                        {tradeHistory.length === 0 ? (
+                            <tr>
+                                <td colSpan={5}>
+                                    <div className="my-20 text-center">
+                                        <NoQueued className="mx-auto mb-5" />
+                                        <div className="text-cool-gray-500">
+                                            You have no {isMintHistory ? 'mint' : 'burn'} history.
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            tradeHistory.map((commit, index) => (
+                                <CommitRow key={`pcr-${index}`} index={index} {...commit} provider={provider} />
+                            ))
+                        )}
+                    </tbody>
                 )}
             </Table>
             <div className="ml-auto mt-auto px-4 sm:px-6 py-3">
-                <PageNumber
-                    page={page}
-                    numResults={focus === CommitsFocusEnum.mints ? mintCommits.length : burnCommits.length}
-                    resultsPerPage={PAGE_ENTRIES}
-                />
-                <Pagination
-                    onLeft={({ nextPage }) => {
-                        setPage(nextPage);
-                    }}
-                    onRight={({ nextPage }) => {
-                        setPage(nextPage);
-                    }}
-                    onDirect={({ nextPage }) => {
-                        setPage(nextPage);
-                    }}
-                    numPages={numPages}
-                    selectedPage={page}
-                />
+                <PageNumber page={page} numResults={totalRecords} resultsPerPage={PAGE_ENTRIES} />
+                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Pagination
+                        onLeft={({ nextPage }) => {
+                            setPage(nextPage);
+                        }}
+                        onRight={({ nextPage }) => {
+                            setPage(nextPage);
+                        }}
+                        onDirect={({ nextPage }) => {
+                            setPage(nextPage);
+                        }}
+                        numPages={Math.ceil(totalRecords / PAGE_ENTRIES) || 1}
+                        selectedPage={page}
+                    />
+                </div>
             </div>
         </div>
     );
@@ -162,10 +138,14 @@ export default (({ focus }) => {
 const CommitRow: React.FC<
     TradeHistory & {
         index: number;
-        burnRow: number;
+        provider?: ethers.providers.JsonRpcProvider;
     }
-> = ({ date, tokenName, tokenAmount, tokenPrice, tokenSymbol, index, burnRow }) => {
-    const { timeString, dateString } = formatDate(new Date(date * 1000));
+> = ({ date, tokenAmount, tokenPrice, tokenSymbol, index, type, provider, tokenAddress, tokenDecimals }) => {
+    const timeString = new Intl.DateTimeFormat('en-AU', {
+        hour: 'numeric',
+        minute: 'numeric',
+    }).format(new Date(date * 1000));
+    const dateString = new Intl.DateTimeFormat('en-AU').format(new Date(date * 1000));
     return (
         <TableRow key={index} rowNumber={index}>
             <TableRowCell>
@@ -178,22 +158,18 @@ const CommitRow: React.FC<
                     <div>
                         <div className="flex">
                             <div>
-                                {tokenSymbol.split('-')[0][0]}-
-                                {tokenSymbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                                {tokenSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenSymbol.slice(3)]}
                             </div>
                             &nbsp;
-                            <div className={`${tokenName.split('-')[1] === 'LONG' ? 'green' : 'red'}`}>
-                                {tokenName.split('-')[1].toLowerCase().charAt(0).toUpperCase() +
-                                    tokenName.split('-')[1].toLowerCase().slice(1)}
+                            <div className={type === 'LongMint' || type === 'LongBurn' ? 'green' : 'red'}>
+                                {type === 'LongMint' || type === 'LongBurn' ? 'Long' : 'Short'}
                             </div>
                         </div>
-                        <div className="text-cool-gray-500">{`${tokenName.split('-')[0]}${
-                            tokenName.split('-')[1] === 'LONG' ? 'L' : 'S'
-                        }-${tokenName.split('-')[2]}`}</div>
+                        {tokenSymbol}
                     </div>
                 </div>
             </TableRowCell>
-            {burnRow ? (
+            {type === 'LongBurn' || type === 'ShortBurn' ? (
                 <>
                     <TableRowCell>
                         <div>{tokenAmount.toFixed(2)} tokens</div>
@@ -203,23 +179,27 @@ const CommitRow: React.FC<
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(tokenAmount)} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))} USDC</TableRowCell>
                     <TableRowCell>
                         <div>{tokenAmount.div(tokenPrice).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
                     </TableRowCell>
                 </>
             )}
-            {/*<TableRowCell className="flex text-right">*/}
-            {/*    <Actions*/}
-            {/*        token={token}*/}
-            {/*        provider={provider}*/}
-            {/*        arbiscanTarget={{*/}
-            {/*            type: ArbiscanEnum.txn,*/}
-            {/*            target: txnHash,*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*</TableRowCell>*/}
+            <TableRowCell>
+                <Actions
+                    provider={provider as ethers.providers.JsonRpcProvider}
+                    token={{
+                        address: tokenAddress,
+                        decimals: tokenDecimals,
+                        symbol: tokenSymbol,
+                    }}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.token,
+                        target: tokenAddress,
+                    }}
+                />
+            </TableRowCell>
         </TableRow>
     );
 };

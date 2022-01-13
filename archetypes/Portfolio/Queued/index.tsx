@@ -83,8 +83,8 @@ export default (({ focus, commits }) => {
     };
 
     return (
-        <div className="bg-theme-background rounded-xl shadow my-4 p-4">
-            <div className="my-4">
+        <div className="bg-theme-background rounded-xl shadow my-5 p-5">
+            <div className="mb-5">
                 <TWButtonGroup
                     value={focus}
                     size="lg"
@@ -109,7 +109,7 @@ export default (({ focus, commits }) => {
                             <TableHeaderCell>Mint In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {mintRows(mintCommits)}
+                        <tbody>{mintRows(mintCommits)}</tbody>
                     </>
                 ) : (
                     <>
@@ -120,7 +120,7 @@ export default (({ focus, commits }) => {
                             <TableHeaderCell>Burn In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {burnRows(burnCommits)}
+                        <tbody>{burnRows(burnCommits)}</tbody>
                     </>
                 )}
             </Table>
