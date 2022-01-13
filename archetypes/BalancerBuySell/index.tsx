@@ -16,7 +16,7 @@ import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 
 export default (() => {
-    const { network = ARBITRUM } = useWeb3();
+    const { network = ARBITRUM, account } = useWeb3();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
     const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];
@@ -28,7 +28,13 @@ export default (() => {
     const token = side === SideEnum.long ? pool?.longToken : pool?.shortToken;
 
     const button = () => {
-        if (!valid) {
+        if (!account) {
+            return (
+                <Button size="lg" variant="primary" disabled={true}>
+                    Connect Wallet
+                </Button>
+            );
+        } else if (!valid) {
             return (
                 <StyledTooltip title="Select the market, side, and power leverage you're after.">
                     <div>
