@@ -140,7 +140,18 @@ const CommitRow: React.FC<
         index: number;
         provider?: ethers.providers.JsonRpcProvider;
     }
-> = ({ date, tokenAmount, tokenPrice, tokenSymbol, index, type, provider, tokenAddress, tokenDecimals }) => {
+> = ({
+    date,
+    tokenAmount,
+    tokenPrice,
+    tokenSymbol,
+    index,
+    type,
+    provider,
+    tokenAddress,
+    tokenDecimals,
+    collateralAmount,
+}) => {
     const timeString = new Intl.DateTimeFormat('en-AU', {
         hour: 'numeric',
         minute: 'numeric',
@@ -179,9 +190,9 @@ const CommitRow: React.FC<
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(collateralAmount)} USDC</TableRowCell>
                     <TableRowCell>
-                        <div>{tokenAmount.div(tokenPrice).toFixed(2)} tokens</div>
+                        <div>{tokenAmount.toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
                     </TableRowCell>
                 </>
