@@ -186,7 +186,7 @@ const CommitRow: React.FC<
                         <div>{tokenAmount.toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
                     </TableRowCell>
-                    <TableRowCell>{toApproxCurrency(tokenAmount.times(tokenPrice))} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(collateralAmount)} USDC</TableRowCell>
                 </>
             ) : (
                 <>
