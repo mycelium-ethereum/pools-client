@@ -20,6 +20,8 @@ type Result = {
     type: CommitType;
     userAddress: string;
     tokenDecimals: number;
+    transactionHashIn: string;
+    transactionHashOut: string;
 };
 
 // Parsed types
@@ -33,6 +35,8 @@ export type TradeHistory = {
     tokenSymbol: string;
     tokenAddress: string;
     tokenDecimals: number;
+    transactionHashIn: string;
+    transactionHashOut: string;
 };
 
 const fetchTradeHistory: (params: {
@@ -51,7 +55,7 @@ const fetchTradeHistory: (params: {
     let route = `${BASE_TRADE_HISTORY_API}?page=${page}&pageSize=${pageSize}&network=${
         network ?? ARBITRUM
     }&userAddress=${account}`;
-    // }&userAddress=0xFBA206E73709F614E5a85afF27A98692d4F3c579`;
+    // }&userAddress=0x46a0B4Fa58141ABa23185e79f7047A7dFd0FF100`;
     if (type === 'burn') {
         route += '&types=LongBurn&types=ShortBurn';
     } else {
@@ -74,6 +78,8 @@ const fetchTradeHistory: (params: {
                     tokenSymbol: row.tokenSymbol,
                     tokenAddress: row.tokenAddress,
                     tokenDecimals: row.tokenDecimals,
+                    transactionHashIn: row.transactionHashIn,
+                    transactionHashOut: row.transactionHashOut,
                 });
             });
             return {

@@ -151,6 +151,8 @@ const CommitRow: React.FC<
     tokenAddress,
     tokenDecimals,
     collateralAmount,
+    transactionHashIn,
+    transactionHashOut,
 }) => {
     const timeString = new Intl.DateTimeFormat('en-AU', {
         hour: 'numeric',
@@ -209,6 +211,20 @@ const CommitRow: React.FC<
                         type: ArbiscanEnum.token,
                         target: tokenAddress,
                     }}
+                    otherActions={[
+                        {
+                            type: ArbiscanEnum.txn,
+                            target: transactionHashIn,
+                            logo: ARBITRUM,
+                            text: 'View Commit on Arbiscan',
+                        },
+                        {
+                            type: ArbiscanEnum.txn,
+                            target: transactionHashOut,
+                            logo: ARBITRUM,
+                            text: 'View Upkeep on Arbiscan',
+                        },
+                    ]}
                 />
             </TableRowCell>
         </TableRow>
