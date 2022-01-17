@@ -1,6 +1,6 @@
 import { Children } from '@libs/types/General';
 import React, { useMemo, useEffect, useState } from 'react';
-import { Theme, themes } from './themes'
+import { Theme, themes } from './themes';
 
 interface ContextProps {
     isDark: boolean;
@@ -18,7 +18,7 @@ import { ThemeProvider } from 'styled-components';
  * Wrapper store for the FactoryContext.
  */
 export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
-    const [theme, setTheme] = useState<Theme>('dark')
+    const [theme, setTheme] = useState<Theme>('dark');
     const isDark = useMemo(() => theme === 'dark', [theme]);
 
     const toggleTheme = () => {
@@ -27,18 +27,18 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
             // is dark going to light
             localStorage.setItem('theme', 'light');
             head.classList.remove('theme-dark');
-            setTheme('light')
+            setTheme('light');
         } else {
             head.classList.add('theme-dark');
             localStorage.removeItem('theme');
-            setTheme('dark')
+            setTheme('dark');
         }
     };
 
     useEffect(() => {
         if (localStorage.getItem('theme') === 'light') {
-            setTheme('light')
-        } 
+            setTheme('light');
+        }
     }, []);
 
     return (
@@ -48,9 +48,7 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
                 toggleTheme,
             }}
         >
-            <ThemeProvider theme={themes[theme]}>
-                {children}
-            </ThemeProvider>
+            <ThemeProvider theme={themes[theme]}>{children}</ThemeProvider>
         </ThemeContext.Provider>
     );
 };
