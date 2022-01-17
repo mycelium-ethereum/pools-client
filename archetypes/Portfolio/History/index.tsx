@@ -53,7 +53,7 @@ export default (({ focus }) => {
                 setTotalRecords(r.totalRecords);
             });
         }
-    }, [focus, page, account]);
+    }, [focus, page, account, network]);
 
     const isMintHistory = focus === CommitsFocusEnum.mints;
 
