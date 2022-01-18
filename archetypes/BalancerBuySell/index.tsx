@@ -9,14 +9,15 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
 import { poolMap } from '@libs/constants/poolLists';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import {useWeb3, useWeb3Actions} from '@context/Web3Context/Web3Context';
 import { StaticPoolInfo } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
 import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 
 export default (() => {
-    const { network = ARBITRUM } = useWeb3();
+    const { network = ARBITRUM, account } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
     const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];
@@ -28,7 +29,13 @@ export default (() => {
     const token = side === SideEnum.long ? pool?.longToken : pool?.shortToken;
 
     const button = () => {
-        if (!valid) {
+        if (!account) {
+            return (
+                <Button size="lg" variant="primary" onClick={handleConnect}>
+                    Connect Wallet
+                </Button>
+            );
+        } else if (!valid) {
             return (
                 <StyledTooltip title="Select the market, side, and power leverage you're after.">
                     <div>
