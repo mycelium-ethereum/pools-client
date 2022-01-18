@@ -140,8 +140,8 @@ export const Browse: React.FC = () => {
                             key={index}
                             className="p-4 md:p-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
                         >
-                            <div className="w-full h-20 my-5 p-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
-                                <div style={{ minHeight: '3rem' }} className="flex">
+                            <div className="w-full h-20 my-5 p-5 flex justify-between divide-x-4 divide-cool-gray-200 dark:divide-cool-gray-900 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                                <div className="flex">
                                     <Logo
                                         className="inline mr-3 my-auto"
                                         size="lg"
@@ -150,6 +150,18 @@ export const Browse: React.FC = () => {
                                     <div className="my-auto">
                                         <div className="font-bold text-lg">{key}</div>
                                     </div>
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    SPOT PRICE
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    ORACLE
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    24H VOLUME
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    NUMBER OF POOLS
                                 </div>
                             </div>
                             <PoolsTable
