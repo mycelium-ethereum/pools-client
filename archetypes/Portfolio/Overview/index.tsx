@@ -1,4 +1,4 @@
-import { Dropdown, Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import BigNumber from 'bignumber.js';
 import React, { useState } from 'react'; // userReducer
 import TokenTable from './TokenTable';
@@ -33,7 +33,7 @@ enum PriceByEnum {
 }
 
 export enum DenotedInEnum {
-    Base = 'Base',
+    BASE = 'BASE',
     USDC = 'USDC',
 }
 
@@ -107,16 +107,6 @@ export const historicsReducer: (state: PortfolioOverviewState, action: OverviewA
     }
 };
 
-const infoCard = 'xl:w-1/3 mr-4 my-2 px-5 py-10 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary';
-
-const overviewCard = 'xl:w-2/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
-
-const guideCard = 'xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background';
-
-const ctaCard = 'relative overflow-hidden xl:w-1/3 px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-tracer-50';
-
-const mainCard = 'px-4 py-6 my-2 mx-4 rounded-xl shadow-md bg-theme-background dark:bg-theme-background';
-
 // const Overview
 export default (({ onClickBurn }) => {
     // const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
@@ -124,7 +114,7 @@ export default (({ onClickBurn }) => {
     const { rows: tokens } = useBrowsePools();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
-    const [denotedIn, setDenotedIn] = useState<DenotedInEnum>(DenotedInEnum.Base);
+    const [denotedIn, setDenotedIn] = useState<DenotedInEnum>(DenotedInEnum.BASE);
 
     const totalValuation = function () {
         let total = 0;
@@ -138,29 +128,19 @@ export default (({ onClickBurn }) => {
 
     const emptyState = () => {
         return (
-            <div className="mt-3">
-                <div className="flex mb-5 flex-col xl:flex-row">
-                    <div className={overviewCard}>
-                        <h1 className="relative text-theme-text text-xl mr-[20px]">Trade Portfolio Overview</h1>
-                        <div className="flex flex-col lg:flex-row justify-between my-2">
-                            <div className={infoCard}>
-                                <div className="font-bold text-2xl opacity-50">0.00</div>
-                                <div className="text-md opacity-50">Portfolio Valuation</div>
-                            </div>
-                            {/*<div className={infoCard}>*/}
-                            {/*    <div className="font-bold text-2xl opacity-50">0.00</div>*/}
-                            {/*    <div className="text-md opacity-50">Unrealised Profit and Loss</div>*/}
-                            {/*</div>*/}
-                            {/*<div className={infoCard}>*/}
-                            {/*    <div className="font-bold text-2xl opacity-50">0.00</div>*/}
-                            {/*    <div className="text-md opacity-50">Net Acquisition Costs</div>*/}
-                            {/*</div>*/}
+            <div className="mt-5">
+                <div className="flex flex-col xl:flex-row">
+                    <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
+                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
+                        <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                            <div className="font-bold text-2xl opacity-50">0.00</div>
+                            <div className="font-bold text-md text-cool-gray-500 opacity-50">Portfolio Valuation</div>
                         </div>
                     </div>
-                    <div className={ctaCard}>
+                    <div className="relative overflow-hidden xl:w-1/3 mt-5 xl:mt-0 p-5 rounded-xl shadow-md bg-tracer-50">
                         <CTABackground className="w-full absolute bottom-0 right-0" />
-                        <div className="relative flex flex-col justify-center items-center p-10">
-                            <div className="text-white mb-10 text-2xl text-center">
+                        <div className="relative flex flex-col justify-center items-center p-5">
+                            <div className="text-white mb-5 text-2xl text-center">
                                 Connect to Arbitrum to get started with Perpetual Pools
                             </div>
                             <div
@@ -172,8 +152,8 @@ export default (({ onClickBurn }) => {
                         </div>
                     </div>
                 </div>
-                <div className="flex mb-5 flex-col xl:flex-row">
-                    <div className={`${maxSkew === undefined ? '' : 'xl:w-2/3'} mx-4 flex flex-col xl:flex-row`}>
+                <div className="flex my-5 flex-col xl:flex-row">
+                    <div className={`${maxSkew === undefined ? '' : 'xl:w-2/3 xl:mr-12'} flex flex-col xl:flex-row`}>
                         <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
                             <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">TIP</div>
                             <div className="mb-3 text-2xl font-semibold">Earn TCR Now!</div>
@@ -222,7 +202,7 @@ export default (({ onClickBurn }) => {
                         </div>
                     </div>
                     {maxSkew === undefined ? null : (
-                        <div className="my-2 xl:w-1/3 flex flex-col mx-4">
+                        <div className="my-2 xl:w-1/3 flex flex-col">
                             <div className="relative overflow-hidden rounded-t-xl">
                                 <CTABackground className="w-full absolute bottom-0 right-0" />
                                 <div className="relative flex">
@@ -291,54 +271,19 @@ export default (({ onClickBurn }) => {
 
     const filledState = () => {
         return (
-            <div className="mt-3">
-                <div className="flex mb-5 flex-col xl:flex-row">
-                    <div className={overviewCard}>
-                        <h1 className="relative text-theme-text text-xl mr-[20px]">
-                            Trade Portfolio Overview
-                            {/*<div className="absolute right-0 top-0">*/}
-                            {/*    <Dropdown*/}
-                            {/*        className="mr-2"*/}
-                            {/*        size={'xs'}*/}
-                            {/*        value={state.timeScale.toString()}*/}
-                            {/*        options={Object.keys(TimescaleEnum).map((key) => ({*/}
-                            {/*            key: key,*/}
-                            {/*            text: TimescaleEnum[key as keyof typeof TimescaleEnum],*/}
-                            {/*        }))}*/}
-                            {/*        onSelect={(val) =>*/}
-                            {/*            dispatch({ type: 'setTimescale', timeScale: val as TimescaleEnum })*/}
-                            {/*        }*/}
-                            {/*    />*/}
-                            {/*    <Dropdown*/}
-                            {/*        size={'xs'}*/}
-                            {/*        value={state.currency}*/}
-                            {/*        options={Object.keys(CurrencyEnum).map((key) => ({*/}
-                            {/*            key: key,*/}
-                            {/*            text: CurrencyEnum[key as keyof typeof CurrencyEnum],*/}
-                            {/*        }))}*/}
-                            {/*        onSelect={(val) => dispatch({ type: 'setCurrency', currency: val as CurrencyEnum })}*/}
-                            {/*    />*/}
-                            {/*</div>*/}
-                        </h1>
-                        <div className="flex flex-col lg:flex-row justify-between my-2">
-                            <div className={infoCard}>
-                                <div className="flex">
-                                    <Logo size="md" ticker="USDC" className="mr-1 my-auto" />
-                                    <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
-                                </div>
-                                <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USDC)</div>
+            <div className="mt-5">
+                <div className="flex flex-col xl:flex-row">
+                    <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
+                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
+                        <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                            <div className="flex">
+                                <Logo size="md" ticker="USDC" className="mr-1 my-auto" />
+                                <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
                             </div>
-                            {/*<div className={infoCard}>*/}
-                            {/*    <div className="font-bold text-2xl">$40,000</div>*/}
-                            {/*    <div className="text-md">Unrealised Profit and Loss</div>*/}
-                            {/*</div>*/}
-                            {/*<div className={infoCard}>*/}
-                            {/*    <div className="font-bold text-2xl">$360,000</div>*/}
-                            {/*    <div className="text-md">Net Acquisition Costs</div>*/}
-                            {/*</div>*/}
+                            <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USDC)</div>
                         </div>
                     </div>
-                    <div className={guideCard}>
+                    <div className="xl:w-1/3 mt-5 xl:mt-0 p-5 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
                         <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
                         <div className="mb-3 text-2xl font-semibold">Skew Farming: How To</div>
                         <div className="mb-3">
@@ -355,15 +300,15 @@ export default (({ onClickBurn }) => {
                         </a>
                     </div>
                 </div>
-                <div className={mainCard}>
+                <div className="mt-10 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
                     <div className="sm:flex sm:justify-between whitespace-nowrap">
-                        <h1 className="text-theme-text text-xl mb-2">Token Holdings</h1>
-                        <div className="flex">
+                        <div className="font-semibold text-2xl my-4">Token Holdings</div>
+                        <div className="flex my-auto">
                             <div className="flex mr-2 sm:mr-5">
-                                <div className="mr-2">Price by</div>
+                                <div className="mr-2 my-auto">Price by</div>
                                 <Dropdown
-                                    size={'xs'}
-                                    value={'Tracer'}
+                                    size="sm"
+                                    value="Tracer"
                                     options={[
                                         { key: PriceByEnum.Tracer },
                                         {
@@ -378,13 +323,15 @@ export default (({ onClickBurn }) => {
                                 />
                             </div>
                             <div className="flex">
-                                <div className="mr-2">Denote in</div>
+                                <div className="mr-2 my-auto">Denote in</div>
                                 <Dropdown
-                                    size={'xs'}
+                                    size="sm"
+                                    iconSize="xs"
+                                    placeHolderIcon={denotedIn}
                                     value={denotedIn}
                                     options={Object.keys(DenotedInEnum).map((key) => ({
                                         key: key,
-                                        text: DenotedInEnum[key as keyof typeof DenotedInEnum],
+                                        ticker: key as LogoTicker,
                                     }))}
                                     onSelect={(val) => setDenotedIn(val as DenotedInEnum)}
                                 />

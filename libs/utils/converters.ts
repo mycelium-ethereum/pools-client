@@ -220,14 +220,15 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
 export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
     Number.isNaN(oldValue) || !oldValue ? 0 : ((newValue - oldValue) / oldValue) * 100;
 
-const names: Record<string, string> = {
+export const marketSymbolToAssetName: Record<string, string> = {
     'ETH/USD': 'Ethereum',
     'EUR/USD': 'Euro',
     'BTC/USD': 'Bitcoin',
     'TOKE/USD': 'Tokemak',
+    'LINK/USD': 'Chainlink',
 };
 
 export const tickerToName: (ticker: string) => string = (ticker) => {
     const [leverage, market] = ticker.split('-');
-    return `${leverage}-${names[market]}`;
+    return `${leverage}-${marketSymbolToAssetName[market]}`;
 };

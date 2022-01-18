@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import { CommitActionEnum, CommitEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
-import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -16,22 +15,22 @@ import TimeLeft from '@components/TimeLeft';
 
 import NoQueued from '@public/img/no-queued.svg';
 
-const queuedOptions = [
-    {
-        key: CommitsFocusEnum.mints,
-        text: 'Queued Mints',
-    },
-    {
-        key: CommitsFocusEnum.burns,
-        text: 'Queued Burns',
-    },
-];
+const queuedOptions = (numMints: number, numBurns: number) => {
+    return [
+        {
+            key: CommitsFocusEnum.mints,
+            text: <>Queued Mints ({numMints})</>,
+        },
+        {
+            key: CommitsFocusEnum.burns,
+            text: <>Queued Burns ({numBurns})</>,
+        },
+    ];
+};
 
-export default (({ focus }) => {
+export default (({ focus, commits }) => {
     const router = useRouter();
     const { provider } = useWeb3();
-
-    const commits = usePendingCommits();
 
     const { mintCommits, burnCommits } = useMemo(
         () => ({
@@ -84,8 +83,8 @@ export default (({ focus }) => {
     };
 
     return (
-        <div className="bg-theme-background rounded-xl shadow m-4 p-4">
-            <div className="my-4">
+        <div className="bg-theme-background rounded-xl shadow my-5 p-5">
+            <div className="mb-5">
                 <TWButtonGroup
                     value={focus}
                     size="lg"
@@ -97,7 +96,7 @@ export default (({ focus }) => {
                         })
                     }
                     color={'tracer'}
-                    options={queuedOptions}
+                    options={queuedOptions(mintCommits.length, burnCommits.length)}
                 />
             </div>
             <Table>
@@ -110,7 +109,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Mint In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {mintRows(mintCommits)}
+                        <tbody>{mintRows(mintCommits)}</tbody>
                     </>
                 ) : (
                     <>
@@ -121,7 +120,7 @@ export default (({ focus }) => {
                             <TableHeaderCell>Burn In</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
-                        {burnRows(burnCommits)}
+                        <tbody>{burnRows(burnCommits)}</tbody>
                     </>
                 )}
             </Table>
@@ -137,6 +136,7 @@ export default (({ focus }) => {
     );
 }) as React.FC<{
     focus: CommitsFocusEnum;
+    commits: QueuedCommit[];
 }>;
 
 const CommitRow: React.FC<

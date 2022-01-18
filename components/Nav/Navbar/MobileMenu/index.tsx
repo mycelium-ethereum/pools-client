@@ -78,10 +78,10 @@ export default (({ account, className }) => {
                                             Tokens
                                         </div>
                                         <div
-                                            className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
+                                            className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/pools')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
+                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
                                         </div>
                                         <div
@@ -101,8 +101,22 @@ export default (({ account, className }) => {
                                             )}
                                             onClick={() => handleRoute('/bridge')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Bridge" />
+                                            <img className="inline mr-2" src={'/img/general/bridge.svg'} alt="Bridge" />
                                             Bridge
+                                        </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('portfolio') ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/portfolio')}
+                                        >
+                                            <img
+                                                className="inline mr-2"
+                                                src={'/img/general/portfolio.svg'}
+                                                alt="Portfolio"
+                                            />
+                                            Portfolio
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />

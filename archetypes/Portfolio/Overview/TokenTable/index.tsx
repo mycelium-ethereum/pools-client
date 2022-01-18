@@ -125,7 +125,7 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell>
                 <div>
-                    {denotedIn === DenotedInEnum.Base ? (
+                    {denotedIn === DenotedInEnum.BASE ? (
                         <>
                             {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
                         </>
@@ -143,7 +143,7 @@ export const TokenRow: React.FC<
             {/*    {toApproxCurrency(pnl)}*/}
             {/*</TableRowCell>*/}
             <TableRowCell>
-                {denotedIn === DenotedInEnum.Base ? (
+                {denotedIn === DenotedInEnum.BASE ? (
                     <>
                         {BaseNumDenote(netValue, oraclePrice, name, parseInt(name.split('-')[0][0]))}{' '}
                         {name.split('-')[1].split('/')[0]}

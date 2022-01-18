@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import { browseReducer, BrowseState } from '@archetypes/Pools/state';
 import MintBurnModal from '@archetypes/Pools/MintBurnModal';
+import usePendingCommits from '@libs/hooks/useQueuedCommits';
 
 export enum PortfolioPage {
     TradePortfolio = 0,
@@ -23,7 +24,8 @@ export enum TradePortfolioPage {
 
 export const PortfolioNav: React.FC<{
     page: TradePortfolioPage;
-}> = ({ page }) => {
+    numCommits: number;
+}> = ({ page, numCommits }) => {
     const router = useRouter();
 
     const overviewPage = page === TradePortfolioPage.Overview;
@@ -31,13 +33,13 @@ export const PortfolioNav: React.FC<{
     const historyPage = page === TradePortfolioPage.History;
 
     return (
-        <div className="flex mt-4 overflow-x-auto whitespace-nowrap pb-2">
-            <div className="mx-4">
+        <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
+            <div className="mr-5">
                 <Link href="/portfolio">
                     <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
                 </Link>
             </div>
-            <div className="mx-4">
+            <div className="mr-5">
                 <Button
                     variant={queuedPage ? 'primary' : 'unselected'}
                     onClick={() =>
@@ -46,10 +48,10 @@ export const PortfolioNav: React.FC<{
                         })
                     }
                 >
-                    Queued Trades
+                    Queued Trades ({numCommits})
                 </Button>
             </div>
-            <div className="mx-4">
+            <div>
                 <Button
                     variant={historyPage ? 'primary' : 'unselected'}
                     onClick={() =>
@@ -73,6 +75,8 @@ export default (({ page }) => {
     const [state, dispatch] = useReducer(browseReducer, {
         mintBurnModalOpen: false,
     } as BrowseState);
+
+    const commits = usePendingCommits();
 
     const handleBurn = (pool: string, side: SideEnum) => {
         swapDispatch({ type: 'setSelectedPool', value: pool });
@@ -101,7 +105,7 @@ export default (({ page }) => {
             case TradePortfolioPage.History:
                 return <History focus={focus} />;
             case TradePortfolioPage.Queued:
-                return <Queued focus={focus} />;
+                return <Queued focus={focus} commits={commits} />;
             default:
                 return <Overview onClickBurn={handleBurn} />;
         }
@@ -109,7 +113,7 @@ export default (({ page }) => {
 
     return (
         <div className="container">
-            <PortfolioNav page={page} />
+            <PortfolioNav page={page} numCommits={commits.length} />
             {renderPage(page)}
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </div>

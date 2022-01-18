@@ -4,7 +4,7 @@ import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
-import { Logo, LogoTicker } from 'components/General/Logo';
+import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
 
 /**
@@ -86,6 +86,7 @@ interface DropdownProps {
     }[];
     onSelect: (option: string) => void;
     size?: ButtonSize;
+    iconSize?: LogoSize;
     className?: string;
     variant?: ButtonVariant;
 }
@@ -96,6 +97,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     onSelect,
     placeHolderIcon,
     size = 'default',
+    iconSize,
     variant = 'default',
     className,
 }) => {
@@ -111,7 +113,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
             >
                 <span className="mr-2 opacity-80">
                     {placeHolderIcon && value !== '' ? (
-                        <Logo ticker={placeHolderIcon} className="inline my-0 mr-2" />
+                        <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
@@ -162,7 +164,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             )}
                                         >
                                             {option?.ticker ? (
-                                                <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                                <Logo size={iconSize} ticker={option.ticker} className="inline mr-3" />
                                             ) : (
                                                 ''
                                             )}

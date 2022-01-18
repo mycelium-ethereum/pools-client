@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-import CommitDropdown from './CommitDropdown';
+// import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
@@ -38,7 +38,7 @@ export const NavBarContent: React.FC<{
     const { account } = useWeb3();
 
     // controls displaying queued commits
-    const [showQueued, setShowQueued] = useState(false);
+    // const [showQueued, setShowQueued] = useState(false);
 
     const linkStyles = 'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
@@ -93,9 +93,9 @@ export const NavBarContent: React.FC<{
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
 
                     {/* Hide if showing queued */}
-                    <AccountBalance hide={showQueued} className="my-auto mx-2" />
+                    <AccountBalance className="my-auto mx-2" />
 
-                    <CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />
+                    {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
                 <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
