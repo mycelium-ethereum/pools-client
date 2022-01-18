@@ -9,7 +9,6 @@ import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { ARBITRUM } from '@libs/constants';
 import Identicon from '@components/Nav/Navbar/Identicon';
-import Link from 'next/link';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
