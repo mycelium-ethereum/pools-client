@@ -101,10 +101,12 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                     statusMessages?.success?.title ?? 'Order Submitted to Queue',
                     statusMessages?.success?.body ?? (
                         <>
-                            <div className="mb-2">
-                                {`${statusMessages?.poolName} in `}
-                                <TimeLeft targetTime={statusMessages?.nextRebalance ?? 0} />
-                            </div>
+                            {statusMessages?.nextRebalance !== undefined ? (
+                                <div className="mb-2">
+                                    {`${statusMessages?.poolName} in `}
+                                    <TimeLeft targetTime={statusMessages?.nextRebalance ?? 0} />
+                                </div>
+                            ) : null}
                             {/*<div>*/}
                             {/*    <a*/}
                             {/*        key={contractReceipt.transactionHash}*/}
