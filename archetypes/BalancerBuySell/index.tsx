@@ -9,7 +9,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
 import { poolMap } from '@libs/constants/poolLists';
-import {useWeb3, useWeb3Actions} from '@context/Web3Context/Web3Context';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { StaticPoolInfo } from '@libs/types/General';
 import { classNames } from '@libs/utils/functions';
 import { StyledTooltip } from '@components/Tooltips';

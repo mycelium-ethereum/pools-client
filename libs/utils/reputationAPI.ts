@@ -45,7 +45,7 @@ export const fetchPoolCommits: (
 ) => Promise<APICommitReturn[]> = async (network, { pool, from, to, account }) => {
     const route = `${BASE_REPUTATION_API}/commits?source=${SourceMap[network]}&from=${from ?? 0}&to=${
         to ?? Math.round(Date.now() / 1000)
-    }${!!pool ? `&pool_address=${pool?.toLowerCase()}}` : ''}${!!account ? `&committer_address=${account}` : ''}`;
+    }${!!pool ? `&pool_address=${pool?.toLowerCase()}` : ''}${!!account ? `&committer_address=${account}` : ''}`;
     const commits: APICommitReturn[] = await fetch(route)
         .then((res) => res.json())
         .then((commits) => {
@@ -62,6 +62,7 @@ export const fetchPoolCommits: (
                     pool: commit.pool_address,
                 });
             });
+            console.log('Parsed commits', parsedCommits);
             return parsedCommits;
         })
         .catch((err) => {
