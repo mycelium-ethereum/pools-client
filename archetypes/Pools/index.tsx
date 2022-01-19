@@ -177,12 +177,12 @@ export const Browse: React.FC = () => {
                                 <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
                                     24H VOLUME
                                 </div>
-                                {/*<div className="px-10">*/}
-                                {/*    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">*/}
-                                {/*        NUMBER OF POOLS*/}
-                                {/*    </div>*/}
-                                {/*    <div className="font-bold">{toApproxCurrency(dataRows[0].oraclePrice)}</div>*/}
-                                {/*</div>*/}
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        NUMBER OF POOLS
+                                    </div>
+                                    <div className="font-bold">{dataRows.length}</div>
+                                </div>
                             </div>
                             <PoolsTable
                                 rows={dataRows}
