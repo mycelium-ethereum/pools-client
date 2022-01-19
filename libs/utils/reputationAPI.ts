@@ -62,7 +62,7 @@ export const fetchPoolCommits: (
                     pool: commit.pool_address,
                 });
             });
-            console.log('Parsed commits', parsedCommits);
+            console.info('Parsed commits', parsedCommits);
             return parsedCommits;
         })
         .catch((err) => {
