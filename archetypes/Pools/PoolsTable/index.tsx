@@ -565,21 +565,12 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
+                            className="mx-1 w-[70px] my-auto ml-auto uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
                         >
-                            Mint
-                        </Button>
-                        <Button
-                            className="mx-1 w-[70px] my-auto font-bold uppercase "
-                            size="xs"
-                            variant="primary-light"
-                            disabled={!tokenInfo.userHoldings}
-                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
-                        >
-                            Burn
+                            COMMIT
                         </Button>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
