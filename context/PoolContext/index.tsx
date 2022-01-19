@@ -20,7 +20,6 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
-import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { poolList } from '@libs/constants/poolLists';
 
@@ -401,10 +400,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             );
             if (handleTransaction) {
                 const poolName = poolsState.pools[pool].name;
-                const tokenAddress =
-                    commitType === CommitEnum.short_mint || commitType === CommitEnum.short_burn
-                        ? poolsState.pools[pool].shortToken.address
-                        : poolsState.pools[pool].longToken.address;
 
                 const type =
                     commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
