@@ -13,7 +13,7 @@ import {
 } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum, MarketToOracleMap, SideEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 import Loading from '@components/General/Loading';
@@ -142,8 +142,8 @@ export const Browse: React.FC = () => {
                             key={index}
                             className="p-4 md:p-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
                         >
-                            <div className="w-full h-20 my-5 p-5 flex justify-between divide-x-4 divide-cool-gray-200 dark:divide-cool-gray-900 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
-                                <div className="flex">
+                            <div className="w-full h-20 my-5 p-4 flex justify-between divide-x-4 divide-cool-gray-200 dark:divide-cool-gray-900 overflow-x-auto whitespace-nowrap rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                                <div className="flex pr-10">
                                     <Logo
                                         className="inline mr-3 my-auto"
                                         size="lg"
@@ -159,15 +159,30 @@ export const Browse: React.FC = () => {
                                     </div>
                                     <div className="font-bold">{toApproxCurrency(dataRows[0].oraclePrice)}</div>
                                 </div>
-                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
-                                    ORACLE
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        ORACLE
+                                    </div>
+                                    <a
+                                        href={`https://reputation.link/contracts/${MarketToOracleMap(key)}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center"
+                                    >
+                                        <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
+                                        <div className="mr-2 font-bold">Chainlink</div>
+                                        <img src={'/img/general/link.svg'} alt="Link" />
+                                    </a>
                                 </div>
                                 <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
                                     24H VOLUME
                                 </div>
-                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
-                                    NUMBER OF POOLS
-                                </div>
+                                {/*<div className="px-10">*/}
+                                {/*    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">*/}
+                                {/*        NUMBER OF POOLS*/}
+                                {/*    </div>*/}
+                                {/*    <div className="font-bold">{toApproxCurrency(dataRows[0].oraclePrice)}</div>*/}
+                                {/*</div>*/}
                             </div>
                             <PoolsTable
                                 rows={dataRows}
