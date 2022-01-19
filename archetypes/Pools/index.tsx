@@ -18,6 +18,7 @@ import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 import Loading from '@components/General/Loading';
 import { Logo, LogoTicker } from '@components/General';
+import { toApproxCurrency } from '@libs/utils/converters';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -135,6 +136,7 @@ export const Browse: React.FC = () => {
                 </section>
                 {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
+                    const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     return (
                         <div
                             key={index}
@@ -151,8 +153,11 @@ export const Browse: React.FC = () => {
                                         <div className="font-bold text-lg">{key}</div>
                                     </div>
                                 </div>
-                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
-                                    SPOT PRICE
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        SPOT PRICE
+                                    </div>
+                                    <div className="font-bold">{toApproxCurrency(dataRows[0].oraclePrice)}</div>
                                 </div>
                                 <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
                                     ORACLE
@@ -165,7 +170,7 @@ export const Browse: React.FC = () => {
                                 </div>
                             </div>
                             <PoolsTable
-                                rows={groupedSortedFilteredTokens[key as any]}
+                                rows={dataRows}
                                 deltaDenotion={state.deltaDenotion}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
