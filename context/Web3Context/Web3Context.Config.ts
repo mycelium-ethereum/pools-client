@@ -51,6 +51,12 @@ export type Network = {
     };
     tcrAddress: string;
     sushiRouterAddress: string;
+    stakingRewardTokens?: {
+        [key: string]: {
+            address: string;
+            decimals: number;
+        };
+    };
     balancerInfo?: {
         graphUri: string;
         baseUri: string; // base link to balancer trading page
@@ -264,6 +270,12 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         },
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
         tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
+        stakingRewardTokens: {
+            fxs: {
+                address: '0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7',
+                decimals: 18,
+            },
+        },
         balancerInfo: {
             graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
             baseUri: 'https://arbitrum.balancer.fi/#/trade',

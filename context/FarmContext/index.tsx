@@ -310,41 +310,57 @@ export const FarmStore: React.FC<
         [signer, provider, config, account],
     );
 
-    const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !signer) {
-            // leave it as the default value
+    const refreshRewardsTokenPriceUSDC = async ({ address, decimals }: { address?: string; decimals?: number }) => {
+        if (!config?.sushiRouterAddress || !address || !decimals || !config.usdcAddress || !signer) {
+            // no update to perform
             return;
         }
+
         const sushiRouter = new ethers.Contract(
             config?.sushiRouterAddress,
             UniswapV2Router02__factory.abi,
             signer,
         ) as UniswapV2Router02;
 
-        const oneTcr = new BigNumber('1').times(10 ** TCR_DECIMALS);
+        const oneUnit = new BigNumber('1').times(10 ** decimals);
 
-        const [usdcPer1Tcr] = await sushiRouter.getAmountsIn(oneTcr.toFixed(), [config.usdcAddress, config.tcrAddress]);
+        const [, buyPrice] = await sushiRouter.getAmountsOut(oneUnit.toFixed(), [address, config.usdcAddress]);
 
-        const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(usdcPer1Tcr, USDC_DECIMALS));
+        const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(buyPrice, USDC_DECIMALS));
 
         setRewardsTokenUSDPrices((previousValue) => ({
             ...previousValue,
-            [config.tcrAddress]: formattedUSDCPrice,
+            // we can cast here because we exit early if it's not set
+            [address as string]: formattedUSDCPrice,
         }));
+    };
+
+    const refreshTcrPriceUSDC = async () => {
+        refreshRewardsTokenPriceUSDC({
+            address: config?.tcrAddress,
+            decimals: TCR_DECIMALS,
+        });
+    };
+
+    const refreshFxsPriceUSDC = async () => {
+        refreshRewardsTokenPriceUSDC({
+            address: config?.stakingRewardTokens?.fxs.address,
+            decimals: config?.stakingRewardTokens?.fxs.decimals,
+        });
     };
 
     // fetch farms initially
     useEffect(() => {
         fetchFarms({ reset: false });
         refreshTcrPriceUSDC();
-        // TODO: add refreshFxsPriceUSDC()
+        refreshFxsPriceUSDC();
     }, []);
 
     // update farms on network change
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
-        // TODO: add refreshFxsPriceUSDC()
+        refreshFxsPriceUSDC();
     }, [signer, config, account]);
 
     return (
