@@ -4,7 +4,7 @@ import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
 
 export default (() => {
-    const { farms, refreshFarm, fetchingFarms, tcrUSDCPrice } = useFarms();
+    const { farms, refreshFarm, fetchingFarms, rewardsTokenUSDPrices } = useFarms();
     return (
         <StakeGeneric
             logo="BALANCER"
@@ -14,7 +14,7 @@ export default (() => {
             refreshFarm={refreshFarm}
             fetchingFarms={fetchingFarms}
             farms={farms}
-            tcrUSDCPrice={tcrUSDCPrice}
+            rewardsTokenUSDPrices={rewardsTokenUSDPrices}
             hideSideFilter
         />
     );
