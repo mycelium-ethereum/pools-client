@@ -62,7 +62,6 @@ export const fetchPoolCommits: (
                     pool: commit.pool_address,
                 });
             });
-            console.info('Parsed commits', parsedCommits);
             return parsedCommits;
         })
         .catch((err) => {
