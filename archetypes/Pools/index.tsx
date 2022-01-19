@@ -129,9 +129,9 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <div className="container mt-0 md:mt-20">
+            <div className="container mt-0 md:mt-5">
                 <section className="mb-8">
-                    <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
+                    <h1 className="font-semibold text-3xl text-theme-text">Pools</h1>
                     <FilterBar state={state} dispatch={dispatch} />
                 </section>
                 {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
