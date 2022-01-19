@@ -2,12 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
-import { calcPercentageDifference, tickerToName, toApproxCurrency } from '@libs/utils/converters';
+import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
@@ -83,7 +83,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     {/*</tr>*/}
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
+                        <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
@@ -218,17 +218,8 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div style={{ minHeight: '3rem' }} className="flex">
-                        <Logo
-                            className="inline mr-2 my-auto"
-                            size={'md'}
-                            ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
-                        />
-                        <div className="my-auto">
-                            <div className="font-bold">{tickerToName(pool.name)}</div>
-                            <div className="text-xs">{pool.name.split('-')[1]}</div>
-                        </div>
-                    </div>
+                    <div className="font-bold">{pool.name.split('-')[0][0]}</div>
+                    USDC
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
