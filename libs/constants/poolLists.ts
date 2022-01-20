@@ -206,25 +206,25 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
         {
-            name: '3-AAVE/FRAX',
-            address: '0xA45B53547EC002403531D453c118AC41c03B3346',
+            name: '3-AAVE/USD',
+            address: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
             leverage: 3,
             updateInterval: ONE_HOUR,
             frontRunningInterval: FIVE_MINUTES,
             keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
             committer: {
-                address: '0x149BDeAC3E90522D8043452910Ef41f7cb75E3f3',
+                address: '0x993321599Fc9D0c5a496044308f16C70575DABBa',
             },
             longToken: {
-                name: '3L-AAVE/FRAX',
-                address: '0x316C96E328071DC6403587c243130712A9D03fF3', // TODO change to real
-                symbol: '3L-AAVE/FRAX',
+                name: '3L-AAVE/USD',
+                address: '0xd15239e444Ac687874fee8A415f8F59fd01E3E51', // TODO change to real
+                symbol: '3L-AAVE/USD',
                 decimals: tokenMap[ARBITRUM].FRAX.decimals,
             },
             shortToken: {
-                name: '3S-AAVE/FRAX',
-                address: '0xA8C483D29bFaD4Ea159C1a002f4769C33F808A1e', // TODO change to real
-                symbol: '3S-AAVE/FRAX',
+                name: '3S-AAVE/USD',
+                address: '0x4eBA8B7B13C565041D74b92dCA6C9E4B8885B3cC', // TODO change to real
+                symbol: '3S-AAVE/USD',
                 decimals: tokenMap[ARBITRUM].FRAX.decimals,
             },
             quoteToken: tokenMap[ARBITRUM].FRAX,

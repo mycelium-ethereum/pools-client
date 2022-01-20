@@ -24,9 +24,9 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     <TableHeaderCell>
                         <APYTip>APY</APYTip>/APR
                     </TableHeaderCell>
-                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
-                    <TableHeaderCell>My Staked (TOKENS/USDC)</TableHeaderCell>
-                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>TVL (USD)</TableHeaderCell>
+                    <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
                     <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
