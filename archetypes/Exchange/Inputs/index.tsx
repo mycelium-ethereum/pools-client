@@ -10,7 +10,7 @@ import { toApproxCurrency } from '@libs/utils/converters';
 import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import { Currency } from '@components/General/Currency';
-import { tokenSymbolToLogoTicker } from '@components/General';
+import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import { Pool } from '@libs/types/General';
 
@@ -212,7 +212,7 @@ const AmountInput: React.FC<AmountProps> = ({
                 />
                 <InnerInputText>
                     {tokenSymbol ? (
-                        <Currency ticker={tokenSymbolToLogoTicker(tokenSymbol)} label={tokenSymbol} />
+                        <Currency ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : tokenSymbol as LogoTicker} label={tokenSymbol} />
                     ) : null}
                     <div
                         className="m-auto cursor-pointer hover:underline"
