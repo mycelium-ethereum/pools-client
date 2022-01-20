@@ -189,10 +189,10 @@ const CommitRow: React.FC<
                     <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
                         <div>
-                            {toApproxCurrency(amount.times(tokenPrice))} ${collateral}
+                            {toApproxCurrency(amount.times(tokenPrice))} {collateral}
                         </div>
                         <div>
-                            at {toApproxCurrency(tokenPrice)} ${quoteTokenSymbol}/token
+                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
                         </div>
                     </TableRowCell>
                 </>
@@ -202,7 +202,7 @@ const CommitRow: React.FC<
                     <TableRowCell>
                         <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            at {toApproxCurrency(tokenPrice)} ${quoteTokenSymbol}/token
+                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
                         </div>
                     </TableRowCell>
                 </>

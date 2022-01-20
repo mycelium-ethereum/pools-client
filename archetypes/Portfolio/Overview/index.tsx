@@ -277,7 +277,7 @@ export default (({ onClickBurn }) => {
                         <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
                         <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
                             <div className="flex">
-                                <Logo size="md" ticker="USD" className="mr-1 my-auto" />
+                                {/* <Logo size="md" ticker="USD" className="mr-1 my-auto" /> */}
                                 <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
                             </div>
                             <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USD)</div>
