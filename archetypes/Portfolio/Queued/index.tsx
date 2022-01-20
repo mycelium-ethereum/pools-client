@@ -158,6 +158,7 @@ const CommitRow: React.FC<
     updateInterval,
     created,
     burnRow,
+    quoteTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
@@ -191,7 +192,7 @@ const CommitRow: React.FC<
                             {toApproxCurrency(amount.times(tokenPrice))} ${collateral}
                         </div>
                         <div>
-                            at {toApproxCurrency(tokenPrice)} ${collateral}/token
+                            at {toApproxCurrency(tokenPrice)} ${quoteTokenSymbol}/token
                         </div>
                     </TableRowCell>
                 </>
@@ -201,7 +202,7 @@ const CommitRow: React.FC<
                     <TableRowCell>
                         <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            at {toApproxCurrency(tokenPrice)} ${collateral}/token
+                            at {toApproxCurrency(tokenPrice)} ${quoteTokenSymbol}/token
                         </div>
                     </TableRowCell>
                 </>
