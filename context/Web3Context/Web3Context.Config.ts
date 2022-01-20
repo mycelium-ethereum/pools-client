@@ -192,11 +192,13 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 address: '0xC50712733C8acE3012Ab11F56BF232F8bFfAe7f2', // 3-LINK/USDC-long
                 pool: '0x7b6FfAd58ce09f2a71c01e61F94b1592Bd641876',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xA29fF864fE81ab9ff2c4737904eBB2f5e9Fa9D71', // 3-LINK/USDC-short
                 pool: '0x7b6FfAd58ce09f2a71c01e61F94b1592Bd641876',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
