@@ -123,6 +123,7 @@ export type QueuedCommit = PendingCommitInfo & {
     nextRebalance: BigNumber;
     frontRunningInterval: BigNumber;
     updateInterval: BigNumber;
+    quoteTokenSymbol: string;
 };
 
 export type HistoricCommit = PendingCommitInfo & {
