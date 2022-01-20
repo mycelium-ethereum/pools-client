@@ -34,7 +34,7 @@ enum PriceByEnum {
 
 export enum DenotedInEnum {
     BASE = 'BASE',
-    USDC = 'USDC',
+    USD = 'USD',
 }
 
 export type TokenRowProps = {
@@ -277,10 +277,10 @@ export default (({ onClickBurn }) => {
                         <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
                         <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
                             <div className="flex">
-                                <Logo size="md" ticker="USDC" className="mr-1 my-auto" />
+                                <Logo size="md" ticker="USD" className="mr-1 my-auto" />
                                 <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
                             </div>
-                            <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USDC)</div>
+                            <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USD)</div>
                         </div>
                     </div>
                     <div className="xl:w-1/3 mt-5 xl:mt-0 p-5 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
@@ -327,7 +327,7 @@ export default (({ onClickBurn }) => {
                                 <Dropdown
                                     size="sm"
                                     iconSize="xs"
-                                    placeHolderIcon={denotedIn}
+                                    placeHolderIcon={denotedIn as LogoTicker}
                                     value={denotedIn}
                                     options={Object.keys(DenotedInEnum).map((key) => ({
                                         key: key,

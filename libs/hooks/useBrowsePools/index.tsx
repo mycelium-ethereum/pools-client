@@ -95,6 +95,7 @@ export default (() => {
                     market: tickerToName(name),
                     leverage: leverage,
                     decimals: quoteToken.decimals,
+                    quoteTokenSymbol: quoteToken.symbol,
 
                     lastPrice: pool.lastPrice.toNumber(),
                     oraclePrice: pool.oraclePrice.toNumber(),

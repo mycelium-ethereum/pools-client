@@ -51,6 +51,12 @@ export type Network = {
     };
     tcrAddress: string;
     sushiRouterAddress: string;
+    stakingRewardTokens?: {
+        [key: string]: {
+            address: string;
+            decimals: number;
+        };
+    };
     balancerInfo?: {
         graphUri: string;
         baseUri: string; // base link to balancer trading page
@@ -195,6 +201,16 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 rewardsEnded: true,
             },
             {
+                address: '0xA9808Afc50e06877575d2Ff7ccc21bc55552Bcd1', // 3-AAVE/USD-long
+                pool: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x880e722a5996e7abaB4B8BbC77B9537205BDA1DE', // 3-AAVE/USD-short
+                pool: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
+                abi: StakingRewards__factory.abi,
+            },
+            {
                 address: '0x39723F758701E82D5Fbe8b3Bfd1a646d73f99793', // 1-EUR/USDC-long
                 pool: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
                 abi: StakingRewards__factory.abi,
@@ -266,6 +282,12 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         },
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
         tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
+        stakingRewardTokens: {
+            fxs: {
+                address: '0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7',
+                decimals: 18,
+            },
+        },
         balancerInfo: {
             graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
             baseUri: 'https://arbitrum.balancer.fi/#/trade',

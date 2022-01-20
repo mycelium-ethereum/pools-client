@@ -20,6 +20,7 @@ export type FarmTableDetails = {
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
     rewardsEnded: boolean;
+    rewardsTokenAddress: string;
     link?: string;
     linkText?: string;
     bptDetails?: {

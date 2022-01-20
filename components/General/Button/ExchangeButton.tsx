@@ -46,13 +46,14 @@ const ExchangeButton: React.FC<{
                         if (!approve) {
                             return;
                         }
-                        approve(selectedPool ?? '');
+                        approve(selectedPool ?? '', pool.quoteToken.symbol);
                     }}
                 >
-                    Unlock USDC
+                    Unlock {pool.quoteToken.symbol}
                 </Button>
                 <p className="mt-2 text-theme-text text-sm text-center opacity-70">
-                    Unlock USDC to start investing with Tracer. This is a one-time transaction for each pool.
+                    Unlock {pool.quoteToken.symbol} to start investing with Tracer. This is a one-time transaction for
+                    each pool.
                 </p>
             </>
         );
