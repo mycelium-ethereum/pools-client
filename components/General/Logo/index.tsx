@@ -26,6 +26,7 @@ import LINK from '@public/img/logos/currencies/link.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
+import USD from '@public/img/logos/currencies/usd.svg';
 import BASE from '@public/img/logos/currencies/base.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
@@ -82,7 +83,7 @@ const logos: Record<LogoTicker, any> = {
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
     USDC: USDC,
-    USD: USDC, // TODO change to USD
+    USD: USD,
     FRAX: FRAX,
     AAVE: AAVE, 
     DEFAULT: ETH,
