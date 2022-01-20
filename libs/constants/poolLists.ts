@@ -216,15 +216,15 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 address: '0x149BDeAC3E90522D8043452910Ef41f7cb75E3f3',
             },
             longToken: {
-                name: '3L-EUR/USD',
-                address: '0x316C96E328071DC6403587c243130712A9D03fF3',
-                symbol: '3L-EUR/USD',
+                name: '3L-AAVE/FRAX',
+                address: '0x316C96E328071DC6403587c243130712A9D03fF3', // TODO change to real
+                symbol: '3L-AAVE/FRAX',
                 decimals: tokenMap[ARBITRUM].FRAX.decimals,
             },
             shortToken: {
-                name: '3S-EUR/USD',
-                address: '0xA8C483D29bFaD4Ea159C1a002f4769C33F808A1e',
-                symbol: '3S-EUR/USD',
+                name: '3S-AAVE/FRAX',
+                address: '0xA8C483D29bFaD4Ea159C1a002f4769C33F808A1e', // TODO change to real
+                symbol: '3S-AAVE/FRAX',
                 decimals: tokenMap[ARBITRUM].FRAX.decimals,
             },
             quoteToken: tokenMap[ARBITRUM].FRAX,
