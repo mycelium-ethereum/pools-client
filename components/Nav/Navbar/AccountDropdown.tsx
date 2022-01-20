@@ -9,7 +9,6 @@ import { classNames } from '@libs/utils/functions';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { ARBITRUM } from '@libs/constants';
 import Identicon from '@components/Nav/Navbar/Identicon';
-import Link from 'next/link';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 // const ADD_TCR_TO_WALLET_LINK = `${ETHERSCAN_URI}/token/0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050`;
@@ -89,7 +88,6 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
 
             <div className="py-1 px-4 mb-2">
                 <ViewOnArbiscanOption account={account} />
-                <BridgeFundsOption />
                 {/*<AddTCROption />*/}
             </div>
 
@@ -145,19 +143,6 @@ const WalletIcon: React.FC<{
     };
 
     return <>{IconContent()}</>;
-};
-
-const BridgeFundsOption: React.FC<{
-    className?: string;
-}> = ({ className }) => {
-    return (
-        <Link href="/bridge">
-            <button className={classNames(className ?? '', 'flex hover:bg-theme-button-bg-hover mt-3 text-sm w-full')}>
-                <Logo className="inline text-lg my-auto mr-2" ticker={ARBITRUM} />
-                Bridge Funds
-            </button>
-        </Link>
-    );
 };
 
 // const AddTCROption = styled(({ className }) => {
