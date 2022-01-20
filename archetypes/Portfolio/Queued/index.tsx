@@ -160,6 +160,8 @@ const CommitRow: React.FC<
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
+    const [base, collateral] = token.symbol.split('-')[1].split('/');
+
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
@@ -168,8 +170,7 @@ const CommitRow: React.FC<
                     <div>
                         <div className="flex">
                             <div>
-                                {token.symbol.split('-')[0][0]}-
-                                {token.symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                                {token.symbol.split('-')[0][0]}-{base === 'BTC' ? 'Bitcoin' : 'Ethereum'}
                             </div>
                             &nbsp;
                             <div className={`${token.side === SideEnum.long ? 'green' : 'red'}`}>
@@ -184,8 +185,12 @@ const CommitRow: React.FC<
                 <>
                     <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
-                        <div>{toApproxCurrency(amount.times(tokenPrice))} USDC</div>
-                        <div>at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div>
+                            {toApproxCurrency(amount.times(tokenPrice))} ${collateral}
+                        </div>
+                        <div>
+                            at {toApproxCurrency(tokenPrice)} ${collateral}/token
+                        </div>
                     </TableRowCell>
                 </>
             ) : (
@@ -193,7 +198,9 @@ const CommitRow: React.FC<
                     <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
                     <TableRowCell>
                         <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(tokenPrice)} ${collateral}/token
+                        </div>
                     </TableRowCell>
                 </>
             )}

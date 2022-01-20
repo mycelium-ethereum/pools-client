@@ -44,6 +44,7 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
 export type LogoTicker =
     | 'ETHERSCAN'
     | 'USDC'
+    | 'USD'
     | 'ETH_L'
     | 'EUR_L'
     | 'BTC_L'
@@ -73,6 +74,7 @@ const logos: Record<LogoTicker, any> = {
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
     USDC: USDC,
+    USD: USDC,
     DEFAULT: ETH,
     ETH_L: ETH_L,
     EUR_L: EUR_L,

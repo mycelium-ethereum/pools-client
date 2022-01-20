@@ -34,7 +34,7 @@ enum PriceByEnum {
 
 export enum DenotedInEnum {
     BASE = 'BASE',
-    USDC = 'USDC',
+    USD = 'USD',
 }
 
 export type TokenRowProps = {
@@ -327,7 +327,7 @@ export default (({ onClickBurn }) => {
                                 <Dropdown
                                     size="sm"
                                     iconSize="xs"
-                                    placeHolderIcon={denotedIn}
+                                    placeHolderIcon={denotedIn as LogoTicker}
                                     value={denotedIn}
                                     options={Object.keys(DenotedInEnum).map((key) => ({
                                         key: key,
