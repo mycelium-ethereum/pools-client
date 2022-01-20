@@ -205,6 +205,30 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             },
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
+        {
+            name: '3-AAVE/FRAX',
+            address: '0xA45B53547EC002403531D453c118AC41c03B3346',
+            leverage: 3,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0x149BDeAC3E90522D8043452910Ef41f7cb75E3f3',
+            },
+            longToken: {
+                name: '3L-EUR/USD',
+                address: '0x316C96E328071DC6403587c243130712A9D03fF3',
+                symbol: '3L-EUR/USD',
+                decimals: tokenMap[ARBITRUM].FRAX.decimals,
+            },
+            shortToken: {
+                name: '3S-EUR/USD',
+                address: '0xA8C483D29bFaD4Ea159C1a002f4769C33F808A1e',
+                symbol: '3S-EUR/USD',
+                decimals: tokenMap[ARBITRUM].FRAX.decimals,
+            },
+            quoteToken: tokenMap[ARBITRUM].FRAX,
+        },
     ],
     [ARBITRUM_RINKEBY]: [
         {

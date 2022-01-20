@@ -7,6 +7,7 @@ export enum MarketFilterEnum {
     TOKE = 'Tokemak',
     LINK = 'Chainlink',
     EUR = 'Euro',
+    FRAX = 'Frax',
 }
 
 export enum DeltaEnum {

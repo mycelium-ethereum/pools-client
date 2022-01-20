@@ -226,6 +226,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'BTC/USD': 'Bitcoin',
     'TOKE/USD': 'Tokemak',
     'LINK/USD': 'Chainlink',
+    'AAVE/FRAX': 'AAVE',
 };
 
 export const tickerToName: (ticker: string) => string = (ticker) => {
