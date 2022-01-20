@@ -1,4 +1,4 @@
-import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, CommitEnum, CommitTypeMap } from '@libs/constants';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
@@ -31,27 +31,22 @@ export type APICommitReturn = {
     timestamp: number; // seconds
     from: string;
     commitID: number;
+    pool: string; // pool address
 };
 
-const CommitTypeMap = {
-    LongBurn: CommitEnum.long_burn,
-    LongMint: CommitEnum.long_mint,
-    ShortBurn: CommitEnum.short_burn,
-    ShortMint: CommitEnum.short_mint,
-};
 export const fetchPoolCommits: (
-    pool: string,
     network: SourceType,
     params: {
+        pool?: string;
         from?: number;
         to?: number;
+        account?: string;
     },
-) => Promise<APICommitReturn[]> = async (pool, network, { from, to }) => {
-    const commits: APICommitReturn[] = await fetch(
-        `${BASE_REPUTATION_API}/commits?source=${SourceMap[network]}&from=${from ?? 0}&to=${
-            to ?? Math.round(Date.now() / 1000)
-        }&pool_address=${pool.toLowerCase()}`,
-    )
+) => Promise<APICommitReturn[]> = async (network, { pool, from, to, account }) => {
+    const route = `${BASE_REPUTATION_API}/commits?source=${SourceMap[network]}&from=${from ?? 0}&to=${
+        to ?? Math.round(Date.now() / 1000)
+    }${!!pool ? `&pool_address=${pool?.toLowerCase()}` : ''}${!!account ? `&committer_address=${account}` : ''}`;
+    const commits: APICommitReturn[] = await fetch(route)
         .then((res) => res.json())
         .then((commits) => {
             const parsedCommits: APICommitReturn[] = [];
@@ -64,6 +59,7 @@ export const fetchPoolCommits: (
                     timestamp: parseInt(commit.block_timestamp),
                     // hacky solution while I wait for rep guys to put commitID
                     commitID: index,
+                    pool: commit.pool_address,
                 });
             });
             return parsedCommits;

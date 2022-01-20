@@ -47,6 +47,8 @@ export const Browse: React.FC = () => {
                 return pool.name.replace(/.\-/g, '').split('/')[0] === 'EUR';
             case MarketFilterEnum.TOKE:
                 return pool.name.replace(/.\-/g, '').split('/')[0] === 'TOKE';
+            case MarketFilterEnum.LINK:
+                return pool.name.replace(/.\-/g, '').split('/')[0] === 'LINK';
             case MarketFilterEnum.ETH:
                 return pool.name.replace(/.\-/g, '').split('/')[0] === 'ETH';
             case MarketFilterEnum.BTC:

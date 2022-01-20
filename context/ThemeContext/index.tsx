@@ -1,5 +1,6 @@
 import { Children } from '@libs/types/General';
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
+import { Theme, themes } from './themes';
 
 interface ContextProps {
     isDark: boolean;
@@ -11,11 +12,14 @@ export const ThemeContext = React.createContext<ContextProps>({
     toggleTheme: () => undefined,
 });
 
+import { ThemeProvider } from 'styled-components';
+
 /**
  * Wrapper store for the FactoryContext.
  */
 export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
-    const [isDark, setIsDark] = useState(true);
+    const [theme, setTheme] = useState<Theme>('dark');
+    const isDark = useMemo(() => theme === 'dark', [theme]);
 
     const toggleTheme = () => {
         const head = document.getElementsByTagName('html')[0];
@@ -23,17 +27,17 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
             // is dark going to light
             localStorage.setItem('theme', 'light');
             head.classList.remove('theme-dark');
-            setIsDark(false);
+            setTheme('light');
         } else {
             head.classList.add('theme-dark');
             localStorage.removeItem('theme');
-            setIsDark(true);
+            setTheme('dark');
         }
     };
 
     useEffect(() => {
         if (localStorage.getItem('theme') === 'light') {
-            setIsDark(false);
+            setTheme('light');
         }
     }, []);
 
@@ -44,7 +48,7 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
                 toggleTheme,
             }}
         >
-            {children}
+            <ThemeProvider theme={themes[theme]}>{children}</ThemeProvider>
         </ThemeContext.Provider>
     );
 };

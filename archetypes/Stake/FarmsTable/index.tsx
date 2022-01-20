@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
@@ -11,6 +11,7 @@ import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { APYTip, RewardsEndedTip } from '@components/Tooltips';
+import { TokenToFarmAddressMap } from '@libs/constants';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
     const [showModal, setShowModal] = useState(false);
@@ -111,6 +112,16 @@ const PoolRow: React.FC<{
     const apy = useMemo(() => calcAPY(apr), [apr]);
 
     const { bptDetails } = farm;
+
+    useEffect(() => {
+        if (
+            sessionStorage.getItem('portfolio.selectedToken') !== null &&
+            sessionStorage.getItem('portfolio.selectedToken') !== ''
+        ) {
+            onClickStake(TokenToFarmAddressMap(sessionStorage.getItem('portfolio.selectedToken')));
+            sessionStorage.setItem('portfolio.selectedToken', '');
+        }
+    }, []);
 
     return (
         <TableRow key={farm.farm} rowNumber={index}>

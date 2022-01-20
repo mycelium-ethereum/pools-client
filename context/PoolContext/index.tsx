@@ -382,6 +382,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         async (pool, commitType, amount, options) => {
             const committerAddress = poolsState.pools[pool].committer.address;
             const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
+            const nextRebalance = poolsState.pools[pool].lastUpdate
+                .plus(poolsState.pools[pool].updateInterval)
+                .toNumber();
+            const frontRunning = poolsState.pools[pool].frontRunningInterval.toNumber();
+            const targetTime =
+                nextRebalance - Date.now() / 1000 < frontRunning
+                    ? nextRebalance + poolsState.pools[pool].updateInterval.toNumber()
+                    : nextRebalance;
             if (!committerAddress) {
                 console.error('Committer address undefined when trying to mint');
                 // TODO handle error
@@ -418,6 +426,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             waiting: {
                                 title: `Queueing ${poolName} ${type}`,
                             },
+                            poolName: poolName,
+                            type: type,
+                            nextRebalance: targetTime,
                             success: {
                                 title: `${poolName} ${type} Queued`,
                             },

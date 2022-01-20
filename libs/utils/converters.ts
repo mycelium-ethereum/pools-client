@@ -142,12 +142,29 @@ export const timeTill: (time: number) => {
 };
 
 /**
- * Formats a given date into HH:MM:SS
+ * Formats a given date into YY/MM/DD HH:MM.
+ * Optional to hide either the date or the time string or both (returning an empty string)
  * @param date Object to format
- * @returns string of HH:MM:SS
+ * @param options object containing booleans to hide either the date or time string
+ * @returns string of YY/MM/DD HH:MM
  */
-export const formatDate: (date: Date) => string = (date) =>
-    `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+export const formatDate: (
+    date: Date,
+    options?: {
+        hideTime: boolean;
+        hideDate: boolean;
+    },
+) => { timeString: string; dateString: string } = (
+    date,
+    { hideTime, hideDate } = {
+        hideDate: false,
+        hideTime: false,
+    },
+) => {
+    const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
+    const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
+    return { timeString, dateString };
+};
 
 /**
  * Checks if a number is an arbitrarily small number. Returns is an approximated value instead
@@ -203,14 +220,15 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
 export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
     Number.isNaN(oldValue) || !oldValue ? 0 : ((newValue - oldValue) / oldValue) * 100;
 
-const names: Record<string, string> = {
+export const marketSymbolToAssetName: Record<string, string> = {
     'ETH/USD': 'Ethereum',
     'EUR/USD': 'Euro',
     'BTC/USD': 'Bitcoin',
     'TOKE/USD': 'Tokemak',
+    'LINK/USD': 'Chainlink',
 };
 
 export const tickerToName: (ticker: string) => string = (ticker) => {
     const [leverage, market] = ticker.split('-');
-    return `${leverage}-${names[market]}`;
+    return `${leverage}-${marketSymbolToAssetName[market]}`;
 };
