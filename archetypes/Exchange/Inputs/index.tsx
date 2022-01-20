@@ -44,7 +44,7 @@ const isInvalidAmount: (
     if (minimumTokens.gt(amount)) {
         return {
             message: `
-                The minimum order size is 
+                The minimum order size is
                 ${
                     isMint
                         ? toApproxCurrency(minimumTokens)
@@ -212,7 +212,10 @@ const AmountInput: React.FC<AmountProps> = ({
                 />
                 <InnerInputText>
                     {tokenSymbol ? (
-                        <Currency ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : tokenSymbol as LogoTicker} label={tokenSymbol} />
+                        <Currency
+                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
+                            label={tokenSymbol}
+                        />
                     ) : null}
                     <div
                         className="m-auto cursor-pointer hover:underline"

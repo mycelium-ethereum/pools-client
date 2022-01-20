@@ -15,7 +15,7 @@ const tokenList: Record<AvailableNetwork, StaticTokenInfo[]> = {
             name: 'FRAX',
             symbol: 'FRAX',
             decimals: 18,
-            address: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+            address: '0x17fc002b466eec40dae837fc4be5c67993ddbd6f',
         },
     ],
     [ARBITRUM_RINKEBY]: [

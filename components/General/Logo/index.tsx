@@ -85,7 +85,7 @@ const logos: Record<LogoTicker, any> = {
     USDC: USDC,
     USD: USD,
     FRAX: FRAX,
-    AAVE: AAVE, 
+    AAVE: AAVE,
     DEFAULT: ETH,
     AAVE_L: AAVE_L,
     AAVE_S: AAVE_S,

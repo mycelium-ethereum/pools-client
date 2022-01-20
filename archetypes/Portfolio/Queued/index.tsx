@@ -9,6 +9,7 @@ import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import Actions from '@components/TokenActions';
+import { marketSymbolToAssetName } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
@@ -170,7 +171,8 @@ const CommitRow: React.FC<
                     <div>
                         <div className="flex">
                             <div>
-                                {token.symbol.split('-')[0][0]}-{base === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                                {}
+                                {token.symbol.split('-')[0][0]}-{marketSymbolToAssetName[`${base}/${collateral}`]}
                             </div>
                             &nbsp;
                             <div className={`${token.side === SideEnum.long ? 'green' : 'red'}`}>
