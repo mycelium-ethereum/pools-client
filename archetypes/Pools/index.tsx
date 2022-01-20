@@ -20,6 +20,8 @@ import Loading from '@components/General/Loading';
 import { Logo, LogoTicker } from '@components/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 
+import LinkIcon from '@public/img/general/link.svg';
+
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
     const { swapDispatch = noDispatch } = useSwapContext();
@@ -142,7 +144,7 @@ export const Browse: React.FC = () => {
                             key={index}
                             className="p-4 md:p-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
                         >
-                            <div className="w-full h-20 my-5 p-4 flex justify-between divide-x-4 divide-cool-gray-200 dark:divide-cool-gray-900 overflow-x-auto whitespace-nowrap rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
+                            <div className="w-full h-20 my-5 p-4 flex justify-between divide-x-[3px] divide-cool-gray-200 dark:divide-cool-gray-900 overflow-x-auto whitespace-nowrap rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
                                 <div className="flex pr-10">
                                     <Logo
                                         className="inline mr-3 my-auto"
@@ -171,7 +173,7 @@ export const Browse: React.FC = () => {
                                     >
                                         <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
                                         <div className="mr-2 font-bold">Chainlink</div>
-                                        <img src={'/img/general/link.svg'} alt="Link" />
+                                        <LinkIcon alt="Link" />
                                     </a>
                                 </div>
                                 <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
