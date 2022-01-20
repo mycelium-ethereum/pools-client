@@ -9,7 +9,7 @@ export default (() => {
         <StakeGeneric
             logo="BALANCER"
             title="Balancer Pool Token Strategies"
-            subTitle="Stake Balancer Pool Tokens and earn TCR."
+            subTitle="Stake Balancer Pool Tokens and earn rewards."
             tokenType="Balancer Pool"
             refreshFarm={refreshFarm}
             fetchingFarms={fetchingFarms}
