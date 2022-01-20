@@ -377,6 +377,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    quoteTokenSymbol={pool.quoteTokenSymbol}
                     poolTicker={pool.name}
                 />
             </TableRow>
@@ -400,6 +401,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    quoteTokenSymbol={pool.quoteTokenSymbol}
                     poolTicker={pool.name}
                 />
             </TableRow>
@@ -424,6 +426,7 @@ const TokenRows: React.FC<
     {
         side: SideEnum;
         tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken'];
+        quoteTokenSymbol: string;
         leverage: number;
         address: string;
         decimals: number;
@@ -442,6 +445,7 @@ const TokenRows: React.FC<
 > = ({
     side,
     tokenInfo,
+    quoteTokenSymbol,
     leverage,
     address: poolAddress,
     account,
@@ -556,7 +560,7 @@ const TokenRows: React.FC<
                         {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
                     </div>
                     <div className="flex">
-                        <Logo size="xs" ticker="USD" className="mr-1 my-auto" />
+                        <Logo size="xs" ticker={quoteTokenSymbol as LogoTicker} className="mr-1 my-auto" />
                         {tokenInfo.userHoldings === 0
                             ? '-'
                             : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}
