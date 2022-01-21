@@ -18,10 +18,14 @@ import { LinkOutlined } from '@ant-design/icons';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
+import Info from '/public/img/general/info.svg';
 import Equal from '/public/img/general/circle-equal.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
+import PoolDetailsModal from '../PoolDetailsModal';
+import { useTheme } from '@context/ThemeContext';
+import styled from 'styled-components';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -67,9 +71,29 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const InfoIcon = styled(Info)`
+    margin-left: 15px;
+    :hover {
+        cursor: pointer;
+    }
+
+    path {
+        fill: ${(props) => (props.isDark ? '#FFFFF' : '#6b7280')};
+    }
+`;
+
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
-    const { provider, account } = useWeb3();
+    const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
+    const [poolDetails, setPoolDetails] = useState<any>({});
+    const { provider, account, config } = useWeb3();
+    const { isDark } = useTheme();
+
+    const handlePoolDetailsClick = (data: any) => {
+        setShowModalPoolDetails(true);
+        setPoolDetails(data);
+    };
+
     return (
         <>
             <Table>
@@ -157,12 +181,14 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <PoolRow
                             pool={pool}
                             onClickMintBurn={onClickMintBurn}
+                            onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
                             index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             account={account}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
+                            isDark={isDark}
                         />
                     );
                 })}
@@ -188,6 +214,13 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
+            <PoolDetailsModal
+                open={showModalPoolDetails}
+                onClose={() => setShowModalPoolDetails(false)}
+                poolDetails={poolDetails}
+                previewUrl={config?.previewUrl || ''}
+                isDark={isDark}
+            />
         </>
     );
 }) as React.FC<
@@ -203,8 +236,20 @@ const PoolRow: React.FC<
         account: string | undefined;
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
+        onClickShowPoolDetailsModal: () => void;
+        isDark: boolean;
     } & TProps
-> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({
+    pool,
+    account,
+    onClickMintBurn,
+    index,
+    provider,
+    showNextRebalance,
+    deltaDenotion,
+    onClickShowPoolDetailsModal,
+    isDark,
+}) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -220,7 +265,7 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div style={{ minHeight: '3rem' }} className="flex">
+                    <div style={{ minHeight: '3rem' }} className="flex items-center">
                         <Logo
                             className="inline mr-2 my-auto"
                             size={'md'}
@@ -230,6 +275,7 @@ const PoolRow: React.FC<
                             <div className="font-bold">{tickerToName(pool.name)}</div>
                             <div className="text-xs">{pool.name.split('-')[1]}</div>
                         </div>
+                        <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
