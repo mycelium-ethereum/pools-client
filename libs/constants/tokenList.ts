@@ -23,7 +23,7 @@ const tokenList: Record<AvailableNetwork, StaticTokenInfo[]> = {
             name: 'USDC',
             symbol: 'USDC',
             decimals: 6,
-            address: '0x1E77ad77925Ac0075CF61Fb76bA35D884985019d',
+            address: '0x480C65B30a3Ca78659bD33AD66450E16599a167e',
         },
     ],
     [MAINNET]: [

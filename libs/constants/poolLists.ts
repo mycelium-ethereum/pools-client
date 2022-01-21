@@ -234,122 +234,127 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         {
             // 1x
             name: '1-BTC/USD',
-            address: '0x1b9A08Bd1b976fd91a355625509FbFcbbF34fb20',
+            address: '0x62Ef3d4CA538C8f53182f5A73d71104Fc42Af5DC',
             leverage: 1,
             updateInterval: FIVE_MINUTES,
             frontRunningInterval: THIRTY_SECONDS,
-            keeper: '0xf3A03510d21c235C02203FF6725C9D1c0F4E49D9',
+            keeper: '0x4D14D788dAa9B3698F8da11e7095F1E674E8FF23',
             committer: {
-                address: '0x89bf5ecE20372ACf46fA8591cba71AF931066879',
+                address: '0x50ffc9B16409c53245DC35889A7b3E0db2b2608d',
             },
             longToken: {
                 name: '1L-BTC/USD',
-                address: '0x9D4a8285eB3e77206A638721406D110cE90725A9',
+                address: '0x6993Ef999453c069a47c9DE1d2d815F54eb43920',
                 symbol: '1L-BTC/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
             shortToken: {
                 name: '1S-BTC/USD',
-                address: '0x668759F808F21af7e59049C4F02e7E211a142EF1',
+                address: '0x7830d0458D7E43fcAab008C22FF8cCf85a61a820',
                 symbol: '1S-BTC/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0x191f0Db87d3136541354F89F43a034E11287788D',
-                decimals: TEST_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
         },
         {
             // 3x
             name: '3-BTC/USD',
-            address: '0xd0983C3E9E4Af753E6e74D741a39c3053b06dFcf',
+            address: '0x229bDEF4152aE45A6af5Dd3fa962f2B937e02F67',
             leverage: 3,
             updateInterval: FIVE_MINUTES,
             frontRunningInterval: THIRTY_SECONDS,
-            keeper: '0xf3A03510d21c235C02203FF6725C9D1c0F4E49D9',
+            keeper: '0x4D14D788dAa9B3698F8da11e7095F1E674E8FF23',
             committer: {
-                address: '0xee39278864665cC2BB9af3E4aD857cBC3222a3DA',
+                address: '0x5049487054435EE4CdF19991AB0341CFcB8CD33C',
             },
             longToken: {
                 name: '3L-BTC/USD',
-                address: '0x09c6EF9215ce74Fd8f9991D24ad32e6aF710d1B6',
+                address: '0x7Bf89A31758B5044999Ef7b557A05d5b71aDb976',
                 symbol: '3L-BTC/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
             shortToken: {
                 name: '3S-BTC/USD',
-                address: '0x24f7dA47Db30F0Ef8f595A9AB0F5dE7c1b4E38Bc',
+                address: '0x4093a7e0082E43BE8CaA0f74D9FA99c79c626feD',
                 symbol: '3S-BTC/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0x191f0Db87d3136541354F89F43a034E11287788D',
-                decimals: TEST_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
         },
         {
             // 1x
             name: '1-ETH/USD',
-            address: '0x34eE510e1d51904C50d9CD03199dE5147A4E15eD',
+            address: '0x986128171f14640Bde21f99537a04473456D9a05',
             leverage: 1,
             updateInterval: FIVE_MINUTES,
             frontRunningInterval: THIRTY_SECONDS,
-            keeper: '0xf3A03510d21c235C02203FF6725C9D1c0F4E49D9',
+            keeper: '0x4D14D788dAa9B3698F8da11e7095F1E674E8FF23',
             committer: {
-                address: '0x5F6a868e4AEa2AFCF56a7937c01896E564354542',
+                address: '0xe6979038eC3237039DC6BBa2C1B24933599089a3',
             },
             longToken: {
                 name: '1L-ETH/USD',
-                address: '0x34966D8A3Ff227f13A5F8471FE6fa9D33a7f0B85',
+                address: '0x6a5240fE1e4AE5BAd1ED1e4E546a1e3f264fFCE2',
                 symbol: '1L-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
             shortToken: {
                 name: '1S-ETH/USD',
-                address: '0xf8e1F91966aEe3aD4CD83C9B09Cb947262aeB10A',
+                address: '0x9B00465EE7b74827Ef3cFff8E81ABdEd8c5Df411',
                 symbol: '1S-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0x191f0Db87d3136541354F89F43a034E11287788D',
-                decimals: TEST_TOKEN_DECIMALS,
-            },
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
         },
         {
             // 3x
             name: '3-ETH/USD',
-            address: '0xe3cAD84c29775399a25c6Ff040FE141b4eD10047',
+            address: '0xD9279c1962B0fce74A193BeE04d2Dfd1c7d953c6',
             leverage: 3,
             updateInterval: FIVE_MINUTES,
             frontRunningInterval: THIRTY_SECONDS,
-            keeper: '0xf3A03510d21c235C02203FF6725C9D1c0F4E49D9',
+            keeper: '0x4D14D788dAa9B3698F8da11e7095F1E674E8FF23',
             committer: {
-                address: '0xd063eAa3962F8715C88096899EB5A0D9475D5B6B',
+                address: '0x672793dbB8866Ac6B19998aA64266bb9F6DfC393',
             },
             longToken: {
                 name: '3L-ETH/USD',
-                address: '0x67d4101350F2494564D9FA6281E23152dC561249',
+                address: '0x1Af4C1296B524337e4B297eB8C546f469f2Dea80',
                 symbol: '3L-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
             shortToken: {
                 name: '3S-ETH/USD',
-                address: '0xcd1070e52861cfA33063b3F0EF3E6236Ec99924A',
+                address: '0x781a645a6cD0cbF85574e8aa3E770E4B265E5673',
                 symbol: '3S-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
-            quoteToken: {
-                name: 'USDC',
-                symbol: 'USDC',
-                address: '0x191f0Db87d3136541354F89F43a034E11287788D',
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+        },
+        {
+            // 3x
+            name: '3-ETH/USD-SMA',
+            address: '0xad803ED3dC06886d96Cc397B33C683E18bF9CF46',
+            leverage: 3,
+            updateInterval: FIVE_MINUTES,
+            frontRunningInterval: THIRTY_SECONDS,
+            keeper: '0x4D14D788dAa9B3698F8da11e7095F1E674E8FF23',
+            committer: {
+                address: '0xd610648503E614E3FaCbF9e3a17902176c43de28',
+            },
+            longToken: {
+                name: '3L-ETH/USD',
+                address: '0x3cC0520263B526Bb7C207027B4ACEe25D3F221fB',
+                symbol: '3L-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
+            shortToken: {
+                name: '3S-ETH/USD',
+                address: '0x6afeA0aC6594f61AE58B30274afeCf7c618924A1',
+                symbol: '3S-ETH/USD',
+                decimals: TEST_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
         },
     ],
     '0': [],
