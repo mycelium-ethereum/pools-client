@@ -9,11 +9,8 @@ import BigNumber from 'bignumber.js';
 import {
     LeveragedPool,
     LeveragedPool__factory,
-    PoolCommitter,
     PoolCommitter__factory,
-    PoolKeeper,
     PoolKeeper__factory,
-    PoolToken,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { CommitEnum } from '@libs/constants';
@@ -270,16 +267,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 networkConfig[provider?.network?.chainId.toString() as AvailableNetwork]?.publicWebsocketRPC;
             const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
 
-            const committer = new ethers.Contract(
-                committerInfo.address,
-                PoolCommitter__factory.abi,
-                subscriptionProvider,
-            ) as PoolCommitter;
+            const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
 
             // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
                 console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.on(committer.filters.CreateCommit(), (id, amount, type, log) => {
+                committer.filters.CreateCommit
+                committer.on(committer.filters.CreateCommit(), (id, amount, type, _appropriateUpdateInterval, _mintingFee, log) => {
+                    // TODO id is now user
                     console.debug('Commit created', {
                         id,
                         amount,
@@ -287,13 +282,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     });
 
                     const decimals = poolsState.pools[pool].quoteToken.decimals;
+                    console.log("Transaction log", log)
 
+                    // @ts-ignore
                     log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                         if (commitDispatch) {
                             commitDispatch({
                                 type: 'addCommit',
                                 commitInfo: {
-                                    id: id.toNumber(),
+                                    id: parseInt(id),
                                     pool,
                                     from: txn?.from, // from address
                                     txnHash: txn.hash,
@@ -317,11 +314,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
             }
 
-            const keeperInstance = new ethers.Contract(
+            const keeperInstance = PoolKeeper__factory.connect(
                 keeper,
-                PoolKeeper__factory.abi,
                 subscriptionProvider,
-            ) as PoolKeeper;
+            );
 
             if (!subscriptions.current[keeper]) {
                 console.debug(`Subscribing keeper: ${keeper.slice()}`);
@@ -341,11 +337,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        const leveragedPool = new ethers.Contract(
+                        const leveragedPool = LeveragedPool__factory.connect(
                             pool,
-                            LeveragedPool__factory.abi,
                             subscriptionProvider,
-                        ) as LeveragedPool;
+                        );
                         leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
                             console.debug(`New last updated: ${lastUpdate}`);
                             poolsDispatch({
@@ -398,7 +393,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             // TODO handle error
         }
         const network = await signer?.getChainId();
-        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
+        if (!signer) {
+            console.error("Signer undefined when trying to mint");
+            return;
+        }
+        const committer = PoolCommitter__factory.connect(committerAddress, signer);
         console.debug(
             `Creating commit. Amount: ${ethers.utils.parseUnits(
                 amount.toFixed(),
@@ -462,15 +461,19 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * @param pool address to approve
      */
     const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
-        const token = new ethers.Contract(
+        if (!signer) {
+            console.error("Failed to approve token: signer undefined")
+            return;
+        }
+
+        const token = PoolToken__factory.connect(
             poolsState.pools[pool].quoteToken.address,
-            PoolToken__factory.abi,
             signer,
-        ) as PoolToken;
+        );
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
-                network: (network ?? '0') as AvailableNetwork,
+                network: (network?.toString() ?? '0') as AvailableNetwork,
                 onSuccess: async (receipt) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({

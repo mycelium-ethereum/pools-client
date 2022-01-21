@@ -55,7 +55,6 @@ export const DEFAULT_POOLSTATE: Pool = {
             burn: new BigNumber(0),
         },
         allUnexecutedCommits: [] as CreatedCommitType[],
-        minimumCommitSize: new BigNumber(1000),
     },
     subscribed: false,
 };

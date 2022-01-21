@@ -1,4 +1,4 @@
-import { SideEnum, CommitEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { SideEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
 import { PendingAmounts, Pool, StaticPoolInfo } from '@libs/types/General';
 import {
@@ -6,12 +6,7 @@ import {
     TestToken__factory,
     PoolCommitter__factory,
     ERC20__factory,
-    ERC20,
-    PoolCommitter,
-    LeveragedPool,
-    PoolToken,
     PoolKeeper__factory,
-    PoolKeeper,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
@@ -40,16 +35,15 @@ export const initPool: (
     console.debug(`LastUpdate: ${lastUpdate.toNumber()}`);
 
     // fetch short and long tokeninfo
-    const shortTokenInstance = new ethers.Contract(
-        pool.shortToken.address,
-        TestToken__factory.abi,
-        provider,
-    ) as PoolToken;
-    const longTokenInstance = new ethers.Contract(
-        pool.longToken.address,
-        TestToken__factory.abi,
-        provider,
-    ) as PoolToken;
+    const shortTokenInstance = TestToken__factory.connect(pool.shortToken.address, provider)
+    // const longTokenInstance = new ethers.Contract(
+        // pool.longToken.address,
+        // TestToken__factory.abi,
+        // provider,
+    // ) as PoolToken;
+
+    const longTokenInstance = TestToken__factory.connect(pool.longToken.address, provider)
+
     const [longTokenSupply, shortTokenSupply] = await Promise.all([
         longTokenInstance.totalSupply({
             blockTag: 'latest',
@@ -60,16 +54,6 @@ export const initPool: (
     ]).catch((err) => {
         console.error('Failed to fetch short and long supply', err);
         return [ethers.BigNumber.from(0), ethers.BigNumber.from(0)];
-    });
-
-    // fetch minimum commit size
-    const poolCommitterInstance = new ethers.Contract(
-        pool.committer.address,
-        PoolCommitter__factory.abi,
-        provider,
-    ) as PoolCommitter;
-    const minimumCommitSize = await poolCommitterInstance.minimumCommitSize({
-        blockTag: 'latest',
     });
 
     // temp fix since the fetched leverage is in IEEE 128 bit. Get leverage amount from name
@@ -85,7 +69,6 @@ export const initPool: (
         oraclePrice: oraclePrice,
         committer: {
             address: pool.committer.address,
-            minimumCommitSize: new BigNumber(minimumCommitSize.toString()),
             pendingLong: {
                 mint: new BigNumber(0),
                 burn: new BigNumber(0),
@@ -135,10 +118,10 @@ export const fetchPoolBalances: (
     longBalance: BigNumber;
     oraclePrice: BigNumber;
 }> = async (poolInfo, provider) => {
-    const contract = new ethers.Contract(poolInfo.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
+    const contract = LeveragedPool__factory.connect(poolInfo.address, provider);
 
     // fetch last keeper price
-    const keeperInstance = new ethers.Contract(poolInfo.keeper, PoolKeeper__factory.abi, provider) as PoolKeeper;
+    const keeperInstance = PoolKeeper__factory.connect(poolInfo.keeper, provider);
 
     const [lastUpdate, shortBalance, longBalance, oraclePrice, lastPrice] = await Promise.all([
         contract.lastPriceTimestamp({
@@ -197,7 +180,7 @@ export const fetchCommits: (
         return defaultState;
     }
 
-    const contract = new ethers.Contract(committer, PoolCommitter__factory.abi, provider) as PoolCommitter;
+    const contract = PoolCommitter__factory.connect(committer, provider);
 
     let allUnexecutedCommits: APICommitReturn[] = [];
     const network = provider.network.chainId;
@@ -208,12 +191,10 @@ export const fetchCommits: (
         });
     }
 
-    const pendingAmounts = await Promise.all([
-        contract.shadowPools(CommitEnum.short_mint),
-        contract.shadowPools(CommitEnum.short_burn),
-        contract.shadowPools(CommitEnum.long_mint),
-        contract.shadowPools(CommitEnum.long_burn),
-    ]);
+    const updateInterval = await contract.updateIntervalId();
+    const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
+
+    console.log('pending mint amounts', pendingAmounts)
 
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
@@ -245,7 +226,7 @@ export const fetchTokenBalances: (
 ) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {
-            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
+            const tokenContract = ERC20__factory.connect(token, provider);
             return tokenContract.balanceOf(account, {
                 blockTag: 'latest',
             });
@@ -261,7 +242,7 @@ export const fetchTokenApprovals: (
 ) => Promise<EthersBigNumber[]> = (tokens, provider, account, pool) => {
     return Promise.all(
         tokens.map((token) => {
-            const tokenContract = new ethers.Contract(token, ERC20__factory.abi, provider) as ERC20;
+            const tokenContract = ERC20__factory.connect(token, provider);
             return tokenContract.allowance(account, pool, {
                 blockTag: 'latest',
             });

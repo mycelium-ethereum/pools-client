@@ -7,7 +7,7 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
@@ -22,10 +22,7 @@ type InvalidAmount = {
 const isInvalidAmount: (
     amount: BigNumber,
     balance: BigNumber,
-    minimumTokens: BigNumber,
-    tokenPrice: BigNumber,
-    isMint: boolean,
-) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice, isMint) => {
+) => InvalidAmount = (amount, balance) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -40,19 +37,6 @@ const isInvalidAmount: (
         };
     }
 
-    // need to sell an amount of tokens worth minimumCommitSize or more
-    if (minimumTokens.gt(amount)) {
-        return {
-            message: `
-                The minimum order size is
-                ${
-                    isMint
-                        ? toApproxCurrency(minimumTokens)
-                        : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
-                }`,
-            isInvalid: true,
-        };
-    }
     return {
         message: undefined,
         isInvalid: false,
@@ -84,30 +68,17 @@ export default (({ pool, swapState, swapDispatch }) => {
 
     useEffect(() => {
         if (pool) {
-            const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
 
-            const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
-
-            let currentBalance: BigNumber, minimumTokens: BigNumber;
+            let currentBalance: BigNumber;
             if (commitAction === CommitActionEnum.mint) {
                 currentBalance = pool.quoteToken.balance;
-                minimumTokens = new BigNumber(minimumCommitSize.toString());
             } else {
                 currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
-                minimumTokens = calcMinAmountIn(
-                    token.supply.plus(pendingBurns),
-                    notional,
-                    minimumCommitSize,
-                    pendingBurns,
-                );
             }
 
             const invalidAmount = isInvalidAmount(
                 amountBN,
                 currentBalance,
-                minimumTokens,
-                tokenPrice,
-                commitAction === CommitActionEnum.mint,
             );
 
             swapDispatch({
