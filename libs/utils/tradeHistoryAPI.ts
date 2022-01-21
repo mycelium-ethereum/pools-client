@@ -11,6 +11,7 @@ type CommitType = 'LongBurn' | 'LongMint' | 'ShortMint' | 'ShortBurn';
 // Raw API return types
 type Result = {
     collateralAmount: string;
+    collateralSymbol: string;
     date: number;
     tokenAddress: string;
     tokenAmount: string;
@@ -30,6 +31,7 @@ export type TradeHistory = {
     type: CommitType;
     tokenName: string;
     collateralAmount: BigNumber;
+    collateralSymbol: string;
     tokenAmount: BigNumber;
     tokenPrice: BigNumber;
     tokenSymbol: string;
@@ -73,6 +75,7 @@ const fetchTradeHistory: (params: {
                     type: row.type,
                     tokenName: row.tokenName,
                     collateralAmount: new BigNumber(row.collateralAmount),
+                    collateralSymbol: row.collateralSymbol,
                     tokenAmount: new BigNumber(row.tokenAmount),
                     tokenPrice: new BigNumber(row.tokenPrice),
                     tokenSymbol: row.tokenSymbol,

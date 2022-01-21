@@ -35,7 +35,7 @@ interface ContextProps {
 
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
-    approve: (pool: string) => void;
+    approve: (pool: string, quoteTokenSymbol: string) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -461,7 +461,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * Approve pool to spend quote token
      * @param pool address to approve
      */
-    const approve: (pool: string) => Promise<void> = async (pool) => {
+    const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
             PoolToken__factory.abi,
@@ -482,15 +482,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
                 statusMessages: {
                     waiting: {
-                        title: 'Unlocking USDC',
+                        title: `Unlocking ${quoteTokenSymbol}`,
                         body: '',
                     },
                     success: {
-                        title: 'USDC Unlocked',
+                        title: `${quoteTokenSymbol} Unlocked`,
                         body: '',
                     },
                     error: {
-                        title: 'Unlock USDC Failed',
+                        title: `Unlock ${quoteTokenSymbol} Failed`,
                         body: '',
                     },
                 },

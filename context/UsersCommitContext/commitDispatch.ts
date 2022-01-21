@@ -25,7 +25,7 @@ export type CommitAction =
 export const reducer: (state: CommitsState, action: CommitAction) => CommitsState = (state, action) => {
     switch (action.type) {
         case 'addCommit':
-            const { id, pool } = action.commitInfo;
+            const { txnHash, pool } = action.commitInfo;
             const poolLower = pool.toLowerCase();
             console.debug('Adding commit', action.commitInfo);
             return {
@@ -34,7 +34,7 @@ export const reducer: (state: CommitsState, action: CommitAction) => CommitsStat
                     ...state.commits,
                     [`${poolLower}`]: {
                         ...state.commits[`${poolLower}`],
-                        [id]: action.commitInfo,
+                        [txnHash.toLowerCase()]: action.commitInfo,
                     },
                 },
             };

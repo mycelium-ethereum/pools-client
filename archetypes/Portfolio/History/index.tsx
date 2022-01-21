@@ -151,6 +151,7 @@ const CommitRow: React.FC<
     tokenAddress,
     tokenDecimals,
     collateralAmount,
+    collateralSymbol,
     transactionHashIn,
     transactionHashOut,
 }) => {
@@ -186,16 +187,24 @@ const CommitRow: React.FC<
                 <>
                     <TableRowCell>
                         <div>{tokenAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(tokenPrice)} {collateralSymbol}/token
+                        </div>
                     </TableRowCell>
-                    <TableRowCell>{toApproxCurrency(collateralAmount)} USDC</TableRowCell>
+                    <TableRowCell>
+                        {toApproxCurrency(collateralAmount)} {collateralSymbol}
+                    </TableRowCell>
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(collateralAmount)} USDC</TableRowCell>
+                    <TableRowCell>
+                        {toApproxCurrency(collateralAmount)} {collateralSymbol}
+                    </TableRowCell>
                     <TableRowCell>
                         <div>{tokenAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(tokenPrice)} {collateralSymbol}/token
+                        </div>
                     </TableRowCell>
                 </>
             )}
