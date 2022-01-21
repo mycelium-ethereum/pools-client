@@ -46,7 +46,7 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Si
             className ?? '',
             `align-${twAlign}`,
             HEADER_CELL_SIZES[size],
-            'pb-2 text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
+            'text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
         )}
     >
         {children}

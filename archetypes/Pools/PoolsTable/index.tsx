@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
+import { ARBITRUM, CommitActionEnum, MarketToOracleMap, SideEnum } from '@libs/constants';
 import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
+import { classNames } from '@libs/utils/functions';
+import { constructBalancerLink } from '@archetypes/Exchange/Summary';
+import { StyledTooltip } from '@components/Tooltips';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';
-import { classNames } from '@libs/utils/functions';
-import { constructBalancerLink } from '@archetypes/Exchange/Summary';
-import { StyledTooltip } from '@components/Tooltips';
+import LinkIcon from '@public/img/general/link.svg';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -73,14 +74,58 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
         <>
             <Table>
                 <TableHeader className="align-baseline">
-                    {/*<tr>*/}
-                    {/*    <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>*/}
-                    {/*        <div className="capitalize text-lg">{'POOLS'}</div>*/}
-                    {/*    </TableHeaderCell>*/}
-                    {/*    <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>*/}
-                    {/*        <div className="capitalize text-lg">{'POOL TOKENS'}</div>*/}
-                    {/*    </TableHeaderCell>*/}
-                    {/*</tr>*/}
+                    <tr>
+                        <TableHeaderCell
+                            className="bg-cool-gray-50 dark:bg-theme-background-secondary rounded-xl"
+                            colSpan={13}
+                        >
+                            <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 dark:divide-cool-gray-900 text-base">
+                                <div className="flex pr-10">
+                                    <Logo
+                                        className="inline mr-3 my-auto"
+                                        size="lg"
+                                        ticker={rows[0].name.split('-')[1].split('/')[0] as LogoTicker}
+                                    />
+                                    <div className="my-auto">
+                                        <div className="font-bold text-lg">{rows[0].name.split('-')[1]}</div>
+                                    </div>
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        SPOT PRICE
+                                    </div>
+                                    <div className="font-bold">{toApproxCurrency(rows[0].oraclePrice)}</div>
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        ORACLE
+                                    </div>
+                                    <a
+                                        href={`https://reputation.link/contracts/${MarketToOracleMap(
+                                            rows[0].name.split('-')[1],
+                                        )}`}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center"
+                                    >
+                                        <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
+                                        <div className="mr-2 font-bold">Chainlink</div>
+                                        <LinkIcon alt="Link" />
+                                    </a>
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    24H VOLUME
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        NUMBER OF POOLS
+                                    </div>
+                                    <div className="font-bold">{rows.length}</div>
+                                </div>
+                            </div>
+                        </TableHeaderCell>
+                    </tr>
+                    <tr className="h-5" />
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
