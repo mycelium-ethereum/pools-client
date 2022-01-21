@@ -12,7 +12,7 @@ interface FilterSelectsProps {
     dispatch: React.Dispatch<BrowseAction>;
 }
 
-const REBALANCE_OPTIONS = [
+const REBALANCE_OPTIONS_DESKTOP = [
     {
         key: RebalanceEnum.next,
         text: 'Next Rebalance',
@@ -27,6 +27,17 @@ const REBALANCE_OPTIONS = [
         disabled: {
             optionKey: TooltipKeys.ComingSoon,
         },
+    },
+];
+
+const REBALANCE_OPTIONS_MOBILE = [
+    {
+        key: RebalanceEnum.next,
+        text: 'Next Rebalance',
+    },
+    {
+        key: RebalanceEnum.last,
+        text: 'Last Rebalance',
     },
 ];
 
@@ -47,13 +58,28 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
             {/** Desktop */}
             <div className="block lg:flex w-full mb-2">
                 <div className="mt-auto">
-                    <TWButtonGroup
-                        value={state.rebalanceFocus}
-                        size="lg"
-                        onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
-                        color={'tracer'}
-                        options={REBALANCE_OPTIONS}
-                    />
+                    <div className="xl:hidden">
+                        <TWButtonGroup
+                            value={state.rebalanceFocus}
+                            size="lg"
+                            onClick={(option) =>
+                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
+                            }
+                            color={'tracer'}
+                            options={REBALANCE_OPTIONS_MOBILE}
+                        />
+                    </div>
+                    <div className="hidden xl:block">
+                        <TWButtonGroup
+                            value={state.rebalanceFocus}
+                            size="lg"
+                            onClick={(option) =>
+                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
+                            }
+                            color={'tracer'}
+                            options={REBALANCE_OPTIONS_DESKTOP}
+                        />
+                    </div>
                 </div>
                 <div className="flex-grow" />
                 <div className="hidden lg:flex mx-4 flex-col">
