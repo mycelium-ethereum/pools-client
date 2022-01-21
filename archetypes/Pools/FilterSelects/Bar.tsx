@@ -54,32 +54,26 @@ const DENOTION_OPTIONS = [
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     return (
-        <section className="container px-0">
+        <section className="container px-4 sm:px-0">
             {/** Desktop */}
             <div className="block lg:flex w-full mb-2">
-                <div className="mt-auto">
-                    <div className="xl:hidden">
-                        <TWButtonGroup
-                            value={state.rebalanceFocus}
-                            size="lg"
-                            onClick={(option) =>
-                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                            }
-                            color={'tracer'}
-                            options={REBALANCE_OPTIONS_MOBILE}
-                        />
-                    </div>
-                    <div className="hidden xl:block">
-                        <TWButtonGroup
-                            value={state.rebalanceFocus}
-                            size="lg"
-                            onClick={(option) =>
-                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                            }
-                            color={'tracer'}
-                            options={REBALANCE_OPTIONS_DESKTOP}
-                        />
-                    </div>
+                <div className="xl:hidden">
+                    <TWButtonGroup
+                        value={state.rebalanceFocus}
+                        size="lg"
+                        onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
+                        color={'tracer'}
+                        options={REBALANCE_OPTIONS_MOBILE}
+                    />
+                </div>
+                <div className="hidden xl:block">
+                    <TWButtonGroup
+                        value={state.rebalanceFocus}
+                        size="lg"
+                        onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
+                        color={'tracer'}
+                        options={REBALANCE_OPTIONS_DESKTOP}
+                    />
                 </div>
                 <div className="flex-grow" />
                 <div className="hidden lg:flex mx-4 flex-col">
