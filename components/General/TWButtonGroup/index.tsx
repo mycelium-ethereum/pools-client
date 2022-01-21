@@ -39,7 +39,7 @@ const OVERALL_BACKGROUND = {
     greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg rounded-full',
 };
 
-const DISABLED = 'cursor-not-allowed bg-theme-background-secondary dark:bg-theme-background opacity-60';
+const DISABLED = 'cursor-not-allowed bg-cool-gray-100 dark:bg-theme-background opacity-60';
 const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all no-focus-outline';
 const FULL_WIDTH_BUTTONS = 'w-full justify-center';
 
