@@ -1,13 +1,19 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 
-export const Table: React.FC<{ className?: string }> = ({ className, children }) => {
+export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
+    showDivider = true,
+    className,
+    children,
+}) => {
     return (
         <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
             <div className="overflow-x-auto h-full">
                 <div className="py-2 align-middle inline-block min-w-full">
-                    <div className="border-b border-theme-border sm:rounded-lg">
-                        <table className="min-w-full divide-y divide-theme-border">{children}</table>
+                    <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
+                        <table className={`min-w-full ${showDivider ? 'divide-y divide-theme-border' : ''}`}>
+                            {children}
+                        </table>
                     </div>
                 </div>
             </div>

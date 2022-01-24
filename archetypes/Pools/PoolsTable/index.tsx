@@ -17,10 +17,14 @@ import { LinkOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
+import PoolDetailsModal from '../PoolDetailsModal';
+import { useTheme } from '@context/ThemeContext';
+import styled from 'styled-components';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';
+import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
 
 type TProps = {
@@ -67,9 +71,30 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const InfoIcon = styled(Info)`
+    margin-left: 15px;
+
+    :hover {
+        cursor: pointer;
+    }
+
+    path {
+        fill: ${(props) => (props.isDark ? '#ffffff' : '#111928')};
+    }
+`;
+
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
-    const { provider, account } = useWeb3();
+    const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
+    const [poolDetails, setPoolDetails] = useState<any>({});
+    const { provider, account, config } = useWeb3();
+    const { isDark } = useTheme();
+
+    const handlePoolDetailsClick = (data: any) => {
+        setShowModalPoolDetails(true);
+        setPoolDetails(data);
+    };
+
     return (
         <>
             <Table>
@@ -201,12 +226,14 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <PoolRow
                             pool={pool}
                             onClickMintBurn={onClickMintBurn}
+                            onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
                             index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             account={account}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
+                            isDark={isDark}
                         />
                     );
                 })}
@@ -231,6 +258,13 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
+            <PoolDetailsModal
+                open={showModalPoolDetails}
+                onClose={() => setShowModalPoolDetails(false)}
+                poolDetails={poolDetails}
+                previewUrl={config?.previewUrl || ''}
+                isDark={isDark}
+            />
         </>
     );
 }) as React.FC<
@@ -246,8 +280,20 @@ const PoolRow: React.FC<
         account: string | undefined;
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
+        onClickShowPoolDetailsModal: () => void;
+        isDark: boolean;
     } & TProps
-> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({
+    pool,
+    account,
+    onClickMintBurn,
+    index,
+    provider,
+    showNextRebalance,
+    deltaDenotion,
+    onClickShowPoolDetailsModal,
+    isDark,
+}) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -265,6 +311,7 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     USDC
+                    <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (

@@ -73,6 +73,11 @@ export interface BrowseTableRowData {
 
     pastUpkeep: Upkeep;
     antecedentUpkeep: Upkeep;
+
+    keeper: string;
+    committer: string;
+    collateralAsset: string;
+    collateralAssetAddress: string;
 }
 
 export interface BrowseState {
