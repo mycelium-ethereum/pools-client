@@ -1,6 +1,5 @@
+import React, { useReducer } from 'react';
 import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import BigNumber from 'bignumber.js';
-import React, { useState } from 'react'; // userReducer
 import TokenTable from './TokenTable';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
@@ -8,9 +7,15 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import styled from 'styled-components';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
+import {MarketFilterEnum} from '@libs/types/General';
+import { portfolioReducer, initialPortfolioState, DenotedInEnum } from './state';
+import {SearchInput} from '@components/General/SearchInput';
+import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
+import EscrowTable from './EscrowTable';
 
 export enum LoadingState {
     Idle = 0,
@@ -32,89 +37,22 @@ enum PriceByEnum {
     Balancer = 'Balancer',
 }
 
-export enum DenotedInEnum {
-    BASE = 'BASE',
-    USD = 'USD',
-}
-
-export type TokenRowProps = {
-    poolAddress: string;
-    address: string;
-    name: string;
-    decimals: number;
-    symbol: string;
-    side: number;
-    holdings: BigNumber;
-    price: BigNumber;
-    deposits: BigNumber; // amount of USDC deposited
-    oraclePrice: BigNumber;
-};
-
-export interface PortfolioOverviewState {
-    pnlHistorics: any[];
-    loadingState: LoadingState;
-    timeScale: TimescaleEnum;
-    currency: CurrencyEnum;
-}
-
-export type OverviewAction =
-    | { type: 'setPnlHistorics'; pnlHistorics: any[] }
-    | { type: 'setTimescale'; timeScale: TimescaleEnum }
-    | { type: 'setCurrency'; currency: CurrencyEnum }
-    | { type: 'setLoadingState'; state: LoadingState }
-    | { type: 'reset' };
-
-export const initialOverviewState = {
-    pnlHistorics: [],
-    timeScale: TimescaleEnum.AllTime,
-    currency: CurrencyEnum.AUD,
-    loadingState: LoadingState.Fetching,
-};
-
-export const historicsReducer: (state: PortfolioOverviewState, action: OverviewAction) => PortfolioOverviewState = (
-    state,
-    action,
-) => {
-    switch (action.type) {
-        case 'setPnlHistorics':
-            return {
-                ...state,
-                pnlHistorics: action.pnlHistorics,
-            };
-        case 'setLoadingState':
-            return {
-                ...state,
-                loadingState: action.state,
-            };
-        case 'setCurrency':
-            return {
-                ...state,
-                currency: action.currency,
-            };
-        case 'setTimescale':
-            return {
-                ...state,
-                timeScale: action.timeScale,
-            };
-        case 'reset':
-            return {
-                ...state,
-                loadingState: LoadingState.Idle,
-                commits: [],
-            };
-        default:
-            throw new Error('Unexpected action');
-    }
-};
+const TableSection = styled.div`
+    border-radius: 0.75rem;
+    margin-top: 2.5rem;
+    padding: 1.25rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    background: ${({ theme }) => theme.background}
+`
 
 // const Overview
 export default (({ onClickBurn }) => {
-    // const [state, dispatch] = useReducer(historicsReducer, initialOverviewState);
+    const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
+    const escrowRows = useEscrowHoldings();
     const { account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
-    const [denotedIn, setDenotedIn] = useState<DenotedInEnum>(DenotedInEnum.BASE);
 
     const totalValuation = function () {
         let total = 0;
@@ -300,7 +238,7 @@ export default (({ onClickBurn }) => {
                         </a>
                     </div>
                 </div>
-                <div className="mt-10 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
+                <TableSection>
                     <div className="sm:flex sm:justify-between whitespace-nowrap">
                         <div className="font-semibold text-2xl my-4">Token Holdings</div>
                         <div className="flex my-auto">
@@ -327,19 +265,47 @@ export default (({ onClickBurn }) => {
                                 <Dropdown
                                     size="sm"
                                     iconSize="xs"
-                                    placeHolderIcon={denotedIn as LogoTicker}
-                                    value={denotedIn}
+                                    placeHolderIcon={state.positionsDenotedIn as LogoTicker}
+                                    value={state.positionsDenotedIn}
                                     options={Object.keys(DenotedInEnum).map((key) => ({
                                         key: key,
                                         ticker: key as LogoTicker,
                                     }))}
-                                    onSelect={(val) => setDenotedIn(val as DenotedInEnum)}
+                                    onSelect={(val) => dispatch({ type: 'setDenotion', denotedIn: val as DenotedInEnum })}
                                 />
                             </div>
                         </div>
                     </div>
-                    <TokenTable rows={rows} onClickBurn={onClickBurn} denotedIn={denotedIn} />
-                </div>
+                    <TokenTable rows={rows} onClickBurn={onClickBurn} denotedIn={state.positionsDenotedIn} />
+                </TableSection>
+                <TableSection>
+                    <div className="sm:flex sm:justify-between whitespace-nowrap">
+                        <div className="font-semibold text-2xl my-4">Escrow Holdings</div>
+                        <div className="flex my-auto">
+                            <div className="flex mr-2 sm:mr-5">
+                                <div className="mr-2 my-auto">Market</div>
+                                <Dropdown
+                                    size="sm"
+                                    value={state.escrowMarketFilter}
+                                    className="w-32 mt-auto"
+                                    options={Object.keys(MarketFilterEnum).map((key) => ({
+                                        key: (MarketFilterEnum as any)[key],
+                                        ticker: (key !== 'All' ? key : '') as LogoTicker,
+                                    }))}
+                                    onSelect={(val) => dispatch({ type: 'setEscrowMarketFilter', market: val as MarketFilterEnum })}
+                                />
+                            </div>
+                            <div className="flex">
+                                <SearchInput
+                                    placeholder="Search"
+                                    value={state.escrowSearch}
+                                    onChange={(search) => dispatch({ type: 'setEscrowSearch', search })}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <EscrowTable rows={escrowRows} />
+                </TableSection>
             </div>
         );
     };

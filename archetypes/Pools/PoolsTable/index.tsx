@@ -17,11 +17,10 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
 
 import Close from '/public/img/general/close.svg';
-import ArrowDown from '/public/img/general/arrow-circle-down.svg';
-import Equal from '/public/img/general/circle-equal.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
+import { default as UpOrDownInner } from '@components/UpOrDown';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -686,27 +685,14 @@ const UpOrDown: React.FC<{
             poolTicker={poolTicker}
             showNextRebalance={showNextRebalance}
         >
-            <div
-                className={classNames(
-                    approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
-                    'flex',
-                )}
-            >
-                <div className="mr-1 flex">
-                    {approxValue === 0 ? (
-                        <Equal className="h-5 my-auto" />
-                    ) : (
-                        <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
-                    )}
-                </div>
-                <div>
-                    {deltaDenotion === DeltaEnum.Numeric
-                        ? currency
-                            ? toApproxCurrency(value).replace('-', '')
-                            : approxValue
-                        : `${approxValue}%`}
-                </div>
-            </div>
+
+            <UpOrDownInner 
+                oldValue={oldValue}
+                newValue={newValue}
+                deltaDenotion={deltaDenotion}
+                currency={'USD'}
+                showCurrencyTicker={false}
+            />
         </UpOrDownTip>
     );
 };

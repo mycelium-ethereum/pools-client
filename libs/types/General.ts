@@ -154,3 +154,13 @@ export type BridgeableBalance = {
 export type BridgeableBalances = { [network: string]: { [account: string]: { [symbol: string]: BridgeableBalance } } };
 
 export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };
+
+export enum MarketFilterEnum {
+    All = 'All',
+    ETH = 'Ethereum',
+    BTC = 'Bitcoin',
+    TOKE = 'Tokemak',
+    LINK = 'Chainlink',
+    EUR = 'Euro',
+    AAVE = 'Aave',
+}
