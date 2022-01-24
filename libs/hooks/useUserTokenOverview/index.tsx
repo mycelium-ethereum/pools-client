@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
 import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
-import { TokenRowProps } from '@archetypes/Portfolio/Overview';
+import { TokenRowProps } from '@archetypes/Portfolio/Overview/state';
 
 export default (() => {
     const { pools } = usePools();

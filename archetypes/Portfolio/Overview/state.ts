@@ -28,6 +28,7 @@ export type TokenRowProps = {
 
 export interface EscrowRowProps {
     poolName: string; // pool name
+    poolAddress: string;
     marketTicker: LogoTicker;
     claimableLongTokens: ClaimablePoolToken;
     claimableShortTokens: ClaimablePoolToken;

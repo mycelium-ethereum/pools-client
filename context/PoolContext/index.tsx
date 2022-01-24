@@ -40,6 +40,7 @@ interface ContextProps {
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string, quoteTokenSymbol: string) => void;
+    claim: (pool: string, options?: Options) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -388,6 +389,53 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     };
 
     /**
+     * Claim all pending commits
+     * @param pool pool address to claim from
+     * @param options handleTransaction options
+     */
+    const claim: (pool: string, options?: Options) => Promise<void> = async (pool, options) => {
+        const committerAddress = poolsState.pools[pool].committer.address;
+        if (!committerAddress) {
+            console.error('Failed to claim: Committer address undefined');
+            // TODO handle error
+        }
+        if (!account) {
+            console.error('Failed to claim: Account undefined');
+        }
+        const network = await signer?.getChainId();
+        if (!signer) {
+            console.error('Signer undefined when trying to mint');
+            return;
+        }
+        const committer = PoolCommitter__factory.connect(committerAddress, signer);
+        if (handleTransaction) {
+            const poolName = poolsState.pools[pool].name;
+
+            handleTransaction(committer.claim, [account], {
+                network: (network ?? '0') as AvailableNetwork,
+                onSuccess: (receipt) => {
+                    console.debug('Successfully submitted claim txn: ', receipt);
+                    // get and set token balances
+                    updateTokenBalances(poolsState.pools[pool], provider);
+                    options?.onSuccess ? options.onSuccess(receipt) : null;
+                },
+                statusMessages: {
+                    waiting: {
+                        title: `Claiming ${poolName} tokens`,
+                    },
+                    poolName: poolName,
+                    success: {
+                        title: `${poolName} Claim Queued`,
+                    },
+                    error: {
+                        title: `Claim from ${poolName} Failed`,
+                    },
+                },
+            });
+        }
+    };
+
+    /**
      * Commit to a pool
      * @param pool pool address to commit to
      * @param commitType int corresponding to commitType
@@ -424,6 +472,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 quoteTokenDecimals,
             )}, Raw amount: ${amount.toFixed()}`,
         );
+        committer.commit;
         if (handleTransaction) {
             const poolName = poolsState.pools[pool].name;
             const tokenAddress =
@@ -432,9 +481,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     : poolsState.pools[pool].longToken.address;
 
             const type = commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
+            // TODO handle payForClaim
             handleTransaction(
                 committer.commit,
-                [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
+                [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals), false, false],
                 {
                     network: (network ?? '0') as AvailableNetwork,
                     onSuccess: (receipt) => {
@@ -561,6 +611,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 value={{
                     commit,
                     approve,
+                    claim,
                 }}
             >
                 {children}

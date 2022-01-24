@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import UpOrDown from '@components/UpOrDown';
 import { DeltaEnum } from '@archetypes/Pools/state';
 import { toApproxCurrency } from '@libs/utils/converters';
+import {usePoolActions} from '@context/PoolContext';
 
 const ArrowDown = '/img/general/caret-down-white.svg';
 
@@ -17,7 +18,7 @@ export default (({ rows }) => {
         <>
             <div>
                 {rows.map((pool) => {
-                    return <PoolRow key={pool.poolName} {...pool} />;
+                    return <PoolRow key={pool.poolAddress} {...pool} />;
                 })}
             </div>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
@@ -94,6 +95,7 @@ const DropdownArrow = styled.img`
 
 const PoolRow: React.FC<EscrowRowProps> = ({
     poolName,
+    poolAddress,
     marketTicker,
     claimableLongTokens,
     claimableShortTokens,
@@ -101,6 +103,7 @@ const PoolRow: React.FC<EscrowRowProps> = ({
     numClaimable,
     claimableSum,
 }) => {
+    const { claim = () => console.error("Failed to claim: claim function not defined in context")} = usePoolActions();
     const [expanded, setExpanded] = useState<boolean>(false);
     return (
         <>
@@ -118,7 +121,11 @@ const PoolRow: React.FC<EscrowRowProps> = ({
                     <Value>{toApproxCurrency(claimableSum)}</Value>
                 </Section>
                 <Section className="buttons">
-                    <ClaimButton variant="primary">CLAIM ALL</ClaimButton>
+                    <ClaimButton variant="primary" onClick={() => claim(poolAddress, {
+                        onSuccess: () => {
+                            setExpanded(false)
+                        }
+                    })}>CLAIM ALL</ClaimButton>
                     <DropdownButton variant="primary" onClick={() => setExpanded(!expanded)}>
                         <DropdownArrow className={expanded ? 'open' : ''} src={ArrowDown} alt="dropdown-toggle" />
                     </DropdownButton>

@@ -9,7 +9,6 @@ const FIVE_MINUTES = new BigNumber(300); // seconds
 const THIRTY_SECONDS = new BigNumber(30); // seconds
 
 const USDC_TOKEN_DECIMALS = 6;
-const TEST_TOKEN_DECIMALS = 18;
 
 export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
     [ARBITRUM]: [
@@ -321,13 +320,13 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 name: '3L-ETH/USD',
                 address: '0x1Af4C1296B524337e4B297eB8C546f469f2Dea80',
                 symbol: '3L-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             shortToken: {
                 name: '3S-ETH/USD',
                 address: '0x781a645a6cD0cbF85574e8aa3E770E4B265E5673',
                 symbol: '3S-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
@@ -346,13 +345,13 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 name: '3L-ETH/USD',
                 address: '0x3cC0520263B526Bb7C207027B4ACEe25D3F221fB',
                 symbol: '3L-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             shortToken: {
                 name: '3S-ETH/USD',
                 address: '0x6afeA0aC6594f61AE58B30274afeCf7c618924A1',
                 symbol: '3S-ETH/USD',
-                decimals: TEST_TOKEN_DECIMALS,
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },

@@ -104,6 +104,7 @@ export default (() => {
                 );
 
                 _rows.push({
+                    poolAddress: pool.address,
                     poolName: pool.name,
                     marketTicker: pool.name.split('-')[1].split('/')[0] as LogoTicker,
                     claimableSettlementTokens,
