@@ -16,15 +16,35 @@ type PoolProps = {
 
 export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
     const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails || {};
-    const BASE_URL = `${previewUrl}/address/` || 'https://arbiscan.io/address/';
+
     const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
+
+    const getContractDetailsUrl = (v: string) => {
+        const BASE_URL = `${previewUrl}address/${v}` || 'https://arbiscan.io/address/';
+        return v ? BASE_URL : 'https://arbiscan.io';
+    };
+
+    const getPriceFeedUrl = (v: string) => {
+        if (!v) {
+            return 'https://data.chain.link/arbitrum/mainnet/crypto-usd/';
+        }
+
+        let name = v?.split('-')[1];
+        name = name?.toLowerCase();
+        name = /\//.test(name) ? name?.replace('/', '-') : '';
+
+        const market = /eur/.test(name) ? 'fiat' : 'crypto-usd';
+        const FEED_URL = `https://data.chain.link/arbitrum/mainnet/${market}/`;
+
+        return `${FEED_URL}${name}`;
+    };
 
     const poolDetailsData = [
         { name: 'Pool Ticker', value: name },
         {
             name: 'Price Feed',
             value: name?.split('-')[1],
-            href: '',
+            href: getPriceFeedUrl(name),
         },
         {
             name: 'Power Leverage',
@@ -33,17 +53,17 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
         {
             name: 'Collateral Asset',
             value: collateralAsset,
-            href: collateralAssetAddress,
+            href: getContractDetailsUrl(collateralAssetAddress),
         },
         {
             name: 'Deployer',
             value: formatAddress(committer),
-            href: committer,
+            href: getContractDetailsUrl(committer),
         },
         {
-            name: 'Kepper Contract',
+            name: 'Keeper Contract',
             value: formatAddress(keeper),
-            href: keeper,
+            href: getContractDetailsUrl(keeper),
         },
     ];
 
@@ -66,7 +86,7 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
                                 <div className="info">
                                     {v.value}
                                     {v.href ? (
-                                        <a href={`${BASE_URL}${v.href}`} target="_blank" rel="noopener noreferrer">
+                                        <a href={v.href} target="_blank" rel="noopener noreferrer">
                                             <FollowLinkIcon isDark={isDark} />
                                         </a>
                                     ) : null}
