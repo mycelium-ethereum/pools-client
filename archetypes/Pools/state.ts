@@ -7,6 +7,7 @@ export enum MarketFilterEnum {
     TOKE = 'Tokemak',
     LINK = 'Chainlink',
     EUR = 'Euro',
+    AAVE = 'Aave',
 }
 
 export enum LeverageEnum {
@@ -51,6 +52,7 @@ export interface BrowseTableRowData {
     market: string;
     address: string;
     decimals: number;
+    quoteTokenSymbol: string;
     leverage: number;
 
     lastPrice: number;

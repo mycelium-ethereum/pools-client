@@ -20,7 +20,6 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
-import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { poolList } from '@libs/constants/poolLists';
 
@@ -35,7 +34,7 @@ interface ContextProps {
 
 interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
-    approve: (pool: string) => void;
+    approve: (pool: string, quoteTokenSymbol: string) => void;
 }
 
 interface SelectedPoolContextProps {
@@ -379,89 +378,74 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * @param amount amount to commit
      * @param options handleTransaction options
      */
-    const commit: (
-        pool: string,
-        commitType: CommitEnum,
-        amount: BigNumber,
-        options?: Options,
-    ) => Promise<void> = async (pool, commitType, amount, options) => {
-        const committerAddress = poolsState.pools[pool].committer.address;
-        const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
-        const nextRebalance = poolsState.pools[pool].lastUpdate.plus(poolsState.pools[pool].updateInterval).toNumber();
-        const frontRunning = poolsState.pools[pool].frontRunningInterval.toNumber();
-        const targetTime =
-            nextRebalance - Date.now() / 1000 < frontRunning
-                ? nextRebalance + poolsState.pools[pool].updateInterval.toNumber()
-                : nextRebalance;
-        if (!committerAddress) {
-            console.error('Committer address undefined when trying to mint');
-            // TODO handle error
-        }
-        const network = await signer?.getChainId();
-        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
-        console.debug(
-            `Creating commit. Amount: ${ethers.utils.parseUnits(
-                amount.toFixed(),
-                quoteTokenDecimals,
-            )}, Raw amount: ${amount.toFixed()}`,
-        );
-        if (handleTransaction) {
-            const poolName = poolsState.pools[pool].name;
-            const tokenAddress =
-                commitType === CommitEnum.short_mint || commitType === CommitEnum.short_burn
-                    ? poolsState.pools[pool].shortToken.address
-                    : poolsState.pools[pool].longToken.address;
-
-            const type = commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
-            handleTransaction(
-                committer.commit,
-                [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
-                {
-                    network: (network ?? '0') as AvailableNetwork,
-                    onSuccess: (receipt) => {
-                        console.debug('Successfully submitted commit txn: ', receipt);
-                        // get and set token balances
-                        updateTokenBalances(poolsState.pools[pool], provider);
-                        options?.onSuccess ? options.onSuccess(receipt) : null;
-                    },
-                    statusMessages: {
-                        waiting: {
-                            title: `Queueing ${poolName} ${type}`,
-                            body: (
-                                <div
-                                    className="text-sm text-tracer-400 underline cursor-pointer"
-                                    onClick={() =>
-                                        openArbiscan(
-                                            ArbiscanEnum.token,
-                                            tokenAddress,
-                                            provider?.network?.chainId?.toString() as AvailableNetwork,
-                                        )
-                                    }
-                                >
-                                    View token on Arbiscan
-                                </div>
-                            ),
-                        },
-                        poolName: poolName,
-                        type: type,
-                        nextRebalance: targetTime,
-                        success: {
-                            title: `${poolName} ${type} Queued`,
-                        },
-                        error: {
-                            title: `${type} ${poolName} Failed`,
-                        },
-                    },
-                },
+    const commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void> =
+        async (pool, commitType, amount, options) => {
+            const committerAddress = poolsState.pools[pool].committer.address;
+            const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
+            const nextRebalance = poolsState.pools[pool].lastUpdate
+                .plus(poolsState.pools[pool].updateInterval)
+                .toNumber();
+            const frontRunning = poolsState.pools[pool].frontRunningInterval.toNumber();
+            const targetTime =
+                nextRebalance - Date.now() / 1000 < frontRunning
+                    ? nextRebalance + poolsState.pools[pool].updateInterval.toNumber()
+                    : nextRebalance;
+            if (!committerAddress) {
+                console.error('Committer address undefined when trying to mint');
+                // TODO handle error
+            }
+            const network = await signer?.getChainId();
+            const committer = new ethers.Contract(
+                committerAddress,
+                PoolCommitter__factory.abi,
+                signer,
+            ) as PoolCommitter;
+            console.debug(
+                `Creating commit. Amount: ${ethers.utils.parseUnits(
+                    amount.toFixed(),
+                    quoteTokenDecimals,
+                )}, Raw amount: ${amount.toFixed()}`,
             );
-        }
-    };
+            if (handleTransaction) {
+                const poolName = poolsState.pools[pool].name;
+
+                const type =
+                    commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
+                handleTransaction(
+                    committer.commit,
+                    [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
+                    {
+                        network: (network ?? '0') as AvailableNetwork,
+                        onSuccess: (receipt) => {
+                            console.debug('Successfully submitted commit txn: ', receipt);
+                            // get and set token balances
+                            updateTokenBalances(poolsState.pools[pool], provider);
+                            options?.onSuccess ? options.onSuccess(receipt) : null;
+                        },
+                        statusMessages: {
+                            waiting: {
+                                title: `Queueing ${poolName} ${type}`,
+                            },
+                            poolName: poolName,
+                            type: type,
+                            nextRebalance: targetTime,
+                            success: {
+                                title: `${poolName} ${type} Queued`,
+                            },
+                            error: {
+                                title: `${type} ${poolName} Failed`,
+                            },
+                        },
+                    },
+                );
+            }
+        };
 
     /**
      * Approve pool to spend quote token
      * @param pool address to approve
      */
-    const approve: (pool: string) => Promise<void> = async (pool) => {
+    const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
         const token = new ethers.Contract(
             poolsState.pools[pool].quoteToken.address,
             PoolToken__factory.abi,
@@ -482,15 +466,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
                 statusMessages: {
                     waiting: {
-                        title: 'Unlocking USDC',
+                        title: `Unlocking ${quoteTokenSymbol}`,
                         body: '',
                     },
                     success: {
-                        title: 'USDC Unlocked',
+                        title: `${quoteTokenSymbol} Unlocked`,
                         body: '',
                     },
                     error: {
-                        title: 'Unlock USDC Failed',
+                        title: `Unlock ${quoteTokenSymbol} Failed`,
                         body: '',
                     },
                 },

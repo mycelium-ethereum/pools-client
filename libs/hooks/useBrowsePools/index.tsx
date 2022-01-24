@@ -89,12 +89,27 @@ export default (() => {
                     tvl: tvl,
                 };
 
+                let effectiveShortGain = leverage;
+
+                const _effectiveShortGain = calcEffectiveShortGain(shortBalance, longBalance, leverageBN);
+                if (_effectiveShortGain.isFinite() && !_effectiveShortGain.isZero()) {
+                    effectiveShortGain = _effectiveShortGain.toNumber();
+                }
+
+                let effectiveLongGain = leverage;
+
+                const _effectiveLongGain = calcEffectiveLongGain(shortBalance, longBalance, leverageBN);
+                if (_effectiveLongGain.isFinite() && !_effectiveLongGain.isZero()) {
+                    effectiveLongGain = _effectiveLongGain.toNumber();
+                }
+
                 rows.push({
                     address: address,
                     name: name,
                     market: tickerToName(name),
                     leverage: leverage,
                     decimals: quoteToken.decimals,
+                    quoteTokenSymbol: quoteToken.symbol,
 
                     lastPrice: pool.lastPrice.toNumber(),
                     oraclePrice: pool.oraclePrice.toNumber(),
@@ -108,7 +123,7 @@ export default (() => {
                     shortToken: {
                         address: shortToken.address,
                         symbol: shortToken.symbol,
-                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: effectiveShortGain,
                         lastTCRPrice: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)).toNumber(),
                         nextTCRPrice: nextShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
@@ -119,7 +134,7 @@ export default (() => {
                     longToken: {
                         address: longToken.address,
                         symbol: longToken.symbol,
-                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: effectiveLongGain,
                         lastTCRPrice: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)).toNumber(),
                         nextTCRPrice: nextLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),

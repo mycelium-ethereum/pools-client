@@ -13,7 +13,7 @@ import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils'
 import { APYTip, RewardsEndedTip } from '@components/Tooltips';
 import { TokenToFarmAddressMap } from '@libs/constants';
 
-export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, tcrUSDCPrice }) => {
+export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);
 
     return (
@@ -24,9 +24,9 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     <TableHeaderCell>
                         <APYTip>APY</APYTip>/APR
                     </TableHeaderCell>
-                    <TableHeaderCell>TVL (USDC)</TableHeaderCell>
-                    <TableHeaderCell>My Staked (TOKENS/USDC)</TableHeaderCell>
-                    <TableHeaderCell>My Holdings (TOKENS/USDC)</TableHeaderCell>
+                    <TableHeaderCell>TVL (USD)</TableHeaderCell>
+                    <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
+                    <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
                     <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
@@ -36,7 +36,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                             key={`${farm}-${index}`}
                             farm={farm}
                             index={index}
-                            tcrUSDCPrice={tcrUSDCPrice}
+                            rewardsTokenUSDPrices={rewardsTokenUSDPrices}
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
                             onClickUnstake={onClickUnstake}
@@ -84,17 +84,26 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
     fetchingFarms: boolean;
-    tcrUSDCPrice: BigNumber;
+    rewardsTokenUSDPrices: Record<string, BigNumber>;
 }>;
+
+const LARGE_DECIMAL = 10000000000;
+const largeDecimal: (num: BigNumber) => string = (num) => {
+    if (num.gt(LARGE_DECIMAL)) {
+        return `> ${LARGE_DECIMAL}`
+    } else {
+        return num.times(100).toFixed(2);
+    }
+}
 
 const PoolRow: React.FC<{
     farm: FarmTableRowData;
     index: number;
-    tcrUSDCPrice: BigNumber;
+    rewardsTokenUSDPrices: Record<string, BigNumber>;
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, tcrUSDCPrice }) => {
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, rewardsTokenUSDPrices }) => {
     const tokenPrice = useMemo(
         () =>
             farm?.poolDetails
@@ -103,11 +112,13 @@ const PoolRow: React.FC<{
         [farm],
     );
 
+    const rewardsTokenPrice = rewardsTokenUSDPrices[farm.rewardsTokenAddress] || new BigNumber(0);
+
     const apr = useMemo(() => {
-        const aprNumerator = farm.rewardsPerYear.times(tcrUSDCPrice);
+        const aprNumerator = farm.rewardsPerYear.times(rewardsTokenPrice);
         const aprDenominator = tokenPrice.times(farm.totalStaked);
         return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
-    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, tcrUSDCPrice]);
+    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, rewardsTokenPrice]);
 
     const apy = useMemo(() => calcAPY(apr), [apr]);
 
@@ -157,7 +168,7 @@ const PoolRow: React.FC<{
                 {farm.rewardsEnded ? (
                     <RewardsEndedTip>N/A</RewardsEndedTip>
                 ) : (
-                    `${apy.times(100).toFixed(2)}% / ${apr.times(100).toFixed(2)}%`
+                    `${largeDecimal(apy)}% / ${largeDecimal(apr)}%`
                 )}
             </TableRowCell>
             <TableRowCell>

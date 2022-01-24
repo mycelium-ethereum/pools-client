@@ -133,7 +133,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USDC)'}</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USD)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
                                 <div>{'Skew'}</div>
@@ -151,7 +151,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             {'Side'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" className={'whitespace-nowrap w-2/12'}>
-                            {'TVL (USDC)'}
+                            {'TVL (USD)'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap w-[12%]'}>
                             <EffectiveLeverageTip>
@@ -159,7 +159,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             </EffectiveLeverageTip>
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
-                            {'Token Price (USDC)'}
+                            {'Token Price (USD)'}
                         </TableHeaderCell>
                         {showNextRebalance && !!account ? (
                             <TableHeaderCell size="sm">
@@ -411,6 +411,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    quoteTokenSymbol={pool.quoteTokenSymbol}
                     poolTicker={pool.name}
                 />
             </TableRow>
@@ -434,6 +435,7 @@ const PoolRow: React.FC<
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
+                    quoteTokenSymbol={pool.quoteTokenSymbol}
                     poolTicker={pool.name}
                 />
             </TableRow>
@@ -458,6 +460,7 @@ const TokenRows: React.FC<
     {
         side: SideEnum;
         tokenInfo: BrowseTableRowData['longToken'] | BrowseTableRowData['shortToken'];
+        quoteTokenSymbol: string;
         leverage: number;
         address: string;
         decimals: number;
@@ -476,6 +479,7 @@ const TokenRows: React.FC<
 > = ({
     side,
     tokenInfo,
+    quoteTokenSymbol,
     leverage,
     address: poolAddress,
     account,
@@ -590,7 +594,7 @@ const TokenRows: React.FC<
                         {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
                     </div>
                     <div className="flex">
-                        <Logo size="xs" ticker="USDC" className="mr-1 my-auto" />
+                        <Logo size="xs" ticker={quoteTokenSymbol as LogoTicker} className="mr-1 my-auto" />
                         {tokenInfo.userHoldings === 0
                             ? '-'
                             : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}

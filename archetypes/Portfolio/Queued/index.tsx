@@ -9,6 +9,7 @@ import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import Actions from '@components/TokenActions';
+import { marketSymbolToAssetName } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
@@ -157,8 +158,11 @@ const CommitRow: React.FC<
     updateInterval,
     created,
     burnRow,
+    quoteTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    const [base, collateral] = token.symbol.split('-')[1].split('/');
 
     return (
         <TableRow key={txnHash} rowNumber={index}>
@@ -168,8 +172,8 @@ const CommitRow: React.FC<
                     <div>
                         <div className="flex">
                             <div>
-                                {token.symbol.split('-')[0][0]}-
-                                {token.symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                                {}
+                                {token.symbol.split('-')[0][0]}-{marketSymbolToAssetName[`${base}/${collateral}`]}
                             </div>
                             &nbsp;
                             <div className={`${token.side === SideEnum.long ? 'green' : 'red'}`}>
@@ -184,8 +188,12 @@ const CommitRow: React.FC<
                 <>
                     <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
-                        <div>{toApproxCurrency(amount.times(tokenPrice))} USDC</div>
-                        <div>at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div>
+                            {toApproxCurrency(amount.times(tokenPrice))} {collateral}
+                        </div>
+                        <div>
+                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                        </div>
                     </TableRowCell>
                 </>
             ) : (
@@ -193,7 +201,9 @@ const CommitRow: React.FC<
                     <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
                     <TableRowCell>
                         <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(tokenPrice)} USDC/token</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                        </div>
                     </TableRowCell>
                 </>
             )}

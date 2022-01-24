@@ -125,13 +125,17 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell>
                 <div>
-                    {denotedIn === DenotedInEnum.BASE ? (
-                        <>
-                            {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
-                        </>
-                    ) : (
-                        `${toApproxCurrency(netValue)} USDC`
-                    )}
+                    {
+                        denotedIn === DenotedInEnum.BASE ? (
+                            <>
+                                {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
+                            </>
+                        ) : (
+                            `${toApproxCurrency(netValue)} USD`
+                        )
+                        // TODO the above netValue is fine for stable coins but needs a conversion
+                        //  rate for anything that is not 1/1 with USD
+                    }
                 </div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
             </TableRowCell>
@@ -149,7 +153,7 @@ export const TokenRow: React.FC<
                         {name.split('-')[1].split('/')[0]}
                     </>
                 ) : (
-                    `${NotionalDenote(netValue, parseInt(name.split('-')[0][0]))} USDC`
+                    `${NotionalDenote(netValue, parseInt(name.split('-')[0][0]))} USD`
                 )}
             </TableRowCell>
             <TableRowCell className="flex">

@@ -14,14 +14,19 @@ import TOKE_L from '@public/img/logos/currencies/toke_long.svg';
 import TOKE_S from '@public/img/logos/currencies/toke_short.svg';
 import LINK_L from '@public/img/logos/currencies/link_long.svg';
 import LINK_S from '@public/img/logos/currencies/link_short.svg';
+import AAVE_L from '@public/img/logos/currencies/aave_long.svg';
+import AAVE_S from '@public/img/logos/currencies/aave_short.svg';
 import ETH from '@public/img/logos/currencies/eth.svg';
 import EUR from '@public/img/logos/currencies/eur.svg';
 import BTC from '@public/img/logos/currencies/btc.svg';
 import TOKE from '@public/img/logos/currencies/toke.svg';
+import FRAX from '@public/img/logos/currencies/frax.svg';
+import AAVE from '@public/img/logos/currencies/aave.svg';
 import LINK from '@public/img/logos/currencies/link.svg';
 import SUSHI from '@public/img/logos/currencies/sushi.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
 import USDC from '@public/img/logos/currencies/usdc.svg';
+import USD from '@public/img/logos/currencies/usd.svg';
 import BASE from '@public/img/logos/currencies/base.svg';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
@@ -44,16 +49,21 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
 export type LogoTicker =
     | 'ETHERSCAN'
     | 'USDC'
+    | 'FRAX'
+    | 'AAVE'
+    | 'USD'
     | 'ETH_L'
     | 'EUR_L'
     | 'BTC_L'
     | 'TOKE_L'
     | 'LINK_L'
+    | 'AAVE_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
     | 'TOKE_S'
     | 'LINK_S'
+    | 'AAVE_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
@@ -73,7 +83,12 @@ const logos: Record<LogoTicker, any> = {
     [ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
     USDC: USDC,
+    USD: USD,
+    FRAX: FRAX,
+    AAVE: AAVE,
     DEFAULT: ETH,
+    AAVE_L: AAVE_L,
+    AAVE_S: AAVE_S,
     ETH_L: ETH_L,
     EUR_L: EUR_L,
     BTC_L: BTC_L,

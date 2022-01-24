@@ -19,21 +19,20 @@ import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { poolMap } from '@libs/constants/poolLists';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
+type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
 interface ContextProps {
     farms: FarmsLookup;
     refreshFarm: (farmAddress: string) => void;
     fetchingFarms: boolean;
-    tcrUSDCPrice: BigNumber;
+    rewardsTokenUSDPrices: RewardsTokenUSDPrices;
 }
-
-const DEFAULT_TCR_PRICE = new BigNumber('0.25');
 
 export const FarmContext = React.createContext<ContextProps>({
     farms: {},
     refreshFarm: () => console.error('default FarmContext.refreshFarm'),
     fetchingFarms: false,
-    tcrUSDCPrice: DEFAULT_TCR_PRICE,
+    rewardsTokenUSDPrices: {},
 });
 
 export type FarmContexts = 'bptFarms' | 'poolFarms';
@@ -49,7 +48,7 @@ export const FarmStore: React.FC<
     const { signer, config, account, provider } = useWeb3();
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
-    const [tcrUSDCPrice, setTcrUSDCPrice] = useState<BigNumber>(DEFAULT_TCR_PRICE);
+    const [rewardsTokenUSDPrices, setRewardsTokenUSDPrices] = useState<Record<string, BigNumber>>({});
 
     // used to fetch details of tokens that make up a balancer pool
     const getBptDetails = async (
@@ -288,6 +287,7 @@ export const FarmStore: React.FC<
                                     link,
                                     linkText,
                                     rewardsEnded: Boolean(rewardsEnded),
+                                    rewardsTokenAddress,
                                 };
                             } catch (error) {
                                 console.error('failed fetching farm with address: ', address, error);
@@ -310,36 +310,57 @@ export const FarmStore: React.FC<
         [signer, provider, config, account],
     );
 
-    const refreshTcrPriceUSDC = async () => {
-        if (!config?.sushiRouterAddress || !config?.tcrAddress || !config.usdcAddress || !signer) {
-            // leave it as the default value
+    const refreshRewardsTokenPriceUSDC = async ({ address, decimals }: { address?: string; decimals?: number }) => {
+        if (!config?.sushiRouterAddress || !address || !decimals || !config.usdcAddress || !signer) {
+            // no update to perform
             return;
         }
+
         const sushiRouter = new ethers.Contract(
             config?.sushiRouterAddress,
             UniswapV2Router02__factory.abi,
             signer,
         ) as UniswapV2Router02;
 
-        const oneTcr = new BigNumber('1').times(10 ** TCR_DECIMALS);
+        const oneUnit = new BigNumber('1').times(10 ** decimals);
 
-        const [usdcPer1Tcr] = await sushiRouter.getAmountsIn(oneTcr.toFixed(), [config.usdcAddress, config.tcrAddress]);
+        const [, buyPrice] = await sushiRouter.getAmountsOut(oneUnit.toFixed(), [address, config.usdcAddress]);
 
-        const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(usdcPer1Tcr, USDC_DECIMALS));
+        const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(buyPrice, USDC_DECIMALS));
 
-        setTcrUSDCPrice(formattedUSDCPrice);
+        setRewardsTokenUSDPrices((previousValue) => ({
+            ...previousValue,
+            // we can cast here because we exit early if it's not set
+            [address as string]: formattedUSDCPrice,
+        }));
+    };
+
+    const refreshTcrPriceUSDC = async () => {
+        refreshRewardsTokenPriceUSDC({
+            address: config?.tcrAddress,
+            decimals: TCR_DECIMALS,
+        });
+    };
+
+    const refreshFxsPriceUSDC = async () => {
+        refreshRewardsTokenPriceUSDC({
+            address: config?.stakingRewardTokens?.fxs.address,
+            decimals: config?.stakingRewardTokens?.fxs.decimals,
+        });
     };
 
     // fetch farms initially
     useEffect(() => {
         fetchFarms({ reset: false });
         refreshTcrPriceUSDC();
+        refreshFxsPriceUSDC();
     }, []);
 
     // update farms on network change
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
+        refreshFxsPriceUSDC();
     }, [signer, config, account]);
 
     return (
@@ -348,7 +369,7 @@ export const FarmStore: React.FC<
                 farms,
                 refreshFarm,
                 fetchingFarms,
-                tcrUSDCPrice,
+                rewardsTokenUSDPrices,
             }}
         >
             {children}
