@@ -73,12 +73,13 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
 
 const InfoIcon = styled(Info)`
     margin-left: 15px;
+
     :hover {
         cursor: pointer;
     }
 
     path {
-        fill: ${(props) => (props.isDark ? '#FFFFF' : '#6b7280')};
+        fill: ${(props) => (props.isDark ? '#ffffff' : '#111928')};
     }
 `;
 
