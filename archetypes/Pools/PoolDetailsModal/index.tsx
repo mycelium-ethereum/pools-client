@@ -1,9 +1,10 @@
 import React from 'react';
 import { TWModal } from '@components/General/TWModal';
 import { Table, TableRow, TableRowCell } from '@components/General/TWTable';
+import styled from 'styled-components';
+
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
-import styled from 'styled-components';
 
 type PoolProps = {
     name: string;
@@ -129,7 +130,7 @@ const FollowLinkIcon = styled(FollowLink)`
     margin-left: 15px;
 
     path {
-        stroke: ${(props) => (props.isDark ? '#FAFAFA' : '#6b7280')};
+        stroke: ${(props) => (props.isDark ? '#ffffff' : '#374151')};
     }
 `;
 
