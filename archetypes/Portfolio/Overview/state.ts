@@ -1,11 +1,16 @@
-import {LogoTicker} from '@components/General';
+import { LogoTicker } from '@components/General';
 import { MarketFilterEnum } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
-
 
 export enum DenotedInEnum {
     BASE = 'BASE',
     USD = 'USD',
+}
+
+export enum TokenType {
+    Short = 0,
+    Long = 1,
+    Settlement = 2,
 }
 
 export type TokenRowProps = {
@@ -22,19 +27,31 @@ export type TokenRowProps = {
 };
 
 export interface EscrowRowProps {
-    pool: string, // pool name
+    poolName: string; // pool name
     marketTicker: LogoTicker;
-    claimableAssets: ClaimableAsset[];
+    claimableLongTokens: ClaimablePoolToken;
+    claimableShortTokens: ClaimablePoolToken;
+    claimableSettlementTokens: ClaimableAsset;
+    claimableSum: BigNumber;
+    numClaimable: number;
 }
+
+export type EntryPrice = {
+    tokenPrice: BigNumber;
+    basePrice: BigNumber;
+};
 
 export type ClaimableAsset = {
     symbol: string;
-    balance: number;
-    price: number;
+    balance: BigNumber;
+    currentTokenPrice: BigNumber;
+    type: TokenType;
     token: string;
-    notionalValue: number;
-    unrealisedPNL: number;
-}
+    notionalValue: BigNumber;
+};
+export type ClaimablePoolToken = {
+    entryPrice: EntryPrice;
+} & ClaimableAsset;
 
 export interface PortfolioState {
     positionsDenotedIn: DenotedInEnum;
@@ -43,17 +60,17 @@ export interface PortfolioState {
 }
 
 export const initialPortfolioState = {
-    escrowSearch: "",
+    escrowSearch: '',
     escrowMarketFilter: MarketFilterEnum.All,
-    positionsDenotedIn: DenotedInEnum.BASE
-}
+    positionsDenotedIn: DenotedInEnum.BASE,
+};
 
 export type PortfolioAction =
     | { type: 'setEscrowSearch'; search: string }
     | { type: 'setEscrowMarketFilter'; market: MarketFilterEnum }
-    | { type: 'setDenotion'; denotedIn: DenotedInEnum }
+    | { type: 'setDenotion'; denotedIn: DenotedInEnum };
 
-export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState= (state, action) => {
+export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState = (state, action) => {
     switch (action.type) {
         case 'setEscrowSearch':
             return {
@@ -63,7 +80,7 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
         case 'setEscrowMarketFilter':
             return {
                 ...state,
-                marketFilter: action.market,
+                escrowMarketFilter: action.market,
             };
         case 'setDenotion':
             return {

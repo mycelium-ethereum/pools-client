@@ -2,7 +2,14 @@ import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } f
 import { Children, Pool, StaticPoolInfo } from 'libs/types/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, reducer } from './poolDispatch';
-import { fetchCommits, fetchPoolBalances, fetchTokenApprovals, fetchTokenBalances, initPool } from './helpers';
+import {
+    fetchAggregateBalance,
+    fetchCommits,
+    fetchPoolBalances,
+    fetchTokenApprovals,
+    fetchTokenBalances,
+    initPool,
+} from './helpers';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -207,6 +214,22 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             .catch((err) => {
                 console.error('Failed to fetch token balances', err);
             });
+        fetchAggregateBalance(provider_, account, pool.committer.address, decimals)
+            .then((balances) => {
+                console.debug('Pending balances', {
+                    longTokens: balances.longTokens.toNumber(),
+                    shortTokens: balances.shortTokens.toNumber(),
+                    quoteTokens: balances.quoteTokens.toNumber(),
+                });
+                poolsDispatch({
+                    type: 'setAggregateBalances',
+                    pool: pool.address,
+                    aggregateBalances: balances,
+                });
+            })
+            .catch((err) => {
+                console.error('Failed to fetch aggregate balance', err);
+            });
     };
 
     // get and set approvals
@@ -272,39 +295,42 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
                 console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.filters.CreateCommit
-                committer.on(committer.filters.CreateCommit(), (id, amount, type, _appropriateUpdateInterval, _mintingFee, log) => {
-                    // TODO id is now user
-                    console.debug('Commit created', {
-                        id,
-                        amount,
-                        type,
-                    });
+                committer.filters.CreateCommit;
+                committer.on(
+                    committer.filters.CreateCommit(),
+                    (id, amount, type, _appropriateUpdateInterval, _mintingFee, log) => {
+                        // TODO id is now user
+                        console.debug('Commit created', {
+                            id,
+                            amount,
+                            type,
+                        });
 
-                    const decimals = poolsState.pools[pool].quoteToken.decimals;
-                    console.log("Transaction log", log)
+                        const decimals = poolsState.pools[pool].quoteToken.decimals;
+                        console.log('Transaction log', log);
 
-                    // @ts-ignore
-                    log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
-                        if (commitDispatch) {
-                            commitDispatch({
-                                type: 'addCommit',
-                                commitInfo: {
-                                    id: parseInt(id),
-                                    pool,
-                                    from: txn?.from, // from address
-                                    txnHash: txn.hash,
-                                    type: type as CommitEnum,
-                                    amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                    created: txn.timestamp ?? Date.now() / 1000,
-                                },
-                            });
-                        }
-                    });
+                        // @ts-ignore
+                        log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
+                            if (commitDispatch) {
+                                commitDispatch({
+                                    type: 'addCommit',
+                                    commitInfo: {
+                                        id: parseInt(id),
+                                        pool,
+                                        from: txn?.from, // from address
+                                        txnHash: txn.hash,
+                                        type: type as CommitEnum,
+                                        amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
+                                        created: txn.timestamp ?? Date.now() / 1000,
+                                    },
+                                });
+                            }
+                        });
 
-                    const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
-                    poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
-                });
+                        const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
+                        poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
+                    },
+                );
 
                 subscriptions.current = {
                     ...subscriptions.current,
@@ -314,10 +340,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
             }
 
-            const keeperInstance = PoolKeeper__factory.connect(
-                keeper,
-                subscriptionProvider,
-            );
+            const keeperInstance = PoolKeeper__factory.connect(keeper, subscriptionProvider);
 
             if (!subscriptions.current[keeper]) {
                 console.debug(`Subscribing keeper: ${keeper.slice()}`);
@@ -337,10 +360,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        const leveragedPool = LeveragedPool__factory.connect(
-                            pool,
-                            subscriptionProvider,
-                        );
+                        const leveragedPool = LeveragedPool__factory.connect(pool, subscriptionProvider);
                         leveragedPool.lastPriceTimestamp().then((lastUpdate) => {
                             console.debug(`New last updated: ${lastUpdate}`);
                             poolsDispatch({
@@ -394,7 +414,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
         const network = await signer?.getChainId();
         if (!signer) {
-            console.error("Signer undefined when trying to mint");
+            console.error('Signer undefined when trying to mint');
             return;
         }
         const committer = PoolCommitter__factory.connect(committerAddress, signer);
@@ -462,14 +482,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      */
     const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
         if (!signer) {
-            console.error("Failed to approve token: signer undefined")
+            console.error('Failed to approve token: signer undefined');
             return;
         }
 
-        const token = PoolToken__factory.connect(
-            poolsState.pools[pool].quoteToken.address,
-            signer,
-        );
+        const token = PoolToken__factory.connect(poolsState.pools[pool].quoteToken.address, signer);
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {

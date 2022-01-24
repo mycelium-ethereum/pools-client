@@ -246,15 +246,15 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 name: '1L-BTC/USD',
                 address: '0x6993Ef999453c069a47c9DE1d2d815F54eb43920',
                 symbol: '1L-BTC/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             shortToken: {
                 name: '1S-BTC/USD',
                 address: '0x7830d0458D7E43fcAab008C22FF8cCf85a61a820',
                 symbol: '1S-BTC/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
-            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
         {
             // 3x
@@ -271,15 +271,15 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 name: '3L-BTC/USD',
                 address: '0x7Bf89A31758B5044999Ef7b557A05d5b71aDb976',
                 symbol: '3L-BTC/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             shortToken: {
                 name: '3S-BTC/USD',
                 address: '0x4093a7e0082E43BE8CaA0f74D9FA99c79c626feD',
                 symbol: '3S-BTC/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
-            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
         {
             // 1x
@@ -296,15 +296,15 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 name: '1L-ETH/USD',
                 address: '0x6a5240fE1e4AE5BAd1ED1e4E546a1e3f264fFCE2',
                 symbol: '1L-ETH/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
             shortToken: {
                 name: '1S-ETH/USD',
                 address: '0x9B00465EE7b74827Ef3cFff8E81ABdEd8c5Df411',
                 symbol: '1S-ETH/USD',
-                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals
+                decimals: tokenMap[ARBITRUM_RINKEBY].USDC.decimals,
             },
-            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
         {
             // 3x
@@ -329,7 +329,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '3S-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
-            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
         {
             // 3x
@@ -354,7 +354,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 symbol: '3S-ETH/USD',
                 decimals: TEST_TOKEN_DECIMALS,
             },
-            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC
+            quoteToken: tokenMap[ARBITRUM_RINKEBY].USDC,
         },
     ],
     '0': [],

@@ -1,5 +1,5 @@
 import { CommitEnum } from '@libs/constants';
-import { PendingAmounts, Pool } from '@libs/types/General';
+import { AggregateBalances, PendingAmounts, Pool } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 
 const MAX_RETRY_COUNT = 5;
@@ -28,6 +28,11 @@ export type PoolAction =
           shortTokenBalance: BigNumber;
           quoteTokenBalance: BigNumber;
           longTokenBalance: BigNumber;
+      }
+    | {
+          type: 'setAggregateBalances';
+          pool: string;
+          aggregateBalances: AggregateBalances;
       }
     | {
           type: 'setTokenApprovals';
@@ -140,6 +145,20 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                             ...state.pools[action.pool].quoteToken,
                             balance: action.quoteTokenBalance,
                         },
+                    },
+                },
+            };
+        case 'setAggregateBalances':
+            if (!state.pools[action.pool]) {
+                return state;
+            }
+            return {
+                ...state,
+                pools: {
+                    ...state.pools,
+                    [action.pool]: {
+                        ...state.pools[action.pool],
+                        aggregateBalances: action.aggregateBalances,
                     },
                 },
             };

@@ -15,6 +15,7 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum, CommitActionEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
+import { marketFilter } from '@libs/utils/functions';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -39,27 +40,6 @@ export const Browse: React.FC = () => {
     // parse the pools rows
     const { rows: tokens } = useBrowsePools();
 
-    const marketFilter = (pool: BrowseTableRowData): boolean => {
-        switch (state.marketFilter) {
-            case MarketFilterEnum.All:
-                return true;
-            case MarketFilterEnum.EUR:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'EUR';
-            case MarketFilterEnum.TOKE:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'TOKE';
-            case MarketFilterEnum.LINK:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'LINK';
-            case MarketFilterEnum.ETH:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'ETH';
-            case MarketFilterEnum.BTC:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'BTC';
-            case MarketFilterEnum.AAVE:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'AAVE';
-            default:
-                return false;
-        }
-    };
-
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
         return Boolean(
@@ -81,7 +61,7 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter(marketFilter).filter(searchFilter);
+    const filteredTokens = tokens.filter((pool) => marketFilter(pool.name, state.marketFilter)).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {

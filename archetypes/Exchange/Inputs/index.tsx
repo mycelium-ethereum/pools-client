@@ -19,10 +19,7 @@ type InvalidAmount = {
     message?: string;
 };
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (
-    amount: BigNumber,
-    balance: BigNumber,
-) => InvalidAmount = (amount, balance) => {
+const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -68,7 +65,6 @@ export default (({ pool, swapState, swapDispatch }) => {
 
     useEffect(() => {
         if (pool) {
-
             let currentBalance: BigNumber;
             if (commitAction === CommitActionEnum.mint) {
                 currentBalance = pool.quoteToken.balance;
@@ -76,10 +72,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                 currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
             }
 
-            const invalidAmount = isInvalidAmount(
-                amountBN,
-                currentBalance,
-            );
+            const invalidAmount = isInvalidAmount(amountBN, currentBalance);
 
             swapDispatch({
                 type: 'setInvalidAmount',

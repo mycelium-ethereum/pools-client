@@ -89,6 +89,12 @@ export type StaticPoolInfo = {
     quoteToken: StaticTokenInfo;
 };
 
+export type AggregateBalances = {
+    longTokens: BigNumber;
+    shortTokens: BigNumber;
+    quoteTokens: BigNumber;
+};
+
 export type Pool = StaticPoolInfo & {
     lastUpdate: BigNumber;
     lastPrice: BigNumber;
@@ -102,6 +108,7 @@ export type Pool = StaticPoolInfo & {
     longToken: PoolToken;
     committer: Committer;
     subscribed: boolean;
+    aggregateBalances: AggregateBalances;
 };
 
 // for mint the amount is the amount of collateral spent

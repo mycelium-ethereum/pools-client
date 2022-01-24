@@ -44,6 +44,11 @@ export const DEFAULT_POOLSTATE: Pool = {
         approvedAmount: new BigNumber(0),
         side: SideEnum.long,
     },
+    aggregateBalances: {
+        longTokens: new BigNumber(0),
+        shortTokens: new BigNumber(0),
+        quoteTokens: new BigNumber(0),
+    },
     committer: {
         address: '',
         pendingLong: {

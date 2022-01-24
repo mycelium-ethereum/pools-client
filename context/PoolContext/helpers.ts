@@ -1,6 +1,6 @@
 import { SideEnum, ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
-import { PendingAmounts, Pool, StaticPoolInfo } from '@libs/types/General';
+import { AggregateBalances, PendingAmounts, Pool, StaticPoolInfo } from '@libs/types/General';
 import {
     LeveragedPool__factory,
     TestToken__factory,
@@ -10,6 +10,7 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 
 /**
  *
@@ -35,14 +36,14 @@ export const initPool: (
     console.debug(`LastUpdate: ${lastUpdate.toNumber()}`);
 
     // fetch short and long tokeninfo
-    const shortTokenInstance = TestToken__factory.connect(pool.shortToken.address, provider)
+    const shortTokenInstance = TestToken__factory.connect(pool.shortToken.address, provider);
     // const longTokenInstance = new ethers.Contract(
-        // pool.longToken.address,
-        // TestToken__factory.abi,
-        // provider,
+    // pool.longToken.address,
+    // TestToken__factory.abi,
+    // provider,
     // ) as PoolToken;
 
-    const longTokenInstance = TestToken__factory.connect(pool.longToken.address, provider)
+    const longTokenInstance = TestToken__factory.connect(pool.longToken.address, provider);
 
     const [longTokenSupply, shortTokenSupply] = await Promise.all([
         longTokenInstance.totalSupply({
@@ -100,6 +101,7 @@ export const initPool: (
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
+        aggregateBalances: DEFAULT_POOLSTATE.aggregateBalances,
         subscribed: false,
     };
 };
@@ -194,7 +196,7 @@ export const fetchCommits: (
     const updateInterval = await contract.updateIntervalId();
     const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
 
-    console.log('pending mint amounts', pendingAmounts)
+    console.log('pending mint amounts', pendingAmounts);
 
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
@@ -232,6 +234,22 @@ export const fetchTokenBalances: (
             });
         }),
     );
+};
+
+export const fetchAggregateBalance: (
+    provider: ethers.providers.JsonRpcProvider,
+    account: string,
+    committer: string,
+    quoteTokenDecimals: number,
+) => Promise<AggregateBalances> = async (provider, _account, committer, quoteTokenDecimals) => {
+    const contract = PoolCommitter__factory.connect(committer, provider);
+    // const balances = await contract.getAggregateBalance(account)
+    const balances = await contract.getAggregateBalance('0x110af92Ba116fD7868216AA794a7E4dA3b9D7D11');
+    return {
+        longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens), quoteTokenDecimals),
+        shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens), quoteTokenDecimals),
+        quoteTokens: new BigNumber(ethers.utils.formatUnits(balances.settlementTokens), quoteTokenDecimals),
+    };
 };
 
 export const fetchTokenApprovals: (

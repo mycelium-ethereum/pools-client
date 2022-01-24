@@ -11,11 +11,12 @@ import styled from 'styled-components';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
-import {MarketFilterEnum} from '@libs/types/General';
-import { portfolioReducer, initialPortfolioState, DenotedInEnum } from './state';
-import {SearchInput} from '@components/General/SearchInput';
+import { MarketFilterEnum } from '@libs/types/General';
+import { portfolioReducer, initialPortfolioState, DenotedInEnum, EscrowRowProps } from './state';
+import { SearchInput } from '@components/General/SearchInput';
 import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
 import EscrowTable from './EscrowTable';
+import { marketFilter } from '@libs/utils/functions';
 
 export enum LoadingState {
     Idle = 0,
@@ -42,8 +43,8 @@ const TableSection = styled.div`
     margin-top: 2.5rem;
     padding: 1.25rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    background: ${({ theme }) => theme.background}
-`
+    background: ${({ theme }) => theme.background};
+`;
 
 // const Overview
 export default (({ onClickBurn }) => {
@@ -63,6 +64,15 @@ export default (({ onClickBurn }) => {
     };
 
     const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
+
+    const searchFilter = (pool: EscrowRowProps): boolean => {
+        const searchString = state.escrowSearch.toLowerCase();
+        return Boolean(pool.poolName.toLowerCase().match(searchString));
+    };
+
+    const filteredEscrowRows = escrowRows
+        .filter((pool: EscrowRowProps) => marketFilter(pool.poolName, state.escrowMarketFilter))
+        .filter(searchFilter);
 
     const emptyState = () => {
         return (
@@ -271,7 +281,9 @@ export default (({ onClickBurn }) => {
                                         key: key,
                                         ticker: key as LogoTicker,
                                     }))}
-                                    onSelect={(val) => dispatch({ type: 'setDenotion', denotedIn: val as DenotedInEnum })}
+                                    onSelect={(val) =>
+                                        dispatch({ type: 'setDenotion', denotedIn: val as DenotedInEnum })
+                                    }
                                 />
                             </div>
                         </div>
@@ -292,7 +304,9 @@ export default (({ onClickBurn }) => {
                                         key: (MarketFilterEnum as any)[key],
                                         ticker: (key !== 'All' ? key : '') as LogoTicker,
                                     }))}
-                                    onSelect={(val) => dispatch({ type: 'setEscrowMarketFilter', market: val as MarketFilterEnum })}
+                                    onSelect={(val) =>
+                                        dispatch({ type: 'setEscrowMarketFilter', market: val as MarketFilterEnum })
+                                    }
                                 />
                             </div>
                             <div className="flex">
@@ -304,7 +318,7 @@ export default (({ onClickBurn }) => {
                             </div>
                         </div>
                     </div>
-                    <EscrowTable rows={escrowRows} />
+                    <EscrowTable rows={filteredEscrowRows} />
                 </TableSection>
             </div>
         );

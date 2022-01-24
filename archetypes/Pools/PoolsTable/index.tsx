@@ -685,8 +685,7 @@ const UpOrDown: React.FC<{
             poolTicker={poolTicker}
             showNextRebalance={showNextRebalance}
         >
-
-            <UpOrDownInner 
+            <UpOrDownInner
                 oldValue={oldValue}
                 newValue={newValue}
                 deltaDenotion={deltaDenotion}
