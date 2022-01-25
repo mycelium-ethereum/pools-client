@@ -129,7 +129,7 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <div className="container">
+            <div className="container mb-10">
                 <section className="mb-8">
                     <h1 className="mt-8 mb-4 px-4 sm:px-0 font-semibold text-3xl text-theme-text">Pools</h1>
                     <FilterBar state={state} dispatch={dispatch} />
@@ -140,7 +140,7 @@ export const Browse: React.FC = () => {
                     return (
                         <div
                             key={index}
-                            className="p-4 md:p-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
+                            className="p-4 md:p-8 lg:px-16 mb-10 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
                         >
                             <PoolsTable
                                 rows={dataRows}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { ARBITRUM, CommitActionEnum, MarketToOracleMap, SideEnum } from '@libs/constants';
-import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
+import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
+import {calcPercentageDifference, getPriceFeedUrl, toApproxCurrency} from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -126,15 +126,13 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                                         ORACLE
                                     </div>
                                     <a
-                                        href={`https://reputation.link/contracts/${MarketToOracleMap(
-                                            rows[0].name.split('-')[1],
-                                        )}`}
+                                        href={getPriceFeedUrl(rows[0].name)}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="flex items-center"
                                     >
                                         <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
-                                        <div className="mr-2 font-bold">Chainlink</div>
+                                        <div className="mr-2 font-bold normal-case">Chainlink</div>
                                         <LinkIcon alt="Link" />
                                     </a>
                                 </div>
@@ -310,8 +308,10 @@ const PoolRow: React.FC<
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
-                    USDC
-                    <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
+                    <div className="flex items-center">
+                        USDC
+                        <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
+                    </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
@@ -494,10 +494,10 @@ const LongBalance: React.FC<{ width: number }> = ({ width }) => (
     <div
         style={{ width: `${width}%` }}
         className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green matrix:bg-dark-green`}
-    ></div>
+    />
 );
 const ShortBalance = () => (
-    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`}></div>
+    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`} />
 );
 
 const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';

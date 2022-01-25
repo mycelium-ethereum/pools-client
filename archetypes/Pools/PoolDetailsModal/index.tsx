@@ -2,6 +2,7 @@ import React from 'react';
 import { TWModal } from '@components/General/TWModal';
 import { Table, TableRow, TableRowCell } from '@components/General/TWTable';
 import styled from 'styled-components';
+import { getPriceFeedUrl } from '@libs/utils/converters';
 
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
@@ -23,21 +24,6 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
     const getContractDetailsUrl = (v: string) => {
         const BASE_URL = `${previewUrl}address/${v}` || 'https://arbiscan.io/address/';
         return v ? BASE_URL : 'https://arbiscan.io';
-    };
-
-    const getPriceFeedUrl = (v: string) => {
-        if (!v) {
-            return 'https://data.chain.link/arbitrum/mainnet/crypto-usd/';
-        }
-
-        let name = v?.split('-')[1];
-        name = name?.toLowerCase();
-        name = /\//.test(name) ? name?.replace('/', '-') : '';
-
-        const market = /eur/.test(name) ? 'fiat' : 'crypto-usd';
-        const FEED_URL = `https://data.chain.link/arbitrum/mainnet/${market}/`;
-
-        return `${FEED_URL}${name}`;
     };
 
     const poolDetailsData = [

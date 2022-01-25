@@ -64,19 +64,6 @@ export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (t
     }
 };
 
-export const MarketToOracleMap: (marketName: string) => string = (marketName) => {
-    switch (marketName) {
-        // BTC/USD
-        case 'BTC/USD':
-            return '0xae74faa92cb67a95ebcab07358bc222e33a34da7';
-        // ETH/USD
-        case 'ETH/USD':
-            return '0x37bc7498f4ff12c19678ee8fe19d713b87f6a9e6';
-        default:
-            return '';
-    }
-};
-
 // Focused on either buys or shorts when viewing pending commits
 export enum CommitsFocusEnum {
     mints = 0,
