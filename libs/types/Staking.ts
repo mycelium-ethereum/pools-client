@@ -39,3 +39,4 @@ export type Farm = {
     stakingTokenDecimals: number;
     stakingTokenAllowance: BigNumber;
 } & FarmTableDetails;
+

@@ -6,7 +6,6 @@ import { StakingRewards } from '@libs/staking/typechain';
 import {
     AggregatorV3Interface,
     AggregatorV3Interface__factory,
-    ERC20,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
@@ -69,7 +68,7 @@ export const FarmStore: React.FC<
         // populate token details and add to lookup
         await Promise.all(
             tokenAddresses.map(async (address, index) => {
-                const tokenContract = new ethers.Contract(address, ERC20__factory.abi, provider) as ERC20;
+                const tokenContract = ERC20__factory.connect(address, provider);
 
                 const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
                 const tokenBalance = tokenBalances[index];
@@ -83,9 +82,8 @@ export const FarmStore: React.FC<
                 } else if (config?.knownUSDCPriceFeeds?.[address]) {
                     // fetch USDC price for known markets (BTC and ETH)
                     // known market price feed addresses are configured in Web3Context.Config.ts
-                    const priceFeedAggregator = new ethers.Contract(
+                    const priceFeedAggregator = AggregatorV3Interface__factory.connect(
                         config.knownUSDCPriceFeeds[address],
-                        AggregatorV3Interface__factory.abi,
                         provider,
                     ) as AggregatorV3Interface;
 
@@ -155,7 +153,7 @@ export const FarmStore: React.FC<
                     farm.contract.rewardsToken(),
                 ]);
 
-            const rewardsToken = new ethers.Contract(rewardsTokenAddress, ERC20__factory.abi, signer) as ERC20;
+            const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
             const rewardsTokenDecimals = await rewardsToken.decimals();
 
@@ -197,16 +195,14 @@ export const FarmStore: React.FC<
                                         contract.rewardsToken(),
                                     ]);
 
-                                const stakingToken = new ethers.Contract(
+                                const stakingToken = ERC20__factory.connect(
                                     stakingTokenAddress,
-                                    ERC20__factory.abi,
                                     signer,
-                                ) as ERC20;
-                                const rewardsToken = new ethers.Contract(
+                                );
+                                const rewardsToken = ERC20__factory.connect(
                                     rewardsTokenAddress,
-                                    ERC20__factory.abi,
                                     signer,
-                                ) as ERC20;
+                                );
 
                                 const [
                                     stakingTokenName,
