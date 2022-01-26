@@ -51,7 +51,7 @@ export type SwapAction =
 export const LEVERAGE_OPTIONS = (market: string): { leverage: number; disabled: boolean }[] => [
     {
         leverage: 1,
-        disabled: market === 'TOKE/USD',
+        disabled: market === 'TOKE/USD' || market === 'LINK/USD' || market === 'AAVE/USD',
     },
     {
         leverage: 2,

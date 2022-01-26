@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Logo } from '@components/General';
+import { Logo, LogoTicker } from '@components/General';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
@@ -8,7 +8,7 @@ import { ARBITRUM } from '@libs/constants';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 
 // const Actions
-export default (({ provider, token, arbiscanTarget }) => (
+export default (({ provider, token, arbiscanTarget, otherActions }) => (
     <>
         <Popover as="div" className="inline relative ml-2 my-auto">
             {({ open }) => (
@@ -42,19 +42,39 @@ export default (({ provider, token, arbiscanTarget }) => (
                                     <PlusOutlined className="relative inline mr-2 h-[12px]" />
                                     Add token to wallet
                                 </div>
-                                <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
-                                    onClick={() =>
-                                        openArbiscan(
-                                            arbiscanTarget.type,
-                                            arbiscanTarget.target,
-                                            provider?.network?.chainId?.toString() as AvailableNetwork,
-                                        )
-                                    }
-                                >
-                                    <Logo className="relative inline mr-2" ticker={ARBITRUM} />
-                                    View on Arbiscan
-                                </div>
+                                {arbiscanTarget ? (
+                                    <div
+                                        className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
+                                        onClick={() =>
+                                            openArbiscan(
+                                                arbiscanTarget.type,
+                                                arbiscanTarget.target,
+                                                provider?.network?.chainId?.toString() as AvailableNetwork,
+                                            )
+                                        }
+                                    >
+                                        <Logo className="relative inline mr-2" ticker={ARBITRUM} />
+                                        View on Arbiscan
+                                    </div>
+                                ) : null}
+                                {otherActions
+                                    ? otherActions.map((action) => (
+                                          <div
+                                              key={action.text}
+                                              className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
+                                              onClick={() =>
+                                                  openArbiscan(
+                                                      action.type,
+                                                      action.target,
+                                                      provider?.network?.chainId?.toString() as AvailableNetwork,
+                                                  )
+                                              }
+                                          >
+                                              <Logo className="relative inline mr-2" ticker={action.logo} />
+                                              {action.text}
+                                          </div>
+                                      ))
+                                    : null}
                             </div>
                         </Popover.Panel>
                     </Transition>
@@ -69,8 +89,14 @@ export default (({ provider, token, arbiscanTarget }) => (
         symbol: string;
         decimals: number;
     };
-    arbiscanTarget: {
+    arbiscanTarget?: {
         type: ArbiscanEnum;
         target: string;
     };
+    otherActions?: {
+        type: ArbiscanEnum;
+        target: string;
+        logo: LogoTicker;
+        text: string;
+    }[];
 }>;

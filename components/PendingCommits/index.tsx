@@ -44,14 +44,20 @@ export default (() => {
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spent (USDC)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Spent (USD)</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
                             <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
                             <TableHeaderCell>Receive in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <MintRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <CommitRow
+                                key={`pcr-${index}`}
+                                index={index}
+                                provider={provider ?? null}
+                                {...commit}
+                                burnRow={false}
+                            />
                         ))}
                     </>
                 ) : (
@@ -59,13 +65,19 @@ export default (() => {
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
                             <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USDC) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USDC) *</TableHeaderCell>
+                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
+                            <TableHeaderCell>Return (USD) *</TableHeaderCell>
                             <TableHeaderCell>Burn in</TableHeaderCell>
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <BurnRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+                            <CommitRow
+                                key={`pcr-${index}`}
+                                index={index}
+                                provider={provider ?? null}
+                                {...commit}
+                                burnRow={true}
+                            />
                         ))}
                     </>
                 )}
@@ -80,10 +92,11 @@ export default (() => {
     );
 }) as React.FC;
 
-const MintRow: React.FC<
+export const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
         index: number;
+        burnRow: boolean; // is burnRow
     }
 > = ({
     token,
@@ -96,6 +109,7 @@ const MintRow: React.FC<
     frontRunningInterval,
     updateInterval,
     created,
+    burnRow,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
@@ -105,9 +119,19 @@ const MintRow: React.FC<
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
             </TableRowCell>
-            <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-            <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
+            {burnRow ? (
+                <>
+                    <TableRowCell>{amount.toFixed(2)}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
+                </>
+            ) : (
+                <>
+                    <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
+                    <TableRowCell>{amount.div(tokenPrice).toFixed(3)}</TableRowCell>
+                </>
+            )}
             <TableRowCell>
                 <ReceiveIn
                     pendingUpkeep={pendingUpkeep}
@@ -132,60 +156,6 @@ const MintRow: React.FC<
         </TableRow>
     );
 };
-
-const BurnRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
-    }
-> = ({
-    token,
-    txnHash,
-    tokenPrice,
-    amount,
-    nextRebalance,
-    provider,
-    index,
-    frontRunningInterval,
-    updateInterval,
-    created,
-}) => {
-    const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    return (
-        <TableRow key={txnHash} rowNumber={index}>
-            <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.name}
-            </TableRowCell>
-            <TableRowCell>{amount.toFixed(2)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(tokenPrice)}</TableRowCell>
-            <TableRowCell>{toApproxCurrency(amount.times(tokenPrice))}</TableRowCell>
-            <TableRowCell>
-                <ReceiveIn
-                    pendingUpkeep={pendingUpkeep}
-                    setPendingUpkeep={setPendingUpkeep}
-                    actionType={CommitActionEnum.burn}
-                    nextRebalance={nextRebalance}
-                    created={created}
-                    frontRunningInterval={frontRunningInterval}
-                    updateInterval={updateInterval}
-                />
-            </TableRowCell>
-            <TableRowCell className="flex text-right">
-                <Actions
-                    token={token}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
-                        target: txnHash,
-                    }}
-                />
-            </TableRowCell>
-        </TableRow>
-    );
-};
-
 interface ReceiveInProps {
     pendingUpkeep: boolean;
     setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;

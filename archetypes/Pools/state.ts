@@ -5,7 +5,9 @@ export enum MarketFilterEnum {
     ETH = 'Ethereum',
     BTC = 'Bitcoin',
     TOKE = 'Tokemak',
+    LINK = 'Chainlink',
     EUR = 'Euro',
+    AAVE = 'Aave',
 }
 
 export enum DeltaEnum {
@@ -43,6 +45,7 @@ export interface BrowseTableRowData {
     market: string;
     address: string;
     decimals: number;
+    quoteTokenSymbol: string;
     leverage: number;
 
     lastPrice: number;

@@ -51,6 +51,12 @@ export type Network = {
     };
     tcrAddress: string;
     sushiRouterAddress: string;
+    stakingRewardTokens?: {
+        [key: string]: {
+            address: string;
+            decimals: number;
+        };
+    };
     balancerInfo?: {
         graphUri: string;
         baseUri: string; // base link to balancer trading page
@@ -171,13 +177,37 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x2c8373688d20b87e492F9860c7639997a0Cb968B', // 1-TOKE/USDC-long
+                address: '0x2c8373688d20b87e492F9860c7639997a0Cb968B', // 3-TOKE/USDC-long
                 pool: '0xc11B9Dc0F566B5084FC48Be1F821a8298fc900bC',
+                abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
+            },
+            {
+                address: '0xaD27FD92C77331b4cD687556d581F72cA5342316', // 3-TOKE/USDC-short
+                pool: '0xc11B9Dc0F566B5084FC48Be1F821a8298fc900bC',
+                abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
+            },
+            {
+                address: '0xC50712733C8acE3012Ab11F56BF232F8bFfAe7f2', // 3-LINK/USDC-long
+                pool: '0x7b6FfAd58ce09f2a71c01e61F94b1592Bd641876',
+                abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
+            },
+            {
+                address: '0xA29fF864fE81ab9ff2c4737904eBB2f5e9Fa9D71', // 3-LINK/USDC-short
+                pool: '0x7b6FfAd58ce09f2a71c01e61F94b1592Bd641876',
+                abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
+            },
+            {
+                address: '0xA9808Afc50e06877575d2Ff7ccc21bc55552Bcd1', // 3-AAVE/USD-long
+                pool: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0xaD27FD92C77331b4cD687556d581F72cA5342316', // 1-TOKE/USDC-short
-                pool: '0xc11B9Dc0F566B5084FC48Be1F821a8298fc900bC',
+                address: '0x880e722a5996e7abaB4B8BbC77B9537205BDA1DE', // 3-AAVE/USD-short
+                pool: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
                 abi: StakingRewards__factory.abi,
             },
             {
@@ -252,6 +282,12 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         },
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
         tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
+        stakingRewardTokens: {
+            fxs: {
+                address: '0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7',
+                decimals: 18,
+            },
+        },
         balancerInfo: {
             graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
             baseUri: 'https://arbitrum.balancer.fi/#/trade',

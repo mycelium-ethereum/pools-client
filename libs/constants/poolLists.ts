@@ -133,30 +133,30 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
             },
             quoteToken: tokenMap[ARBITRUM].USDC,
         },
-        // {
-        //     name: '3-LINK/USD',
-        //     address: 'TODO',
-        //     leverage: 3,
-        //     updateInterval: ONE_HOUR,
-        //     frontRunningInterval: FIVE_MINUTES,
-        //     keeper: 'TODO',
-        //     committer: {
-        //         address: 'TODO',
-        //     },
-        //     longToken: {
-        //         name: '3L-LINK/USD',
-        //         address: 'TODO',
-        //         symbol: '3L-LINK/USD',
-        //         decimals: USDC_TOKEN_DECIMALS,
-        //     },
-        //     shortToken: {
-        //         name: '3S-LINK/USD',
-        //         address: 'TODO',
-        //         symbol: '3S-LINK/USD',
-        //         decimals: USDC_TOKEN_DECIMALS,
-        //     },
-        //     quoteToken: tokenMap[ARBITRUM].USDC,
-        // },
+        {
+            name: '3-LINK/USD',
+            address: '0x7b6FfAd58ce09f2a71c01e61F94b1592Bd641876',
+            leverage: 3,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0x8186948382f67c7160Fc7b872688AdC293aDF789',
+            },
+            longToken: {
+                name: '3L-LINK/USD',
+                address: '0x9d6CCCb49Abd383C51079904e341cAb1d02d92c6',
+                symbol: '3L-LINK/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            shortToken: {
+                name: '3S-LINK/USD',
+                address: '0x6d3bED2465d8c5e3Ef7F8DDC2CD3f8b38E90EaA5',
+                symbol: '3S-LINK/USD',
+                decimals: USDC_TOKEN_DECIMALS,
+            },
+            quoteToken: tokenMap[ARBITRUM].USDC,
+        },
         {
             name: '1-EUR/USD',
             address: '0x2C740EEe739098Ab8E90f5Af78ac1d07835d225B',
@@ -204,6 +204,30 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
                 decimals: USDC_TOKEN_DECIMALS,
             },
             quoteToken: tokenMap[ARBITRUM].USDC,
+        },
+        {
+            name: '3-AAVE/USD',
+            address: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
+            leverage: 3,
+            updateInterval: ONE_HOUR,
+            frontRunningInterval: FIVE_MINUTES,
+            keeper: '0x759E817F0C40B11C775d1071d466B5ff5c6ce28e',
+            committer: {
+                address: '0x993321599Fc9D0c5a496044308f16C70575DABBa',
+            },
+            longToken: {
+                name: '3L-AAVE/USD',
+                address: '0xd15239e444Ac687874fee8A415f8F59fd01E3E51', // TODO change to real
+                symbol: '3L-AAVE/USD',
+                decimals: tokenMap[ARBITRUM].FRAX.decimals,
+            },
+            shortToken: {
+                name: '3S-AAVE/USD',
+                address: '0x4eBA8B7B13C565041D74b92dCA6C9E4B8885B3cC', // TODO change to real
+                symbol: '3S-AAVE/USD',
+                decimals: tokenMap[ARBITRUM].FRAX.decimals,
+            },
+            quoteToken: tokenMap[ARBITRUM].FRAX,
         },
     ],
     [ARBITRUM_RINKEBY]: [

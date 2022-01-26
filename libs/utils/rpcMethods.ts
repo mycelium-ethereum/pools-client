@@ -99,7 +99,7 @@ export const openArbiscan: (type: ArbiscanEnum, taraget: string, network: Availa
     target,
     network,
 ) => {
-    const base = !!network ? networkConfig[network] : 'https://arbiscan.io';
+    const base = !!network ? networkConfig[network]?.previewUrl : 'https://arbiscan.io';
     switch (type) {
         case ArbiscanEnum.txn:
             window.open(`${base}/tx/${target}`, '', 'noreferrer=true,noopener=true');

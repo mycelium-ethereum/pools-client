@@ -37,7 +37,7 @@ export default (({ account, className }) => {
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative ml-4 my-auto overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative ml-4 my-auto overflow-hidden xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -51,7 +51,7 @@ export default (({ account, className }) => {
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
-                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full lg:hidden">
+                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full xl:hidden">
                             <Transition.Child
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -78,10 +78,10 @@ export default (({ account, className }) => {
                                             Tokens
                                         </div>
                                         <div
-                                            className={classNames(linkStyles, route === 'browse' ? selectedStyles : '')}
+                                            className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/pools')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Browse" />
+                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
                                         </div>
                                         <div
@@ -101,8 +101,22 @@ export default (({ account, className }) => {
                                             )}
                                             onClick={() => handleRoute('/bridge')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Bridge" />
+                                            <img className="inline mr-2" src={'/img/general/bridge.svg'} alt="Bridge" />
                                             Bridge
+                                        </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('portfolio') ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/portfolio')}
+                                        >
+                                            <img
+                                                className="inline mr-2"
+                                                src={'/img/general/portfolio.svg'}
+                                                alt="Portfolio"
+                                            />
+                                            Portfolio
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />

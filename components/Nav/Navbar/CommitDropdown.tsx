@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
 import TimeLeft from '@components/TimeLeft';
-import { useCommitActions } from '@context/UsersCommitContext';
 import { CommitsFocusEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import { classNames } from '@libs/utils/functions';
 import TWPopup from '@components/General/TWPopup';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import { useRouter } from 'next/router';
 
 const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 
 // const CommitDropdown
 export default (({ setShowQueued, hide }) => {
-    const { commitDispatch } = useCommitActions();
+    const router = useRouter();
     const { mints, burns, nextUpdate } = useCommitsBreakdown();
 
     useMemo(() => {
@@ -22,13 +22,13 @@ export default (({ setShowQueued, hide }) => {
         }
     }, [mints, burns]);
 
-    const handleClick = (focus: CommitsFocusEnum) => {
-        if (commitDispatch) {
-            commitDispatch({ type: 'show', focus: focus });
-        } else {
-            console.error('Commitdispatch undefined');
-        }
-    };
+    const handleClick = (focus: CommitsFocusEnum) =>
+        router.push({
+            pathname: '/portfolio/commits',
+            query: {
+                focus: focus === CommitsFocusEnum.mints ? 'mints' : 'burns',
+            },
+        });
 
     return (
         <TWPopup

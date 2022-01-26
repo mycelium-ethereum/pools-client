@@ -32,6 +32,7 @@ export default (() => {
                         nextLongBalance,
                         lastUpdate,
                         updateInterval,
+                        quoteToken,
                         committer: {
                             pendingLong: { burn: pendingLongBurn },
                             pendingShort: { burn: pendingShortBurn },
@@ -55,6 +56,7 @@ export default (() => {
                         nextRebalance: lastUpdate.plus(updateInterval),
                         frontRunningInterval: pools[commit.pool].frontRunningInterval,
                         updateInterval: updateInterval,
+                        quoteTokenSymbol: quoteToken.symbol,
                     });
                 }
             }
