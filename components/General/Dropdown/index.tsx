@@ -112,7 +112,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 )}
             >
                 <span className="mr-2 opacity-80">
-                    {placeHolderIcon && value !== '' ? (
+                    {placeHolderIcon && value !== '' && value !== 'All' ? (
                         <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
                     ) : null}
                     {value === '' ? placeHolder : value}

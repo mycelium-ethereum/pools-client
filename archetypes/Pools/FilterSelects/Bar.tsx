@@ -96,8 +96,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <div className="hidden lg:flex mr-4 flex-col">
                     <h3 className="mb-1 text-theme-text">Market</h3>
                     <Dropdown
+                        iconSize="xs"
+                        placeHolderIcon={
+                            Object.entries(MarketFilterEnum).find(
+                                ([_key, val]) => val === state.marketFilter,
+                            )?.[0] as LogoTicker
+                        }
                         value={state.marketFilter}
-                        className="w-32 mt-auto"
+                        className="w-36 mt-auto"
                         options={Object.keys(MarketFilterEnum).map((key) => ({
                             key: (MarketFilterEnum as any)[key],
                             ticker: (key !== 'All' ? key : '') as LogoTicker,
