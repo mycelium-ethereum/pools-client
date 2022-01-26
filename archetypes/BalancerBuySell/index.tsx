@@ -75,6 +75,7 @@ export default (() => {
         } else {
             return (
                 <Button
+                    id="take-me-to-balancer"
                     size="lg"
                     variant="primary"
                     onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}

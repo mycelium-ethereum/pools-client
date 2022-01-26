@@ -37,7 +37,7 @@ interface ConnectWalletProps {
 
 const ConnectWalletButton = ({ handleConnect }: ConnectWalletProps) => {
     return (
-        <Button size="sm" variant="transparent" onClick={handleConnect}>
+        <Button id="connect-wallet" size="sm" variant="transparent" onClick={handleConnect}>
             Connect Wallet
         </Button>
     );
