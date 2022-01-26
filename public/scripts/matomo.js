@@ -29,3 +29,43 @@ const d = document,
 g.async = true;
 g.src = 'https://cdn.matomo.cloud/tracerfinance.matomo.cloud/container_9pOj4o6E.js';
 s.parentNode.insertBefore(g, s);
+
+var _mtm = _mtm || [];
+_mtm.push({
+    event: 'mtm_event',
+    event_category: 'acquisition',
+    event_action: 'landing-page | header',
+    event_name: 'click button | launch-pools',
+});
+
+var _mtm = _mtm || [];
+_mtm.push({
+    event: 'mtm_event',
+    event_category: 'acquisition',
+    event_action: 'pools-page | header',
+    event_name: 'click button | connect-wallet',
+});
+
+var _mtm = _mtm || [];
+_mtm.push({
+    event: 'mtm_event',
+    event_category: 'acquisition',
+    event_action: 'pools-page | header',
+    event_name: 'click button | take-me-to-balancer',
+});
+
+var _mtm = _mtm || [];
+_mtm.push({
+    event: 'mtm_event',
+    event_category: 'acquisition',
+    event_action: 'pools-page | header',
+    event_name: 'click button | mint-or-burn',
+});
+
+var _mtm = _mtm || [];
+_mtm.push({
+    event: 'mtm_event',
+    event_category: 'acquisition',
+    event_action: 'pools-page | header',
+    event_name: 'click button | stake',
+});
