@@ -22,6 +22,8 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/tracer-pools-utils';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { poolList } from '@libs/constants/poolLists';
+import { watchAsset } from '@libs/utils/rpcMethods';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -378,68 +380,94 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * @param amount amount to commit
      * @param options handleTransaction options
      */
-    const commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void> =
-        async (pool, commitType, amount, options) => {
-            const committerAddress = poolsState.pools[pool].committer.address;
-            const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
-            const nextRebalance = poolsState.pools[pool].lastUpdate
-                .plus(poolsState.pools[pool].updateInterval)
-                .toNumber();
-            const frontRunning = poolsState.pools[pool].frontRunningInterval.toNumber();
-            const targetTime =
-                nextRebalance - Date.now() / 1000 < frontRunning
-                    ? nextRebalance + poolsState.pools[pool].updateInterval.toNumber()
-                    : nextRebalance;
-            if (!committerAddress) {
-                console.error('Committer address undefined when trying to mint');
-                // TODO handle error
-            }
-            const network = await signer?.getChainId();
-            const committer = new ethers.Contract(
-                committerAddress,
-                PoolCommitter__factory.abi,
-                signer,
-            ) as PoolCommitter;
-            console.debug(
-                `Creating commit. Amount: ${ethers.utils.parseUnits(
-                    amount.toFixed(),
-                    quoteTokenDecimals,
-                )}, Raw amount: ${amount.toFixed()}`,
-            );
-            if (handleTransaction) {
-                const poolName = poolsState.pools[pool].name;
-
-                const type =
-                    commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
-                handleTransaction(
-                    committer.commit,
-                    [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
-                    {
-                        network: (network ?? '0') as AvailableNetwork,
-                        onSuccess: (receipt) => {
-                            console.debug('Successfully submitted commit txn: ', receipt);
-                            // get and set token balances
-                            updateTokenBalances(poolsState.pools[pool], provider);
-                            options?.onSuccess ? options.onSuccess(receipt) : null;
+    const commit: (
+        pool: string,
+        commitType: CommitEnum,
+        amount: BigNumber,
+        options?: Options,
+    ) => Promise<void> = async (pool, commitType, amount, options) => {
+        const committerAddress = poolsState.pools[pool].committer.address;
+        const quoteTokenDecimals = poolsState.pools[pool].quoteToken.decimals;
+        const nextRebalance = poolsState.pools[pool].lastUpdate.plus(poolsState.pools[pool].updateInterval).toNumber();
+        const frontRunning = poolsState.pools[pool].frontRunningInterval.toNumber();
+        const targetTime =
+            nextRebalance - Date.now() / 1000 < frontRunning
+                ? nextRebalance + poolsState.pools[pool].updateInterval.toNumber()
+                : nextRebalance;
+        if (!committerAddress) {
+            console.error('Committer address undefined when trying to mint');
+            // TODO handle error
+        }
+        const network = await signer?.getChainId();
+        const committer = new ethers.Contract(committerAddress, PoolCommitter__factory.abi, signer) as PoolCommitter;
+        console.debug(
+            `Creating commit. Amount: ${ethers.utils.parseUnits(
+                amount.toFixed(),
+                quoteTokenDecimals,
+            )}, Raw amount: ${amount.toFixed()}`,
+        );
+        if (handleTransaction) {
+            handleTransaction(
+                committer.commit,
+                [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals)],
+                {
+                    network: (network ?? '0') as AvailableNetwork,
+                    onSuccess: (receipt) => {
+                        console.debug('Successfully submitted commit txn: ', receipt);
+                        // get and set token balances
+                        updateTokenBalances(poolsState.pools[pool], provider);
+                        options?.onSuccess ? options.onSuccess(receipt) : null;
+                    },
+                    statusMessages: {
+                        waiting: {
+                            title: 'Submitting Order',
+                            body: (
+                                <div
+                                    className="flex items-center cursor-pointer"
+                                    onClick={() =>
+                                        watchAsset(provider as ethers.providers.JsonRpcProvider, {
+                                            address: poolsState.pools[pool].address,
+                                            decimals: quoteTokenDecimals,
+                                            symbol:
+                                                commitType === CommitEnum.long_mint
+                                                    ? poolsState.pools[pool].longToken.symbol
+                                                    : poolsState.pools[pool].shortToken.symbol,
+                                        })
+                                    }
+                                >
+                                    <Logo
+                                        className="mr-2"
+                                        size="md"
+                                        ticker={tokenSymbolToLogoTicker(
+                                            commitType === CommitEnum.long_mint
+                                                ? poolsState.pools[pool].longToken.symbol
+                                                : poolsState.pools[pool].shortToken.symbol,
+                                        )}
+                                    />
+                                    <div>Add to wallet</div>
+                                </div>
+                            ),
                         },
-                        statusMessages: {
-                            waiting: {
-                                title: `Queueing ${poolName} ${type}`,
-                            },
-                            poolName: poolName,
-                            type: type,
-                            nextRebalance: targetTime,
-                            success: {
-                                title: `${poolName} ${type} Queued`,
-                            },
-                            error: {
-                                title: `${type} ${poolName} Failed`,
-                            },
+                        symbol:
+                            commitType === CommitEnum.long_mint
+                                ? poolsState.pools[pool].longToken.symbol
+                                : poolsState.pools[pool].shortToken.symbol,
+                        type:
+                            commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint
+                                ? 'Mint'
+                                : 'Burn',
+                        nextRebalance: targetTime,
+                        success: {
+                            title: 'Order Submitted',
+                        },
+                        error: {
+                            title: 'Order Failed',
                         },
                     },
-                );
-            }
-        };
+                },
+            );
+        }
+    };
 
     /**
      * Approve pool to spend quote token

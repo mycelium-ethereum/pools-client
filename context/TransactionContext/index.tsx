@@ -9,6 +9,7 @@ import {
 // import { ARBITRUM, CommitsFocusEnum } from '@libs/constants';
 import TimeLeft from '@components/TimeLeft';
 import { useRouter } from 'next/router';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 type Content = {
     title?: React.ReactNode;
@@ -26,7 +27,7 @@ export type Options = {
         error?: Content; // transaction message for when the transaction fails
         success?: Content; // transaction message for when the transaction succeeds
         nextRebalance?: number;
-        poolName?: string;
+        symbol?: string;
         type?: 'Mint' | 'Burn';
     };
 };
@@ -98,13 +99,29 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
 
             updateToast(toastId as unknown as string, {
                 content: [
-                    statusMessages?.success?.title ?? 'Order Submitted to Queue',
+                    statusMessages?.success?.title ?? 'Order Submitted',
                     statusMessages?.success?.body ?? (
                         <>
                             {statusMessages?.nextRebalance !== undefined ? (
-                                <div className="mb-2">
-                                    {`${statusMessages?.poolName} in `}
-                                    <TimeLeft targetTime={statusMessages?.nextRebalance ?? 0} />
+                                <div className="whitespace-nowrap">
+                                    <div className="flex items-center mb-2">
+                                        <Logo
+                                            className="mr-2"
+                                            size="md"
+                                            ticker={tokenSymbolToLogoTicker(statusMessages?.symbol)}
+                                        />
+                                        <div>{statusMessages?.symbol} ready to claim in</div>
+                                        <TimeLeft
+                                            className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
+                                            targetTime={statusMessages?.nextRebalance ?? 0}
+                                        />
+                                    </div>
+                                    <div
+                                        className="text-tracer-400 underline cursor-pointer"
+                                        onClick={() => handleClick(statusMessages?.type ?? 'Mint')}
+                                    >
+                                        View order
+                                    </div>
                                 </div>
                             ) : null}
                             {/*<div>*/}
@@ -120,12 +137,6 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                             {/*        View order*/}
                             {/*    </a>*/}
                             {/*</div>*/}
-                            <div
-                                className="text-tracer-400 underline cursor-pointer"
-                                onClick={() => handleClick(statusMessages?.type ?? 'Mint')}
-                            >
-                                View order
-                            </div>
                         </>
                     ),
                 ],

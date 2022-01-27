@@ -6,11 +6,11 @@ import { PendingCommitInfo } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
 
-import Close from '/public/img/general/close.svg';
-import Error from 'public/img/general/error.svg';
-import Success from 'public/img/general/success.svg';
-import Warning from 'public/img/general/warning.svg';
-import Loading from 'public/img/loading-large.svg';
+import Close from '@public/img/general/close.svg';
+import Success from '@public/img/notifications/success.svg';
+import Warning from '@public/img/notifications/warning.svg';
+import Error from '@public/img/notifications/error.svg';
+import Loading from '@public/img/loading-large.svg';
 
 type PlacementType = 'bottom-left' | 'bottom-center' | 'bottom-right' | 'top-left' | 'top-center' | 'top-right';
 type AppearanceTypes = 'success' | 'error' | 'warning' | 'info' | 'loading';
