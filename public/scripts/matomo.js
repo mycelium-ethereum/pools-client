@@ -11,7 +11,7 @@ _paq.push(['enableLinkTracking']);
 (function () {
     const u = 'https://tracerfinance.matomo.cloud/';
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '2']);
+    _paq.push(['setSiteId', '4']);
     const d = document,
         g = d.createElement('script'),
         s = d.getElementsByTagName('script')[0];
@@ -30,7 +30,6 @@ g.async = true;
 g.src = 'https://cdn.matomo.cloud/tracerfinance.matomo.cloud/container_9pOj4o6E.js';
 s.parentNode.insertBefore(g, s);
 
-var _mtm = _mtm || [];
 _mtm.push({
     event: 'mtm_event',
     event_category: 'acquisition',
@@ -38,7 +37,6 @@ _mtm.push({
     event_name: 'click button | launch-pools',
 });
 
-var _mtm = _mtm || [];
 _mtm.push({
     event: 'mtm_event',
     event_category: 'acquisition',
@@ -46,7 +44,6 @@ _mtm.push({
     event_name: 'click button | connect-wallet',
 });
 
-var _mtm = _mtm || [];
 _mtm.push({
     event: 'mtm_event',
     event_category: 'acquisition',
@@ -54,7 +51,6 @@ _mtm.push({
     event_name: 'click button | take-me-to-balancer',
 });
 
-var _mtm = _mtm || [];
 _mtm.push({
     event: 'mtm_event',
     event_category: 'acquisition',
@@ -62,7 +58,6 @@ _mtm.push({
     event_name: 'click button | mint-or-burn',
 });
 
-var _mtm = _mtm || [];
 _mtm.push({
     event: 'mtm_event',
     event_category: 'acquisition',
