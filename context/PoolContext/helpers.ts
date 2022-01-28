@@ -88,7 +88,7 @@ export const fetchCommits: (
     const updateInterval = await contract.updateIntervalId();
     const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
 
-    console.log('Pending mint amounts', pendingAmounts);
+    console.info('Pending mint amounts', pendingAmounts);
 
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
