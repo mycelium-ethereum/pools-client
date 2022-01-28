@@ -2938,6 +2938,15 @@
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.12.tgz#6ead00421142394bfd44c64529e496a892d70943"
   integrity sha512-89zMpllR2PCS1DZ21viR6Zdqv70ZnEShIX+2cFB5cKfixl1DovIf+eU4H5ih6C4VnfYOazbrMRdWZsLtZy73Xg==
 
+"@tracer-protocol/pools-js@0.0.23":
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.23.tgz#94b4e442879b06e12ad8f91fb680801d5b996a70"
+  integrity sha512-FckTPKjoEAx5PbbpI9KFppU4eNb4JbDbk18KtPdh6AoglD7ysKWEBnjrqMlrfwz3Ar/8HpqUwdDUREnUjkGvwg==
+  dependencies:
+    "@tracer-protocol/perpetual-pools-contracts" "0.0.12"
+    bignumber.js "^9.0.1"
+    ethers "^5.5.1"
+
 "@tracer-protocol/tracer-pools-utils@^0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.7.tgz#6581de5c96196f333cea1e2289141557a37af385"
