@@ -2933,24 +2933,15 @@
     walletlink "^2.1.11"
     web3-provider-engine "^15.0.4"
 
-"@tracer-protocol/perpetual-pools-contracts@0.0.12":
-  version "0.0.12"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-0.0.12.tgz#6ead00421142394bfd44c64529e496a892d70943"
-  integrity sha512-89zMpllR2PCS1DZ21viR6Zdqv70ZnEShIX+2cFB5cKfixl1DovIf+eU4H5ih6C4VnfYOazbrMRdWZsLtZy73Xg==
-
 "@tracer-protocol/perpetual-pools-contracts@1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.0.2.tgz#e05a23bf6f919fc2aae47e1fd56dec9cf5698f28"
   integrity sha512-/AMXMwUkvTRWIUtp/sX/aObzhpTe1P0ThisvWqXovTj32eCneP6DAf+1Hq9ewlMQzTLpwN6Ns7RRIyYuEfDAmA==
 
-"@tracer-protocol/pools-js@^0.0.23":
-  version "0.0.23"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-0.0.23.tgz#94b4e442879b06e12ad8f91fb680801d5b996a70"
-  integrity sha512-FckTPKjoEAx5PbbpI9KFppU4eNb4JbDbk18KtPdh6AoglD7ysKWEBnjrqMlrfwz3Ar/8HpqUwdDUREnUjkGvwg==
-  dependencies:
-    "@tracer-protocol/perpetual-pools-contracts" "0.0.12"
-    bignumber.js "^9.0.1"
-    ethers "^5.5.1"
+"@tracer-protocol/pools-js@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.0.tgz#a57898f0219dfd9217c989f816d5923bf33d7d3d"
+  integrity sha512-HtIhEr56PusZn8Zt2Z3GM9lOsvxN1e2U1axR4fTVsZh+AODo2fo2cFdAVzmpuF1Zn2ECA8SQ6BN4NHFITBP3SA==
 
 "@tracer-protocol/tracer-pools-utils@^0.0.7":
   version "0.0.7"
