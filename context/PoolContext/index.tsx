@@ -306,7 +306,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
 
                         const decimals = poolsState.pools[pool].poolInstance.quoteToken.decimals;
-                        console.log('Transaction log', log);
 
                         // @ts-ignore
                         log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {

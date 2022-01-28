@@ -8,7 +8,7 @@ import { Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
 import { useTheme } from '@context/ThemeContext';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { KnownNetwork } from '@tracer-protocol/pools-js'
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -223,7 +223,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
             } catch (err) {
                 console.error(err);
             }
-        }
+        } 
     };
 
     const web3Context = React.useMemo(
