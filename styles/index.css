@@ -180,12 +180,6 @@ html {
     --button-bg-hover: #F3F4F6;
 }
 
-@media (max-height: 800px) {
-    html {
-        font-size: 12px;
-    }
-}
-
 html.theme-dark{
     /* cool-gray-900 */
     --background: #111928;
