@@ -62,6 +62,8 @@ export const initPool: (
         return [ethers.BigNumber.from(0), ethers.BigNumber.from(0)];
     });
 
+    console.log(pool.name, 'Short token supply', shortTokenSupply.toString());
+
     // fetch minimum commit size
     const poolCommitterInstance = new ethers.Contract(
         pool.committer.address,

@@ -417,6 +417,7 @@ const PoolRow: React.FC<
                     pastUpkeepTokenInfo={{
                         tokenPrice: pool.pastUpkeep.longTokenPrice,
                         tokenBalance: pool.pastUpkeep.longTokenBalance,
+                        effectiveGain: pool.pastUpkeep.longTokenEffectiveGain,
                     }}
                     account={account}
                     tokenInfo={pool.longToken}
@@ -442,6 +443,7 @@ const PoolRow: React.FC<
                     pastUpkeepTokenInfo={{
                         tokenPrice: pool.pastUpkeep.shortTokenPrice,
                         tokenBalance: pool.pastUpkeep.shortTokenBalance,
+                        effectiveGain: pool.pastUpkeep.shortTokenEffectiveGain,
                     }}
                     tokenInfo={pool.shortToken}
                     deltaDenotion={deltaDenotion}
@@ -481,6 +483,7 @@ const TokenRows: React.FC<
         pastUpkeepTokenInfo: {
             tokenPrice: number;
             tokenBalance: number;
+            effectiveGain: number;
         };
         antecedentUpkeepTokenInfo: {
             tokenPrice: number;
@@ -506,6 +509,8 @@ const TokenRows: React.FC<
     poolTicker,
 }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
+
+    const effectiveGain = showNextRebalance ? tokenInfo.effectiveGain : pastUpkeepTokenInfo.effectiveGain;
 
     return (
         <>
@@ -548,14 +553,10 @@ const TokenRows: React.FC<
             <TableRowCell size={'sm'} className={styles}>
                 <div
                     className={
-                        tokenInfo.effectiveGain > leverage
-                            ? 'text-green-600'
-                            : tokenInfo.effectiveGain < leverage
-                            ? 'text-red-600'
-                            : ''
+                        effectiveGain > leverage ? 'text-green-600' : effectiveGain < leverage ? 'text-red-600' : ''
                     }
                 >
-                    {tokenInfo.effectiveGain.toFixed(3)}
+                    {effectiveGain.toFixed(3)}
                 </div>
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
