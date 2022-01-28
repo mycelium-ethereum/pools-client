@@ -104,18 +104,28 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                         <>
                             {statusMessages?.nextRebalance !== undefined ? (
                                 <div className="whitespace-nowrap">
-                                    <div className="flex items-center mb-2">
-                                        <Logo
-                                            className="mr-2"
-                                            size="md"
-                                            ticker={tokenSymbolToLogoTicker(statusMessages?.symbol)}
-                                        />
-                                        <div>{statusMessages?.symbol} ready to claim in</div>
-                                        <TimeLeft
-                                            className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
-                                            targetTime={statusMessages?.nextRebalance ?? 0}
-                                        />
-                                    </div>
+                                    {statusMessages?.type === 'Mint' ? (
+                                        <div className="flex items-center mb-2">
+                                            <Logo
+                                                className="mr-2"
+                                                size="md"
+                                                ticker={tokenSymbolToLogoTicker(statusMessages?.symbol)}
+                                            />
+                                            <div>{statusMessages?.symbol} ready to claim in</div>
+                                            <TimeLeft
+                                                className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
+                                                targetTime={statusMessages?.nextRebalance ?? 0}
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center mb-2">
+                                            <div>USDC ready to claim in</div>
+                                            <TimeLeft
+                                                className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
+                                                targetTime={statusMessages?.nextRebalance ?? 0}
+                                            />
+                                        </div>
+                                    )}
                                     <div
                                         className="text-tracer-400 underline cursor-pointer"
                                         onClick={() => handleClick(statusMessages?.type ?? 'Mint')}
