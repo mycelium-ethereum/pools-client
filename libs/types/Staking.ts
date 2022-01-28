@@ -7,7 +7,7 @@ export type BalancerPoolAsset = {
     symbol: string;
     isPoolToken: boolean;
     reserves: BigNumber;
-    usdcPrice: BigNumber;
+    usdPrice: BigNumber;
     decimals: number;
 };
 
@@ -39,4 +39,3 @@ export type Farm = {
     stakingTokenDecimals: number;
     stakingTokenAllowance: BigNumber;
 } & FarmTableDetails;
-

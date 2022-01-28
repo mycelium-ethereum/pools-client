@@ -9,7 +9,7 @@ import Close from '/public/img/general/close.svg';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
 import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
-import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { APYTip, RewardsEndedTip } from '@components/Tooltips';
 import { TokenToFarmAddressMap } from '@libs/constants';
 

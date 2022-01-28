@@ -198,13 +198,13 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         if (poolsInitialised && Object.keys(pools)?.length) {
             const markets: Record<string, Market> = {};
             Object.values(pools).forEach((pool) => {
-                const [leverage, marketName] = pool.name.split('-');
+                const [leverage, marketName] = pool.poolInstance.name.split('-');
                 // hopefully valid pool name
                 if (marketName) {
                     if (!markets[marketName]) {
                         markets[marketName] = {};
                     }
-                    markets[marketName][parseInt(leverage)] = pool;
+                    markets[marketName][parseInt(leverage)] = pool.poolInstance;
                 }
             });
             swapDispatch({
@@ -219,7 +219,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         if (poolsInitialised && router.query.pool) {
             // the selectedPool will already be set from the above useEffect
             if (pools[router.query.pool as string]) {
-                const { leverage, name } = pools[router.query.pool as string];
+                const { leverage, name } = pools[router.query.pool as string].poolInstance;
                 swapDispatch({
                     type: 'setMarket',
                     // eg 3-BTC/USD -> BTC/USD

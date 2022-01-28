@@ -1,15 +1,19 @@
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 
-export const isSupportedNetwork = (networkId?: AvailableNetwork): boolean => {
+export const isSupportedNetwork = (networkId?: KnownNetwork): boolean => {
     const networkIdString = networkId?.toString();
 
-    return networkIdString === ARBITRUM || networkIdString === ARBITRUM_RINKEBY;
+    return networkIdString === NETWORKS.ARBITRUM || networkIdString === NETWORKS.ARBITRUM_RINKEBY;
 };
 
-const supportedBridgeNetworks = [ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY];
+const supportedBridgeNetworks: string[] = [
+    NETWORKS.ARBITRUM,
+    NETWORKS.ARBITRUM_RINKEBY,
+    NETWORKS.MAINNET,
+    NETWORKS.RINKEBY,
+];
 
-export const isSupportedBridgeNetwork = (networkId?: AvailableNetwork): boolean => {
+export const isSupportedBridgeNetwork = (networkId?: KnownNetwork): boolean => {
     const networkIdString = networkId?.toString();
 
     return supportedBridgeNetworks.includes(networkIdString ?? '');
