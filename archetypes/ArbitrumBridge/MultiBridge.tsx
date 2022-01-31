@@ -11,10 +11,10 @@ import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
 import { MAINNET } from '@libs/constants';
 import { Logo } from '@components/General';
-
-import Error from 'public/img/general/error.svg';
 import { StyledTooltip } from '@components/Tooltips';
 import { ethers } from 'ethers';
+
+import Error from '@public/img/notifications/error.svg';
 
 interface MultiBridgeProps {
     fromNetwork: Network;

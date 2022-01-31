@@ -49,6 +49,8 @@ export default (() => {
                     quoteToken,
                     updateInterval,
                     frontRunningInterval,
+                    keeper,
+                    committer 
                 } = pool;
 
                 const leverageBN = new BigNumber(leverage);
@@ -114,6 +116,11 @@ export default (() => {
                     frontRunning: frontRunningInterval.toNumber(),
                     pastUpkeep: defaultUpkeep,
                     antecedentUpkeep: defaultUpkeep,
+
+                    keeper: keeper,
+                    committer: committer.address,
+                    collateralAsset: quoteToken.symbol,
+                    collateralAssetAddress: quoteToken.address,
                 });
             });
 

@@ -24,8 +24,9 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
-import { ArbiscanEnum, openArbiscan } from '@libs/utils/rpcMethods';
+import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -468,16 +469,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 quoteTokenDecimals,
             )}, Raw amount: ${amount.toFixed()}`,
         );
-        committer.commit;
         if (handleTransaction) {
-            const poolName = poolsState.pools[pool].poolInstance.name;
-            const tokenAddress =
-                commitType === CommitEnum.short_mint || commitType === CommitEnum.short_burn
-                    ? poolsState.pools[pool].poolInstance.shortToken.address
-                    : poolsState.pools[pool].poolInstance.longToken.address;
-
-            const type = commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint ? 'Mint' : 'Burn';
-            // TODO handle payForClaim
             handleTransaction(
                 committer.commit,
                 [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals), false, false],
@@ -491,30 +483,48 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     },
                     statusMessages: {
                         waiting: {
-                            title: `Queueing ${poolName} ${type}`,
+                            title: 'Submitting Order',
                             body: (
                                 <div
-                                    className="text-sm text-tracer-400 underline cursor-pointer"
+                                    className="flex items-center cursor-pointer"
                                     onClick={() =>
-                                        openArbiscan(
-                                            ArbiscanEnum.token,
-                                            tokenAddress,
-                                            provider?.network?.chainId?.toString() as KnownNetwork,
-                                        )
+                                        watchAsset(provider as ethers.providers.JsonRpcProvider, {
+                                            address: poolsState.pools[pool].poolInstance.address,
+                                            decimals: quoteTokenDecimals,
+                                            symbol:
+                                                commitType === CommitEnum.long_mint
+                                                    ? poolsState.pools[pool].poolInstance.longToken.symbol
+                                                    : poolsState.pools[pool].poolInstance.shortToken.symbol,
+                                        })
                                     }
                                 >
-                                    View token on Arbiscan
+                                    <Logo
+                                        className="mr-2"
+                                        size="md"
+                                        ticker={tokenSymbolToLogoTicker(
+                                            commitType === CommitEnum.long_mint
+                                                ? poolsState.pools[pool].poolInstance.longToken.symbol
+                                                : poolsState.pools[pool].poolInstance.shortToken.symbol,
+                                        )}
+                                    />
+                                    <div>Add to wallet</div>
                                 </div>
                             ),
                         },
-                        poolName: poolName,
-                        type: type,
+                        symbol:
+                            commitType === CommitEnum.long_mint
+                                ? poolsState.pools[pool].poolInstance.longToken.symbol
+                                : poolsState.pools[pool].poolInstance.shortToken.symbol,
+                        type:
+                            commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint
+                                ? 'Mint'
+                                : 'Burn',
                         nextRebalance: targetTime,
                         success: {
-                            title: `${poolName} ${type} Queued`,
+                            title: 'Order Submitted',
                         },
                         error: {
-                            title: `${type} ${poolName} Failed`,
+                            title: 'Order Failed',
                         },
                     },
                 },

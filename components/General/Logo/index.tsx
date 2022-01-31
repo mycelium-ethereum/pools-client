@@ -122,7 +122,7 @@ const SIZES: Record<LogoSize, string> = {
     xs: 'h-4',
     sm: 'w-[20px] h-[20px]',
     md: 'h-6',
-    lg: 'h-10',
+    lg: 'h-[32px]',
     full: 'h-full',
 };
 

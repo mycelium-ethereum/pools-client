@@ -233,3 +233,18 @@ export const tickerToName: (ticker: string) => string = (ticker) => {
     const [leverage, market] = ticker.split('-');
     return `${leverage}-${marketSymbolToAssetName[market]}`;
 };
+
+export const getPriceFeedUrl: (v: string) => string = (v) => {
+    if (!v) {
+        return 'https://data.chain.link/arbitrum/mainnet/crypto-usd/';
+    }
+
+    let name = v?.split('-')[1];
+    name = name?.toLowerCase();
+    name = /\//.test(name) ? name?.replace('/', '-') : '';
+
+    const market = /eur/.test(name) ? 'fiat' : 'crypto-usd';
+    const FEED_URL = `https://data.chain.link/arbitrum/mainnet/${market}/`;
+
+    return `${FEED_URL}${name}`;
+};

@@ -6,9 +6,8 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import TWPopup from '@components/General/TWPopup';
 
-// @ts-ignore
-import Error from 'public/img/general/error.svg';
 import Icon from '@ant-design/icons';
+import Error from '@public/img/notifications/error.svg';
 
 const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
