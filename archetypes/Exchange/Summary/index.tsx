@@ -17,7 +17,7 @@ import { classNames } from '@libs/utils/functions';
 // import { useWeb3 } from '@context/Web3Context/Web3Context';
 // import { ARBITRUM } from '@libs/constants';
 // import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
-// import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
@@ -233,17 +233,17 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
     );
 }) as React.FC<SummaryProps>;
 
-// export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
-//     token,
-//     network,
-//     isBuy,
-// ) => {
-//     const { usdcAddress, balancerInfo } = networkConfig[network];
-//     // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
-//     return isBuy
-//         ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
-//         : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
-// };
+export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
+    token,
+    network,
+    isBuy,
+) => {
+    const { usdcAddress, balancerInfo } = networkConfig[network];
+    // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
+    return isBuy
+        ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
+        : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
+};
 
 // const BalancerLink: React.FC<{
 //     token: {
