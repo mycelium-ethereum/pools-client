@@ -76,7 +76,10 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter((pool) => marketFilter(pool.name, state.marketFilter)).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = tokens
+        .filter((pool) => marketFilter(pool.name, state.marketFilter))
+        .filter(leverageFilter)
+        .filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const groupedSortedFilteredTokens = sortedFilteredTokens.reduce((groups, item) => {

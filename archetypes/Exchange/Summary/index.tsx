@@ -2,12 +2,7 @@ import React, { useMemo } from 'react';
 import { HiddenExpand, Logo, LogoTicker, Section, tokenSymbolToLogoTicker } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
 import { toApproxCurrency } from '@libs/utils/converters';
-import {
-    calcEffectiveLongGain,
-    calcEffectiveShortGain,
-    calcNotionalValue,
-    calcTokenPrice,
-} from '@tracer-protocol/pools-js';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { classNames } from '@libs/utils/functions';
@@ -36,28 +31,8 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
 
     const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
-    const valueTransfer = useMemo(() => pool.getNextValueTransfer(), [pool]);
-    const notional = useMemo(
-        () =>
-            isLong
-                ? pool.longBalance.plus(valueTransfer.longValueTransfer)
-                : pool.shortBalance.plus(valueTransfer.shortValueTransfer),
-        [
-            isLong,
-            pool.longBalance,
-            valueTransfer.longValueTransfer,
-            pool.shortBalance,
-            valueTransfer.shortValueTransfer,
-        ],
-    );
-    const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
-    );
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
+
+    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     const balancesAfter = {
         longBalance: nextPoolState.expectedLongBalance.plus(isLong ? amount : 0),

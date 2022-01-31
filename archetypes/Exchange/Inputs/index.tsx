@@ -7,12 +7,12 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcTokenPrice } from '@tracer-protocol/pools-js';
 
 import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -54,30 +54,15 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         [isLong, userBalances.longToken, userBalances.shortToken],
     );
 
-    const valueTransfer = useMemo(() => pool.getNextValueTransfer(), [pool]);
-    const notional = useMemo(
-        () =>
-            isLong
-                ? pool.longBalance.plus(valueTransfer.longValueTransfer)
-                : pool.shortBalance.plus(valueTransfer.shortValueTransfer),
-        [
-            isLong,
-            pool.longBalance,
-            valueTransfer.longValueTransfer,
-            pool.shortBalance,
-            valueTransfer.shortValueTransfer,
-        ],
-    );
+    const nextBalances = usePoolsNextBalances(pool);
+    const notional = useMemo(() => (isLong ? nextBalances.nextLongBalance : nextBalances.nextShortBalance), [isLong]);
 
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
+    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     useEffect(() => {
         if (pool) {

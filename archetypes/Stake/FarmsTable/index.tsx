@@ -90,11 +90,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
 const LARGE_DECIMAL = 10000000000;
 const largeDecimal: (num: BigNumber) => string = (num) => {
     if (num.gt(LARGE_DECIMAL)) {
-        return `> ${LARGE_DECIMAL}`
+        return `> ${LARGE_DECIMAL}`;
     } else {
         return num.times(100).toFixed(2);
     }
-}
+};
 
 const PoolRow: React.FC<{
     farm: FarmTableRowData;

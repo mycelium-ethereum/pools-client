@@ -50,7 +50,7 @@ export default (() => {
                     updateInterval,
                     frontRunningInterval,
                     keeper,
-                    committer 
+                    committer,
                 } = pool;
 
                 const leverageBN = new BigNumber(leverage);
@@ -94,7 +94,7 @@ export default (() => {
                         symbol: shortToken.symbol,
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: pool.getShortTokenPrice().toNumber(),
-                        nextTCRPrice: newLongTokenPrice.toNumber(),
+                        nextTCRPrice: newShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
                         nextTvl: expectedShortBalance.toNumber(),
                         balancerPrice: balancerPoolPrices[shortToken.symbol]?.toNumber() ?? 0,
@@ -105,7 +105,7 @@ export default (() => {
                         symbol: longToken.symbol,
                         effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: pool.getLongTokenPrice().toNumber(),
-                        nextTCRPrice: newShortTokenPrice.toNumber(),
+                        nextTCRPrice: newLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),
                         nextTvl: expectedLongBalance.toNumber(),
                         balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
