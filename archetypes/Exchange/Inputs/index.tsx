@@ -13,6 +13,32 @@ import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
 import { Pool } from '@libs/types/General';
+import styled from 'styled-components';
+
+const Container = styled.div`
+    .subtext {
+        font-size: 16px;
+        opacity: 0.7;
+    }
+
+    .select-token {
+        border-color: ${({ theme }) => theme['border-secondary']} !important;
+    }
+
+    .exchange-modal {
+        border-color: ${({ theme }) => theme['border-secondary']} !important;
+    }
+
+    @media (min-width: 640px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 15px;
+
+        .subtext {
+            margin-top: 0.5rem;
+        }
+    }
+`;
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -82,11 +108,12 @@ export default (({ pool, swapState, swapDispatch }) => {
     }, [side, commitAction, amount, notional, token, pendingBurns]);
 
     return (
-        <>
+        <Container>
             <div className="w-full mb-4">
-                <p className="mb-2 ">Token</p>
+                <p className="mb-1 sm:mb-2 ">Token</p>
                 <Dropdown
                     className="w-full"
+                    variant="secondary"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
                         side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
@@ -104,12 +131,12 @@ export default (({ pool, swapState, swapDispatch }) => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'text-sm opacity-70 mt-2')}>
+                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'subtext')}>
                     Expected Price: {toApproxCurrency(tokenPrice)}
                 </p>
             </div>
             <div className="w-full">
-                <p className="mb-2 ">Amount</p>
+                <p className="mb-1 sm:mb-2 ">Amount</p>
 
                 {commitAction === CommitActionEnum.mint ? (
                     <AmountInput
@@ -135,7 +162,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                     />
                 )}
             </div>
-        </>
+        </Container>
     );
 }) as React.FC<{
     pool: Pool;
@@ -166,9 +193,9 @@ const AmountInput: React.FC<AmountProps> = ({
 }) => {
     return (
         <>
-            <InputContainer error={invalidAmount.isInvalid} className="w-full">
+            <InputContainer error={invalidAmount.isInvalid} className="w-full exchange-modal">
                 <Input
-                    className="w-3/5 h-full font-normal text-base"
+                    className="w-3/5 h-full font-semibold text-base"
                     value={amount}
                     onUserInput={(val) => {
                         swapDispatch({ type: 'setAmount', value: val || '' });
@@ -195,12 +222,7 @@ const AmountInput: React.FC<AmountProps> = ({
                     </div>
                 </InnerInputText>
             </InputContainer>
-            <p
-                className={classNames(
-                    invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
-                    'opacity-70 text-sm mt-2',
-                )}
-            >
+            <p className={classNames(invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text', 'subtext')}>
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (

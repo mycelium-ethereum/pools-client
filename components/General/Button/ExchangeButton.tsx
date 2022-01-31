@@ -82,7 +82,7 @@ const ExchangeButton: React.FC<{
                     });
                 }}
             >
-                Ok, let&apos;s {commitAction === CommitActionEnum.mint ? 'mint' : 'burn'}
+                Commit {commitAction === CommitActionEnum.mint ? 'Mint' : 'Burn'}
             </Button>
         );
     }

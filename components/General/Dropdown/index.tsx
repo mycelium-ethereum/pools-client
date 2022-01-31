@@ -6,6 +6,7 @@ import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
+import styled from 'styled-components';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -63,13 +64,21 @@ const SIZE = {
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-    default:
-        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
-    tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
-    unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
+    default: 'default',
+    tracer: 'tracer',
+    unselected: 'unselected',
+    secondary: 'secondary',
 };
+// const VARIANTS: Record<ButtonVariant, string> = {
+//     default:
+//         'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
+//     tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
+//     unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
+//     secondary:
+//         'border border-secondary bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
+// };
 
-export type ButtonVariant = 'default' | 'tracer' | 'unselected';
+export type ButtonVariant = 'default' | 'tracer' | 'unselected' | 'secondary';
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
@@ -102,44 +111,66 @@ export const Dropdown: React.FC<DropdownProps> = ({
     className,
 }) => {
     return (
-        <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
-            <Menu.Button
-                className={classNames(
-                    `inline-flex justify-between w-full rounded-md`,
-                    SIZE[size],
-                    'font-normal focus:outline-none hover:ring-1 hover:ring-50',
-                    VARIANTS[variant],
-                )}
-            >
-                <span className="mr-2 opacity-80">
-                    {placeHolderIcon && value !== '' && value !== 'All' ? (
-                        <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
-                    ) : null}
-                    {value === '' ? placeHolder : value}
-                </span>
-                {options.length ? (
-                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                ) : (
-                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                )}
-            </Menu.Button>
+        <Wrapper>
+            <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
+                <Menu.Button
+                    className={classNames(
+                        `inline-flex justify-between w-full rounded-md`,
+                        SIZE[size],
+                        'font-normal focus:outline-none hover:ring-1 hover:ring-50',
+                        VARIANTS[variant],
+                    )}
+                >
+                    <span className="mr-2 opacity-80">
+                        {placeHolderIcon && value !== '' && value !== 'All' ? (
+                            <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
+                        ) : null}
+                        {value === '' ? placeHolder : value}
+                    </span>
+                    {options.length ? (
+                        <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                    ) : (
+                        <LoadingOutlined
+                            className="flex items-center h-4 w-4 ml-auto mr-0 my-auto "
+                            aria-hidden="true"
+                        />
+                    )}
+                </Menu.Button>
 
-            <Transition
-                as={Fragment}
-                enter="transition ease-out duration-100"
-                enterFrom="transform opacity-0 scale-95"
-                enterTo="transform opacity-100 scale-100"
-                leave="transition ease-in duration-75"
-                leaveFrom="transform opacity-100 scale-100"
-                leaveTo="transform opacity-0 scale-95"
-            >
-                <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <div className="py-1">
-                        {options.map((option) => (
-                            <Menu.Item key={option.key} disabled={option.disabled}>
-                                {({ active }) =>
-                                    option.tooltip ? (
-                                        <TooltipSelector tooltip={option.tooltip}>
+                <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                >
+                    <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <div className="py-1">
+                            {options.map((option) => (
+                                <Menu.Item key={option.key} disabled={option.disabled}>
+                                    {({ active }) =>
+                                        option.tooltip ? (
+                                            <TooltipSelector tooltip={option.tooltip}>
+                                                <button
+                                                    onClick={() => onSelect(option.key)}
+                                                    className={classNames(
+                                                        active
+                                                            ? 'bg-theme-button-bg-hover'
+                                                            : 'text-theme-text opacity-80',
+                                                        'block px-4 py-2 text-sm w-full text-left',
+                                                    )}
+                                                >
+                                                    {option?.ticker ? (
+                                                        <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                                    ) : (
+                                                        ''
+                                                    )}
+                                                    {option?.text ?? option.key}
+                                                </button>
+                                            </TooltipSelector>
+                                        ) : (
                                             <button
                                                 onClick={() => onSelect(option.key)}
                                                 className={classNames(
@@ -148,35 +179,83 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                                 )}
                                             >
                                                 {option?.ticker ? (
-                                                    <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                                    <Logo
+                                                        size={iconSize}
+                                                        ticker={option.ticker}
+                                                        className="inline mr-3"
+                                                    />
                                                 ) : (
                                                     ''
                                                 )}
                                                 {option?.text ?? option.key}
                                             </button>
-                                        </TooltipSelector>
-                                    ) : (
-                                        <button
-                                            onClick={() => onSelect(option.key)}
-                                            className={classNames(
-                                                active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
-                                                'block px-4 py-2 text-sm w-full text-left',
-                                            )}
-                                        >
-                                            {option?.ticker ? (
-                                                <Logo size={iconSize} ticker={option.ticker} className="inline mr-3" />
-                                            ) : (
-                                                ''
-                                            )}
-                                            {option?.text ?? option.key}
-                                        </button>
-                                    )
-                                }
-                            </Menu.Item>
-                        ))}
-                    </div>
-                </Menu.Items>
-            </Transition>
-        </Menu>
+                                        )
+                                    }
+                                </Menu.Item>
+                            ))}
+                        </div>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+        </Wrapper>
     );
 };
+
+const Wrapper = styled.div`
+    .default {
+        border-width: 1px;
+        border-color: ${({ theme }) => theme.border};
+        background-color: ${({ theme }) => theme['button-bg']};
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: ${({ theme }) => theme['button-bg-hover']};
+        }
+
+        &:focus {
+            border-style: solid;
+        }
+    }
+
+    .tracer {
+        border: none;
+        background-color: rgba(53, 53, 220, 1);
+        /* matrix:bg-theme-primary */
+        /* matrix:text-black */
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: rgba(42, 42, 199, 1) !important;
+        }
+
+        &:focus {
+            border: none;
+        }
+    }
+
+    .unselected {
+        border: none;
+        background-color: rgba(222, 222, 255, 1) !important;
+        /* dark:bg-cool-gray-700 */
+        color: ${({ theme }) => theme.text};
+
+        &:focus {
+            border: none;
+        }
+    }
+
+    .secondary {
+        border-width: 1px;
+        border-color: ${({ theme }) => theme['border-secondary']};
+        background-color: ${({ theme }) => theme['button-bg']};
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: ${({ theme }) => theme['button-bg-hover']};
+        }
+
+        &:focus {
+            border-style: solid;
+        }
+    }
+`;
