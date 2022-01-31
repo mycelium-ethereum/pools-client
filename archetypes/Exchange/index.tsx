@@ -112,7 +112,7 @@ export default styled((({ onClose, className }) => {
 
         .close {
             right: 4rem;
-            top: 5rem;
+            top: 3.8rem;
             width: 1rem;
             height: 1rem;
         }
