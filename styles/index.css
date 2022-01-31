@@ -128,6 +128,8 @@ body > div:first-child {
 .ant-tooltip-inner {
     background: var(--background);
     color: var(--text);
+    border-radius: 8px;
+    padding: 6px 12px;
 }
 .ant-tooltip-inner a {
     color: var(--text-secondary);
@@ -136,6 +138,7 @@ body > div:first-child {
 .ant-tooltip-arrow-content {
     background-color: var(--background);
 }
+
 @tailwind base;
 
 @tailwind components;
@@ -160,9 +163,6 @@ html {
     --background-secondary: #f9fafb;
 
     --background-nav-secondary: #EEEEF6;
-
-    /* cool-gray-900 */
-    --text: #111928;
 
     /* cool-gray-700 */
     --text: #374151;

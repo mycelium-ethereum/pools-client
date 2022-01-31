@@ -1,6 +1,11 @@
 // Matomo Setup
 const _paq = (window._paq = window._paq || []);
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+_paq.push([
+    'setDomains',
+    ['*.tracer.finance', '*.docs.tracer.finance', '*.pools.tracer.finance', '*.vote.tracer.finance/'],
+]);
+_paq.push(['enableCrossDomainLinking']);
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function () {
@@ -22,5 +27,5 @@ const d = document,
     g = d.createElement('script'),
     s = d.getElementsByTagName('script')[0];
 g.async = true;
-g.src = 'https://cdn.matomo.cloud/tracerfinance.matomo.cloud/container_9pOj4o6E_staging_0dde2c7af69ee784018e71f1.js';
+g.src = 'https://cdn.matomo.cloud/tracerfinance.matomo.cloud/container_9pOj4o6E.js';
 s.parentNode.insertBefore(g, s);

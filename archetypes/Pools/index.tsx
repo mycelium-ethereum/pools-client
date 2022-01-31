@@ -6,16 +6,18 @@ import {
     BrowseState,
     BrowseTableRowData,
     DeltaEnum,
+    LeverageEnum,
     MarketFilterEnum,
     RebalanceEnum,
     SortByEnum,
 } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 import { marketFilter } from '@libs/utils/functions';
+import Loading from '@components/General/Loading';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -24,6 +26,7 @@ export const Browse: React.FC = () => {
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         marketFilter: MarketFilterEnum.All,
+        leverageFilter: LeverageEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
@@ -40,6 +43,18 @@ export const Browse: React.FC = () => {
     // parse the pools rows
     const { rows: tokens } = useBrowsePools();
 
+    const leverageFilter = (pool: BrowseTableRowData): boolean => {
+        switch (state.leverageFilter) {
+            case LeverageEnum.All:
+                return true;
+            case LeverageEnum.One:
+                return pool.name.split('-')[0] === '1';
+            case LeverageEnum.Three:
+                return pool.name.split('-')[0] === '3';
+            default:
+                return false;
+        }
+    };
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
         return Boolean(
@@ -61,8 +76,17 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter((pool) => marketFilter(pool.name, state.marketFilter)).filter(searchFilter);
+    const filteredTokens = tokens.filter((pool) => marketFilter(pool.name, state.marketFilter)).filter(leverageFilter).filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
+
+    const groupedSortedFilteredTokens = sortedFilteredTokens.reduce((groups, item) => {
+        // @ts-ignore
+        const group = groups[item.name.split('-')[1]] || [];
+        group.push(item);
+        // @ts-ignore
+        groups[item.name.split('-')[1]] = group;
+        return groups;
+    }, []);
 
     const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {
         console.debug(`
@@ -84,22 +108,28 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <div className="container mt-0 md:mt-20">
-                <div className="p-4 md:pt-16 md:pb-12 md:px-8 lg:px-16 mb-4 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background">
-                    <section className="mb-8">
-                        <h1 className="font-bold text-3xl mb-2 text-theme-text">Pools</h1>
-                        <p className="mb-1 text-cool-gray-500 dark:text-cool-gray-300 matrix:text-theme-text-secondary">
-                            Browse the available Tracer Pools and Pool Tokens.
-                        </p>
-                        <FilterBar state={state} dispatch={dispatch} />
-                    </section>
-                    <PoolsTable
-                        rows={sortedFilteredTokens}
-                        deltaDenotion={state.deltaDenotion}
-                        onClickMintBurn={handleMintBurn}
-                        showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
-                    />
-                </div>
+            <div className="container mb-10">
+                <section className="mb-8">
+                    <h1 className="mt-8 mb-4 px-4 sm:px-0 font-semibold text-3xl text-theme-text">Pools</h1>
+                    <FilterBar state={state} dispatch={dispatch} />
+                </section>
+                {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
+                {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
+                    const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
+                    return (
+                        <div
+                            key={index}
+                            className="p-4 md:p-8 lg:px-16 mb-10 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
+                        >
+                            <PoolsTable
+                                rows={dataRows}
+                                deltaDenotion={state.deltaDenotion}
+                                onClickMintBurn={handleMintBurn}
+                                showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
+                            />
+                        </div>
+                    );
+                })}
             </div>
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
         </>
