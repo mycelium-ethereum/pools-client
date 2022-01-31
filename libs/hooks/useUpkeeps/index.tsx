@@ -127,8 +127,6 @@ const parseUpkeep: (upkeep: RawUpkeep, decimals: number, leverage: number) => Up
     const shortTokenPrice = calcTokenPrice(shortTokenBalance, shortTokenSupply);
     const leverageBN = new BigNumber(leverage);
 
-    console.log('balances', shortTokenBalance.toNumber(), longTokenBalance.toNumber(), leverage);
-
     // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
     return {
         pool: upkeep.pool_address,
