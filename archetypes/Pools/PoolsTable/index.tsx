@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
-import { calcPercentageDifference, tickerToName, toApproxCurrency } from '@libs/utils/converters';
+import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -11,17 +11,21 @@ import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-import Loading from '@components/General/Loading';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
+import { classNames } from '@libs/utils/functions';
+import { constructBalancerLink } from '@archetypes/Exchange/Summary';
+import { StyledTooltip } from '@components/Tooltips';
+import PoolDetailsModal from '../PoolDetailsModal';
+import { useTheme } from '@context/ThemeContext';
+import styled from 'styled-components';
 
 import Close from '/public/img/general/close.svg';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';
-import { classNames } from '@libs/utils/functions';
-import { constructBalancerLink } from '@archetypes/Exchange/Summary';
-import { StyledTooltip } from '@components/Tooltips';
+import Info from '/public/img/general/info.svg';
+import LinkIcon from '@public/img/general/link.svg';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -67,24 +71,87 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const InfoIcon = styled(Info)`
+    margin-left: 15px;
+
+    :hover {
+        cursor: pointer;
+    }
+
+    path {
+        fill: ${(props) => (props.isDark ? '#ffffff' : '#111928')};
+    }
+`;
+
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
-    const { provider, account } = useWeb3();
+    const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
+    const [poolDetails, setPoolDetails] = useState<any>({});
+    const { provider, account, config } = useWeb3();
+    const { isDark } = useTheme();
+
+    const handlePoolDetailsClick = (data: any) => {
+        setShowModalPoolDetails(true);
+        setPoolDetails(data);
+    };
+
     return (
         <>
             <Table>
                 <TableHeader className="align-baseline">
                     <tr>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={showNextRebalance ? 5 : 4}>
-                            <div className="capitalize text-lg">{'POOLS'}</div>
-                        </TableHeaderCell>
-                        <TableHeaderCell className="bg-theme-background pl-0" colSpan={7}>
-                            <div className="capitalize text-lg">{'POOL TOKENS'}</div>
+                        <TableHeaderCell
+                            className="bg-cool-gray-50 dark:bg-theme-background-secondary rounded-xl"
+                            colSpan={13}
+                        >
+                            <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 dark:divide-cool-gray-900 text-base">
+                                <div className="flex pr-10">
+                                    <Logo
+                                        className="inline mr-3 my-auto"
+                                        size="lg"
+                                        ticker={rows[0].name.split('-')[1].split('/')[0] as LogoTicker}
+                                    />
+                                    <div className="my-auto">
+                                        <div className="font-bold text-lg">{rows[0].name.split('-')[1]}</div>
+                                    </div>
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        SPOT PRICE
+                                    </div>
+                                    <div className="font-bold">{toApproxCurrency(rows[0].oraclePrice)}</div>
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        ORACLE
+                                    </div>
+                                    <a
+                                        href={getPriceFeedUrl(rows[0].name)}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center"
+                                    >
+                                        <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
+                                        <div className="mr-2 font-bold normal-case">Chainlink</div>
+                                        <LinkIcon alt="Link" />
+                                    </a>
+                                </div>
+                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    24H VOLUME
+                                </div>
+                                <div className="px-10">
+                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                        NUMBER OF POOLS
+                                    </div>
+                                    <div className="font-bold">{rows.length}</div>
+                                </div>
+                            </div>
                         </TableHeaderCell>
                     </tr>
+                    <tr className="h-5" />
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12">Pool</TableHeaderCell>
+                        <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap w-1/12">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
@@ -157,23 +224,24 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <PoolRow
                             pool={pool}
                             onClickMintBurn={onClickMintBurn}
+                            onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
                             index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             account={account}
                             provider={provider}
                             deltaDenotion={deltaDenotion}
+                            isDark={isDark}
                         />
                     );
                 })}
             </Table>
-            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
-            {showNextRebalance ? (
-                <p className="mt-3 text-sm text-theme-text opacity-80 text-left">
-                    Values are indicative only. They are estimates given the committed mints and burns, and change in
-                    price of the underlying market. All values are subject to change at the next rebalance of each pool.
-                </p>
-            ) : null}
+            {/*{showNextRebalance ? (*/}
+            {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
+            {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}
+            {/*        price of the underlying market. All values are subject to change at the next rebalance of each pool.*/}
+            {/*    </p>*/}
+            {/*) : null}*/}
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
@@ -188,6 +256,13 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     depending on the capital in the other side of the pool.
                 </div>
             </TWModal>
+            <PoolDetailsModal
+                open={showModalPoolDetails}
+                onClose={() => setShowModalPoolDetails(false)}
+                poolDetails={poolDetails}
+                previewUrl={config?.previewUrl || ''}
+                isDark={isDark}
+            />
         </>
     );
 }) as React.FC<
@@ -203,8 +278,20 @@ const PoolRow: React.FC<
         account: string | undefined;
         index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
+        onClickShowPoolDetailsModal: () => void;
+        isDark: boolean;
     } & TProps
-> = ({ pool, account, onClickMintBurn, index, provider, showNextRebalance, deltaDenotion }) => {
+> = ({
+    pool,
+    account,
+    onClickMintBurn,
+    index,
+    provider,
+    showNextRebalance,
+    deltaDenotion,
+    onClickShowPoolDetailsModal,
+    isDark,
+}) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -220,16 +307,10 @@ const PoolRow: React.FC<
             <TableRow rowNumber={index}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div style={{ minHeight: '3rem' }} className="flex">
-                        <Logo
-                            className="inline mr-2 my-auto"
-                            size={'md'}
-                            ticker={pool.name?.split('-')[1]?.split('/')[0] as LogoTicker}
-                        />
-                        <div className="my-auto">
-                            <div className="font-bold">{tickerToName(pool.name)}</div>
-                            <div className="text-xs">{pool.name.split('-')[1]}</div>
-                        </div>
+                    <div className="font-bold">{pool.name.split('-')[0][0]}</div>
+                    <div className="flex items-center">
+                        USDC
+                        <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
@@ -413,10 +494,10 @@ const LongBalance: React.FC<{ width: number }> = ({ width }) => (
     <div
         style={{ width: `${width}%` }}
         className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green matrix:bg-dark-green`}
-    ></div>
+    />
 );
 const ShortBalance = () => (
-    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`}></div>
+    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`} />
 );
 
 const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
@@ -571,21 +652,12 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
+                            className="mx-1 w-[70px] my-auto ml-auto uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
                         >
-                            Mint
-                        </Button>
-                        <Button
-                            className="mx-1 w-[70px] my-auto font-bold uppercase "
-                            size="xs"
-                            variant="primary-light"
-                            disabled={!tokenInfo.userHoldings}
-                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
-                        >
-                            Burn
+                            COMMIT
                         </Button>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}

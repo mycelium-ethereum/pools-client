@@ -51,16 +51,18 @@ export default (() => {
                     longBalance,
                     nextShortBalance: shortBalanceAfterTransfer,
                     nextLongBalance: longBalanceAfterTransfer,
+                    committer,
                     leverage,
                     lastUpdate,
                     frontRunningInterval,
                     updateInterval,
+                    keeper,
                 } = pool;
 
                 const {
                     pendingLong: { burn: pendingLongBurn, mint: pendingLongMint },
                     pendingShort: { burn: pendingShortBurn, mint: pendingShortMint },
-                } = pool.committer;
+                } = committer;
 
                 const leverageBN = new BigNumber(leverage);
 
@@ -147,6 +149,11 @@ export default (() => {
                     frontRunning: frontRunningInterval.toNumber(),
                     pastUpkeep: defaultUpkeep,
                     antecedentUpkeep: defaultUpkeep,
+
+                    keeper: keeper,
+                    committer: committer.address,
+                    collateralAsset: quoteToken.symbol,
+                    collateralAssetAddress: quoteToken.address,
                 });
             });
 
