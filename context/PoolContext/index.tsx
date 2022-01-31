@@ -24,7 +24,7 @@ import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
-import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
+import { watchAsset } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
@@ -418,7 +418,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     waiting: {
                         title: `Claiming ${poolName} tokens`,
                     },
-                    poolName: poolName,
                     success: {
                         title: `${poolName} Claim Queued`,
                     },
