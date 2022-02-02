@@ -17,6 +17,7 @@ import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
 import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { poolMap } from '@libs/constants/poolLists';
 import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+import { Provider } from '@ethersproject/providers';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -68,6 +69,7 @@ export const FarmStore: React.FC<
         // populate token details and add to lookup
         await Promise.all(
             tokenAddresses.map(async (address, index) => {
+                // @ts-ignore
                 const tokenContract = ERC20__factory.connect(address, provider);
 
                 const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
@@ -84,7 +86,7 @@ export const FarmStore: React.FC<
                     // known market price feed addresses are configured in Web3Context.Config.ts
                     const priceFeedAggregator = AggregatorV3Interface__factory.connect(
                         config.knownUSDCPriceFeeds[address],
-                        provider,
+                        provider as Provider,
                     ) as AggregatorV3Interface;
 
                     const [{ answer }, priceFeedDecimals] = await Promise.all([
@@ -153,6 +155,7 @@ export const FarmStore: React.FC<
                     farm.contract.rewardsToken(),
                 ]);
 
+            // @ts-ignore
             const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
             const rewardsTokenDecimals = await rewardsToken.decimals();
@@ -195,14 +198,8 @@ export const FarmStore: React.FC<
                                         contract.rewardsToken(),
                                     ]);
 
-                                const stakingToken = ERC20__factory.connect(
-                                    stakingTokenAddress,
-                                    signer,
-                                );
-                                const rewardsToken = ERC20__factory.connect(
-                                    rewardsTokenAddress,
-                                    signer,
-                                );
+                                const stakingToken = ERC20__factory.connect(stakingTokenAddress, signer);
+                                const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
                                 const [
                                     stakingTokenName,
