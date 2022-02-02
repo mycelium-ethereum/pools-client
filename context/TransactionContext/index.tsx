@@ -29,6 +29,7 @@ export type Options = {
         nextRebalance?: number;
         symbol?: string;
         type?: 'Mint' | 'Burn';
+        poolName?: string;
     };
 };
 type HandleTransactionType =
