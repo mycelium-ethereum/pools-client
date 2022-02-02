@@ -81,19 +81,6 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                 className={classNames('hidden-expand', !!pool.name ? 'show-border' : 'border-transparent')}
             >
                 <div className="wrapper">
-                    {/* <h2 className="text-theme-text mb-2">
-                    {isMint ? (
-                        <>
-                            <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                            {token.name}
-                        </>
-                    ) : (
-                        <>
-                            <Logo className="inline mr-2" size="md" ticker={pool.quoteToken.symbol as LogoTicker} />
-                            {pool.quoteToken.symbol}
-                        </>
-                    )}
-                </h2> */}
                     <Transition
                         show={showBreakdown}
                         enter="transition-opacity duration-50 delay-100"
@@ -106,7 +93,6 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                         {isMint ? (
                             <>
                                 <Section label="Total Costs">
-                                    {/* <span className="sum">{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span> */}
                                     <span className="sum">${totalCost}</span>
                                 </Section>
                                 {showTransactionDetails && (
@@ -114,23 +100,9 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                                         <Section label="Commit Amount" showSectionDetails>
                                             <div>
                                                 <span className="opacity-50">${totalCommitmentAmount}</span>
-                                                {/* <span className="opacity-50">{`${toApproxCurrency(
-                                                tokenPrice ?? 1,
-                                                3,
-                                            )}`}</span> */}
                                             </div>
                                         </Section>
-                                        {/* <Section label="Protocol Fee" showSectionDetails>
-                                        <div>
-                                            <span>{`${amount.div(tokenPrice ?? 1).toFixed(3)}`}</span>
-                                            <span className="opacity-50">{` @ ${toApproxCurrency(
-                                                tokenPrice ?? 1,
-                                                3,
-                                            )}`}</span>
-                                        </div>
-                                    </Section> */}
                                         <Section label="Gas Fee" showSectionDetails>
-                                            {/* <span className="opacity-50">{`${toApproxCurrency(tokenPrice ?? 1, 3)}`}</span> */}
                                             <span className="opacity-50">${totalGasFee}</span>
                                         </Section>
                                     </div>
@@ -221,7 +193,6 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
                                 </ShowDetailsButton>
                             </>
                         )}
-                        {/* <BalancerLink token={token} isBuy={isMint} /> */}
                     </Transition>
                     <div className="countdown">
                         {`${isMint ? 'Mint' : 'Burn'} in`}
@@ -245,37 +216,6 @@ export const constructBalancerLink: (token: string | undefined, network: Availab
         : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
 };
 
-// const BalancerLink: React.FC<{
-//     token: {
-//         address: string;
-//         symbol: string;
-//     };
-//     isBuy: boolean;
-// }> = ({ token, isBuy }) => {
-//     const { network } = useWeb3();
-//     const balancerPoolPrices = useBalancerSpotPrices(network);
-//     return network === ARBITRUM && balancerPoolPrices[token?.symbol] ? (
-//         <div className="text-sm mt-2">
-//             <div className="mr-2 whitespace-nowrap">{`Don't want to wait?`}</div>
-//             <div>
-//                 <Logo className="inline mr-2" ticker="BALANCER" />
-//                 <a
-//                     className="text-tracer-400 matrix:text-theme-primary underline hover:opacity-80"
-//                     href={constructBalancerLink(token.address, network, isBuy)}
-//                     target={'_blank'}
-//                     rel={'noopener noreferrer'}
-//                 >
-//                     {`${isBuy ? 'Buy' : 'Sell'} on Balancer Pools @ ${toApproxCurrency(
-//                         balancerPoolPrices[token.symbol],
-//                         3,
-//                     )}`}
-//                     <Link className="inline ml-2 h-4 w-4 text-theme-text opacity-80" />
-//                 </a>
-//             </div>
-//         </div>
-//     ) : null;
-// };
-
 const Container = styled.div`
     .hidden-expand {
         margin-bottom: 2rem !important;
@@ -286,8 +226,7 @@ const Container = styled.div`
         background-color: ${({ theme }) => theme.background};
 
         .show-border {
-            /* border-color: ${({ theme }) => theme.border}; */
-            border-color: #d1d5db;
+            border-color: ${({ theme }) => theme.border};
         }
     }
 

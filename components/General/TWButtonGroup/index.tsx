@@ -11,8 +11,6 @@ const SELECTED = {
 };
 
 const UNSELECTED = {
-    // TODO Double check button background color
-    // tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-background dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
     greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg text-cool-gray-400 dark:text-cool-gray-800 focus:border-transparent',

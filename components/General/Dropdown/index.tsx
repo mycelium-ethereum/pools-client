@@ -69,14 +69,6 @@ const VARIANTS: Record<ButtonVariant, string> = {
     unselected: 'unselected',
     secondary: 'secondary',
 };
-// const VARIANTS: Record<ButtonVariant, string> = {
-//     default:
-//         'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
-//     tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
-//     unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
-//     secondary:
-//         'border border-secondary bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
-// };
 
 export type ButtonVariant = 'default' | 'tracer' | 'unselected' | 'secondary';
 

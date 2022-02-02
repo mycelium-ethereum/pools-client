@@ -7,7 +7,6 @@ import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
-// import FeeNote from './FeeNote';
 import { usePool } from '@context/PoolContext';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import Close from '/public/img/general/close.svg';
@@ -66,12 +65,6 @@ export default styled((({ onClose, className }) => {
                 receiveIn={receiveIn}
                 isMint={swapState.commitAction === CommitActionEnum.mint}
             />
-
-            {/* <FeeNote
-                poolName={pool.name}
-                isMint={swapState.commitAction === CommitActionEnum.mint}
-                receiveIn={receiveIn}
-            /> */}
 
             <ExchangeButton onClose={onClose} swapState={swapState} swapDispatch={swapDispatch} />
         </div>
