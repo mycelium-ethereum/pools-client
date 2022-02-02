@@ -1,4 +1,3 @@
-import { calcTokenPrice } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import Pool, { StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
@@ -19,6 +18,6 @@ export const fetchTokenPrice: (
 
     return tokenAddresses.map((tokenAddress) => {
         const isLong: boolean = tokenAddress.toLowerCase() === poolInfo.longToken.address.toLowerCase();
-        return isLong ? poolInfo.getNextLongTokenPrice() : poolInfo.getNextShortTokenPrice()
+        return isLong ? poolInfo.getNextLongTokenPrice() : poolInfo.getNextShortTokenPrice();
     });
 };
