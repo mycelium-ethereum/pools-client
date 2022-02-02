@@ -78,6 +78,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             Promise.all(
                 pools.map((pool) =>
                     Pool.Create({
+                        ...pool,
                         address: pool.address,
                         provider,
                     }),
