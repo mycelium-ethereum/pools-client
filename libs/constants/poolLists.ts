@@ -207,7 +207,7 @@ export const poolList: Record<AvailableNetwork, StaticPoolInfo[]> = {
         },
         {
             name: '3-AAVE/USD',
-            address: '0x23a5744ebc353944a4d5baac177c16b199afa4ed',
+            address: '0x23A5744eBC353944A4d5baaC177C16b199AfA4ed',
             leverage: 3,
             updateInterval: ONE_HOUR,
             frontRunningInterval: FIVE_MINUTES,
