@@ -628,6 +628,7 @@ const TokenRows: React.FC<
                             Mint
                         </Button>
                         <Button
+                            id="mint-or-burn"
                             className="mx-1 w-[70px] my-auto font-bold uppercase "
                             size="xs"
                             variant="primary-light"
