@@ -16,7 +16,7 @@ const useBalance = () => {
         if (pools && Object.keys(pools).length) {
             // it doesnt matter which pool we use
             // since they should all have the same quote token
-            setBalance(Object.values(pools)[0]?.quoteToken?.balance ?? new BigNumber(0));
+            setBalance(Object.values(pools)[0]?.userBalances.quoteToken?.balance ?? new BigNumber(0));
         }
     }, [pools]);
 

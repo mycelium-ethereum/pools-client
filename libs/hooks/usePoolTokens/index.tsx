@@ -24,22 +24,31 @@ export default (() => {
             const _tokens: TokenRow[] = [];
             const _tokenMap: TokenMap = {};
             Object.values(pools).forEach((pool) => {
+                const { poolInstance } = pool;
+
+                const {
+                    address,
+                    leverage,
+                    shortToken: { symbol: shortTokenSymbol, address: shortTokenAddress },
+                    longToken: { symbol: longTokenSymbol, address: longTokenAddress },
+                } = poolInstance;
+
                 const shortToken = {
-                    symbol: pool.shortToken.symbol,
+                    symbol: shortTokenSymbol,
                     side: SideEnum.short,
-                    pool: pool.address,
-                    leverage: pool.leverage,
+                    pool: address,
+                    leverage: leverage,
                 };
 
                 const longToken = {
-                    symbol: pool.longToken.symbol,
+                    symbol: longTokenSymbol,
                     side: SideEnum.long,
-                    pool: pool.address,
-                    leverage: pool.leverage,
+                    pool: address,
+                    leverage: leverage,
                 };
                 _tokens.push(shortToken, longToken);
-                _tokenMap[pool.shortToken.address] = shortToken;
-                _tokenMap[pool.longToken.address] = longToken;
+                _tokenMap[shortTokenAddress] = shortToken;
+                _tokenMap[longTokenAddress] = longToken;
             });
 
             setTokens(_tokens);

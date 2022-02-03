@@ -7,12 +7,12 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { classNames } from '@libs/utils/functions';
-import { Pool } from '@libs/types/General';
+import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -40,7 +40,7 @@ const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount 
     };
 };
 
-export default (({ pool, swapState, swapDispatch }) => {
+export default (({ pool, userBalances, swapState, swapDispatch }) => {
     const { tokens } = usePoolTokens();
 
     const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
@@ -49,27 +49,29 @@ export default (({ pool, swapState, swapDispatch }) => {
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    const tokenBalance = useMemo(
+        () => (isLong ? userBalances.longToken : userBalances.shortToken),
+        [isLong, userBalances.longToken, userBalances.shortToken],
     );
+
+    const nextBalances = usePoolsNextBalances(pool);
+    const notional = useMemo(() => (isLong ? nextBalances.nextLongBalance : nextBalances.nextShortBalance), [isLong]);
+
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
+    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     useEffect(() => {
         if (pool) {
             let currentBalance: BigNumber;
             if (commitAction === CommitActionEnum.mint) {
-                currentBalance = pool.quoteToken.balance;
+                currentBalance = userBalances.quoteToken.balance;
             } else {
-                currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
+                currentBalance =
+                    side === SideEnum.long ? userBalances.longToken.balance : userBalances.shortToken.balance;
             }
 
             const invalidAmount = isInvalidAmount(amountBN, currentBalance);
@@ -116,7 +118,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                         invalidAmount={invalidAmount}
                         amount={amount}
                         amountBN={amountBN}
-                        balance={pool.quoteToken.balance}
+                        balance={userBalances.quoteToken.balance}
                         tokenSymbol={pool.quoteToken.symbol}
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
@@ -127,7 +129,7 @@ export default (({ pool, swapState, swapDispatch }) => {
                         invalidAmount={invalidAmount}
                         amount={amount}
                         amountBN={amountBN}
-                        balance={token.balance}
+                        balance={tokenBalance.balance}
                         tokenSymbol={token.symbol}
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
@@ -138,7 +140,8 @@ export default (({ pool, swapState, swapDispatch }) => {
         </>
     );
 }) as React.FC<{
-    pool: Pool;
+    pool: PoolInfo['poolInstance'];
+    userBalances: PoolInfo['userBalances'];
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }>;

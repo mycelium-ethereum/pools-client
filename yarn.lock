@@ -2966,12 +2966,10 @@
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.0.2.tgz#e05a23bf6f919fc2aae47e1fd56dec9cf5698f28"
   integrity sha512-/AMXMwUkvTRWIUtp/sX/aObzhpTe1P0ThisvWqXovTj32eCneP6DAf+1Hq9ewlMQzTLpwN6Ns7RRIyYuEfDAmA==
 
-"@tracer-protocol/tracer-pools-utils@^0.0.7":
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/tracer-pools-utils/-/tracer-pools-utils-0.0.7.tgz#6581de5c96196f333cea1e2289141557a37af385"
-  integrity sha512-Bl3HkLxnPOnZWkMFhqZC26Xof8FICB82t3VBDjAnShpZkSh3x6X6qxl2GoarYbsfXQLvRBr9FKqkqsXKOHaeBw==
-  dependencies:
-    bignumber.js "^9.0.1"
+"@tracer-protocol/pools-js@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.0.tgz#a57898f0219dfd9217c989f816d5923bf33d7d3d"
+  integrity sha512-HtIhEr56PusZn8Zt2Z3GM9lOsvxN1e2U1axR4fTVsZh+AODo2fo2cFdAVzmpuF1Zn2ECA8SQ6BN4NHFITBP3SA==
 
 "@types/aria-query@^4.2.0":
   version "4.2.2"

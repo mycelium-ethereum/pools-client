@@ -74,41 +74,10 @@ export type CreatedCommitType = TypedEvent<
     }
 >;
 
-export type StaticPoolInfo = {
-    address: string;
-    name: string;
-    updateInterval: BigNumber;
-    frontRunningInterval: BigNumber;
-    leverage: number;
-    keeper: string;
-    committer: {
-        address: string;
-    };
-    shortToken: StaticTokenInfo;
-    longToken: StaticTokenInfo;
-    quoteToken: StaticTokenInfo;
-};
-
 export type AggregateBalances = {
     longTokens: BigNumber;
     shortTokens: BigNumber;
     quoteTokens: BigNumber;
-};
-
-export type Pool = StaticPoolInfo & {
-    lastUpdate: BigNumber;
-    lastPrice: BigNumber;
-    shortBalance: BigNumber;
-    longBalance: BigNumber;
-    nextShortBalance: BigNumber;
-    nextLongBalance: BigNumber;
-    oraclePrice: BigNumber;
-    quoteToken: Token;
-    shortToken: PoolToken;
-    longToken: PoolToken;
-    committer: Committer;
-    subscribed: boolean;
-    aggregateBalances: AggregateBalances;
 };
 
 // for mint the amount is the amount of collateral spent

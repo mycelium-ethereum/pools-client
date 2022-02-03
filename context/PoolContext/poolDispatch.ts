@@ -1,11 +1,27 @@
-import { CommitEnum } from '@libs/constants';
-import { AggregateBalances, PendingAmounts, Pool } from '@libs/types/General';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
+import { AggregateBalances } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
 
 const MAX_RETRY_COUNT = 5;
 
+export type PoolInfo = {
+    poolInstance: Pool;
+    userBalances: {
+        shortToken: TokenBalance;
+        longToken: TokenBalance;
+        quoteToken: TokenBalance;
+        aggregateBalances: AggregateBalances;
+    };
+};
+
+type TokenBalance = {
+    approvedAmount: BigNumber;
+    balance: BigNumber;
+};
+
 export type PoolState = {
-    pools: Record<string, Pool>;
+    pools: Record<string, PoolInfo>;
     subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
     poolsInitialised: boolean;
@@ -43,10 +59,7 @@ export type PoolAction =
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'incrementRetryCount' }
-    | { type: 'setLastUpdate'; value: BigNumber; pool: string }
     | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
-    | { type: 'setPendingAmounts'; pool: string; pendingLong: PendingAmounts; pendingShort: PendingAmounts }
-    | { type: 'addToPending'; pool: string; commitType: CommitEnum; amount: BigNumber }
     | { type: 'resetPools' }
     | {
           type: 'setUpdatedPoolBalances';
@@ -57,7 +70,6 @@ export type PoolAction =
           shortBalance: BigNumber;
           lastUpdate: BigNumber;
       }
-    | { type: 'setNextPoolBalances'; pool: string; nextLongBalance: BigNumber; nextShortBalance: BigNumber }
     | { type: 'setNextRebalance'; nextRebalance: number };
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
@@ -67,7 +79,10 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                 ...state,
                 pools: {
                     ...state.pools,
-                    [action.key]: action.pool,
+                    [action.key]: {
+                        poolInstance: action.pool,
+                        userBalances: DEFAULT_POOLSTATE.userBalances,
+                    },
                 },
             };
         case 'incrementRetryCount': {
@@ -108,21 +123,6 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     },
                 },
             };
-        case 'setNextPoolBalances':
-            if (!state.pools[action.pool]) {
-                return state;
-            }
-            return {
-                ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        nextLongBalance: action.nextLongBalance,
-                        nextShortBalance: action.nextShortBalance,
-                    },
-                },
-            };
         case 'setTokenBalances':
             if (!state.pools[action.pool]) {
                 return state;
@@ -133,17 +133,20 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     ...state.pools,
                     [action.pool]: {
                         ...state.pools[action.pool],
-                        shortToken: {
-                            ...state.pools[action.pool].shortToken,
-                            balance: action.shortTokenBalance,
-                        },
-                        longToken: {
-                            ...state.pools[action.pool].longToken,
-                            balance: action.longTokenBalance,
-                        },
-                        quoteToken: {
-                            ...state.pools[action.pool].quoteToken,
-                            balance: action.quoteTokenBalance,
+                        userBalances: {
+                            ...state.pools[action.pool].userBalances,
+                            shortToken: {
+                                ...state.pools[action.pool].userBalances.shortToken,
+                                balance: action.shortTokenBalance,
+                            },
+                            longToken: {
+                                ...state.pools[action.pool].userBalances.longToken,
+                                balance: action.longTokenBalance,
+                            },
+                            quoteToken: {
+                                ...state.pools[action.pool].userBalances.quoteToken,
+                                balance: action.quoteTokenBalance,
+                            },
                         },
                     },
                 },
@@ -158,7 +161,10 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     ...state.pools,
                     [action.pool]: {
                         ...state.pools[action.pool],
-                        aggregateBalances: action.aggregateBalances,
+                        userBalances: {
+                            ...state.pools[action.pool].userBalances,
+                            aggregateBalances: action.aggregateBalances,
+                        },
                     },
                 },
             };
@@ -172,90 +178,24 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     ...state.pools,
                     [action.pool]: {
                         ...state.pools[action.pool],
-                        shortToken: {
-                            ...state.pools[action.pool].shortToken,
-                            approvedAmount: action.shortTokenAmount,
-                        },
-                        longToken: {
-                            ...state.pools[action.pool].longToken,
-                            approvedAmount: action.longTokenAmount,
-                        },
-                        quoteToken: {
-                            ...state.pools[action.pool].quoteToken,
-                            approvedAmount: action.quoteTokenAmount,
+                        userBalances: {
+                            ...state.pools[action.pool].userBalances,
+                            shortToken: {
+                                ...state.pools[action.pool].userBalances.shortToken,
+                                approvedAmount: action.shortTokenAmount,
+                            },
+                            longToken: {
+                                ...state.pools[action.pool].userBalances.longToken,
+                                approvedAmount: action.longTokenAmount,
+                            },
+                            quoteToken: {
+                                ...state.pools[action.pool].userBalances.quoteToken,
+                                approvedAmount: action.quoteTokenAmount,
+                            },
                         },
                     },
                 },
             };
-        case 'setLastUpdate':
-            if (!state.pools[action.pool]) {
-                return state;
-            }
-            return {
-                ...state,
-                pools: {
-                    ...state.pools,
-                    [action.pool]: {
-                        ...state.pools[action.pool],
-                        lastUpdate: action.value,
-                    },
-                },
-            };
-        case 'setPendingAmounts':
-            console.debug(`Setting pending amounts on ${action.pool}`, state.pools);
-            const currentCommitter = state.pools[action.pool]?.committer;
-            if (currentCommitter) {
-                return {
-                    ...state,
-                    pools: {
-                        ...state.pools,
-                        [action.pool]: {
-                            ...state.pools[action.pool],
-                            committer: {
-                                ...currentCommitter,
-                                pendingLong: action.pendingLong,
-                                pendingShort: action.pendingShort,
-                            },
-                        },
-                    },
-                };
-            } else {
-                return state;
-            }
-        case 'addToPending':
-            const committer = state.pools[action.pool]?.committer;
-            if (committer) {
-                switch (action.commitType) {
-                    case CommitEnum.short_burn:
-                        committer.pendingShort.burn = committer.pendingShort.burn.plus(action.amount);
-                        break;
-                    case CommitEnum.short_mint:
-                        committer.pendingShort.mint = committer.pendingShort.mint.plus(action.amount);
-                        break;
-                    case CommitEnum.long_burn:
-                        committer.pendingLong.burn = committer.pendingLong.burn.plus(action.amount);
-                        break;
-                    case CommitEnum.long_mint:
-                        committer.pendingLong.mint = committer.pendingLong.mint.plus(action.amount);
-                        break;
-                    default:
-                        break;
-                }
-                return {
-                    ...state,
-                    pools: {
-                        ...state.pools,
-                        [action.pool]: {
-                            ...state.pools[action.pool],
-                            committer: {
-                                ...committer,
-                            },
-                        },
-                    },
-                };
-            } else {
-                return state;
-            }
         case 'setPoolsInitialised':
             return {
                 ...state,
@@ -271,9 +211,12 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                     ...state.pools,
                     [action.pool]: {
                         ...state.pools[action.pool],
-                        [action.token]: {
-                            ...state.pools[action.pool][action.token],
-                            approvedAmount: action.value,
+                        userBalances: {
+                            ...state.pools[action.pool].userBalances,
+                            [action.token]: {
+                                ...state.pools[action.pool].userBalances[action.token],
+                                approvedAmount: action.value,
+                            },
                         },
                     },
                 },

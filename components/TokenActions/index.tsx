@@ -5,7 +5,7 @@ import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
 import { ARBITRUM } from '@libs/constants';
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget, otherActions }) => (
@@ -49,7 +49,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                             openArbiscan(
                                                 arbiscanTarget.type,
                                                 arbiscanTarget.target,
-                                                provider?.network?.chainId?.toString() as AvailableNetwork,
+                                                provider?.network?.chainId?.toString() as KnownNetwork,
                                             )
                                         }
                                     >
@@ -66,7 +66,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                                   openArbiscan(
                                                       action.type,
                                                       action.target,
-                                                      provider?.network?.chainId?.toString() as AvailableNetwork,
+                                                      provider?.network?.chainId?.toString() as KnownNetwork,
                                                   )
                                               }
                                           >

@@ -25,7 +25,7 @@ const TRADE_OPTIONS = [
 
 export default (({ onClose }) => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
-    const pool = usePool(swapState.selectedPool);
+    const { poolInstance: pool, userBalances } = usePool(swapState.selectedPool);
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     const amountBN = useBigNumber(swapState.amount);
@@ -54,7 +54,7 @@ export default (({ onClose }) => {
             <Divider className="my-8" />
 
             {/** Inputs */}
-            <Inputs pool={pool} swapDispatch={swapDispatch} swapState={swapState} />
+            <Inputs pool={pool} userBalances={userBalances} swapDispatch={swapDispatch} swapState={swapState} />
 
             <Summary
                 pool={pool}
