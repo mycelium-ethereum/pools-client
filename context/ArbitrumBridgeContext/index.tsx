@@ -340,6 +340,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
+        // @ts-ignore
         const token = ERC20__factory.connect(tokenAddress, signer);
 
         const bridgeableToken = bridgeableAssets[fromNetwork.id].find((token) => token.address === tokenAddress);
