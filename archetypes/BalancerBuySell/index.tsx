@@ -31,7 +31,7 @@ export default (() => {
     const button = () => {
         if (!account) {
             return (
-                <Button size="lg" variant="primary" onClick={handleConnect}>
+                <Button id="connect-wallet" size="lg" variant="primary" onClick={handleConnect}>
                     Connect Wallet
                 </Button>
             );
