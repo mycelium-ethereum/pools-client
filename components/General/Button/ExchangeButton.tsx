@@ -60,6 +60,7 @@ const ExchangeButton: React.FC<{
     } else {
         return (
             <Button
+                id="mint-or-burn"
                 size="lg"
                 variant="primary"
                 disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}

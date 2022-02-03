@@ -619,7 +619,6 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            id="mint-or-burn"
                             className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
                             size="xs"
                             variant="primary-light"
@@ -628,7 +627,6 @@ const TokenRows: React.FC<
                             Mint
                         </Button>
                         <Button
-                            id="mint-or-burn"
                             className="mx-1 w-[70px] my-auto font-bold uppercase "
                             size="xs"
                             variant="primary-light"
