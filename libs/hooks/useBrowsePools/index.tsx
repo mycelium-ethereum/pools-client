@@ -19,6 +19,8 @@ const STATIC_DEFAULT_UPKEEP = {
     tvl: 0,
     newPrice: 0,
     oldPrice: 0,
+    longTokenEffectiveGain: 0,
+    shortTokenEffectiveGain: 0,
     longTokenBalance: 0,
     shortTokenBalance: 0,
     longTokenSupply: 0,
@@ -51,16 +53,18 @@ export default (() => {
                     longBalance,
                     nextShortBalance: shortBalanceAfterTransfer,
                     nextLongBalance: longBalanceAfterTransfer,
+                    committer,
                     leverage,
                     lastUpdate,
                     frontRunningInterval,
                     updateInterval,
+                    keeper,
                 } = pool;
 
                 const {
                     pendingLong: { burn: pendingLongBurn, mint: pendingLongMint },
                     pendingShort: { burn: pendingShortBurn, mint: pendingShortMint },
-                } = pool.committer;
+                } = committer;
 
                 const leverageBN = new BigNumber(leverage);
 
@@ -68,6 +72,14 @@ export default (() => {
                     longBalanceAfterTransfer,
                     longToken.supply.plus(pendingLongBurn),
                 );
+
+                console.log(
+                    name,
+                    `balances after: ${shortBalanceAfterTransfer.toString()}, supply: ${shortToken.supply
+                        .plus(pendingShortBurn)
+                        .toString()}`,
+                );
+
                 const nextShortTokenPrice = calcTokenPrice(
                     shortBalanceAfterTransfer,
                     shortToken.supply.plus(pendingShortBurn),
@@ -80,6 +92,12 @@ export default (() => {
                     .plus(pendingShortMint)
                     .minus(nextShortTokenPrice.times(pendingShortBurn));
 
+                console.log(
+                    name,
+                    `mint: ${pendingShortMint.toString()}, burn: ${pendingShortBurn.toString()}, next tokenPrice: ${nextShortTokenPrice.toString()}`,
+                );
+                console.log(name, 'next short balance', nextShortBalance.toNumber());
+
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
                 const defaultUpkeep = {
@@ -89,16 +107,21 @@ export default (() => {
                     tvl: tvl,
                 };
 
-                let effectiveShortGain = leverage;
+                let effectiveShortGain: number = leverage;
 
-                const _effectiveShortGain = calcEffectiveShortGain(shortBalance, longBalance, leverageBN);
+                console.log(
+                    name,
+                    `short balance: ${shortBalance.toNumber()}, longBalance: ${longBalance.toNumber()}, leverage: ${leverageBN.toNumber()}`,
+                );
+                const _effectiveShortGain = calcEffectiveShortGain(nextShortBalance, nextLongBalance, leverageBN);
                 if (_effectiveShortGain.isFinite() && !_effectiveShortGain.isZero()) {
                     effectiveShortGain = _effectiveShortGain.toNumber();
                 }
+                console.log(name, 'effective short gain', effectiveShortGain);
 
                 let effectiveLongGain = leverage;
 
-                const _effectiveLongGain = calcEffectiveLongGain(shortBalance, longBalance, leverageBN);
+                const _effectiveLongGain = calcEffectiveLongGain(nextShortBalance, nextLongBalance, leverageBN);
                 if (_effectiveLongGain.isFinite() && !_effectiveLongGain.isZero()) {
                     effectiveLongGain = _effectiveLongGain.toNumber();
                 }
@@ -147,6 +170,11 @@ export default (() => {
                     frontRunning: frontRunningInterval.toNumber(),
                     pastUpkeep: defaultUpkeep,
                     antecedentUpkeep: defaultUpkeep,
+
+                    keeper: keeper,
+                    committer: committer.address,
+                    collateralAsset: quoteToken.symbol,
+                    collateralAssetAddress: quoteToken.address,
                 });
             });
 

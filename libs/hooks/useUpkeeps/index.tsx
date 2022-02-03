@@ -6,6 +6,8 @@ import { poolList, ONE_HOUR } from '@libs/constants/poolLists';
 import { StaticPoolInfo } from '@libs/types/General';
 import { ARBITRUM } from '@libs/constants';
 import { calcSkew, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcEffectiveLongGain, calcEffectiveShortGain, poolMap } from '@tracer-protocol/pools-js';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 
 export type Upkeep = {
     pool: string;
@@ -15,8 +17,10 @@ export type Upkeep = {
     tvl: number;
     longTokenBalance: number;
     longTokenSupply: number;
+    longTokenEffectiveGain: number;
     shortTokenBalance: number;
     shortTokenSupply: number;
+    shortTokenEffectiveGain: number;
     longTokenPrice: number;
     shortTokenPrice: number;
     skew: number;
@@ -43,7 +47,6 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
     useEffect(() => {
         let mounted = true;
         const poolInfo: StaticPoolInfo = poolList[(network ?? ARBITRUM) as AvailableNetwork][0];
-        const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
             const now = Math.floor(Date.now() / 1000);
             const from = now - (poolInfo?.updateInterval || ONE_HOUR).times(2).toNumber();
@@ -76,10 +79,17 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
                     const upkeepMapping: Record<string, Upkeep[]> = {};
 
                     for (const upkeep of rawUpkeeps.data) {
+                        const pool: StaticPoolInfo =
+                            // @ts-expect-error
+                            poolMap[network ?? ARBITRUM]?.[upkeep.pool_address] ?? DEFAULT_POOLSTATE;
                         if (upkeepMapping[upkeep.pool_address]) {
-                            upkeepMapping[upkeep.pool_address].push(parseUpkeep(upkeep, USDC_DECIMALS));
+                            upkeepMapping[upkeep.pool_address].push(
+                                parseUpkeep(upkeep, pool.quoteToken.decimals, pool.leverage),
+                            );
                         } else {
-                            upkeepMapping[upkeep.pool_address] = [parseUpkeep(upkeep, USDC_DECIMALS)];
+                            upkeepMapping[upkeep.pool_address] = [
+                                parseUpkeep(upkeep, pool.quoteToken.decimals, pool.leverage),
+                            ];
                         }
                     }
 
@@ -104,7 +114,7 @@ export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<strin
     return upkeeps;
 };
 
-const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, decimals) => {
+const parseUpkeep: (upkeep: RawUpkeep, decimals: number, leverage: number) => Upkeep = (upkeep, decimals, leverage) => {
     const longTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.long_balance, decimals));
 
     const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.short_balance, decimals));
@@ -115,6 +125,7 @@ const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, de
 
     const longTokenPrice = calcTokenPrice(longTokenBalance, longTokenSupply);
     const shortTokenPrice = calcTokenPrice(shortTokenBalance, shortTokenSupply);
+    const leverageBN = new BigNumber(leverage);
 
     // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
     return {
@@ -127,6 +138,8 @@ const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, de
         longTokenSupply: longTokenSupply.toNumber(),
         shortTokenBalance: shortTokenBalance.toNumber(),
         shortTokenSupply: shortTokenSupply.toNumber(),
+        longTokenEffectiveGain: calcEffectiveLongGain(shortTokenBalance, longTokenBalance, leverageBN).toNumber(),
+        shortTokenEffectiveGain: calcEffectiveShortGain(shortTokenBalance, longTokenBalance, leverageBN).toNumber(),
         longTokenPrice: longTokenPrice.toNumber(),
         shortTokenPrice: shortTokenPrice.toNumber(),
         skew: calcSkew(shortTokenBalance, longTokenBalance).toNumber(),

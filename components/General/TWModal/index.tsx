@@ -7,6 +7,7 @@ interface TWModalProps {
     open: boolean;
     onClose: () => any;
     size?: Size;
+    className?: string;
 }
 
 type Size = 'default' | 'wide';
@@ -16,7 +17,7 @@ const SIZES: Record<Size, string> = {
     wide: 'max-w-[1010px] h-[700px]',
 };
 
-export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default', children }) => {
+export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default', className = '', children }) => {
     return (
         <Transition.Root show={open} as={Fragment}>
             <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => onClose()}>
@@ -50,6 +51,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                             className={classNames(
                                 'p-10 inline-block w-full align-bottom self-center bg-theme-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle',
                                 SIZES[size],
+                                className,
                             )}
                         >
                             {children}
