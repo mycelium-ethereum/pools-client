@@ -27,8 +27,7 @@
         "react-toast-notifications": "^2.4.0",
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
-        "tailwindcss-multi-theme": "^1.0.4",
-        "web3": "^1.7.0"
+        "tailwindcss-multi-theme": "^1.0.4"
     },
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev -p 3002",
