@@ -9,7 +9,7 @@ import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
 import { usePool } from '@context/PoolContext';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
-import Close from '/public/img/general/close.svg';
+import CloseIcon from '/public/img/general/close.svg';
 import styled from 'styled-components';
 
 const TRADE_OPTIONS = [
@@ -33,9 +33,9 @@ export default styled((({ onClose, className }) => {
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
-            <h2 className="title">New Commit</h2>
+            <Title>New Commit</Title>
 
-            <div className="header-wrapper">
+            <Header>
                 <TWButtonGroup
                     value={swapState?.commitAction ?? CommitActionEnum.mint}
                     size={'xl'}
@@ -50,9 +50,9 @@ export default styled((({ onClose, className }) => {
                     options={TRADE_OPTIONS}
                 />
                 <Gas />
-            </div>
+            </Header>
 
-            <Divider className="divider" />
+            <DividerRow />
 
             {/** Inputs */}
             <Inputs pool={pool} swapDispatch={swapDispatch} swapState={swapState} />
@@ -76,42 +76,42 @@ export default styled((({ onClose, className }) => {
     width: 100%;
     justify-content: center;
 
-    .close {
-        position: absolute;
-        right: 1rem;
-        top: 1.6rem;
-        width: 0.75rem;
-        height: 0.75rem;
-        cursor: pointer;
-    }
-
-    .title {
-        font-weight: 600;
-        font-size: 20px;
-        color: ${({ theme }) => theme.text};
-        margin-bottom: 15px;
-    }
-
-    .header-wrapper {
-        display: flex;
-    }
-
-    .divider {
-        margin: 30px 0;
-    }
-
     @media (min-width: 640px) {
         margin-top: 1.7rem;
-
-        .close {
-            right: 4rem;
-            top: 3.8rem;
-            width: 1rem;
-            height: 1rem;
-        }
-
-        .title {
-            margin-bottom: 20px;
-        }
     }
+`;
+
+const Title = styled.h2`
+    font-weight: 600;
+    font-size: 20px;
+    color: ${({ theme }) => theme.text};
+    margin-bottom: 15px;
+
+    @media (min-width: 640px) {
+        margin-bottom: 20px;
+    }
+`;
+
+const Close = styled(CloseIcon)`
+    position: absolute;
+    right: 1rem;
+    top: 1.6rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    cursor: pointer;
+
+    @media (min-width: 640px) {
+        right: 4rem;
+        top: 3.8rem;
+        width: 1rem;
+        height: 1rem;
+    }
+`;
+
+const Header = styled.div`
+    display: flex;
+`;
+
+const DividerRow = styled(Divider)`
+    margin: 30px 0;
 `;

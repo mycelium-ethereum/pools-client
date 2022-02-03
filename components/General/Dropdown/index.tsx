@@ -103,66 +103,44 @@ export const Dropdown: React.FC<DropdownProps> = ({
     className,
 }) => {
     return (
-        <Wrapper>
-            <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
-                <Menu.Button
-                    className={classNames(
-                        `inline-flex justify-between w-full rounded-md`,
-                        SIZE[size],
-                        'font-normal focus:outline-none hover:ring-1 hover:ring-50',
-                        VARIANTS[variant],
-                    )}
-                >
-                    <span className="mr-2 opacity-80">
-                        {placeHolderIcon && value !== '' && value !== 'All' ? (
-                            <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
-                        ) : null}
-                        {value === '' ? placeHolder : value}
-                    </span>
-                    {options.length ? (
-                        <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
-                    ) : (
-                        <LoadingOutlined
-                            className="flex items-center h-4 w-4 ml-auto mr-0 my-auto "
-                            aria-hidden="true"
-                        />
-                    )}
-                </Menu.Button>
+        <MenuStyled forwardedAs="div" className={`${className || ''}`}>
+            <Menu.Button
+                className={classNames(
+                    `inline-flex justify-between w-full rounded-md`,
+                    SIZE[size],
+                    'font-normal focus:outline-none hover:ring-1 hover:ring-50',
+                    VARIANTS[variant],
+                )}
+            >
+                <span className="mr-2 opacity-80">
+                    {placeHolderIcon && value !== '' && value !== 'All' ? (
+                        <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
+                    ) : null}
+                    {value === '' ? placeHolder : value}
+                </span>
+                {options.length ? (
+                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                ) : (
+                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                )}
+            </Menu.Button>
 
-                <Transition
-                    as={Fragment}
-                    enter="transition ease-out duration-100"
-                    enterFrom="transform opacity-0 scale-95"
-                    enterTo="transform opacity-100 scale-100"
-                    leave="transition ease-in duration-75"
-                    leaveFrom="transform opacity-100 scale-100"
-                    leaveTo="transform opacity-0 scale-95"
-                >
-                    <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        <div className="py-1">
-                            {options.map((option) => (
-                                <Menu.Item key={option.key} disabled={option.disabled}>
-                                    {({ active }) =>
-                                        option.tooltip ? (
-                                            <TooltipSelector tooltip={option.tooltip}>
-                                                <button
-                                                    onClick={() => onSelect(option.key)}
-                                                    className={classNames(
-                                                        active
-                                                            ? 'bg-theme-button-bg-hover'
-                                                            : 'text-theme-text opacity-80',
-                                                        'block px-4 py-2 text-sm w-full text-left',
-                                                    )}
-                                                >
-                                                    {option?.ticker ? (
-                                                        <Logo ticker={option.ticker} className="inline my-0 mr-3" />
-                                                    ) : (
-                                                        ''
-                                                    )}
-                                                    {option?.text ?? option.key}
-                                                </button>
-                                            </TooltipSelector>
-                                        ) : (
+            <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95"
+            >
+                <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                    <div className="py-1">
+                        {options.map((option) => (
+                            <Menu.Item key={option.key} disabled={option.disabled}>
+                                {({ active }) =>
+                                    option.tooltip ? (
+                                        <TooltipSelector tooltip={option.tooltip}>
                                             <button
                                                 onClick={() => onSelect(option.key)}
                                                 className={classNames(
@@ -171,29 +149,44 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                                 )}
                                             >
                                                 {option?.ticker ? (
-                                                    <Logo
-                                                        size={iconSize}
-                                                        ticker={option.ticker}
-                                                        className="inline mr-3"
-                                                    />
+                                                    <Logo ticker={option.ticker} className="inline my-0 mr-3" />
                                                 ) : (
                                                     ''
                                                 )}
                                                 {option?.text ?? option.key}
                                             </button>
-                                        )
-                                    }
-                                </Menu.Item>
-                            ))}
-                        </div>
-                    </Menu.Items>
-                </Transition>
-            </Menu>
-        </Wrapper>
+                                        </TooltipSelector>
+                                    ) : (
+                                        <button
+                                            onClick={() => onSelect(option.key)}
+                                            className={classNames(
+                                                active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
+                                                'block px-4 py-2 text-sm w-full text-left',
+                                            )}
+                                        >
+                                            {option?.ticker ? (
+                                                <Logo size={iconSize} ticker={option.ticker} className="inline mr-3" />
+                                            ) : (
+                                                ''
+                                            )}
+                                            {option?.text ?? option.key}
+                                        </button>
+                                    )
+                                }
+                            </Menu.Item>
+                        ))}
+                    </div>
+                </Menu.Items>
+            </Transition>
+        </MenuStyled>
     );
 };
 
-const Wrapper = styled.div`
+const MenuStyled = styled(Menu)`
+    position: relative;
+    display: inline-block;
+    text-align: left;
+
     .default {
         border-width: 1px;
         border-color: ${({ theme }) => theme.border};

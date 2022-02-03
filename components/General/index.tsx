@@ -13,8 +13,8 @@ export const Section: React.FC<SProps> = styled(
     ({ className, children, label, showSectionDetails = false }: SProps) => {
         return (
             <div className={classNames(className ?? '')}>
-                <div className={`label ${showSectionDetails ? 'details' : ''}`}>{label}</div>
-                <span className="content">{children}</span>
+                <Label showSectionDetails={showSectionDetails}>{label}</Label>
+                <Content>{children}</Content>
             </div>
         );
     },
@@ -31,43 +31,49 @@ export const Section: React.FC<SProps> = styled(
     &:last-child {
         padding-bottom: 0;
     }
+`;
 
-    .label {
-        text-align: left;
-        font-weight: 600;
-    }
+const Label = styled.div<{ showSectionDetails: boolean }>`
+    text-align: left;
+    font-weight: 600;
 
-    .content {
-        width: 100%;
-        text-align: right;
-        padding-left: 0.25rem;
-        font-size: 14px;
-        white-space: nowrap;
-    }
-
-    .details {
-        opacity: 0.5;
-        margin-left: 0.75rem;
-        margin-bottom: 0;
-        max-width: 140px;
-        font-size: 12px;
-        line-height: 18px;
-        font-weight: 400;
-    }
+    ${({ showSectionDetails }) => {
+        if (showSectionDetails) {
+            return `
+                opacity: 0.5;
+                margin-left: 0.75rem;
+                margin-bottom: 0;
+                max-width: 140px;
+                font-size: 12px;
+                line-height: 18px;
+                font-weight: 400;
+            `;
+        }
+    }}
 
     @media (min-width: 640px) {
-        .label {
-            font-size: 16px;
-        }
+        font-size: 16px;
 
-        .content {
-            font-size: 14px;
-        }
+        ${({ showSectionDetails }) => {
+            if (showSectionDetails) {
+                return `
+                    max-width: 100%;
+                    font-size: 14px;
+                `;
+            }
+        }}
+    }
+`;
 
-        .details {
-            max-width: 100%;
-            font-size: 14px;
-        }
+const Content = styled.span`
+    width: 100%;
+    text-align: right;
+    padding-left: 0.25rem;
+    font-size: 14px;
+    white-space: nowrap;
+
+    @media (min-width: 640px) {
+        font-size: 14px;
     }
 `;
 
