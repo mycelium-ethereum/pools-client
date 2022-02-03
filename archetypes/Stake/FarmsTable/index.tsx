@@ -187,6 +187,7 @@ const PoolRow: React.FC<{
             </TableRowCell>
             <TableRowCell>
                 <Button
+                    id="stake"
                     disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] rounded-2xl font-bold uppercase "
                     size="sm"
