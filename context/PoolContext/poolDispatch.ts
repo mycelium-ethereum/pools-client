@@ -2,6 +2,8 @@ import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { AggregateBalances } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { PoolLists } from '@libs/services/poolList';
 
 const MAX_RETRY_COUNT = 5;
 
@@ -21,6 +23,7 @@ type TokenBalance = {
 };
 
 export type PoolState = {
+    poolsLists: Partial<Record<KnownNetwork, PoolLists>>;
     pools: Record<string, PoolInfo>;
     subscriptions: Record<string, boolean>;
     selectedPool: string | undefined;
@@ -30,6 +33,7 @@ export type PoolState = {
 
 export const initialPoolState: PoolState = {
     pools: {},
+    poolsLists: {},
     selectedPool: undefined,
     poolsInitialised: false,
     retryCount: 0,
@@ -38,6 +42,7 @@ export const initialPoolState: PoolState = {
 
 export type PoolAction =
     | { type: 'setPool'; key: string; pool: Pool }
+    | { type: 'setPoolLists'; network: KnownNetwork; lists: PoolLists }
     | {
           type: 'setTokenBalances';
           pool: string;
@@ -74,6 +79,14 @@ export type PoolAction =
 
 export const reducer: (state: PoolState, action: PoolAction) => PoolState = (state, action) => {
     switch (action.type) {
+        case 'setPoolLists':
+            return {
+                ...state,
+                poolsLists: {
+                    ...state.poolsLists,
+                    [action.network]: action.lists,
+                },
+            };
         case 'setPool':
             return {
                 ...state,
