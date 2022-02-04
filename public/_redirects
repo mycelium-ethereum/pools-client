@@ -1,1 +1,3 @@
 /stake	/stakepooltoken
+/matomo https://tracerfinance.matomo.cloud 200
+/matomo-php https://tracerfinance.matomo.cloud/matomo.php 200
