@@ -32,7 +32,9 @@ export default class MyDocument extends Document {
         return (
         <Html>
             <Head>
-                <script src="/scripts/matomo.js" />
+                <script src="/scripts/mat.js" />
+                <script src="/scripts/mat-container.js" />
+                <script src="/scripts/mat-script.js" />
                 <script src="/scripts/theme.js" />
             </Head>
             <body>
