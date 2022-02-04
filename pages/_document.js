@@ -34,7 +34,7 @@ export default class MyDocument extends Document {
             <Head>
                 <script src="/scripts/mat.js" />
                 <script src="/scripts/mat-container.js" />
-                <script src="/scripts/mat-script.js" />
+                <script defer src="/scripts/mat-script.js" />
                 <script src="/scripts/theme.js" />
             </Head>
             <body>
