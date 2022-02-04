@@ -1,5 +1,5 @@
 // Matomo Setup
-const _paq = (window._paq = window._paq || []);
+let _paq = (window._paq = window._paq || []);
 /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
 _paq.push([
     'setDomains',
@@ -9,10 +9,10 @@ _paq.push(['enableCrossDomainLinking']);
 _paq.push(['trackPageView']);
 _paq.push(['enableLinkTracking']);
 (function () {
-    const u = 'https://tracerfinance.matomo.cloud/';
+    let u = 'https://tracerfinance.matomo.cloud/';
     _paq.push(['setTrackerUrl', u + 'matomo.php']);
-    _paq.push(['setSiteId', '2']);
-    const d = document,
+    _paq.push(['setSiteId', '4']);
+    let d = document,
         g = d.createElement('script'),
         s = d.getElementsByTagName('script')[0];
     g.async = true;
@@ -21,9 +21,9 @@ _paq.push(['enableLinkTracking']);
 })();
 
 // Matomo tag manager
-const _mtm = (window._mtm = window._mtm || []);
+let _mtm = (window._mtm = window._mtm || []);
 _mtm.push({ 'mtm.startTime': new Date().getTime(), event: 'mtm.Start' });
-const d = document,
+let d = document,
     g = d.createElement('script'),
     s = d.getElementsByTagName('script')[0];
 g.async = true;
