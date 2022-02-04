@@ -10,7 +10,7 @@ _paq.push(["setDomains", ["*.tracer.finance", "*.docs.tracer.finance", "*.pools.
         let e = document,
             t = e.createElement("script"),
             a = e.getElementsByTagName("script")[0];
-        (t.async = !0), (t.src = "/mat.js"), a.parentNode.insertBefore(t, a);
+        (t.async = !0), (t.src = "/scripts/mat.js"), a.parentNode.insertBefore(t, a);
     })();
 let _mtm = (window._mtm = window._mtm || []);
 _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
