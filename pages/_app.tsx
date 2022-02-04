@@ -53,7 +53,6 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     async
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
-                <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
 
             <ToastProvider components={{ Toast: Notification }}>
