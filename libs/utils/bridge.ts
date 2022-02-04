@@ -2,7 +2,7 @@ import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
 import { BridgeableAsset } from '@libs/types/General';
 import { LogoTicker } from '@components/General/Logo';
 import BigNumber from 'bignumber.js';
-import { tokenMap } from '@libs/constants/tokenList';
+import { tokenMap } from '@tracer-protocol/pools-js/data';
 
 type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;
 

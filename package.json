@@ -11,7 +11,7 @@
         "@mycelium-ethereum/vyps-kit": "^0.1.0",
         "@tracer-protocol/onboard": "^2.2.4",
         "@tracer-protocol/perpetual-pools-contracts": "1.0.2",
-        "@tracer-protocol/tracer-pools-utils": "^0.0.7",
+        "@tracer-protocol/pools-js": "2.0.2",
         "@visx/visx": "^2.2.2",
         "antd": "^4.16.13",
         "arb-ts": "^1.0.0-beta.4",
@@ -27,8 +27,7 @@
         "react-toast-notifications": "^2.4.0",
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
-        "tailwindcss-multi-theme": "^1.0.4",
-        "web3": "^1.7.0"
+        "tailwindcss-multi-theme": "^1.0.4"
     },
     "scripts": {
         "dev": "NODE_OPTIONS='--inspect' next dev -p 3002",

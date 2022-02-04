@@ -1,11 +1,11 @@
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
-import { poolList, ONE_HOUR } from '@libs/constants/poolLists';
-import { StaticPoolInfo } from '@libs/types/General';
-import { ARBITRUM } from '@libs/constants';
-import { calcSkew, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { KnownNetwork, poolList, StaticPoolInfo } from '@tracer-protocol/pools-js';
+
+const ONE_HOUR = 60 * 60;
+
+import { calcSkew, calcTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
 
 export type Upkeep = {
     pool: string;
@@ -37,16 +37,16 @@ type RawUpkeep = {
 const POOLS_API = process.env.NEXT_PUBLIC_POOLS_API;
 
 // const useUpkeeps
-export const useUpkeeps: (network: AvailableNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
+export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
     const [upkeeps, setUpkeeps] = useState<Record<string, Upkeep[]>>({});
 
     useEffect(() => {
         let mounted = true;
-        const poolInfo: StaticPoolInfo = poolList[(network ?? ARBITRUM) as AvailableNetwork][0];
+        const poolInfo: StaticPoolInfo = poolList[network ?? NETWORKS.ARBITRUM][0];
         const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
             const now = Math.floor(Date.now() / 1000);
-            const from = now - (poolInfo?.updateInterval || ONE_HOUR).times(2).toNumber();
+            const from = now - (poolInfo?.updateInterval || ONE_HOUR) * 2;
 
             const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
                 .then(async (res) => {

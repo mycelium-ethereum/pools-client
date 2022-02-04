@@ -9,7 +9,7 @@ export default (() => {
     return (
         <div className="flex flex-col items-center justify-center p-2 ml-auto">
             <GasPriceTooltip
-                network={networkConfig[network ?? 0]?.name ?? 'Unknown'}
+                network={network ? networkConfig[network]?.name ?? 'Unkwown' : 'Unknown'}
                 wallet={wallet?.name ?? 'Unknown'}
             >
                 <div className="flex">

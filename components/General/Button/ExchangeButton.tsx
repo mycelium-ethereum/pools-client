@@ -16,7 +16,7 @@ const ExchangeButton: React.FC<{
 
     const amountBN = useBigNumber(amount);
 
-    const pool = usePool(selectedPool);
+    const { userBalances, poolInstance: pool } = usePool(selectedPool);
 
     const { commit, approve } = usePoolActions();
 
@@ -33,7 +33,8 @@ const ExchangeButton: React.FC<{
             </Button>
         );
     } else if (
-        (!pool.quoteToken.approvedAmount?.gte(pool.quoteToken.balance) || pool.quoteToken.approvedAmount.eq(0)) &&
+        (!userBalances.quoteToken.approvedAmount?.gte(userBalances.quoteToken.balance) ||
+            userBalances.quoteToken.approvedAmount.eq(0)) &&
         commitAction !== CommitActionEnum.burn
     ) {
         return (

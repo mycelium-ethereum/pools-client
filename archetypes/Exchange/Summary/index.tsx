@@ -1,29 +1,21 @@
 import React, { useMemo, useState } from 'react';
-// import { HiddenExpand, Logo, LogoTicker, Section, tokenSymbolToLogoTicker } from '@components/General';
 import { HiddenExpand, Section } from '@components/General';
 import TimeLeft from '@components/TimeLeft';
-import { Pool } from '@libs/types/General';
 import { toApproxCurrency } from '@libs/utils/converters';
-import {
-    // calcEffectiveLongGain,
-    // calcEffectiveShortGain,
-    calcNotionalValue,
-    calcTokenPrice,
-} from '@tracer-protocol/tracer-pools-utils';
-import { BigNumber } from 'bignumber.js';
-import { Transition } from '@headlessui/react';
-import { classNames } from '@libs/utils/functions';
-// import Link from '/public/img/general/link.svg';
-// import { useWeb3 } from '@context/Web3Context/Web3Context';
-// import { ARBITRUM } from '@libs/constants';
-// import useBalancerSpotPrices from '@libs/hooks/useBalancerSpotPrices';
-import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
+import { BigNumber } from 'bignumber.js';
+import { Transition } from '@headlessui/react';
+import { classNames } from '@libs/utils/functions';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+
 type SummaryProps = {
-    pool: Pool;
+    pool: PoolInfo['poolInstance'];
     showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
@@ -36,23 +28,10 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
-    );
-    const pendingBurns = useMemo(
-        () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
-        [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
-    );
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
 
-    // const balancesAfter = {
-    //     longBalance: pool.nextLongBalance.plus(isLong ? amount : 0).plus(pool.committer.pendingLong.mint),
-    //     shortBalance: pool.nextShortBalance.plus(isLong ? 0 : amount).plus(pool.committer.pendingShort.mint),
-    // };
+    const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
+
+    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     const totalCommitmentAmount = 2000;
     const totalGasFee = 1.78;
@@ -63,15 +42,23 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
     // const commitAmount = totalCommitmentAmount;
     const poolPowerLeverage = pool.leverage;
 
-    // const effectiveGains = useMemo(() => {
-    //     return isLong
-    //         ? calcEffectiveLongGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
-    //         : calcEffectiveShortGain(
-    //               balancesAfter.shortBalance,
-    //               balancesAfter.longBalance,
-    //               new BigNumber(pool.leverage),
-    //           );
-    // }, [isLong, amount, balancesAfter.longBalance, balancesAfter.shortBalance]);
+    const balancesAfter = {
+        longBalance: nextPoolState.expectedLongBalance.plus(isLong ? amount : 0),
+        shortBalance: nextPoolState.expectedShortBalance.plus(isLong ? 0 : amount),
+    };
+
+    const effectiveGains = useMemo(() => {
+        return isLong
+            ? calcEffectiveLongGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
+            : calcEffectiveShortGain(
+                  balancesAfter.shortBalance,
+                  balancesAfter.longBalance,
+                  new BigNumber(pool.leverage),
+              );
+    }, [isLong, amount, balancesAfter.longBalance, balancesAfter.shortBalance]);
+
+    //TODO remove when working on summary logic
+    console.log(effectiveGains);
 
     return (
         <Container>
@@ -204,7 +191,7 @@ export default (({ pool, showBreakdown, amount, isLong, isMint, receiveIn }) => 
     );
 }) as React.FC<SummaryProps>;
 
-export const constructBalancerLink: (token: string | undefined, network: AvailableNetwork, isBuy: boolean) => string = (
+export const constructBalancerLink: (token: string | undefined, network: KnownNetwork, isBuy: boolean) => string = (
     token,
     network,
     isBuy,

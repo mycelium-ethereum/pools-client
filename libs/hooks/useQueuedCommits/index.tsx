@@ -3,7 +3,6 @@ import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { CommitEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
-import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { useCommits } from '@context/UsersCommitContext';
 
 export default (() => {
@@ -25,28 +24,25 @@ export default (() => {
                     ) {
                         continue;
                     }
-                    const {
-                        shortToken,
-                        longToken,
-                        nextShortBalance,
-                        nextLongBalance,
-                        lastUpdate,
-                        updateInterval,
-                        quoteToken,
-                        committer: {
-                            pendingLong: { burn: pendingLongBurn },
-                            pendingShort: { burn: pendingShortBurn },
-                        },
-                    } = pools[commit.pool];
+                    const { poolInstance, userBalances } = pools[commit.pool];
+
+                    const { shortToken, longToken, quoteToken, frontRunningInterval, lastUpdate, updateInterval } =
+                        poolInstance;
 
                     let token, tokenPrice;
 
                     if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
-                        token = shortToken;
-                        tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
+                        token = {
+                            ...shortToken,
+                            ...userBalances.shortToken,
+                        };
+                        tokenPrice = poolInstance.getNextShortTokenPrice();
                     } else {
-                        token = longToken;
-                        tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
+                        token = {
+                            ...longToken,
+                            ...userBalances.longToken,
+                        };
+                        tokenPrice = poolInstance.getNextLongTokenPrice();
                     }
 
                     parsedCommits.push({
@@ -54,7 +50,7 @@ export default (() => {
                         token,
                         tokenPrice,
                         nextRebalance: lastUpdate.plus(updateInterval),
-                        frontRunningInterval: pools[commit.pool].frontRunningInterval,
+                        frontRunningInterval: frontRunningInterval,
                         updateInterval: updateInterval,
                         quoteTokenSymbol: quoteToken.symbol,
                     });

@@ -29,7 +29,9 @@ export default (() => {
                         burns += 1;
                     }
                     if (pools[commit.pool]) {
-                        const newMin = pools[commit.pool].lastUpdate.plus(pools[commit.pool].updateInterval).toNumber();
+                        const newMin = pools[commit.pool].poolInstance.lastUpdate
+                            .plus(pools[commit.pool].poolInstance.updateInterval)
+                            .toNumber();
                         if (newMin < nextUpdate_ || nextUpdate_ === 0) {
                             nextUpdate_ = newMin; // set new min
                         }

@@ -335,6 +335,11 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
+        if (!signer) {
+            console.error('Failed to approve token: signer undefined');
+            return;
+        }
+
         // @ts-ignore
         const token = ERC20__factory.connect(tokenAddress, signer);
 
