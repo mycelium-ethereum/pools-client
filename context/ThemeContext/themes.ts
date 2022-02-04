@@ -9,6 +9,7 @@ export const themes: Record<
         text: string;
         'text-secondary': string;
         border: string;
+        'border-secondary': string;
         primary: string;
         'button-bg': string;
         'button-bg-hover': string;
@@ -28,6 +29,9 @@ export const themes: Record<
 
         /* cool-gray-300*/
         border: '#D1D5DB',
+
+        /* cool-gray-200 */
+        'border-secondary': '#E5E7EB',
 
         /* tracer-800*/
         primary: '#0000B0',
@@ -56,6 +60,9 @@ export const themes: Record<
         /* cool-gray-500*/
         border: '#6B7280',
 
+        /* cool-gray-700 */
+        'border-secondary': '#374151',
+
         /* tracer-100*/
         primary: '#DEDEFF',
 
@@ -78,6 +85,9 @@ export const themes: Record<
         'text-secondary': '#80ce87',
 
         border: '#008f11',
+
+        //TODO get correct color for matrix
+        'border-secondary': '#E5E7EB',
 
         primary: '#00ff41',
 

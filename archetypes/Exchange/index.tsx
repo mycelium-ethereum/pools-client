@@ -7,10 +7,10 @@ import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
-import FeeNote from './FeeNote';
 import { usePool } from '@context/PoolContext';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
-import Close from '/public/img/general/close.svg';
+import CloseIcon from '/public/img/general/close.svg';
+import styled from 'styled-components';
 
 const TRADE_OPTIONS = [
     {
@@ -23,7 +23,7 @@ const TRADE_OPTIONS = [
     },
 ];
 
-export default (({ onClose }) => {
+export default styled((({ onClose, className }) => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { poolInstance: pool, userBalances } = usePool(swapState.selectedPool);
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
@@ -31,10 +31,11 @@ export default (({ onClose }) => {
     const amountBN = useBigNumber(swapState.amount);
 
     return (
-        <div className="w-full justify-center sm:mt-14">
-            <Close onClick={onClose} className="absolute right-4 top-4 sm:right-10 sm:top-10 w-3 h-3 cursor-pointer" />
+        <div className={className}>
+            <Close onClick={onClose} className="close" />
+            <Title>New Commit</Title>
 
-            <div className="flex">
+            <Header>
                 <TWButtonGroup
                     value={swapState?.commitAction ?? CommitActionEnum.mint}
                     size={'xl'}
@@ -49,9 +50,9 @@ export default (({ onClose }) => {
                     options={TRADE_OPTIONS}
                 />
                 <Gas />
-            </div>
+            </Header>
 
-            <Divider className="my-8" />
+            <DividerRow />
 
             {/** Inputs */}
             <Inputs pool={pool} userBalances={userBalances} swapDispatch={swapDispatch} swapState={swapState} />
@@ -65,15 +66,52 @@ export default (({ onClose }) => {
                 isMint={swapState.commitAction === CommitActionEnum.mint}
             />
 
-            <FeeNote
-                poolName={pool.name}
-                isMint={swapState.commitAction === CommitActionEnum.mint}
-                receiveIn={receiveIn}
-            />
-
             <ExchangeButton onClose={onClose} swapState={swapState} swapDispatch={swapDispatch} />
         </div>
     );
 }) as React.FC<{
     onClose: () => void;
-}>;
+    className?: string;
+}>)`
+    width: 100%;
+    justify-content: center;
+
+    @media (min-width: 640px) {
+        margin-top: 1.7rem;
+    }
+`;
+
+const Title = styled.h2`
+    font-weight: 600;
+    font-size: 20px;
+    color: ${({ theme }) => theme.text};
+    margin-bottom: 15px;
+
+    @media (min-width: 640px) {
+        margin-bottom: 20px;
+    }
+`;
+
+const Close = styled(CloseIcon)`
+    position: absolute;
+    right: 1rem;
+    top: 1.6rem;
+    width: 0.75rem;
+    height: 0.75rem;
+    cursor: pointer;
+
+    @media (min-width: 640px) {
+        right: 4rem;
+        top: 3.8rem;
+        width: 1rem;
+        height: 1rem;
+    }
+`;
+
+const Header = styled.div`
+    display: flex;
+`;
+
+const DividerRow = styled(Divider)`
+    margin: 30px 0;
+`;

@@ -10,7 +10,7 @@ import { toApproxCurrency } from '@libs/utils/converters';
 
 import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import { classNames } from '@libs/utils/functions';
+import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
 
@@ -84,11 +84,11 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
     }, [side, commitAction, amount, notional, token, pendingBurns]);
 
     return (
-        <>
-            <div className="w-full mb-4">
-                <p className="mb-2 ">Token</p>
-                <Dropdown
-                    className="w-full"
+        <Container>
+            <Wrapper hasMargin>
+                <Label>Token</Label>
+                <DropdownStyled
+                    variant="secondary"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
                         side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
@@ -106,12 +106,10 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'text-sm opacity-70 mt-2')}>
-                    Expected Price: {toApproxCurrency(tokenPrice)}
-                </p>
-            </div>
-            <div className="w-full">
-                <p className="mb-2 ">Amount</p>
+                <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
+            </Wrapper>
+            <Wrapper>
+                <Label>Amount</Label>
 
                 {commitAction === CommitActionEnum.mint ? (
                     <AmountInput
@@ -136,8 +134,8 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                         isPoolToken={true}
                     />
                 )}
-            </div>
-        </>
+            </Wrapper>
+        </Container>
     );
 }) as React.FC<{
     pool: PoolInfo['poolInstance'];
@@ -169,9 +167,8 @@ const AmountInput: React.FC<AmountProps> = ({
 }) => {
     return (
         <>
-            <InputContainer error={invalidAmount.isInvalid} className="w-full">
-                <Input
-                    className="w-3/5 h-full font-normal text-base"
+            <InputContainerStyled error={invalidAmount.isInvalid}>
+                <InputStyled
                     value={amount}
                     onUserInput={(val) => {
                         swapDispatch({ type: 'setAmount', value: val || '' });
@@ -197,19 +194,14 @@ const AmountInput: React.FC<AmountProps> = ({
                         Max
                     </div>
                 </InnerInputText>
-            </InputContainer>
-            <p
-                className={classNames(
-                    invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
-                    'opacity-70 text-sm mt-2',
-                )}
-            >
+            </InputContainerStyled>
+            <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
                     <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
                 )}
-            </p>
+            </Subtext>
         </>
     );
 };
@@ -240,3 +232,51 @@ const Available: React.FC<{
         </>
     );
 };
+
+const Container = styled.div`
+    @media (min-width: 640px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 15px;
+    }
+`;
+
+const Wrapper = styled.div<{ hasMargin?: boolean }>`
+    width: 100%;
+    margin-bottom: ${({ hasMargin }) => (hasMargin ? '1rem' : '0')};
+`;
+
+const InputContainerStyled = styled(InputContainer)`
+    width: 100%;
+    border-color: ${({ theme }) => theme['border-secondary']} !important;
+`;
+
+const Label = styled.p`
+    margin-bottom: 0.25rem;
+    @media (min-width: 640px) {
+        margin-bottom: 0.5rem;
+    }
+`;
+
+const DropdownStyled = styled(Dropdown)`
+    width: 100%;
+`;
+
+const InputStyled = styled(Input)`
+    width: 60%;
+    height: 100%;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+`;
+
+const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
+    display: ${({ showContent }) => (showContent ? 'block' : 'none')};
+    color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
+    font-size: 16px;
+    opacity: 0.7;
+
+    @media (min-width: 640px) {
+        margin-top: 0.5rem;
+    }
+`;
