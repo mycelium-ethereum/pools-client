@@ -16,6 +16,7 @@ export const SIDE_MAP: Record<SideEnum, string> = {
 export enum CommitActionEnum {
     mint = 0,
     burn = 1,
+    flip = 2,
 }
 
 // Commit type enum

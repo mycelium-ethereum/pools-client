@@ -3,20 +3,55 @@ import React from 'react';
 import { GasPriceTooltip } from '@components/Tooltips';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import GasIcon from '@public/img/general/gas_icon.svg';
+import styled from 'styled-components';
 
 export default (() => {
     const { gasPrice, wallet, network } = useWeb3();
     return (
-        <div className="flex flex-col items-center justify-center p-2 ml-auto">
+        <Container>
             <GasPriceTooltip
                 network={network ? networkConfig[network]?.name ?? 'Unkwown' : 'Unknown'}
                 wallet={wallet?.name ?? 'Unknown'}
             >
-                <div className="flex">
-                    <GasIcon className="inline h-[22px] w-[20px] mr-2" />
-                    <span>{gasPrice?.toFixed(3)}</span>
-                </div>
+                <Wrapper>
+                    <GasIconStyled />
+                    <Text>{gasPrice?.toFixed(3)}</Text>
+                </Wrapper>
             </GasPriceTooltip>
-        </div>
+        </Container>
     );
 }) as React.FC;
+
+const Container = styled.div`
+    display: flex;
+    padding: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+`;
+
+const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+const GasIconStyled = styled(GasIcon)`
+    display: inline;
+    margin-right: 0.2rem;
+    transform: scale(0.7);
+
+    @media (min-width: 640px) {
+        margin-right: 0.5rem;
+        transform: scale(1);
+    }
+`;
+
+const Text = styled.span`
+    font-size: 14px;
+
+    @media (min-width: 640px) {
+        font-size: 20px;
+        font-weight: 600;
+    }
+`;

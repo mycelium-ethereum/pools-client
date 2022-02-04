@@ -4,6 +4,7 @@ import { SwapAction, SwapState, useBigNumber } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
+import styled from 'styled-components';
 
 const ExchangeButton: React.FC<{
     onClose: () => void;
@@ -52,15 +53,15 @@ const ExchangeButton: React.FC<{
                 >
                     Unlock {pool.quoteToken.symbol}
                 </Button>
-                <p className="mt-2 text-theme-text text-sm text-center opacity-70">
+                <Text>
                     Unlock {pool.quoteToken.symbol} to start investing with Tracer. This is a one-time transaction for
                     each pool.
-                </p>
+                </Text>
             </>
         );
     } else {
         return (
-            <Button
+            <ButtonStyled
                 size="lg"
                 variant="primary"
                 disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}
@@ -83,10 +84,23 @@ const ExchangeButton: React.FC<{
                     });
                 }}
             >
-                Commit {commitAction === CommitActionEnum.mint ? 'Mint' : 'Burn'}
-            </Button>
+                Commit {CommitActionEnum[commitAction]}
+            </ButtonStyled>
         );
     }
 };
 
 export default ExchangeButton;
+
+const Text = styled.p`
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    text-align: center;
+    opacity: 0.7;
+    color: ${({ theme }) => theme.text};
+`;
+
+const ButtonStyled = styled(Button)`
+    text-transform: capitalize;
+`;
