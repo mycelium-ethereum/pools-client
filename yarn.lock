@@ -2938,10 +2938,14 @@
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.0.2.tgz#e05a23bf6f919fc2aae47e1fd56dec9cf5698f28"
   integrity sha512-/AMXMwUkvTRWIUtp/sX/aObzhpTe1P0ThisvWqXovTj32eCneP6DAf+1Hq9ewlMQzTLpwN6Ns7RRIyYuEfDAmA==
 
-"@tracer-protocol/pools-js@2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.0.tgz#a57898f0219dfd9217c989f816d5923bf33d7d3d"
-  integrity sha512-HtIhEr56PusZn8Zt2Z3GM9lOsvxN1e2U1axR4fTVsZh+AODo2fo2cFdAVzmpuF1Zn2ECA8SQ6BN4NHFITBP3SA==
+"@tracer-protocol/pools-js@2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.2.tgz#68b38121558684744b28131d24fcf1f56c019069"
+  integrity sha512-BVN8zfnV28Rkq+/jyNrOWRumbG21ZsAv4Kj9DGtTm4EDL9AZHDfB/GW+7d69vIS9FfCPBCpORdGMPTt7ULj3Yg==
+  dependencies:
+    "@tracer-protocol/perpetual-pools-contracts" "1.0.2"
+    bignumber.js "^9.0.1"
+    ethers "^5.5.1"
 
 "@types/aria-query@^4.2.0":
   version "4.2.2"
