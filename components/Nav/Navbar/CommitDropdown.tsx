@@ -26,7 +26,7 @@ export default (({ setShowQueued, hide }) => {
         router.push({
             pathname: '/portfolio/commits',
             query: {
-                focus: focus === CommitActionEnum.mints ? 'mints' : 'burns',
+                focus: focus === CommitActionEnum.mint ? 'mint' : 'burn',
             },
         });
 
@@ -44,10 +44,10 @@ export default (({ setShowQueued, hide }) => {
                     targetTime={nextUpdate}
                 />
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.mints)}>
+            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.mint)}>
                 <a>{mints} Mints</a>
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.burns)}>
+            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.burn)}>
                 <a>{burns} Burns</a>
             </div>
         </TWPopup>
