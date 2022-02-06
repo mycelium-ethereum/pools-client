@@ -13,6 +13,12 @@ export enum CommitActionEnum {
     flip = 2,
 }
 
+export const CommitToQueryFocusMap: Record<CommitActionEnum, string> = {
+    [CommitActionEnum.mint]: 'mint',
+    [CommitActionEnum.burn]: 'burn',
+    [CommitActionEnum.flip]: 'flip',
+};
+
 // Commit type enum
 export enum CommitEnum {
     short_mint = 0,
@@ -61,19 +67,6 @@ export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (t
         default:
             return '';
     }
-};
-
-// Focused on either buys or shorts when viewing pending commits
-export enum CommitsFocusEnum {
-    mints = 0,
-    burns = 1,
-    flips = 2,
-}
-
-export const CommitsToQueryFocusMap: Record<CommitsFocusEnum, string> = {
-    [CommitsFocusEnum.mints]: 'mints',
-    [CommitsFocusEnum.burns]: 'burns',
-    [CommitsFocusEnum.flips]: 'flips',
 };
 
 export const PENDING_COMMIT = 1;

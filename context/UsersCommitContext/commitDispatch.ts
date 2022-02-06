@@ -1,24 +1,24 @@
-import { CommitsFocusEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
 
 export type CommitsState = {
     commits: Record<string, Record<string, PendingCommitInfo>>; // id is {POOL_ADDRESS}-{COMMIT_ID}
     updateCommits: boolean; // trigger that can be used to listen on commit updates
     showCommits: boolean; // opens and closes commit modal
-    focus: CommitsFocusEnum; // show buys or show sells
+    focus: CommitActionEnum; // show buys or show sells
 };
 
 export const initialCommitState: CommitsState = {
     commits: {},
     updateCommits: false,
     showCommits: false,
-    focus: CommitsFocusEnum.mints,
+    focus: CommitActionEnum.mints,
 };
 
 export type CommitAction =
     | { type: 'addCommit'; commitInfo: PendingCommitInfo }
     | { type: 'hide' }
-    | { type: 'show'; focus: CommitsFocusEnum }
+    | { type: 'show'; focus: CommitActionEnum }
     | { type: 'resetCommits'; pool: string }
     | { type: 'updateCommits' };
 

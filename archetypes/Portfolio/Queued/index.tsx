@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { CommitActionEnum, CommitEnum, CommitsFocusEnum, CommitsToQueryFocusMap, SideEnum } from '@libs/constants';
+import { CommitActionEnum, CommitEnum, CommitToQueryFocusMap, SideEnum } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -18,15 +18,15 @@ import NoQueued from '@public/img/no-queued.svg';
 const queuedOptions = (numMints: number, numBurns: number, numFlips: number) => {
     return [
         {
-            key: CommitsFocusEnum.mints,
+            key: CommitActionEnum.mint,
             text: <>Pending Mints ({numMints})</>,
         },
         {
-            key: CommitsFocusEnum.burns,
+            key: CommitActionEnum.burn,
             text: <>Pending Burns ({numBurns})</>,
         },
         {
-            key: CommitsFocusEnum.flips,
+            key: CommitActionEnum.flip,
             text: <>Pending Flips ({numFlips})</>,
         },
     ];
@@ -109,8 +109,8 @@ export default (({ focus, commits }) => {
         }
     };
 
-    const TableContent = (focus: CommitsFocusEnum) => {
-        if (focus === CommitsFocusEnum.mints) {
+    const TableContent = (focus: CommitActionEnum) => {
+        if (focus === CommitActionEnum.mint) {
             return (
                 <>
                     <TableHeader>
@@ -123,7 +123,7 @@ export default (({ focus, commits }) => {
                     <tbody>{MintRows(mintCommits)}</tbody>
                 </>
             );
-        } else if (focus === CommitsFocusEnum.burns) {
+        } else if (focus === CommitActionEnum.burn) {
             return (
                 <>
                     <TableHeader>
@@ -136,7 +136,7 @@ export default (({ focus, commits }) => {
                     <tbody>{BurnRows(burnCommits)}</tbody>
                 </>
             );
-        } else if (focus === CommitsFocusEnum.flips) {
+        } else if (focus === CommitActionEnum.flip) {
             return (
                 <>
                     <TableHeader>
@@ -161,7 +161,7 @@ export default (({ focus, commits }) => {
                     onClick={(option) =>
                         router.push({
                             query: {
-                                focus: CommitsToQueryFocusMap[option as CommitsFocusEnum],
+                                focus: CommitToQueryFocusMap[option as CommitActionEnum],
                             },
                         })
                     }
@@ -173,15 +173,15 @@ export default (({ focus, commits }) => {
             <div className="flex">
                 <div className="mt-8 max-w-2xl text-sm text-theme-text opacity-80">
                     * <strong>Token Price</strong> and{' '}
-                    <strong>{focus === CommitsFocusEnum.mints ? 'Amount' : 'Return'}</strong> values are indicative
-                    only, and represent the estimated values for the next rebalance, given the committed mints and burns
-                    and change in price of the underlying asset.
+                    <strong>{focus === CommitActionEnum.mint ? 'Amount' : 'Return'}</strong> values are indicative only,
+                    and represent the estimated values for the next rebalance, given the committed mints and burns and
+                    change in price of the underlying asset.
                 </div>
             </div>
         </div>
     );
 }) as React.FC<{
-    focus: CommitsFocusEnum;
+    focus: CommitActionEnum;
     commits: QueuedCommit[];
 }>;
 
