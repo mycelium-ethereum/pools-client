@@ -20,11 +20,11 @@ const queuedOptions = (numMints: number, numBurns: number) => {
     return [
         {
             key: CommitsFocusEnum.mints,
-            text: <>Queued Mints ({numMints})</>,
+            text: <>Pending Mints ({numMints})</>,
         },
         {
             key: CommitsFocusEnum.burns,
-            text: <>Queued Burns ({numBurns})</>,
+            text: <>Pending Burns ({numBurns})</>,
         },
     ];
 };

@@ -48,7 +48,7 @@ export const PortfolioNav: React.FC<{
                         })
                     }
                 >
-                    Queued Trades ({numCommits})
+                    Pending Trades ({numCommits})
                 </Button>
             </div>
             <div>
