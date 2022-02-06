@@ -29,12 +29,12 @@ const Container = styled.div`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    cursor: pointer;
 `;
 
 const Input = styled.input`
     position: absolute;
     opacity: 0;
-    cursor: pointer;
     height: 0;
     width: 0;
 `;
