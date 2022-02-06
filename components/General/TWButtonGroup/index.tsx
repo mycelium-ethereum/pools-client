@@ -136,7 +136,7 @@ const NewCallOut = styled.span`
     position: absolute;
     background-color: #5555e9;
     top: -0.8em;
-    right: 0em;
+    right: 0;
     z-index: 11;
     color: #fff;
     font-weight: 700;

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import TimeLeft from '@components/TimeLeft';
-import { CommitsFocusEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import { classNames } from '@libs/utils/functions';
 import TWPopup from '@components/General/TWPopup';
@@ -22,11 +22,11 @@ export default (({ setShowQueued, hide }) => {
         }
     }, [mints, burns]);
 
-    const handleClick = (focus: CommitsFocusEnum) =>
+    const handleClick = (focus: CommitActionEnum) =>
         router.push({
             pathname: '/portfolio/commits',
             query: {
-                focus: focus === CommitsFocusEnum.mints ? 'mints' : 'burns',
+                focus: focus === CommitActionEnum.mints ? 'mints' : 'burns',
             },
         });
 
@@ -44,10 +44,10 @@ export default (({ setShowQueued, hide }) => {
                     targetTime={nextUpdate}
                 />
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.mints)}>
+            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.mints)}>
                 <a>{mints} Mints</a>
             </div>
-            <div className={linkStyles} onClick={() => handleClick(CommitsFocusEnum.burns)}>
+            <div className={linkStyles} onClick={() => handleClick(CommitActionEnum.burns)}>
                 <a>{burns} Burns</a>
             </div>
         </TWPopup>
