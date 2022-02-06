@@ -97,6 +97,8 @@ export default (({ page }) => {
             setFocus(CommitsFocusEnum.burns);
         } else if (router.query.focus === 'mints') {
             setFocus(CommitsFocusEnum.mints);
+        } else if (router.query.focus === 'flips') {
+            setFocus(CommitsFocusEnum.flips);
         }
     }, [router]);
 

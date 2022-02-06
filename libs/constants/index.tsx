@@ -1,16 +1,10 @@
-import { PoolToken } from '@libs/types/General';
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 
-// side types
+// Side types
 export enum SideEnum {
     long = 0,
     short = 1,
 }
-export const SIDE_MAP: Record<SideEnum, string> = {
-    [SideEnum.long]: 'Long',
-    [SideEnum.short]: 'Short',
-};
 
 // Commit actions enum
 export enum CommitActionEnum {
@@ -25,6 +19,8 @@ export enum CommitEnum {
     short_burn = 1,
     long_mint = 2,
     long_burn = 3,
+    long_flip = 4,
+    short_flip = 5,
 }
 
 export const CommitTypeMap = {
@@ -32,6 +28,8 @@ export const CommitTypeMap = {
     LongMint: CommitEnum.long_mint,
     ShortBurn: CommitEnum.short_burn,
     ShortMint: CommitEnum.short_mint,
+    LongFlip: CommitEnum.long_flip,
+    ShortFlip: CommitEnum.short_flip,
 };
 
 export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {
@@ -69,29 +67,18 @@ export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (t
 export enum CommitsFocusEnum {
     mints = 0,
     burns = 1,
+    flips = 2,
 }
+
+export const CommitsToQueryFocusMap: Record<CommitsFocusEnum, string> = {
+    [CommitsFocusEnum.mints]: 'mints',
+    [CommitsFocusEnum.burns]: 'burns',
+    [CommitsFocusEnum.flips]: 'flips',
+};
 
 export const PENDING_COMMIT = 1;
 
-export const COMMIT_TYPE_MAP: Record<CommitEnum, string> = {
-    [CommitEnum.short_mint]: 'Buying',
-    [CommitEnum.short_burn]: 'Selling',
-    [CommitEnum.long_mint]: 'Buying',
-    [CommitEnum.long_burn]: 'Selling',
-};
-
-export const EMPTY_TOKEN: PoolToken = {
-    name: '',
-    symbol: '',
-    decimals: 18,
-    address: '',
-    balance: new BigNumber(0),
-    supply: new BigNumber(0),
-    approvedAmount: new BigNumber(0),
-    side: SideEnum.short,
-};
-
-// networks
+// Networks
 export const ARBITRUM_RINKEBY = '421611';
 export const ARBITRUM = '42161';
 export const MAINNET = '1';

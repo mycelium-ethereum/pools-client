@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { CommitActionEnum, CommitEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum, CommitEnum, CommitsFocusEnum, CommitsToQueryFocusMap, SideEnum } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -7,16 +7,15 @@ import { useRouter } from 'next/router';
 import { QueuedCommit } from '@libs/types/General';
 import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
 import Actions from '@components/TokenActions';
-import { marketSymbolToAssetName } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
 import NoQueued from '@public/img/no-queued.svg';
 
-const queuedOptions = (numMints: number, numBurns: number) => {
+const queuedOptions = (numMints: number, numBurns: number, numFlips: number) => {
     return [
         {
             key: CommitsFocusEnum.mints,
@@ -26,6 +25,10 @@ const queuedOptions = (numMints: number, numBurns: number) => {
             key: CommitsFocusEnum.burns,
             text: <>Pending Burns ({numBurns})</>,
         },
+        {
+            key: CommitsFocusEnum.flips,
+            text: <>Pending Flips ({numFlips})</>,
+        },
     ];
 };
 
@@ -33,7 +36,7 @@ export default (({ focus, commits }) => {
     const router = useRouter();
     const { provider } = useWeb3();
 
-    const { mintCommits, burnCommits } = useMemo(
+    const { mintCommits, burnCommits, flipCommits } = useMemo(
         () => ({
             mintCommits: commits.filter(
                 (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
@@ -41,18 +44,21 @@ export default (({ focus, commits }) => {
             burnCommits: commits.filter(
                 (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
             ),
+            flipCommits: commits.filter(
+                (commit) => commit.type === CommitEnum.long_flip || commit.type === CommitEnum.short_flip,
+            ),
         }),
         [commits],
     );
 
-    const mintRows = (mintCommits: QueuedCommit[]) => {
+    const MintRows = (mintCommits: QueuedCommit[]) => {
         if (mintCommits.length === 0) {
             return (
                 <tr>
                     <td colSpan={4}>
                         <div className="my-20 text-center">
                             <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no queued mints.</div>
+                            <div className="text-cool-gray-500">You have no pending mints.</div>
                         </div>
                     </td>
                 </tr>
@@ -64,14 +70,14 @@ export default (({ focus, commits }) => {
         }
     };
 
-    const burnRows = (burnCommits: QueuedCommit[]) => {
+    const BurnRows = (burnCommits: QueuedCommit[]) => {
         if (burnCommits.length === 0) {
             return (
                 <tr>
                     <td colSpan={4}>
                         <div className="my-20 text-center">
                             <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no queued burns.</div>
+                            <div className="text-cool-gray-500">You have no pending burns.</div>
                         </div>
                     </td>
                 </tr>
@@ -80,6 +86,69 @@ export default (({ focus, commits }) => {
             return burnCommits.map((commit, index) => (
                 <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
             ));
+        }
+    };
+
+    const FlipRows = (burnCommits: QueuedCommit[]) => {
+        if (burnCommits.length === 0) {
+            return (
+                <tr>
+                    <td colSpan={4}>
+                        <div className="my-20 text-center">
+                            <NoQueued className="mx-auto mb-5" />
+                            <div className="text-cool-gray-500">You have no pending flips.</div>
+                        </div>
+                    </td>
+                </tr>
+            );
+        } else {
+            return burnCommits.map((commit, index) => (
+                // TODO: Modify flip row attributes
+                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+            ));
+        }
+    };
+
+    const TableContent = (focus: CommitsFocusEnum) => {
+        if (focus === CommitsFocusEnum.mints) {
+            return (
+                <>
+                    <TableHeader>
+                        <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell>Tokens / Price *</TableHeaderCell>
+                        <TableHeaderCell>Mint In</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </TableHeader>
+                    <tbody>{MintRows(mintCommits)}</tbody>
+                </>
+            );
+        } else if (focus === CommitsFocusEnum.burns) {
+            return (
+                <>
+                    <TableHeader>
+                        <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell>Return / Price *</TableHeaderCell>
+                        <TableHeaderCell>Burn In</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </TableHeader>
+                    <tbody>{BurnRows(burnCommits)}</tbody>
+                </>
+            );
+        } else if (focus === CommitsFocusEnum.flips) {
+            return (
+                <>
+                    <TableHeader>
+                        <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell>Return / Price *</TableHeaderCell>
+                        <TableHeaderCell>Flip In</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </TableHeader>
+                    <tbody>{FlipRows(flipCommits)}</tbody>
+                </>
+            );
         }
     };
 
@@ -92,39 +161,15 @@ export default (({ focus, commits }) => {
                     onClick={(option) =>
                         router.push({
                             query: {
-                                focus: option === CommitsFocusEnum.mints ? 'mints' : 'burns',
+                                focus: CommitsToQueryFocusMap[option as CommitsFocusEnum],
                             },
                         })
                     }
-                    color={'tracer'}
-                    options={queuedOptions(mintCommits.length, burnCommits.length)}
+                    color="tracer"
+                    options={queuedOptions(mintCommits.length, burnCommits.length, flipCommits.length)}
                 />
             </div>
-            <Table>
-                {focus === CommitsFocusEnum.mints ? (
-                    <>
-                        <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Tokens / Price *</TableHeaderCell>
-                            <TableHeaderCell>Mint In</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </TableHeader>
-                        <tbody>{mintRows(mintCommits)}</tbody>
-                    </>
-                ) : (
-                    <>
-                        <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Return / Price *</TableHeaderCell>
-                            <TableHeaderCell>Burn In</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </TableHeader>
-                        <tbody>{burnRows(burnCommits)}</tbody>
-                    </>
-                )}
-            </Table>
+            <Table>{TableContent(focus)}</Table>
             <div className="flex">
                 <div className="mt-8 max-w-2xl text-sm text-theme-text opacity-80">
                     * <strong>Token Price</strong> and{' '}
@@ -231,6 +276,7 @@ const CommitRow: React.FC<
         </TableRow>
     );
 };
+
 interface ReceiveInProps {
     pendingUpkeep: boolean;
     setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
