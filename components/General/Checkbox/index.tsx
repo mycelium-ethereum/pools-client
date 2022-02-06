@@ -7,10 +7,10 @@ export default (({ onClick, isChecked, className, label, subtext }) => {
     return (
         <Container className={className}>
             <Input type="checkbox" name="checkbox" checked={isChecked} />
-            <div onClick={onClick}>
+            <HoverPointer onClick={onClick}>
                 <Checkmark isChecked={isChecked} isDarkTheme={isDark} />
                 <Label htmlFor="checkbox">{label}</Label>
-            </div>
+            </HoverPointer>
             {subtext && <Subtext>{subtext}</Subtext>}
         </Container>
     );
@@ -29,6 +29,11 @@ const Container = styled.div`
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+`;
+
+const HoverPointer = styled.div`
+    width: min-content;
+    white-space: nowrap;
     cursor: pointer;
 `;
 
@@ -52,10 +57,8 @@ const Checkmark = styled.span<{ isChecked: boolean; isDarkTheme: boolean }>`
     left: 0;
     width: 18px;
     height: 18px;
-    border: 2px solid #374151;
-    border-color: ${({ isChecked, isDarkTheme }) => (isChecked && !isDarkTheme ? '#1c64f2' : '#374151')};
+    border: 2px solid ${({ isChecked, isDarkTheme }) => (isChecked && !isDarkTheme ? '#1c64f2' : '#374151')};
     border-radius: 4px;
-
     background-color: ${({ isChecked, isDarkTheme }) => (isChecked && !isDarkTheme ? '#1c64f2' : 'transparent')};
 
     &:after {
@@ -68,7 +71,6 @@ const Checkmark = styled.span<{ isChecked: boolean; isDarkTheme: boolean }>`
         height: 8px;
         border: solid white;
         border-width: 0 2px 2px 0;
-        -webkit-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
     }
