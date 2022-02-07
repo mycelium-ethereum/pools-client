@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
-import { CommitEnum } from '@libs/constants';
 import { useCommits } from '@context/UsersCommitContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 export default (() => {
     const { account = '' } = useWeb3();
@@ -23,7 +23,7 @@ export default (() => {
                     if (commit.from?.toLowerCase() !== accountLower) {
                         return;
                     }
-                    if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.long_mint) {
+                    if (commit.type === CommitEnum.shortMint || commit.type === CommitEnum.longMint) {
                         mints += 1;
                     } else {
                         burns += 1;

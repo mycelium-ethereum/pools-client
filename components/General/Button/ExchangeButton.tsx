@@ -2,7 +2,8 @@ import React from 'react';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { SwapAction, SwapState, useBigNumber } from '@context/SwapContext';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, CommitEnum, CommitActionEnum } from '@libs/constants';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
 
@@ -71,10 +72,13 @@ const ExchangeButton: React.FC<{
                         return;
                     }
                     if (commitAction === CommitActionEnum.mint) {
-                        commitType = side === SideEnum.long ? CommitEnum.long_mint : CommitEnum.short_mint;
-                    } else {
+                        commitType = side === SideEnum.long ? CommitEnum.longMint : CommitEnum.shortMint;
+                    } else if (commitAction === CommitActionEnum.flip) {
                         // actionType === CommitActionEnum.burn
-                        commitType = side === SideEnum.long ? CommitEnum.long_burn : CommitEnum.short_burn;
+                        commitType =
+                            side === SideEnum.long ? CommitEnum.longBurnShortMint : CommitEnum.shortBurnLongMint;
+                    } else {
+                        commitType = side === SideEnum.long ? CommitEnum.longBurn : CommitEnum.shortBurn;
                     }
                     commit(selectedPool ?? '', commitType, amountBN, {
                         onSuccess: () => {

@@ -1,6 +1,5 @@
 import { useMemo, useReducer } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@libs/constants';
 import { HistoricCommit } from '@libs/types/General';
 import { HistoricCommitsState, historicsReducer, initialHistoricsState, LoadingState } from './state';
 import { fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
@@ -8,16 +7,17 @@ import BigNumber from 'bignumber.js';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { ethers } from 'ethers';
 import { usePools } from '@context/PoolContext';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 // const commitType = (num: number) => {
 //     if (num < 0.25) {
-//         return CommitEnum.long_mint;
+//         return CommitEnum.longMint;
 //     } else if (num >= 0.25 && num < 0.5) {
-//         return CommitEnum.long_burn;
+//         return CommitEnum.longBurn;
 //     } else if (num >= 0.5 && num < 0.75) {
-//         return CommitEnum.short_mint;
+//         return CommitEnum.shortMint;
 //     } else {
-//         return CommitEnum.short_burn;
+//         return CommitEnum.shortBurn;
 //     }
 // };
 
@@ -71,10 +71,7 @@ export default (() => {
 
                         let token;
                         let tokenPrice: BigNumber = new BigNumber(0);
-                        if (
-                            commit.commitType === CommitEnum.short_mint ||
-                            commit.commitType === CommitEnum.short_burn
-                        ) {
+                        if (commit.commitType === CommitEnum.shortMint || commit.commitType === CommitEnum.shortBurn) {
                             token = {
                                 ...shortToken,
                                 ...userBalances.shortToken,

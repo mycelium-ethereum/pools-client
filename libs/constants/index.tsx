@@ -1,6 +1,7 @@
 import { PoolToken } from '@libs/types/General';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import { CommitEnum } from '@tracer-protocol/pools-js/types';
 
 // side types
 export enum SideEnum {
@@ -19,19 +20,11 @@ export enum CommitActionEnum {
     flip = 2,
 }
 
-// Commit type enum
-export enum CommitEnum {
-    short_mint = 0,
-    short_burn = 1,
-    long_mint = 2,
-    long_burn = 3,
-}
-
 export const CommitTypeMap = {
-    LongBurn: CommitEnum.long_burn,
-    LongMint: CommitEnum.long_mint,
-    ShortBurn: CommitEnum.short_burn,
-    ShortMint: CommitEnum.short_mint,
+    LongBurn: CommitEnum.longBurn,
+    LongMint: CommitEnum.longMint,
+    ShortBurn: CommitEnum.shortBurn,
+    ShortMint: CommitEnum.shortMint,
 };
 
 export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {
@@ -74,10 +67,12 @@ export enum CommitsFocusEnum {
 export const PENDING_COMMIT = 1;
 
 export const COMMIT_TYPE_MAP: Record<CommitEnum, string> = {
-    [CommitEnum.short_mint]: 'Buying',
-    [CommitEnum.short_burn]: 'Selling',
-    [CommitEnum.long_mint]: 'Buying',
-    [CommitEnum.long_burn]: 'Selling',
+    [CommitEnum.shortMint]: 'Buying',
+    [CommitEnum.shortBurn]: 'Selling',
+    [CommitEnum.longMint]: 'Buying',
+    [CommitEnum.longBurn]: 'Selling',
+    [CommitEnum.longBurnShortMint]: 'Selling',
+    [CommitEnum.shortBurnLongMint]: 'Selling',
 };
 
 export const EMPTY_TOKEN: PoolToken = {

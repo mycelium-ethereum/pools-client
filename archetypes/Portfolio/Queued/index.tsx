@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
-import { CommitActionEnum, CommitEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -36,10 +37,10 @@ export default (({ focus, commits }) => {
     const { mintCommits, burnCommits } = useMemo(
         () => ({
             mintCommits: commits.filter(
-                (commit) => commit.type === CommitEnum.long_mint || commit.type === CommitEnum.short_mint,
+                (commit) => commit.type === CommitEnum.longMint || commit.type === CommitEnum.shortMint,
             ),
             burnCommits: commits.filter(
-                (commit) => commit.type === CommitEnum.long_burn || commit.type === CommitEnum.short_burn,
+                (commit) => commit.type === CommitEnum.longBurn || commit.type === CommitEnum.shortBurn,
             ),
         }),
         [commits],
