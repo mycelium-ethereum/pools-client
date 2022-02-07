@@ -44,7 +44,7 @@ export type TradeHistory = {
 const fetchTradeHistory: (params: {
     network?: NetworkType;
     account: string;
-    type: string;
+    type: 'mint' | 'burn' | 'flip';
     page: number;
     pageSize: number;
 }) => Promise<{ results: TradeHistory[]; totalRecords: number }> = async ({

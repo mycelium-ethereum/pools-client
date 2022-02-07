@@ -13,7 +13,7 @@ export enum CommitActionEnum {
     flip = 2,
 }
 
-export const CommitToQueryFocusMap: Record<CommitActionEnum, string> = {
+export const CommitToQueryFocusMap: Record<CommitActionEnum, 'mint' | 'burn' | 'flip'> = {
     [CommitActionEnum.mint]: 'mint',
     [CommitActionEnum.burn]: 'burn',
     [CommitActionEnum.flip]: 'flip',
