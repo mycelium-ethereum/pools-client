@@ -44,7 +44,7 @@ export type TradeHistory = {
 const fetchTradeHistory: (params: {
     network?: NetworkType;
     account: string;
-    type: 'mint' | 'burn';
+    type: 'mint' | 'burn' | 'flip';
     page: number;
     pageSize: number;
 }) => Promise<{ results: TradeHistory[]; totalRecords: number }> = async ({
@@ -57,7 +57,6 @@ const fetchTradeHistory: (params: {
     let route = `${BASE_TRADE_HISTORY_API}?page=${page}&pageSize=${pageSize}&network=${
         network ?? ARBITRUM
     }&userAddress=${account}`;
-    // }&userAddress=0x46a0B4Fa58141ABa23185e79f7047A7dFd0FF100`;
     if (type === 'burn') {
         route += '&types=LongBurn&types=ShortBurn';
     } else {
