@@ -10,6 +10,7 @@ import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
 import ThemeSwitcher from './ThemeSwitcher';
+import VersionToggle from './VersionToggle';
 
 import RevisitOnboard from '/public/img/general/onboard-revisit.svg';
 
@@ -90,6 +91,7 @@ export const NavBarContent: React.FC<{
 
                 {/* DESKTOP */}
                 <span className="hidden xl:flex">
+                    <VersionToggle pushContentRight={!!setShowOnboardModal} route={route} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
@@ -100,7 +102,9 @@ export const NavBarContent: React.FC<{
                     {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
-                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
+
+                <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} route={route} />
+                <MobileMenu account={account ?? ''} />
             </div>
         </nav>
     );
