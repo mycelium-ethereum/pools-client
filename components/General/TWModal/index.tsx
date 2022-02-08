@@ -2,6 +2,7 @@ import React from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
 import { classNames } from '@libs/utils/functions';
+import styled from 'styled-components';
 
 interface TWModalProps {
     open: boolean;
@@ -20,8 +21,8 @@ const SIZES: Record<Size, string> = {
 export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default', className = '', children }) => {
     return (
         <Transition.Root show={open} as={Fragment}>
-            <Dialog as="div" className="fixed z-10 inset-0 overflow-y-auto" onClose={() => onClose()}>
-                <div className="flex items-end justify-center min-h-screen pt-4 pb-20 text-center sm:block sm:p-0">
+            <DialogStyled forwardedAs="div" onClose={() => onClose()}>
+                <Wrapper>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -57,8 +58,34 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                             {children}
                         </div>
                     </Transition.Child>
-                </div>
-            </Dialog>
+                </Wrapper>
+            </DialogStyled>
         </Transition.Root>
     );
 };
+
+const Wrapper = styled.div`
+    display: flex;
+    padding-top: 1rem;
+    padding-bottom: 5rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    min-height: 100vh;
+
+    @media (min-width: 640px) {
+        display: block;
+        padding: 0;
+    }
+`;
+
+const DialogStyled = styled(Dialog)<{ onClose: () => void }>`
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow-y: auto;
+    z-index: 10;
+`;
