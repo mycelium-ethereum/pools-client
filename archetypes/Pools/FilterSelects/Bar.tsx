@@ -67,14 +67,13 @@ const DENOTATION_OPTIONS = [
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     return (
         <section className="container px-4 sm:px-0">
-            {/** Desktop */}
             <div className="block lg:flex w-full mb-2">
                 <div className="xl:hidden">
                     <TWButtonGroup
                         value={state.rebalanceFocus}
                         size="lg"
                         onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
-                        color={'tracer'}
+                        color="tracer"
                         options={REBALANCE_OPTIONS_MOBILE}
                     />
                 </div>
@@ -83,27 +82,19 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         value={state.rebalanceFocus}
                         size="lg"
                         onClick={(option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })}
-                        color={'tracer'}
+                        color="tracer"
                         options={REBALANCE_OPTIONS_DESKTOP}
                     />
                 </div>
-                <div className="flex-grow" />
                 <div className="hidden lg:flex mx-4 flex-col">
-                    <span className="inline-flex">
-                        <ArrowDown className="rotate-180 text-green-600 h-6" />
-                        <ArrowDown className="text-red-600 mr-1 h-6" />
-                        <h3 className="mb-1 text-theme-text">Denotion</h3>
-                    </span>
-                    <div className="mt-auto ml-auto">
-                        <TWButtonGroup
-                            value={state.deltaDenotion}
-                            onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
-                            color="greyed"
-                            border="rounded"
-                            borderColor="greyed"
-                            options={DENOTATION_OPTIONS}
-                        />
-                    </div>
+                    <TWButtonGroup
+                        value={state.deltaDenotion}
+                        onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
+                        color="greyed"
+                        border="rounded"
+                        borderColor="greyed"
+                        options={DENOTATION_OPTIONS}
+                    />
                 </div>
                 <div className="hidden lg:flex mr-4 flex-col">
                     <h3 className="mb-1 text-theme-text">Market</h3>
@@ -156,23 +147,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <HiddenExpand className="lg:hidden" defaultHeight={0} open={state.filtersOpen}>
                     <div className="flex">
                         <div className="flex mr-4 flex-col">
-                            <span className="inline-flex">
-                                <ArrowDown className="rotate-180 text-green-600 h-6" />
-                                <ArrowDown className="text-red-600 mr-1 h-6" />
-                                <h3 className="mb-1 text-theme-text">Denotion</h3>
-                            </span>
-                            <div className="mt-auto ml-auto">
-                                <TWButtonGroup
-                                    value={state.deltaDenotion}
-                                    onClick={(option) =>
-                                        dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })
-                                    }
-                                    color="greyed"
-                                    border="rounded"
-                                    borderColor="greyed"
-                                    options={DENOTATION_OPTIONS}
-                                />
-                            </div>
+                            <TWButtonGroup
+                                value={state.deltaDenotion}
+                                onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
+                                color="greyed"
+                                border="rounded"
+                                borderColor="greyed"
+                                options={DENOTATION_OPTIONS}
+                            />
                         </div>
                         <div className="flex mr-4 flex-col">
                             <h3 className="mb-1 text-theme-text">Market</h3>
