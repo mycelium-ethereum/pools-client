@@ -57,19 +57,20 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
     sm: 'px-4 py-2 text-sm',
-    default: 'pl-3 pr-2 py-2 text-sm ',
+    default: 'px-4 py-3 text-sm',
     lg: 'p-3 text-base',
     none: 'p-0 text-base',
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
     default:
-        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
+        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid opacity-80',
     tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
+    blue: 'border-none bg-tracer-650 matrix:bg-theme-primary matrix:text-black text-white font-semibold focus:border-none',
     unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
 };
 
-export type ButtonVariant = 'default' | 'tracer' | 'unselected';
+export type ButtonVariant = 'default' | 'tracer' | 'blue' | 'unselected';
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
@@ -107,11 +108,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 className={classNames(
                     `inline-flex justify-between w-full rounded-md`,
                     SIZE[size],
-                    'font-normal focus:outline-none hover:ring-1 hover:ring-50',
+                    'focus:outline-none hover:ring-1 hover:ring-50',
                     VARIANTS[variant],
                 )}
             >
-                <span className="mr-2 opacity-80">
+                <span className="mr-2">
                     {placeHolderIcon && value !== '' && value !== 'All' ? (
                         <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
                     ) : null}

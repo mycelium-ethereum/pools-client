@@ -18,7 +18,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({ placeholder, onChange,
                 name="email"
                 id="email"
                 value={value}
-                className="block w-full pl-10 sm:text-sm border-theme-border border-opacity-10 rounded-md px-4 py-2"
+                className="block w-full pl-10 sm:text-sm border-theme-border border-opacity-10 rounded-md px-4 py-3"
                 placeholder={placeholder}
                 onChange={(ev) => onChange(ev.target.value)}
             />

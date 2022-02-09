@@ -62,7 +62,7 @@ const EffectiveLeverageTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-const CommittmentTip: React.FC = ({ children }) => (
+const CommitmentTip: React.FC = ({ children }) => (
     <StyledTooltip title="You must commit your mint or burn before the end of this countdown to have your order filled at the upcoming rebalance.">
         {children}
     </StyledTooltip>
@@ -165,9 +165,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         </TableHeaderCell>
                         {showNextRebalance ? (
                             <TableHeaderCell className="w-2/12">
-                                <CommittmentTip>
+                                <CommitmentTip>
                                     <div>{'Commitment Window'}</div>
-                                </CommittmentTip>
+                                </CommitmentTip>
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
