@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import Gas from './Gas';
@@ -29,7 +29,8 @@ const TRADE_OPTIONS = [
 ];
 
 export default styled((({ onClose, className }) => {
-    const [autoClaimTokens, setAutoClaimTokens] = useState(false);
+    // TODO: dependent on auto-claim feature
+    // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { poolInstance: pool, userBalances } = usePool(swapState.selectedPool);
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
@@ -63,7 +64,8 @@ export default styled((({ onClose, className }) => {
             {/** Inputs */}
             <Inputs pool={pool} userBalances={userBalances} swapDispatch={swapDispatch} swapState={swapState} />
 
-            {CommitActionEnum[swapState.commitAction] === 'flip' && (
+            {/* TODO: dependent on auto-claim feature */}
+            {/* {CommitActionEnum[swapState.commitAction] === 'flip' && (
                 <CheckboxStyled
                     onClick={() => setAutoClaimTokens(!autoClaimTokens)}
                     isChecked={autoClaimTokens}
@@ -72,7 +74,7 @@ export default styled((({ onClose, className }) => {
                     checking this box, you are request to have this function automated and will be charged a fee.
                     Otherwise, you can manually claim tokens from escrow."
                 />
-            )}
+            )} */}
 
             <Summary
                 pool={pool}
