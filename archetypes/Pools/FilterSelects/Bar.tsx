@@ -44,11 +44,23 @@ const REBALANCE_OPTIONS_MOBILE = [
 const DENOTATION_OPTIONS = [
     {
         key: DeltaEnum.Percentile,
-        text: 'Relative',
+        text: (
+            <>
+                <div className="mr-2">Relative</div>
+                <ArrowDown className="rotate-180 text-green-600 h-6" />
+                <ArrowDown className="text-red-600 mr-1 h-6" />
+            </>
+        ),
     },
     {
         key: DeltaEnum.Numeric,
-        text: 'Absolute',
+        text: (
+            <>
+                <div className="mr-2">Absolute</div>
+                <ArrowDown className="rotate-180 text-green-600 h-6" />
+                <ArrowDown className="text-red-600 mr-1 h-6" />
+            </>
+        ),
     },
 ];
 
