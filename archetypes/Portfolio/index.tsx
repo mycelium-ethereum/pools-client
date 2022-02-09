@@ -4,7 +4,7 @@ import Overview from './Overview';
 import Queued from './Queued';
 import Link from 'next/link';
 import Button from '@components/General/Button';
-import { CommitActionEnum, CommitsFocusEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import { browseReducer, BrowseState } from '@archetypes/Pools/state';
@@ -48,7 +48,7 @@ export const PortfolioNav: React.FC<{
                         })
                     }
                 >
-                    Queued Trades ({numCommits})
+                    Pending Commits ({numCommits})
                 </Button>
             </div>
             <div>
@@ -60,7 +60,7 @@ export const PortfolioNav: React.FC<{
                         })
                     }
                 >
-                    Trade History
+                    Commit History
                 </Button>
             </div>
         </div>
@@ -68,7 +68,7 @@ export const PortfolioNav: React.FC<{
 };
 
 export default (({ page }) => {
-    const [focus, setFocus] = useState<CommitsFocusEnum>(CommitsFocusEnum.mints);
+    const [focus, setFocus] = useState<CommitActionEnum>(CommitActionEnum.mint);
     const router = useRouter();
 
     const { swapDispatch = noDispatch } = useSwapContext();
@@ -93,10 +93,12 @@ export default (({ page }) => {
     };
 
     useEffect(() => {
-        if (router.query.focus === 'burns') {
-            setFocus(CommitsFocusEnum.burns);
-        } else if (router.query.focus === 'mints') {
-            setFocus(CommitsFocusEnum.mints);
+        if (router.query.focus === 'burn') {
+            setFocus(CommitActionEnum.burn);
+        } else if (router.query.focus === 'mint') {
+            setFocus(CommitActionEnum.mint);
+        } else if (router.query.focus === 'flip') {
+            setFocus(CommitActionEnum.flip);
         }
     }, [router]);
 

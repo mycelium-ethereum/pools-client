@@ -8,7 +8,7 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
-import { CommitActionEnum, CommitsFocusEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Actions from '@components/TokenActions';
@@ -18,7 +18,7 @@ import BigNumber from 'bignumber.js';
 
 export default (() => {
     const { provider } = useWeb3();
-    const { showCommits = false, focus = CommitsFocusEnum.mints } = useCommits();
+    const { showCommits = false, focus = CommitActionEnum.mint } = useCommits();
     const { commitDispatch = () => console.error('Dispatch undefined') } = useCommitActions();
     const commits = usePendingCommits();
 
@@ -34,14 +34,14 @@ export default (() => {
         <TWModal size={'wide'} open={showCommits} onClose={() => commitDispatch({ type: 'hide' })}>
             <div className="flex justify-between">
                 <h1 className="text-bold text-2xl text-theme-text">
-                    {`Queued ${focus === CommitsFocusEnum.mints ? 'Mints' : 'Burns'}`}
+                    {`Queued ${focus === CommitActionEnum.mint ? 'Mints' : 'Burns'}`}
                 </h1>
                 <div className="w-3 h-3 cursor-pointer" onClick={() => commitDispatch({ type: 'hide' })}>
                     <Close />
                 </div>
             </div>
             <Table>
-                {focus === CommitsFocusEnum.mints ? (
+                {focus === CommitActionEnum.mint ? (
                     <>
                         <TableHeader>
                             <TableHeaderCell>Token</TableHeaderCell>
@@ -85,9 +85,9 @@ export default (() => {
             </Table>
             <div className="absolute bottom-10 left-0 right-0 mx-auto max-w-2xl text-sm text-theme-text opacity-80 text-center">
                 * <strong>Token Price</strong> and{' '}
-                <strong>{focus === CommitsFocusEnum.mints ? 'Amount' : 'Return'}</strong> values are indicative only,
-                and represent the estimated values for the next rebalance, given the committed mints and burns and
-                change in price of the underlying asset.
+                <strong>{focus === CommitActionEnum.mint ? 'Amount' : 'Return'}</strong> values are indicative only, and
+                represent the estimated values for the next rebalance, given the committed mints and burns and change in
+                price of the underlying asset.
             </div>
         </TWModal>
     );
