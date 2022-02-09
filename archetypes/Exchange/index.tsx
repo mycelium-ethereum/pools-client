@@ -11,7 +11,8 @@ import { usePool } from '@context/PoolContext';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
 import styled from 'styled-components';
-import Checkbox from '@components/General/Checkbox';
+// TODO: dependent on auto-claim feature
+// import Checkbox from '@components/General/Checkbox';
 
 const TRADE_OPTIONS = [
     {
@@ -145,10 +146,11 @@ const DividerRow = styled(Divider)`
     border-color: ${({ theme }) => theme['border-secondary']};
 `;
 
-const CheckboxStyled = styled(Checkbox)`
-    margin: 25px 0 50px;
+// TODO: dependent on auto-claim feature
+// const CheckboxStyled = styled(Checkbox)`
+//     margin: 25px 0 50px;
 
-    @media (min-width: 640px) {
-        margin: 29px 0 60px;
-    }
-`;
+//     @media (min-width: 640px) {
+//         margin: 29px 0 60px;
+//     }
+// `;
