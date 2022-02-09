@@ -13,6 +13,7 @@ export const themes: Record<
         primary: string;
         'button-bg': string;
         'button-bg-hover': string;
+        'is-dark': boolean;
     }
 > = {
     light: {
@@ -41,6 +42,8 @@ export const themes: Record<
 
         /* cool-gray-100 */
         'button-bg-hover': '#F3F4F6',
+
+        'is-dark': false,
     },
     dark: {
         /* cool-gray-900 */
@@ -71,6 +74,8 @@ export const themes: Record<
 
         /* cool-gray-700 */
         'button-bg-hover': '#374151',
+
+        'is-dark': true,
     },
     matrix: {
         /* cool-gray-900 */
@@ -94,5 +99,7 @@ export const themes: Record<
         'button-bg': '#003b00',
 
         'button-bg-hover': '#020204',
+
+        'is-dark': false,
     },
 };

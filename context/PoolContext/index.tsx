@@ -9,7 +9,7 @@ import {
     fetchTokenApprovals,
     fetchTokenBalances,
 } from './helpers';
-import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
+import { Pool, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -20,7 +20,6 @@ import {
     PoolKeeper__factory,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { CommitEnum } from '@libs/constants';
 import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
@@ -508,7 +507,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                             address: poolsState.pools[pool].poolInstance.address,
                                             decimals: quoteTokenDecimals,
                                             symbol:
-                                                commitType === CommitEnum.long_mint
+                                                commitType === CommitEnum.longMint
                                                     ? poolsState.pools[pool].poolInstance.longToken.symbol
                                                     : poolsState.pools[pool].poolInstance.shortToken.symbol,
                                         })
@@ -518,7 +517,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         className="mr-2"
                                         size="md"
                                         ticker={tokenSymbolToLogoTicker(
-                                            commitType === CommitEnum.long_mint
+                                            commitType === CommitEnum.longMint
                                                 ? poolsState.pools[pool].poolInstance.longToken.symbol
                                                 : poolsState.pools[pool].poolInstance.shortToken.symbol,
                                         )}
@@ -528,13 +527,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             ),
                         },
                         symbol:
-                            commitType === CommitEnum.long_mint
+                            commitType === CommitEnum.longMint
                                 ? poolsState.pools[pool].poolInstance.longToken.symbol
                                 : poolsState.pools[pool].poolInstance.shortToken.symbol,
                         type:
-                            commitType === CommitEnum.long_mint || commitType === CommitEnum.short_mint
-                                ? 'Mint'
-                                : 'Burn',
+                            commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint ? 'Mint' : 'Burn',
                         nextRebalance: targetTime,
                         success: {
                             title: 'Order Submitted',
