@@ -9,7 +9,7 @@ import {
     fetchTokenApprovals,
     fetchTokenBalances,
 } from './helpers';
-import { Pool, StaticPoolInfo, poolList, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
+import { Pool, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -26,6 +26,8 @@ import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
 import { watchAsset } from '@libs/utils/rpcMethods';
 import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import PoolListService, { PoolList } from '@libs/services/poolList';
+import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -70,39 +72,53 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         console.debug('Attempting to initialise pools');
         if (provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
-            const pools: StaticPoolInfo[] = poolList[network as KnownNetwork] ?? [];
-            console.debug(`Initialising pools ${network.slice()}`, pools);
-            poolsDispatch({ type: 'resetPools' });
-            hasSetPools.current = false;
-            Promise.all(
-                pools.map((pool) =>
-                    Pool.Create({
-                        ...pool,
-                        address: pool.address,
-                        provider,
-                    }),
-                ),
-            )
-                .then((res) => {
-                    if (!hasSetPools.current && mounted) {
-                        res.forEach((pool) => {
-                            poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
+            if (isSupportedNetwork(network as KnownNetwork)) {
+                const fetchAndSetPools = async () => {
+                    // for now just select the Tracer verfied pools (Tracer[0])
+                    // this can be changed to select all or a specific list
+                    let pools: PoolList | undefined = poolsState.poolsLists[network as KnownNetwork]?.Tracer[0];
+                    if (!pools) {
+                        const poolsLists = await new PoolListService(network).getAll();
+                        pools = poolsLists.Tracer[0] ?? [];
+                        poolsDispatch({ type: 'setPoolLists', network: network as KnownNetwork, lists: poolsLists });
+                    }
+                    console.debug(`Initialising pools ${network.slice()}`, pools);
+                    poolsDispatch({ type: 'resetPools' });
+                    hasSetPools.current = false;
+                    Promise.all(
+                        pools.pools.map((pool) =>
+                            Pool.Create({
+                                ...pool,
+                                address: pool.address,
+                                provider,
+                            }),
+                        ),
+                    )
+                        .then((res) => {
+                            if (!hasSetPools.current && mounted) {
+                                res.forEach((pool) => {
+                                    poolsDispatch({ type: 'setPool', pool: pool, key: pool.address });
+                                });
+                                if (res.length) {
+                                    // if pools exist
+                                    poolsDispatch({ type: 'setPoolsInitialised', value: true });
+                                    hasSetPools.current = true;
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            console.error('Failed to initialise pools', err);
+                            if (mounted) {
+                                poolsDispatch({ type: 'setPoolsInitialised', value: false });
+                                // this will stop incrementing at MAX_RETRY_COUNT specified in ./poolDispatch
+                                poolsDispatch({ type: 'incrementRetryCount' });
+                            }
                         });
-                        if (res.length) {
-                            // if pools exist
-                            poolsDispatch({ type: 'setPoolsInitialised', value: true });
-                            hasSetPools.current = true;
-                        }
-                    }
-                })
-                .catch((err) => {
-                    console.error('Failed to initialise pools', err);
-                    if (mounted) {
-                        poolsDispatch({ type: 'setPoolsInitialised', value: false });
-                        // this will stop incrementing at MAX_RETRY_COUNT specified in ./poolDispatch
-                        poolsDispatch({ type: 'incrementRetryCount' });
-                    }
-                });
+                };
+                fetchAndSetPools();
+            } else {
+                console.error('Skipped pools initialisation, network not supported');
+            }
         } else {
             console.error('Skipped pools initialisation, provider not ready');
             poolsDispatch({ type: 'resetPools' });
