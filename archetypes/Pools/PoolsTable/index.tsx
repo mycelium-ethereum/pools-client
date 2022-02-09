@@ -26,6 +26,7 @@ import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
+import USDCIcon from '@public/img/logos/currencies/usdc.svg';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -72,7 +73,7 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
 );
 
 const InfoIcon = styled(Info)`
-    margin-left: 15px;
+    margin-left: 10px;
 
     :hover {
         cursor: pointer;
@@ -309,7 +310,7 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
-                        USDC
+                        USDC <USDCIcon className="w-5 ml-2" />
                         <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
                     </div>
                 </TableRowCell>
