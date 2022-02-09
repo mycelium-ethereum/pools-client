@@ -41,14 +41,14 @@ const REBALANCE_OPTIONS_MOBILE = [
     },
 ];
 
-const DENOTION_OPTIONS = [
+const DENOTATION_OPTIONS = [
     {
         key: DeltaEnum.Percentile,
-        text: 'Percent',
+        text: 'Relative',
     },
     {
         key: DeltaEnum.Numeric,
-        text: 'Number',
+        text: 'Absolute',
     },
 ];
 
@@ -89,7 +89,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             color="greyed"
                             border="rounded"
                             borderColor="greyed"
-                            options={DENOTION_OPTIONS}
+                            options={DENOTATION_OPTIONS}
                         />
                     </div>
                 </div>
@@ -158,7 +158,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                     color="greyed"
                                     border="rounded"
                                     borderColor="greyed"
-                                    options={DENOTION_OPTIONS}
+                                    options={DENOTATION_OPTIONS}
                                 />
                             </div>
                         </div>
