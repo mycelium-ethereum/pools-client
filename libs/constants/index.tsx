@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { CommitEnum } from '@tracer-protocol/pools-js/types';
 
 // Side types
 export enum SideEnum {
@@ -13,29 +14,19 @@ export enum CommitActionEnum {
     flip = 2,
 }
 
+export const CommitTypeMap = {
+    LongBurn: CommitEnum.longBurn,
+    LongMint: CommitEnum.longMint,
+    ShortBurn: CommitEnum.shortBurn,
+    ShortMint: CommitEnum.shortMint,
+    LongFlip: CommitEnum.longBurnShortMint,
+    ShortFlip: CommitEnum.longBurnShortMint,
+};
+
 export const CommitToQueryFocusMap: Record<CommitActionEnum, 'mint' | 'burn' | 'flip'> = {
     [CommitActionEnum.mint]: 'mint',
     [CommitActionEnum.burn]: 'burn',
     [CommitActionEnum.flip]: 'flip',
-};
-
-// Commit type enum
-export enum CommitEnum {
-    short_mint = 0,
-    short_burn = 1,
-    long_mint = 2,
-    long_burn = 3,
-    long_flip = 4,
-    short_flip = 5,
-}
-
-export const CommitTypeMap = {
-    LongBurn: CommitEnum.long_burn,
-    LongMint: CommitEnum.long_mint,
-    ShortBurn: CommitEnum.short_burn,
-    ShortMint: CommitEnum.short_mint,
-    LongFlip: CommitEnum.long_flip,
-    ShortFlip: CommitEnum.short_flip,
 };
 
 export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {

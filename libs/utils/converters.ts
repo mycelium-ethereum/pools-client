@@ -1,6 +1,7 @@
 import { ethers } from 'ethers';
 import { BigNumber } from 'bignumber.js';
-import { CommitEnum, SideEnum, CommitActionEnum } from '@libs/constants';
+import { SideEnum, CommitActionEnum } from '@libs/constants';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 /**
  * Simple func to convert a number to a percentage by multiplying
@@ -198,15 +199,15 @@ export const isVerySmall: (num: BigNumber, currency: boolean) => string = (num, 
 export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEnum = (side, token) => {
     if (side === SideEnum.long) {
         if (token === CommitActionEnum.burn) {
-            return CommitEnum.long_burn;
+            return CommitEnum.longBurn;
         } else {
-            return CommitEnum.long_mint;
+            return CommitEnum.longMint;
         }
     } else {
         if (token === CommitActionEnum.burn) {
-            return CommitEnum.short_burn;
+            return CommitEnum.shortBurn;
         } else {
-            return CommitEnum.short_mint;
+            return CommitEnum.shortMint;
         }
     }
 };

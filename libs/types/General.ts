@@ -1,9 +1,10 @@
 import React from 'react';
-import { CommitEnum, SideEnum } from '@libs/constants';
+import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
 import { LogoTicker } from '@components/General';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 /**
  * Can be used when component passes down children

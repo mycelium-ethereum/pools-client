@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@libs/constants';
 import { QueuedCommit } from '@libs/types/General';
 import { useCommits } from '@context/UsersCommitContext';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 export default (() => {
     const { account = '', provider } = useWeb3();
@@ -31,7 +31,7 @@ export default (() => {
 
                     let token, tokenPrice;
 
-                    if (commit.type === CommitEnum.short_mint || commit.type === CommitEnum.short_burn) {
+                    if (commit.type === CommitEnum.shortMint || commit.type === CommitEnum.shortBurn) {
                         token = {
                             ...shortToken,
                             ...userBalances.shortToken,
