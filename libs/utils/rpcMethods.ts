@@ -1,8 +1,8 @@
 import { tokenSymbolToLogoTicker } from '@components/General';
-import { AvailableNetwork, Network, networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { Network, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { calcBptTokenSpotPrice } from '@tracer-protocol/tracer-pools-utils';
+import { calcBptTokenSpotPrice, KnownNetwork } from '@tracer-protocol/pools-js';
 
 const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';
 /**
@@ -18,7 +18,7 @@ export const watchAsset: (
         symbol: string;
         decimals: number;
     },
-) => Promise<boolean> = (provider, token) => {
+) => Promise<boolean> = async (provider, token) => {
     if (!provider) {
         return new Promise(() => false);
     }
@@ -51,7 +51,7 @@ export const watchAsset: (
 
 export const switchNetworks: (
     provider: ethers.providers.JsonRpcProvider | undefined,
-    networkID: AvailableNetwork,
+    networkID: KnownNetwork,
 ) => Promise<boolean> = async (provider, networkID) => {
     const config = networkConfig[networkID];
     try {
@@ -94,7 +94,7 @@ export enum ArbiscanEnum {
 }
 
 // Not really an RPC but thought it kind of belongs here
-export const openArbiscan: (type: ArbiscanEnum, taraget: string, network: AvailableNetwork | undefined) => boolean = (
+export const openArbiscan: (type: ArbiscanEnum, taraget: string, network: KnownNetwork | undefined) => boolean = (
     type,
     target,
     network,

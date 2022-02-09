@@ -1,9 +1,10 @@
 import React from 'react';
-import { CommitEnum, SideEnum } from '@libs/constants';
+import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 import { ethers } from 'ethers';
 import { LogoTicker } from '@components/General';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 /**
  * Can be used when component passes down children
@@ -64,7 +65,6 @@ export type Committer = {
     pendingLong: PendingAmounts;
     pendingShort: PendingAmounts;
     allUnexecutedCommits: CreatedCommitType[];
-    minimumCommitSize: BigNumber;
 };
 
 export type CreatedCommitType = TypedEvent<
@@ -75,34 +75,10 @@ export type CreatedCommitType = TypedEvent<
     }
 >;
 
-export type StaticPoolInfo = {
-    address: string;
-    name: string;
-    updateInterval: BigNumber;
-    frontRunningInterval: BigNumber;
-    leverage: number;
-    keeper: string;
-    committer: {
-        address: string;
-    };
-    shortToken: StaticTokenInfo;
-    longToken: StaticTokenInfo;
-    quoteToken: StaticTokenInfo;
-};
-
-export type Pool = StaticPoolInfo & {
-    lastUpdate: BigNumber;
-    lastPrice: BigNumber;
-    shortBalance: BigNumber;
-    longBalance: BigNumber;
-    nextShortBalance: BigNumber;
-    nextLongBalance: BigNumber;
-    oraclePrice: BigNumber;
-    quoteToken: Token;
-    shortToken: PoolToken;
-    longToken: PoolToken;
-    committer: Committer;
-    subscribed: boolean;
+export type AggregateBalances = {
+    longTokens: BigNumber;
+    shortTokens: BigNumber;
+    quoteTokens: BigNumber;
 };
 
 // for mint the amount is the amount of collateral spent
@@ -155,3 +131,13 @@ export type BridgeableBalance = {
 export type BridgeableBalances = { [network: string]: { [account: string]: { [symbol: string]: BridgeableBalance } } };
 
 export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };
+
+export enum MarketFilterEnum {
+    All = 'All',
+    ETH = 'Ethereum',
+    BTC = 'Bitcoin',
+    TOKE = 'Tokemak',
+    LINK = 'Chainlink',
+    EUR = 'Euro',
+    AAVE = 'Aave',
+}

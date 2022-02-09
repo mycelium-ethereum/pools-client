@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
 import { useTransactionContext } from '../TransactionContext';
-import { ERC20__factory, ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import {
     destinationNetworkLookup,
     bridgeableAssets,
@@ -335,7 +335,13 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
-        const token = new ethers.Contract(tokenAddress, ERC20__factory.abi, signer) as ERC20;
+        if (!signer) {
+            console.error('Failed to approve token: signer undefined');
+            return;
+        }
+
+        // @ts-ignore
+        const token = ERC20__factory.connect(tokenAddress, signer);
 
         const bridgeableToken = bridgeableAssets[fromNetwork.id].find((token) => token.address === tokenAddress);
         if (!bridgeableToken) {

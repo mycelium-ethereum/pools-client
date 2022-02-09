@@ -6,6 +6,7 @@ import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
+import styled from 'styled-components';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -63,13 +64,13 @@ const SIZE = {
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-    default:
-        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid ',
-    tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
-    unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
+    default: 'default',
+    tracer: 'tracer',
+    unselected: 'unselected',
+    secondary: 'secondary',
 };
 
-export type ButtonVariant = 'default' | 'tracer' | 'unselected';
+export type ButtonVariant = 'default' | 'tracer' | 'unselected' | 'secondary';
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
@@ -102,7 +103,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     className,
 }) => {
     return (
-        <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
+        <MenuStyled forwardedAs="div" className={`${className || ''}`}>
             <Menu.Button
                 className={classNames(
                     `inline-flex justify-between w-full rounded-md`,
@@ -177,6 +178,69 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     </div>
                 </Menu.Items>
             </Transition>
-        </Menu>
+        </MenuStyled>
     );
 };
+
+const MenuStyled = styled(Menu)`
+    position: relative;
+    display: inline-block;
+    text-align: left;
+
+    .default {
+        border-width: 1px;
+        border-color: ${({ theme }) => theme.border};
+        background-color: ${({ theme }) => theme['button-bg']};
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: ${({ theme }) => theme['button-bg-hover']};
+        }
+
+        &:focus {
+            border-style: solid;
+        }
+    }
+
+    .tracer {
+        border: none;
+        background-color: rgba(53, 53, 220, 1);
+        /* matrix:bg-theme-primary */
+        /* matrix:text-black */
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: rgba(42, 42, 199, 1) !important;
+        }
+
+        &:focus {
+            border: none;
+        }
+    }
+
+    .unselected {
+        border: none;
+        background-color: rgba(222, 222, 255, 1) !important;
+        /* dark:bg-cool-gray-700 */
+        color: ${({ theme }) => theme.text};
+
+        &:focus {
+            border: none;
+        }
+    }
+
+    .secondary {
+        border-width: 1px;
+        border-color: ${({ theme }) => theme['border-secondary']};
+        background-color: ${({ theme }) => theme['button-bg']};
+        color: ${({ theme }) => theme.text};
+
+        &:hover {
+            background-color: ${({ theme }) => theme['button-bg-hover']};
+        }
+
+        &:focus {
+            border-style: solid;
+        }
+    }
+`;

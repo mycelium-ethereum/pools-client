@@ -7,25 +7,19 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { calcMinAmountIn, calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 
 import { Currency } from '@components/General/Currency';
 import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import { classNames } from '@libs/utils/functions';
-import { Pool } from '@libs/types/General';
+import styled from 'styled-components';
+import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
 
 type InvalidAmount = {
     isInvalid: boolean;
     message?: string;
 };
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (
-    amount: BigNumber,
-    balance: BigNumber,
-    minimumTokens: BigNumber,
-    tokenPrice: BigNumber,
-    isMint: boolean,
-) => InvalidAmount = (amount, balance, minimumTokens, tokenPrice, isMint) => {
+const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -40,26 +34,13 @@ const isInvalidAmount: (
         };
     }
 
-    // need to sell an amount of tokens worth minimumCommitSize or more
-    if (minimumTokens.gt(amount)) {
-        return {
-            message: `
-                The minimum order size is
-                ${
-                    isMint
-                        ? toApproxCurrency(minimumTokens)
-                        : `${minimumTokens.toFixed(2)} (${toApproxCurrency(minimumTokens.times(tokenPrice))})`
-                }`,
-            isInvalid: true,
-        };
-    }
     return {
         message: undefined,
         isInvalid: false,
     };
 };
 
-export default (({ pool, swapState, swapDispatch }) => {
+export default (({ pool, userBalances, swapState, swapDispatch }) => {
     const { tokens } = usePoolTokens();
 
     const { amount, side, selectedPool, invalidAmount, commitAction } = swapState;
@@ -68,47 +49,32 @@ export default (({ pool, swapState, swapDispatch }) => {
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const notional = useMemo(
-        () => (isLong ? pool.nextLongBalance : pool.nextShortBalance),
-        [isLong, pool.nextLongBalance, pool.nextShortBalance],
+    const tokenBalance = useMemo(
+        () => (isLong ? userBalances.longToken : userBalances.shortToken),
+        [isLong, userBalances.longToken, userBalances.shortToken],
     );
+
+    const nextBalances = usePoolsNextBalances(pool);
+    const notional = useMemo(() => (isLong ? nextBalances.nextLongBalance : nextBalances.nextShortBalance), [isLong]);
+
     const pendingBurns = useMemo(
         () => (isLong ? pool.committer.pendingLong.burn : pool.committer.pendingShort.burn),
         [isLong, pool.committer.pendingLong.burn, pool.committer.pendingShort.burn],
     );
 
-    const tokenPrice = useMemo(
-        () => calcTokenPrice(notional, token.supply.plus(pendingBurns)),
-        [notional, token, pendingBurns],
-    );
+    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     useEffect(() => {
         if (pool) {
-            const minimumCommitSize = pool.committer.minimumCommitSize.div(10 ** pool.quoteToken.decimals);
-
-            const tokenPrice = calcTokenPrice(notional, token.supply.plus(pendingBurns));
-
-            let currentBalance: BigNumber, minimumTokens: BigNumber;
+            let currentBalance: BigNumber;
             if (commitAction === CommitActionEnum.mint) {
-                currentBalance = pool.quoteToken.balance;
-                minimumTokens = new BigNumber(minimumCommitSize.toString());
+                currentBalance = userBalances.quoteToken.balance;
             } else {
-                currentBalance = side === SideEnum.long ? pool.longToken.balance : pool.shortToken.balance;
-                minimumTokens = calcMinAmountIn(
-                    token.supply.plus(pendingBurns),
-                    notional,
-                    minimumCommitSize,
-                    pendingBurns,
-                );
+                currentBalance =
+                    side === SideEnum.long ? userBalances.longToken.balance : userBalances.shortToken.balance;
             }
 
-            const invalidAmount = isInvalidAmount(
-                amountBN,
-                currentBalance,
-                minimumTokens,
-                tokenPrice,
-                commitAction === CommitActionEnum.mint,
-            );
+            const invalidAmount = isInvalidAmount(amountBN, currentBalance);
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -118,11 +84,11 @@ export default (({ pool, swapState, swapDispatch }) => {
     }, [side, commitAction, amount, notional, token, pendingBurns]);
 
     return (
-        <>
-            <div className="w-full mb-4">
-                <p className="mb-2 ">Token</p>
-                <Dropdown
-                    className="w-full"
+        <Container>
+            <Wrapper hasMargin>
+                <Label>Token</Label>
+                <DropdownStyled
+                    variant="secondary"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
                         side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
@@ -140,19 +106,17 @@ export default (({ pool, swapState, swapDispatch }) => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <p className={classNames(!!pool.address ? 'block' : 'hidden', 'text-sm opacity-70 mt-2')}>
-                    Expected Price: {toApproxCurrency(tokenPrice)}
-                </p>
-            </div>
-            <div className="w-full">
-                <p className="mb-2 ">Amount</p>
+                <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
+            </Wrapper>
+            <Wrapper>
+                <Label>Amount</Label>
 
                 {commitAction === CommitActionEnum.mint ? (
                     <AmountInput
                         invalidAmount={invalidAmount}
                         amount={amount}
                         amountBN={amountBN}
-                        balance={pool.quoteToken.balance}
+                        balance={userBalances.quoteToken.balance}
                         tokenSymbol={pool.quoteToken.symbol}
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
@@ -163,18 +127,19 @@ export default (({ pool, swapState, swapDispatch }) => {
                         invalidAmount={invalidAmount}
                         amount={amount}
                         amountBN={amountBN}
-                        balance={token.balance}
+                        balance={tokenBalance.balance}
                         tokenSymbol={token.symbol}
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
                         isPoolToken={true}
                     />
                 )}
-            </div>
-        </>
+            </Wrapper>
+        </Container>
     );
 }) as React.FC<{
-    pool: Pool;
+    pool: PoolInfo['poolInstance'];
+    userBalances: PoolInfo['userBalances'];
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
 }>;
@@ -202,9 +167,8 @@ const AmountInput: React.FC<AmountProps> = ({
 }) => {
     return (
         <>
-            <InputContainer error={invalidAmount.isInvalid} className="w-full">
-                <Input
-                    className="w-3/5 h-full font-normal text-base"
+            <InputContainerStyled error={invalidAmount.isInvalid}>
+                <InputStyled
                     value={amount}
                     onUserInput={(val) => {
                         swapDispatch({ type: 'setAmount', value: val || '' });
@@ -230,19 +194,14 @@ const AmountInput: React.FC<AmountProps> = ({
                         Max
                     </div>
                 </InnerInputText>
-            </InputContainer>
-            <p
-                className={classNames(
-                    invalidAmount.isInvalid ? 'text-red-500 ' : 'text-theme-text',
-                    'opacity-70 text-sm mt-2',
-                )}
-            >
+            </InputContainerStyled>
+            <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
                     <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
                 )}
-            </p>
+            </Subtext>
         </>
     );
 };
@@ -273,3 +232,51 @@ const Available: React.FC<{
         </>
     );
 };
+
+const Container = styled.div`
+    @media (min-width: 640px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 15px;
+    }
+`;
+
+const Wrapper = styled.div<{ hasMargin?: boolean }>`
+    width: 100%;
+    margin-bottom: ${({ hasMargin }) => (hasMargin ? '1rem' : '0')};
+`;
+
+const InputContainerStyled = styled(InputContainer)`
+    width: 100%;
+    border-color: ${({ theme }) => theme['border-secondary']} !important;
+`;
+
+const Label = styled.p`
+    margin-bottom: 0.25rem;
+    @media (min-width: 640px) {
+        margin-bottom: 0.5rem;
+    }
+`;
+
+const DropdownStyled = styled(Dropdown)`
+    width: 100%;
+`;
+
+const InputStyled = styled(Input)`
+    width: 60%;
+    height: 100%;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.5rem;
+`;
+
+const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
+    display: ${({ showContent }) => (showContent ? 'block' : 'none')};
+    color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
+    font-size: 16px;
+    opacity: 0.7;
+
+    @media (min-width: 640px) {
+        margin-top: 0.5rem;
+    }
+`;

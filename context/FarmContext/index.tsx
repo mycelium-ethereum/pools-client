@@ -6,7 +6,6 @@ import { StakingRewards } from '@libs/staking/typechain';
 import {
     AggregatorV3Interface,
     AggregatorV3Interface__factory,
-    ERC20,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
@@ -15,9 +14,9 @@ import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
-import { calcBptTokenPrice } from '@tracer-protocol/tracer-pools-utils';
-import { poolMap } from '@libs/constants/poolLists';
-import { AvailableNetwork } from '@context/Web3Context/Web3Context.Config';
+import { poolMap } from '@tracer-protocol/pools-js/data';
+import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
+import { Provider } from '@ethersproject/providers';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -69,24 +68,28 @@ export const FarmStore: React.FC<
         // populate token details and add to lookup
         await Promise.all(
             tokenAddresses.map(async (address, index) => {
-                const tokenContract = new ethers.Contract(address, ERC20__factory.abi, provider) as ERC20;
+                if (!provider) {
+                    console.error('Failed to fetch bptDetails: provider undefined');
+                    return;
+                }
+                // @ts-ignore
+                const tokenContract = ERC20__factory.connect(address, provider);
 
                 const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
                 const tokenBalance = tokenBalances[index];
 
                 let isPoolToken = false;
 
-                let usdcPrice = new BigNumber(0);
+                let usdPrice = new BigNumber(0);
 
                 if (address.toLowerCase() === config.usdcAddress.toLowerCase()) {
-                    usdcPrice = new BigNumber(1);
+                    usdPrice = new BigNumber(1);
                 } else if (config?.knownUSDCPriceFeeds?.[address]) {
                     // fetch USDC price for known markets (BTC and ETH)
                     // known market price feed addresses are configured in Web3Context.Config.ts
-                    const priceFeedAggregator = new ethers.Contract(
+                    const priceFeedAggregator = AggregatorV3Interface__factory.connect(
                         config.knownUSDCPriceFeeds[address],
-                        AggregatorV3Interface__factory.abi,
-                        provider,
+                        provider as Provider,
                     ) as AggregatorV3Interface;
 
                     const [{ answer }, priceFeedDecimals] = await Promise.all([
@@ -94,17 +97,17 @@ export const FarmStore: React.FC<
                         priceFeedAggregator.decimals(),
                     ]);
 
-                    usdcPrice = new BigNumber(ethers.utils.formatUnits(answer, priceFeedDecimals));
+                    usdPrice = new BigNumber(ethers.utils.formatUnits(answer, priceFeedDecimals));
                 } else {
                     // not usdc and not listed as a known non-pool token
                     // assume it is a perpetual pools token
 
-                    const poolInfo = poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                    const poolInfo = poolMap[provider?.network?.chainId.toString() as KnownNetwork]?.[pool];
                     if (!poolInfo) {
                         console.error('Failed to find pool in poolList');
                         return;
                     }
-                    [usdcPrice] = await fetchTokenPrice(poolInfo, [address], provider);
+                    [usdPrice] = await fetchTokenPrice(poolInfo, [address], provider);
                     isPoolToken = true;
                 }
 
@@ -113,7 +116,7 @@ export const FarmStore: React.FC<
                     symbol,
                     isPoolToken,
                     reserves: new BigNumber(ethers.utils.formatUnits(tokenBalance, decimals)),
-                    usdcPrice,
+                    usdPrice,
                     decimals,
                 };
             }),
@@ -145,7 +148,7 @@ export const FarmStore: React.FC<
     const refreshFarm = async (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { stakingToken, stakingTokenDecimals } = farm;
-        if (account && farm) {
+        if (account && signer && farm) {
             const [stakingTokenBalance, stakingTokenAllowance, myStaked, myRewards, rewardsTokenAddress] =
                 await Promise.all([
                     stakingToken.balanceOf(account),
@@ -155,7 +158,8 @@ export const FarmStore: React.FC<
                     farm.contract.rewardsToken(),
                 ]);
 
-            const rewardsToken = new ethers.Contract(rewardsTokenAddress, ERC20__factory.abi, signer) as ERC20;
+            // @ts-ignore
+            const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
             const rewardsTokenDecimals = await rewardsToken.decimals();
 
@@ -197,16 +201,8 @@ export const FarmStore: React.FC<
                                         contract.rewardsToken(),
                                     ]);
 
-                                const stakingToken = new ethers.Contract(
-                                    stakingTokenAddress,
-                                    ERC20__factory.abi,
-                                    signer,
-                                ) as ERC20;
-                                const rewardsToken = new ethers.Contract(
-                                    rewardsTokenAddress,
-                                    ERC20__factory.abi,
-                                    signer,
-                                ) as ERC20;
+                                const stakingToken = ERC20__factory.connect(stakingTokenAddress, signer);
+                                const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
                                 const [
                                     stakingTokenName,
@@ -237,7 +233,7 @@ export const FarmStore: React.FC<
                                     : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
 
                                 const poolInfo =
-                                    poolMap[(provider?.network?.chainId?.toString() ?? '0') as AvailableNetwork][pool];
+                                    poolMap[provider?.network?.chainId?.toString() as KnownNetwork]?.[pool];
                                 if (!poolInfo) {
                                     console.error('Failed to find pool in poolList');
                                     return;
@@ -290,7 +286,7 @@ export const FarmStore: React.FC<
                                     rewardsTokenAddress,
                                 };
                             } catch (error) {
-                                console.error('failed fetching farm with address: ', address, error);
+                                console.error('Failed fetching farm with address: ', address, error);
                                 return;
                             }
                         },

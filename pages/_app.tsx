@@ -44,7 +44,10 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <meta name="robots" content="index, follow" />
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 <meta name="language" content="English" />
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source%20Sans%20Pro" />
+                <link
+                    rel="stylesheet"
+                    href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+                />
 
                 {/** Color for Chrome tabs (Android only) */}
                 <meta name="theme-color" content="#000240" />

@@ -1,61 +1,58 @@
-import { CreatedCommitType, Pool } from '@libs/types/General';
+import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { BigNumber } from 'bignumber.js';
-import { SideEnum } from '.';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 
-export const DEFAULT_POOLSTATE: Pool = {
-    address: '',
-    name: '',
-    lastPrice: new BigNumber(0),
-    updateInterval: new BigNumber(0),
-    lastUpdate: new BigNumber(0),
-    shortBalance: new BigNumber(0),
-    longBalance: new BigNumber(0),
-    nextShortBalance: new BigNumber(0),
-    nextLongBalance: new BigNumber(0),
-    leverage: 0,
-    keeper: '',
-    oraclePrice: new BigNumber(0),
-    frontRunningInterval: new BigNumber(0),
-    quoteToken: {
-        address: '',
-        name: '',
-        symbol: '',
-        decimals: 18,
-        balance: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
-    },
-    shortToken: {
-        address: '',
-        name: '',
-        symbol: '',
-        decimals: 18,
-        balance: new BigNumber(0),
-        supply: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
-        side: SideEnum.short,
-    },
-    longToken: {
-        address: '',
-        name: '',
-        symbol: '',
-        decimals: 18,
-        balance: new BigNumber(0),
-        supply: new BigNumber(0),
-        approvedAmount: new BigNumber(0),
-        side: SideEnum.long,
-    },
-    committer: {
-        address: '',
-        pendingLong: {
-            mint: new BigNumber(0),
-            burn: new BigNumber(0),
+export const DEFAULT_POOLSTATE: PoolInfo = {
+    poolInstance: Pool.CreateDefault(),
+    userBalances: {
+        shortToken: {
+            approvedAmount: new BigNumber(0),
+            balance: new BigNumber(0),
         },
-        pendingShort: {
-            mint: new BigNumber(0),
-            burn: new BigNumber(0),
+        longToken: {
+            approvedAmount: new BigNumber(0),
+            balance: new BigNumber(0),
         },
-        allUnexecutedCommits: [] as CreatedCommitType[],
-        minimumCommitSize: new BigNumber(1000),
+        quoteToken: {
+            approvedAmount: new BigNumber(0),
+            balance: new BigNumber(0),
+        },
+        aggregateBalances: {
+            longTokens: new BigNumber(0),
+            shortTokens: new BigNumber(0),
+            quoteTokens: new BigNumber(0),
+        },
     },
-    subscribed: false,
+};
+
+export interface PoolListMap {
+    Tracer: {
+        verified: string;
+        factoryDeployed?: string;
+    };
+    External: string[];
+}
+
+type TokenListMapByNetwork = Partial<Record<KnownNetwork, PoolListMap>>;
+
+/**
+ * Mapping of the TokenLists used on each network
+ */
+export const POOL_LIST_MAP: TokenListMapByNetwork = {
+    [NETWORKS.ARBITRUM]: {
+        Tracer: {
+            verified:
+                'https://gist.githubusercontent.com/dospore/8194a94a3d3893263737e48c101adf07/raw/e661bad9f6ab9004164777967c731ccb8d17f2f9/mainnet.json',
+        },
+        External: [],
+    },
+    [NETWORKS.ARBITRUM_RINKEBY]: {
+        Tracer: {
+            verified:
+                'https://gist.githubusercontent.com/dospore/8ecc737874cf1726524a922d1c463683/raw/0fbe7c533a79ca479f9c24d76d0701fc2a36da88/arb-rinkeby.json',
+        },
+        External: [],
+    },
 };

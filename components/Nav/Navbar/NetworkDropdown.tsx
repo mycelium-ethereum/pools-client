@@ -13,16 +13,18 @@ const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
 
 export default (({ className }) => {
-    const { provider, network = '0' } = useWeb3();
+    const { provider, network } = useWeb3();
 
     return (
         <TWPopup
             className={className}
             preview={
                 <NetworkPreview
-                    networkID={network.toString()}
-                    networkName={networkConfig[network]?.name ?? 'Unsupported Network'}
-                    supported={!!networkConfig[network]}
+                    networkID={network?.toString() ?? '0'}
+                    networkName={
+                        network ? networkConfig[network]?.name ?? 'Unsupported Network' : 'Unsupported Network'
+                    }
+                    supported={!!network && !!networkConfig[network]}
                 />
             }
         >
