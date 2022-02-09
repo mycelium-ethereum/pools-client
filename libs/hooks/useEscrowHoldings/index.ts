@@ -3,6 +3,7 @@ import { EscrowRowProps, EntryPrice, TokenType } from '@archetypes/Portfolio/Ove
 import { usePools } from '@context/PoolContext';
 import { LogoTicker } from '@components/General';
 import { BigNumber } from 'bignumber.js';
+import useSubgraphAggregateBalances from '../useSubgraphAggregateBalances';
 
 // TODO fetch acquisition prices from API
 // mock return of prices
@@ -24,10 +25,11 @@ const fetchEntryPrices: () => {
 
 export default (() => {
     const { pools } = usePools();
+    const subgraphAggregateBalances = useSubgraphAggregateBalances();
     const [rows, setRows] = useState<EscrowRowProps[]>([]);
+    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowProps[]>([]);
 
     useEffect(() => {
-        // TODO fetch actual rows
         if (pools) {
             const _rows: EscrowRowProps[] = [];
             Object.values(pools).forEach((pool) => {
@@ -102,5 +104,39 @@ export default (() => {
         }
     }, [pools]);
 
-    return rows;
+    useEffect(() => {
+        if (Object.keys(subgraphAggregateBalances).length) {
+            setRowsWithSubgraph(
+                rows.map((row) => {
+                    if (subgraphAggregateBalances[row.poolAddress.toLowerCase()]) {
+                        const subgraphInfo = subgraphAggregateBalances[row.poolAddress.toLowerCase()];
+                        // adds any subgraph info to the existing row
+                        return {
+                            ...row,
+                            claimableLongTokens: {
+                                ...row.claimableLongTokens,
+                                balance: subgraphInfo.longTokenHolding,
+                                entryPrice: {
+                                    ...row.claimableLongTokens.entryPrice,
+                                    tokenPrice: subgraphInfo.longTokenAvgBuyIn,
+                                },
+                            },
+                            claimableShortTokens: {
+                                ...row.claimableShortTokens,
+                                balance: subgraphInfo.shortTokenHolding,
+                                entryPrice: {
+                                    ...row.claimableShortTokens.entryPrice,
+                                    tokenPrice: subgraphInfo.shortTokenAvgBuyIn,
+                                },
+                            },
+                        };
+                    } else {
+                        return row;
+                    }
+                }),
+            );
+        }
+    }, [rows, subgraphAggregateBalances]);
+
+    return rowsWithSubgraph;
 }) as () => EscrowRowProps[];

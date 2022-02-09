@@ -64,6 +64,17 @@ export type Network = {
 
 export const DEFAULT_NETWORK = NETWORKS.ARBITRUM;
 
+type KnownNetworkToSubgraphUrl = {
+    // eslint-disable-next-line
+  [K in KnownNetwork]?: string
+};
+
+export const knownNetworkToSubgraphUrl: KnownNetworkToSubgraphUrl = {
+    [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-one',
+    // [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-rinkeby'
+    [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby',
+};
+
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
