@@ -78,7 +78,7 @@ export default (({
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
                         <button
                             type="button"
-                            data-tip
+                            data-tip=""
                             disabled={true}
                             data-for={`${option.text}`}
                             onClick={() => onClick(option.key)}
@@ -130,7 +130,7 @@ export default (({
 const Container = styled.span`
     position: relative;
     display: inline-flex;
-    width: 100%;
+    white-space: nowrap;
 `;
 
 const NewCallOut = styled.span`

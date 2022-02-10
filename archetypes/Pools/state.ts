@@ -82,7 +82,7 @@ export interface BrowseTableRowData {
 
 export interface BrowseState {
     search: string;
-    deltaDenotion: DeltaEnum;
+    deltaDenotation: DeltaEnum;
     marketFilter: MarketFilterEnum;
     leverageFilter: LeverageEnum;
     rebalanceFocus: RebalanceEnum;
@@ -116,7 +116,7 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
         case 'setDenotion':
             return {
                 ...state,
-                deltaDenotion: action.denotion,
+                deltaDenotation: action.denotion,
             };
         case 'setMarketFilter':
             return {

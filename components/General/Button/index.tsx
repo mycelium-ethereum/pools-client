@@ -3,7 +3,7 @@ import { classNames } from '@libs/utils/functions';
 
 const SIZE: Record<ButtonSize, string> = {
     xs: 'px-2 py-1 text-xs ',
-    sm: 'px-4 py-2 text-sm ',
+    sm: 'px-4 py-3 text-sm ',
     default: 'px-4 py-3 text-base ',
     lg: 'px-6 py-4 text-base ',
     none: 'p-0 text-base ',

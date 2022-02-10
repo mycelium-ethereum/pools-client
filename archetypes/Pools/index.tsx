@@ -31,7 +31,7 @@ export const Browse: React.FC = () => {
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
         mintBurnModalOpen: false,
-        deltaDenotion: DeltaEnum.Percentile,
+        deltaDenotation: DeltaEnum.Percentile,
     } as BrowseState);
 
     useEffect(() => {
@@ -114,7 +114,7 @@ export const Browse: React.FC = () => {
             <div className="container mb-10">
                 <section className="mb-8">
                     <h1 className="mt-8 mb-2 px-4 sm:px-0 font-semibold text-3xl text-theme-text">Pools</h1>
-                    <div className="mb-6 text-sm font-light">
+                    <div className="mb-6 px-4 sm:px-0 text-sm font-light">
                         The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
                         via Tracer’s SMA Wrapper. <a className="text-tracer-400 underline">Learn More</a>
                     </div>
