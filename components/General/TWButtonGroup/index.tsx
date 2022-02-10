@@ -1,6 +1,7 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import styled from 'styled-components';
 
 // the difference here is the bg on unselected
 const SELECTED = {
@@ -11,7 +12,7 @@ const SELECTED = {
 };
 
 const UNSELECTED = {
-    tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-background dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
+    tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
     greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg text-cool-gray-400 dark:text-cool-gray-800 focus:border-transparent',
 };
@@ -31,7 +32,7 @@ const SIZE = {
     sm: 'px-5 py-2 text-sm font-normal',
     default: 'px-8 py-3 text-sm font-medium',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
-    xl: 'py-3 px-16 md:px-18 text-base font-normal',
+    xl: 'py-3 px-10 sm:px-16 md:px-18 text-base font-normal',
 };
 
 const OVERALL_BACKGROUND = {
@@ -66,10 +67,12 @@ export default (({
     border = 'default',
     onClick,
     fullWidthButtons = false,
+    className = '',
 }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
+
     return (
-        <span className={classNames('relative z-0 inline-flex w-full', OVERALL_BACKGROUND[color])}>
+        <Container className={classNames(className, OVERALL_BACKGROUND[color])}>
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
@@ -91,23 +94,26 @@ export default (({
                         </button>
                     </TooltipSelector>
                 ) : (
-                    <button
-                        key={`twbg-${option.key}`}
-                        type="button"
-                        onClick={() => onClick(option.key)}
-                        className={classNames(
-                            value === option.key ? SELECTED[color] : UNSELECTED[color],
-                            buttonClass,
-                            BORDER_COLORS[borderColor],
-                            BORDERS[border],
-                            fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
-                        )}
-                    >
-                        {option.text}
-                    </button>
+                    <>
+                        {option.text === 'Flip' && <NewCallOut>NEW</NewCallOut>}
+                        <button
+                            key={`twbg-${option.key}`}
+                            type="button"
+                            onClick={() => onClick(option.key)}
+                            className={classNames(
+                                value === option.key ? SELECTED[color] : UNSELECTED[color],
+                                buttonClass,
+                                BORDER_COLORS[borderColor],
+                                BORDERS[border],
+                                fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
+                            )}
+                        >
+                            {option.text}
+                        </button>
+                    </>
                 ),
             )}
-        </span>
+        </Container>
     );
 }) as React.FC<{
     onClick: (key: number) => any;
@@ -118,4 +124,28 @@ export default (({
     options: Option[];
     value: number; // key
     fullWidthButtons?: boolean;
+    className?: string;
 }>;
+
+const Container = styled.span`
+    position: relative;
+    display: inline-flex;
+    width: 100%;
+`;
+
+const NewCallOut = styled.span`
+    position: absolute;
+    background-color: #5555e9;
+    top: -0.8em;
+    right: 0;
+    z-index: 11;
+    color: #fff;
+    font-weight: 700;
+    font-size: 10px;
+    border-radius: 4px;
+    width: 41px;
+    height: 17px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`;

@@ -9,9 +9,11 @@ export const themes: Record<
         text: string;
         'text-secondary': string;
         border: string;
+        'border-secondary': string;
         primary: string;
         'button-bg': string;
         'button-bg-hover': string;
+        'is-dark': boolean;
     }
 > = {
     light: {
@@ -29,6 +31,9 @@ export const themes: Record<
         /* cool-gray-300*/
         border: '#D1D5DB',
 
+        /* cool-gray-200 */
+        'border-secondary': '#E5E7EB',
+
         /* tracer-800*/
         primary: '#0000B0',
 
@@ -37,6 +42,8 @@ export const themes: Record<
 
         /* cool-gray-100 */
         'button-bg-hover': '#F3F4F6',
+
+        'is-dark': false,
     },
     dark: {
         /* cool-gray-900 */
@@ -56,6 +63,9 @@ export const themes: Record<
         /* cool-gray-500*/
         border: '#6B7280',
 
+        /* cool-gray-700 */
+        'border-secondary': '#374151',
+
         /* tracer-100*/
         primary: '#DEDEFF',
 
@@ -64,6 +74,8 @@ export const themes: Record<
 
         /* cool-gray-700 */
         'button-bg-hover': '#374151',
+
+        'is-dark': true,
     },
     matrix: {
         /* cool-gray-900 */
@@ -79,10 +91,15 @@ export const themes: Record<
 
         border: '#008f11',
 
+        //TODO get correct color for matrix
+        'border-secondary': '#E5E7EB',
+
         primary: '#00ff41',
 
         'button-bg': '#003b00',
 
         'button-bg-hover': '#020204',
+
+        'is-dark': false,
     },
 };

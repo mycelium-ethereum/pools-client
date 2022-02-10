@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Loading from '@components/General/Loading';
-import { DenotedInEnum, TokenRowProps } from '..';
+import { DenotedInEnum, TokenRowProps } from '../state';
 import { ethers } from 'ethers';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';

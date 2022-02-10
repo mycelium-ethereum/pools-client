@@ -1,29 +1,23 @@
 import { useMemo, useReducer } from 'react';
-// import { usePools } from '@context/PoolContext';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import {
-    CommitEnum,
-    // SideEnum
-} from '@libs/constants';
 import { HistoricCommit } from '@libs/types/General';
-// import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { HistoricCommitsState, historicsReducer, initialHistoricsState, LoadingState } from './state';
 import { fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
 import BigNumber from 'bignumber.js';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { ethers } from 'ethers';
 import { usePools } from '@context/PoolContext';
-import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
 // const commitType = (num: number) => {
 //     if (num < 0.25) {
-//         return CommitEnum.long_mint;
+//         return CommitEnum.longMint;
 //     } else if (num >= 0.25 && num < 0.5) {
-//         return CommitEnum.long_burn;
+//         return CommitEnum.longBurn;
 //     } else if (num >= 0.5 && num < 0.75) {
-//         return CommitEnum.short_mint;
+//         return CommitEnum.shortMint;
 //     } else {
-//         return CommitEnum.short_burn;
+//         return CommitEnum.shortBurn;
 //     }
 // };
 
@@ -67,29 +61,28 @@ export default (() => {
                     console.debug('All user commits', commits);
                     const allUserCommits: HistoricCommit[] = [];
                     for (const commit of commits) {
+                        const { poolInstance, userBalances } = pools?.[commit.pool] ?? DEFAULT_POOLSTATE;
+
                         const {
                             shortToken,
                             longToken,
-                            nextShortBalance,
                             quoteToken: { decimals },
-                            nextLongBalance,
-                            committer: {
-                                pendingLong: { burn: pendingLongBurn },
-                                pendingShort: { burn: pendingShortBurn },
-                            },
-                        } = pools?.[commit.pool] ?? DEFAULT_POOLSTATE;
+                        } = poolInstance;
 
                         let token;
                         let tokenPrice: BigNumber = new BigNumber(0);
-                        if (
-                            commit.commitType === CommitEnum.short_mint ||
-                            commit.commitType === CommitEnum.short_burn
-                        ) {
-                            token = shortToken;
-                            tokenPrice = calcTokenPrice(nextShortBalance, shortToken.supply.plus(pendingShortBurn));
+                        if (commit.commitType === CommitEnum.shortMint || commit.commitType === CommitEnum.shortBurn) {
+                            token = {
+                                ...shortToken,
+                                ...userBalances.shortToken,
+                            };
+                            tokenPrice = poolInstance.getNextShortTokenPrice();
                         } else {
-                            token = longToken;
-                            tokenPrice = calcTokenPrice(nextLongBalance, longToken.supply.plus(pendingLongBurn));
+                            token = {
+                                ...longToken,
+                                ...userBalances.longToken,
+                            };
+                            tokenPrice = poolInstance.getNextLongTokenPrice();
                         }
 
                         allUserCommits.push({

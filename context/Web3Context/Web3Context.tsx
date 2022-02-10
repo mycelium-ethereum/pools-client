@@ -4,10 +4,11 @@
 import React, { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { AvailableNetwork, Network, networkConfig } from './Web3Context.Config';
+import { Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
 import { useTheme } from '@context/ThemeContext';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -31,7 +32,7 @@ type Web3Context = {
     account?: string;
     signer?: ethers.Signer;
     gasPrice?: number;
-    network?: AvailableNetwork;
+    network?: KnownNetwork;
     wallet?: Wallet;
     blockNumber: number;
     config?: Network;
@@ -57,14 +58,14 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     const { isDark } = useTheme();
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
-    const [network, setNetwork] = useState<AvailableNetwork | undefined>(undefined);
+    const [network, setNetwork] = useState<KnownNetwork | undefined>(undefined);
     const [provider, setProvider] = useState<providers.JsonRpcProvider | undefined>(undefined);
     const [blockNumber, setBlockNumber] = useState<number>(0);
     const [gasPrice, setGasPrice] = useState<number>(0);
     const [wallet, setWallet] = useState<Wallet | undefined>(undefined);
     const [onboard, setOnboard] = useState<OnboardApi | undefined>(undefined);
     const [isReady, setIsReady] = useState<boolean>(false);
-    const [config, setConfig] = useState<Network>(networkConfig[0]);
+    const [config, setConfig] = useState<Network | undefined>();
 
     const usingDefaultProvider = useRef(true);
     const unsupportedNetworkPopupRef = useRef<string>('');
@@ -101,7 +102,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                     usingDefaultProvider.current = false;
                                     setProvider(provider_);
                                     if (provider_?.network.chainId) {
-                                        setNetwork(provider_.network.chainId.toString() as AvailableNetwork);
+                                        setNetwork(provider_.network.chainId.toString() as KnownNetwork);
                                     }
                                 });
                             } else {
@@ -114,9 +115,9 @@ const Web3Store: React.FC<Web3ContextProps> = ({
                                 onboard.config({ networkId: network });
                             }
                             console.info(`Changing network ${network}`);
-                            const network_ = network?.toString() as AvailableNetwork;
+                            const network_ = network?.toString() as KnownNetwork;
                             setNetwork(network_);
-                            setConfig(networkConfig[network_ ?? 0]);
+                            setConfig(networkConfig[network_ ?? DEFAULT_NETWORK]);
                             onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
                         },
                     },

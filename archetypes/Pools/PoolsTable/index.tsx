@@ -14,16 +14,15 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
-import { classNames } from '@libs/utils/functions';
-import { constructBalancerLink } from '@archetypes/Exchange/Summary';
-import { StyledTooltip } from '@components/Tooltips';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { useTheme } from '@context/ThemeContext';
 import styled from 'styled-components';
 
 import Close from '/public/img/general/close.svg';
-import ArrowDown from '/public/img/general/arrow-circle-down.svg';
-import Equal from '/public/img/general/circle-equal.svg';
+import { classNames } from '@libs/utils/functions';
+import { constructBalancerLink } from '@archetypes/Exchange/Summary';
+import { StyledTooltip } from '@components/Tooltips';
+import { default as UpOrDownInner } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
 import USDCIcon from '@public/img/logos/currencies/usdc.svg';
@@ -759,27 +758,13 @@ const UpOrDown: React.FC<{
             poolTicker={poolTicker}
             showNextRebalance={showNextRebalance}
         >
-            <div
-                className={classNames(
-                    approxValue === 0 ? 'text-cool-gray-500' : value > 0 ? 'text-green-600' : 'text-red-600',
-                    'flex',
-                )}
-            >
-                <div className="mr-1 flex">
-                    {approxValue === 0 ? (
-                        <Equal className="h-5 my-auto" />
-                    ) : (
-                        <ArrowDown className={classNames(value > 0 ? 'rotate-180' : '', 'h-5')} />
-                    )}
-                </div>
-                <div>
-                    {deltaDenotion === DeltaEnum.Numeric
-                        ? currency
-                            ? toApproxCurrency(value).replace('-', '')
-                            : approxValue
-                        : `${approxValue}%`}
-                </div>
-            </div>
+            <UpOrDownInner
+                oldValue={oldValue}
+                newValue={newValue}
+                deltaDenotion={deltaDenotion}
+                currency={'USD'}
+                showCurrencyTicker={false}
+            />
         </UpOrDownTip>
     );
 };

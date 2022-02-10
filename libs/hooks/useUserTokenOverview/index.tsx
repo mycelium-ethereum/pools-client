@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { usePools } from '@context/PoolContext';
-import { calcTokenPrice } from '@tracer-protocol/tracer-pools-utils';
 import { BigNumber } from 'bignumber.js';
-import { TokenRowProps } from '@archetypes/Portfolio/Overview';
+import { TokenRowProps } from '@archetypes/Portfolio/Overview/state';
 
 export default (() => {
     const { pools } = usePools();
@@ -15,36 +14,34 @@ export default (() => {
             const rows: TokenRowProps[] = [];
 
             poolValues.forEach((pool) => {
-                const { longToken, shortToken, shortBalance, longBalance } = pool;
-                const {
-                    pendingLong: { burn: pendingLongBurn },
-                    pendingShort: { burn: pendingShortBurn },
-                } = pool.committer;
+                const { poolInstance, userBalances } = pool;
+
+                const { address, oraclePrice, longToken, shortToken } = poolInstance;
 
                 rows.push(
                     {
                         name: shortToken.name,
-                        poolAddress: pool.address,
+                        poolAddress: address,
                         address: shortToken.address,
                         decimals: shortToken.decimals,
                         symbol: shortToken.symbol,
                         side: shortToken.side,
-                        price: calcTokenPrice(shortBalance, shortToken.supply.plus(pendingShortBurn)),
-                        holdings: shortToken.balance,
+                        price: poolInstance.getShortTokenPrice(),
+                        holdings: userBalances.shortToken.balance,
                         deposits: new BigNumber(0),
-                        oraclePrice: pool.oraclePrice,
+                        oraclePrice: oraclePrice,
                     },
                     {
                         name: longToken.name,
-                        poolAddress: pool.address,
+                        poolAddress: address,
                         address: longToken.address,
                         decimals: longToken.decimals,
                         symbol: longToken.symbol,
                         side: longToken.side,
-                        price: calcTokenPrice(longBalance, longToken.supply.plus(pendingLongBurn)),
-                        holdings: longToken.balance,
+                        price: poolInstance.getLongTokenPrice(),
+                        holdings: userBalances.longToken.balance,
                         deposits: new BigNumber(0),
-                        oraclePrice: pool.oraclePrice,
+                        oraclePrice: oraclePrice,
                     },
                 );
             });

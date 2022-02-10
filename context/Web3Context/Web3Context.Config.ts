@@ -2,8 +2,9 @@ import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts
 import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
-import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } from '@libs/constants';
 import { LogoTicker } from '@components/General';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { NETWORKS } from '@tracer-protocol/pools-js/utils/constants';
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
@@ -18,16 +19,11 @@ type Farm = {
     rewardsEnded?: boolean;
 };
 
-export type AvailableNetwork =
-    | typeof ARBITRUM
-    | typeof ARBITRUM_RINKEBY
-    | typeof MAINNET
-    | typeof RINKEBY
-    | '0'
-    | '1337';
+export type AvailableNetwork = KnownNetwork | typeof UNKNOWN_NETWORK;
+export const UNKNOWN_NETWORK = '0';
 
 export type Network = {
-    id: AvailableNetwork;
+    id: KnownNetwork;
     name: string;
     logoTicker: LogoTicker;
     previewUrl: string;
@@ -65,6 +61,20 @@ export type Network = {
         wPool: string;
     };
 };
+
+export const DEFAULT_NETWORK = NETWORKS.ARBITRUM;
+
+type KnownNetworkToSubgraphUrl = {
+    // eslint-disable-next-line
+  [K in KnownNetwork]?: string
+};
+
+export const knownNetworkToSubgraphUrl: KnownNetworkToSubgraphUrl = {
+    [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-one',
+    // [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-rinkeby'
+    [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby',
+};
+
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
@@ -74,27 +84,11 @@ export type Network = {
  *  this config.
  * Do not change the other network configs unless the contract addresses have changed.
  */
-export const networkConfig: Record<AvailableNetwork, Network> = {
-    '0': {
-        id: '0',
-        previewUrl: '',
-        name: 'Unknown',
-        logoTicker: 'ETH',
-        contracts: {},
-        poolFarms: [],
-        bptFarms: [],
-        publicRPC: '',
-        hex: '0x0',
-        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
-        tcrAddress: '',
-        sushiRouterAddress: '',
-        knownUSDCPriceFeeds: {},
-    },
-    '421611': {
-        id: '421611',
+export const networkConfig: Record<KnownNetwork, Network> = {
+    [NETWORKS.ARBITRUM_RINKEBY]: {
+        id: NETWORKS.ARBITRUM_RINKEBY,
         name: 'Arbitrum Rinkeby',
-        logoTicker: ARBITRUM,
+        logoTicker: NETWORKS.ARBITRUM,
         previewUrl: 'https://testnet.arbiscan.io',
         contracts: {
             poolFactory: {
@@ -124,10 +118,10 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
-    '42161': {
-        id: '42161',
+    [NETWORKS.ARBITRUM]: {
+        id: NETWORKS.ARBITRUM,
         name: 'Arbitrum',
-        logoTicker: ARBITRUM,
+        logoTicker: NETWORKS.ARBITRUM,
         previewUrl: 'https://arbiscan.io/',
         contracts: {
             poolFactory: {
@@ -302,30 +296,8 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
             wPool: '0x64541216bafffeec8ea535bb71fbc927831d0595',
         },
     },
-    '1337': {
-        id: '1337',
-        name: 'Local',
-        logoTicker: 'ETH',
-        previewUrl: '',
-        contracts: {
-            poolFactory: {
-                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
-                abi: PoolFactory__factory.abi,
-            },
-        },
-        hex: '',
-        poolFarms: [],
-        bptFarms: [],
-        publicRPC: '',
-        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
-        knownUSDCPriceFeeds: {},
-        sushiRouterAddress: '',
-        tcrAddress: '',
-    },
-    '1': {
-        // TODO: fill this out properly
-        id: '1',
+    [NETWORKS.MAINNET]: {
+        id: NETWORKS.MAINNET,
         name: 'Ethereum',
         logoTicker: 'ETH',
         previewUrl: '',
@@ -345,10 +317,31 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
         tcrAddress: '0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050',
         knownUSDCPriceFeeds: {},
     },
-    '4': {
-        // TODO: fill this out properly
-        id: '4',
+    [NETWORKS.RINKEBY]: {
+        id: NETWORKS.RINKEBY,
         name: 'Rinkeby',
+        logoTicker: 'ETH',
+        previewUrl: '',
+        contracts: {
+            poolFactory: {
+                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
+                abi: PoolFactory__factory.abi,
+            },
+        },
+        hex: '0x4',
+        poolFarms: [],
+        bptFarms: [],
+        publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
+        balancerVaultAddress: BALANCER_VAULT_ADDRESS,
+        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
+        sushiRouterAddress: '',
+        tcrAddress: '',
+        knownUSDCPriceFeeds: {},
+    },
+    [NETWORKS.KOVAN]: {
+        // TODO fill this out properly
+        id: NETWORKS.KOVAN,
+        name: 'Kovan',
         logoTicker: 'ETH',
         previewUrl: '',
         contracts: {

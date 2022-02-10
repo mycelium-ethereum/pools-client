@@ -16,6 +16,7 @@ import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
+import { marketFilter } from '@libs/utils/functions';
 import Loading from '@components/General/Loading';
 
 export const Browse: React.FC = () => {
@@ -42,27 +43,6 @@ export const Browse: React.FC = () => {
     // parse the pools rows
     const { rows: tokens } = useBrowsePools();
 
-    const marketFilter = (pool: BrowseTableRowData): boolean => {
-        switch (state.marketFilter) {
-            case MarketFilterEnum.All:
-                return true;
-            case MarketFilterEnum.EUR:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'EUR';
-            case MarketFilterEnum.TOKE:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'TOKE';
-            case MarketFilterEnum.LINK:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'LINK';
-            case MarketFilterEnum.ETH:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'ETH';
-            case MarketFilterEnum.BTC:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'BTC';
-            case MarketFilterEnum.AAVE:
-                return pool.name.replace(/.\-/g, '').split('/')[0] === 'AAVE';
-            default:
-                return false;
-        }
-    };
-
     const leverageFilter = (pool: BrowseTableRowData): boolean => {
         switch (state.leverageFilter) {
             case LeverageEnum.All:
@@ -75,7 +55,6 @@ export const Browse: React.FC = () => {
                 return false;
         }
     };
-
     const searchFilter = (pool: BrowseTableRowData): boolean => {
         const searchString = state.search.toLowerCase();
         return Boolean(
@@ -97,7 +76,10 @@ export const Browse: React.FC = () => {
         }
     };
 
-    const filteredTokens = tokens.filter(marketFilter).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = tokens
+        .filter((pool) => marketFilter(pool.name, state.marketFilter))
+        .filter(leverageFilter)
+        .filter(searchFilter);
     const sortedFilteredTokens = filteredTokens.sort(sorter);
 
     const groupedSortedFilteredTokens = sortedFilteredTokens.reduce((groups, item) => {

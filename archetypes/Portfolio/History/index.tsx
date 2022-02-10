@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { ARBITRUM, CommitsFocusEnum } from '@libs/constants';
+import { ARBITRUM, CommitActionEnum, CommitToQueryFocusMap } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
@@ -20,12 +20,16 @@ import { SourceType } from '@libs/utils/reputationAPI';
 
 const historyOptions = [
     {
-        key: CommitsFocusEnum.mints,
+        key: CommitActionEnum.mint,
         text: 'Mint History',
     },
     {
-        key: CommitsFocusEnum.burns,
+        key: CommitActionEnum.burn,
         text: 'Burn History',
+    },
+    {
+        key: CommitActionEnum.flip,
+        text: 'Flip History',
     },
 ];
 
@@ -44,7 +48,7 @@ export default (({ focus }) => {
             fetchTradeHistory({
                 account: account ?? '0',
                 network: (network as SourceType) ?? ARBITRUM,
-                type: focus === CommitsFocusEnum.mints ? 'mint' : 'burn',
+                type: CommitToQueryFocusMap[focus as CommitActionEnum],
                 page,
                 pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
             }).then((r) => {
@@ -55,7 +59,7 @@ export default (({ focus }) => {
         }
     }, [focus, page, account, network]);
 
-    const isMintHistory = focus === CommitsFocusEnum.mints;
+    const isMintHistory = focus === CommitActionEnum.mint;
 
     return (
         <div className="bg-theme-background rounded-xl shadow mt-5 p-5">
@@ -66,7 +70,7 @@ export default (({ focus }) => {
                     onClick={(option) =>
                         router.push({
                             query: {
-                                focus: option === CommitsFocusEnum.mints ? 'mints' : 'burns',
+                                focus: CommitToQueryFocusMap[option as CommitActionEnum],
                             },
                         })
                     }
@@ -97,9 +101,7 @@ export default (({ focus }) => {
                                 <td colSpan={5}>
                                     <div className="my-20 text-center">
                                         <NoQueued className="mx-auto mb-5" />
-                                        <div className="text-cool-gray-500">
-                                            You have no {isMintHistory ? 'mint' : 'burn'} history.
-                                        </div>
+                                        <div className="text-cool-gray-500">You have no history.</div>
                                     </div>
                                 </td>
                             </tr>
@@ -132,7 +134,7 @@ export default (({ focus }) => {
         </div>
     );
 }) as React.FC<{
-    focus: CommitsFocusEnum;
+    focus: CommitActionEnum;
 }>;
 
 const CommitRow: React.FC<
