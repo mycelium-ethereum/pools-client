@@ -43,7 +43,7 @@ const Button: React.FC<ButtonProps> = ({
                 VARIANT[variant],
                 SIZE[size],
                 className,
-                'rounded disabled:cursor-not-allowed focus:outline-none',
+                'rounded whitespace-nowrap disabled:cursor-not-allowed focus:outline-none',
             )}
             {...rest}
         >

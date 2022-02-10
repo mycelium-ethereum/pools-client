@@ -88,7 +88,6 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
             <Wrapper hasMargin>
                 <Label>Token</Label>
                 <DropdownStyled
-                    variant="secondary"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
                         side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,

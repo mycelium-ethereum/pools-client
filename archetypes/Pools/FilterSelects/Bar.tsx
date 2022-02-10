@@ -6,6 +6,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Filters from '/public/img/general/filters.svg';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import Button from '@components/General/Button';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -119,37 +120,48 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         />
                     </div>
                 </div>
-                <div className="flex mt-8">
-                    <div className="xl:hidden">
-                        <TWButtonGroup
-                            value={state.rebalanceFocus}
-                            onClick={(option) =>
-                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                            }
-                            color="tracer"
-                            options={REBALANCE_OPTIONS_MOBILE}
-                        />
+                <div className="mt-4 flex justify-between items-center">
+                    <div className="flex">
+                        <div className="xl:hidden">
+                            <TWButtonGroup
+                                value={state.rebalanceFocus}
+                                onClick={(option) =>
+                                    dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
+                                }
+                                color="tracer"
+                                options={REBALANCE_OPTIONS_MOBILE}
+                            />
+                        </div>
+                        <div className="hidden xl:block">
+                            <TWButtonGroup
+                                value={state.rebalanceFocus}
+                                onClick={(option) =>
+                                    dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
+                                }
+                                color="tracer"
+                                options={REBALANCE_OPTIONS_DESKTOP}
+                            />
+                        </div>
+                        <div className="hidden lg:flex mx-4 flex-col">
+                            <TWButtonGroup
+                                size="sm"
+                                value={state.deltaDenotion}
+                                onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
+                                color="greyed"
+                                border="rounded"
+                                borderColor="greyed"
+                                options={DENOTATION_OPTIONS}
+                            />
+                        </div>
                     </div>
-                    <div className="hidden xl:block">
-                        <TWButtonGroup
-                            value={state.rebalanceFocus}
-                            onClick={(option) =>
-                                dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                            }
-                            color="tracer"
-                            options={REBALANCE_OPTIONS_DESKTOP}
-                        />
-                    </div>
-                    <div className="hidden lg:flex mx-4 flex-col">
-                        <TWButtonGroup
-                            size="sm"
-                            value={state.deltaDenotion}
-                            onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
-                            color="greyed"
-                            border="rounded"
-                            borderColor="greyed"
-                            options={DENOTATION_OPTIONS}
-                        />
+                    <div>
+                        <div className="mb-2 text-center">Don’t see the pool you’re after?</div>
+                        <div className="flex">
+                            <Button variant="primary" className="mr-5">
+                                Display Alternative Pool
+                            </Button>
+                            <Button variant="primary">Deploy New Pool</Button>
+                        </div>
                     </div>
                 </div>
                 <HiddenExpand className="lg:hidden" defaultHeight={0} open={state.filtersOpen}>
