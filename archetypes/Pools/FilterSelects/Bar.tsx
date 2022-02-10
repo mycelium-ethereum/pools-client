@@ -156,7 +156,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     </div>
                     <TWButtonGroup
                         value={state.deltaDenotation}
-                        onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
+                        onClick={(option) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum })}
                         color="greyed"
                         border="rounded"
                         borderColor="greyed"
@@ -190,7 +190,9 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             <TWButtonGroup
                                 size="sm"
                                 value={state.deltaDenotation}
-                                onClick={(option) => dispatch({ type: 'setDenotion', denotion: option as DeltaEnum })}
+                                onClick={(option) =>
+                                    dispatch({ type: 'setDenotation', denotation: option as DeltaEnum })
+                                }
                                 color="greyed"
                                 border="rounded"
                                 borderColor="greyed"

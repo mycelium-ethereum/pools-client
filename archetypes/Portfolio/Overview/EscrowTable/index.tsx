@@ -173,8 +173,7 @@ const DropdownTable: React.FC<{
 
 const InnerText = styled.div`
     /* text-base/font-normal */
-
-    font-family: Source Sans Pro;
+    font-family: Source Sans Pro, sans-serif;
     font-style: normal;
     font-weight: normal;
     font-size: 16px;
@@ -243,7 +242,7 @@ const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
                     <UpOrDown
                         oldValue={entryPrice ? balance.times(entryPrice.tokenPrice) : balance.times(currentTokenPrice)}
                         newValue={balance.times(currentTokenPrice)}
-                        deltaDenotion={DeltaEnum.Numeric}
+                        deltaDenotation={DeltaEnum.Numeric}
                         currency={currency}
                         showCurrencyTicker={true}
                     />
@@ -283,7 +282,7 @@ const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) =>
             <TableRowCell>
                 <InnerText>-</InnerText>
             </TableRowCell>
-            <TableRowCell></TableRowCell>
+            <TableRowCell />
         </TableRow>
     );
 };

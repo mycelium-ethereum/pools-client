@@ -98,7 +98,7 @@ export type BrowseAction =
     | { type: 'setLeverageFilter'; leverage: LeverageEnum }
     | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
-    | { type: 'setDenotion'; denotion: DeltaEnum }
+    | { type: 'setDenotation'; denotation: DeltaEnum }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
@@ -113,10 +113,10 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 search: action.search,
             };
-        case 'setDenotion':
+        case 'setDenotation':
             return {
                 ...state,
-                deltaDenotation: action.denotion,
+                deltaDenotation: action.denotation,
             };
         case 'setMarketFilter':
             return {

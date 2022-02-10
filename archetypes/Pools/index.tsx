@@ -130,7 +130,7 @@ export const Browse: React.FC = () => {
                         >
                             <PoolsTable
                                 rows={dataRows}
-                                deltaDenotion={state.deltaDenotion}
+                                deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
                             />

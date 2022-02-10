@@ -282,7 +282,7 @@ export default (({ onClickBurn }) => {
                                         ticker: key as LogoTicker,
                                     }))}
                                     onSelect={(val) =>
-                                        dispatch({ type: 'setDenotion', denotedIn: val as DenotedInEnum })
+                                        dispatch({ type: 'setDenotation', denotedIn: val as DenotedInEnum })
                                     }
                                 />
                             </div>
