@@ -1,7 +1,15 @@
 import React from 'react';
 import { Dropdown, HiddenExpand, LogoTicker } from '@components/General';
 import { SearchInput } from '@components/General/SearchInput';
-import { BrowseAction, BrowseState, RebalanceEnum, MarketFilterEnum, DeltaEnum, LeverageEnum } from '../state';
+import {
+    BrowseAction,
+    BrowseState,
+    RebalanceEnum,
+    MarketFilterEnum,
+    DeltaEnum,
+    LeverageEnum,
+    CollateralEnum,
+} from '../state';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';
@@ -91,6 +99,19 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         />
                     </div>
                     <div className="hidden lg:flex mr-4 flex-col">
+                        <h3 className="mb-1 text-theme-text">Collateral</h3>
+                        <Dropdown
+                            value={state.collateralFilter ?? 'All'}
+                            className="w-32 mt-auto"
+                            options={Object.keys(CollateralEnum).map((key) => ({
+                                key: (CollateralEnum as any)[key],
+                            }))}
+                            onSelect={(val) =>
+                                dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum })
+                            }
+                        />
+                    </div>
+                    <div className="hidden lg:flex mr-4 flex-col">
                         <h3 className="mb-1 text-theme-text">Power Leverage</h3>
                         <Dropdown
                             value={state.leverageFilter}
@@ -135,26 +156,41 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 </div>
 
                 <HiddenExpand className="lg:hidden" defaultHeight={0} open={state.filtersOpen}>
-                    <div className="flex mb-5">
+                    <div className="flex flex-col sm:flex-row mb-5">
+                        <div className="flex sm:mr-5">
+                            <div className="mr-5">
+                                <h3 className="mb-1 text-theme-text">Collateral</h3>
+                                <Dropdown
+                                    value={state.collateralFilter ?? 'All'}
+                                    className="w-40 sm:w-32"
+                                    options={Object.keys(CollateralEnum).map((key) => ({
+                                        key: (CollateralEnum as any)[key],
+                                    }))}
+                                    onSelect={(val) =>
+                                        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum })
+                                    }
+                                />
+                            </div>
+                            <div>
+                                <h3 className="mb-1 text-theme-text">Power Leverage</h3>
+                                <Dropdown
+                                    value={state.leverageFilter}
+                                    className="w-40 sm:w-32"
+                                    options={Object.keys(LeverageEnum).map((key) => ({
+                                        key: (LeverageEnum as any)[key],
+                                    }))}
+                                    onSelect={(val) =>
+                                        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })
+                                    }
+                                />
+                            </div>
+                        </div>
                         <SearchInput
-                            className="w-60 mt-auto mr-5"
+                            className="w-full mt-5 sm:mt-auto"
                             placeholder="Search"
                             value={state.search}
                             onChange={(search) => dispatch({ type: 'setSearch', search })}
                         />
-                        <div>
-                            <h3 className="mb-1 text-theme-text">Power Leverage</h3>
-                            <Dropdown
-                                value={state.leverageFilter}
-                                className="w-32"
-                                options={Object.keys(LeverageEnum).map((key) => ({
-                                    key: (LeverageEnum as any)[key],
-                                }))}
-                                onSelect={(val) =>
-                                    dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })
-                                }
-                            />
-                        </div>
                     </div>
                     <TWButtonGroup
                         value={state.deltaDenotation}
@@ -166,7 +202,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </HiddenExpand>
 
-                <div className="mt-5 flex flex-col md:flex-row md:justify-between md:items-center">
+                <div className="mt-5 flex flex-col lg:flex-row lg:justify-between lg:items-center">
                     <div className="flex">
                         <div className="xl:hidden">
                             <TWButtonGroup
@@ -202,7 +238,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             />
                         </div>
                     </div>
-                    <div className="mt-10 lg:mt-0 relative">
+                    <div className="mt-12 lg:mt-0 relative">
                         <div className="absolute -top-2/3 left-1/2 -translate-x-1/2 whitespace-nowrap">
                             Don’t see the pool you’re after?
                         </div>

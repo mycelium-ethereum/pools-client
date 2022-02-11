@@ -14,7 +14,7 @@ export const SearchInput: React.FC<SearchInputProps> = ({ className = '', placeh
         <div
             className={classNames(
                 className,
-                'relative rounded-md shadow-sm border border-theme-border  bg-theme-button-bg text-sm font-medium text-theme-text-secondary hover:bg-button-bg-hover',
+                'relative rounded-md shadow-sm border border-theme-border bg-theme-button-bg text-sm font-medium text-theme-text-secondary hover:bg-button-bg-hover',
             )}
         >
             <div className="absolute left-0 pl-3 pt-1 flex items-center pointer-events-none h-full">

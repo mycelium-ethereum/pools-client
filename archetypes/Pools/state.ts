@@ -10,6 +10,11 @@ export enum MarketFilterEnum {
     AAVE = 'Aave',
 }
 
+export enum CollateralEnum {
+    All = 'All',
+    USDC = 'USDC',
+}
+
 export enum LeverageEnum {
     All = 'All',
     One = '1',
@@ -84,6 +89,7 @@ export interface BrowseState {
     search: string;
     deltaDenotation: DeltaEnum;
     marketFilter: MarketFilterEnum;
+    collateralFilter: CollateralEnum;
     leverageFilter: LeverageEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
@@ -95,6 +101,7 @@ export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
+    | { type: 'setCollateralFilter'; collateral: CollateralEnum }
     | { type: 'setLeverageFilter'; leverage: LeverageEnum }
     | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
@@ -122,6 +129,11 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
             return {
                 ...state,
                 marketFilter: action.market,
+            };
+        case 'setCollateralFilter':
+            return {
+                ...state,
+                collateralFilter: action.collateral,
             };
         case 'setLeverageFilter':
             return {
