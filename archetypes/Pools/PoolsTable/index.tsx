@@ -7,7 +7,11 @@ import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
+import {
+    Logo,
+    LogoTicker,
+    // , tokenSymbolToLogoTicker
+} from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
@@ -184,11 +188,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
                             {'Token Price (USD)'}
                         </TableHeaderCell>
-                        {showNextRebalance && !!account ? (
-                            <TableHeaderCell size="sm">
-                                <div className="capitalize">{'MY HOLDINGS'}</div>
-                            </TableHeaderCell>
-                        ) : null}
+                        {/*{showNextRebalance && !!account ? (*/}
+                        {/*    <TableHeaderCell size="sm">*/}
+                        {/*        <div className="capitalize">{'MY HOLDINGS'}</div>*/}
+                        {/*    </TableHeaderCell>*/}
+                        {/*) : null}*/}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                     <tr>
@@ -526,10 +530,10 @@ const TokenRows: React.FC<
 > = ({
     side,
     tokenInfo,
-    quoteTokenSymbol,
+    // quoteTokenSymbol,
     leverage,
     address: poolAddress,
-    account,
+    // account,
     decimals,
     provider,
     onClickMintBurn,
@@ -634,20 +638,20 @@ const TokenRows: React.FC<
                     )}
                 </TableRowCell>
             ) : null}
-            {showNextRebalance && !!account ? (
-                <TableRowCell size={'sm'} className={styles}>
-                    <div className="flex">
-                        <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
-                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
-                    </div>
-                    <div className="flex">
-                        <Logo size="xs" ticker={quoteTokenSymbol as LogoTicker} className="mr-1 my-auto" />
-                        {tokenInfo.userHoldings === 0
-                            ? '-'
-                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}
-                    </div>
-                </TableRowCell>
-            ) : null}
+            {/*{showNextRebalance && !!account ? (*/}
+            {/*    <TableRowCell size={'sm'} className={styles}>*/}
+            {/*        <div className="flex">*/}
+            {/*            <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />*/}
+            {/*            {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}*/}
+            {/*        </div>*/}
+            {/*        <div className="flex">*/}
+            {/*            <Logo size="xs" ticker={quoteTokenSymbol as LogoTicker} className="mr-1 my-auto" />*/}
+            {/*            {tokenInfo.userHoldings === 0*/}
+            {/*                ? '-'*/}
+            {/*                : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}*/}
+            {/*        </div>*/}
+            {/*    </TableRowCell>*/}
+            {/*) : null}*/}
             <TableRowCell size={'sm'} className={styles}>
                 {showNextRebalance ? (
                     <div className="flex">
