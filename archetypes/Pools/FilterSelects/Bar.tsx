@@ -4,14 +4,14 @@ import { SearchInput } from '@components/General/SearchInput';
 import {
     BrowseAction,
     BrowseState,
-    RebalanceEnum,
-    MarketFilterEnum,
+    CollateralEnum,
     DeltaEnum,
     LeverageEnum,
-    CollateralEnum,
+    MarketFilterEnum,
+    RebalanceEnum,
 } from '../state';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';
 
 import FilterToggleIcon from '@public/img/general/filters.svg';
@@ -193,6 +193,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         />
                     </div>
                     <TWButtonGroup
+                        className="p-1"
                         value={state.deltaDenotation}
                         onClick={(option) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum })}
                         color="greyed"
@@ -226,6 +227,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         </div>
                         <div className="hidden lg:flex mx-4 flex-col">
                             <TWButtonGroup
+                                className="p-0.5"
                                 size="sm"
                                 value={state.deltaDenotation}
                                 onClick={(option) =>
@@ -243,12 +245,16 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             Don’t see the pool you’re after?
                         </div>
                         <div className="flex">
-                            <Button variant="primary" size="sm" className="mr-5">
-                                Display Alternative Pool
-                            </Button>
-                            <Button variant="primary" size="sm">
-                                Deploy New Pool
-                            </Button>
+                            <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
+                                <Button variant="primary" size="sm" className="mr-5 cursor-default">
+                                    Display Alternative Pool
+                                </Button>
+                            </TooltipSelector>
+                            <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
+                                <Button variant="primary" size="sm" className="cursor-default">
+                                    Deploy New Pool
+                                </Button>
+                            </TooltipSelector>
                         </div>
                     </div>
                 </div>
