@@ -7,7 +7,6 @@ import { CommitEnum } from '@tracer-protocol/pools-js';
  * Simple func to convert a number to a percentage by multiplying
  *  it by 100 and returning the string
  * Fixes the return to two decimal places.
- * @param
  * @returns 0.00% if the number is NaN < 0.001 for very small percentages and the percentage otherwise
  */
 export const toPercent: (value: number) => string = (value) => {
@@ -35,7 +34,6 @@ export const round: (num: number, decimalPlaces: number) => number = (num, decim
 
 /**
  * Returns a currency representation of a given ether BigNumber
- * @param num_ number to convert to currency
  * @returns returns the LocaleString representation of the value
  */
 export const etherToApproxCurrency: (num: BigNumber, decimals?: number) => string = (num, decimals = 2) => {
@@ -64,12 +62,26 @@ export const toApproxCurrency: (num_: BigNumber | number, precision?: number) =>
         num = (num_ as BigNumber)?.toNumber();
     }
     if (!num) {
-        // reject if num is falsey
+        // reject if num is faulty
         return '$0.00';
     }
     return num.toLocaleString('en-us', {
         style: 'currency',
         currency: 'USD',
+        minimumFractionDigits: precision ?? 2,
+    });
+};
+
+export const toApproxLocaleString: (num_: BigNumber | number, precision?: number) => string = (num_, precision) => {
+    let num = num_;
+    if (typeof num !== 'number' && num) {
+        num = (num_ as BigNumber)?.toNumber();
+    }
+    if (!num) {
+        // reject if num is faulty
+        return '0.00';
+    }
+    return num.toLocaleString('en-us', {
         minimumFractionDigits: precision ?? 2,
     });
 };

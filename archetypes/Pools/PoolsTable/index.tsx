@@ -2,7 +2,12 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
 import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
-import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '@libs/utils/converters';
+import {
+    calcPercentageDifference,
+    getPriceFeedUrl,
+    toApproxCurrency,
+    toApproxLocaleString,
+} from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
@@ -21,13 +26,13 @@ import { LinkOutlined } from '@ant-design/icons';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { useTheme } from '@context/ThemeContext';
 import styled from 'styled-components';
-
-import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import { StyledTooltip } from '@components/Tooltips';
 import { default as UpOrDownInner } from '@components/UpOrDown';
-import Info from '/public/img/general/info.svg';
+
+import Close from '@public/img/general/close.svg';
+import Info from '@public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
 import USDCIcon from '@public/img/logos/currencies/usdc.svg';
 
@@ -351,7 +356,9 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
                         <>
-                            <div>{toApproxCurrency(pool.nextTVL)}</div>
+                            <div className="flex items-center">
+                                <USDCIcon className="w-5 mr-1" /> {toApproxLocaleString(pool.nextTVL)}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDown
                                     oldValue={pool.tvl}
@@ -554,7 +561,10 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <>
                         <div className="flex">
-                            <div className="mr-1">{toApproxCurrency(tokenInfo.nextTvl)}</div>
+                            <div className="flex items-center mr-1">
+                                <USDCIcon className="w-5 mr-1" />
+                                {toApproxLocaleString(tokenInfo.nextTvl)}
+                            </div>
                             <UpOrDown
                                 oldValue={tokenInfo.tvl}
                                 newValue={tokenInfo.nextTvl}
@@ -601,22 +611,26 @@ const TokenRows: React.FC<
             </TableRowCell>
             <TableRowCell size={'sm'} className={styles}>
                 {showNextRebalance ? (
-                    toApproxCurrency(tokenInfo.nextTCRPrice, 3)
+                    <div className="flex items-center">
+                        <USDCIcon className="w-5 mr-1" />
+                        {toApproxLocaleString(tokenInfo.nextTCRPrice, 3)}
+                    </div>
                 ) : (
-                    <>
-                        <div className="flex">
-                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice, 3)}</div>
-                            <UpOrDown
-                                oldValue={antecedentUpkeepTokenInfo.tokenPrice}
-                                newValue={pastUpkeepTokenInfo.tokenPrice}
-                                deltaDenotation={deltaDenotation}
-                                poolTicker={poolTicker}
-                                tooltipMetric={UpOrDownTipMetric.TokenPrice}
-                                tokenMetricSide={side}
-                                showNextRebalance={showNextRebalance}
-                            />
+                    <div className="flex">
+                        <div className="flex items-center mr-1">
+                            <USDCIcon className="w-5 mr-1" />
+                            {toApproxLocaleString(pastUpkeepTokenInfo.tokenPrice, 3)}
                         </div>
-                    </>
+                        <UpOrDown
+                            oldValue={antecedentUpkeepTokenInfo.tokenPrice}
+                            newValue={pastUpkeepTokenInfo.tokenPrice}
+                            deltaDenotation={deltaDenotation}
+                            poolTicker={poolTicker}
+                            tooltipMetric={UpOrDownTipMetric.TokenPrice}
+                            tokenMetricSide={side}
+                            showNextRebalance={showNextRebalance}
+                        />
+                    </div>
                 )}
             </TableRowCell>
             {showNextRebalance ? (
