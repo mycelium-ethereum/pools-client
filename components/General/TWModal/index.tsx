@@ -69,7 +69,6 @@ const Wrapper = styled.div`
     padding-top: 1rem;
     padding-bottom: 5rem;
     text-align: center;
-    display: flex;
     justify-content: center;
     align-items: flex-end;
     min-height: 100vh;
