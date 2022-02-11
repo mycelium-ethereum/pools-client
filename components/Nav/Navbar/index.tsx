@@ -91,7 +91,7 @@ export const NavBarContent: React.FC<{
 
                 {/* DESKTOP */}
                 <span className="hidden xl:flex">
-                    <VersionToggle pushContentRight={!!setShowOnboardModal} route={route} />
+                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
@@ -103,7 +103,7 @@ export const NavBarContent: React.FC<{
                     <ThemeSwitcher />
                 </span>
 
-                <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} route={route} />
+                <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
                 <MobileMenu account={account ?? ''} />
             </div>
         </nav>
