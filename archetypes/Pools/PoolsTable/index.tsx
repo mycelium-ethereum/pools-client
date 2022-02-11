@@ -199,7 +199,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         {/* Pools  Cols */}
                         <TableHeaderCell colSpan={4} />
                         {showNextRebalance ? (
-                            <TableHeaderCell className="text-cool-gray-400">
+                            <TableHeaderCell className="text-cool-gray-400" size="sm">
                                 <div className="text-cool-gray-400 capitalize">{'Ends in'}</div>
                             </TableHeaderCell>
                         ) : null}
