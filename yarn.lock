@@ -2823,10 +2823,10 @@
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.0.2.tgz#e05a23bf6f919fc2aae47e1fd56dec9cf5698f28"
   integrity sha512-/AMXMwUkvTRWIUtp/sX/aObzhpTe1P0ThisvWqXovTj32eCneP6DAf+1Hq9ewlMQzTLpwN6Ns7RRIyYuEfDAmA==
 
-"@tracer-protocol/pools-js@2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.2.tgz#68b38121558684744b28131d24fcf1f56c019069"
-  integrity sha512-BVN8zfnV28Rkq+/jyNrOWRumbG21ZsAv4Kj9DGtTm4EDL9AZHDfB/GW+7d69vIS9FfCPBCpORdGMPTt7ULj3Yg==
+"@tracer-protocol/pools-js@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-2.0.3.tgz#8bc7f23535ffb504241f31c600571fd5605064f3"
+  integrity sha512-ZvhlWqEt+zxZnpMMcjMKNFHAEHeIPSvpgc85J7EjhJiaP1tGeS+JqBHYt8LG0NU+eJbo9ckqo3yKlJaLT2DaMQ==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "1.0.2"
     bignumber.js "^9.0.1"
