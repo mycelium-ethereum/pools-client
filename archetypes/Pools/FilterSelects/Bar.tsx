@@ -200,8 +200,10 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             />
                         </div>
                     </div>
-                    <div className="mt-5 md:mt-0">
-                        <div className="mb-2 text-center">Don’t see the pool you’re after?</div>
+                    <div className="mt-10 lg:mt-0 relative">
+                        <div className="absolute -top-2/3 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                            Don’t see the pool you’re after?
+                        </div>
                         <div className="flex">
                             <Button variant="primary" size="sm" className="mr-5">
                                 Display Alternative Pool
