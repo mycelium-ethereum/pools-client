@@ -97,7 +97,6 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             className="w-32 mt-auto"
                             options={Object.keys(LeverageEnum).map((key) => ({
                                 key: (LeverageEnum as any)[key],
-                                ticker: (key !== 'All' ? key : '') as LogoTicker,
                             }))}
                             onSelect={(val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })}
                         />
@@ -136,23 +135,26 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 </div>
 
                 <HiddenExpand className="lg:hidden" defaultHeight={0} open={state.filtersOpen}>
-                    <h3 className="mb-1 text-theme-text">Power Leverage</h3>
                     <div className="flex mb-5">
-                        <Dropdown
-                            value={state.leverageFilter}
-                            className="w-32 mt-auto mr-5"
-                            options={Object.keys(LeverageEnum).map((key) => ({
-                                key: (LeverageEnum as any)[key],
-                                ticker: (key !== 'All' ? key : '') as LogoTicker,
-                            }))}
-                            onSelect={(val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })}
-                        />
                         <SearchInput
-                            className="w-60"
+                            className="w-60 mt-auto mr-5"
                             placeholder="Search"
                             value={state.search}
                             onChange={(search) => dispatch({ type: 'setSearch', search })}
                         />
+                        <div>
+                            <h3 className="mb-1 text-theme-text">Power Leverage</h3>
+                            <Dropdown
+                                value={state.leverageFilter}
+                                className="w-32"
+                                options={Object.keys(LeverageEnum).map((key) => ({
+                                    key: (LeverageEnum as any)[key],
+                                }))}
+                                onSelect={(val) =>
+                                    dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })
+                                }
+                            />
+                        </div>
                     </div>
                     <TWButtonGroup
                         value={state.deltaDenotation}
