@@ -165,7 +165,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USD)'}</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
                                 <div>{'Skew'}</div>
@@ -183,7 +183,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             {'Side'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" className={'whitespace-nowrap w-2/12'}>
-                            {'TVL (USD)'}
+                            {'TVL'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap w-[12%]'}>
                             <EffectiveLeverageTip>
@@ -191,7 +191,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             </EffectiveLeverageTip>
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
-                            {'Token Price (USD)'}
+                            {'Token Price'}
                         </TableHeaderCell>
                         {/*{showNextRebalance && !!account ? (*/}
                         {/*    <TableHeaderCell size="sm">*/}
@@ -372,7 +372,9 @@ const PoolRow: React.FC<
                         </>
                     ) : (
                         <>
-                            <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
+                            <div className="flex items-center">
+                                <USDCIcon className="w-5 mr-1" /> {toApproxLocaleString(pool.pastUpkeep.tvl)}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDown
                                     oldValue={pool.antecedentUpkeep.tvl}
@@ -579,7 +581,10 @@ const TokenRows: React.FC<
                 ) : (
                     <>
                         <div className="flex">
-                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenBalance)}</div>
+                            <div className="flex items-center mr-1">
+                                <USDCIcon className="w-5 mr-1" />
+                                {toApproxLocaleString(pastUpkeepTokenInfo.tokenBalance)}
+                            </div>
                             <UpOrDown
                                 oldValue={antecedentUpkeepTokenInfo.tokenBalance}
                                 newValue={pastUpkeepTokenInfo.tokenBalance}
@@ -637,7 +642,10 @@ const TokenRows: React.FC<
                 <TableRowCell size={'sm'} className={styles}>
                     {tokenInfo.balancerPrice ? (
                         <>
-                            {toApproxCurrency(tokenInfo.balancerPrice, 3)}
+                            <div className="flex items-center">
+                                <USDCIcon className="w-5 mr-1" />
+                                {toApproxLocaleString(tokenInfo.balancerPrice, 3)}
+                            </div>
                             <LinkOutlined
                                 className="align-middle ml-1"
                                 onClick={() => {
@@ -647,7 +655,11 @@ const TokenRows: React.FC<
                         </>
                     ) : (
                         <>
-                            <NoBalancerPoolTip market={poolTicker}>-</NoBalancerPoolTip>
+                            <NoBalancerPoolTip market={poolTicker}>
+                                <div className="flex items-center">
+                                    <USDCIcon className="w-5 mr-1" />-
+                                </div>
+                            </NoBalancerPoolTip>
                         </>
                     )}
                 </TableRowCell>

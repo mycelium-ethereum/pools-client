@@ -57,8 +57,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Relative</div>
-                <ArrowDownIcon className="text-red-600 w-5.5" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-5.5" />
+                <ArrowDownIcon className="text-red-600 w-4" />
+                <ArrowDownIcon className="rotate-180 text-green-600 w-4" />
             </>
         ),
     },
@@ -67,8 +67,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Absolute</div>
-                <ArrowDownIcon className="text-red-600 w-5.5" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-5.5" />
+                <ArrowDownIcon className="text-red-600 w-4" />
+                <ArrowDownIcon className="rotate-180 text-green-600 w-4" />
             </>
         ),
     },
