@@ -57,8 +57,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Relative</div>
-                <ArrowDownIcon className="text-red-600 w-6" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-6" />
+                <ArrowDownIcon className="text-red-600 w-5.5" />
+                <ArrowDownIcon className="rotate-180 text-green-600 w-5.5" />
             </>
         ),
     },
@@ -67,8 +67,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Absolute</div>
-                <ArrowDownIcon className="text-red-600 w-6" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-6" />
+                <ArrowDownIcon className="text-red-600 w-5.5" />
+                <ArrowDownIcon className="rotate-180 text-green-600 w-5.5" />
             </>
         ),
     },
@@ -246,12 +246,12 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         </div>
                         <div className="flex">
                             <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                                <Button variant="primary" size="sm" className="mr-5 cursor-default">
+                                <Button variant="primary" size="sm" className="mr-5 cursor-default opacity-50">
                                     Display Alternative Pool
                                 </Button>
                             </TooltipSelector>
                             <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                                <Button variant="primary" size="sm" className="cursor-default">
+                                <Button variant="primary" size="sm" className="cursor-default opacity-50">
                                     Deploy New Pool
                                 </Button>
                             </TooltipSelector>
