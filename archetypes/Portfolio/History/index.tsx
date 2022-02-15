@@ -144,19 +144,19 @@ const CommitRow: React.FC<
     }
 > = ({
     date,
-    tokenAmount,
-    tokenPrice,
-    tokenSymbol,
+    tokenInAmount,
+    price,
+    tokenOutSymbol,
     index,
     type,
     provider,
-    tokenAddress,
+    tokenOutAddress,
     tokenDecimals,
-    collateralAmount,
-    collateralSymbol,
+    fee,
     transactionHashIn,
     transactionHashOut,
 }) => {
+    console.log(typeof price);
     const timeString = new Intl.DateTimeFormat('en-AU', {
         hour: 'numeric',
         minute: 'numeric',
@@ -170,43 +170,35 @@ const CommitRow: React.FC<
             </TableRowCell>
             <TableRowCell>
                 <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="inline my-auto mr-2" />
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOutSymbol)} className="inline my-auto mr-2" />
                     <div>
                         <div className="flex">
                             <div>
-                                {tokenSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenSymbol.slice(3)]}
+                                {tokenOutSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
                             </div>
                             &nbsp;
                             <div className={type === 'LongMint' || type === 'LongBurn' ? 'green' : 'red'}>
                                 {type === 'LongMint' || type === 'LongBurn' ? 'Long' : 'Short'}
                             </div>
                         </div>
-                        {tokenSymbol}
+                        {tokenOutSymbol}
                     </div>
                 </div>
             </TableRowCell>
             {type === 'LongBurn' || type === 'ShortBurn' ? (
                 <>
                     <TableRowCell>
-                        <div>{tokenAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">
-                            at {toApproxCurrency(tokenPrice)} {collateralSymbol}/token
-                        </div>
+                        <div>{tokenInAmount.toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">at {toApproxCurrency(price)} USDC/token</div>
                     </TableRowCell>
-                    <TableRowCell>
-                        {toApproxCurrency(collateralAmount)} {collateralSymbol}
-                    </TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee)} USDC</TableRowCell>
                 </>
             ) : (
                 <>
+                    <TableRowCell>{toApproxCurrency(fee)} USDC</TableRowCell>
                     <TableRowCell>
-                        {toApproxCurrency(collateralAmount)} {collateralSymbol}
-                    </TableRowCell>
-                    <TableRowCell>
-                        <div>{tokenAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">
-                            at {toApproxCurrency(tokenPrice)} {collateralSymbol}/token
-                        </div>
+                        <div>{tokenInAmount.toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">at {toApproxCurrency(price)} USDC/token</div>
                     </TableRowCell>
                 </>
             )}
@@ -214,13 +206,13 @@ const CommitRow: React.FC<
                 <Actions
                     provider={provider as ethers.providers.JsonRpcProvider}
                     token={{
-                        address: tokenAddress,
+                        address: tokenOutAddress,
                         decimals: tokenDecimals,
-                        symbol: tokenSymbol,
+                        symbol: tokenOutSymbol,
                     }}
                     arbiscanTarget={{
                         type: ArbiscanEnum.token,
-                        target: tokenAddress,
+                        target: tokenOutAddress,
                     }}
                     otherActions={[
                         {
