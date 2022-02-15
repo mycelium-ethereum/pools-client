@@ -10,7 +10,7 @@ export default (() => {
     return (
         <Container>
             <GasPriceTooltip
-                network={network ? networkConfig[network]?.name ?? 'Unkwown' : 'Unknown'}
+                network={network ? networkConfig[network]?.name ?? 'Unknown' : 'Unknown'}
                 wallet={wallet?.name ?? 'Unknown'}
             >
                 <Wrapper>

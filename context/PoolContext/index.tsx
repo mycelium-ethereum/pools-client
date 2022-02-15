@@ -78,7 +78,13 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     // this can be changed to select all or a specific list
                     let pools: PoolList | undefined = poolsState.poolsLists[network as KnownNetwork]?.Tracer[0];
                     if (!pools) {
-                        const poolsLists = await new PoolListService(network).getAll();
+                        const poolsLists = await new PoolListService(network)
+                            .getAll()
+                            .catch((err) => console.error(err));
+                        if (!poolsLists) {
+                            console.error('Failed to initialise pools: poolsList undefined');
+                            return;
+                        }
                         pools = poolsLists.Tracer[0] ?? [];
                         poolsDispatch({ type: 'setPoolLists', network: network as KnownNetwork, lists: poolsLists });
                     }

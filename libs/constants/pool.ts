@@ -44,14 +44,14 @@ export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
             verified:
-                'https://gist.githubusercontent.com/dospore/8194a94a3d3893263737e48c101adf07/raw/e661bad9f6ab9004164777967c731ccb8d17f2f9/mainnet.json',
+                'https://raw.githubusercontent.com/tracer-protocol/pools-js/release/v2/src/data/static/arbitrum.json',
         },
         External: [],
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
             verified:
-                'https://gist.githubusercontent.com/dospore/8ecc737874cf1726524a922d1c463683/raw/0fbe7c533a79ca479f9c24d76d0701fc2a36da88/arb-rinkeby.json',
+                'https://raw.githubusercontent.com/tracer-protocol/pools-js/release/v2/src/data/static/arb-rinkeby.json'
         },
         External: [],
     },
