@@ -3,15 +3,14 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { ARBITRUM, CommitActionEnum, CommitToQueryFocusMap } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
-import fetchTradeHistory, { TradeHistory } from '@libs/utils/tradeHistoryAPI';
+import fetchTradeHistory, { COMMIT_TYPES_V2, TradeHistory } from '@libs/utils/tradeHistoryAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import Loading from '@components/General/Loading';
-import { marketSymbolToAssetName } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Actions from '@components/TokenActions';
 
@@ -35,12 +34,11 @@ const historyOptions = [
 ];
 
 export default (({ focus }) => {
-    const router = useRouter();
-    const { provider, account, network } = useWeb3();
+    const [loading, setLoading] = useState(false);
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
     const [totalRecords, setTotalRecords] = useState<number>(0);
-    const [loading, setLoading] = useState(false);
-
+    const router = useRouter();
+    const { provider, account, network } = useWeb3();
     const { setPage, page } = usePagination(tradeHistory);
 
     useEffect(() => {
@@ -60,7 +58,52 @@ export default (({ focus }) => {
         }
     }, [focus, page, account, network]);
 
-    const isMintHistory = focus === CommitActionEnum.mint;
+    const HistoryTableHeader = (focus: CommitActionEnum) => {
+        if (focus === CommitActionEnum.mint) {
+            return (
+                <TableHeader>
+                    <TableHeaderCell>Time / Date</TableHeaderCell>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell>Amount</TableHeaderCell>
+                    <TableHeaderCell>Tokens / Price</TableHeaderCell>
+                    <TableHeaderCell>Protocol Fee</TableHeaderCell>
+                    <TableHeaderCell />
+                </TableHeader>
+            );
+        } else if (focus === CommitActionEnum.burn) {
+            return (
+                <TableHeader>
+                    <TableHeaderCell>Time / Date</TableHeaderCell>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell>Amount / Price</TableHeaderCell>
+                    <TableHeaderCell>Return</TableHeaderCell>
+                    <TableHeaderCell>Fee</TableHeaderCell>
+                    <TableHeaderCell />
+                </TableHeader>
+            );
+        } else if (focus === CommitActionEnum.flip) {
+            return (
+                <TableHeader>
+                    <tr>
+                        <TableHeaderCell>Time / Date</TableHeaderCell>
+                        <TableHeaderCell>From</TableHeaderCell>
+                        <TableHeaderCell />
+                        <TableHeaderCell>To</TableHeaderCell>
+                        <TableHeaderCell />
+                        <TableHeaderCell>Fee</TableHeaderCell>
+                    </tr>
+                    <tr>
+                        <TableHeaderCell />
+                        <TableHeaderCell>Token / Price</TableHeaderCell>
+                        <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell>Token / Price</TableHeaderCell>
+                        <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell />
+                    </tr>
+                </TableHeader>
+            );
+        }
+    };
 
     return (
         <div className="bg-theme-background rounded-xl shadow mt-5 p-5">
@@ -75,18 +118,12 @@ export default (({ focus }) => {
                             },
                         })
                     }
-                    color={'tracer'}
+                    color="tracer"
                     options={historyOptions}
                 />
             </div>
             <Table>
-                <TableHeader>
-                    <TableHeaderCell>Time / Date</TableHeaderCell>
-                    <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell>Amount</TableHeaderCell>
-                    <TableHeaderCell>{isMintHistory ? 'Price' : 'Return'}</TableHeaderCell>
-                    <TableHeaderCell>{/* Empty header for buttons column *!/ */}</TableHeaderCell>
-                </TableHeader>
+                {HistoryTableHeader(focus)}
                 {loading ? (
                     <tr>
                         <td colSpan={5}>
@@ -102,7 +139,9 @@ export default (({ focus }) => {
                                 <td colSpan={5}>
                                     <div className="my-20 text-center">
                                         <NoQueued className="mx-auto mb-5" />
-                                        <div className="text-cool-gray-500">You have no history.</div>
+                                        <div className="text-cool-gray-500">
+                                            You have no {router.query.focus} history.
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
@@ -147,6 +186,7 @@ const CommitRow: React.FC<
     date,
     tokenInAmount,
     price,
+    fee,
     tokenOutSymbol,
     index,
     type,
@@ -161,31 +201,115 @@ const CommitRow: React.FC<
         minute: 'numeric',
     }).format(new Date(date * 1000));
     const dateString = new Intl.DateTimeFormat('en-AU').format(new Date(date * 1000));
-    return (
-        <TableRow key={index} rowNumber={index}>
-            <TableRowCell>
-                <div>{timeString}</div>
-                <div className="text-cool-gray-500">{dateString}</div>
-            </TableRowCell>
-            <TableRowCell>
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOutSymbol)} className="inline my-auto mr-2" />
-                    <div>
-                        <div className="flex">
+
+    const HistoryTableRow = () => {
+        if (type === COMMIT_TYPES_V2.LONG_MINT || type === COMMIT_TYPES_V2.SHORT_MINT) {
+            return (
+                <TableRow key={index} rowNumber={index}>
+                    {/*Time / Date*/}
+                    <TableRowCell>
+                        <div>{timeString}</div>
+                        <div className="text-cool-gray-500">{dateString}</div>
+                    </TableRowCell>
+                    {/*Token*/}
+                    <TableRowCell>
+                        <div className="flex my-auto">
+                            <Logo
+                                size="lg"
+                                ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
+                                className="inline my-auto mr-2"
+                            />
                             <div>
-                                {tokenOutSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
-                            </div>
-                            &nbsp;
-                            <div className={type === 'LongMint' || type === 'LongBurn' ? 'green' : 'red'}>
-                                {type === 'LongMint' || type === 'LongBurn' ? 'Long' : 'Short'}
+                                <div className="flex">
+                                    <div>
+                                        {tokenOutSymbol.split('-')[0][0]}-
+                                        {marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
+                                    </div>
+                                    &nbsp;
+                                    <div className={type === COMMIT_TYPES_V2.LONG_MINT ? 'green' : 'red'}>
+                                        {type === COMMIT_TYPES_V2.LONG_MINT ? 'Long' : 'Short'}
+                                    </div>
+                                </div>
+                                {tokenOutSymbol}
                             </div>
                         </div>
-                        {tokenOutSymbol}
-                    </div>
-                </div>
-            </TableRowCell>
-            {type === 'LongBurn' || type === 'ShortBurn' ? (
-                <>
+                    </TableRowCell>
+                    {/*Amount*/}
+                    <TableRowCell>
+                        {toApproxCurrency(
+                            new BigNumber(ethers.utils.formatEther(price)).times(
+                                new BigNumber(ethers.utils.formatEther(tokenInAmount)),
+                            ),
+                        )}
+                    </TableRowCell>
+                    {/*Tokens / Price*/}
+                    <TableRowCell>
+                        <div>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(new BigNumber(ethers.utils.formatEther(price)))} USD/token
+                        </div>
+                    </TableRowCell>
+                    {/*Protocol Fee*/}
+                    <TableRowCell>{toApproxCurrency(new BigNumber(ethers.utils.formatEther(fee)))} USDC</TableRowCell>
+                    <TableRowCell>
+                        <Actions
+                            provider={provider as ethers.providers.JsonRpcProvider}
+                            token={{
+                                address: tokenOutAddress,
+                                decimals: tokenDecimals,
+                                symbol: tokenOutSymbol,
+                            }}
+                            arbiscanTarget={{
+                                type: ArbiscanEnum.token,
+                                target: tokenOutAddress,
+                            }}
+                            otherActions={[
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashIn,
+                                    logo: ARBITRUM,
+                                    text: 'View Commit on Arbiscan',
+                                },
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashOut,
+                                    logo: ARBITRUM,
+                                    text: 'View Upkeep on Arbiscan',
+                                },
+                            ]}
+                        />
+                    </TableRowCell>
+                </TableRow>
+            );
+        } else if (type === COMMIT_TYPES_V2.LONG_BURN || type === COMMIT_TYPES_V2.SHORT_BURN) {
+            return (
+                <TableRow key={index} rowNumber={index}>
+                    <TableRowCell>
+                        <div>{timeString}</div>
+                        <div className="text-cool-gray-500">{dateString}</div>
+                    </TableRowCell>
+                    <TableRowCell>
+                        <div className="flex my-auto">
+                            <Logo
+                                size="lg"
+                                ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
+                                className="inline my-auto mr-2"
+                            />
+                            <div>
+                                <div className="flex">
+                                    <div>
+                                        {tokenOutSymbol.split('-')[0][0]}-
+                                        {marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
+                                    </div>
+                                    &nbsp;
+                                    <div className={type === COMMIT_TYPES_V2.LONG_BURN ? 'green' : 'red'}>
+                                        {type === COMMIT_TYPES_V2.LONG_BURN ? 'Long' : 'Short'}
+                                    </div>
+                                </div>
+                                {tokenOutSymbol}
+                            </div>
+                        </div>
+                    </TableRowCell>
                     <TableRowCell>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
                         {toApproxCurrency(
@@ -194,41 +318,38 @@ const CommitRow: React.FC<
                             ),
                         )}
                     </TableRowCell>
-                </>
-            ) : (
-                <>
-                    <TableRowCell>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</TableRowCell>
-                    <TableRowCell>{toApproxCurrency(new BigNumber(ethers.utils.formatEther(price)))}</TableRowCell>
-                </>
-            )}
-            <TableRowCell>
-                <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
-                    token={{
-                        address: tokenOutAddress,
-                        decimals: tokenDecimals,
-                        symbol: tokenOutSymbol,
-                    }}
-                    arbiscanTarget={{
-                        type: ArbiscanEnum.token,
-                        target: tokenOutAddress,
-                    }}
-                    otherActions={[
-                        {
-                            type: ArbiscanEnum.txn,
-                            target: transactionHashIn,
-                            logo: ARBITRUM,
-                            text: 'View Commit on Arbiscan',
-                        },
-                        {
-                            type: ArbiscanEnum.txn,
-                            target: transactionHashOut,
-                            logo: ARBITRUM,
-                            text: 'View Upkeep on Arbiscan',
-                        },
-                    ]}
-                />
-            </TableRowCell>
-        </TableRow>
-    );
+                    <TableRowCell>
+                        <Actions
+                            provider={provider as ethers.providers.JsonRpcProvider}
+                            token={{
+                                address: tokenOutAddress,
+                                decimals: tokenDecimals,
+                                symbol: tokenOutSymbol,
+                            }}
+                            arbiscanTarget={{
+                                type: ArbiscanEnum.token,
+                                target: tokenOutAddress,
+                            }}
+                            otherActions={[
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashIn,
+                                    logo: ARBITRUM,
+                                    text: 'View Commit on Arbiscan',
+                                },
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashOut,
+                                    logo: ARBITRUM,
+                                    text: 'View Upkeep on Arbiscan',
+                                },
+                            ]}
+                        />
+                    </TableRowCell>
+                </TableRow>
+            );
+        }
+    };
+
+    return <>{HistoryTableRow()}</>;
 };
