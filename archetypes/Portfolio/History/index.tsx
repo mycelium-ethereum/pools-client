@@ -17,6 +17,7 @@ import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
 import { SourceType } from '@libs/utils/reputationAPI';
+import BigNumber from 'bignumber.js';
 
 const historyOptions = [
     {
@@ -82,8 +83,8 @@ export default (({ focus }) => {
                 <TableHeader>
                     <TableHeaderCell>Time / Date</TableHeaderCell>
                     <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell>{isMintHistory ? 'Amount' : 'Amount / Price'}</TableHeaderCell>
-                    <TableHeaderCell>{isMintHistory ? 'Tokens / Price' : 'Return'}</TableHeaderCell>
+                    <TableHeaderCell>Amount</TableHeaderCell>
+                    <TableHeaderCell>{isMintHistory ? 'Price' : 'Return'}</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column *!/ */}</TableHeaderCell>
                 </TableHeader>
                 {loading ? (
@@ -152,11 +153,9 @@ const CommitRow: React.FC<
     provider,
     tokenOutAddress,
     tokenDecimals,
-    fee,
     transactionHashIn,
     transactionHashOut,
 }) => {
-    console.log(typeof price);
     const timeString = new Intl.DateTimeFormat('en-AU', {
         hour: 'numeric',
         minute: 'numeric',
@@ -187,19 +186,19 @@ const CommitRow: React.FC<
             </TableRowCell>
             {type === 'LongBurn' || type === 'ShortBurn' ? (
                 <>
+                    <TableRowCell>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
-                        <div>{tokenInAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(price)} USDC/token</div>
+                        {toApproxCurrency(
+                            new BigNumber(ethers.utils.formatEther(price)).times(
+                                new BigNumber(ethers.utils.formatEther(tokenInAmount)),
+                            ),
+                        )}
                     </TableRowCell>
-                    <TableRowCell>{toApproxCurrency(fee)} USDC</TableRowCell>
                 </>
             ) : (
                 <>
-                    <TableRowCell>{toApproxCurrency(fee)} USDC</TableRowCell>
-                    <TableRowCell>
-                        <div>{tokenInAmount.toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">at {toApproxCurrency(price)} USDC/token</div>
-                    </TableRowCell>
+                    <TableRowCell>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(new BigNumber(ethers.utils.formatEther(price)))}</TableRowCell>
                 </>
             )}
             <TableRowCell>

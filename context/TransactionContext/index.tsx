@@ -68,7 +68,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
         router.push({
             pathname: '/portfolio/commits',
             query: {
-                focus: focus === 'Mint' ? 'mints' : 'burns',
+                focus: focus === 'Mint' ? 'mint' : 'burn',
             },
         });
 

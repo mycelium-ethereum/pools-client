@@ -1,5 +1,4 @@
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import BigNumber from 'bignumber.js';
 
 // Base API URL
 // const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
@@ -43,13 +42,13 @@ export type TradeHistory = {
     tokenInAddress: string;
     tokenInSymbol: string;
     tokenInName: string;
-    tokenInAmount: BigNumber;
-    price: BigNumber;
-    fee: BigNumber;
+    tokenInAmount: string;
+    price: string;
+    fee: string;
     tokenOutAddress: string;
     tokenOutSymbol: string;
     tokenOutName: string;
-    tokenOutAmount: BigNumber;
+    tokenOutAmount: string;
     transactionHashIn: string;
     transactionHashOut: string;
 };
@@ -91,13 +90,13 @@ const fetchTradeHistory: (params: {
                     tokenInAddress: row.tokenInAddress,
                     tokenInSymbol: row.tokenInSymbol,
                     tokenInName: row.tokenInName,
-                    tokenInAmount: new BigNumber(row.tokenInAmount),
-                    price: new BigNumber(row.price),
-                    fee: new BigNumber(row.fee),
+                    tokenInAmount: row.tokenInAmount,
+                    price: row.price,
+                    fee: row.fee,
                     tokenOutAddress: row.tokenOutAddress,
                     tokenOutSymbol: row.tokenOutSymbol,
                     tokenOutName: row.tokenOutName,
-                    tokenOutAmount: new BigNumber(row.tokenOutAmount),
+                    tokenOutAmount: row.tokenOutAmount,
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
                 });
