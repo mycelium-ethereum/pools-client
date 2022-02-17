@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useMemo, useEffect } from 'react';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import Gas from './Gas';
@@ -7,7 +7,9 @@ import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
-import { usePool } from '@context/PoolContext';
+import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import { usePool, usePoolActions } from '@context/PoolContext';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
 import styled from 'styled-components';
@@ -32,11 +34,35 @@ const TRADE_OPTIONS = [
 export default styled((({ onClose, className }) => {
     // TODO: dependent on auto-claim feature
     // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
-    const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
-    const { poolInstance: pool, userBalances } = usePool(swapState.selectedPool);
-    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
+    const [mintGasFee, setMintGasFee] = useState<string | undefined>('0');
+    const [commitType, setCommitType] = useState<CommitEnum>(0);
 
-    const amountBN = useBigNumber(swapState.amount);
+    const { account } = useWeb3();
+    const { handleConnect } = useWeb3Actions();
+    const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
+    const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};
+    const { poolInstance: pool, userBalances } = usePool(selectedPool);
+    const { commit, approve, commitGasFee } = usePoolActions();
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
+    const amountBN = useBigNumber(amount);
+
+    useMemo(async () => {
+        if (commitGasFee) {
+            const fee = await commitGasFee(selectedPool ?? '', commitType, amountBN);
+            setMintGasFee(fee);
+        }
+    }, [selectedPool, commitType, amountBN]);
+
+    useEffect(() => {
+        if (commitAction === CommitActionEnum.mint) {
+            setCommitType(side === SideEnum.long ? CommitEnum.longMint : CommitEnum.shortMint);
+        } else if (commitAction === CommitActionEnum.flip) {
+            setCommitType(side === SideEnum.long ? CommitEnum.longBurnShortMint : CommitEnum.shortBurnLongMint);
+        } else {
+            setCommitType(side === SideEnum.long ? CommitEnum.longBurn : CommitEnum.shortBurn);
+        }
+    }, [commitAction]);
 
     return (
         <div className={className}>
@@ -45,7 +71,7 @@ export default styled((({ onClose, className }) => {
 
             <Header>
                 <TWButtonGroupStyled
-                    value={swapState?.commitAction ?? CommitActionEnum.mint}
+                    value={commitAction ?? CommitActionEnum.mint}
                     size={'lg'}
                     color={'tracer'}
                     onClick={(val) => {
@@ -79,14 +105,28 @@ export default styled((({ onClose, className }) => {
 
             <Summary
                 pool={pool}
-                showBreakdown={!swapState.invalidAmount.isInvalid}
-                isLong={swapState.side === SideEnum.long}
+                showBreakdown={!invalidAmount.isInvalid}
+                isLong={side === SideEnum.long}
                 amount={amountBN}
                 receiveIn={receiveIn}
-                commitAction={CommitActionEnum[swapState.commitAction]}
+                commitAction={CommitActionEnum[commitAction]}
+                inputAmount={Number(amount)}
+                mintGasFee={mintGasFee}
             />
 
-            <ExchangeButton onClose={onClose} swapState={swapState} swapDispatch={swapDispatch} />
+            <ExchangeButton
+                onClose={onClose}
+                swapState={swapState}
+                swapDispatch={swapDispatch}
+                account={account}
+                handleConnect={handleConnect}
+                userBalances={userBalances}
+                approve={approve}
+                pool={pool}
+                amountBN={amountBN}
+                commit={commit}
+                commitType={commitType}
+            />
         </div>
     );
 }) as React.FC<{

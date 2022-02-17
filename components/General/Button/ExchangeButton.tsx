@@ -1,26 +1,57 @@
 import React from 'react';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { SwapAction, SwapState, useBigNumber } from '@context/SwapContext';
-import { usePool, usePoolActions } from '@context/PoolContext';
-import { SideEnum, CommitActionEnum } from '@libs/constants';
-import { CommitEnum } from '@tracer-protocol/pools-js';
+import { SwapAction, SwapState } from '@context/SwapContext';
+import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
+import { BigNumber } from 'bignumber.js';
+import { AggregateBalances } from '@libs/types/General';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 
-const ExchangeButton: React.FC<{
+type ExchangeButton = {
     onClose: () => void;
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
-}> = ({ onClose, swapState, swapDispatch }) => {
-    const { account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
-    const { selectedPool, side, amount, invalidAmount, commitAction } = swapState;
+    account?: string;
+    handleConnect: () => void;
+    userBalances: UserBalances;
+    approve?: (selectedPool: string, symbol: string) => void;
+    pool: Pool;
+    amountBN: BigNumber;
+    commit?: (selectedPool: string, commitType: number, amount: BigNumber, options?: Options) => void;
+    commitType: CommitEnum;
+};
 
-    const amountBN = useBigNumber(amount);
+type UserBalances = {
+    shortToken: TokenBalance;
+    longToken: TokenBalance;
+    quoteToken: TokenBalance;
+    aggregateBalances: AggregateBalances;
+};
 
-    const { userBalances, poolInstance: pool } = usePool(selectedPool);
+type TokenBalance = {
+    approvedAmount: BigNumber;
+    balance: BigNumber;
+};
 
-    const { commit, approve } = usePoolActions();
+type Options = {
+    onSuccess?: (...args: any) => any;
+};
+
+const ExchangeButton: React.FC<ExchangeButton> = ({
+    onClose,
+    swapState,
+    swapDispatch,
+    account,
+    handleConnect,
+    userBalances,
+    approve,
+    pool,
+    amountBN,
+    commit,
+    commitType,
+}) => {
+    const { selectedPool, invalidAmount, commitAction } = swapState;
 
     if (!account) {
         return (
@@ -67,19 +98,10 @@ const ExchangeButton: React.FC<{
                 variant="primary"
                 disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}
                 onClick={(_e) => {
-                    let commitType;
                     if (!commit) {
                         return;
                     }
-                    if (commitAction === CommitActionEnum.mint) {
-                        commitType = side === SideEnum.long ? CommitEnum.longMint : CommitEnum.shortMint;
-                    } else if (commitAction === CommitActionEnum.flip) {
-                        // actionType === CommitActionEnum.burn
-                        commitType =
-                            side === SideEnum.long ? CommitEnum.longBurnShortMint : CommitEnum.shortBurnLongMint;
-                    } else {
-                        commitType = side === SideEnum.long ? CommitEnum.longBurn : CommitEnum.shortBurn;
-                    }
+
                     commit(selectedPool ?? '', commitType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
