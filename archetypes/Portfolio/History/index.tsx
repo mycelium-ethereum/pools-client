@@ -16,7 +16,6 @@ import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
 import { SourceType } from '@libs/utils/reputationAPI';
-import BigNumber from 'bignumber.js';
 
 const historyOptions = [
     {
@@ -188,10 +187,12 @@ const CommitRow: React.FC<
     price,
     fee,
     tokenOutSymbol,
+    tokenInSymbol,
     index,
     type,
     provider,
     tokenOutAddress,
+    tokenInAddress,
     tokenDecimals,
     transactionHashIn,
     transactionHashOut,
@@ -236,21 +237,17 @@ const CommitRow: React.FC<
                     </TableRowCell>
                     {/*Amount*/}
                     <TableRowCell>
-                        {toApproxCurrency(
-                            new BigNumber(ethers.utils.formatEther(price)).times(
-                                new BigNumber(ethers.utils.formatEther(tokenInAmount)),
-                            ),
-                        )}
+                        {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))}
                     </TableRowCell>
                     {/*Tokens / Price*/}
                     <TableRowCell>
-                        <div>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</div>
+                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            at {toApproxCurrency(new BigNumber(ethers.utils.formatEther(price)))} USD/token
+                            at {toApproxCurrency(price.toNumber() / 1e18)} USD/token
                         </div>
                     </TableRowCell>
                     {/*Protocol Fee*/}
-                    <TableRowCell>{toApproxCurrency(new BigNumber(ethers.utils.formatEther(fee)))} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
@@ -292,43 +289,39 @@ const CommitRow: React.FC<
                         <div className="flex my-auto">
                             <Logo
                                 size="lg"
-                                ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
+                                ticker={tokenSymbolToLogoTicker(tokenInSymbol)}
                                 className="inline my-auto mr-2"
                             />
                             <div>
                                 <div className="flex">
                                     <div>
-                                        {tokenOutSymbol.split('-')[0][0]}-
-                                        {marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
+                                        {tokenInSymbol.split('-')[0][0]}-
+                                        {marketSymbolToAssetName[tokenInSymbol.slice(3)]}
                                     </div>
                                     &nbsp;
                                     <div className={type === COMMIT_TYPES_V2.LONG_BURN ? 'green' : 'red'}>
                                         {type === COMMIT_TYPES_V2.LONG_BURN ? 'Long' : 'Short'}
                                     </div>
                                 </div>
-                                {tokenOutSymbol}
+                                {tokenInSymbol}
                             </div>
                         </div>
                     </TableRowCell>
-                    <TableRowCell>{(+ethers.utils.formatEther(tokenInAmount)).toFixed(2)} tokens</TableRowCell>
+                    <TableRowCell>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</TableRowCell>
                     <TableRowCell>
-                        {toApproxCurrency(
-                            new BigNumber(ethers.utils.formatEther(price)).times(
-                                new BigNumber(ethers.utils.formatEther(tokenInAmount)),
-                            ),
-                        )}
+                        {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))}
                     </TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
                             token={{
-                                address: tokenOutAddress,
+                                address: tokenInAddress,
                                 decimals: tokenDecimals,
-                                symbol: tokenOutSymbol,
+                                symbol: tokenInSymbol,
                             }}
                             arbiscanTarget={{
                                 type: ArbiscanEnum.token,
-                                target: tokenOutAddress,
+                                target: tokenInAddress,
                             }}
                             otherActions={[
                                 {
