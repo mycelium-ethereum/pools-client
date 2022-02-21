@@ -90,6 +90,7 @@ export default (({ focus }) => {
                         <TableHeaderCell>To</TableHeaderCell>
                         <TableHeaderCell />
                         <TableHeaderCell>Fee</TableHeaderCell>
+                        <TableHeaderCell />
                     </tr>
                     <tr>
                         <TableHeaderCell />
@@ -97,6 +98,7 @@ export default (({ focus }) => {
                         <TableHeaderCell>Amount</TableHeaderCell>
                         <TableHeaderCell>Token / Price</TableHeaderCell>
                         <TableHeaderCell>Amount</TableHeaderCell>
+                        <TableHeaderCell />
                         <TableHeaderCell />
                     </tr>
                 </TableHeader>
@@ -184,15 +186,16 @@ const CommitRow: React.FC<
 > = ({
     date,
     tokenInAmount,
+    tokenOutAmount,
     price,
     fee,
-    tokenOutSymbol,
     tokenInSymbol,
+    tokenOutSymbol,
     index,
     type,
     provider,
-    tokenOutAddress,
     tokenInAddress,
+    tokenOutAddress,
     tokenDecimals,
     transactionHashIn,
     transactionHashOut,
@@ -307,10 +310,92 @@ const CommitRow: React.FC<
                             </div>
                         </div>
                     </TableRowCell>
-                    <TableRowCell>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</TableRowCell>
+                    <TableRowCell>
+                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">
+                            at {toApproxCurrency(price.toNumber() / 1e18)} USD/token
+                        </div>
+                    </TableRowCell>
                     <TableRowCell>
                         {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))}
                     </TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
+                    <TableRowCell>
+                        <Actions
+                            provider={provider as ethers.providers.JsonRpcProvider}
+                            token={{
+                                address: tokenInAddress,
+                                decimals: tokenDecimals,
+                                symbol: tokenInSymbol,
+                            }}
+                            arbiscanTarget={{
+                                type: ArbiscanEnum.token,
+                                target: tokenInAddress,
+                            }}
+                            otherActions={[
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashIn,
+                                    logo: ARBITRUM,
+                                    text: 'View Commit on Arbiscan',
+                                },
+                                {
+                                    type: ArbiscanEnum.txn,
+                                    target: transactionHashOut,
+                                    logo: ARBITRUM,
+                                    text: 'View Upkeep on Arbiscan',
+                                },
+                            ]}
+                        />
+                    </TableRowCell>
+                </TableRow>
+            );
+        } else if (type === COMMIT_TYPES_V2.LONG_BURN_SHORT_MINT || type === COMMIT_TYPES_V2.SHORT_BURN_LONG_MINT) {
+            return (
+                <TableRow key={index} rowNumber={index}>
+                    <TableRowCell>
+                        <div>{timeString}</div>
+                        <div className="text-cool-gray-500">{dateString}</div>
+                    </TableRowCell>
+                    <TableRowCell>
+                        <div className="flex my-auto">
+                            <Logo
+                                size="lg"
+                                ticker={tokenSymbolToLogoTicker(tokenInSymbol)}
+                                className="inline my-auto mr-2"
+                            />
+                            <div>
+                                <div>{tokenInSymbol}</div>
+                                <div className="text-cool-gray-500">{toApproxCurrency(price.toNumber() / 1e18)}</div>
+                            </div>
+                        </div>
+                    </TableRowCell>
+                    <TableRowCell>
+                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">
+                            {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))} USDC
+                        </div>
+                    </TableRowCell>
+                    <TableRowCell>
+                        <div className="flex my-auto">
+                            <Logo
+                                size="lg"
+                                ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
+                                className="inline my-auto mr-2"
+                            />
+                            <div>
+                                <div>{tokenOutSymbol}</div>
+                                <div className="text-cool-gray-500">{toApproxCurrency(price.toNumber() / 1e18)}</div>
+                            </div>
+                        </div>
+                    </TableRowCell>
+                    <TableRowCell>
+                        <div>{(tokenOutAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div className="text-cool-gray-500">
+                            {toApproxCurrency((price.toNumber() / 1e18) * (tokenOutAmount.toNumber() / 1e18))} USDC
+                        </div>
+                    </TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
