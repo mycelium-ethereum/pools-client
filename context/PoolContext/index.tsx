@@ -478,7 +478,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         );
 
         const formattedMintGasEstimate = ethers.utils.formatUnits(mintGasEstimate);
-        const weiUnitPriceUSD = poolsState?.pools[pool]?.poolInstance?.lastPrice.div(1000000000);
+        const weiUnitPriceUSD = poolsState?.pools[pool]?.poolInstance?.lastPrice.div(10 ** 18);
         const mintGasPriceInUSD = weiUnitPriceUSD.multipliedBy(formattedMintGasEstimate);
         const mintGasPriceInUSDtoNumber = mintGasPriceInUSD.toNumber();
         const commitGasFee = mintGasPriceInUSDtoNumber.toFixed(20);
