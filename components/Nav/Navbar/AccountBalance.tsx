@@ -28,7 +28,7 @@ export default (({ hide, className }) => {
     const balance = useBalance();
 
     return (
-        <div className={classNames('text-white', hide ? 'hidden' : 'block', className ?? '')}>
+        <div className={classNames('whitespace-nowrap text-white', hide ? 'hidden' : 'block', className ?? '')}>
             {pendingCount > 0 ? (
                 <div className="flex">
                     <div className="w-8 mx-2">
