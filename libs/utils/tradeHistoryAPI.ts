@@ -33,6 +33,9 @@ type Result = {
     tokenOutAmount: string;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 // Parsed types
@@ -52,6 +55,9 @@ export type TradeHistory = {
     tokenOutAmount: BigNumber;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 const fetchTradeHistory: (params: {
@@ -100,6 +106,9 @@ const fetchTradeHistory: (params: {
                     tokenOutAmount: new BigNumber(row.tokenOutAmount),
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
+                    priceTokenAddress: row.priceTokenAddress,
+                    priceTokenName: row.priceTokenName,
+                    priceTokenSymbol: row.priceTokenSymbol,
                 });
             });
             return {
