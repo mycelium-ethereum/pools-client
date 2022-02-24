@@ -240,17 +240,19 @@ const CommitRow: React.FC<
                     </TableRowCell>
                     {/*Amount*/}
                     <TableRowCell>
-                        {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))}
+                        {toApproxCurrency(
+                            (price.toNumber() / 10 ** tokenDecimals) * (tokenInAmount.toNumber() / 10 ** tokenDecimals),
+                        )}
                     </TableRowCell>
                     {/*Tokens / Price*/}
                     <TableRowCell>
-                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            at {toApproxCurrency(price.toNumber() / 1e18)} USD/token
+                            at {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)} USD/token
                         </div>
                     </TableRowCell>
                     {/*Protocol Fee*/}
-                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} USDC</TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
@@ -311,15 +313,17 @@ const CommitRow: React.FC<
                         </div>
                     </TableRowCell>
                     <TableRowCell>
-                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            at {toApproxCurrency(price.toNumber() / 1e18)} USD/token
+                            at {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)} USD/token
                         </div>
                     </TableRowCell>
                     <TableRowCell>
-                        {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))}
+                        {toApproxCurrency(
+                            (price.toNumber() / 10 ** tokenDecimals) * (tokenInAmount.toNumber() / 10 ** tokenDecimals),
+                        )}
                     </TableRowCell>
-                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} USDC</TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
@@ -366,14 +370,20 @@ const CommitRow: React.FC<
                             />
                             <div>
                                 <div>{tokenInSymbol}</div>
-                                <div className="text-cool-gray-500">{toApproxCurrency(price.toNumber() / 1e18)}</div>
+                                <div className="text-cool-gray-500">
+                                    {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)}
+                                </div>
                             </div>
                         </div>
                     </TableRowCell>
                     <TableRowCell>
-                        <div>{(tokenInAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            {toApproxCurrency((price.toNumber() / 1e18) * (tokenInAmount.toNumber() / 1e18))} USDC
+                            {toApproxCurrency(
+                                (price.toNumber() / 10 ** tokenDecimals) *
+                                    (tokenInAmount.toNumber() / 10 ** tokenDecimals),
+                            )}{' '}
+                            USDC
                         </div>
                     </TableRowCell>
                     <TableRowCell>
@@ -385,17 +395,23 @@ const CommitRow: React.FC<
                             />
                             <div>
                                 <div>{tokenOutSymbol}</div>
-                                <div className="text-cool-gray-500">{toApproxCurrency(price.toNumber() / 1e18)}</div>
+                                <div className="text-cool-gray-500">
+                                    {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)}
+                                </div>
                             </div>
                         </div>
                     </TableRowCell>
                     <TableRowCell>
-                        <div>{(tokenOutAmount.toNumber() / 1e18).toFixed(2)} tokens</div>
+                        <div>{(tokenOutAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
                         <div className="text-cool-gray-500">
-                            {toApproxCurrency((price.toNumber() / 1e18) * (tokenOutAmount.toNumber() / 1e18))} USDC
+                            {toApproxCurrency(
+                                (price.toNumber() / 10 ** tokenDecimals) *
+                                    (tokenOutAmount.toNumber() / 10 ** tokenDecimals),
+                            )}{' '}
+                            USDC
                         </div>
                     </TableRowCell>
-                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 1e18)} USDC</TableRowCell>
+                    <TableRowCell>{toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} USDC</TableRowCell>
                     <TableRowCell>
                         <Actions
                             provider={provider as ethers.providers.JsonRpcProvider}
