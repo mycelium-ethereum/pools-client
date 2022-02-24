@@ -32,16 +32,25 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     const totalCommitmentAmount = inputAmount ? toApproxCurrency(inputAmount) : 0;
-    const totalGasFee = mintGasFee;
-    const totalCost = toApproxCurrency(inputAmount);
+    const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(inputAmount);
     const expectedAmount = amount.div(tokenPrice ?? 1).toFixed(0);
     const expectedPrice = ` at ${toApproxCurrency(tokenPrice ?? 1, 2)} USD/token`;
     const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.name}`;
     const poolPowerLeverage = pool.leverage;
-    const selectedToken = pool?.name?.split('-')[1]?.split('/')[0];
+    const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
     const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
-    const equivalentExposureBTC = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
-    const commitAmountBTC = inputAmount / pool.oraclePrice.toNumber();
+    const equivalentExposure = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
+    const commitAmount = inputAmount / pool.oraclePrice.toNumber();
+
+    const totalGasFeeDisplay = () => {
+        if (amount.toNumber() <= 0) {
+            return 0;
+        } else if (mintGasFee < 0.001) {
+            return '< $0.001';
+        } else {
+            return toApproxCurrency(mintGasFee.toFixed(3));
+        }
+    };
 
     const balancesAfter = {
         longBalance: nextPoolState.expectedLongBalance.plus(isLong ? amount : 0),
@@ -86,11 +95,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         </div>
                                     </Section>
                                     <Section label="Gas Fee" showSectionDetails>
-                                        <span className="opacity-50">
-                                            {totalGasFee < 0.001
-                                                ? '< $0.001'
-                                                : toApproxCurrency(totalGasFee.toFixed(3))}
-                                        </span>
+                                        <span className="opacity-50">{totalGasFeeDisplay()}</span>
                                     </Section>
                                 </SectionDetails>
                             )}
@@ -114,7 +119,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                 </SectionDetails>
                             )}
                             <Section label="Expected Equivalent Exposure">
-                                <SumText setColor="green">{equivalentExposureBTC.toFixed(3)} BTC</SumText>
+                                <SumText setColor="green">
+                                    {equivalentExposure.toFixed(3)} {selectedToken}
+                                </SumText>
                             </Section>
                             {showTransactionDetails && (
                                 <>
@@ -122,7 +129,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
                                         showSectionDetails
                                     >
-                                        <span className="opacity-50">{commitAmountBTC.toFixed(3)} BTC</span>
+                                        <span className="opacity-50">
+                                            {commitAmount.toFixed(3)} {selectedToken}
+                                        </span>
                                     </Section>
                                     <Section label="Pool Power Leverage" showSectionDetails>
                                         <span className="opacity-50">{poolPowerLeverage}</span>
@@ -139,7 +148,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                         <>
                             <Section label="Expected Token Value">
                                 <SumText>
-                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 2)}`} USDC
+                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 2)} ${
+                                        pool.quoteToken.symbol
+                                    }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -161,7 +172,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                             <Section label="Expected Fees">
                                 <SumText>
-                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`} USDC
+                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
+                                        pool.quoteToken.symbol
+                                    }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -202,7 +215,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                             <Section label="Expected Amount">
                                 <SumText>
-                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`} USDC
+                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
+                                        pool.quoteToken.symbol
+                                    }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -224,7 +239,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                             <Section label="Expected Fees">
                                 <SumText>
-                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)}`} USDC
+                                    {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
+                                        pool.quoteToken.symbol
+                                    }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
