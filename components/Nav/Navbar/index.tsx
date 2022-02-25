@@ -83,6 +83,7 @@ export const NavBarContent: React.FC<{
                         onClick={() => {
                             setShowOnboardModal(true);
                         }}
+                        id="help-button"
                     >
                         <RevisitOnboard />
                     </div>
