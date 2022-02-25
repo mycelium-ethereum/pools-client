@@ -12,6 +12,8 @@ _paq.push([
     "*.vote.tracer.finance",
   ],
 ]);
+// Call disableCookies before calling trackPageView 
+_paq.push(['disableCookies']);
 _paq.push(["trackPageView"]);
 _paq.push(["enableLinkTracking"]);
 (function () {
