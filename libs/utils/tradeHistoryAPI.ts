@@ -1,4 +1,5 @@
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import BigNumber from 'bignumber.js';
 
 // Base API URL
 // const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
@@ -32,6 +33,9 @@ type Result = {
     tokenOutAmount: string;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 // Parsed types
@@ -42,15 +46,18 @@ export type TradeHistory = {
     tokenInAddress: string;
     tokenInSymbol: string;
     tokenInName: string;
-    tokenInAmount: string;
-    price: string;
-    fee: string;
+    tokenInAmount: BigNumber;
+    price: BigNumber;
+    fee: BigNumber;
     tokenOutAddress: string;
     tokenOutSymbol: string;
     tokenOutName: string;
-    tokenOutAmount: string;
+    tokenOutAmount: BigNumber;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 const fetchTradeHistory: (params: {
@@ -90,15 +97,18 @@ const fetchTradeHistory: (params: {
                     tokenInAddress: row.tokenInAddress,
                     tokenInSymbol: row.tokenInSymbol,
                     tokenInName: row.tokenInName,
-                    tokenInAmount: row.tokenInAmount,
-                    price: row.price,
-                    fee: row.fee,
+                    tokenInAmount: new BigNumber(row.tokenInAmount),
+                    price: new BigNumber(row.price),
+                    fee: new BigNumber(row.fee),
                     tokenOutAddress: row.tokenOutAddress,
                     tokenOutSymbol: row.tokenOutSymbol,
                     tokenOutName: row.tokenOutName,
-                    tokenOutAmount: row.tokenOutAmount,
+                    tokenOutAmount: new BigNumber(row.tokenOutAmount),
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
+                    priceTokenAddress: row.priceTokenAddress,
+                    priceTokenName: row.priceTokenName,
+                    priceTokenSymbol: row.priceTokenSymbol,
                 });
             });
             return {
