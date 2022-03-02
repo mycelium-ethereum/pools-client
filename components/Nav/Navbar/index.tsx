@@ -78,7 +78,7 @@ export const NavBarContent: React.FC<{
                 </ul>
 
                 {setShowOnboardModal ? (
-                    <div
+                    <button
                         className="ml-auto my-auto cursor-pointer"
                         onClick={() => {
                             setShowOnboardModal(true);
@@ -86,7 +86,7 @@ export const NavBarContent: React.FC<{
                         id="help-button"
                     >
                         <RevisitOnboard />
-                    </div>
+                    </button>
                 ) : null}
 
                 {/* DESKTOP */}
