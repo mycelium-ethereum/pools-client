@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default (({ hideOnDesktop, pushContentRight, route }) => (
+export default (({ hideOnDesktop, pushContentRight }) => (
     <VersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
-        <V1 href={`https://v1.tracer.finance/${route}`}>V1</V1>
+        <V1 href="https://pools.tracer.finance">V1</V1>
         <V2>
             V2 <New>NEW</New>
         </V2>
@@ -11,7 +11,6 @@ export default (({ hideOnDesktop, pushContentRight, route }) => (
 )) as React.FC<{
     hideOnDesktop?: boolean;
     pushContentRight: boolean;
-    route: string;
 }>;
 
 const VersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: boolean }>`
