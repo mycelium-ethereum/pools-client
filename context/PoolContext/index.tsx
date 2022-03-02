@@ -78,10 +78,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     // this can be changed to select all or a specific list
                     let pools: PoolList | undefined = poolsState.poolsLists[network as KnownNetwork]?.Tracer[0];
                     if (!pools) {
-                        const poolsLists = await new PoolListService(network).getAll().catch((err) => console.error(err));
+                        const poolsLists = await new PoolListService(network)
+                            .getAll()
+                            .catch((err) => console.error(err));
                         if (!poolsLists) {
-                            console.error("Failed to initialise pools: poolsList undefined");
-                            return 
+                            console.error('Failed to initialise pools: poolsList undefined');
+                            return;
                         }
                         pools = poolsLists.Tracer[0] ?? [];
                         poolsDispatch({ type: 'setPoolLists', network: network as KnownNetwork, lists: poolsLists });
@@ -379,14 +381,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        const poolInstance = poolsState.pools[pool].poolInstance;
+                        const poolInstance = poolsState.pools[pool]?.poolInstance;
+                        if (!poolInstance) {
+                            return;
+                        }
                         poolInstance.connect(subscriptionProvider);
                         poolInstance.fetchLastPriceTimestamp().then((lastUpdate: BigNumber) => {
                             console.debug(`New last updated: ${lastUpdate.toString()}`);
                             // poolsDispatch({ type: 'triggerUpdate' });
                         });
-                        updateTokenBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
-                        updatePoolBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
+                        updateTokenBalances(poolInstance, subscriptionProvider);
+                        updatePoolBalances(poolInstance, subscriptionProvider);
                         commitDispatch({
                             type: 'resetCommits',
                             pool: pool,

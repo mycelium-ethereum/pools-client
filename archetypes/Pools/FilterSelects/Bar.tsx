@@ -82,7 +82,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <div className="hidden lg:flex mr-4 flex-col">
                         <h3 className="mb-1 text-theme-text">Market</h3>
                         <Dropdown
-                            variant="blue"
+                            variant="tracer"
                             iconSize="xs"
                             placeHolderIcon={
                                 Object.entries(MarketFilterEnum).find(
@@ -133,7 +133,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     <div className="lg:hidden">Market</div>
                     <div className="flex lg:hidden w-full mt-2 justify-between items-center">
                         <Dropdown
-                            variant="blue"
+                            variant="tracer"
                             iconSize="xs"
                             placeHolderIcon={
                                 Object.entries(MarketFilterEnum).find(
@@ -246,12 +246,12 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         </div>
                         <div className="flex">
                             <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                                <Button variant="primary" size="sm" className="mr-5 cursor-default opacity-50">
+                                <Button variant="primary" size="sm" className="mr-5 cursor-not-allowed opacity-50">
                                     Display Alternative Pool
                                 </Button>
                             </TooltipSelector>
                             <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                                <Button variant="primary" size="sm" className="cursor-default opacity-50">
+                                <Button variant="primary" size="sm" className="cursor-not-allowed opacity-50">
                                     Deploy New Pool
                                 </Button>
                             </TooltipSelector>
