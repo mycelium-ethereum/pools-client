@@ -172,11 +172,11 @@ const DropdownOption: React.FC<{
         </span>
         <style>
             {`
-            .box svg {
-                width: 100%;
-                height: 100%;
-            }
-        `}
+                .box svg {
+                    width: 100%;
+                    height: 100%;
+                }
+            `}
         </style>
     </a>
 );

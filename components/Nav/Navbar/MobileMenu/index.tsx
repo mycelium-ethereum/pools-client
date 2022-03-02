@@ -124,11 +124,11 @@ export default (({ account, className }) => {
                                     </div>
                                     <style>
                                         {`
-                                        .aligned-background {
-                                            background-position-y: -60px; 
-                                            background-size: 100%;
-                                        }
-                                    `}
+                                            .aligned-background {
+                                                background-position-y: -60px; 
+                                                background-size: 100%;
+                                            }
+                                        `}
                                     </style>
                                 </div>
                             </Transition.Child>

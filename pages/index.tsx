@@ -38,20 +38,20 @@ const CorWidget: React.FC = () => (
         />
         <style>
             {`
-            #cor-widget a {
-                background: rgba(87, 113, 226)!important;
-            }
-            @media (max-width: 1024px) {
-                #cor-widget div {
-                    bottom: 20px!important;
+                #cor-widget a {
+                    background: rgba(87, 113, 226)!important;
                 }
-            }
-            @media (min-width: 1024px) {
-                #cor-widget div {
-                    bottom: 60px!important;
+                @media (max-width: 1024px) {
+                    #cor-widget div {
+                        bottom: 20px!important;
+                    }
                 }
-            }
-        `}
+                @media (min-width: 1024px) {
+                    #cor-widget div {
+                        bottom: 60px!important;
+                    }
+                }
+            `}
         </style>
     </div>
 );

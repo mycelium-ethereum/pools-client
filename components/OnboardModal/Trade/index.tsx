@@ -224,11 +224,11 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             <div className="onboard">{OnboardContent()}</div>
             <style>
                 {`
-                 .onboard a {
-                    text-decoration: underline;
-                    cursor: pointer;
-                }
-            `}
+                     .onboard a {
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                `}
             </style>
         </TWModal>
     );
