@@ -16,8 +16,9 @@ import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
 import NoQueued from '@public/img/no-queued.svg';
+import { PageOptions } from '..';
 
-const queuedOptions = (numMints: number, numBurns: number, numFlips: number) => {
+const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (numMints, numBurns, numFlips) => {
     return [
         {
             key: CommitActionEnum.mint,

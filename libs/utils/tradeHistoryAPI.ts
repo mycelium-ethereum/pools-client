@@ -6,7 +6,7 @@ const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
 
 type NetworkType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
-export const COMMIT_TYPES_V2 = {
+export const V2_API_COMMIT_TYPES = {
     LONG_MINT: 'LongMint',
     LONG_BURN: 'LongBurn',
     SHORT_MINT: 'ShortMint',
@@ -15,10 +15,12 @@ export const COMMIT_TYPES_V2 = {
     SHORT_BURN_LONG_MINT: 'ShortBurnLongMint',
 } as const;
 
+type V2_API_COMMIT_TYPE = typeof V2_API_COMMIT_TYPES[keyof typeof V2_API_COMMIT_TYPES];
+
 // Raw API return types
 type Result = {
     date: number;
-    type: typeof COMMIT_TYPES_V2[keyof typeof COMMIT_TYPES_V2];
+    type: V2_API_COMMIT_TYPE;
     tokenDecimals: number;
     tokenInAddress: string;
     tokenInSymbol: string;
@@ -40,7 +42,7 @@ type Result = {
 // Parsed types
 export type TradeHistory = {
     date: number;
-    type: typeof COMMIT_TYPES_V2[keyof typeof COMMIT_TYPES_V2];
+    type: V2_API_COMMIT_TYPE;
     tokenDecimals: number;
     tokenInAddress: string;
     tokenInSymbol: string;
