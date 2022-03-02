@@ -23,7 +23,16 @@ export const CommitTypeMap = {
     ShortFlip: CommitEnum.longBurnShortMint,
 };
 
-export const CommitToQueryFocusMap: Record<CommitActionEnum, 'mint' | 'burn' | 'flip'> = {
+export const CommitToQueryFocusMap: Record<CommitEnum, 'mint' | 'burn' | 'flip'> = {
+    [CommitEnum.longMint]: 'mint',
+    [CommitEnum.shortMint]: 'mint',
+    [CommitEnum.longBurn]: 'burn',
+    [CommitEnum.shortBurn]: 'burn',
+    [CommitEnum.longBurnShortMint]: 'flip',
+    [CommitEnum.shortBurnLongMint]: 'flip',
+};
+
+export const CommitActionToQueryFocusMap: Record<CommitActionEnum, 'mint' | 'burn' | 'flip'> = {
     [CommitActionEnum.mint]: 'mint',
     [CommitActionEnum.burn]: 'burn',
     [CommitActionEnum.flip]: 'flip',

@@ -94,7 +94,8 @@ export type PendingCommitInfo = {
 };
 
 export type QueuedCommit = PendingCommitInfo & {
-    token: PoolToken;
+    tokenIn: PoolToken;
+    tokenOut: PoolToken;
     tokenPrice: BigNumber;
     nextRebalance: BigNumber;
     frontRunningInterval: BigNumber;

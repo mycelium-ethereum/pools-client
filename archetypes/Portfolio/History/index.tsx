@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { ARBITRUM, CommitActionEnum, CommitToQueryFocusMap } from '@libs/constants';
+import { ARBITRUM, CommitActionEnum, CommitActionToQueryFocusMap } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
@@ -46,7 +46,7 @@ export default (({ focus }) => {
             fetchTradeHistory({
                 account: account ?? '0',
                 network: (network as SourceType) ?? ARBITRUM,
-                type: CommitToQueryFocusMap[focus as CommitActionEnum],
+                type: CommitActionToQueryFocusMap[focus as CommitActionEnum],
                 page,
                 pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
             }).then((r) => {
@@ -115,7 +115,7 @@ export default (({ focus }) => {
                     onClick={(option) =>
                         router.push({
                             query: {
-                                focus: CommitToQueryFocusMap[option as CommitActionEnum],
+                                focus: CommitActionToQueryFocusMap[option as CommitActionEnum],
                             },
                         })
                     }

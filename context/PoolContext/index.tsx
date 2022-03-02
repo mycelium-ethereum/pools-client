@@ -28,6 +28,7 @@ import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Contex
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
+import { CommitToQueryFocusMap } from '@libs/constants';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -78,10 +79,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     // this can be changed to select all or a specific list
                     let pools: PoolList | undefined = poolsState.poolsLists[network as KnownNetwork]?.Tracer[0];
                     if (!pools) {
-                        const poolsLists = await new PoolListService(network).getAll().catch((err) => console.error(err));
+                        const poolsLists = await new PoolListService(network)
+                            .getAll()
+                            .catch((err) => console.error(err));
                         if (!poolsLists) {
-                            console.error("Failed to initialise pools: poolsList undefined");
-                            return 
+                            console.error('Failed to initialise pools: poolsList undefined');
+                            return;
                         }
                         pools = poolsLists.Tracer[0] ?? [];
                         poolsDispatch({ type: 'setPoolLists', network: network as KnownNetwork, lists: poolsLists });
@@ -534,8 +537,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             commitType === CommitEnum.longMint
                                 ? poolsState.pools[pool].poolInstance.longToken.symbol
                                 : poolsState.pools[pool].poolInstance.shortToken.symbol,
-                        type:
-                            commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint ? 'Mint' : 'Burn',
+                        type: CommitToQueryFocusMap[commitType],
                         nextRebalance: targetTime,
                         success: {
                             title: 'Order Submitted',
@@ -549,10 +551,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    /**
-     * Approve pool to spend quote token
-     * @param pool address to approve
-     */
     const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
         if (!signer) {
             console.error('Failed to approve token: signer undefined');

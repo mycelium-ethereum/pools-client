@@ -28,7 +28,7 @@ export type Options = {
         success?: Content; // transaction message for when the transaction succeeds
         nextRebalance?: number;
         symbol?: string;
-        type?: 'Mint' | 'Burn';
+        type?: 'mint' | 'burn' | 'flip';
         poolName?: string;
     };
 };
@@ -64,11 +64,11 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
     const { addToast, updateToast } = useToasts();
     const [pendingCount, setPendingCount] = useState(0);
 
-    const handleClick = (focus: 'Mint' | 'Burn') =>
+    const handleClick = (focus: 'mint' | 'burn' | 'flip') =>
         router.push({
             pathname: '/portfolio/commits',
             query: {
-                focus: focus === 'Mint' ? 'mint' : 'burn',
+                focus: focus,
             },
         });
 
@@ -105,7 +105,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                         <>
                             {statusMessages?.nextRebalance !== undefined ? (
                                 <div className="whitespace-nowrap">
-                                    {statusMessages?.type === 'Mint' ? (
+                                    {statusMessages?.type === 'mint' ? (
                                         <div className="flex items-center mb-2">
                                             <Logo
                                                 className="mr-2"
@@ -129,7 +129,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                                     )}
                                     <div
                                         className="text-tracer-400 underline cursor-pointer"
-                                        onClick={() => handleClick(statusMessages?.type ?? 'Mint')}
+                                        onClick={() => handleClick(statusMessages?.type ?? 'mint')}
                                     >
                                         View order
                                     </div>

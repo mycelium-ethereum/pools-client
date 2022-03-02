@@ -29,25 +29,38 @@ export default (() => {
                     const { shortToken, longToken, quoteToken, frontRunningInterval, lastUpdate, updateInterval } =
                         poolInstance;
 
-                    let token, tokenPrice;
+                    let tokenIn, tokenOut, tokenPrice;
 
-                    if (commit.type === CommitEnum.shortMint || commit.type === CommitEnum.shortBurn) {
-                        token = {
+                    if (
+                        commit.type === CommitEnum.longMint ||
+                        commit.type === CommitEnum.longBurn ||
+                        commit.type === CommitEnum.longBurnShortMint
+                    ) {
+                        tokenIn = {
                             ...shortToken,
                             ...userBalances.shortToken,
                         };
-                        tokenPrice = poolInstance.getNextShortTokenPrice();
-                    } else {
-                        token = {
+                        tokenOut = {
                             ...longToken,
                             ...userBalances.longToken,
                         };
                         tokenPrice = poolInstance.getNextLongTokenPrice();
+                    } else {
+                        tokenIn = {
+                            ...longToken,
+                            ...userBalances.longToken,
+                        };
+                        tokenOut = {
+                            ...shortToken,
+                            ...userBalances.shortToken,
+                        };
+                        tokenPrice = poolInstance.getNextShortTokenPrice();
                     }
 
                     parsedCommits.push({
                         ...commit,
-                        token,
+                        tokenIn,
+                        tokenOut,
                         tokenPrice,
                         nextRebalance: lastUpdate.plus(updateInterval),
                         frontRunningInterval: frontRunningInterval,
