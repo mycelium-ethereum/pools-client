@@ -99,12 +99,14 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                 <Close />
             </div>
             <div className="onboard">{OnboardContent()}</div>
-            <style>{`
+            <style>
+                {`
                  .onboard a {
                     text-decoration: underline;
                     cursor: pointer;
                 }
-            `}</style>
+            `}
+            </style>
         </TWModal>
     );
 };

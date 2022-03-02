@@ -58,7 +58,8 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                 </div>
                 <div className="flex flex-col w-full px-5 lg:px-0 lg:w/80">
                     <div className="my-0 mx-auto transition-all content max-w-screen-md">{children}</div>
-                    <style>{`
+                    <style>
+                        {`
                         .content a {
                             text-decoration: underline;
                             cursor: pointer;
@@ -67,7 +68,8 @@ export const LegalPageLayout: React.FC = ({ children }) => {
                         .content a:hover {
                             opacity: 0.8;
                         }
-                    `}</style>
+                    `}
+                    </style>
                 </div>
             </div>
             <Footer />

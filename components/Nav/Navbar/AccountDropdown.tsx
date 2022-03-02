@@ -77,11 +77,13 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                                 }
                             }}
                         />
-                        <style>{`
+                        <style>
+                            {`
                             .copy svg {
                                 vertical-align: 0;
                             }
-                        `}</style>
+                        `}
+                        </style>
                     </TooltipSelector>
                 </div>
             </div>

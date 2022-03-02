@@ -122,12 +122,14 @@ export default (({ account, className }) => {
                                             <ThemeSwitcher />
                                         </div>
                                     </div>
-                                    <style>{`
+                                    <style>
+                                        {`
                                         .aligned-background {
                                             background-position-y: -60px; 
                                             background-size: 100%;
                                         }
-                                    `}</style>
+                                    `}
+                                    </style>
                                 </div>
                             </Transition.Child>
                         </div>

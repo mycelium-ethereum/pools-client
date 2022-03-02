@@ -36,7 +36,8 @@ const CorWidget: React.FC = () => (
             textColor={'#ffffff'}
             url={'https://reputation.link/protocols/tracer/?network=Arbitrum'}
         />
-        <style>{`
+        <style>
+            {`
             #cor-widget a {
                 background: rgba(87, 113, 226)!important;
             }
@@ -50,6 +51,7 @@ const CorWidget: React.FC = () => (
                     bottom: 60px!important;
                 }
             }
-        `}</style>
+        `}
+        </style>
     </div>
 );

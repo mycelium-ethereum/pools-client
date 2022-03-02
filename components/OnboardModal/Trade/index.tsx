@@ -181,11 +181,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             <br />
                             <br />
                             Check out{' '}
-                            <a
-                                href="https://tracer.finance/radar"
-                                target="_blank"
-                                rel="noreferrer"
-                            >{`Radar, Tracer's blog`}</a>
+                            <a href="https://tracer.finance/radar" target="_blank" rel="noreferrer">
+                                {`Radar, Tracer's blog`}
+                            </a>
                             <br />
                             <br />
                             Catch up on{' '}
@@ -224,12 +222,14 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                 <Close />
             </div>
             <div className="onboard">{OnboardContent()}</div>
-            <style>{`
+            <style>
+                {`
                  .onboard a {
                     text-decoration: underline;
                     cursor: pointer;
                 }
-            `}</style>
+            `}
+            </style>
         </TWModal>
     );
 };

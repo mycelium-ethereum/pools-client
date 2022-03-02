@@ -204,7 +204,8 @@ export default (({ margin = defaultMargin }) => {
                                     </TooltipInPortal>
                                 );
                             })()}
-                        <style>{`
+                        <style>
+                            {`
                             .axis-ticks text {
                                 fill: var(--text);
                             }
@@ -224,7 +225,8 @@ export default (({ margin = defaultMargin }) => {
                                 border-right: 10px solid transparent;
                                 border-top: 10px solid;
                             }
-                        `}</style>
+                        `}
+                        </style>
                     </>
                 );
             }}
