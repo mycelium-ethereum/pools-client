@@ -283,7 +283,7 @@ const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) =>
             <TableRowCell>
                 <InnerText>-</InnerText>
             </TableRowCell>
-            <TableRowCell></TableRowCell>
+            <TableRowCell />
         </TableRow>
     );
 };
