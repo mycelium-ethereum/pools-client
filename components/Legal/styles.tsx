@@ -1,9 +1,10 @@
+import TWPopup from '@components/General/TWPopup';
+import { device } from '@context/ThemeContext/themes';
 import styled from 'styled-components';
 
 export const MenuItem = styled.div<{
     selected: boolean;
 }>`
-    margin-left: auto;
     margin-top: 0.25rem;
     margin-bottom: 0.25rem;
     font-size: 1rem; /* 16px */
@@ -14,6 +15,17 @@ export const MenuItem = styled.div<{
     opacity: ${(props) => (props.selected ? 1 : 0.6)};
 `;
 
+export const MainContentWrap = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0 1.25rem;
+
+    @media ${device.lg} {
+        width: 80%;
+        padding: 0;
+    }
+`;
 export const MainContent = styled.div`
     margin: 0 auto;
     transition-property: all;
@@ -62,4 +74,40 @@ export const List = styled.ul`
     padding-left: 1rem;
 `;
 
-// export const List: React.FC = ({ children }) => <ul className="mb-4 list-disc pl-4">{children}</ul>;
+export const LegalDropdown = styled(TWPopup)`
+    margin-top: 1.5rem;
+    margin-left: 1rem;
+    margin-right: auto;
+    text-align: left;
+    color: ${({ theme }) => theme['text']};
+    position: relative;
+    display: block;
+    width: 175px;
+
+    @media ${device.lg} {
+        display: none;
+    }
+`;
+
+export const Desktop = styled.div`
+    display: flex;
+    margin-bottom: 2rem;
+`;
+
+export const DesktopHeader = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    display: none;
+    @media ${device.lg} {
+        display: flex;
+    }
+    margin: 0 auto;
+`;
+export const HeaderTitle = styled.div`
+    padding-top: 4rem;
+    padding-bottom: 0.75rem;
+    font-weight: 700;
+    font-size: 1.875rem; /* 30px */
+    line-height: 2.25rem; /* 36px */
+`;
