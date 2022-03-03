@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Link from 'next/link';
+import Icon from '@ant-design/icons';
+
 import { classNames } from '@libs/utils/functions';
 import { Transition } from '@headlessui/react';
-import Icon from '@ant-design/icons';
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
 // Images
@@ -147,6 +149,13 @@ const DropdownMenu: React.FC = () => {
     );
 };
 
+const TBox = styled(Icon)`
+    svg {
+        width: 100%;
+        height: 100%;
+    }
+`;
+
 const DropdownOption: React.FC<{
     href: string;
     label: string;
@@ -158,7 +167,7 @@ const DropdownOption: React.FC<{
         rel="noreferrer"
         target="_blank"
     >
-        <Icon
+        <TBox
             component={TracerBox}
             className="box h-[48px] w-[48px] mr-3"
             style={{ color: boxColor }}
@@ -170,14 +179,6 @@ const DropdownOption: React.FC<{
                 <b>{label}</b>
             </p>
         </span>
-        <style>
-            {`
-                .box svg {
-                    width: 100%;
-                    height: 100%;
-                }
-            `}
-        </style>
     </a>
 );
 
