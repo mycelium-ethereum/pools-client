@@ -31,10 +31,16 @@ const TRADE_OPTIONS = [
     },
 ];
 
+type CommitGasTypes = {
+    mint?: 'string';
+    burn?: 'string';
+    flip?: 'string';
+};
+
 export default styled((({ onClose, className }) => {
     // TODO: dependent on auto-claim feature
     // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
-    const [mintGasFee, setMintGasFee] = useState<string | undefined>('0');
+    const [commitGasFees, setCommitGasFees] = useState<CommitGasTypes>();
     const [commitType, setCommitType] = useState<CommitEnum>(0);
 
     const { account } = useWeb3();
@@ -50,7 +56,7 @@ export default styled((({ onClose, className }) => {
     useMemo(async () => {
         if (commitGasFee) {
             const fee = await commitGasFee(selectedPool ?? '', commitType, amountBN);
-            setMintGasFee(fee);
+            setCommitGasFees({ ...commitGasFees, [CommitActionEnum[commitAction]]: fee });
         }
     }, [selectedPool, commitType, amountBN]);
 
@@ -111,7 +117,7 @@ export default styled((({ onClose, className }) => {
                 receiveIn={receiveIn}
                 commitAction={CommitActionEnum[commitAction]}
                 inputAmount={Number(amount)}
-                mintGasFee={mintGasFee}
+                commitGasFees={commitGasFees}
             />
 
             <ExchangeButton
