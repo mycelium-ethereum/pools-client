@@ -54,9 +54,7 @@ const LegalPageLayout: React.FC = ({ children }) => {
                     </div>
                 </div>
                 <div className="flex flex-col w-full px-5 lg:px-0 lg:w/80">
-                    <Styled.MainContent>
-                        {children}
-                    </Styled.MainContent>
+                    <Styled.MainContent>{children}</Styled.MainContent>
                 </div>
             </div>
             <Footer />

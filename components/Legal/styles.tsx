@@ -14,7 +14,6 @@ export const MenuItem = styled.div<{
     opacity: ${(props) => (props.selected ? 1 : 0.6)};
 `;
 
-
 export const MainContent = styled.div`
     margin: 0 auto;
     transition-property: all;
