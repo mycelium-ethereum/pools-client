@@ -40,7 +40,6 @@ export const MainTitle = styled.div`
     font-size: 1.875rem; /* 30px */
     line-height: 2.25rem; /* 36px */
 `;
-// React.FC = ({ children }) => <div className="text-3xl font-bold pt-16 pb-3">{children}</div>;
 
 export const Title = styled.div`
     margin-top: 1.5rem;
@@ -48,17 +47,14 @@ export const Title = styled.div`
     font-size: 1.25rem; /* 20px */
     line-height: 1.75rem; /* 28px */
 `;
-// : React.FC = ({ children }) => <div className="mt-6 mb-2 text-xl">{children}</div>;
 
 export const Subtitle = styled.div`
     padding-bottom: 1rem;
 `;
-// export const Subtitle: React.FC = ({ children }) => <div className="pb-4 font-bold">{children}</div>;
 
 export const Paragraph = styled.div`
     padding: 0.5rem 0;
 `;
-// export const Paragraph: React.FC = ({ children }) => <p className="py-2">{children}</p>;
 
 export const List = styled.ul`
     margin-bottom: 1rem;
