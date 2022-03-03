@@ -3,6 +3,7 @@ export type Theme = 'dark' | 'light' | 'matrix';
 export const themes: Record<
     Theme,
     {
+        isDark: boolean;
         background: string;
         'background-secondary': string;
         'background-nav-secondary': string;
@@ -17,6 +18,7 @@ export const themes: Record<
     }
 > = {
     light: {
+        isDark: false,
         background: '#fff',
         /* gray-50 */
         'background-secondary': '#f9fafb',
@@ -46,6 +48,7 @@ export const themes: Record<
         'is-dark': false,
     },
     dark: {
+        isDark: true,
         /* cool-gray-900 */
         background: '#111928',
 
@@ -78,6 +81,7 @@ export const themes: Record<
         'is-dark': true,
     },
     matrix: {
+        isDark: true,
         /* cool-gray-900 */
         background: '#020204',
 
