@@ -21,10 +21,10 @@ type SummaryProps = {
     commitAction: string;
     receiveIn: number;
     inputAmount: number;
-    commitGasFees: any;
+    gasFee?: string;
 };
 
-export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, commitGasFees }) => {
+export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
@@ -43,13 +43,14 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const equivalentExposureFlip = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
     const commitAmount = inputAmount / pool.oraclePrice.toNumber();
 
-    const getCommitGasFee = (action: string) => {
-        if (commitAction === action && amount.toNumber() === 0) {
+    const getCommitGasFee = () => {
+        const fee = Number(gasFee);
+        if (amount.toNumber() === 0) {
             return 0;
-        } else if (commitGasFees[action] < 0.001) {
+        } else if (fee < 0.001) {
             return '< $0.001';
         } else {
-            return toApproxCurrency(commitGasFees[action]?.toFixed(3));
+            return toApproxCurrency(fee);
         }
     };
 
@@ -96,7 +97,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         </div>
                                     </Section>
                                     <Section label="Gas Fee" showSectionDetails>
-                                        <span className="opacity-50">{getCommitGasFee('mint')}</span>
+                                        <span className="opacity-50">{getCommitGasFee()}</span>
                                     </Section>
                                 </SectionDetails>
                             )}
@@ -187,7 +188,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     </Section> */}
                                     <Section label="Gas Fee" showSectionDetails>
                                         <div>
-                                            <span className="opacity-50">{getCommitGasFee('burn')}</span>
+                                            <span className="opacity-50">{getCommitGasFee()}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
@@ -254,7 +255,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     </Section> */}
                                     <Section label="Gas Fee" showSectionDetails>
                                         <div>
-                                            <span className="opacity-50">{getCommitGasFee('flip')}</span>
+                                            <span className="opacity-50">{getCommitGasFee()}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
