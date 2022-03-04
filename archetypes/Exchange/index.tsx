@@ -34,7 +34,7 @@ const TRADE_OPTIONS = [
 export default styled((({ onClose, className }) => {
     // TODO: dependent on auto-claim feature
     // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
-    const [commitGasFees, setCommitGasFees] = useState<Partial<Record<'mint' | 'burn' | 'flip', string>>>({});
+    const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, string>>>({});
     const [commitType, setCommitType] = useState<CommitEnum>(0);
 
     const { account } = useWeb3();
@@ -111,7 +111,7 @@ export default styled((({ onClose, className }) => {
                 receiveIn={receiveIn}
                 commitAction={CommitActionEnum[commitAction]}
                 inputAmount={Number(amount)}
-                gasFee={commitGasFees[CommitActionEnum[commitAction] as keyof typeof CommitActionEnum]}
+                gasFee={commitGasFees[commitAction]}
             />
 
             <ExchangeButton
