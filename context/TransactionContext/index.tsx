@@ -180,10 +180,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                 });
             } else {
                 updateToast(toastId as unknown as string, {
-                    content: [
-                        statusMessages?.error?.title ?? 'Transaction failed',
-                        statusMessages?.error?.body ?? error.message,
-                    ],
+                    content: [statusMessages?.error?.title ?? 'Transaction failed'],
                     appearance: 'error',
                     autoDismiss: true,
                 });

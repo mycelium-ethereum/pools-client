@@ -295,6 +295,7 @@ export default (({
                     },
                     error: {
                         title: `Claim TCR Failed`,
+                        body: '',
                     },
                 },
                 onSuccess: () => {
