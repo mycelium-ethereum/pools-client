@@ -109,7 +109,7 @@ export default styled((({ onClose, className }) => {
                 isLong={side === SideEnum.long}
                 amount={amountBN}
                 receiveIn={receiveIn}
-                commitAction={CommitActionEnum[commitAction]}
+                commitAction={commitAction}
                 inputAmount={Number(amount)}
                 gasFee={commitGasFees[commitAction]}
             />
