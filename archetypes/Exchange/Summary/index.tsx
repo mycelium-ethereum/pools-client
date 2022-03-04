@@ -12,13 +12,14 @@ import { Transition } from '@headlessui/react';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { CommitActionEnum } from '@libs/constants';
 
 type SummaryProps = {
     pool: PoolInfo['poolInstance'];
     showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
-    commitAction: string;
+    commitAction: CommitActionEnum;
     receiveIn: number;
     inputAmount: number;
     gasFee?: string;
@@ -28,6 +29,10 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const flippedToken = useMemo(
+        () => (isLong ? pool.shortToken : pool.longToken),
+        [isLong, pool.longToken, pool.shortToken],
+    );
     const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
@@ -84,7 +89,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    {commitAction === 'mint' && (
+                    {commitAction === CommitActionEnum.mint && (
                         <>
                             <Section label="Total Costs">
                                 <SumText>{totalCost}</SumText>
@@ -146,7 +151,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                         </>
                     )}
 
-                    {commitAction === 'burn' && (
+                    {commitAction === CommitActionEnum.burn && (
                         <>
                             <Section label="Expected Token Value">
                                 <SumText>
@@ -199,16 +204,16 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                         </>
                     )}
 
-                    {commitAction === 'flip' && (
+                    {commitAction === CommitActionEnum.flip && (
                         <>
                             <Section label="Receive">
                                 <SumText>
                                     <Logo
                                         className="inline mr-2"
                                         size="md"
-                                        ticker={tokenSymbolToLogoTicker(token.symbol)}
+                                        ticker={tokenSymbolToLogoTicker(flippedToken.symbol)}
                                     />
-                                    {token.name}
+                                    {flippedToken.name}
                                 </SumText>
                             </Section>
                             <Divider />
@@ -288,7 +293,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                     )}
                 </Transition>
                 <Countdown>
-                    {`${commitAction} in`}
+                    {`${CommitActionEnum[commitAction]} in`}
                     <TimeLeftStyled className="timeleft" targetTime={receiveIn} />
                 </Countdown>
             </Wrapper>
