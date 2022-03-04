@@ -34,7 +34,7 @@ const TRADE_OPTIONS = [
 export default styled((({ onClose, className }) => {
     // TODO: dependent on auto-claim feature
     // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
-    const [mintGasFee, setMintGasFee] = useState<string | undefined>('0');
+    const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, string>>>({});
     const [commitType, setCommitType] = useState<CommitEnum>(0);
 
     const { account } = useWeb3();
@@ -50,7 +50,7 @@ export default styled((({ onClose, className }) => {
     useMemo(async () => {
         if (commitGasFee) {
             const fee = await commitGasFee(selectedPool ?? '', commitType, amountBN);
-            setMintGasFee(fee);
+            setCommitGasFees({ ...commitGasFees, [CommitActionEnum[commitAction]]: fee });
         }
     }, [selectedPool, commitType, amountBN]);
 
@@ -109,9 +109,9 @@ export default styled((({ onClose, className }) => {
                 isLong={side === SideEnum.long}
                 amount={amountBN}
                 receiveIn={receiveIn}
-                commitAction={CommitActionEnum[commitAction]}
+                commitAction={commitAction}
                 inputAmount={Number(amount)}
-                mintGasFee={mintGasFee}
+                gasFee={commitGasFees[commitAction]}
             />
 
             <ExchangeButton

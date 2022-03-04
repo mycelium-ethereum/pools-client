@@ -12,22 +12,27 @@ import { Transition } from '@headlessui/react';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { CommitActionEnum } from '@libs/constants';
 
 type SummaryProps = {
     pool: PoolInfo['poolInstance'];
     showBreakdown: boolean;
     amount: BigNumber;
     isLong: boolean;
-    commitAction: string;
+    commitAction: CommitActionEnum;
     receiveIn: number;
     inputAmount: number;
-    mintGasFee: any;
+    gasFee?: string;
 };
 
-export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, mintGasFee }) => {
+export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+    const flippedToken = useMemo(
+        () => (isLong ? pool.shortToken : pool.longToken),
+        [isLong, pool.longToken, pool.shortToken],
+    );
     const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
@@ -40,15 +45,17 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
     const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
     const equivalentExposure = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
+    const equivalentExposureFlip = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
     const commitAmount = inputAmount / pool.oraclePrice.toNumber();
 
-    const totalGasFeeDisplay = () => {
-        if (amount.toNumber() <= 0) {
+    const getCommitGasFee = () => {
+        const fee = Number(gasFee);
+        if (amount.toNumber() === 0) {
             return 0;
-        } else if (mintGasFee < 0.001) {
+        } else if (fee < 0.001) {
             return '< $0.001';
         } else {
-            return toApproxCurrency(mintGasFee.toFixed(3));
+            return toApproxCurrency(fee);
         }
     };
 
@@ -82,7 +89,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
-                    {commitAction === 'mint' && (
+                    {commitAction === CommitActionEnum.mint && (
                         <>
                             <Section label="Total Costs" className="header">
                                 <SumText>{totalCost}</SumText>
@@ -95,7 +102,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         </div>
                                     </Section>
                                     <Section label="Gas Fee" showSectionDetails>
-                                        <span className="opacity-50">{totalGasFeeDisplay()}</span>
+                                        <span className="opacity-50">{getCommitGasFee()}</span>
                                     </Section>
                                 </SectionDetails>
                             )}
@@ -144,7 +151,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                         </>
                     )}
 
-                    {commitAction === 'burn' && (
+                    {commitAction === CommitActionEnum.burn && (
                         <>
                             <Section label="Expected Token Value" className="header">
                                 <SumText>
@@ -157,9 +164,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                 <SectionDetails>
                                     <Section label="Tokens" showSectionDetails>
                                         <div>
-                                            <span className="opacity-50">
-                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
-                                            </span>
+                                            <span className="opacity-50">{`${amount}`} tokens</span>
                                         </div>
                                     </Section>
                                     <Section label="Expected Price" showSectionDetails>
@@ -179,16 +184,16 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Protocol Fee" showSectionDetails>
+                                    {/* <Section label="Protocol Fee" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">
                                                 {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
                                             </span>
                                         </div>
-                                    </Section>
+                                    </Section> */}
                                     <Section label="Gas Fee" showSectionDetails>
                                         <div>
-                                            <span className="opacity-50">{expectedPrice}</span>
+                                            <span className="opacity-50">{getCommitGasFee()}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
@@ -199,16 +204,16 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                         </>
                     )}
 
-                    {commitAction === 'flip' && (
+                    {commitAction === CommitActionEnum.flip && (
                         <>
                             <Section label="Receive" className="header">
                                 <SumText>
                                     <Logo
                                         className="inline mr-2"
                                         size="md"
-                                        ticker={tokenSymbolToLogoTicker(token.symbol)}
+                                        ticker={tokenSymbolToLogoTicker(flippedToken.symbol)}
                                     />
-                                    {token.symbol}
+                                    {flippedToken.name}
                                 </SumText>
                             </Section>
                             <Divider />
@@ -246,37 +251,38 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Protocol Fee" showSectionDetails>
+                                    {/* <Section label="Protocol Fee" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">
                                                 {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
                                             </span>
                                         </div>
-                                    </Section>
+                                    </Section> */}
                                     <Section label="Gas Fee" showSectionDetails>
                                         <div>
-                                            <span className="opacity-50">{expectedPrice}</span>
+                                            <span className="opacity-50">{getCommitGasFee()}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
                             )}
 
-                            <Section label="Expected Exposure" className="header">
-                                <SumText setColor="red">0.02 BTC</SumText>
+                            <Section label="Expected Exposure">
+                                <SumText setColor="red">
+                                    {equivalentExposureFlip.toFixed(3)} {selectedToken}
+                                </SumText>
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Protocol Fee" showSectionDetails>
-                                        <div>
-                                            <span className="opacity-50">
-                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
-                                            </span>
-                                        </div>
+                                    <Section
+                                        label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
+                                        showSectionDetails
+                                    >
+                                        <span className="opacity-50">
+                                            {commitAmount.toFixed(3)} {selectedToken}
+                                        </span>
                                     </Section>
-                                    <Section label="Gas Fee" showSectionDetails>
-                                        <div>
-                                            <span className="opacity-50">{expectedPrice}</span>
-                                        </div>
+                                    <Section label="Pool Power Leverage" showSectionDetails>
+                                        <span className="opacity-50">{poolPowerLeverage}</span>
                                     </Section>
                                 </SectionDetails>
                             )}
@@ -287,7 +293,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                     )}
                 </Transition>
                 <Countdown>
-                    {`${commitAction} in`}
+                    {`${CommitActionEnum[commitAction]} in`}
                     <TimeLeftStyled className="timeleft" targetTime={receiveIn} />
                 </Countdown>
             </Wrapper>
