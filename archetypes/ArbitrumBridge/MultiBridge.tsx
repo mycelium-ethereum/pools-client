@@ -15,6 +15,7 @@ import { StyledTooltip } from '@components/Tooltips';
 import { ethers } from 'ethers';
 
 import Error from '@public/img/notifications/error.svg';
+import Max from '@components/General/Max';
 
 interface MultiBridgeProps {
     fromNetwork: Network;
@@ -315,8 +316,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                     {approvalRequired ? (
                                         <span className="cursor-not-allowed">Max</span>
                                     ) : (
-                                        <div
-                                            className="m-auto cursor-pointer hover:underline"
+                                        <Max
+                                            className="m-auto"
                                             onClick={(_e) =>
                                                 selectedAssetBalance?.balance
                                                     ? setAmount(selectedAssetBalance.balance.toFixed())
@@ -324,7 +325,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                             }
                                         >
                                             Max
-                                        </div>
+                                        </Max>
                                     )}
                                 </InnerInputText>
                             </InputContainer>
