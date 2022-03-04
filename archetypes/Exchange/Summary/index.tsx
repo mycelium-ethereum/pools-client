@@ -213,7 +213,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         size="md"
                                         ticker={tokenSymbolToLogoTicker(flippedToken.symbol)}
                                     />
-                                    {flippedToken.name}
+                                    {flippedToken.symbol}
                                 </SumText>
                             </Section>
                             <Divider />
@@ -221,22 +221,27 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                             <Section label="Expected Amount" className="header">
                                 <SumText>
                                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
-                                        pool.quoteToken.symbol
+                                        flippedToken.symbol
                                     }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Tokens" showSectionDetails>
+                                    <Section label="Expected Long Token Value" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">
-                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
+                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} USDC
                                             </span>
                                         </div>
                                     </Section>
-                                    <Section label="Expected Price" showSectionDetails>
+                                    <Section label="Expected Short Token Price" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">{expectedPrice}</span>
+                                        </div>
+                                    </Section>
+                                    <Section label="Expected Amount of Short Tokens" showSectionDetails>
+                                        <div>
+                                            <span className="opacity-50">{expectedTokensMinted}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
@@ -266,7 +271,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                 </SectionDetails>
                             )}
 
-                            <Section label="Expected Exposure">
+                            <Section label="Expected Exposure" className="header">
                                 <SumText setColor="red">
                                     {equivalentExposureFlip.toFixed(3)} {selectedToken}
                                 </SumText>
@@ -277,12 +282,16 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
                                         showSectionDetails
                                     >
-                                        <span className="opacity-50">
-                                            {commitAmount.toFixed(3)} {selectedToken}
-                                        </span>
+                                        <div>
+                                            <span className="opacity-50">
+                                                {commitAmount.toFixed(3)} {selectedToken}
+                                            </span>
+                                        </div>
                                     </Section>
-                                    <Section label="Pool Power Leverage" showSectionDetails>
-                                        <span className="opacity-50">{poolPowerLeverage}</span>
+                                    <Section label="Pool Leverage" showSectionDetails>
+                                        <div>
+                                            <span className="opacity-50">{poolPowerLeverage}x</span>
+                                        </div>
                                     </Section>
                                 </SectionDetails>
                             )}
