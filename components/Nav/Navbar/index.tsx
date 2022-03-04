@@ -24,11 +24,6 @@ const NavBar: React.FC<{
             )}
         >
             <NavBarContent setShowOnboardModal={setShowOnboardModal} />
-            <style>
-                {`
-                    background-position-x:
-                `}
-            </style>
         </div>
     );
 };

@@ -4,17 +4,12 @@ import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
 import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
+import * as Styled from './styles';
+import { OnboardModalProps } from './types';
 
-import Close from '/public/img/general/close.svg';
 import Wave from '/public/img/onboard/wave.svg';
 import Question from '/public/img/onboard/question.svg';
 
-interface OnboardModalProps {
-    onboardStep: number;
-    setOnboardStep: React.Dispatch<React.SetStateAction<number>>;
-    showOnboardModal: boolean;
-    setShowOnboardModal: () => any;
-}
 const OnboardTradeModal: React.FC<OnboardModalProps> = ({
     onboardStep,
     setOnboardStep,
@@ -218,18 +213,8 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
 
     return (
         <TWModal open={showOnboardModal} onClose={() => setShowOnboardModal()}>
-            <div className="w-3 h-3 ml-auto cursor-pointer" onClick={() => setShowOnboardModal()}>
-                <Close />
-            </div>
-            <div className="onboard">{OnboardContent()}</div>
-            <style>
-                {`
-                     .onboard a {
-                        text-decoration: underline;
-                        cursor: pointer;
-                    }
-                `}
-            </style>
+            <Styled.Close onClick={() => setShowOnboardModal()} />
+            <Styled.OnboardContent className="onboard">{OnboardContent()}</Styled.OnboardContent>
         </TWModal>
     );
 };
