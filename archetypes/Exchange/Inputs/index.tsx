@@ -273,7 +273,7 @@ const InputStyled = styled(Input)`
 const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
     display: ${({ showContent }) => (showContent ? 'block' : 'none')};
     color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.7;
 
     @media (min-width: 640px) {
