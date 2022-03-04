@@ -1,3 +1,4 @@
+import {Theme} from '@context/ThemeContext/themes';
 import React from 'react';
 import styled from 'styled-components';
 import { ProgressIndicatorProps } from './types';
@@ -16,7 +17,7 @@ const Step = styled.div`
     width: 0.75rem;
     height: 0.75rem;
 
-    background-color: ${({ theme }) => (theme.isDark ? '#1f2a37' : '#f3f4f6')};
+    background-color: ${({ theme }) => (theme === Theme.Light ? '#f3f4f6' : '#1f2a37')};
 
     &.current-step {
         width: 1.25rem;

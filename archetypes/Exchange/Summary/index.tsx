@@ -6,7 +6,7 @@ import Button from '@components/General/Button';
 import styled from 'styled-components';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
-import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
+import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { BigNumber } from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
@@ -29,11 +29,8 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const flippedToken = useMemo(
-        () => (isLong ? pool.shortToken : pool.longToken),
-        [isLong, pool.longToken, pool.shortToken],
-    );
-    const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
+    const flippedToken = useMemo(() => (isLong ? pool.shortToken : pool.longToken), [isLong, pool.longToken, pool.shortToken]);
+    // const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     const totalCommitmentAmount = inputAmount ? toApproxCurrency(inputAmount) : 0;
@@ -58,24 +55,6 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
             return toApproxCurrency(fee);
         }
     };
-
-    const balancesAfter = {
-        longBalance: nextPoolState.expectedLongBalance.plus(isLong ? amount : 0),
-        shortBalance: nextPoolState.expectedShortBalance.plus(isLong ? 0 : amount),
-    };
-
-    const effectiveGains = useMemo(() => {
-        return isLong
-            ? calcEffectiveLongGain(balancesAfter.shortBalance, balancesAfter.longBalance, new BigNumber(pool.leverage))
-            : calcEffectiveShortGain(
-                  balancesAfter.shortBalance,
-                  balancesAfter.longBalance,
-                  new BigNumber(pool.leverage),
-              );
-    }, [isLong, amount, balancesAfter.longBalance, balancesAfter.shortBalance]);
-
-    //TODO remove when working on summary logic
-    console.log(effectiveGains);
 
     return (
         <HiddenExpandStyled defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>

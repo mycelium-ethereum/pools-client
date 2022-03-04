@@ -1,5 +1,7 @@
+import {Theme} from '@context/ThemeContext/themes';
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
+import styled from 'styled-components';
 
 export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
     showDivider = true,
@@ -9,7 +11,7 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
     return (
         <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
             <div className="overflow-x-auto h-full">
-                <div className="py-2 align-middle inline-block min-w-full">
+                <div className="align-middle inline-block min-w-full">
                     <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
                         <table className={`min-w-full ${showDivider ? 'divide-y divide-theme-border' : ''}`}>
                             {children}
@@ -59,23 +61,26 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Si
     </th>
 );
 
-type TableRowProps = JSX.IntrinsicElements['tr'] & {
-    rowNumber: number;
-};
-
-export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
-    return (
-        <tr
-            className={
-                rowNumber % 2 === 0
-                    ? 'bg-theme-background'
-                    : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
+export const TableRow = styled.tr<{ lined?: boolean }>`
+    &:nth-child(even) {
+        background: ${({ theme }) => theme.background};
+    }
+    &:nth-child(odd) {
+        background: ${({ theme, lined }) => {
+            if (!lined) return theme.background
+            switch (theme.theme) {
+                case Theme.Dark:
+                    return '#1F2A37';
+                case Theme.Matrix:
+                    return '#003b00'
+                case Theme.Light:
+                default:
+                    return '#F9FAFB'
             }
-        >
-            {children}
-        </tr>
-    );
-};
+
+        }};
+    }
+`
 
 const CELL_SIZES = {
     default: 'p-4',

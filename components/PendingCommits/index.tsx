@@ -54,7 +54,6 @@ export default (() => {
                         {mintCommits.map((commit, index) => (
                             <CommitRow
                                 key={`pcr-${index}`}
-                                index={index}
                                 provider={provider ?? null}
                                 {...commit}
                                 burnRow={false}
@@ -74,7 +73,6 @@ export default (() => {
                         {burnCommits.map((commit, index) => (
                             <CommitRow
                                 key={`pcr-${index}`}
-                                index={index}
                                 provider={provider ?? null}
                                 {...commit}
                                 burnRow={true}
@@ -96,7 +94,6 @@ export default (() => {
 export const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
         burnRow: boolean; // is burnRow
     }
 > = ({
@@ -106,7 +103,6 @@ export const CommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -115,7 +111,7 @@ export const CommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
                 {token.name}
