@@ -41,7 +41,7 @@ const OVERALL_BACKGROUND = {
 };
 
 const DISABLED = 'cursor-not-allowed bg-cool-gray-100 dark:bg-theme-background opacity-60';
-const DEFAULT_BUTTON = 'relative inline-flex items-center transition-all no-focus-outline';
+const DEFAULT_BUTTON = 'relative inline-flex items-center justify-center transition-all no-focus-outline';
 const FULL_WIDTH_BUTTONS = 'w-full justify-center';
 
 type Option = {

@@ -26,10 +26,21 @@ export const Section: React.FC<SProps> = styled(
     line-height: 18px;
     box-sizing: border-box;
     color: ${({ theme }) => theme['text-secondary']};
-    margin-bottom: 4px;
+    margin-bottom: 3px;
+    &:not(.header) {
+        margin-bottom: 1px;
+    }
 
     &:last-child {
         padding-bottom: 0;
+    }
+
+    &.header {
+        padding-bottom: 3px;
+    }
+
+    @media (min-width: 640px) {
+        margin-bottom: 3px;
     }
 `;
 
@@ -52,7 +63,7 @@ const Label = styled.div<{ showSectionDetails: boolean }>`
     }}
 
     @media (min-width: 640px) {
-        font-size: 16px;
+        font-size: 15px;
 
         ${({ showSectionDetails }) => {
             if (showSectionDetails) {
@@ -69,7 +80,7 @@ const Content = styled.span`
     width: 100%;
     text-align: right;
     padding-left: 0.25rem;
-    font-size: 14px;
+    font-size: 12px;
     white-space: nowrap;
 
     @media (min-width: 640px) {
