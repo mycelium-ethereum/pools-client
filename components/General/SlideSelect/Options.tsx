@@ -6,7 +6,7 @@ export const MatchingEngine: React.FC<{ title: string; subTitle: string }> = ({ 
         <a>
             <strong>{title}</strong>
         </a>
-        <br></br>
+        <br />
         <a>{subTitle}</a>
     </div>
 );

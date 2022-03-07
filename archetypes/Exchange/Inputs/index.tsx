@@ -13,6 +13,7 @@ import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
+import Max from '@components/General/Max';
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -88,7 +89,6 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
             <Wrapper hasMargin>
                 <Label>Token</Label>
                 <DropdownStyled
-                    variant="secondary"
                     placeHolder="Select Token"
                     placeHolderIcon={tokenSymbolToLogoTicker(
                         side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
@@ -181,8 +181,8 @@ const AmountInput: React.FC<AmountProps> = ({
                             label={tokenSymbol}
                         />
                     ) : null}
-                    <div
-                        className="m-auto cursor-pointer hover:underline"
+                    <Max
+                        className="m-auto"
                         onClick={(_e) =>
                             !!selectedPool &&
                             swapDispatch({
@@ -191,8 +191,8 @@ const AmountInput: React.FC<AmountProps> = ({
                             })
                         }
                     >
-                        Max
-                    </div>
+                        MAX
+                    </Max>
                 </InnerInputText>
             </InputContainerStyled>
             <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
