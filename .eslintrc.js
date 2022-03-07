@@ -30,6 +30,14 @@ module.exports = {
         '@typescript-eslint/ban-ts-comment': [0],
         'no-unreachable-loop': 1,
         'no-unreachable': 1,
+        'react/prefer-es6-class': 1,
+        'react/prefer-stateless-function': 1,
+        'react/jsx-pascal-case': 1,
+        'react/jsx-closing-bracket-location': 1,
+        'react/jsx-closing-tag-location': 1,
+        'no-multi-spaces': 1, 
+        'react/self-closing-comp': 1
+
         // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
         // e.g. "@typescript-eslint/explicit-function-return-type": "off",
     },

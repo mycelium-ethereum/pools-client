@@ -7,7 +7,6 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-
 // import { Currency } from '@components/General/Currency';
 import {
     // LogoTicker,
@@ -16,6 +15,7 @@ import {
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
+import Max from '@components/General/Max';
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -183,8 +183,8 @@ const AmountInput: React.FC<AmountProps> = ({
                     {/*        label={tokenSymbol}*/}
                     {/*    />*/}
                     {/*) : null}*/}
-                    <div
-                        className="m-auto cursor-pointer hover:underline"
+                    <Max
+                        className="m-auto"
                         onClick={(_e) =>
                             !!selectedPool &&
                             swapDispatch({
@@ -193,8 +193,8 @@ const AmountInput: React.FC<AmountProps> = ({
                             })
                         }
                     >
-                        Max
-                    </div>
+                        MAX
+                    </Max>
                 </InnerInputText>
             </InputContainerStyled>
             <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
