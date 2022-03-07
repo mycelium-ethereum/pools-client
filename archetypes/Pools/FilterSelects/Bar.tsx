@@ -215,7 +215,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 options={REBALANCE_OPTIONS_MOBILE}
                             />
                         </div>
-                        <div className="hidden xl:block">
+                        <div className="hidden xl:block mr-2">
                             <TWButtonGroup
                                 value={state.rebalanceFocus}
                                 onClick={(option) =>

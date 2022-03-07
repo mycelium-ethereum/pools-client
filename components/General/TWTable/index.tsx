@@ -60,17 +60,21 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Si
 );
 
 type TableRowProps = JSX.IntrinsicElements['tr'] & {
+    className?: string;
     rowNumber: number;
 };
 
-export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
+export const TableRow: React.FC<TableRowProps> = ({ rowNumber, className, children }) => {
     return (
         <tr
-            className={
-                rowNumber % 2 === 0
-                    ? 'bg-theme-background'
-                    : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
-            }
+            className={classNames(
+                `${
+                    rowNumber % 2 === 0
+                        ? 'bg-theme-background'
+                        : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
+                }`,
+                className ?? '',
+            )}
         >
             {children}
         </tr>

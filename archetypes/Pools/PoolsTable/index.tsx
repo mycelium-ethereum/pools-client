@@ -106,8 +106,8 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
 
     return (
         <>
-            <Table>
-                <TableHeader className="align-baseline">
+            <Table showDivider={false}>
+                <TableHeader className="align-baseline border-b border-theme-border">
                     <tr>
                         <TableHeaderCell
                             className="bg-cool-gray-50 dark:bg-theme-background-secondary rounded-xl"
@@ -314,15 +314,14 @@ const PoolRow: React.FC<
     return (
         <>
             <TableRow rowNumber={index}>
-                {/** Pool rows */}
-                <TableRowCell rowSpan={2}>
+                <TableRowCell rowSpan={2} className="border-b border-theme-border">
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
                         USDC <USDCIcon className="w-5 ml-2" />
                         <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
                     </div>
                 </TableRowCell>
-                <TableRowCell rowSpan={2}>
+                <TableRowCell rowSpan={2} className="border-b border-theme-border">
                     {showNextRebalance ? (
                         <>
                             <div>{toApproxCurrency(pool.oraclePrice)}</div>
@@ -353,7 +352,7 @@ const PoolRow: React.FC<
                         </>
                     )}
                 </TableRowCell>
-                <TableRowCell rowSpan={2}>
+                <TableRowCell rowSpan={2} className="border-b border-theme-border">
                     {showNextRebalance ? (
                         <>
                             <div className="flex items-center">
@@ -390,7 +389,10 @@ const PoolRow: React.FC<
                 </TableRowCell>
                 <TableRowCell
                     rowSpan={2}
-                    className={classNames('relative bg-opacity-0 z-[1]', !showNextRebalance ? 'w-1/6' : '')}
+                    className={classNames(
+                        'relative bg-opacity-0 z-[1] border-b border-theme-border',
+                        !showNextRebalance ? 'w-1/6' : '',
+                    )}
                 >
                     <LongBalance width={calcPercentage(pool.longToken.tvl, pool.tvl)} />
                     <ShortBalance />
@@ -427,7 +429,7 @@ const PoolRow: React.FC<
                     )}
                 </TableRowCell>
                 {showNextRebalance ? (
-                    <TableRowCell rowSpan={2}>
+                    <TableRowCell rowSpan={2} className="border-b border-theme-border">
                         {!isBeforeFrontRunning ? (
                             <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
                                 <div>Front-running interval reached</div>
@@ -475,7 +477,7 @@ const PoolRow: React.FC<
                     poolTicker={pool.name}
                 />
             </TableRow>
-            <TableRow rowNumber={index}>
+            <TableRow rowNumber={index} className="border-b border-theme-border">
                 <TokenRows
                     side={SideEnum.short}
                     provider={provider}
