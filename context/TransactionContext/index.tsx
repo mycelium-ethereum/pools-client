@@ -105,7 +105,7 @@ export const TransactionStore: React.FC = ({ children }: Children) => {
                         <>
                             {statusMessages?.nextRebalance !== undefined ? (
                                 <div className="whitespace-nowrap">
-                                    {statusMessages?.type === 'mint' ? (
+                                    {statusMessages?.type === 'mint' || statusMessages?.type === 'flip' ? (
                                         <div className="flex items-center mb-2">
                                             <Logo
                                                 className="mr-2"
