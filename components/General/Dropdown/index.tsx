@@ -6,7 +6,6 @@ import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { classNames } from '@libs/utils/functions';
 import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
-import styled from 'styled-components';
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -58,19 +57,20 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
 const SIZE = {
     xs: 'px-2 py-1 text-xs',
     sm: 'px-4 py-2 text-sm',
-    default: 'pl-3 pr-2 py-2 text-sm ',
+    default: 'px-4 py-3 text-sm',
     lg: 'p-3 text-base',
     none: 'p-0 text-base',
 };
 
 const VARIANTS: Record<ButtonVariant, string> = {
-    default: 'default',
-    tracer: 'tracer',
-    unselected: 'unselected',
-    secondary: 'secondary',
+    default:
+        'border border-theme-border bg-theme-button-bg text-theme-text hover:bg-theme-button-bg-hover focus:border-solid opacity-80',
+    tracer: 'border-none bg-tracer-500 matrix:bg-theme-primary matrix:text-black text-white hover:bg-tracer-600 focus:border-none',
+    blue: 'border bg-tracer-650 matrix:bg-theme-primary matrix:text-black text-white font-semibold focus:border-none',
+    unselected: 'border-none bg-tracer-100 dark:bg-cool-gray-700 text-white focus:border-none',
 };
 
-export type ButtonVariant = 'default' | 'tracer' | 'unselected' | 'secondary';
+export type ButtonVariant = 'default' | 'tracer' | 'blue' | 'unselected';
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
@@ -103,16 +103,16 @@ export const Dropdown: React.FC<DropdownProps> = ({
     className,
 }) => {
     return (
-        <MenuStyled forwardedAs="div" className={`${className || ''}`}>
+        <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
             <Menu.Button
                 className={classNames(
                     `inline-flex justify-between w-full rounded-md`,
                     SIZE[size],
-                    'font-normal focus:outline-none hover:ring-1 hover:ring-50',
+                    'focus:outline-none hover:ring-1 hover:ring-50',
                     VARIANTS[variant],
                 )}
             >
-                <span className="mr-2 opacity-80">
+                <span className="mr-2">
                     {placeHolderIcon && value !== '' && value !== 'All' ? (
                         <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
                     ) : null}
@@ -134,7 +134,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
                             <Menu.Item key={option.key} disabled={option.disabled}>
@@ -178,69 +178,6 @@ export const Dropdown: React.FC<DropdownProps> = ({
                     </div>
                 </Menu.Items>
             </Transition>
-        </MenuStyled>
+        </Menu>
     );
 };
-
-const MenuStyled = styled(Menu)`
-    position: relative;
-    display: inline-block;
-    text-align: left;
-
-    .default {
-        border-width: 1px;
-        border-color: ${({ theme }) => theme.border};
-        background-color: ${({ theme }) => theme['button-bg']};
-        color: ${({ theme }) => theme.text};
-
-        &:hover {
-            background-color: ${({ theme }) => theme['button-bg-hover']};
-        }
-
-        &:focus {
-            border-style: solid;
-        }
-    }
-
-    .tracer {
-        border: none;
-        background-color: rgba(53, 53, 220, 1);
-        /* matrix:bg-theme-primary */
-        /* matrix:text-black */
-        color: ${({ theme }) => theme.text};
-
-        &:hover {
-            background-color: rgba(42, 42, 199, 1) !important;
-        }
-
-        &:focus {
-            border: none;
-        }
-    }
-
-    .unselected {
-        border: none;
-        background-color: rgba(222, 222, 255, 1) !important;
-        /* dark:bg-cool-gray-700 */
-        color: ${({ theme }) => theme.text};
-
-        &:focus {
-            border: none;
-        }
-    }
-
-    .secondary {
-        border-width: 1px;
-        border-color: ${({ theme }) => theme['border-secondary']};
-        background-color: ${({ theme }) => theme['button-bg']};
-        color: ${({ theme }) => theme.text};
-
-        &:hover {
-            background-color: ${({ theme }) => theme['button-bg-hover']};
-        }
-
-        &:focus {
-            border-style: solid;
-        }
-    }
-`;

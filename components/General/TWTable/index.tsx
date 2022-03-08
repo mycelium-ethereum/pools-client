@@ -32,8 +32,8 @@ export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children
 };
 
 const HEADER_CELL_SIZES = {
-    default: 'p-4',
-    sm: 'px-2 py-4',
+    default: 'p-3',
+    sm: 'px-3 py-0',
 };
 
 type Size = 'default' | 'sm';
@@ -52,7 +52,7 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Si
             className ?? '',
             `align-${twAlign}`,
             HEADER_CELL_SIZES[size],
-            'text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
+            'text-left text-sm font-semibold text-theme-text-secondary uppercase tracking-wider',
         )}
     >
         {children}
@@ -60,17 +60,21 @@ export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Si
 );
 
 type TableRowProps = JSX.IntrinsicElements['tr'] & {
+    className?: string;
     rowNumber: number;
 };
 
-export const TableRow: React.FC<TableRowProps> = ({ rowNumber, children }) => {
+export const TableRow: React.FC<TableRowProps> = ({ rowNumber, className, children }) => {
     return (
         <tr
-            className={
-                rowNumber % 2 === 0
-                    ? 'bg-theme-background'
-                    : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
-            }
+            className={classNames(
+                `${
+                    rowNumber % 2 === 0
+                        ? 'bg-theme-background'
+                        : 'bg-cool-gray-50 dark:bg-cool-gray-800 matrix:bg-theme-button-bg'
+                }`,
+                className ?? '',
+            )}
         >
             {children}
         </tr>

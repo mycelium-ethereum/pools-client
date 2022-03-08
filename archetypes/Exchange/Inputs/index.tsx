@@ -7,9 +7,11 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-
-import { Currency } from '@components/General/Currency';
-import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
+// import { Currency } from '@components/General/Currency';
+import {
+    // LogoTicker,
+    tokenSymbolToLogoTicker,
+} from '@components/General';
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
@@ -162,7 +164,7 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
-    tokenSymbol,
+    // tokenSymbol,
     isPoolToken,
 }) => {
     return (
@@ -175,12 +177,12 @@ const AmountInput: React.FC<AmountProps> = ({
                     }}
                 />
                 <InnerInputText>
-                    {tokenSymbol ? (
-                        <Currency
-                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
-                            label={tokenSymbol}
-                        />
-                    ) : null}
+                    {/*{tokenSymbol ? (*/}
+                    {/*    <Currency*/}
+                    {/*        ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}*/}
+                    {/*        label={tokenSymbol}*/}
+                    {/*    />*/}
+                    {/*) : null}*/}
                     <Max
                         className="m-auto"
                         onClick={(_e) =>

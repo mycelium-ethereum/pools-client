@@ -383,14 +383,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        const poolInstance = poolsState.pools[pool].poolInstance;
+                        const poolInstance = poolsState.pools[pool]?.poolInstance;
+                        if (!poolInstance) {
+                            return;
+                        }
                         poolInstance.connect(subscriptionProvider);
                         poolInstance.fetchLastPriceTimestamp().then((lastUpdate: BigNumber) => {
                             console.debug(`New last updated: ${lastUpdate.toString()}`);
                             // poolsDispatch({ type: 'triggerUpdate' });
                         });
-                        updateTokenBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
-                        updatePoolBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
+                        updateTokenBalances(poolInstance, subscriptionProvider);
+                        updatePoolBalances(poolInstance, subscriptionProvider);
                         commitDispatch({
                             type: 'resetCommits',
                             pool: pool,
