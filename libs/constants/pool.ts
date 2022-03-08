@@ -50,8 +50,7 @@ export const POOL_LIST_MAP: TokenListMapByNetwork = {
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
-            verified:
-                'https://raw.githubusercontent.com/tracer-protocol/pools-js/release/v2/src/data/static/arb-rinkeby.json',
+            verified: 'https://api.tracer.finance/poolsv2/poolList?network=421611',
         },
         External: [],
     },

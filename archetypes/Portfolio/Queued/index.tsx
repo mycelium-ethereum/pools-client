@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { CommitEnum } from '@tracer-protocol/pools-js';
-import { CommitToQueryFocusMap } from '@libs/constants';
+import { CommitActionToQueryFocusMap } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -16,8 +16,9 @@ import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
 import NoQueued from '@public/img/no-queued.svg';
+import { PageOptions } from '..';
 
-const queuedOptions = (numMints: number, numBurns: number, numFlips: number) => {
+const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (numMints, numBurns, numFlips) => {
     return [
         {
             key: CommitActionEnum.mint,
@@ -68,7 +69,7 @@ export default (({ focus, commits }) => {
             );
         } else {
             return mintCommits.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={false} />
+                <MintCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
             ));
         }
     };
@@ -87,7 +88,7 @@ export default (({ focus, commits }) => {
             );
         } else {
             return burnCommits.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+                <BurnCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
             ));
         }
     };
@@ -96,7 +97,7 @@ export default (({ focus, commits }) => {
         if (burnCommits.length === 0) {
             return (
                 <tr>
-                    <td colSpan={4}>
+                    <td colSpan={5}>
                         <div className="my-20 text-center">
                             <NoQueued className="mx-auto mb-5" />
                             <div className="text-cool-gray-500">You have no pending flips.</div>
@@ -106,8 +107,7 @@ export default (({ focus, commits }) => {
             );
         } else {
             return burnCommits.map((commit, index) => (
-                // TODO: Modify flip row attributes
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+                <FlipCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
             ));
         }
     };
@@ -143,11 +143,22 @@ export default (({ focus, commits }) => {
             return (
                 <>
                     <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Amount</TableHeaderCell>
-                        <TableHeaderCell>Return / Price *</TableHeaderCell>
-                        <TableHeaderCell>Flip In</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <tr>
+                            <TableHeaderCell>From</TableHeaderCell>
+                            <TableHeaderCell />
+                            <TableHeaderCell>To</TableHeaderCell>
+                            <TableHeaderCell />
+                            <TableHeaderCell>Flip In</TableHeaderCell>
+                            <TableHeaderCell />
+                        </tr>
+                        <tr>
+                            <TableHeaderCell>Token / Price *</TableHeaderCell>
+                            <TableHeaderCell>Amount *</TableHeaderCell>
+                            <TableHeaderCell>Token / Price *</TableHeaderCell>
+                            <TableHeaderCell>Amount *</TableHeaderCell>
+                            <TableHeaderCell />
+                            <TableHeaderCell />
+                        </tr>
                     </TableHeader>
                     <tbody>{FlipRows(flipCommits)}</tbody>
                 </>
@@ -164,7 +175,7 @@ export default (({ focus, commits }) => {
                     onClick={(option) =>
                         router.push({
                             query: {
-                                focus: CommitToQueryFocusMap[option as CommitActionEnum],
+                                focus: CommitActionToQueryFocusMap[option as CommitActionEnum],
                             },
                         })
                     }
@@ -188,14 +199,13 @@ export default (({ focus, commits }) => {
     commits: QueuedCommit[];
 }>;
 
-const CommitRow: React.FC<
+const MintCommitRow: React.FC<
     QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
         index: number;
-        burnRow: boolean; // is burnRow
+        provider: ethers.providers.JsonRpcProvider | null;
     }
 > = ({
-    token,
+    tokenOut,
     txnHash,
     tokenPrice,
     amount,
@@ -205,56 +215,46 @@ const CommitRow: React.FC<
     frontRunningInterval,
     updateInterval,
     created,
-    burnRow,
     quoteTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    const [base, collateral] = token.symbol.split('-')[1].split('/');
 
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
                 <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline my-auto mr-2" />
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
                     <div>
                         <div className="flex">
                             <div>
                                 {}
-                                {token.symbol.split('-')[0][0]}-{marketSymbolToAssetName[`${base}/${collateral}`]}
+                                {tokenOut.symbol.split('-')[0][0]}-
+                                {
+                                    marketSymbolToAssetName[
+                                        `${tokenOut.symbol.split('-')[1].split('/')[0]}/${
+                                            tokenOut.symbol.split('-')[1].split('/')[1]
+                                        }`
+                                    ]
+                                }
                             </div>
                             &nbsp;
-                            <div className={`${token.side === SideEnum.long ? 'green' : 'red'}`}>
-                                {token.side === SideEnum.long ? 'Long' : 'Short'}
+                            <div className={`${tokenOut.side === SideEnum.long ? 'green' : 'red'}`}>
+                                {tokenOut.side === SideEnum.long ? 'Long' : 'Short'}
                             </div>
                         </div>
-                        <div className="text-cool-gray-500">{token.name} </div>
+                        <div className="text-cool-gray-500">{tokenOut.symbol} </div>
                     </div>
                 </div>
             </TableRowCell>
-            {burnRow ? (
-                <>
-                    <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
-                    <TableRowCell>
-                        <div>
-                            {toApproxCurrency(amount.times(tokenPrice))} {collateral}
-                        </div>
-                        <div>
-                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
-                        </div>
-                    </TableRowCell>
-                </>
-            ) : (
-                <>
-                    <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
-                    <TableRowCell>
-                        <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
-                        <div className="text-cool-gray-500">
-                            at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
-                        </div>
-                    </TableRowCell>
-                </>
-            )}
+            <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
+            <TableRowCell>
+                <div>
+                    {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
+                </div>
+                <div className="text-cool-gray-500">
+                    at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                </div>
+            </TableRowCell>
             <TableRowCell>
                 <ReceiveIn
                     pendingUpkeep={pendingUpkeep}
@@ -268,7 +268,166 @@ const CommitRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
-                    token={token}
+                    token={tokenOut}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
+            </TableRowCell>
+        </TableRow>
+    );
+};
+
+const BurnCommitRow: React.FC<
+    QueuedCommit & {
+        index: number;
+        provider: ethers.providers.JsonRpcProvider | null;
+    }
+> = ({
+    tokenOut,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+    quoteTokenSymbol,
+}) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    return (
+        <TableRow key={txnHash} rowNumber={index}>
+            <TableRowCell>
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div className="flex">
+                            <div>
+                                {}
+                                {tokenOut.symbol.split('-')[0][0]}-
+                                {
+                                    marketSymbolToAssetName[
+                                        `${tokenOut.symbol.split('-')[1].split('/')[0]}/${
+                                            tokenOut.symbol.split('-')[1].split('/')[1]
+                                        }`
+                                    ]
+                                }
+                            </div>
+                            &nbsp;
+                            <div className={`${tokenOut.side === SideEnum.long ? 'green' : 'red'}`}>
+                                {tokenOut.side === SideEnum.long ? 'Long' : 'Short'}
+                            </div>
+                        </div>
+                        <div className="text-cool-gray-500">{tokenOut.symbol} </div>
+                    </div>
+                </div>
+            </TableRowCell>
+            <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
+            <TableRowCell>
+                <div>
+                    {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
+                </div>
+                <div>
+                    at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                </div>
+            </TableRowCell>
+            <TableRowCell>
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.mint}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
+                <Actions
+                    token={tokenOut}
+                    provider={provider}
+                    arbiscanTarget={{
+                        type: ArbiscanEnum.txn,
+                        target: txnHash,
+                    }}
+                />
+            </TableRowCell>
+        </TableRow>
+    );
+};
+
+const FlipCommitRow: React.FC<
+    QueuedCommit & {
+        index: number;
+        provider: ethers.providers.JsonRpcProvider | null;
+    }
+> = ({
+    tokenIn,
+    tokenOut,
+    txnHash,
+    tokenPrice,
+    amount,
+    nextRebalance,
+    provider,
+    index,
+    frontRunningInterval,
+    updateInterval,
+    created,
+    quoteTokenSymbol,
+}) => {
+    const [pendingUpkeep, setPendingUpkeep] = useState(false);
+
+    return (
+        <TableRow key={txnHash} rowNumber={index}>
+            <TableRowCell>
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div>{tokenOut.symbol}</div>
+                        <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
+                    </div>
+                </div>
+            </TableRowCell>
+            <TableRowCell>
+                <div>{amount.toFixed(2)} tokens</div>
+                <div className="text-cool-gray-500">
+                    {toApproxCurrency(tokenPrice.times(amount))} {quoteTokenSymbol}
+                </div>
+            </TableRowCell>
+            <TableRowCell>
+                <div className="flex my-auto">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenIn.symbol)} className="inline my-auto mr-2" />
+                    <div>
+                        <div>{tokenIn.symbol}</div>
+                        <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
+                    </div>
+                </div>
+            </TableRowCell>
+            <TableRowCell>
+                <div>{amount.toFixed(2)} tokens</div>
+                <div className="text-cool-gray-500">
+                    {toApproxCurrency(tokenPrice.times(amount))} {quoteTokenSymbol}
+                </div>
+            </TableRowCell>
+            <TableRowCell>
+                <ReceiveIn
+                    pendingUpkeep={pendingUpkeep}
+                    setPendingUpkeep={setPendingUpkeep}
+                    actionType={CommitActionEnum.mint}
+                    nextRebalance={nextRebalance}
+                    created={created}
+                    frontRunningInterval={frontRunningInterval}
+                    updateInterval={updateInterval}
+                />
+            </TableRowCell>
+            <TableRowCell className="flex text-right">
+                <Actions
+                    token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
                         type: ArbiscanEnum.txn,

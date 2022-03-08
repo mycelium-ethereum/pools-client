@@ -6,39 +6,59 @@ const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
 
 type NetworkType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
-type CommitType = 'LongBurn' | 'LongMint' | 'ShortMint' | 'ShortBurn';
+export const V2_API_COMMIT_TYPES = {
+    LONG_MINT: 'LongMint',
+    LONG_BURN: 'LongBurn',
+    SHORT_MINT: 'ShortMint',
+    SHORT_BURN: 'ShortBurn',
+    LONG_BURN_SHORT_MINT: 'LongBurnShortMint',
+    SHORT_BURN_LONG_MINT: 'ShortBurnLongMint',
+} as const;
+
+type V2_API_COMMIT_TYPE = typeof V2_API_COMMIT_TYPES[keyof typeof V2_API_COMMIT_TYPES];
 
 // Raw API return types
 type Result = {
-    collateralAmount: string;
-    collateralSymbol: string;
     date: number;
-    tokenAddress: string;
-    tokenAmount: string;
-    tokenName: string;
-    tokenPrice: string;
-    tokenSymbol: string;
-    type: CommitType;
-    userAddress: string;
+    type: V2_API_COMMIT_TYPE;
     tokenDecimals: number;
+    tokenInAddress: string;
+    tokenInSymbol: string;
+    tokenInName: string;
+    tokenInAmount: string;
+    price: string;
+    fee: string;
+    tokenOutAddress: string;
+    tokenOutSymbol: string;
+    tokenOutName: string;
+    tokenOutAmount: string;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 // Parsed types
 export type TradeHistory = {
     date: number;
-    type: CommitType;
-    tokenName: string;
-    collateralAmount: BigNumber;
-    collateralSymbol: string;
-    tokenAmount: BigNumber;
-    tokenPrice: BigNumber;
-    tokenSymbol: string;
-    tokenAddress: string;
+    type: V2_API_COMMIT_TYPE;
     tokenDecimals: number;
+    tokenInAddress: string;
+    tokenInSymbol: string;
+    tokenInName: string;
+    tokenInAmount: BigNumber;
+    price: BigNumber;
+    fee: BigNumber;
+    tokenOutAddress: string;
+    tokenOutSymbol: string;
+    tokenOutName: string;
+    tokenOutAmount: BigNumber;
     transactionHashIn: string;
     transactionHashOut: string;
+    priceTokenAddress: string;
+    priceTokenName: string;
+    priceTokenSymbol: string;
 };
 
 const fetchTradeHistory: (params: {
@@ -57,10 +77,12 @@ const fetchTradeHistory: (params: {
     let route = `${BASE_TRADE_HISTORY_API}?page=${page}&pageSize=${pageSize}&network=${
         network ?? ARBITRUM
     }&userAddress=${account}`;
-    if (type === 'burn') {
+    if (type === 'mint') {
+        route += '&types=LongMint&types=ShortMint';
+    } else if (type === 'burn') {
         route += '&types=LongBurn&types=ShortBurn';
     } else {
-        route += '&types=LongMint&types=ShortMint';
+        route += '&types=LongBurnShortMint&types=ShortBurnLongMint';
     }
     const fetchedTradeHistory: { results: TradeHistory[]; totalRecords: number } = await fetch(route)
         .then((res) => res.json())
@@ -72,16 +94,22 @@ const fetchTradeHistory: (params: {
                 parsedResults.push({
                     date: row.date,
                     type: row.type,
-                    tokenName: row.tokenName,
-                    collateralAmount: new BigNumber(row.collateralAmount),
-                    collateralSymbol: row.collateralSymbol,
-                    tokenAmount: new BigNumber(row.tokenAmount),
-                    tokenPrice: new BigNumber(row.tokenPrice),
-                    tokenSymbol: row.tokenSymbol,
-                    tokenAddress: row.tokenAddress,
                     tokenDecimals: row.tokenDecimals,
+                    tokenInAddress: row.tokenInAddress,
+                    tokenInSymbol: row.tokenInSymbol,
+                    tokenInName: row.tokenInName,
+                    tokenInAmount: new BigNumber(row.tokenInAmount),
+                    price: new BigNumber(row.price),
+                    fee: new BigNumber(row.fee),
+                    tokenOutAddress: row.tokenOutAddress,
+                    tokenOutSymbol: row.tokenOutSymbol,
+                    tokenOutName: row.tokenOutName,
+                    tokenOutAmount: new BigNumber(row.tokenOutAmount),
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
+                    priceTokenAddress: row.priceTokenAddress,
+                    priceTokenName: row.priceTokenName,
+                    priceTokenSymbol: row.priceTokenSymbol,
                 });
             });
             return {

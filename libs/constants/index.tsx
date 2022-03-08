@@ -23,10 +23,24 @@ export const CommitTypeMap = {
     ShortFlip: CommitEnum.longBurnShortMint,
 };
 
-export const CommitToQueryFocusMap: Record<CommitActionEnum, 'mint' | 'burn' | 'flip'> = {
-    [CommitActionEnum.mint]: 'mint',
-    [CommitActionEnum.burn]: 'burn',
-    [CommitActionEnum.flip]: 'flip',
+const mintQueryFocus = 'mint';
+const burnQueryFocus = 'burn';
+const flipQueryFocus = 'flip';
+type QueryFocus = typeof mintQueryFocus | typeof burnQueryFocus | typeof flipQueryFocus;
+
+export const CommitToQueryFocusMap: Record<CommitEnum, QueryFocus> = {
+    [CommitEnum.longMint]: mintQueryFocus,
+    [CommitEnum.shortMint]: mintQueryFocus,
+    [CommitEnum.longBurn]: burnQueryFocus,
+    [CommitEnum.shortBurn]: burnQueryFocus,
+    [CommitEnum.longBurnShortMint]: flipQueryFocus,
+    [CommitEnum.shortBurnLongMint]: flipQueryFocus,
+};
+
+export const CommitActionToQueryFocusMap: Record<CommitActionEnum, QueryFocus> = {
+    [CommitActionEnum.mint]: mintQueryFocus,
+    [CommitActionEnum.burn]: burnQueryFocus,
+    [CommitActionEnum.flip]: flipQueryFocus,
 };
 
 export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {

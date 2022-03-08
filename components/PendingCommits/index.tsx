@@ -100,7 +100,7 @@ export const CommitRow: React.FC<
         burnRow: boolean; // is burnRow
     }
 > = ({
-    token,
+    tokenOut,
     txnHash,
     tokenPrice,
     amount,
@@ -117,8 +117,8 @@ export const CommitRow: React.FC<
     return (
         <TableRow key={txnHash} rowNumber={index}>
             <TableRowCell>
-                <Logo ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline mr-2" />
-                {token.name}
+                <Logo ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline mr-2" />
+                {tokenOut.name}
             </TableRowCell>
             {burnRow ? (
                 <>
@@ -146,7 +146,7 @@ export const CommitRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
-                    token={token}
+                    token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
                         type: ArbiscanEnum.txn,
