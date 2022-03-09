@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
-import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
@@ -88,25 +87,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         <Container>
             <Wrapper hasMargin>
                 <Label>Token</Label>
-                <DropdownStyled
-                    variant="secondary"
-                    placeHolder="Select Token"
-                    placeHolderIcon={tokenSymbolToLogoTicker(
-                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
-                    )}
-                    size="lg"
-                    options={tokens.map((token) => ({
-                        key: `${token.pool}-${token.side}`,
-                        text: token.symbol,
-                        ticker: tokenSymbolToLogoTicker(token.symbol),
-                    }))}
-                    value={token.symbol}
-                    onSelect={(option) => {
-                        const [pool, side] = option.split('-');
-                        swapDispatch({ type: 'setSelectedPool', value: pool as string });
-                        swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
-                    }}
-                />
+                <TokenSelect tokens={tokens} />
                 <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
             </Wrapper>
             <Wrapper>
@@ -257,10 +238,6 @@ const Label = styled.p`
     @media (min-width: 640px) {
         margin-bottom: 0.5rem;
     }
-`;
-
-const DropdownStyled = styled(Dropdown)`
-    width: 100%;
 `;
 
 const InputStyled = styled(Input)`

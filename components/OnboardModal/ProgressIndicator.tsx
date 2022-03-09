@@ -1,4 +1,4 @@
-import {Theme} from '@context/ThemeContext/themes';
+import { Theme } from '@context/ThemeContext/themes';
 import React from 'react';
 import styled from 'styled-components';
 import { ProgressIndicatorProps } from './types';

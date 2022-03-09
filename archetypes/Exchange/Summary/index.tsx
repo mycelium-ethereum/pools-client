@@ -29,7 +29,10 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const flippedToken = useMemo(() => (isLong ? pool.shortToken : pool.longToken), [isLong, pool.longToken, pool.shortToken]);
+    const flippedToken = useMemo(
+        () => (isLong ? pool.shortToken : pool.longToken),
+        [isLong, pool.longToken, pool.shortToken],
+    );
     // const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 

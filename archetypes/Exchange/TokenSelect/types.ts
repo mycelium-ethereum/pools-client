@@ -1,4 +1,4 @@
 export enum TokenLocation {
     Wallet = 'Wallet',
-    Escrow = 'Escrow'
+    Escrow = 'Escrow',
 }

@@ -382,6 +382,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
+                        if (!poolsState.pools[pool]) {
+                            return;
+                        }
                         const poolInstance = poolsState.pools[pool].poolInstance;
                         poolInstance.connect(subscriptionProvider);
                         poolInstance.fetchLastPriceTimestamp().then((lastUpdate: BigNumber) => {

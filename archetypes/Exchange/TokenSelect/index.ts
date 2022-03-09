@@ -1,2 +1,2 @@
-import TokenSelect from './TokenSelect'
+import TokenSelect from './TokenSelect';
 export default TokenSelect;

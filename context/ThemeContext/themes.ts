@@ -1,7 +1,7 @@
 export enum Theme {
     Dark = 'dark',
     Light = 'light',
-    Matrix = 'matrix'
+    Matrix = 'matrix',
 }
 
 export const themes: Record<
