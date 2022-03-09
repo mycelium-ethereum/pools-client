@@ -6,8 +6,11 @@ import BigNumber from 'bignumber.js';
 export type TokenRow = {
     side: SideEnum;
     leverage: number;
-    pool: string;
-    poolName: string;
+    pool: {
+        address: string;
+        name: string;
+        quoteTokenSymbol: string;
+    };
     symbol: string;
     balance: BigNumber;
     escrowBalance: BigNumber;
@@ -36,26 +39,33 @@ export default (() => {
                     leverage,
                     shortToken: { symbol: shortTokenSymbol, address: shortTokenAddress },
                     longToken: { symbol: longTokenSymbol, address: longTokenAddress },
+                    quoteToken: { symbol: quoteTokenSymbol },
                 } = poolInstance;
 
                 const shortToken: TokenRow = {
                     symbol: shortTokenSymbol,
                     side: SideEnum.short,
-                    pool: address,
                     leverage: leverage,
                     balance: userBalances.shortToken.balance,
                     escrowBalance: userBalances.aggregateBalances.shortTokens,
-                    poolName: name,
+                    pool: {
+                        address,
+                        quoteTokenSymbol,
+                        name,
+                    },
                 };
 
                 const longToken: TokenRow = {
                     symbol: longTokenSymbol,
                     side: SideEnum.long,
-                    pool: address,
                     leverage: leverage,
                     balance: userBalances.longToken.balance,
                     escrowBalance: userBalances.aggregateBalances.shortTokens,
-                    poolName: name,
+                    pool: {
+                        address,
+                        quoteTokenSymbol,
+                        name,
+                    },
                 };
                 _tokens.push(shortToken, longToken);
                 _tokenMap[shortTokenAddress] = shortToken;

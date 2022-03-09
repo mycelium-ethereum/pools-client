@@ -1,9 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import * as Styles from './styles';
-import { Table, TableHeader, TableRowCell, TableRow } from '@components/General/TWTable';
-import { tokenSymbolToLogoTicker } from '@components/General';
-import { tickerToName } from '@libs/utils/converters';
 import { TokenRow } from '@libs/hooks/usePoolTokens';
+import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 
 const TokenSelect: React.FC<{
     tokens: TokenRow[];
@@ -30,36 +28,49 @@ const TokenSelect: React.FC<{
             <Styles.TokenSearch ref={searchInput} value={filter} onChange={(filter) => setFilter(filter)} />
             <Styles.TokenSelectDropdown defaultHeight={0} open={show}>
                 <Styles.TokenSelectBox>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
+                    <Styles.TokenSelectTable>
+                        <Styles.TokenSelectHead>
+                            <Styles.TokenSelectRow>
                                 <Styles.HeaderCell>Token</Styles.HeaderCell>
-                                <Styles.HeaderCell>Wallet</Styles.HeaderCell>
                                 <Styles.HeaderCell>Escrow</Styles.HeaderCell>
-                            </TableRow>
-                        </TableHeader>
-                        {tokens.map((token) => (
-                            <>
-                                <Styles.TokenSelecRow>
-                                    <TableRowCell>
-                                        <Styles.LogoCell>
-                                            <Styles.TokenLogo ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                            <Styles.TextWrapper>
-                                                <Styles.LogoText className="font-bold">
-                                                    {tickerToName(token.poolName)}
-                                                </Styles.LogoText>
-                                                <Styles.LogoSubtext className="text-xs">
-                                                    {token.poolName.split('-')[1]}
-                                                </Styles.LogoSubtext>
-                                            </Styles.TextWrapper>
-                                        </Styles.LogoCell>
-                                    </TableRowCell>
-                                    <TableRowCell>{token.balance.toFixed(3)}</TableRowCell>
-                                    <TableRowCell>{token.escrowBalance.toFixed(3)}</TableRowCell>
-                                </Styles.TokenSelecRow>
-                            </>
-                        ))}
-                    </Table>
+                                <Styles.HeaderCell>Wallet</Styles.HeaderCell>
+                            </Styles.TokenSelectRow>
+                        </Styles.TokenSelectHead>
+                        <Styles.TokenSelectBody>
+                            {tokens.map((token) => (
+                                <Styles.TokenSelectRow key={token.symbol}>
+                                    <Styles.TokenSelectCell hasLogo>
+                                        <Logo
+                                            className="inline"
+                                            size="md"
+                                            ticker={tokenSymbolToLogoTicker(token.symbol)}
+                                        />
+                                        {token.symbol}+{token.pool.quoteTokenSymbol}-01
+                                    </Styles.TokenSelectCell>
+                                    <Styles.TokenSelectCell hasBalance={token.escrowBalance.toNumber() > 0}>
+                                        {token.escrowBalance.toNumber() > 0 ? (
+                                            <>
+                                                {token.escrowBalance?.toFixed(2)}
+                                                <span>Tokens</span>
+                                            </>
+                                        ) : (
+                                            '0.00'
+                                        )}
+                                    </Styles.TokenSelectCell>
+                                    <Styles.TokenSelectCell hasBalance={token.balance.toNumber() > 0}>
+                                        {token.balance.toNumber() > 0 ? (
+                                            <>
+                                                {token.balance.toNumber().toFixed(2)}
+                                                <span>Tokens</span>
+                                            </>
+                                        ) : (
+                                            '0.00'
+                                        )}
+                                    </Styles.TokenSelectCell>
+                                </Styles.TokenSelectRow>
+                            ))}
+                        </Styles.TokenSelectBody>
+                    </Styles.TokenSelectTable>
                 </Styles.TokenSelectBox>
             </Styles.TokenSelectDropdown>
         </>
@@ -67,22 +78,3 @@ const TokenSelect: React.FC<{
 };
 
 export default TokenSelect;
-// <DropdownStyled
-// variant="secondary"
-// placeHolder="Select Token"
-// placeHolderIcon={tokenSymbolToLogoTicker(
-// side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
-// )}
-// size="lg"
-// options={tokens.map((token) => ({
-// key: `${token.pool}-${token.side}`,
-// text: token.symbol,
-// ticker: tokenSymbolToLogoTicker(token.symbol),
-// }))}
-// value={token.symbol}
-// onSelect={(option) => {
-// const [pool, side] = option.split('-');
-// swapDispatch({ type: 'setSelectedPool', value: pool as string });
-// swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
-// }}
-// />
