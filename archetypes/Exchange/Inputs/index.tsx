@@ -7,11 +7,8 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-// import { Currency } from '@components/General/Currency';
-import {
-    // LogoTicker,
-    tokenSymbolToLogoTicker,
-} from '@components/General';
+import { Currency } from '@components/General/Currency';
+import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
@@ -108,7 +105,9 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                         swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
                     }}
                 />
-                <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
+                {commitAction !== CommitActionEnum.burn && (
+                    <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
+                )}
             </Wrapper>
             <Wrapper>
                 <Label>Amount</Label>
@@ -134,6 +133,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
                         isPoolToken={true}
+                        commitAction={commitAction}
                     />
                 )}
             </Wrapper>
@@ -155,6 +155,7 @@ type AmountProps = {
     balance: BigNumber;
     tokenSymbol: string;
     isPoolToken: boolean;
+    commitAction?: CommitActionEnum;
 };
 
 const AmountInput: React.FC<AmountProps> = ({
@@ -164,8 +165,9 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
-    // tokenSymbol,
+    tokenSymbol,
     isPoolToken,
+    commitAction,
 }) => {
     return (
         <>
@@ -177,12 +179,12 @@ const AmountInput: React.FC<AmountProps> = ({
                     }}
                 />
                 <InnerInputText>
-                    {/*{tokenSymbol ? (*/}
-                    {/*    <Currency*/}
-                    {/*        ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}*/}
-                    {/*        label={tokenSymbol}*/}
-                    {/*    />*/}
-                    {/*) : null}*/}
+                    {tokenSymbol && commitAction !== CommitActionEnum.burn ? (
+                        <Currency
+                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
+                            label={tokenSymbol}
+                        />
+                    ) : null}
                     <Max
                         className="m-auto"
                         onClick={(_e) =>
@@ -197,13 +199,15 @@ const AmountInput: React.FC<AmountProps> = ({
                     </Max>
                 </InnerInputText>
             </InputContainerStyled>
-            <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
-                {invalidAmount.isInvalid && invalidAmount.message ? (
-                    invalidAmount.message
-                ) : (
-                    <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
-                )}
-            </Subtext>
+            {commitAction !== CommitActionEnum.burn && (
+                <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
+                    {invalidAmount.isInvalid && invalidAmount.message ? (
+                        invalidAmount.message
+                    ) : (
+                        <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
+                    )}
+                </Subtext>
+            )}
         </>
     );
 };

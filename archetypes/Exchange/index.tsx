@@ -13,6 +13,7 @@ import { CommitEnum } from '@tracer-protocol/pools-js';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
 import styled from 'styled-components';
+import TokenHoldingsTable from './TokenHoldingsTable';
 // TODO: dependent on auto-claim feature
 // import Checkbox from '@components/General/Checkbox';
 
@@ -102,6 +103,9 @@ export default styled((({ onClose, className }) => {
                     Otherwise, you can manually claim tokens from escrow."
                 />
             )} */}
+            {CommitActionEnum[swapState.commitAction] === 'burn' && (
+                <StyledTokenHoldingsTable userBalances={userBalances} pool={pool} side={swapState.side} />
+            )}
 
             <Summary
                 pool={pool}
@@ -184,6 +188,10 @@ const TWButtonGroupStyled = styled(TWButtonGroup)`
 const DividerRow = styled(Divider)`
     margin: 30px 0;
     border-color: ${({ theme }) => theme['border-secondary']};
+`;
+
+const StyledTokenHoldingsTable = styled(TokenHoldingsTable)`
+    margin-top: -20px;
 `;
 
 // TODO: dependent on auto-claim feature
