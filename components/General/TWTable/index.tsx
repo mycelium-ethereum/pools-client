@@ -1,4 +1,4 @@
-import {Theme} from '@context/ThemeContext/themes';
+import { Theme } from '@context/ThemeContext/themes';
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import styled from 'styled-components';
@@ -33,33 +33,37 @@ export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children
     );
 };
 
-const HEADER_CELL_SIZES = {
-    default: 'p-4',
-    sm: 'px-2 py-4',
+type Size = 'default' | 'sm';
+type Align = 'bottom' | 'top';
+
+const HEADER_CELL_SIZES: Record<Size, string> = {
+    default: '1rem',
+    sm: '1rem 0.5rem',
 };
 
-type Size = 'default' | 'sm';
+export const TableHeaderCell = styled.th.attrs((props) => ({
+    ...props,
+    scope: 'col',
+}))<{
+    size?: Size;
+    twAlign?: Align;
+}>`
+    font-size: 0.75rem; /* 12px */
+    line-height: 1rem; /* 16px */
+    text-align: left;
+    font-weight: 500;
+    color: ${({ theme }) => theme['text-secondary']};
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 
-export const TableHeaderCell: React.FC<JSX.IntrinsicElements['th'] & { size?: Size; twAlign?: 'bottom' }> = ({
-    children,
-    className,
-    twAlign = 'top',
-    size = 'default',
-    ...props
-}) => (
-    <th
-        {...props}
-        scope="col"
-        className={classNames(
-            className ?? '',
-            `align-${twAlign}`,
-            HEADER_CELL_SIZES[size],
-            'text-left text-xs font-medium text-theme-text-secondary uppercase tracking-wider',
-        )}
-    >
-        {children}
-    </th>
-);
+    vertical-align: ${(props) => props.twAlign};
+    padding: ${({ size }) => HEADER_CELL_SIZES[size as Size]};
+`;
+
+TableHeaderCell.defaultProps = {
+    size: 'default',
+    twAlign: 'top',
+};
 
 export const TableRow = styled.tr<{ lined?: boolean }>`
     &:nth-child(even) {
@@ -67,20 +71,21 @@ export const TableRow = styled.tr<{ lined?: boolean }>`
     }
     &:nth-child(odd) {
         background: ${({ theme, lined }) => {
-            if (!lined) return theme.background
+            if (!lined) {
+                return theme.background;
+            }
             switch (theme.theme) {
                 case Theme.Dark:
                     return '#1F2A37';
                 case Theme.Matrix:
-                    return '#003b00'
+                    return '#003b00';
                 case Theme.Light:
                 default:
-                    return '#F9FAFB'
+                    return '#F9FAFB';
             }
-
         }};
     }
-`
+`;
 
 const CELL_SIZES = {
     default: 'p-4',

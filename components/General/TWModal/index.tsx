@@ -50,7 +50,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                     >
                         <div
                             className={classNames(
-                                'p-10 inline-block w-full align-bottom self-center bg-theme-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle',
+                                'p-10 inline-block w-full align-bottom bg-theme-background rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle',
                                 SIZES[size],
                                 className,
                             )}
