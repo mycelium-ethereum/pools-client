@@ -43,7 +43,7 @@ const TokenHoldingsTable: React.FC<FeeNoteProps> = ({ pool, side, userBalances }
                     <Row>
                         <HeaderCell>Token</HeaderCell>
                         <HeaderCell>Escrow</HeaderCell>
-                        <HeaderCell>Walet</HeaderCell>
+                        <HeaderCell>Wallet</HeaderCell>
                     </Row>
                 </Head>
                 <Body>
