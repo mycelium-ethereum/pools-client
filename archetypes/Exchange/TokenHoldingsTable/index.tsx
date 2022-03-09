@@ -7,8 +7,8 @@ import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 
 interface FeeNoteProps {
-    pool: any;
-    side: any;
+    pool: PoolInfo['poolInstance'];
+    side: SideEnum;
     userBalances: PoolInfo['userBalances'];
 }
 
@@ -120,7 +120,7 @@ const StyledHiddenExpand = styled(HiddenExpand)`
 
 const Table = styled.table`
     width: 100%;
-    box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 10px 10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
     border-radius: 7px;
     overflow: hidden;
     font-weight: 600;
@@ -170,9 +170,14 @@ const Body = styled.tbody`
     background-color: ${({ theme }) => (theme.isDark ? theme['button-bg'] : theme.backgroud)};
 `;
 
-const DataCell = styled.td<{ hasLogo?: boolean; hasBalance?: boolean }>`
+interface DataCellProps {
+    hasLogo?: boolean;
+    hasBalance?: boolean;
+}
+const DataCell = styled.td<DataCellProps>`
     display: flex;
-    justify-content: center;
+    flex-direction: ${(props: DataCellProps) => (props.hasBalance ? 'column' : 'row')};
+    justify-content: ${(props: DataCellProps) => (props.hasLogo ? 'flex-start' : 'center')};
     align-items: center;
     font-size: 12px;
 
@@ -183,20 +188,6 @@ const DataCell = styled.td<{ hasLogo?: boolean; hasBalance?: boolean }>`
     span {
         color: #6b7280;
     }
-
-    ${({ hasLogo, hasBalance }) => {
-        if (hasLogo) {
-            return `
-                justify-content: flex-start;
-            `;
-        }
-
-        if (hasBalance) {
-            return `
-                flex-direction: column;
-            `;
-        }
-    }}
 
     @media (min-width: 640px) {
         font-size: 14px;
