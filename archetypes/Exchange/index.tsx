@@ -110,7 +110,6 @@ export default styled((({ onClose, className }) => {
                 amount={amountBN}
                 receiveIn={receiveIn}
                 commitAction={commitAction}
-                inputAmount={Number(amount)}
                 gasFee={commitGasFees[commitAction]}
             />
 

@@ -21,12 +21,12 @@ type SummaryProps = {
     isLong: boolean;
     commitAction: CommitActionEnum;
     receiveIn: number;
-    inputAmount: number;
     gasFee?: string;
 };
 
-export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, gasFee }) => {
+export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
+    const amountNumber: number = useMemo(() => amount.toNumber(), [amount]);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const flippedToken = useMemo(
@@ -34,23 +34,38 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
         [isLong, pool.longToken, pool.shortToken],
     );
     const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
-    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
+    const [tokenPrice, flippedTokenPrice] = useMemo(
+        () =>
+            isLong
+                ? [pool.getNextLongTokenPrice(), pool.getNextShortTokenPrice()]
+                : [pool.getNextShortTokenPrice(), pool.getNextLongTokenPrice()],
+        [isLong],
+    );
 
-    const totalCommitmentAmount = inputAmount ? toApproxCurrency(inputAmount) : 0;
-    const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(inputAmount);
-    const expectedAmount = amount.div(tokenPrice ?? 1).toFixed(0);
+    const totalCommitmentAmount: string = amountNumber ? toApproxCurrency(amountNumber) : '0';
+    const totalCost: string = amountNumber <= 0 ? '0' : toApproxCurrency(amountNumber);
+    const expectedAmount: string = amount.div(tokenPrice ?? 1).toFixed(0);
+
+    const flippedAmount: BigNumber = calcNotionalValue(tokenPrice, amount);
+    const flippedExpectedAmount: string = flippedAmount.div(flippedTokenPrice ?? 1).toFixed(0);
+
     const expectedPrice = ` at ${toApproxCurrency(tokenPrice ?? 1, 2)} USD/token`;
+    const flippedExpectedPrice = ` at ${toApproxCurrency(flippedTokenPrice ?? 1, 2)} USD/token`;
     const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.symbol}`;
-    const poolPowerLeverage = pool.leverage;
-    const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
-    const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
-    const equivalentExposure = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
-    const equivalentExposureFlip = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
-    const commitAmount = inputAmount / pool.oraclePrice.toNumber();
+    const flippedExpectedTokensMinted: string =
+        amountNumber > 0 ? `${flippedExpectedAmount} ${flippedToken.symbol}` : '0';
+    const poolPowerLeverage: number = pool.leverage;
+    const selectedToken: string = pool.name?.split('-')[1]?.split('/')[0];
+    const selectedTokenOraclePrice: string = toApproxCurrency(pool.oraclePrice);
+    const equivalentExposure: number = (amountNumber / pool.oraclePrice.toNumber()) * poolPowerLeverage;
+    const flippedEquivalentExposure: number =
+        (flippedAmount.toNumber() / pool.oraclePrice.toNumber()) * poolPowerLeverage;
+    const commitAmount: number = amountNumber / pool.oraclePrice.toNumber();
+    const flippedCommitAmount: number = flippedAmount.toNumber() / pool.oraclePrice.toNumber();
 
     const getCommitGasFee = () => {
         const fee = Number(gasFee);
-        if (amount.toNumber() === 0) {
+        if (amountNumber === 0) {
             return 0;
         } else if (fee < 0.001) {
             return '< $0.001';
@@ -227,21 +242,31 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Expected Long Token Value" showSectionDetails>
+                                    <Section
+                                        label={`Expected ${isLong ? 'Long' : 'Short'} Token Value`}
+                                        showSectionDetails
+                                    >
                                         <div>
                                             <span className="opacity-50">
-                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} USDC
+                                                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 2)} `}
+                                                USDC
                                             </span>
                                         </div>
                                     </Section>
-                                    <Section label="Expected Short Token Price" showSectionDetails>
+                                    <Section
+                                        label={`Expected ${isLong ? 'Short' : 'Long'} Token Price`}
+                                        showSectionDetails
+                                    >
                                         <div>
-                                            <span className="opacity-50">{expectedPrice}</span>
+                                            <span className="opacity-50">{flippedExpectedPrice}</span>
                                         </div>
                                     </Section>
-                                    <Section label="Expected Amount of Short Tokens" showSectionDetails>
+                                    <Section
+                                        label={`Expected Amount of ${isLong ? 'Short' : 'Long'} Tokens`}
+                                        showSectionDetails
+                                    >
                                         <div>
-                                            <span className="opacity-50">{expectedTokensMinted}</span>
+                                            <span className="opacity-50">{flippedExpectedTokensMinted}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
@@ -273,7 +298,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                             <Section label="Expected Exposure" className="header">
                                 <SumText setColor="red">
-                                    {equivalentExposureFlip.toFixed(3)} {selectedToken}
+                                    {flippedEquivalentExposure.toFixed(3)} {selectedToken}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -284,7 +309,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     >
                                         <div>
                                             <span className="opacity-50">
-                                                {commitAmount.toFixed(3)} {selectedToken}
+                                                {flippedCommitAmount.toFixed(3)} {selectedToken}
                                             </span>
                                         </div>
                                     </Section>
