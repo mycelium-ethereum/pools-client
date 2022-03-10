@@ -69,7 +69,7 @@ export const initialPortfolioState = {
 export type PortfolioAction =
     | { type: 'setEscrowSearch'; search: string }
     | { type: 'setEscrowMarketFilter'; market: MarketFilterEnum }
-    | { type: 'setDenotion'; denotedIn: DenotedInEnum };
+    | { type: 'setDenotation'; denotedIn: DenotedInEnum };
 
 export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState = (state, action) => {
     switch (action.type) {
@@ -83,7 +83,7 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
                 ...state,
                 escrowMarketFilter: action.market,
             };
-        case 'setDenotion':
+        case 'setDenotation':
             return {
                 ...state,
                 positionsDenotedIn: action.denotedIn,

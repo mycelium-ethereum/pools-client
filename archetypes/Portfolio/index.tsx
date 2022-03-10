@@ -22,6 +22,11 @@ export enum TradePortfolioPage {
     Queued = 2,
 }
 
+export type PageOptions = {
+    key: CommitActionEnum;
+    text: React.ReactNode;
+}[];
+
 export const PortfolioNav: React.FC<{
     page: TradePortfolioPage;
     numCommits: number;

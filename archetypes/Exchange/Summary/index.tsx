@@ -33,14 +33,13 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
         () => (isLong ? pool.shortToken : pool.longToken),
         [isLong, pool.longToken, pool.shortToken],
     );
-    // const nextPoolState = useMemo(() => pool.getNextPoolState(), [pool.lastPrice]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
 
     const totalCommitmentAmount = inputAmount ? toApproxCurrency(inputAmount) : 0;
     const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(inputAmount);
     const expectedAmount = amount.div(tokenPrice ?? 1).toFixed(0);
     const expectedPrice = ` at ${toApproxCurrency(tokenPrice ?? 1, 2)} USD/token`;
-    const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.name}`;
+    const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.symbol}`;
     const poolPowerLeverage = pool.leverage;
     const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
     const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
@@ -73,7 +72,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                 >
                     {commitAction === CommitActionEnum.mint && (
                         <>
-                            <Section label="Total Costs">
+                            <Section label="Total Costs" className="header">
                                 <SumText>{totalCost}</SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -88,7 +87,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     </Section>
                                 </SectionDetails>
                             )}
-                            <Section label="Expected Tokens Minted">
+                            <Section label="Expected Tokens Minted" className="header">
                                 <SumText>{expectedTokensMinted}</SumText>
                             </Section>
                             {showTransactionDetails && (
@@ -107,13 +106,13 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     </Section>
                                 </SectionDetails>
                             )}
-                            <Section label="Expected Equivalent Exposure">
+                            <Section label="Expected Equivalent Exposure" className="header">
                                 <SumText setColor="green">
                                     {equivalentExposure.toFixed(3)} {selectedToken}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
-                                <>
+                                <SectionDetails>
                                     <Section
                                         label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
                                         showSectionDetails
@@ -125,7 +124,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                     <Section label="Pool Power Leverage" showSectionDetails>
                                         <span className="opacity-50">{poolPowerLeverage}</span>
                                     </Section>
-                                </>
+                                </SectionDetails>
                             )}
                             <ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
@@ -135,7 +134,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                     {commitAction === CommitActionEnum.burn && (
                         <>
-                            <Section label="Expected Token Value">
+                            <Section label="Expected Token Value" className="header">
                                 <SumText>
                                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 2)} ${
                                         pool.quoteToken.symbol
@@ -157,7 +156,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                 </SectionDetails>
                             )}
 
-                            <Section label="Expected Fees">
+                            <Section label="Expected Fees" className="header">
                                 <SumText>
                                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
                                         pool.quoteToken.symbol
@@ -188,43 +187,48 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                     {commitAction === CommitActionEnum.flip && (
                         <>
-                            <Section label="Receive">
+                            <Section label="Receive" className="header">
                                 <SumText>
                                     <Logo
                                         className="inline mr-2"
                                         size="md"
                                         ticker={tokenSymbolToLogoTicker(flippedToken.symbol)}
                                     />
-                                    {flippedToken.name}
+                                    {flippedToken.symbol}
                                 </SumText>
                             </Section>
                             <Divider />
 
-                            <Section label="Expected Amount">
+                            <Section label="Expected Amount" className="header">
                                 <SumText>
                                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
-                                        pool.quoteToken.symbol
+                                        flippedToken.symbol
                                     }`}
                                 </SumText>
                             </Section>
                             {showTransactionDetails && (
                                 <SectionDetails>
-                                    <Section label="Tokens" showSectionDetails>
+                                    <Section label="Expected Long Token Value" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">
-                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
+                                                {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} USDC
                                             </span>
                                         </div>
                                     </Section>
-                                    <Section label="Expected Price" showSectionDetails>
+                                    <Section label="Expected Short Token Price" showSectionDetails>
                                         <div>
                                             <span className="opacity-50">{expectedPrice}</span>
+                                        </div>
+                                    </Section>
+                                    <Section label="Expected Amount of Short Tokens" showSectionDetails>
+                                        <div>
+                                            <span className="opacity-50">{expectedTokensMinted}</span>
                                         </div>
                                     </Section>
                                 </SectionDetails>
                             )}
 
-                            <Section label="Expected Fees">
+                            <Section label="Expected Fees" className="header">
                                 <SumText>
                                     {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 3)} ${
                                         pool.quoteToken.symbol
@@ -248,7 +252,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                 </SectionDetails>
                             )}
 
-                            <Section label="Expected Exposure">
+                            <Section label="Expected Exposure" className="header">
                                 <SumText setColor="red">
                                     {equivalentExposureFlip.toFixed(3)} {selectedToken}
                                 </SumText>
@@ -259,12 +263,16 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                                         label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
                                         showSectionDetails
                                     >
-                                        <span className="opacity-50">
-                                            {commitAmount.toFixed(3)} {selectedToken}
-                                        </span>
+                                        <div>
+                                            <span className="opacity-50">
+                                                {commitAmount.toFixed(3)} {selectedToken}
+                                            </span>
+                                        </div>
                                     </Section>
-                                    <Section label="Pool Power Leverage" showSectionDetails>
-                                        <span className="opacity-50">{poolPowerLeverage}</span>
+                                    <Section label="Pool Leverage" showSectionDetails>
+                                        <div>
+                                            <span className="opacity-50">{poolPowerLeverage}x</span>
+                                        </div>
                                     </Section>
                                 </SectionDetails>
                             )}
@@ -324,7 +332,7 @@ const Countdown = styled.div`
     border-radius: 0.25rem;
     background-color: ${({ theme }) => theme.background};
     z-index: 2;
-    font-size: 16px;
+    font-size: 15px;
     text-transform: capitalize;
 `;
 
@@ -339,21 +347,24 @@ const TimeLeftStyled = styled(TimeLeft)`
 `;
 
 const SumText = styled.span<{ setColor?: string }>`
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: 600;
 
     ${({ setColor }) => {
         if (setColor === 'green') {
             return `
-                font-weight: 600;
                 color: #10b981;
-                `;
+            `;
         } else if (setColor === 'red') {
             return `
-                font-weight: 600;
                 color: #ef4444;
             `;
         }
     }}
+
+    @media (min-width: 640px) {
+        font-size: 15px;
+    }
 `;
 
 const Divider = styled.hr`

@@ -1,13 +1,13 @@
 import React, { forwardRef } from 'react';
-import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { device } from '@context/ThemeContext/themes';
+import { SearchOutlined } from '@ant-design/icons';
 
 interface SearchInputProps {
+    className?: string;
     placeholder?: string;
     value: string;
     onChange: (input: string) => void;
-    className?: string;
 }
 
 export const InputWrapper = styled.div`
@@ -48,7 +48,7 @@ export const InnerSearchInput = styled.input`
     display: block;
     width: 100%;
     // -1 px for the border top and bottom
-    padding: calc(0.5rem - 1px) 1rem calc(0.5rem - 1px) 2.5rem;
+    padding: calc(0.7rem - 1px) 1rem calc(0.7rem - 1px) 2.5rem;
 
     border-color: ${({ theme }) => theme.border};
     border-radius: inherit;

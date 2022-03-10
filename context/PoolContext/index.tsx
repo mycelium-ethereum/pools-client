@@ -28,6 +28,7 @@ import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Contex
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
+import { CommitToQueryFocusMap } from '@libs/constants';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -382,17 +383,17 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             [keeper]: false,
                         };
                     } else {
-                        if (!poolsState.pools[pool]) {
+                        const poolInstance = poolsState.pools[pool]?.poolInstance;
+                        if (!poolInstance) {
                             return;
                         }
-                        const poolInstance = poolsState.pools[pool].poolInstance;
                         poolInstance.connect(subscriptionProvider);
                         poolInstance.fetchLastPriceTimestamp().then((lastUpdate: BigNumber) => {
                             console.debug(`New last updated: ${lastUpdate.toString()}`);
                             // poolsDispatch({ type: 'triggerUpdate' });
                         });
-                        updateTokenBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
-                        updatePoolBalances(poolsState.pools[pool].poolInstance, subscriptionProvider);
+                        updateTokenBalances(poolInstance, subscriptionProvider);
+                        updatePoolBalances(poolInstance, subscriptionProvider);
                         commitDispatch({
                             type: 'resetCommits',
                             pool: pool,
@@ -574,8 +575,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             commitType === CommitEnum.longMint
                                 ? poolsState.pools[pool].poolInstance.longToken.symbol
                                 : poolsState.pools[pool].poolInstance.shortToken.symbol,
-                        type:
-                            commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint ? 'Mint' : 'Burn',
+                        type: CommitToQueryFocusMap[commitType],
                         nextRebalance: targetTime,
                         success: {
                             title: 'Order Submitted',
@@ -589,10 +589,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    /**
-     * Approve pool to spend quote token
-     * @param pool address to approve
-     */
     const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
         if (!signer) {
             console.error('Failed to approve token: signer undefined');

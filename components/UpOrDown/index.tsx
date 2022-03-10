@@ -19,31 +19,35 @@ const IconBox = styled.div`
 const dollarTickers = ['USD', 'USDC'];
 const isDollar: (currency: LogoTicker) => boolean = (currency) => dollarTickers.includes(currency);
 
-export default styled(({ deltaDenotion, oldValue, newValue, currency, showCurrencyTicker, className }) => {
-    const value = useMemo(
-        () =>
-            deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
-        [deltaDenotion, oldValue, newValue],
-    );
-    const approxValue = Math.abs(parseFloat(value.toFixed(3)));
-    return (
-        <div className={`${className} ${approxValue === 0 ? '' : value > 0 ? 'green' : 'red'}`}>
-            <IconBox>
-                {approxValue === 0 ? (
-                    <Equal className="icon" />
-                ) : (
-                    <ArrowDown className={`icon ${value > 0 ? 'rotate' : ''}`} />
-                )}
-            </IconBox>
-            <div>
-                {deltaDenotion === DeltaEnum.Numeric
-                    ? `${isDollar(currency) ? toApproxCurrency(value).replace('-', '') : approxValue}${' '}
+export default styled(
+    ({ deltaDenotation: deltaDenotation, oldValue, newValue, currency, showCurrencyTicker, className }) => {
+        const value = useMemo(
+            () =>
+                deltaDenotation === DeltaEnum.Numeric
+                    ? newValue - oldValue
+                    : calcPercentageDifference(newValue, oldValue),
+            [deltaDenotation, oldValue, newValue],
+        );
+        const approxValue = Math.abs(parseFloat(value.toFixed(3)));
+        return (
+            <div className={`${className} ${approxValue === 0 ? '' : value > 0 ? 'green' : 'red'}`}>
+                <IconBox>
+                    {approxValue === 0 ? (
+                        <Equal className="icon" />
+                    ) : (
+                        <ArrowDown className={`icon ${value > 0 ? 'rotate' : ''}`} />
+                    )}
+                </IconBox>
+                <div>
+                    {deltaDenotation === DeltaEnum.Numeric
+                        ? `${isDollar(currency) ? toApproxCurrency(value).replace('-', '') : approxValue}${' '}
                             ${showCurrencyTicker ? currency : ''}`
-                    : `${approxValue}%`}
+                        : `${approxValue}%`}
+                </div>
             </div>
-        </div>
-    );
-}).attrs((props) => ({
+        );
+    },
+).attrs((props) => ({
     ...props,
     textColor: props.textColor,
 }))<{
@@ -51,7 +55,7 @@ export default styled(({ deltaDenotion, oldValue, newValue, currency, showCurren
     newValue: number;
     currency?: LogoTicker;
     showCurrencyTicker?: boolean;
-    deltaDenotion: DeltaEnum;
+    deltaDenotation: DeltaEnum;
 }>`
     display: flex;
 

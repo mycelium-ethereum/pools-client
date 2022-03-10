@@ -10,6 +10,11 @@ export enum MarketFilterEnum {
     AAVE = 'Aave',
 }
 
+export enum CollateralEnum {
+    All = 'All',
+    USDC = 'USDC',
+}
+
 export enum LeverageEnum {
     All = 'All',
     One = '1',
@@ -82,8 +87,9 @@ export interface BrowseTableRowData {
 
 export interface BrowseState {
     search: string;
-    deltaDenotion: DeltaEnum;
+    deltaDenotation: DeltaEnum;
     marketFilter: MarketFilterEnum;
+    collateralFilter: CollateralEnum;
     leverageFilter: LeverageEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
@@ -95,10 +101,11 @@ export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
+    | { type: 'setCollateralFilter'; collateral: CollateralEnum }
     | { type: 'setLeverageFilter'; leverage: LeverageEnum }
     | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
-    | { type: 'setDenotion'; denotion: DeltaEnum }
+    | { type: 'setDenotation'; denotation: DeltaEnum }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
 export const browseReducer: (state: BrowseState, action: BrowseAction) => BrowseState = (state, action) => {
@@ -113,15 +120,20 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 search: action.search,
             };
-        case 'setDenotion':
+        case 'setDenotation':
             return {
                 ...state,
-                deltaDenotion: action.denotion,
+                deltaDenotation: action.denotation,
             };
         case 'setMarketFilter':
             return {
                 ...state,
                 marketFilter: action.market,
+            };
+        case 'setCollateralFilter':
+            return {
+                ...state,
+                collateralFilter: action.collateral,
             };
         case 'setLeverageFilter':
             return {

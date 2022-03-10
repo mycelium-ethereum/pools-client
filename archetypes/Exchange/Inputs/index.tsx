@@ -6,13 +6,11 @@ import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-
-import { Currency } from '@components/General/Currency';
-import { LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
 import TokenSelect from '../TokenSelect';
+import Max from '@components/General/Max';
 
 type InvalidAmount = {
     isInvalid: boolean;
@@ -151,7 +149,7 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
-    tokenSymbol,
+    // tokenSymbol,
     isPoolToken,
 }) => {
     return (
@@ -164,14 +162,14 @@ const AmountInput: React.FC<AmountProps> = ({
                     }}
                 />
                 <InnerInputText>
-                    {tokenSymbol ? (
-                        <Currency
-                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
-                            label={tokenSymbol}
-                        />
-                    ) : null}
-                    <div
-                        className="m-auto cursor-pointer hover:underline"
+                    {/*{tokenSymbol ? (*/}
+                    {/*    <Currency*/}
+                    {/*        ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}*/}
+                    {/*        label={tokenSymbol}*/}
+                    {/*    />*/}
+                    {/*) : null}*/}
+                    <Max
+                        className="m-auto"
                         onClick={(_e) =>
                             !!selectedPool &&
                             swapDispatch({
@@ -181,7 +179,7 @@ const AmountInput: React.FC<AmountProps> = ({
                         }
                     >
                         Max
-                    </div>
+                    </Max>
                 </InnerInputText>
             </InputContainerStyled>
             <Subtext isAmountValid={invalidAmount.isInvalid} showContent>
@@ -259,7 +257,7 @@ const InputStyled = styled(Input)`
 const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
     display: ${({ showContent }) => (showContent ? 'block' : 'none')};
     color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
-    font-size: 16px;
+    font-size: 15px;
     opacity: 0.7;
 
     @media (min-width: 640px) {

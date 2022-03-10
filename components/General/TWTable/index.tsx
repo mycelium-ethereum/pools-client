@@ -33,12 +33,14 @@ export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children
     );
 };
 
-type Size = 'default' | 'sm';
+type Size = 'default' | 'default-x' | 'sm' | 'sm-x';
 type Align = 'bottom' | 'top';
 
 const HEADER_CELL_SIZES: Record<Size, string> = {
     default: '1rem',
+    ['default-x']: '0 1rem',
     sm: '1rem 0.5rem',
+    ['sm-x']: '0 0.5rem',
 };
 
 export const TableHeaderCell = styled.th.attrs((props) => ({

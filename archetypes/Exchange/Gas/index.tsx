@@ -43,15 +43,15 @@ const GasIconStyled = styled(GasIcon)`
 
     @media (min-width: 640px) {
         margin-right: 0.5rem;
-        transform: scale(1);
+        transform: scale(0.9);
     }
 `;
 
 const Text = styled.span`
     font-size: 14px;
+    font-weight: 600;
 
     @media (min-width: 640px) {
-        font-size: 20px;
-        font-weight: 600;
+        font-size: 18px;
     }
 `;

@@ -194,24 +194,24 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         {/* Pools  Cols */}
                         <TableHeaderCell colSpan={4} />
                         {showNextRebalance ? (
-                            <TableHeaderCell className="text-cool-gray-400">
+                            <TableHeaderCell size="default-x" className="text-cool-gray-400">
                                 <div className="text-cool-gray-400 capitalize">{'Ends in'}</div>
                             </TableHeaderCell>
                         ) : null}
 
                         {/* Token Cols */}
-                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm" colSpan={2} />
-                        <TableHeaderCell size="sm">
+                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
+                        <TableHeaderCell size="sm-x">
                             <div className="text-cool-gray-400 capitalize">{'Gains'}</div>
                         </TableHeaderCell>
-                        <TableHeaderCell className="text-cool-gray-400" size="sm">
+                        <TableHeaderCell className="text-cool-gray-400" size="sm-x">
                             <div className="text-cool-gray-400 capitalize">{'Losses'}</div>
                         </TableHeaderCell>
-                        <TableHeaderCell className="text-cool-gray-400" size="sm">
+                        <TableHeaderCell className="text-cool-gray-400" size="sm-x">
                             <div className="text-cool-gray-400 capitalize">{'Tracer'}</div>
                         </TableHeaderCell>
                         {showNextRebalance ? (
-                            <TableHeaderCell className="text-cool-gray-400" size="sm">
+                            <TableHeaderCell className="text-cool-gray-400" size="sm-x">
                                 <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
                             </TableHeaderCell>
                         ) : null}
@@ -234,6 +234,12 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     );
                 })}
             </Table>
+            {/*{showNextRebalance ? (*/}
+            {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
+            {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}
+            {/*        price of the underlying market. All values are subject to change at the next rebalance of each pool.*/}
+            {/*    </p>*/}
+            {/*) : null}*/}
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
