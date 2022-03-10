@@ -91,7 +91,9 @@ export const TableRow = styled.tr<{ lined?: boolean }>`
 
 const CELL_SIZES = {
     default: 'p-4',
+    ['default-x']: '0 1rem',
     sm: 'px-2 py-1',
+    ['sm-x']: '0 0.5rem',
 };
 
 export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size }> = ({

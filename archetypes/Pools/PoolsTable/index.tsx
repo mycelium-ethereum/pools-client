@@ -29,7 +29,7 @@ import LinkIcon from '@public/img/general/link.svg';
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
     showNextRebalance: boolean;
-    deltaDenotion: DeltaEnum;
+    deltaDenotation: DeltaEnum;
 };
 
 const SkewTip: React.FC = ({ children }) => (
@@ -82,7 +82,7 @@ const InfoIcon = styled(Info)`
     }
 `;
 
-export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) => {
+export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) => {
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
@@ -228,7 +228,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                             key={pool.address}
                             account={account}
                             provider={provider}
-                            deltaDenotion={deltaDenotion}
+                            deltaDenotation={deltaDenotation}
                             isDark={isDark}
                         />
                     );
@@ -284,7 +284,7 @@ const PoolRow: React.FC<
     onClickMintBurn,
     provider,
     showNextRebalance,
-    deltaDenotion,
+    deltaDenotation,
     onClickShowPoolDetailsModal,
     isDark,
 }) => {
@@ -317,7 +317,7 @@ const PoolRow: React.FC<
                                 <UpOrDown
                                     oldValue={pool.lastPrice}
                                     newValue={pool.oraclePrice}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.IndexPrice}
                                     showNextRebalance={showNextRebalance}
@@ -331,7 +331,7 @@ const PoolRow: React.FC<
                                 <UpOrDown
                                     oldValue={pool.pastUpkeep.oldPrice}
                                     newValue={pool.pastUpkeep.newPrice}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.IndexPrice}
                                     showNextRebalance={showNextRebalance}
@@ -348,7 +348,7 @@ const PoolRow: React.FC<
                                 <UpOrDown
                                     oldValue={pool.tvl}
                                     newValue={pool.nextTVL}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.TVL}
                                     showNextRebalance={showNextRebalance}
@@ -362,7 +362,7 @@ const PoolRow: React.FC<
                                 <UpOrDown
                                     oldValue={pool.antecedentUpkeep.tvl}
                                     newValue={pool.pastUpkeep.tvl}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.TVL}
                                     showNextRebalance={showNextRebalance}
@@ -385,7 +385,7 @@ const PoolRow: React.FC<
                                     oldValue={pool.skew}
                                     currency={false}
                                     newValue={pool.nextSkew}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.ExpectedSkew}
                                     showNextRebalance={showNextRebalance}
@@ -399,7 +399,7 @@ const PoolRow: React.FC<
                                 <UpOrDown
                                     oldValue={pool.antecedentUpkeep.skew}
                                     newValue={pool.pastUpkeep.skew}
-                                    deltaDenotion={deltaDenotion}
+                                    deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.Skew}
                                     currency={false}
@@ -450,7 +450,7 @@ const PoolRow: React.FC<
                     }}
                     account={account}
                     tokenInfo={pool.longToken}
-                    deltaDenotion={deltaDenotion}
+                    deltaDenotation={deltaDenotation}
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
@@ -474,7 +474,7 @@ const PoolRow: React.FC<
                         tokenBalance: pool.pastUpkeep.shortTokenBalance,
                     }}
                     tokenInfo={pool.shortToken}
-                    deltaDenotion={deltaDenotion}
+                    deltaDenotation={deltaDenotation}
                     leverage={pool.leverage}
                     address={pool.address}
                     decimals={pool.decimals}
@@ -530,7 +530,7 @@ const TokenRows: React.FC<
     provider,
     onClickMintBurn,
     showNextRebalance,
-    deltaDenotion,
+    deltaDenotation,
     antecedentUpkeepTokenInfo,
     pastUpkeepTokenInfo,
     poolTicker,
@@ -550,7 +550,7 @@ const TokenRows: React.FC<
                             <UpOrDown
                                 oldValue={tokenInfo.tvl}
                                 newValue={tokenInfo.nextTvl}
-                                deltaDenotion={deltaDenotion}
+                                deltaDenotation={deltaDenotation}
                                 poolTicker={poolTicker}
                                 tooltipMetric={UpOrDownTipMetric.TVL}
                                 tokenMetricSide={side}
@@ -565,7 +565,7 @@ const TokenRows: React.FC<
                             <UpOrDown
                                 oldValue={antecedentUpkeepTokenInfo.tokenBalance}
                                 newValue={pastUpkeepTokenInfo.tokenBalance}
-                                deltaDenotion={deltaDenotion}
+                                deltaDenotation={deltaDenotation}
                                 poolTicker={poolTicker}
                                 tooltipMetric={UpOrDownTipMetric.TVL}
                                 tokenMetricSide={side}
@@ -601,7 +601,7 @@ const TokenRows: React.FC<
                             <UpOrDown
                                 oldValue={antecedentUpkeepTokenInfo.tokenPrice}
                                 newValue={pastUpkeepTokenInfo.tokenPrice}
-                                deltaDenotion={deltaDenotion}
+                                deltaDenotation={deltaDenotation}
                                 poolTicker={poolTicker}
                                 tooltipMetric={UpOrDownTipMetric.TokenPrice}
                                 tokenMetricSide={side}
@@ -721,11 +721,11 @@ const UpOrDown: React.FC<{
     tooltipMetric: UpOrDownTipMetric;
     showNextRebalance: boolean;
     currency?: boolean;
-    deltaDenotion: DeltaEnum;
+    deltaDenotation: DeltaEnum;
 }> = ({
     oldValue,
     newValue,
-    deltaDenotion,
+    deltaDenotation,
     tooltipMetric,
     showNextRebalance,
     poolTicker,
@@ -734,15 +734,15 @@ const UpOrDown: React.FC<{
 }) => {
     const value = useMemo(
         () =>
-            deltaDenotion === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
-        [deltaDenotion, oldValue, newValue],
+            deltaDenotation === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
+        [deltaDenotation, oldValue, newValue],
     );
     const approxValue = Math.abs(parseFloat(value.toFixed(3)));
     return (
         <UpOrDownTip
             metric={tooltipMetric}
             valueText={
-                deltaDenotion === DeltaEnum.Numeric
+                deltaDenotation === DeltaEnum.Numeric
                     ? currency
                         ? toApproxCurrency(value).replace('-', '')
                         : approxValue.toString()
@@ -757,7 +757,7 @@ const UpOrDown: React.FC<{
             <UpOrDownInner
                 oldValue={oldValue}
                 newValue={newValue}
-                deltaDenotion={deltaDenotion}
+                deltaDenotation={deltaDenotation}
                 currency={'USD'}
                 showCurrencyTicker={false}
             />
