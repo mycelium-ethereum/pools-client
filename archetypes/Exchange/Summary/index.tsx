@@ -26,7 +26,6 @@ type SummaryProps = {
 
 export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
-    const amountNumber: number = useMemo(() => amount.toNumber(), [amount]);
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const flippedToken = useMemo(
@@ -42,6 +41,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
         [isLong],
     );
 
+    const amountNumber: number = amount.toNumber();
     const totalCommitmentAmount: string = amountNumber ? toApproxCurrency(amountNumber) : '0';
     const totalCost: string = amountNumber <= 0 ? '0' : toApproxCurrency(amountNumber);
     const expectedAmount: string = amount.div(tokenPrice ?? 1).toFixed(0);
