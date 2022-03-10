@@ -35,20 +35,6 @@ export const TokenLogo = styled(Logo)`
     margin-right: 0.25rem;
 `;
 
-export const LogoCell = styled.div`
-    display: flex;
-    align-items: center;
-    text-align: left;
-`;
-
-export const LogoText = styled.div`
-    font-weight: 700;
-`;
-
-export const LogoSubtext = styled.div``;
-
-export const TextWrapper = styled.div``;
-
 export const SearchWrap = styled(InputWrapper)`
     opacity: 0.8;
     border-radius: 7px;
