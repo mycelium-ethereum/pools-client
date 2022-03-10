@@ -218,13 +218,12 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                     </tr>
                 </TableHeader>
-                {rows.map((pool, index) => {
+                {rows.map((pool) => {
                     return (
                         <PoolRow
                             pool={pool}
                             onClickMintBurn={onClickMintBurn}
                             onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
-                            index={index}
                             showNextRebalance={showNextRebalance}
                             key={pool.address}
                             account={account}
@@ -235,12 +234,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotion }) =>
                     );
                 })}
             </Table>
-            {/*{showNextRebalance ? (*/}
-            {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
-            {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}
-            {/*        price of the underlying market. All values are subject to change at the next rebalance of each pool.*/}
-            {/*    </p>*/}
-            {/*) : null}*/}
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
@@ -275,7 +268,6 @@ const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
         account: string | undefined;
-        index: number;
         provider: ethers.providers.JsonRpcProvider | undefined;
         onClickShowPoolDetailsModal: () => void;
         isDark: boolean;
@@ -284,7 +276,6 @@ const PoolRow: React.FC<
     pool,
     account,
     onClickMintBurn,
-    index,
     provider,
     showNextRebalance,
     deltaDenotion,
@@ -303,7 +294,7 @@ const PoolRow: React.FC<
 
     return (
         <>
-            <TableRow rowNumber={index}>
+            <TableRow lined>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
@@ -461,7 +452,7 @@ const PoolRow: React.FC<
                     poolTicker={pool.name}
                 />
             </TableRow>
-            <TableRow rowNumber={index}>
+            <TableRow lined>
                 <TokenRows
                     side={SideEnum.short}
                     provider={provider}

@@ -27,12 +27,11 @@ export default (({ rows, onClickBurn, denotedIn }) => {
                     <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
-                {rows.map((token, index) => {
+                {rows.map((token) => {
                     if (!token.holdings.eq(0)) {
                         return (
                             <TokenRow
                                 {...token}
-                                index={index}
                                 key={token.address}
                                 provider={provider ?? null}
                                 onClickBurn={onClickBurn}
@@ -55,7 +54,6 @@ export const TokenRow: React.FC<
     TokenRowProps & {
         onClickBurn: (pool: string, side: SideEnum) => void;
         provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
         denotedIn: DenotedInEnum;
     }
 > = ({
@@ -69,7 +67,6 @@ export const TokenRow: React.FC<
     holdings,
     provider,
     // deposits,
-    index,
     onClickBurn,
     oraclePrice,
     denotedIn,
@@ -97,7 +94,7 @@ export const TokenRow: React.FC<
     };
 
     return (
-        <TableRow rowNumber={index}>
+        <TableRow lined>
             <TableRowCell>
                 {/*<div className="flex">*/}
                 {/*    <Logo ticker={tokenSymbolToLogoTicker(symbol)} size="md" className="inline mr-2 my-auto" />*/}

@@ -67,8 +67,13 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return mintCommits.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={false} />
+            return mintCommits.map((commit) => (
+                <CommitRow
+                    key={`pcr-${commit.pool}-${commit.id}`}
+                    provider={provider ?? null}
+                    {...commit}
+                    burnRow={false}
+                />
             ));
         }
     };
@@ -86,8 +91,13 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return burnCommits.map((commit, index) => (
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+            return burnCommits.map((commit) => (
+                <CommitRow
+                    key={`pcr-${commit.pool}-${commit.id}`}
+                    provider={provider ?? null}
+                    {...commit}
+                    burnRow={true}
+                />
             ));
         }
     };
@@ -105,9 +115,14 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return burnCommits.map((commit, index) => (
+            return burnCommits.map((commit) => (
                 // TODO: Modify flip row attributes
-                <CommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} burnRow={true} />
+                <CommitRow
+                    key={`pcr-${commit.pool}-${commit.id}`}
+                    provider={provider ?? null}
+                    {...commit}
+                    burnRow={true}
+                />
             ));
         }
     };
@@ -191,7 +206,6 @@ export default (({ focus, commits }) => {
 const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
         burnRow: boolean; // is burnRow
     }
 > = ({
@@ -201,7 +215,6 @@ const CommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -213,7 +226,7 @@ const CommitRow: React.FC<
     const [base, collateral] = token.symbol.split('-')[1].split('/');
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash} lined>
             <TableRowCell>
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(token.symbol)} className="inline my-auto mr-2" />

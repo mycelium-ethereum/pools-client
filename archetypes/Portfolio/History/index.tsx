@@ -107,7 +107,7 @@ export default (({ focus }) => {
                             </tr>
                         ) : (
                             tradeHistory.map((commit, index) => (
-                                <CommitRow key={`pcr-${index}`} index={index} {...commit} provider={provider} />
+                                <CommitRow key={`pcr-${index}`} {...commit} provider={provider} />
                             ))
                         )}
                     </tbody>
@@ -139,7 +139,6 @@ export default (({ focus }) => {
 
 const CommitRow: React.FC<
     TradeHistory & {
-        index: number;
         provider?: ethers.providers.JsonRpcProvider;
     }
 > = ({
@@ -147,7 +146,6 @@ const CommitRow: React.FC<
     tokenAmount,
     tokenPrice,
     tokenSymbol,
-    index,
     type,
     provider,
     tokenAddress,
@@ -163,7 +161,7 @@ const CommitRow: React.FC<
     }).format(new Date(date * 1000));
     const dateString = new Intl.DateTimeFormat('en-AU').format(new Date(date * 1000));
     return (
-        <TableRow key={index} rowNumber={index}>
+        <TableRow key={tokenAddress} lined>
             <TableRowCell>
                 <div>{timeString}</div>
                 <div className="text-cool-gray-500">{dateString}</div>

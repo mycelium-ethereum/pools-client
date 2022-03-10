@@ -10,7 +10,7 @@ interface SearchInputProps {
     className?: string;
 }
 
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
     position: relative;
     width: 100%;
     border: 1px ${({ theme }) => theme.border} solid;
@@ -44,13 +44,18 @@ const SearchIcon = styled(SearchOutlined)`
     color: rgb(156 163 175);
 `;
 
-const InnerSearchInput = styled.input`
+export const InnerSearchInput = styled.input`
     display: block;
     width: 100%;
-    padding: 0.5rem 1rem 0.5rem 2.5rem;
+    // -1 px for the border top and bottom
+    padding: calc(0.5rem - 1px) 1rem calc(0.5rem - 1px) 2.5rem;
 
     border-color: ${({ theme }) => theme.border};
-    border-radius: 0.375rem; /* 6px */
+    border-radius: inherit;
+
+    &:focus-visible {
+        outline: 1px solid ${({ theme }) => theme.primary};
+    }
 
     @media (${device.sm}) {
         // TODO create font-size css variables

@@ -87,7 +87,14 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         <Container>
             <Wrapper hasMargin>
                 <Label>Token</Label>
-                <TokenSelect tokens={tokens} />
+                <TokenSelect
+                    tokens={tokens}
+                    selectedToken={token}
+                    setToken={(pool, side) => {
+                        swapDispatch({ type: 'setSelectedPool', value: pool as string });
+                        swapDispatch({ type: 'setSide', value: side as SideEnum });
+                    }}
+                />
                 <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
             </Wrapper>
             <Wrapper>
@@ -149,7 +156,7 @@ const AmountInput: React.FC<AmountProps> = ({
 }) => {
     return (
         <>
-            <InputContainerStyled error={invalidAmount.isInvalid}>
+            <InputContainerStyled variation={invalidAmount.isInvalid ? 'error' : undefined}>
                 <InputStyled
                     value={amount}
                     onUserInput={(val) => {
@@ -230,7 +237,8 @@ const Wrapper = styled.div<{ hasMargin?: boolean }>`
 
 const InputContainerStyled = styled(InputContainer)`
     width: 100%;
-    border-color: ${({ theme }) => theme['border-secondary']} !important;
+    border-color: ${({ theme }) => theme['border']};
+    border-radius: 7px;
 `;
 
 const Label = styled.p`

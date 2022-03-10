@@ -30,12 +30,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
                     <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                 </TableHeader>
-                {rows.map((farm, index) => {
+                {rows.map((farm) => {
                     return (
                         <PoolRow
-                            key={`${farm}-${index}`}
+                            key={`${farm.farm}`}
                             farm={farm}
-                            index={index}
                             rewardsTokenUSDPrices={rewardsTokenUSDPrices}
                             onClickClaim={onClickClaim}
                             onClickStake={onClickStake}
@@ -98,12 +97,11 @@ const largeDecimal: (num: BigNumber) => string = (num) => {
 
 const PoolRow: React.FC<{
     farm: FarmTableRowData;
-    index: number;
     rewardsTokenUSDPrices: Record<string, BigNumber>;
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, index, rewardsTokenUSDPrices }) => {
+}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
     const tokenPrice = useMemo(
         () =>
             farm?.poolDetails
@@ -135,7 +133,7 @@ const PoolRow: React.FC<{
     }, []);
 
     return (
-        <TableRow key={farm.farm} rowNumber={index}>
+        <TableRow key={farm.farm} lined>
             <TableRowCell>
                 <div className="inline">
                     {farm?.bptDetails ? (

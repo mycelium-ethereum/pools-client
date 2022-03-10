@@ -2,7 +2,8 @@ import { HiddenExpand, Logo } from '@components/General';
 import { Table } from '@components/General/TWTable';
 import styled from 'styled-components';
 import { device } from '@context/ThemeContext/themes';
-import { SearchInput } from '@components/General/SearchInput';
+import { InnerSearchInput, InputWrapper } from '@components/General/SearchInput';
+import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
@@ -48,10 +49,49 @@ export const LogoSubtext = styled.div``;
 
 export const TextWrapper = styled.div``;
 
-export const TokenSearch = styled(SearchInput)`
-    > input {
-        padding: 0.75rem 1rem 0.75rem 2.5rem !important;
-    }
+export const SearchWrap = styled(InputWrapper)`
+    opacity: 0.8;
+    border-radius: 7px;
+`;
+
+export const TokenSearch = styled(InnerSearchInput)<{
+    show: boolean;
+}>`
+    padding: 0.75rem 2.5rem 0.75rem 1rem !important;
+    display: ${({ show }) => (show ? 'block' : 'none')};
+`;
+
+export const SelectedToken = styled.div<{
+    show: boolean;
+}>`
+    padding: 0.75rem 2.5rem 0.75rem 1rem;
+    display: ${({ show }) => (show ? 'block' : 'none')};
+`;
+
+export const IconWrap = styled.div`
+    position: absolute;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    right: 0.75rem;
+    padding-top: 0.25rem;
+    pointer-events: none;
+`;
+
+export const SearchIcon = styled(SearchOutlined)`
+    height: 1.25rem;
+    width: 1.25rem;
+
+    // text-gray-400
+    color: rgb(156 163 175);
+`;
+
+export const DownArrow = styled(DownOutlined)`
+    height: 1.25rem;
+    width: 1.25rem;
+
+    // text-gray-400
+    color: rgb(156 163 175);
 `;
 
 // TABLE
@@ -62,10 +102,14 @@ export const TokenSelectTable = styled(Table)`
     font-size: 14px;
 `;
 
-export const TokenSelectRow = styled.tr`
+export const TokenSelectRow = styled.tr<{
+    header?: boolean;
+}>`
     display: grid;
     grid-template-columns: 2fr 1fr 1fr;
     padding: 0.6rem;
+    cursor: pointer;
+
     td {
         position: relative;
     }
@@ -77,6 +121,10 @@ export const TokenSelectRow = styled.tr`
         height: 40%;
         width: 1px;
         background: ${({ theme }) => (theme.isDark ? '#F9FAFB' : '#E5E7EB')};
+    }
+
+    &:hover {
+        ${({ header }) => (!header ? 'opacity: 0.8' : '')};
     }
 `;
 
