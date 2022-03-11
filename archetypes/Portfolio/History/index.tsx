@@ -39,20 +39,24 @@ const MAX_COLS = 100;
 const historyTableHeader: Record<CommitActionEnum, React.ReactNode> = {
     [CommitActionEnum.mint]: (
         <TableHeader>
-            <TableHeaderCell>Time / Date</TableHeaderCell>
-            <TableHeaderCell>Token</TableHeaderCell>
-            <TableHeaderCell>Amount</TableHeaderCell>
-            <TableHeaderCell>Tokens / Price</TableHeaderCell>
-            <TableHeaderCell colSpan={2}>Protocol Fee</TableHeaderCell>
+            <tr>
+                <TableHeaderCell>Time / Date</TableHeaderCell>
+                <TableHeaderCell>Token</TableHeaderCell>
+                <TableHeaderCell>Amount</TableHeaderCell>
+                <TableHeaderCell>Tokens / Price</TableHeaderCell>
+                <TableHeaderCell colSpan={2}>Protocol Fee</TableHeaderCell>
+            </tr>
         </TableHeader>
     ),
     [CommitActionEnum.burn]: (
         <TableHeader>
-            <TableHeaderCell>Time / Date</TableHeaderCell>
-            <TableHeaderCell>Token</TableHeaderCell>
-            <TableHeaderCell>Amount / Price</TableHeaderCell>
-            <TableHeaderCell>Return</TableHeaderCell>
-            <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
+            <tr>
+                <TableHeaderCell>Time / Date</TableHeaderCell>
+                <TableHeaderCell>Token</TableHeaderCell>
+                <TableHeaderCell>Amount / Price</TableHeaderCell>
+                <TableHeaderCell>Return</TableHeaderCell>
+                <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
+            </tr>
         </TableHeader>
     ),
     [CommitActionEnum.flip]: (
