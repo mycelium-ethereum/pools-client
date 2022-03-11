@@ -41,7 +41,9 @@ export const PortfolioNav: React.FC<{
         <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
             <div className="mr-5">
                 <Link href="/portfolio">
-                    <><Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button></>
+                    <>
+                        <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
+                    </>
                 </Link>
             </div>
             <div className="mr-5">
