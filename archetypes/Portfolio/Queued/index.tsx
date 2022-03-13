@@ -121,11 +121,13 @@ export default (({ focus, commits }) => {
             return (
                 <>
                     <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Amount</TableHeaderCell>
-                        <TableHeaderCell>Tokens / Price *</TableHeaderCell>
-                        <TableHeaderCell>Mint In</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <tr>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Tokens / Price *</TableHeaderCell>
+                            <TableHeaderCell>Mint In</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </tr>
                     </TableHeader>
                     <tbody>{MintRows(mintCommits)}</tbody>
                 </>
@@ -134,11 +136,13 @@ export default (({ focus, commits }) => {
             return (
                 <>
                     <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Amount</TableHeaderCell>
-                        <TableHeaderCell>Return / Price *</TableHeaderCell>
-                        <TableHeaderCell>Burn In</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <tr>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Return / Price *</TableHeaderCell>
+                            <TableHeaderCell>Burn In</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </tr>
                     </TableHeader>
                     <tbody>{BurnRows(burnCommits)}</tbody>
                 </>

@@ -20,15 +20,17 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
         <>
             <Table>
                 <TableHeader className="uppercase">
-                    <TableHeaderCell>Strategy</TableHeaderCell>
-                    <TableHeaderCell>
-                        <APYTip>APY</APYTip>/APR
-                    </TableHeaderCell>
-                    <TableHeaderCell>TVL (USD)</TableHeaderCell>
-                    <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
-                    <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
-                    <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
-                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    <tr>
+                        <TableHeaderCell>Strategy</TableHeaderCell>
+                        <TableHeaderCell>
+                            <APYTip>APY</APYTip>/APR
+                        </TableHeaderCell>
+                        <TableHeaderCell>TVL (USD)</TableHeaderCell>
+                        <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
+                        <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
+                        <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </tr>
                 </TableHeader>
                 {rows.map((farm) => {
                     return (

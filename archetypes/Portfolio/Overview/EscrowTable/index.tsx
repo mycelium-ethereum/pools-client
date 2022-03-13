@@ -153,12 +153,14 @@ const DropdownTable: React.FC<{
     return (
         <Table>
             <TableHeader>
-                <TableHeaderCell>Token</TableHeaderCell>
-                <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
-                <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
-                <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
-                <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
-                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                <tr>
+                    <TableHeaderCell>Token</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
+                    <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                </tr>
             </TableHeader>
             {claimableAssets.map((claimableAsset) => {
                 if (claimableAsset.type === TokenTypeEnum.Settlement) {

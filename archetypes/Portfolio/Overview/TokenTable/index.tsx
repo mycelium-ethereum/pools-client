@@ -20,12 +20,14 @@ export default (({ rows, onClickBurn, denotedIn }) => {
         <>
             <Table>
                 <TableHeader>
-                    <TableHeaderCell>Token</TableHeaderCell>
-                    <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
-                    {/*<TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>*/}
-                    {/*<TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>*/}
-                    <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
-                    <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    <tr>
+                        <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
+                        {/*<TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>*/}
+                        {/*<TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>*/}
+                        <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                    </tr>
                 </TableHeader>
                 {rows.map((token) => {
                     if (!token.holdings.eq(0)) {

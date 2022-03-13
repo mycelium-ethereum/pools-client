@@ -44,12 +44,14 @@ export default (() => {
                 {focus === CommitActionEnum.mint ? (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spent (USD)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
-                            <TableHeaderCell>Receive in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Spent (USD)</TableHeaderCell>
+                                <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
+                                <TableHeaderCell>Receive in</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
                             <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
@@ -58,12 +60,14 @@ export default (() => {
                 ) : (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Burn in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
+                                <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Return (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Burn in</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
                             <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
