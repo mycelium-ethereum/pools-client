@@ -11,6 +11,7 @@ export const TokenSelectBox = styled.div`
     height: 220px;
     box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 10px 10px rgba(0, 0, 0, 0.04);
     border-radius: 7px;
+    overflow: hidden;
 `;
 
 export const TokenSelectDropdown = styled(HiddenExpand)`

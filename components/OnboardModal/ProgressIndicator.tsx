@@ -17,7 +17,7 @@ const Step = styled.div`
     width: 0.75rem;
     height: 0.75rem;
 
-    background-color: ${({ theme }) => (theme === Theme.Light ? '#f3f4f6' : '#1f2a37')};
+    background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#f3f4f6' : '#1f2a37')};
 
     &.current-step {
         width: 1.25rem;

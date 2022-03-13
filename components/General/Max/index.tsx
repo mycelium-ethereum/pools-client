@@ -7,7 +7,7 @@ const Max = styled.div`
     font-weight: bold;
     font-size: 16px;
     line-height: 150%;
-    color: ${({ theme }) => (theme === Theme.Light ? '#2A2AC7' : '#fff')};
+    color: ${({ theme }) => (theme.theme === Theme.Light ? '#2A2AC7' : '#fff')};
     &:hover {
         text-decoration: underline;
     }
