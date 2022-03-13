@@ -1,20 +1,15 @@
 import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { InnerInputText, InputContainer } from '@components/General/Input';
-import { Dropdown } from '@components/General/Dropdown';
 import { Input } from '@components/General/Input/Numeric';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-// import { Currency } from '@components/General/Currency';
-import {
-    // LogoTicker,
-    tokenSymbolToLogoTicker,
-} from '@components/General';
 import styled from 'styled-components';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
+import TokenSelect from '../TokenSelect';
 import Max from '@components/General/Max';
 
 type InvalidAmount = {
@@ -90,22 +85,12 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         <Container>
             <Wrapper hasMargin>
                 <Label>Token</Label>
-                <DropdownStyled
-                    placeHolder="Select Token"
-                    placeHolderIcon={tokenSymbolToLogoTicker(
-                        side === SideEnum.long ? pool.longToken.symbol : pool.shortToken.symbol,
-                    )}
-                    size="lg"
-                    options={tokens.map((token) => ({
-                        key: `${token.pool}-${token.side}`,
-                        text: token.symbol,
-                        ticker: tokenSymbolToLogoTicker(token.symbol),
-                    }))}
-                    value={token.symbol}
-                    onSelect={(option) => {
-                        const [pool, side] = option.split('-');
+                <TokenSelect
+                    tokens={tokens}
+                    selectedToken={token}
+                    setToken={(pool, side) => {
                         swapDispatch({ type: 'setSelectedPool', value: pool as string });
-                        swapDispatch({ type: 'setSide', value: parseInt(side) as SideEnum });
+                        swapDispatch({ type: 'setSide', value: side as SideEnum });
                     }}
                 />
                 <Subtext showContent={!!pool.address}>Expected Price: {toApproxCurrency(tokenPrice)}</Subtext>
@@ -169,7 +154,7 @@ const AmountInput: React.FC<AmountProps> = ({
 }) => {
     return (
         <>
-            <InputContainerStyled error={invalidAmount.isInvalid}>
+            <InputContainerStyled variation={invalidAmount.isInvalid ? 'error' : undefined}>
                 <InputStyled
                     value={amount}
                     onUserInput={(val) => {
@@ -193,7 +178,7 @@ const AmountInput: React.FC<AmountProps> = ({
                             })
                         }
                     >
-                        MAX
+                        Max
                     </Max>
                 </InnerInputText>
             </InputContainerStyled>
@@ -250,7 +235,8 @@ const Wrapper = styled.div<{ hasMargin?: boolean }>`
 
 const InputContainerStyled = styled(InputContainer)`
     width: 100%;
-    border-color: ${({ theme }) => theme['border-secondary']} !important;
+    border-color: ${({ theme }) => theme['border']};
+    border-radius: 7px;
 `;
 
 const Label = styled.p`
@@ -258,10 +244,6 @@ const Label = styled.p`
     @media (min-width: 640px) {
         margin-bottom: 0.5rem;
     }
-`;
-
-const DropdownStyled = styled(Dropdown)`
-    width: 100%;
 `;
 
 const InputStyled = styled(Input)`

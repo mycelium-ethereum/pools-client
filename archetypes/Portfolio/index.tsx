@@ -23,9 +23,9 @@ export enum TradePortfolioPage {
 }
 
 export type PageOptions = {
-    key: CommitActionEnum,
-    text: React.ReactNode
-}[]
+    key: CommitActionEnum;
+    text: React.ReactNode;
+}[];
 
 export const PortfolioNav: React.FC<{
     page: TradePortfolioPage;

@@ -52,13 +52,7 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={false}
-                            />
+                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
                         ))}
                     </>
                 ) : (
@@ -72,13 +66,7 @@ export default (() => {
                             <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={true}
-                            />
+                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
                         ))}
                     </>
                 )}
@@ -96,7 +84,6 @@ export default (() => {
 export const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
         burnRow: boolean; // is burnRow
     }
 > = ({
@@ -106,7 +93,6 @@ export const CommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -115,7 +101,7 @@ export const CommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline mr-2" />
                 {tokenOut.name}

@@ -36,24 +36,24 @@ const historyOptions: PageOptions = [
 /* Cheat to span the rest of the columns */
 const MAX_COLS = 100;
 
-const historyTableHeader : Record<CommitActionEnum, React.ReactNode> = {
+const historyTableHeader: Record<CommitActionEnum, React.ReactNode> = {
     [CommitActionEnum.mint]: (
-            <TableHeader>
-                <TableHeaderCell>Time / Date</TableHeaderCell>
-                <TableHeaderCell>Token</TableHeaderCell>
-                <TableHeaderCell>Amount</TableHeaderCell>
-                <TableHeaderCell>Tokens / Price</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>Protocol Fee</TableHeaderCell>
-            </TableHeader>
+        <TableHeader>
+            <TableHeaderCell>Time / Date</TableHeaderCell>
+            <TableHeaderCell>Token</TableHeaderCell>
+            <TableHeaderCell>Amount</TableHeaderCell>
+            <TableHeaderCell>Tokens / Price</TableHeaderCell>
+            <TableHeaderCell colSpan={2}>Protocol Fee</TableHeaderCell>
+        </TableHeader>
     ),
     [CommitActionEnum.burn]: (
-            <TableHeader>
-                <TableHeaderCell>Time / Date</TableHeaderCell>
-                <TableHeaderCell>Token</TableHeaderCell>
-                <TableHeaderCell>Amount / Price</TableHeaderCell>
-                <TableHeaderCell>Return</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
-            </TableHeader>
+        <TableHeader>
+            <TableHeaderCell>Time / Date</TableHeaderCell>
+            <TableHeaderCell>Token</TableHeaderCell>
+            <TableHeaderCell>Amount / Price</TableHeaderCell>
+            <TableHeaderCell>Return</TableHeaderCell>
+            <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
+        </TableHeader>
     ),
     [CommitActionEnum.flip]: (
         <TableHeader>
@@ -71,7 +71,7 @@ const historyTableHeader : Record<CommitActionEnum, React.ReactNode> = {
                 <TableHeaderCell colSpan={3}>Amount</TableHeaderCell>
             </tr>
         </TableHeader>
-    )
+    ),
 };
 
 export default (({ focus }) => {
@@ -98,7 +98,6 @@ export default (({ focus }) => {
             });
         }
     }, [focus, page, account, network]);
-
 
     return (
         <div className="bg-theme-background rounded-xl shadow mt-5 p-5">
@@ -142,7 +141,7 @@ export default (({ focus }) => {
                             </tr>
                         ) : (
                             tradeHistory.map((commit, index) => (
-                                <CommitRow key={`pcr-${index}`} index={index} {...commit} provider={provider} />
+                                <CommitRow key={`pcr-${index}`} {...commit} provider={provider} />
                             ))
                         )}
                     </tbody>
@@ -174,7 +173,6 @@ export default (({ focus }) => {
 
 const CommitRow: React.FC<
     TradeHistory & {
-        index: number;
         provider?: ethers.providers.JsonRpcProvider;
     }
 > = ({
@@ -185,7 +183,6 @@ const CommitRow: React.FC<
     fee,
     tokenInSymbol,
     tokenOutSymbol,
-    index,
     type,
     provider,
     tokenInAddress,
@@ -200,10 +197,9 @@ const CommitRow: React.FC<
         minute: 'numeric',
     }).format(new Date(date * 1000));
     const dateString = new Intl.DateTimeFormat('en-AU').format(new Date(date * 1000));
-
     if (type === V2_API_COMMIT_TYPES.LONG_MINT || type === V2_API_COMMIT_TYPES.SHORT_MINT) {
         return (
-            <TableRow key={index} rowNumber={index}>
+            <TableRow key={`${transactionHashIn}`} lined>
                 {/*Time / Date*/}
                 <TableRowCell>
                     <div>{timeString}</div>
@@ -220,8 +216,7 @@ const CommitRow: React.FC<
                         <div>
                             <div className="flex">
                                 <div>
-                                    {tokenOutSymbol.split('-')[0][0]}-
-                                    {marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
+                                    {tokenOutSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
                                 </div>
                                 &nbsp;
                                 <div className={type === V2_API_COMMIT_TYPES.LONG_MINT ? 'green' : 'red'}>
@@ -281,7 +276,7 @@ const CommitRow: React.FC<
         );
     } else if (type === V2_API_COMMIT_TYPES.LONG_BURN || type === V2_API_COMMIT_TYPES.SHORT_BURN) {
         return (
-            <TableRow key={index} rowNumber={index}>
+            <TableRow key={`${transactionHashIn}`} lined>
                 <TableRowCell>
                     <div>{timeString}</div>
                     <div className="text-cool-gray-500">{dateString}</div>
@@ -296,8 +291,7 @@ const CommitRow: React.FC<
                         <div>
                             <div className="flex">
                                 <div>
-                                    {tokenInSymbol.split('-')[0][0]}-
-                                    {marketSymbolToAssetName[tokenInSymbol.slice(3)]}
+                                    {tokenInSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenInSymbol.slice(3)]}
                                 </div>
                                 &nbsp;
                                 <div className={type === V2_API_COMMIT_TYPES.LONG_BURN ? 'green' : 'red'}>
@@ -354,7 +348,7 @@ const CommitRow: React.FC<
         );
     } else if (type === V2_API_COMMIT_TYPES.LONG_BURN_SHORT_MINT || type === V2_API_COMMIT_TYPES.SHORT_BURN_LONG_MINT) {
         return (
-            <TableRow key={index} rowNumber={index}>
+            <TableRow key={`${transactionHashIn}`} lined>
                 <TableRowCell>
                     <div>{timeString}</div>
                     <div className="text-cool-gray-500">{dateString}</div>
@@ -378,8 +372,7 @@ const CommitRow: React.FC<
                     <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
                     <div className="text-cool-gray-500">
                         {toApproxCurrency(
-                            (price.toNumber() / 10 ** tokenDecimals) *
-                                (tokenInAmount.toNumber() / 10 ** tokenDecimals),
+                            (price.toNumber() / 10 ** tokenDecimals) * (tokenInAmount.toNumber() / 10 ** tokenDecimals),
                         )}{' '}
                         {priceTokenSymbol}
                     </div>
@@ -444,5 +437,5 @@ const CommitRow: React.FC<
         );
     }
     // default return nothing
-    return <></>
+    return <></>;
 };

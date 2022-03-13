@@ -1,12 +1,19 @@
 import { useEffect, useState } from 'react';
 import { usePools } from '@context/PoolContext';
 import { SideEnum } from '@libs/constants';
+import BigNumber from 'bignumber.js';
 
-type TokenRow = {
+export type TokenRow = {
     side: SideEnum;
     leverage: number;
-    pool: string;
+    pool: {
+        address: string;
+        name: string;
+        quoteTokenSymbol: string;
+    };
     symbol: string;
+    balance: BigNumber;
+    escrowBalance: BigNumber;
 };
 
 type TokenMap = {
@@ -24,27 +31,41 @@ export default (() => {
             const _tokens: TokenRow[] = [];
             const _tokenMap: TokenMap = {};
             Object.values(pools).forEach((pool) => {
-                const { poolInstance } = pool;
+                const { poolInstance, userBalances } = pool;
 
                 const {
                     address,
+                    name,
                     leverage,
                     shortToken: { symbol: shortTokenSymbol, address: shortTokenAddress },
                     longToken: { symbol: longTokenSymbol, address: longTokenAddress },
+                    quoteToken: { symbol: quoteTokenSymbol },
                 } = poolInstance;
 
-                const shortToken = {
+                const shortToken: TokenRow = {
                     symbol: shortTokenSymbol,
                     side: SideEnum.short,
-                    pool: address,
                     leverage: leverage,
+                    balance: userBalances.shortToken.balance,
+                    escrowBalance: userBalances.aggregateBalances.shortTokens,
+                    pool: {
+                        address,
+                        quoteTokenSymbol,
+                        name,
+                    },
                 };
 
-                const longToken = {
+                const longToken: TokenRow = {
                     symbol: longTokenSymbol,
                     side: SideEnum.long,
-                    pool: address,
                     leverage: leverage,
+                    balance: userBalances.longToken.balance,
+                    escrowBalance: userBalances.aggregateBalances.shortTokens,
+                    pool: {
+                        address,
+                        quoteTokenSymbol,
+                        name,
+                    },
                 };
                 _tokens.push(shortToken, longToken);
                 _tokenMap[shortTokenAddress] = shortToken;
@@ -55,6 +76,5 @@ export default (() => {
             setTokenMap(_tokenMap);
         }
     }, [pools]);
-
     return { tokens, tokenMap };
 }) as () => { tokens: TokenRow[]; tokenMap: TokenMap };

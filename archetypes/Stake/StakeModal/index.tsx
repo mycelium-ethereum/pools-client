@@ -79,7 +79,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                     {state.stakeModalState === 'claim' ? 'Available to claim' : 'Amount'}
                 </p>
                 {state.stakeModalState !== 'claim' ? (
-                    <InputContainer error={false /* invalidAmount.isInvalid */}>
+                    <InputContainer>
                         <NumericInput
                             disabled={!isApproved}
                             className="w-full h-full text-base font-normal "

@@ -221,7 +221,7 @@ const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
     const currency = 'USD';
 
     return (
-        <TableRow rowNumber={0}>
+        <TableRow>
             <TableRowCell>
                 <TokenType type={token}>{token}</TokenType>
             </TableRowCell>
@@ -264,7 +264,7 @@ const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
 };
 const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) => {
     return (
-        <TableRow rowNumber={0}>
+        <TableRow>
             <TableRowCell>
                 <TokenType type={token}>{token}</TokenType>
             </TableRowCell>
