@@ -4,8 +4,7 @@ import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import PendingCommits from '@components/PendingCommits';
-// @ts-ignore
-import { SecurityWidget } from '@mycelium-ethereum/vyps-kit';
+import { SecurityWidget } from '@reputation.link/vyps-kit';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 import { WarningBanners } from '@components/WarningBanner';
 import BalancerBuySell from '@archetypes/BalancerBuySell';
@@ -30,26 +29,15 @@ export default (() => {
 
 const CorWidget: React.FC = () => (
     <div id="cor-widget">
-        <SecurityWidget
-            right
-            color={'#3E58C9'}
-            textColor={'#ffffff'}
-            url={'https://reputation.link/protocols/tracer/?network=Arbitrum'}
-        />
-        <style>{`
-            #cor-widget a {
-                background: rgba(87, 113, 226)!important;
-            }
-            @media (max-width: 1024px) {
-                #cor-widget div {
-                    bottom: 20px!important;
-                }
-            }
-            @media (min-width: 1024px) {
-                #cor-widget div {
-                    bottom: 60px!important;
-                }
-            }
-        `}</style>
+        {typeof window !== 'undefined' && (
+            <SecurityWidget
+                right
+                color={'#3E58C9'}
+                textColor={'#ffffff'}
+                variant={'sm'}
+                protocol={'tracer'}
+                network={'Arbitrum'}
+            />
+        )}
     </div>
 );
