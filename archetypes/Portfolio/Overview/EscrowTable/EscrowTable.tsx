@@ -7,9 +7,7 @@ import { usePoolActions } from '@context/PoolContext';
 
 import * as Styles from './styles';
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
-import { ClaimablePoolToken, TokenType } from '../state';
-
-import { EscrowRowProps } from '../state';
+import { ClaimablePoolToken, TokenType, EscrowRowProps } from '../state';
 
 const ArrowDown = '/img/general/caret-down-white.svg';
 

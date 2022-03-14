@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-
 import Button from '@components/General/Button';
 import { TableRowCell } from '@components/General/TWTable';
+import { ClaimableAsset } from '../state';
 
 export const Pool = styled.div`
     color: ${({ theme }) => theme.text};

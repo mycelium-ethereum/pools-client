@@ -3,9 +3,8 @@ import { DeltaEnum } from '@archetypes/Pools/state';
 import { TableRowCell, TableRow } from '@components/General/TWTable';
 import UpOrDown from '@components/UpOrDown';
 import { toApproxCurrency } from '@libs/utils/converters';
-
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
-import { ClaimablePoolToken } from '../state';
+import { ClaimableAsset, ClaimablePoolToken } from '../state';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
     token,
