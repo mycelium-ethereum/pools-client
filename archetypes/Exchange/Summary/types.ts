@@ -3,13 +3,6 @@ import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { CommitActionEnum } from '@libs/constants';
 import { PoolToken } from '@tracer-protocol/pools-js';
 
-export type SummaryWrapProps = {
-    showBreakdown: boolean;
-    open: boolean;
-    receiveIn: number;
-    commitAction: CommitActionEnum;
-};
-
 export type SummaryProps = {
     pool: PoolInfo['poolInstance'];
     showBreakdown: boolean;
@@ -24,10 +17,10 @@ export type SummaryProps = {
 type SharedProps = {
     inputAmount: SummaryProps['inputAmount'];
     amount: SummaryProps['amount'];
+    gasFee: SummaryProps['gasFee'];
 
     tokenPrice: BigNumber;
     token: PoolToken;
-    gasFee?: string;
 };
 
 export type FlipSummaryProps = {
