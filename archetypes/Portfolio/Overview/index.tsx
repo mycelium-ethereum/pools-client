@@ -1,22 +1,25 @@
 import React, { useReducer } from 'react';
+
 import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import TokenTable from './TokenTable';
-import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
+import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+
+import { MarketFilterEnum } from '@libs/types/General';
+import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
+import { marketFilter } from '@libs/utils/functions';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
 import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-import styled from 'styled-components';
+import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
-import { MarketFilterEnum } from '@libs/types/General';
-import { portfolioReducer, initialPortfolioState, DenotedInEnum, EscrowRowProps } from './state';
-import { SearchInput } from '@components/General/SearchInput';
-import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
+
+import * as Styles from './styles';
+import TokenTable from './TokenTable';
 import EscrowTable from './EscrowTable';
-import { marketFilter } from '@libs/utils/functions';
+import { portfolioReducer, initialPortfolioState, DenotedInEnum, EscrowRowProps } from './state';
 
 export enum LoadingState {
     Idle = 0,
@@ -37,14 +40,6 @@ enum PriceByEnum {
     Tracer = 'Tracer',
     Balancer = 'Balancer',
 }
-
-const TableSection = styled.div`
-    border-radius: 0.75rem;
-    margin-top: 2.5rem;
-    padding: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    background: ${({ theme }) => theme.background};
-`;
 
 // const Overview
 export default (({ onClickBurn }) => {
@@ -248,7 +243,7 @@ export default (({ onClickBurn }) => {
                         </a>
                     </div>
                 </div>
-                <TableSection>
+                <Styles.TableSection>
                     <div className="sm:flex sm:justify-between whitespace-nowrap">
                         <div className="font-semibold text-2xl my-4">Token Holdings</div>
                         <div className="flex my-auto">
@@ -289,8 +284,8 @@ export default (({ onClickBurn }) => {
                         </div>
                     </div>
                     <TokenTable rows={rows} onClickBurn={onClickBurn} denotedIn={state.positionsDenotedIn} />
-                </TableSection>
-                <TableSection>
+                </Styles.TableSection>
+                <Styles.TableSection>
                     <div className="sm:flex sm:justify-between whitespace-nowrap">
                         <div className="font-semibold text-2xl my-4">Escrow Holdings</div>
                         <div className="flex my-auto">
@@ -310,7 +305,7 @@ export default (({ onClickBurn }) => {
                                 />
                             </div>
                             <div className="flex">
-                                <SearchInput
+                                <Styles.SearchInput
                                     placeholder="Search"
                                     value={state.escrowSearch}
                                     onChange={(search) => dispatch({ type: 'setEscrowSearch', search })}
@@ -319,7 +314,7 @@ export default (({ onClickBurn }) => {
                         </div>
                     </div>
                     <EscrowTable rows={filteredEscrowRows} />
-                </TableSection>
+                </Styles.TableSection>
             </div>
         );
     };
