@@ -18,8 +18,8 @@ import { ThemeProvider } from 'styled-components';
  * Wrapper store for the FactoryContext.
  */
 export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
-    const [theme, setTheme] = useState<Theme>('dark');
-    const isDark = useMemo(() => theme === 'dark', [theme]);
+    const [theme, setTheme] = useState<Theme>(Theme.Dark);
+    const isDark = useMemo(() => theme === Theme.Dark, [theme]);
 
     const toggleTheme = () => {
         const head = document.getElementsByTagName('html')[0];
@@ -27,17 +27,17 @@ export const ThemeStore: React.FC<Children> = ({ children }: Children) => {
             // is dark going to light
             localStorage.setItem('theme', 'light');
             head.classList.remove('theme-dark');
-            setTheme('light');
+            setTheme(Theme.Light);
         } else {
             head.classList.add('theme-dark');
             localStorage.removeItem('theme');
-            setTheme('dark');
+            setTheme(Theme.Dark);
         }
     };
 
     useEffect(() => {
         if (localStorage.getItem('theme') === 'light') {
-            setTheme('light');
+            setTheme(Theme.Light);
         }
     }, []);
 

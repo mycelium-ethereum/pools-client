@@ -44,41 +44,33 @@ export default (() => {
                 {focus === CommitActionEnum.mint ? (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Spent (USD)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
-                            <TableHeaderCell>Receive in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Spent (USD)</TableHeaderCell>
+                                <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Amount (Tokens) *</TableHeaderCell>
+                                <TableHeaderCell>Receive in</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
                         </TableHeader>
                         {mintCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={false}
-                            />
+                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
                         ))}
                     </>
                 ) : (
                     <>
                         <TableHeader>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
-                            <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Return (USD) *</TableHeaderCell>
-                            <TableHeaderCell>Burn in</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Sold (Tokens)</TableHeaderCell>
+                                <TableHeaderCell>Token Price (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Return (USD) *</TableHeaderCell>
+                                <TableHeaderCell>Burn in</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
                         </TableHeader>
                         {burnCommits.map((commit, index) => (
-                            <CommitRow
-                                key={`pcr-${index}`}
-                                index={index}
-                                provider={provider ?? null}
-                                {...commit}
-                                burnRow={true}
-                            />
+                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
                         ))}
                     </>
                 )}
@@ -96,7 +88,6 @@ export default (() => {
 export const CommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
-        index: number;
         burnRow: boolean; // is burnRow
     }
 > = ({
@@ -106,7 +97,6 @@ export const CommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -115,7 +105,7 @@ export const CommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash}>
             <TableRowCell>
                 <Logo ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline mr-2" />
                 {tokenOut.name}

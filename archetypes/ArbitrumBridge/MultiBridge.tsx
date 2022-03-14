@@ -299,7 +299,10 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="amount" className="font-bold block mb-2">
                                 Amount
                             </label>
-                            <InputContainer className="w-full" error={amountIsInvalid} warning={Boolean(warningText)}>
+                            <InputContainer
+                                className="w-full"
+                                variation={amountIsInvalid ? 'error' : !!warningText ? 'warning' : undefined}
+                            >
                                 <Input
                                     className="w-full h-full font-normal text-base"
                                     value={amount}

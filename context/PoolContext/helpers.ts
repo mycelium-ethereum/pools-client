@@ -74,8 +74,6 @@ export const fetchCommits: (
         };
     }
 
-    const contract = PoolCommitter__factory.connect(committer, provider);
-
     let allUnexecutedCommits: APICommitReturn[] = [];
     const network = provider.network.chainId;
     if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
@@ -85,11 +83,11 @@ export const fetchCommits: (
         });
     }
 
-    const updateInterval = await contract.updateIntervalId();
-    const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
-
-    console.info('Pending mint amounts', pendingAmounts);
-
+    // const contract = PoolCommitter__factory.connect(committer, provider);
+    // const updateInterval = await contract.updateIntervalId();
+    // const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
+    // console.info('Pending mint amounts', pendingAmounts);
+    //
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
     return {

@@ -1,34 +1,61 @@
-import { Children } from '@libs/types/General';
-import { classNames } from '@libs/utils/functions';
-import React from 'react';
+import styled from 'styled-components';
 
-export const InputContainer: React.FC<{
+const errorStyles = `
+    border-color: rgb(252 165 165)!important;
+    color: rgb(239 68 68);
+    &:focus-within {
+        outline-color: rgb(239 68 68);
+    }
+`;
+
+const warningStyles = `
+    border-color: rgb(234 179 8)!important;
+    color: rgb(202 138 4);
+    &:focus-within {
+        outline-color: rgb(202 138 4);
+    }
+`;
+
+type Variation = 'warning' | 'error';
+
+export const InputContainer = styled.div<{
     className?: string;
-    error?: boolean;
-    warning?: boolean;
-}> = ({ error, warning, className = '', children }) => (
-    <div
-        className={classNames(
-            'relative py-3 px-3 border rounded bg-theme-button-bg',
-            warning
-                ? 'border-yellow-500 text-yellow-600 focus-within:ring-yellow-600'
-                : error
-                ? 'border-red-300 text-red-500 focus-within:ring-red-500'
-                : 'border-theme-border text-theme-text opacity-80 focus-within:ring-theme-primary',
-            'focus-within:ring-2 focus-within:ring-opacity-50 ',
-            className,
-        )}
-    >
-        {children}
-    </div>
-);
+    variation?: Variation;
+}>`
+    position: relative;
+    padding: 0.75rem;
+    border-width: 1px;
+    border-radius: 0.25rem;
+    background: ${({ theme }) => theme['button-bg']};
+    outline: 1px solid transparent;
 
-export const InnerInputText = (({ className, children }) => (
-    <div className={`${className ?? ''} absolute flex m-auto top-0 bottom-0 right-5 h-1/2 text-theme-primary`}>
-        {children}
-    </div>
-)) as React.FC<
-    {
-        className?: string;
-    } & Children
->;
+    ${({ theme, variation }) => {
+        switch (variation) {
+            case 'error':
+                return errorStyles;
+            case 'warning':
+                return warningStyles;
+            default:
+                return `
+                    border-color: ${theme.border};
+                    color: ${theme.text};
+                    opacity: 0.8;
+                    &:focus-within {
+                        outline-color: ${theme.primary};
+                    }
+
+            `;
+        }
+    }}
+`;
+
+export const InnerInputText = styled.div`
+    display flex;
+    position: absolute;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    right: 1.25rem;
+    height: 50%;
+    color: ${({ theme }) => theme.primary};
+`;

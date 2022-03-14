@@ -94,10 +94,9 @@ export default (({
                         </button>
                     </TooltipSelector>
                 ) : (
-                    <>
+                    <React.Fragment key={`twbg-${option.key}`}>
                         {option.text === 'Flip' && <NewCallOut>NEW</NewCallOut>}
                         <button
-                            key={`twbg-${option.key}`}
                             type="button"
                             onClick={() => onClick(option.key)}
                             className={classNames(
@@ -110,7 +109,7 @@ export default (({
                         >
                             {option.text}
                         </button>
-                    </>
+                    </React.Fragment>
                 ),
             )}
         </Container>

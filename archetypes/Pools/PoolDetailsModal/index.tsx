@@ -66,7 +66,7 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
 
             <Table showDivider={false}>
                 {poolDetailsData.map((v, i) => (
-                    <TableRow rowNumber={i} key={`${v.name}-${i}`}>
+                    <TableRow key={`${v.name}-${i}`} lined>
                         <TableRowCell className="px-2">
                             <CellContent>
                                 <div className="name">{v.name}</div>

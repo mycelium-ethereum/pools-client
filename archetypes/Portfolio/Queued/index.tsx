@@ -18,7 +18,11 @@ import TimeLeft from '@components/TimeLeft';
 import NoQueued from '@public/img/no-queued.svg';
 import { PageOptions } from '..';
 
-const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (numMints, numBurns, numFlips) => {
+const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (
+    numMints,
+    numBurns,
+    numFlips,
+) => {
     return [
         {
             key: CommitActionEnum.mint,
@@ -68,8 +72,8 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return mintCommits.map((commit, index) => (
-                <MintCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+            return mintCommits.map((commit) => (
+                <MintCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
             ));
         }
     };
@@ -87,13 +91,13 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return burnCommits.map((commit, index) => (
-                <BurnCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+            return burnCommits.map((commit) => (
+                <BurnCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
             ));
         }
     };
 
-    const FlipRows = (burnCommits: QueuedCommit[]) => {
+    const FlipRows = (flipCommits: QueuedCommit[]) => {
         if (burnCommits.length === 0) {
             return (
                 <tr>
@@ -106,8 +110,8 @@ export default (({ focus, commits }) => {
                 </tr>
             );
         } else {
-            return burnCommits.map((commit, index) => (
-                <FlipCommitRow key={`pcr-${index}`} index={index} provider={provider ?? null} {...commit} />
+            return flipCommits.map((commit) => (
+                <FlipCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
             ));
         }
     };
@@ -117,11 +121,13 @@ export default (({ focus, commits }) => {
             return (
                 <>
                     <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Amount</TableHeaderCell>
-                        <TableHeaderCell>Tokens / Price *</TableHeaderCell>
-                        <TableHeaderCell>Mint In</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <tr>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Tokens / Price *</TableHeaderCell>
+                            <TableHeaderCell>Mint In</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </tr>
                     </TableHeader>
                     <tbody>{MintRows(mintCommits)}</tbody>
                 </>
@@ -130,11 +136,13 @@ export default (({ focus, commits }) => {
             return (
                 <>
                     <TableHeader>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell>Amount</TableHeaderCell>
-                        <TableHeaderCell>Return / Price *</TableHeaderCell>
-                        <TableHeaderCell>Burn In</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <tr>
+                            <TableHeaderCell>Token</TableHeaderCell>
+                            <TableHeaderCell>Amount</TableHeaderCell>
+                            <TableHeaderCell>Return / Price *</TableHeaderCell>
+                            <TableHeaderCell>Burn In</TableHeaderCell>
+                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        </tr>
                     </TableHeader>
                     <tbody>{BurnRows(burnCommits)}</tbody>
                 </>
@@ -201,7 +209,6 @@ export default (({ focus, commits }) => {
 
 const MintCommitRow: React.FC<
     QueuedCommit & {
-        index: number;
         provider: ethers.providers.JsonRpcProvider | null;
     }
 > = ({
@@ -211,7 +218,6 @@ const MintCommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -220,7 +226,7 @@ const MintCommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash} lined>
             <TableRowCell>
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
@@ -282,7 +288,6 @@ const MintCommitRow: React.FC<
 
 const BurnCommitRow: React.FC<
     QueuedCommit & {
-        index: number;
         provider: ethers.providers.JsonRpcProvider | null;
     }
 > = ({
@@ -292,7 +297,6 @@ const BurnCommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -301,7 +305,7 @@ const BurnCommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash} lined>
             <TableRowCell>
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
@@ -363,7 +367,6 @@ const BurnCommitRow: React.FC<
 
 const FlipCommitRow: React.FC<
     QueuedCommit & {
-        index: number;
         provider: ethers.providers.JsonRpcProvider | null;
     }
 > = ({
@@ -374,7 +377,6 @@ const FlipCommitRow: React.FC<
     amount,
     nextRebalance,
     provider,
-    index,
     frontRunningInterval,
     updateInterval,
     created,
@@ -383,7 +385,7 @@ const FlipCommitRow: React.FC<
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
-        <TableRow key={txnHash} rowNumber={index}>
+        <TableRow key={txnHash} lined>
             <TableRowCell>
                 <div className="flex my-auto">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
