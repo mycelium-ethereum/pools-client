@@ -17,8 +17,8 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, tokenPr
         () => (isLong ? pool.shortToken : pool.longToken),
         [isLong, pool.longToken, pool.shortToken],
     );
-    const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
-    const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
+    const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
+    const baseAssetPrice = toApproxCurrency(pool.oraclePrice);
     const flippedAmount = calcNotionalValue(tokenPrice, amount);
     const flippedExpectedAmount: string = flippedAmount.div(tokenPrice ?? 1).toFixed(0);
 
@@ -105,18 +105,18 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, tokenPr
 
                             <Section label="Expected Exposure" className="header">
                                 <Styles.SumText setColor="red">
-                                    {flippedEquivalentExposure.toFixed(3)} {selectedToken}
+                                    {flippedEquivalentExposure.toFixed(3)} {baseAsset}
                                 </Styles.SumText>
                             </Section>
                             {showTransactionDetails && (
                                 <Styles.SectionDetails>
                                     <Section
-                                        label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
+                                        label={`Commit Amount (${baseAsset}) at ${baseAssetPrice} USD/${baseAsset}`}
                                         showSectionDetails
                                     >
                                         <div>
                                             <span className="opacity-50">
-                                                {flippedCommitAmount.toFixed(3)} {selectedToken}
+                                                {flippedCommitAmount.toFixed(3)} {baseAsset}
                                             </span>
                                         </div>
                                     </Section>

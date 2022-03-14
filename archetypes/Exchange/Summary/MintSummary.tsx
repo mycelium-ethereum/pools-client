@@ -16,8 +16,8 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
     const totalCommitmentAmount = amount.eq(0) ? toApproxCurrency(amount) : 0;
     const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(amount);
     const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.symbol}`;
-    const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
-    const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
+    const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
+    const baseAssetPrice = toApproxCurrency(pool.oraclePrice);
     const equivalentExposure = (amount.div(pool.oraclePrice.toNumber()).times(poolPowerLeverage)).toNumber();
 
     const commitAmount = amount.div(pool.oraclePrice).toNumber()
@@ -55,17 +55,17 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
             )}
             <Section label="Expected Equivalent Exposure" className="header">
                 <Styles.SumText setColor="green">
-                    {equivalentExposure.toFixed(3)} {selectedToken}
+                    {equivalentExposure.toFixed(3)} {baseAsset}
                 </Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
                     <Section
-                        label={`Commit Amount (${selectedToken}) at ${selectedTokenOraclePrice} USD/${selectedToken}`}
+                        label={`Commit Amount (${baseAsset}) at ${baseAssetPrice} USD/${baseAsset}`}
                         showSectionDetails
                     >
                         <Styles.Transparent>
-                            {commitAmount.toFixed(3)} {selectedToken}
+                            {commitAmount.toFixed(3)} {baseAsset}
                         </Styles.Transparent>
                     </Section>
                     <Section label="Pool Power Leverage" showSectionDetails>
