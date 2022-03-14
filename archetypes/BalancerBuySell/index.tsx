@@ -4,7 +4,6 @@ import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContex
 import { ARBITRUM, SideEnum } from '@libs/constants';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
-import { constructBalancerLink } from '@archetypes/Exchange/Summary';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
@@ -14,6 +13,9 @@ import { StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { classNames } from '@libs/utils/functions';
 import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
+
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 export default (() => {
     const { network = ARBITRUM, account } = useWeb3();
@@ -170,3 +172,15 @@ export default (() => {
         </div>
     );
 }) as React.FC;
+
+export const constructBalancerLink: (token: string | undefined, network: KnownNetwork, isBuy: boolean) => string = (
+    token,
+    network,
+    isBuy,
+) => {
+    const { usdcAddress, balancerInfo } = networkConfig[network];
+    // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
+    return isBuy
+        ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
+        : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
+};
