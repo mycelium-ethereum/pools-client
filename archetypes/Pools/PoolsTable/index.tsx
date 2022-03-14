@@ -20,7 +20,7 @@ import styled from 'styled-components';
 
 import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
-import { constructBalancerLink } from '@archetypes/Exchange/Summary';
+import { constructBalancerLink } from '@archetypes/BalancerBuySell';
 import { StyledTooltip } from '@components/Tooltips';
 import { default as UpOrDownInner } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
