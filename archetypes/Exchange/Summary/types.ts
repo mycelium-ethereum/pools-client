@@ -10,12 +10,10 @@ export type SummaryProps = {
     isLong: boolean;
     commitAction: CommitActionEnum;
     receiveIn: number;
-    inputAmount: number;
     gasFee?: string;
 };
 
 type SharedProps = {
-    inputAmount: SummaryProps['inputAmount'];
     amount: SummaryProps['amount'];
     gasFee: SummaryProps['gasFee'];
 

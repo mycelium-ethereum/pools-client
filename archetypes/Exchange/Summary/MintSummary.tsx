@@ -7,20 +7,20 @@ import { ExpectedTokenPrice } from './Sections';
 import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
-const MintSummary: React.FC<MintSummaryProps> = ({ inputAmount, amount, tokenPrice, token, pool, gasFee }) => {
+const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const expectedAmount = amount.div(tokenPrice ?? 1).toFixed(0);
     const poolPowerLeverage = pool.leverage;
 
-    const totalCommitmentAmount = inputAmount ? toApproxCurrency(inputAmount) : 0;
-    const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(inputAmount);
+    const totalCommitmentAmount = amount.eq(0) ? toApproxCurrency(amount) : 0;
+    const totalCost = amount.toNumber() <= 0 ? 0 : toApproxCurrency(amount);
     const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.symbol}`;
     const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
     const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
-    const equivalentExposure = (inputAmount / pool.oraclePrice.toNumber()) * poolPowerLeverage;
+    const equivalentExposure = (amount.div(pool.oraclePrice.toNumber()).times(poolPowerLeverage)).toNumber();
 
-    const commitAmount = inputAmount / pool.oraclePrice.toNumber();
+    const commitAmount = amount.div(pool.oraclePrice).toNumber()
     return (
         <>
             <Section label="Total Costs" className="header">

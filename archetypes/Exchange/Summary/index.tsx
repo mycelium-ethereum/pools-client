@@ -8,10 +8,9 @@ import MintSummary from './MintSummary';
 import BurnSummary from './BurnSummary';
 import { SummaryProps } from './types';
 
-export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, commitAction, gasFee }) => {
+export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
-
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
             <Styles.Wrapper>
@@ -26,7 +25,6 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
                 >
                     {commitAction === CommitActionEnum.mint && (
                         <MintSummary
-                            inputAmount={inputAmount}
                             amount={amount}
                             tokenPrice={tokenPrice}
                             token={token}
@@ -41,7 +39,6 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                     {commitAction === CommitActionEnum.burn && (
                         <BurnSummary
-                            inputAmount={inputAmount}
                             amount={amount}
                             tokenPrice={tokenPrice}
                             gasFee={gasFee}
@@ -54,7 +51,6 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, inputAmount, 
 
                     {commitAction === CommitActionEnum.flip && (
                         <FlipSummary
-                            inputAmount={inputAmount}
                             amount={amount}
                             tokenPrice={tokenPrice}
                             token={token}
