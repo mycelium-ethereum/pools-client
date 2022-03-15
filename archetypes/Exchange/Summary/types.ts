@@ -39,3 +39,7 @@ export type BurnSummaryProps = {
         quoteTokenSymbol: string;
     };
 } & SharedProps;
+
+export type BaseSection = {
+    showTransactionDetails: boolean;
+};
