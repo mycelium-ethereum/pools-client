@@ -15,8 +15,8 @@ import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelect
 import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
 import PoolDetailsModal from '../PoolDetailsModal';
-import { useTheme } from '@context/ThemeContext';
 import styled from 'styled-components';
+import { Theme } from '@context/ThemeContext/themes';
 
 import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
@@ -78,7 +78,14 @@ const InfoIcon = styled(Info)`
     }
 
     path {
-        fill: ${(props) => (props.isDark ? '#ffffff' : '#111928')};
+        fill: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#111928';
+                default:
+                    '#fff';
+            }
+        }};
     }
 `;
 
@@ -87,7 +94,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
     const { provider, account, config } = useWeb3();
-    const { isDark } = useTheme();
 
     const handlePoolDetailsClick = (data: any) => {
         setShowModalPoolDetails(true);
@@ -229,7 +235,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             account={account}
                             provider={provider}
                             deltaDenotation={deltaDenotation}
-                            isDark={isDark}
                         />
                     );
                 })}
@@ -259,7 +264,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                 onClose={() => setShowModalPoolDetails(false)}
                 poolDetails={poolDetails}
                 previewUrl={config?.previewUrl || ''}
-                isDark={isDark}
             />
         </>
     );
@@ -276,18 +280,8 @@ const PoolRow: React.FC<
         account: string | undefined;
         provider: ethers.providers.JsonRpcProvider | undefined;
         onClickShowPoolDetailsModal: () => void;
-        isDark: boolean;
     } & TProps
-> = ({
-    pool,
-    account,
-    onClickMintBurn,
-    provider,
-    showNextRebalance,
-    deltaDenotation,
-    onClickShowPoolDetailsModal,
-    isDark,
-}) => {
+> = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
@@ -306,7 +300,7 @@ const PoolRow: React.FC<
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
                         USDC
-                        <InfoIcon onClick={onClickShowPoolDetailsModal} isDark={isDark} />
+                        <InfoIcon onClick={onClickShowPoolDetailsModal} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>

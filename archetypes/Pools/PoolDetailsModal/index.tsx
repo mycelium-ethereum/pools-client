@@ -3,6 +3,7 @@ import { TWModal } from '@components/General/TWModal';
 import { Table, TableRow, TableRowCell } from '@components/General/TWTable';
 import styled from 'styled-components';
 import { getPriceFeedUrl } from '@libs/utils/converters';
+import { Theme } from '@context/ThemeContext/themes';
 
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
@@ -16,7 +17,7 @@ type PoolProps = {
     collateralAssetAddress: string;
 };
 
-export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
+export default (({ open, onClose, poolDetails, previewUrl }) => {
     const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails || {};
 
     const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
@@ -74,7 +75,7 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
                                     {v.value}
                                     {v.href ? (
                                         <a href={v.href} target="_blank" rel="noopener noreferrer">
-                                            <FollowLinkIcon isDark={isDark} />
+                                            <FollowLinkIcon />
                                         </a>
                                     ) : null}
                                 </div>
@@ -90,7 +91,6 @@ export default (({ open, onClose, poolDetails, previewUrl, isDark }) => {
     onClose: () => void;
     poolDetails: PoolProps;
     previewUrl: string;
-    isDark: boolean;
 }>;
 
 const ModalHeader = styled((props: any) => <div className={props.className}>{props.children}</div>)`
@@ -116,7 +116,14 @@ const FollowLinkIcon = styled(FollowLink)`
     margin-left: 15px;
 
     path {
-        stroke: ${(props) => (props.isDark ? '#ffffff' : '#374151')};
+        stroke: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#374151';
+                default:
+                    '#fff';
+            }
+        }};
     }
 `;
 

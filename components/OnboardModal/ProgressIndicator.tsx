@@ -5,7 +5,7 @@ import { ProgressIndicatorProps } from './types';
 
 const StepsContainer = styled.div`
     display: flex;
-    margin 2rem 0;
+    margin: 2rem 0;
     justify-content: center;
     align-items: center;
 `;

@@ -50,7 +50,7 @@ export const InputContainer = styled.div<{
 `;
 
 export const InnerInputText = styled.div`
-    display flex;
+    display: flex;
     position: absolute;
     margin: auto;
     top: 0;

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useTheme } from '@context/ThemeContext';
 import { TWModal } from '@components/General/TWModal';
 import Divider from '@components/General/Divider';
 import Button from '@components/General/Button';
@@ -7,23 +6,19 @@ import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
 import * as Styled from './styles';
 import { OnboardModalProps } from './types';
 
-import Wave from '/public/img/onboard/wave.svg';
-import Question from '/public/img/onboard/question.svg';
-
 const OnboardStakeModal: React.FC<OnboardModalProps> = ({
     onboardStep,
     setOnboardStep,
     showOnboardModal,
     setShowOnboardModal,
 }) => {
-    const { isDark } = useTheme();
     const OnboardContent = () => {
         switch (onboardStep) {
             case 1:
                 return (
                     <>
                         <div className="flex justify-center">
-                            <Wave fill={`${isDark ? '#374151' : '#F3F4F6'}`} />
+                            <Styled.Wave />
                         </div>
                         <div className="text-2xl text-center my-5">Stake Pool tokens</div>
                         <Divider className="mb-8" />
@@ -55,7 +50,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                 return (
                     <>
                         <div className="flex justify-center">
-                            <Question fill={`${isDark ? '#374151' : '#E5E7EB'}`} />
+                            <Styled.Question />
                         </div>
                         <div className="text-2xl text-center my-5">Explore the wider landscape</div>
                         <Divider className="mb-8" />
