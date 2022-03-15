@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Section } from '@components/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import * as Styles from './styles';
@@ -6,8 +6,9 @@ import ApproxCommitGasFee from './ApproxCommitGasFee';
 import { ExpectedTokenPrice } from './Sections';
 import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
+import { Skeleton } from 'antd';
 
-const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, pool, gasFee }) => {
+const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, pool, gasFee, showBreakdown }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const expectedAmount = amount.div(tokenPrice ?? 1).toFixed(0);
@@ -18,13 +19,24 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
     const expectedTokensMinted = `${Number(expectedAmount) > 0 ? expectedAmount : ''} ${token.symbol}`;
     const selectedToken = pool.name?.split('-')[1]?.split('/')[0];
     const selectedTokenOraclePrice = toApproxCurrency(pool.oraclePrice);
-    const equivalentExposure = (amount.div(pool.oraclePrice.toNumber()).times(poolPowerLeverage)).toNumber();
+    const equivalentExposure = amount.div(pool.oraclePrice.toNumber()).times(poolPowerLeverage).toNumber();
 
-    const commitAmount = amount.div(pool.oraclePrice).toNumber()
+    const commitAmount = amount.div(pool.oraclePrice).toNumber();
+
+    useEffect(() => {
+        if (!showBreakdown) {
+            setShowTransactionDetails(false);
+        }
+    }, [showBreakdown]);
+
     return (
         <>
             <Section label="Total Costs" className="header">
-                <Styles.SumText>{totalCost}</Styles.SumText>
+                {showBreakdown ? (
+                    <Styles.SumText>{totalCost}</Styles.SumText>
+                ) : (
+                    <Skeleton active paragraph={{ rows: 1, width: '100%' }} title={false} />
+                )}
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
@@ -39,7 +51,11 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
                 </Styles.SectionDetails>
             )}
             <Section label="Expected Tokens Minted" className="header">
-                <Styles.SumText>{expectedTokensMinted}</Styles.SumText>
+                {showBreakdown ? (
+                    <Styles.SumText>{expectedTokensMinted}</Styles.SumText>
+                ) : (
+                    <Skeleton active paragraph={{ rows: 1, width: '100%' }} title={false} />
+                )}
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
@@ -54,9 +70,13 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
                 </Styles.SectionDetails>
             )}
             <Section label="Expected Equivalent Exposure" className="header">
-                <Styles.SumText setColor="green">
-                    {equivalentExposure.toFixed(3)} {selectedToken}
-                </Styles.SumText>
+                {showBreakdown ? (
+                    <Styles.SumText setColor="green">
+                        {equivalentExposure.toFixed(3)} {selectedToken}
+                    </Styles.SumText>
+                ) : (
+                    <Skeleton active paragraph={{ rows: 1, width: '100%' }} title={false} />
+                )}
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
@@ -73,9 +93,11 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
                     </Section>
                 </Styles.SectionDetails>
             )}
-            <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
-                <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
-            </Styles.ShowDetailsButton>
+            {showBreakdown && (
+                <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
+                    <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
+                </Styles.ShowDetailsButton>
+            )}
         </>
     );
 };

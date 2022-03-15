@@ -13,9 +13,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
-            <Styles.Wrapper>
+            <Styles.Wrapper isSummaryAvailable={showBreakdown}>
                 <Transition
-                    show={showBreakdown}
+                    show
                     enter="transition-opacity duration-50 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
@@ -34,6 +34,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                                 leverage: pool.leverage,
                             }}
                             gasFee={gasFee}
+                            showBreakdown={showBreakdown}
                         />
                     )}
 

@@ -13,8 +13,8 @@ export const HiddenExpand = styled(UnstyledHiddenExpand)<{ showBorder: boolean }
     border-color: ${({ showBorder, theme }) => (showBorder ? theme['border-secondary'] : 'transparent')};
 `;
 
-export const Wrapper = styled.div`
-    padding: 1.5rem 1rem 0;
+export const Wrapper = styled.div<{ isSummaryAvailable?: boolean }>`
+    padding: ${({ isSummaryAvailable }) => `1.5rem 1rem ${isSummaryAvailable ? '0' : '1'}rem`};
     position: relative;
 `;
 
