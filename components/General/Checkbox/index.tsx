@@ -1,14 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useTheme } from '@context/ThemeContext';
+import { Theme } from '@context/ThemeContext/themes';
 
 export default (({ onClick, isChecked, className, label, subtext }) => {
-    const { isDark } = useTheme();
     return (
         <Container className={className}>
             <Input type="checkbox" name="checkbox" checked={isChecked} />
             <HoverPointer onClick={onClick}>
-                <Checkmark isChecked={isChecked} isDarkTheme={isDark} />
+                <Checkmark isChecked={isChecked} />
                 <Label htmlFor="checkbox">{label}</Label>
             </HoverPointer>
             {subtext && <Subtext>{subtext}</Subtext>}
@@ -51,15 +50,38 @@ const Label = styled.label`
     font-weight: 600;
 `;
 
-const Checkmark = styled.span<{ isChecked: boolean; isDarkTheme: boolean }>`
+const Checkmark = styled.span<{ isChecked: boolean }>`
     position: absolute;
     top: 0.25em;
     left: 0;
     width: 18px;
     height: 18px;
-    border: 2px solid ${({ isChecked, isDarkTheme }) => (isChecked && !isDarkTheme ? '#1c64f2' : '#374151')};
     border-radius: 4px;
-    background-color: ${({ isChecked, isDarkTheme }) => (isChecked && !isDarkTheme ? '#1c64f2' : 'transparent')};
+
+    ${({ theme, isChecked }) => {
+        switch (true) {
+            case isChecked && Theme.Light === theme.theme:
+                return `
+                    border: 2px solid #374151;
+                    background-color: #374151;
+                `;
+            case isChecked && Theme.Dark === theme.theme:
+                return `
+                    border: 2px solid #1c64f2;
+                    background-color: #1c64f2;
+                `;
+            case Theme.Light === theme.theme:
+                return `
+                    border: 2px solid #374151;
+                    background-color: transparent;
+                `;
+            default:
+                return `
+                    background-color: transparent;
+                    border: 2px solid #1c64f2;
+                `;
+        }
+    }}
 
     &:after {
         content: '';
@@ -79,5 +101,12 @@ const Checkmark = styled.span<{ isChecked: boolean; isDarkTheme: boolean }>`
 const Subtext = styled.p`
     font-size: 12px;
     margin-left: 30px;
-    color: ${({ theme }) => (theme['is-dark'] ? '#D1D5DB' : '#6b7280')};
+    color: ${({ theme }) => {
+        switch (theme.theme) {
+            case Theme.Light:
+                return '#6b7280';
+            default:
+                return '#D1D5DB';
+        }
+    }};
 `;
