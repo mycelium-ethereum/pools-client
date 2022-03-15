@@ -3,17 +3,18 @@ import * as Styles from './styles';
 import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
 import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
+import { calcExposure, calcNumTokens } from './utils';
+import { getBaseAsset } from '@libs/utils/converters';
 
 const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
-    const expectedAmount = amount.div(nextTokenPrice ?? 1);
     const poolPowerLeverage = pool.leverage;
-
-    const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
-    const equivalentExposure = amount.div(pool.oraclePrice.toNumber()).times(poolPowerLeverage).toNumber();
-
-    const commitAmount = amount.div(pool.oraclePrice).toNumber();
+    const baseAsset = getBaseAsset(pool.name);
+    const equivalentExposure = calcExposure(amount, pool.oraclePrice, poolPowerLeverage).toNumber();
+    const expectedAmount = calcNumTokens(amount, nextTokenPrice);
+    // commit amount represented in collateral tokens
+    const commitAmount = calcNumTokens(amount, pool.oraclePrice).toNumber();
     return (
         <>
             <TotalMintCosts amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />

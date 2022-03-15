@@ -13,8 +13,8 @@ import { CommitEnum } from '@tracer-protocol/pools-js';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
 import styled from 'styled-components';
-// TODO: dependent on auto-claim feature
-// import Checkbox from '@components/General/Checkbox';
+import useBalancerETHPrice from '@libs/hooks/useBalancerETHPrice';
+import BigNumber from 'bignumber.js';
 
 const TRADE_OPTIONS = [
     {
@@ -31,28 +31,37 @@ const TRADE_OPTIONS = [
     },
 ];
 
-export default styled((({ onClose, className }) => {
-    // TODO: dependent on auto-claim feature
-    // const [autoClaimTokens, setAutoClaimTokens] = useState(false);
-    const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, string>>>({});
-    const [commitType, setCommitType] = useState<CommitEnum>(0);
+const DEFAULT_GAS_FEE = new BigNumber(0);
 
-    const { account } = useWeb3();
+export default styled((({ onClose, className }) => {
+    const { account, gasPrice } = useWeb3();
     const { handleConnect } = useWeb3Actions();
+
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
     const { commit, approve, commitGasFee } = usePoolActions();
+
+    const ethPrice = useBalancerETHPrice();
+
+    const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, BigNumber>>>({});
+    const [commitType, setCommitType] = useState<CommitEnum>(0);
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
     const amountBN = useBigNumber(amount);
 
     useMemo(async () => {
         if (commitGasFee) {
-            const fee = await commitGasFee(selectedPool ?? '', commitType, amountBN);
-            setCommitGasFees({ ...commitGasFees, [CommitActionEnum[commitAction]]: fee });
+            const fee: BigNumber | undefined = await commitGasFee(selectedPool ?? '', commitType, amountBN).catch(
+                (_err) => undefined,
+            );
+            if (fee) {
+                const gasPriceInEth = new BigNumber(gasPrice ?? 0).div(10 ** 9);
+                const costInEth = fee.times(gasPriceInEth);
+                setCommitGasFees({ ...commitGasFees, [commitAction]: ethPrice.times(costInEth) });
+            }
         }
-    }, [selectedPool, commitType, amountBN]);
+    }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
 
     useEffect(() => {
         if (commitAction === CommitActionEnum.mint) {
@@ -110,7 +119,7 @@ export default styled((({ onClose, className }) => {
                 amount={amountBN}
                 receiveIn={receiveIn}
                 commitAction={commitAction}
-                gasFee={commitGasFees[commitAction]}
+                gasFee={commitGasFees[commitAction] ?? DEFAULT_GAS_FEE}
             />
 
             <ExchangeButton

@@ -43,7 +43,7 @@ interface ActionContextProps {
     commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
     approve: (pool: string, quoteTokenSymbol: string) => void;
     claim: (pool: string, options?: Options) => void;
-    commitGasFee: (pool: string, commitType: CommitEnum, amount: BigNumber) => Promise<string | undefined>;
+    commitGasFee: (pool: string, commitType: CommitEnum, amount: BigNumber) => Promise<BigNumber>;
 }
 
 interface SelectedPoolContextProps {
@@ -456,40 +456,40 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const commitGasFee: (
-        pool: string,
-        commitType: CommitEnum,
-        amount: BigNumber,
-    ) => Promise<string | undefined> = async (pool = '', commitType, amount) => {
+    // returns the cost of gas units
+    const commitGasFee: (pool: string, commitType: CommitEnum, amount: BigNumber) => Promise<BigNumber> = async (
+        pool = '',
+        commitType,
+        amount,
+    ) => {
+        if (amount.eq(0)) {
+            throw 'Failed to estimate gas cost: amount cannot be 0';
+        }
+
         const committerAddress = poolsState?.pools[pool]?.poolInstance?.committer?.address;
 
         if (!committerAddress) {
-            console.error('Committer address undefined when trying to mint');
-            // TODO handle error
+            throw 'Committer address undefined when trying to mint';
         }
 
         if (!signer) {
-            console.error('Signer undefined when trying to mint');
-            return;
+            throw 'Signer undefined when trying to mint';
         }
         const committer = PoolCommitter__factory?.connect(committerAddress, signer);
 
-        const mintGasEstimate = await committer?.estimateGas?.commit(
-            commitType,
-            ethers?.utils?.parseUnits(amount?.toFixed(), 18),
-            false,
-            false,
-        );
-
-        const formattedMintGasEstimate = ethers.utils.formatUnits(mintGasEstimate);
-        const weiUnitPriceUSD = poolsState?.pools[pool]?.poolInstance?.lastPrice.div(10 ** 18);
-        const mintGasPriceInUSD = weiUnitPriceUSD.multipliedBy(formattedMintGasEstimate);
-        const mintGasPriceInUSDtoNumber = mintGasPriceInUSD.toNumber();
-        const commitGasFee = mintGasPriceInUSDtoNumber.toFixed(20);
-
-        return commitGasFee;
+        try {
+            const gasEstimate = await committer?.estimateGas?.commit(
+                commitType,
+                ethers?.utils?.parseUnits(amount?.toFixed(), 18),
+                false,
+                false,
+            );
+            const formattedGasEstimate = new BigNumber(gasEstimate.toString());
+            return formattedGasEstimate;
+        } catch (err) {
+            throw `Failed to estimate gas cost: ${err}`;
+        }
     };
-
     /**
      * Commit to a pool
      * @param pool pool address to commit to

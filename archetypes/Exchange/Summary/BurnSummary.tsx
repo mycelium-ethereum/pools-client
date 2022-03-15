@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { ShowDetailsButton } from './styles';
 import { ExpectedFees, ExpectedTokenValue } from './Sections';
 import { BurnSummaryProps } from './types';
@@ -15,13 +14,7 @@ export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice
                 quoteTokenSymbol={pool.quoteTokenSymbol}
                 showTransactionDetails={showTransactionDetails}
             />
-            <ExpectedFees
-                quoteTokenSymbol={pool.quoteTokenSymbol}
-                commitNotionalValue={calcNotionalValue(nextTokenPrice, amount)}
-                amount={amount}
-                gasFee={gasFee}
-                showTransactionDetails={showTransactionDetails}
-            />
+            <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />
 
             <ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />

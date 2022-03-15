@@ -10,7 +10,10 @@ import { SummaryProps } from './types';
 
 export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const nextTokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
+    const nextTokenPrice = useMemo(
+        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
+        [isLong],
+    );
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
             <Styles.Wrapper>

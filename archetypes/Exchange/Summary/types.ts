@@ -10,7 +10,7 @@ export type SummaryProps = {
     isLong: boolean;
     commitAction: CommitActionEnum;
     receiveIn: number;
-    gasFee?: string;
+    gasFee: BigNumber;
 };
 
 type SharedProps = {

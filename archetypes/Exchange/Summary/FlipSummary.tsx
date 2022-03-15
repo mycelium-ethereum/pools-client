@@ -6,6 +6,7 @@ import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } fro
 import { FlipSummaryProps } from './types';
 
 import ArrowDown from '@public/img/general/caret-down-white.svg';
+import { getBaseAsset } from '@libs/utils/converters';
 
 const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTokenPrice, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
@@ -14,11 +15,19 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
         () => (isLong ? pool.shortToken : pool.longToken),
         [isLong, pool.longToken, pool.shortToken],
     );
-    const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
-    const commitNotionalValue = calcNotionalValue(nextTokenPrice, amount);
-    const flippedEquivalentExposure: number =
-        (commitNotionalValue.toNumber() / pool.oraclePrice.toNumber()) * pool.leverage;
-    const flippedCommitAmount: number = commitNotionalValue.toNumber() / pool.oraclePrice.toNumber();
+    const nextFlipTokenPrice = useMemo(
+        () => (isLong ? pool.getNextShortTokenPrice() : pool.getNextLongTokenPrice()),
+        [isLong],
+    );
+
+    const baseAsset = getBaseAsset(pool.name);
+    const expectedNotionalReturn = calcNotionalValue(nextTokenPrice, amount);
+
+    const flippedEquivalentExposure: number = expectedNotionalReturn
+        .div(pool.oraclePrice)
+        .times(pool.leverage)
+        .toNumber();
+    const flippedCommitAmount: number = expectedNotionalReturn.div(pool.oraclePrice).toNumber();
 
     return (
         <>
@@ -26,19 +35,13 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
             <Styles.Divider />
             <ExpectedFlipAmounts
                 showTransactionDetails={showTransactionDetails}
-                amount={amount}
-                nextTokenPrice={nextTokenPrice}
+                nextFlipTokenPrice={nextFlipTokenPrice}
                 flippedTokenSymbol={flippedToken.symbol}
-                commitNotionalValue={commitNotionalValue}
+                expectedNotionalReturn={expectedNotionalReturn}
+                quoteTokenSymbol={pool.quoteToken.symbol}
                 isLong={isLong}
             />
-            <ExpectedFees
-                amount={amount}
-                commitNotionalValue={commitNotionalValue}
-                quoteTokenSymbol={pool.quoteToken.symbol}
-                gasFee={gasFee}
-                showTransactionDetails={showTransactionDetails}
-            />
+            <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />
             <ExpectedExposure
                 label="Expected Exposure"
                 expectedExposure={flippedEquivalentExposure}
