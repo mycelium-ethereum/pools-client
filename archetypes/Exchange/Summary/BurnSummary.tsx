@@ -5,19 +5,19 @@ import { ExpectedFees, ExpectedTokenValue } from './Sections';
 import { BurnSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
-export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, tokenPrice, pool, gasFee }) => {
+export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
     return (
         <>
             <ExpectedTokenValue
-                tokenPrice={tokenPrice}
+                nextTokenPrice={nextTokenPrice}
                 amount={amount}
                 quoteTokenSymbol={pool.quoteTokenSymbol}
                 showTransactionDetails={showTransactionDetails}
             />
             <ExpectedFees
                 quoteTokenSymbol={pool.quoteTokenSymbol}
-                commitNotionalValue={calcNotionalValue(tokenPrice, amount)}
+                commitNotionalValue={calcNotionalValue(nextTokenPrice, amount)}
                 amount={amount}
                 gasFee={gasFee}
                 showTransactionDetails={showTransactionDetails}

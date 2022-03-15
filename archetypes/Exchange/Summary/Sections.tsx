@@ -15,7 +15,7 @@ export const ExpectedTokenPrice: React.FC<{
     </div>
 );
 
-// Mint cost section (MintSummary)
+// Mint cost section (MintSummary) 
 export const TotalMintCosts: React.FC<
     {
         amount: BigNumber;
@@ -50,10 +50,10 @@ export const TotalMintCosts: React.FC<
 export const ExpectedTokensMinted: React.FC<
     {
         expectedTokensMinted: number;
-        tokenPrice: BigNumber;
+        nextTokenPrice: BigNumber;
         tokenSymbol: string;
     } & BaseSection
-> = ({ expectedTokensMinted, tokenPrice, tokenSymbol, showTransactionDetails }) => (
+> = ({ expectedTokensMinted, nextTokenPrice, tokenSymbol, showTransactionDetails }) => (
     <>
         <Section label="Expected Tokens Minted" className="header">
             <Styles.SumText>
@@ -68,7 +68,7 @@ export const ExpectedTokensMinted: React.FC<
                     </Styles.Transparent>
                 </Section>
                 <Section label="Expected Price" showSectionDetails>
-                    <ExpectedTokenPrice tokenPrice={tokenPrice} />
+                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
                 </Section>
             </Styles.SectionDetails>
         )}
@@ -80,13 +80,13 @@ export const ExpectedTokenValue: React.FC<
     {
         quoteTokenSymbol: string;
         amount: BigNumber;
-        tokenPrice: BigNumber;
+        nextTokenPrice: BigNumber;
     } & BaseSection
-> = ({ amount, tokenPrice, quoteTokenSymbol, showTransactionDetails }) => (
+> = ({ amount, nextTokenPrice, quoteTokenSymbol, showTransactionDetails }) => (
     <>
         <Section label="Expected Token Value" className="header">
             <Styles.SumText>
-                {`${toApproxCurrency(calcNotionalValue(tokenPrice, amount), 2)} ${quoteTokenSymbol}`}
+                {`${toApproxCurrency(calcNotionalValue(nextTokenPrice, amount), 2)} ${quoteTokenSymbol}`}
             </Styles.SumText>
         </Section>
         {showTransactionDetails && (
@@ -95,12 +95,13 @@ export const ExpectedTokenValue: React.FC<
                     <Styles.Transparent>{`${amount}`} tokens</Styles.Transparent>
                 </Section>
                 <Section label="Expected Price" showSectionDetails>
-                    <ExpectedTokenPrice tokenPrice={tokenPrice} />
+                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
                 </Section>
             </Styles.SectionDetails>
         )}
     </>
 );
+
 
 // Expected resultant exposure (MintSummary and FlipSummary)
 export const ExpectedExposure: React.FC<
@@ -176,14 +177,14 @@ export const ExpectedFees: React.FC<
 // (FlipSummary)
 export const ExpectedFlipAmounts: React.FC<
     {
-        tokenPrice: BigNumber;
+        nextTokenPrice: BigNumber;
         amount: BigNumber;
         isLong: boolean;
         flippedTokenSymbol: string;
         commitNotionalValue: BigNumber;
     } & BaseSection
-> = ({ showTransactionDetails, tokenPrice, amount, isLong, flippedTokenSymbol, commitNotionalValue }) => {
-    const flippedExpectedAmount: string = commitNotionalValue.div(tokenPrice ?? 1).toFixed(0);
+> = ({ showTransactionDetails, nextTokenPrice, amount, isLong, flippedTokenSymbol, commitNotionalValue }) => {
+    const flippedExpectedAmount: string = commitNotionalValue.div(nextTokenPrice ?? 1).toFixed(0);
     const flippedExpectedTokensMinted: string = amount.gt(0) ? `${flippedExpectedAmount} ${flippedTokenSymbol}` : '0';
     return (
         <>
@@ -201,7 +202,7 @@ export const ExpectedFlipAmounts: React.FC<
                         </div>
                     </Section>
                     <Section label={`Expected ${isLong ? 'Short' : 'Long'} Token Price`} showSectionDetails>
-                        <ExpectedTokenPrice tokenPrice={tokenPrice} />
+                        <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
                     </Section>
                     <Section label={`Expected Amount of ${isLong ? 'Short' : 'Long'} Tokens`} showSectionDetails>
                         <div>

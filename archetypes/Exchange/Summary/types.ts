@@ -17,7 +17,7 @@ type SharedProps = {
     amount: SummaryProps['amount'];
     gasFee: SummaryProps['gasFee'];
 
-    tokenPrice: BigNumber;
+    nextTokenPrice: BigNumber;
     token: PoolToken;
 };
 

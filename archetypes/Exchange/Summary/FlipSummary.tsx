@@ -7,7 +7,7 @@ import { FlipSummaryProps } from './types';
 
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
-const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, tokenPrice, gasFee }) => {
+const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTokenPrice, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const flippedToken = useMemo(
@@ -15,7 +15,7 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, tokenPr
         [isLong, pool.longToken, pool.shortToken],
     );
     const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
-    const commitNotionalValue = calcNotionalValue(tokenPrice, amount);
+    const commitNotionalValue = calcNotionalValue(nextTokenPrice, amount);
     const flippedEquivalentExposure: number =
         (commitNotionalValue.toNumber() / pool.oraclePrice.toNumber()) * pool.leverage;
     const flippedCommitAmount: number = commitNotionalValue.toNumber() / pool.oraclePrice.toNumber();
@@ -26,8 +26,8 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, tokenPr
             <Styles.Divider />
             <ExpectedFlipAmounts
                 showTransactionDetails={showTransactionDetails}
-                tokenPrice={tokenPrice}
                 amount={amount}
+                nextTokenPrice={nextTokenPrice}
                 flippedTokenSymbol={flippedToken.symbol}
                 commitNotionalValue={commitNotionalValue}
                 isLong={isLong}

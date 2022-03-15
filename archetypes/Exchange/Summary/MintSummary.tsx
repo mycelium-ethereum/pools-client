@@ -4,10 +4,10 @@ import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sectio
 import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 
-const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, pool, gasFee }) => {
+const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
-    const expectedAmount = amount.div(tokenPrice ?? 1);
+    const expectedAmount = amount.div(nextTokenPrice ?? 1);
     const poolPowerLeverage = pool.leverage;
 
     const baseAsset = pool.name?.split('-')[1]?.split('/')[0];
@@ -20,7 +20,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, tokenPrice, token, po
             <ExpectedTokensMinted
                 showTransactionDetails={showTransactionDetails}
                 expectedTokensMinted={expectedAmount.toNumber()}
-                tokenPrice={tokenPrice}
+                nextTokenPrice={nextTokenPrice}
                 tokenSymbol={token.symbol}
             />
             <ExpectedExposure
