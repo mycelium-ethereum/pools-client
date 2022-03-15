@@ -10,14 +10,14 @@ export type SummaryProps = {
     isLong: boolean;
     commitAction: CommitActionEnum;
     receiveIn: number;
-    gasFee?: string;
+    gasFee: BigNumber;
 };
 
 type SharedProps = {
     amount: SummaryProps['amount'];
     gasFee: SummaryProps['gasFee'];
 
-    tokenPrice: BigNumber;
+    nextTokenPrice: BigNumber;
     token: PoolToken;
 };
 
@@ -39,3 +39,7 @@ export type BurnSummaryProps = {
         quoteTokenSymbol: string;
     };
 } & SharedProps;
+
+export type BaseSection = {
+    showTransactionDetails: boolean;
+};

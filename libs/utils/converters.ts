@@ -261,3 +261,5 @@ export const getPriceFeedUrl: (v: string) => string = (v) => {
 
     return `${FEED_URL}${name}`;
 };
+
+export const getBaseAsset: (poolName: string) => string = (poolName) => poolName?.split('-')[1]?.split('/')[0];

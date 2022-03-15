@@ -5,16 +5,15 @@ import { Transparent } from './styles';
 
 export const ApproxCommitGasFee: React.FC<{
     amount: BigNumber;
-    gasFee?: string;
+    gasFee: BigNumber;
 }> = ({ amount, gasFee }) => {
-    const fee = Number(gasFee);
     const getFee = () => {
         if (amount.toNumber() === 0) {
             return 0;
-        } else if (fee < 0.001) {
+        } else if (gasFee.lt(0.001)) {
             return '< $0.001';
         } else {
-            return toApproxCurrency(fee);
+            return toApproxCurrency(gasFee);
         }
     };
     return <Transparent>{getFee()}</Transparent>;

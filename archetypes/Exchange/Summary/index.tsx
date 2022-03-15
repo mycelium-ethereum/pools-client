@@ -10,7 +10,10 @@ import { SummaryProps } from './types';
 
 export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
-    const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
+    const nextTokenPrice = useMemo(
+        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
+        [isLong],
+    );
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
             <Styles.Wrapper>
@@ -26,7 +29,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                     {commitAction === CommitActionEnum.mint && (
                         <MintSummary
                             amount={amount}
-                            tokenPrice={tokenPrice}
+                            nextTokenPrice={nextTokenPrice}
                             token={token}
                             pool={{
                                 name: pool.name,
@@ -40,7 +43,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                     {commitAction === CommitActionEnum.burn && (
                         <BurnSummary
                             amount={amount}
-                            tokenPrice={tokenPrice}
+                            nextTokenPrice={nextTokenPrice}
                             gasFee={gasFee}
                             token={token}
                             pool={{
@@ -52,7 +55,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                     {commitAction === CommitActionEnum.flip && (
                         <FlipSummary
                             amount={amount}
-                            tokenPrice={tokenPrice}
+                            nextTokenPrice={nextTokenPrice}
                             token={token}
                             isLong={isLong}
                             pool={pool}
