@@ -19,6 +19,7 @@ type SharedProps = {
 
     tokenPrice: BigNumber;
     token: PoolToken;
+    showBreakdown?: boolean;
 };
 
 export type FlipSummaryProps = {
