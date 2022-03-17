@@ -22,7 +22,7 @@ import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';
 import { constructBalancerLink } from '@archetypes/BalancerBuySell';
 import { StyledTooltip } from '@components/Tooltips';
-import { default as UpOrDownInner } from '@components/UpOrDown';
+import { default as UpOrDown } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
 
@@ -310,7 +310,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.oraclePrice)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.lastPrice}
                                     newValue={pool.oraclePrice}
                                     deltaDenotation={deltaDenotation}
@@ -324,7 +324,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.pastUpkeep.newPrice)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.pastUpkeep.oldPrice}
                                     newValue={pool.pastUpkeep.newPrice}
                                     deltaDenotation={deltaDenotation}
@@ -341,7 +341,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.nextTVL)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.tvl}
                                     newValue={pool.nextTVL}
                                     deltaDenotation={deltaDenotation}
@@ -355,7 +355,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.antecedentUpkeep.tvl}
                                     newValue={pool.pastUpkeep.tvl}
                                     deltaDenotation={deltaDenotation}
@@ -377,7 +377,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{pool.skew.toFixed(3)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.skew}
                                     currency={false}
                                     newValue={pool.nextSkew}
@@ -392,7 +392,7 @@ const PoolRow: React.FC<
                         <>
                             <div>{pool.skew.toFixed(3)}</div>
                             <div className="mt-1">
-                                <UpOrDown
+                                <UpOrDownWithTooltip
                                     oldValue={pool.antecedentUpkeep.skew}
                                     newValue={pool.pastUpkeep.skew}
                                     deltaDenotation={deltaDenotation}
@@ -543,7 +543,7 @@ const TokenRows: React.FC<
                     <>
                         <div className="flex">
                             <div className="mr-1">{toApproxCurrency(tokenInfo.nextTvl)}</div>
-                            <UpOrDown
+                            <UpOrDownWithTooltip
                                 oldValue={tokenInfo.tvl}
                                 newValue={tokenInfo.nextTvl}
                                 deltaDenotation={deltaDenotation}
@@ -558,7 +558,7 @@ const TokenRows: React.FC<
                     <>
                         <div className="flex">
                             <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenBalance)}</div>
-                            <UpOrDown
+                            <UpOrDownWithTooltip
                                 oldValue={antecedentUpkeepTokenInfo.tokenBalance}
                                 newValue={pastUpkeepTokenInfo.tokenBalance}
                                 deltaDenotation={deltaDenotation}
@@ -594,7 +594,7 @@ const TokenRows: React.FC<
                     <>
                         <div className="flex">
                             <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice, 3)}</div>
-                            <UpOrDown
+                            <UpOrDownWithTooltip
                                 oldValue={antecedentUpkeepTokenInfo.tokenPrice}
                                 newValue={pastUpkeepTokenInfo.tokenPrice}
                                 deltaDenotation={deltaDenotation}
@@ -678,7 +678,7 @@ enum UpOrDownTipMetric {
     IndexPrice = 'index price',
 }
 
-const UpOrDownTip: React.FC<{
+const UpOrDownWithTooltipTip: React.FC<{
     metric: UpOrDownTipMetric;
     currency: boolean;
     side?: SideEnum;
@@ -709,7 +709,7 @@ const UpOrDownTip: React.FC<{
     return <StyledTooltip title={message}>{children}</StyledTooltip>;
 };
 
-const UpOrDown: React.FC<{
+const UpOrDownWithTooltip: React.FC<{
     oldValue: number;
     newValue: number;
     tokenMetricSide?: SideEnum;
@@ -718,7 +718,7 @@ const UpOrDown: React.FC<{
     showNextRebalance: boolean;
     currency?: boolean;
     deltaDenotation: DeltaEnum;
-}> = ({
+}> = React.forwardRef(({
     oldValue,
     newValue,
     deltaDenotation,
@@ -727,7 +727,7 @@ const UpOrDown: React.FC<{
     poolTicker,
     tokenMetricSide,
     currency = true,
-}) => {
+}, _ref) => {
     const value = useMemo(
         () =>
             deltaDenotation === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
@@ -735,7 +735,7 @@ const UpOrDown: React.FC<{
     );
     const approxValue = Math.abs(parseFloat(value.toFixed(3)));
     return (
-        <UpOrDownTip
+        <UpOrDownWithTooltipTip
             metric={tooltipMetric}
             valueText={
                 deltaDenotation === DeltaEnum.Numeric
@@ -750,13 +750,16 @@ const UpOrDown: React.FC<{
             poolTicker={poolTicker}
             showNextRebalance={showNextRebalance}
         >
-            <UpOrDownInner
-                oldValue={oldValue}
-                newValue={newValue}
-                deltaDenotation={deltaDenotation}
-                currency={'USD'}
-                showCurrencyTicker={false}
-            />
-        </UpOrDownTip>
+            { /* Fixes ref error with antd tooltip */ }
+            <div>
+                <UpOrDown
+                    oldValue={oldValue}
+                    newValue={newValue}
+                    deltaDenotation={deltaDenotation}
+                    currency={'USD'}
+                    showCurrencyTicker={false}
+                />
+            </div>
+        </UpOrDownWithTooltipTip>
     );
-};
+});
