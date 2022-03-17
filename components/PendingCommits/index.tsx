@@ -55,7 +55,12 @@ export default (() => {
                         </TableHeader>
                         <tbody>
                             {mintCommits.map((commit, index) => (
-                                <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
+                                <CommitRow
+                                    key={`pcr-${index}`}
+                                    provider={provider ?? null}
+                                    {...commit}
+                                    burnRow={false}
+                                />
                             ))}
                         </tbody>
                     </>
@@ -73,7 +78,12 @@ export default (() => {
                         </TableHeader>
                         <tbody>
                             {burnCommits.map((commit, index) => (
-                                <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
+                                <CommitRow
+                                    key={`pcr-${index}`}
+                                    provider={provider ?? null}
+                                    {...commit}
+                                    burnRow={true}
+                                />
                             ))}
                         </tbody>
                     </>

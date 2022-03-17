@@ -718,48 +718,55 @@ const UpOrDownWithTooltip: React.FC<{
     showNextRebalance: boolean;
     currency?: boolean;
     deltaDenotation: DeltaEnum;
-}> = React.forwardRef(({
-    oldValue,
-    newValue,
-    deltaDenotation,
-    tooltipMetric,
-    showNextRebalance,
-    poolTicker,
-    tokenMetricSide,
-    currency = true,
-}, _ref) => {
-    const value = useMemo(
-        () =>
-            deltaDenotation === DeltaEnum.Numeric ? newValue - oldValue : calcPercentageDifference(newValue, oldValue),
-        [deltaDenotation, oldValue, newValue],
-    );
-    const approxValue = Math.abs(parseFloat(value.toFixed(3)));
-    return (
-        <UpOrDownWithTooltipTip
-            metric={tooltipMetric}
-            valueText={
+}> = React.forwardRef(
+    (
+        {
+            oldValue,
+            newValue,
+            deltaDenotation,
+            tooltipMetric,
+            showNextRebalance,
+            poolTicker,
+            tokenMetricSide,
+            currency = true,
+        },
+        _ref,
+    ) => {
+        const value = useMemo(
+            () =>
                 deltaDenotation === DeltaEnum.Numeric
-                    ? currency
-                        ? toApproxCurrency(value).replace('-', '')
-                        : approxValue.toString()
-                    : `${approxValue}%`
-            }
-            side={tokenMetricSide}
-            value={value}
-            currency={currency}
-            poolTicker={poolTicker}
-            showNextRebalance={showNextRebalance}
-        >
-            { /* Fixes ref error with antd tooltip */ }
-            <div>
-                <UpOrDown
-                    oldValue={oldValue}
-                    newValue={newValue}
-                    deltaDenotation={deltaDenotation}
-                    currency={'USD'}
-                    showCurrencyTicker={false}
-                />
-            </div>
-        </UpOrDownWithTooltipTip>
-    );
-});
+                    ? newValue - oldValue
+                    : calcPercentageDifference(newValue, oldValue),
+            [deltaDenotation, oldValue, newValue],
+        );
+        const approxValue = Math.abs(parseFloat(value.toFixed(3)));
+        return (
+            <UpOrDownWithTooltipTip
+                metric={tooltipMetric}
+                valueText={
+                    deltaDenotation === DeltaEnum.Numeric
+                        ? currency
+                            ? toApproxCurrency(value).replace('-', '')
+                            : approxValue.toString()
+                        : `${approxValue}%`
+                }
+                side={tokenMetricSide}
+                value={value}
+                currency={currency}
+                poolTicker={poolTicker}
+                showNextRebalance={showNextRebalance}
+            >
+                {/* Fixes ref error with antd tooltip */}
+                <div>
+                    <UpOrDown
+                        oldValue={oldValue}
+                        newValue={newValue}
+                        deltaDenotation={deltaDenotation}
+                        currency={'USD'}
+                        showCurrencyTicker={false}
+                    />
+                </div>
+            </UpOrDownWithTooltipTip>
+        );
+    },
+);
