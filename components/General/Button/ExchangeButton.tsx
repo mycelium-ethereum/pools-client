@@ -1,6 +1,6 @@
 import React from 'react';
 import { SwapAction, SwapState } from '@context/SwapContext';
-import { CommitActionEnum } from '@libs/constants';
+import { BalanceTypeEnum, CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
@@ -18,7 +18,13 @@ type ExchangeButton = {
     approve?: (selectedPool: string, symbol: string) => void;
     pool: Pool;
     amountBN: BigNumber;
-    commit?: (selectedPool: string, commitType: number, amount: BigNumber, options?: Options) => void;
+    commit?: (
+        selectedPool: string,
+        commitType: number,
+        balanceType: BalanceTypeEnum,
+        amount: BigNumber,
+        options?: Options,
+    ) => void;
     commitType: CommitEnum;
 };
 
@@ -51,7 +57,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
     commit,
     commitType,
 }) => {
-    const { selectedPool, invalidAmount, commitAction } = swapState;
+    const { selectedPool, invalidAmount, commitAction, balanceType } = swapState;
 
     if (!account) {
         return (
@@ -102,7 +108,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                         return;
                     }
 
-                    commit(selectedPool ?? '', commitType, amountBN, {
+                    commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
                             onClose();

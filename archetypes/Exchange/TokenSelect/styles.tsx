@@ -19,7 +19,7 @@ export const TokenSelectDropdown = styled(HiddenExpand)`
     width: 100%;
     margin-top: 0.75rem !important;
 
-    z-index: 3;
+    z-index: 11;
 
     // this is the margin of the parent modal
     padding: 0 1rem;

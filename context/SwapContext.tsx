@@ -1,7 +1,7 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { Children, PoolType } from '@libs/types/General';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
+import { CommitActionEnum, SideEnum, BalanceTypeEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { usePools } from './PoolContext';
 
@@ -29,6 +29,8 @@ export type SwapState = {
 
     side: SideEnum;
 
+    balanceType: BalanceTypeEnum;
+
     // selected market name
     market: string;
     markets: Record<string, Market>;
@@ -37,6 +39,7 @@ export type SwapState = {
 export type SwapAction =
     | { type: 'setAmount'; value: string }
     | { type: 'setCommitAction'; value: CommitActionEnum }
+    | { type: 'setBalanceType'; value: BalanceTypeEnum }
     | { type: 'setMarket'; value: string }
     | { type: 'setPoolFromMarket'; market: string }
     | { type: 'setMarkets'; markets: Record<string, Market> }
@@ -89,6 +92,7 @@ export const swapDefaults: SwapState = {
         isInvalid: false,
     },
     commitAction: CommitActionEnum.mint,
+    balanceType: BalanceTypeEnum.wallet,
     selectedPool: undefined,
     side: NaN,
     leverage: NaN,
@@ -116,6 +120,8 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 };
             case 'setCommitAction':
                 return { ...state, commitAction: action.value };
+            case 'setBalanceType':
+                return { ...state, balanceType: action.value };
             case 'setSide':
                 return { ...state, side: action.value };
             case 'setPoolFromLeverage':

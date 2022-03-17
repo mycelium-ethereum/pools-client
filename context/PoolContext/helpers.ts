@@ -1,4 +1,4 @@
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, BalanceTypeEnum } from '@libs/constants';
 import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
 import { AggregateBalances } from '@libs/types/General';
 import {
@@ -143,3 +143,6 @@ export const fetchTokenApprovals: (
         }),
     );
 };
+
+export const fromAggregatBalances: (balanceType: BalanceTypeEnum) => boolean = (balanceType) =>
+    balanceType === BalanceTypeEnum.escrow;
