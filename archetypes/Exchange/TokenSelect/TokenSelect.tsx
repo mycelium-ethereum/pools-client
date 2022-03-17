@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
-import * as Styles from './styles';
-import { TokenRow } from '@libs/hooks/usePoolTokens';
-import { tokenSymbolToLogoTicker } from '@components/General';
 import { Pool } from '@tracer-protocol/pools-js';
+import { tokenSymbolToLogoTicker } from '@components/General';
+import { TokenRow } from '@libs/hooks/usePoolTokens';
+import * as Styles from './styles';
 
 const TokenSelect: React.FC<{
     tokens: TokenRow[];

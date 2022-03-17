@@ -2,7 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Tooltip from 'antd/lib/tooltip';
 
-export const StyledTooltip = styled(Tooltip)`
+export const StyledTooltip = styled(Tooltip).attrs((props: { forwardRef: any }) => ({
+    forwardRef: props.forwardRef,
+}))`
     color: inherit;
 
     &:hover {

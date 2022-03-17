@@ -8,6 +8,7 @@ import {
     fetchPoolBalances,
     fetchTokenApprovals,
     fetchTokenBalances,
+    fromAggregatBalances,
 } from './helpers';
 import { Pool, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
@@ -28,7 +29,7 @@ import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Contex
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
-import { CommitToQueryFocusMap } from '@libs/constants';
+import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -40,10 +41,21 @@ interface ContextProps {
 }
 
 interface ActionContextProps {
-    commit: (pool: string, commitType: CommitEnum, amount: BigNumber, options?: Options) => Promise<void>;
+    commit: (
+        pool: string,
+        commitType: CommitEnum,
+        balanceType: BalanceTypeEnum,
+        amount: BigNumber,
+        options?: Options,
+    ) => Promise<void>;
     approve: (pool: string, quoteTokenSymbol: string) => void;
     claim: (pool: string, options?: Options) => void;
-    commitGasFee: (pool: string, commitType: CommitEnum, amount: BigNumber) => Promise<BigNumber>;
+    commitGasFee: (
+        pool: string,
+        commitType: CommitEnum,
+        balanceType: BalanceTypeEnum,
+        amount: BigNumber,
+    ) => Promise<BigNumber>;
 }
 
 interface SelectedPoolContextProps {
@@ -457,11 +469,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     };
 
     // returns the cost of gas units
-    const commitGasFee: (pool: string, commitType: CommitEnum, amount: BigNumber) => Promise<BigNumber> = async (
-        pool = '',
-        commitType,
-        amount,
-    ) => {
+    const commitGasFee: ActionContextProps['commitGasFee'] = async (pool = '', commitType, balanceType, amount) => {
         if (amount.eq(0)) {
             throw 'Failed to estimate gas cost: amount cannot be 0';
         }
@@ -481,7 +489,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             const gasEstimate = await committer?.estimateGas?.commit(
                 commitType,
                 ethers?.utils?.parseUnits(amount?.toFixed(), 18),
-                false,
+                fromAggregatBalances(balanceType),
                 false,
             );
             const formattedGasEstimate = new BigNumber(gasEstimate.toString());
@@ -500,9 +508,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const commit: (
         pool: string,
         commitType: CommitEnum,
+        balanceType: BalanceTypeEnum,
         amount: BigNumber,
         options?: Options,
-    ) => Promise<void> = async (pool, commitType, amount, options) => {
+    ) => Promise<void> = async (pool, commitType, balanceType, amount, options) => {
         const committerAddress = poolsState.pools[pool].poolInstance.committer.address;
         const quoteTokenDecimals = poolsState.pools[pool].poolInstance.quoteToken.decimals;
         const nextRebalance = poolsState.pools[pool].poolInstance.lastUpdate
@@ -532,7 +541,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (handleTransaction) {
             handleTransaction(
                 committer.commit,
-                [commitType, ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals), false, false],
+                [
+                    commitType,
+                    ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals),
+                    fromAggregatBalances(balanceType),
+                    false,
+                ],
                 {
                     network: (network ?? '0') as AvailableNetwork,
                     onSuccess: (receipt) => {

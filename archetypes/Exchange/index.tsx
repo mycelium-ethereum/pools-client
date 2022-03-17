@@ -52,9 +52,12 @@ export default styled((({ onClose, className }) => {
 
     useMemo(async () => {
         if (commitGasFee) {
-            const fee: BigNumber | undefined = await commitGasFee(selectedPool ?? '', commitType, amountBN).catch(
-                (_err) => undefined,
-            );
+            const fee: BigNumber | undefined = await commitGasFee(
+                selectedPool ?? '',
+                commitType,
+                swapState.balanceType,
+                amountBN,
+            ).catch((_err) => undefined);
             if (fee) {
                 const gasPriceInEth = new BigNumber(gasPrice ?? 0).div(10 ** 9);
                 const costInEth = fee.times(gasPriceInEth);

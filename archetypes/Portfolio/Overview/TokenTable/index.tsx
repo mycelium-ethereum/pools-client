@@ -29,19 +29,21 @@ export default (({ rows, onClickBurn, denotedIn }) => {
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                 </TableHeader>
-                {rows.map((token) => {
-                    if (!token.holdings.eq(0)) {
-                        return (
-                            <TokenRow
-                                {...token}
-                                key={token.address}
-                                provider={provider ?? null}
-                                onClickBurn={onClickBurn}
-                                denotedIn={denotedIn}
-                            />
-                        );
-                    }
-                })}
+                <tbody>
+                    {rows.map((token) => {
+                        if (!token.holdings.eq(0)) {
+                            return (
+                                <TokenRow
+                                    {...token}
+                                    key={token.address}
+                                    provider={provider ?? null}
+                                    onClickBurn={onClickBurn}
+                                    denotedIn={denotedIn}
+                                />
+                            );
+                        }
+                    })}
+                </tbody>
             </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
         </>
