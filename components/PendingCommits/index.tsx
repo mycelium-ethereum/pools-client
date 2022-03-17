@@ -53,9 +53,11 @@ export default (() => {
                                 <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                             </tr>
                         </TableHeader>
-                        {mintCommits.map((commit, index) => (
-                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
-                        ))}
+                        <tbody>
+                            {mintCommits.map((commit, index) => (
+                                <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={false} />
+                            ))}
+                        </tbody>
                     </>
                 ) : (
                     <>
@@ -69,9 +71,11 @@ export default (() => {
                                 <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                             </tr>
                         </TableHeader>
-                        {burnCommits.map((commit, index) => (
-                            <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
-                        ))}
+                        <tbody>
+                            {burnCommits.map((commit, index) => (
+                                <CommitRow key={`pcr-${index}`} provider={provider ?? null} {...commit} burnRow={true} />
+                            ))}
+                        </tbody>
                     </>
                 )}
             </Table>

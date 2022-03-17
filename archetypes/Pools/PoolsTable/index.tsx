@@ -224,20 +224,22 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                     </tr>
                 </TableHeader>
-                {rows.map((pool) => {
-                    return (
-                        <PoolRow
-                            pool={pool}
-                            onClickMintBurn={onClickMintBurn}
-                            onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
-                            showNextRebalance={showNextRebalance}
-                            key={pool.address}
-                            account={account}
-                            provider={provider}
-                            deltaDenotation={deltaDenotation}
-                        />
-                    );
-                })}
+                <tbody>
+                    {rows.map((pool) => {
+                        return (
+                            <PoolRow
+                                pool={pool}
+                                onClickMintBurn={onClickMintBurn}
+                                onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
+                                showNextRebalance={showNextRebalance}
+                                key={pool.address}
+                                account={account}
+                                provider={provider}
+                                deltaDenotation={deltaDenotation}
+                            />
+                        );
+                    })}
+                </tbody>
             </Table>
             {/*{showNextRebalance ? (*/}
             {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}

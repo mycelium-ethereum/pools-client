@@ -14,25 +14,27 @@ const ArrowDown = '/img/general/caret-down-white.svg';
 export const EscrowTable = (({ rows }) => {
     return (
         <>
-            <div>
-                {rows.map((pool) => {
-                    return (
-                        !!pool.numClaimable && (
-                            <PoolRow
-                                key={pool.poolAddress}
-                                poolName={pool.poolName}
-                                poolAddress={pool.poolAddress}
-                                marketTicker={pool.marketTicker}
-                                claimableLongTokens={pool.claimableLongTokens}
-                                claimableShortTokens={pool.claimableShortTokens}
-                                claimableSettlementTokens={pool.claimableSettlementTokens}
-                                numClaimable={pool.numClaimable}
-                                claimableSum={pool.claimableSum}
-                            />
-                        )
-                    );
-                })}
-            </div>
+            <Table>
+                <tbody>
+                    {rows.map((pool) => {
+                        return (
+                            !!pool.numClaimable && (
+                                <PoolRow
+                                    key={pool.poolAddress}
+                                    poolName={pool.poolName}
+                                    poolAddress={pool.poolAddress}
+                                    marketTicker={pool.marketTicker}
+                                    claimableLongTokens={pool.claimableLongTokens}
+                                    claimableShortTokens={pool.claimableShortTokens}
+                                    claimableSettlementTokens={pool.claimableSettlementTokens}
+                                    numClaimable={pool.numClaimable}
+                                    claimableSum={pool.claimableSum}
+                                />
+                            )
+                        );
+                    })}
+                </tbody>
+            </Table>
             {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
         </>
     );
