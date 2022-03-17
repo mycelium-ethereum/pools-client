@@ -66,23 +66,25 @@ export default (({ open, onClose, poolDetails, previewUrl }) => {
             <br />
 
             <Table showDivider={false}>
-                {poolDetailsData.map((v, i) => (
-                    <TableRow key={`${v.name}-${i}`} lined>
-                        <TableRowCell className="px-2">
-                            <CellContent>
-                                <div className="name">{v.name}</div>
-                                <div className="info">
-                                    {v.value}
-                                    {v.href ? (
-                                        <a href={v.href} target="_blank" rel="noopener noreferrer">
-                                            <FollowLinkIcon />
-                                        </a>
-                                    ) : null}
-                                </div>
-                            </CellContent>
-                        </TableRowCell>
-                    </TableRow>
-                ))}
+                <tbody>
+                    {poolDetailsData.map((v, i) => (
+                        <TableRow key={`${v.name}-${i}`} lined>
+                            <TableRowCell className="px-2">
+                                <CellContent>
+                                    <div className="name">{v.name}</div>
+                                    <div className="info">
+                                        {v.value}
+                                        {v.href ? (
+                                            <a href={v.href} target="_blank" rel="noopener noreferrer">
+                                                <FollowLinkIcon />
+                                            </a>
+                                        ) : null}
+                                    </div>
+                                </CellContent>
+                            </TableRowCell>
+                        </TableRow>
+                    ))}
+                </tbody>
             </Table>
         </TWModal>
     );
