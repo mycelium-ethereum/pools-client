@@ -91,37 +91,43 @@ const PoolRow: React.FC<EscrowRowProps> = ({
                     </Styles.DropdownButton>
                 </Styles.Section>
             </Styles.Pool>
-            <HiddenExpand defaultHeight={0} open={expanded}>
-                <Table>
-                    <TableHeader>
-                        <tr>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
-                            <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
-                            <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
-                            <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </tr>
-                    </TableHeader>
-                    <tbody>
-                        {[claimableLongTokens, claimableShortTokens, claimableSettlementTokens].map(
-                            (claimableAsset) => {
-                                if (claimableAsset.type === TokenType.Settlement) {
-                                    return (
-                                        !claimableAsset.balance.eq(0) && <ClaimableQuoteTokenRow {...claimableAsset} />
-                                    );
-                                } else {
-                                    return (
-                                        !claimableAsset.balance.eq(0) && (
-                                            <ClaimablePoolTokenRow {...(claimableAsset as ClaimablePoolToken)} />
-                                        )
-                                    );
-                                }
-                            },
-                        )}
-                    </tbody>
-                </Table>
-            </HiddenExpand>
+            <tr>
+                <td>
+                <HiddenExpand defaultHeight={0} open={expanded}>
+                    <Table>
+                        <TableHeader>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
+                                <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
+                                <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
+                                <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
+                        </TableHeader>
+                        <tbody>
+                            {[claimableLongTokens, claimableShortTokens, claimableSettlementTokens].map(
+                                (claimableAsset) => {
+                                    if (claimableAsset.type === TokenType.Settlement) {
+                                        return (
+                                            !claimableAsset.balance.eq(0) && (
+                                                <ClaimableQuoteTokenRow key={`${poolAddress}-${claimableAsset.symbol}`} {...claimableAsset} />
+                                            )
+                                        );
+                                    } else {
+                                        return (
+                                            !claimableAsset.balance.eq(0) && (
+                                                <ClaimablePoolTokenRow key={`${poolAddress}-${claimableAsset.symbol}`} {...(claimableAsset as ClaimablePoolToken)} />
+                                            )
+                                        );
+                                    }
+                                },
+                            )}
+                        </tbody>
+                    </Table>
+                </HiddenExpand>
+                </td>
+            </tr>
         </>
     );
 };

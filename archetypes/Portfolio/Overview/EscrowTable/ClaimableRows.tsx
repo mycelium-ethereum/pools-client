@@ -59,27 +59,25 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
     );
 };
 
-export const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) => {
-    return (
-        <TableRow>
-            <TableRowCell>
-                <TokenType type={token}>{token}</TokenType>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>
-                    {balance.toFixed(2)} {token}
-                </InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>-</InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>-</InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>-</InnerText>
-            </TableRowCell>
-            <TableRowCell />
-        </TableRow>
-    );
-};
+export const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) => (
+    <TableRow>
+        <TableRowCell>
+            <TokenType type={token}>{token}</TokenType>
+        </TableRowCell>
+        <TableRowCell>
+            <InnerText>
+                {balance.toFixed(2)} {token}
+            </InnerText>
+        </TableRowCell>
+        <TableRowCell>
+            <InnerText>-</InnerText>
+        </TableRowCell>
+        <TableRowCell>
+            <InnerText>-</InnerText>
+        </TableRowCell>
+        <TableRowCell>
+            <InnerText>-</InnerText>
+        </TableRowCell>
+        <TableRowCell />
+    </TableRow>
+);
