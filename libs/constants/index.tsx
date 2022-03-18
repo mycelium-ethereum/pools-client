@@ -26,8 +26,8 @@ export const CommitTypeMap = {
     LongMint: CommitEnum.longMint,
     ShortBurn: CommitEnum.shortBurn,
     ShortMint: CommitEnum.shortMint,
-    LongFlip: CommitEnum.longBurnShortMint,
-    ShortFlip: CommitEnum.longBurnShortMint,
+    LongBurnShortMint: CommitEnum.longBurnShortMint,
+    ShortBurnLongMint: CommitEnum.shortBurnLongMint,
 };
 
 const mintQueryFocus = 'mint';

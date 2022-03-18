@@ -30,27 +30,24 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     ref?: React.Ref<HTMLButtonElement>;
 }
 
-const Button: React.FC<ButtonProps> = React.forwardRef(({
-    children,
-    className = '',
-    size = 'default',
-    variant = 'default',
-    ...rest
-}, ref) => {
-    return (
-        <button
-            className={classNames(
-                VARIANT[variant],
-                SIZE[size],
-                className,
-                'rounded whitespace-nowrap disabled:cursor-not-allowed focus:outline-none',
-            )}
-            ref={ref}
-            {...rest}
-        >
-            {children}
-        </button>
-    );
-});
+const Button: React.FC<ButtonProps> = React.forwardRef(
+    ({ children, className = '', size = 'default', variant = 'default', ...rest }, ref) => {
+        return (
+            <button
+                className={classNames(
+                    VARIANT[variant],
+                    SIZE[size],
+                    className,
+                    'rounded whitespace-nowrap disabled:cursor-not-allowed focus:outline-none',
+                )}
+                ref={ref}
+                {...rest}
+            >
+                {children}
+            </button>
+        );
+    },
+);
+Button.displayName = 'Button';
 
 export default Button;

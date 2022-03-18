@@ -1,5 +1,5 @@
 import { ARBITRUM, ARBITRUM_RINKEBY, BalanceTypeEnum } from '@libs/constants';
-import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
+import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
 import { AggregateBalances } from '@libs/types/General';
 import {
     LeveragedPool__factory,

@@ -15,7 +15,7 @@ import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
-import { SourceType } from '@libs/utils/reputationAPI';
+import { SourceType } from '@libs/utils/tracerAPI';
 import { PageOptions } from '..';
 
 const historyOptions: PageOptions = [

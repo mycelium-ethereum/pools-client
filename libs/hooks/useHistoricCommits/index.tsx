@@ -2,7 +2,7 @@ import { useMemo, useReducer } from 'react';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { HistoricCommit } from '@libs/types/General';
 import { HistoricCommitsState, historicsReducer, initialHistoricsState, LoadingState } from './state';
-import { fetchPoolCommits, SourceType } from '@libs/utils/reputationAPI';
+import { fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
 import BigNumber from 'bignumber.js';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { ethers } from 'ethers';
