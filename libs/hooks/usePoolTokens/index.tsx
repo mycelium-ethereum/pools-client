@@ -9,7 +9,7 @@ export type TokenRow = {
     pool: {
         address: string;
         name: string;
-        quoteTokenSymbol: string;
+        settlementTokenSymbol: string;
     };
     symbol: string;
     balance: BigNumber;
@@ -39,7 +39,7 @@ export default (() => {
                     leverage,
                     shortToken: { symbol: shortTokenSymbol, address: shortTokenAddress },
                     longToken: { symbol: longTokenSymbol, address: longTokenAddress },
-                    quoteToken: { symbol: quoteTokenSymbol },
+                    settlementToken: { symbol: settlementTokenSymbol },
                 } = poolInstance;
 
                 const shortToken: TokenRow = {
@@ -50,7 +50,7 @@ export default (() => {
                     escrowBalance: userBalances.aggregateBalances.shortTokens,
                     pool: {
                         address,
-                        quoteTokenSymbol,
+                        settlementTokenSymbol,
                         name,
                     },
                 };
@@ -63,7 +63,7 @@ export default (() => {
                     escrowBalance: userBalances.aggregateBalances.shortTokens,
                     pool: {
                         address,
-                        quoteTokenSymbol,
+                        settlementTokenSymbol,
                         name,
                     },
                 };

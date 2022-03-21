@@ -38,7 +38,7 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
                 nextFlipTokenPrice={nextFlipTokenPrice}
                 flippedTokenSymbol={flippedToken.symbol}
                 expectedNotionalReturn={expectedNotionalReturn}
-                quoteTokenSymbol={pool.quoteToken.symbol}
+                settlementTokenSymbol={pool.settlementToken.symbol}
                 isLong={isLong}
             />
             <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />

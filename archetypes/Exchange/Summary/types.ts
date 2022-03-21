@@ -36,7 +36,7 @@ export type MintSummaryProps = {
 
 export type BurnSummaryProps = {
     pool: {
-        quoteTokenSymbol: string;
+        settlementTokenSymbol: string;
     };
 } & SharedProps;
 

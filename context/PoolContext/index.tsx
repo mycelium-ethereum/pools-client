@@ -48,7 +48,7 @@ interface ActionContextProps {
         amount: BigNumber,
         options?: Options,
     ) => Promise<void>;
-    approve: (pool: string, quoteTokenSymbol: string) => void;
+    approve: (pool: string, settlementTokenSymbol: string) => void;
     claim: (pool: string, options?: Options) => void;
     commitGasFee: (
         pool: string,
@@ -153,7 +153,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         let mounted = true;
         if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
-                const decimals = pool.poolInstance.quoteToken.decimals;
+                const decimals = pool.poolInstance.settlementToken.decimals;
                 // fetch commits
                 fetchCommits(
                     {
@@ -211,7 +211,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     pool: pool,
                     shortTokenBalance: new BigNumber(0),
                     longTokenBalance: new BigNumber(0),
-                    quoteTokenBalance: new BigNumber(0),
+                    settlementTokenBalance: new BigNumber(0),
                 });
             });
         }
@@ -225,18 +225,18 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (!provider_ || !account) {
             return false;
         }
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        const decimals = pool.quoteToken.decimals;
+        const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
+        const decimals = pool.settlementToken.decimals;
         fetchTokenBalances(tokens, provider_, account, pool.address)
             .then((balances) => {
                 const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
                 const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
-                const quoteTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
+                const settlementTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
 
                 console.debug('Balances', {
                     shortTokenBalance,
                     longTokenBalance,
-                    quoteTokenBalance,
+                    settlementTokenBalance,
                 });
 
                 poolsDispatch({
@@ -244,7 +244,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     pool: pool.address,
                     shortTokenBalance,
                     longTokenBalance,
-                    quoteTokenBalance,
+                    settlementTokenBalance,
                 });
             })
             .catch((err) => {
@@ -255,7 +255,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 console.debug('Pending balances', {
                     longTokens: balances.longTokens.toNumber(),
                     shortTokens: balances.shortTokens.toNumber(),
-                    quoteTokens: balances.quoteTokens.toNumber(),
+                    settlementTokens: balances.settlementTokens.toNumber(),
                 });
                 poolsDispatch({
                     type: 'setAggregateBalances',
@@ -273,8 +273,8 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (!provider || !account) {
             return;
         }
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.quoteToken.address];
-        const decimals = pool.quoteToken.decimals;
+        const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
+        const decimals = pool.settlementToken.decimals;
         fetchTokenApprovals(tokens, provider, account, pool.address)
             .then((approvals) => {
                 poolsDispatch({
@@ -282,7 +282,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     pool: pool.address,
                     shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
                     longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
-                    quoteTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+                    settlementTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
                 });
             })
             .catch((err) => {
@@ -299,7 +299,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 {
                     address: pool.address,
                     keeper: pool.keeper,
-                    quoteTokenDecimals: pool.quoteToken.decimals,
+                    settlementTokenDecimals: pool.settlementToken.decimals,
                 },
                 provider_,
             ).then((poolBalances) => {
@@ -342,7 +342,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             type,
                         });
 
-                        const decimals = poolsState.pools[pool].poolInstance.quoteToken.decimals;
+                        const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
                         // @ts-ignore
                         log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
@@ -513,7 +513,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         options?: Options,
     ) => Promise<void> = async (pool, commitType, balanceType, amount, options) => {
         const committerAddress = poolsState.pools[pool].poolInstance.committer.address;
-        const quoteTokenDecimals = poolsState.pools[pool].poolInstance.quoteToken.decimals;
+        const settlementTokenDecimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
         const nextRebalance = poolsState.pools[pool].poolInstance.lastUpdate
             .plus(poolsState.pools[pool].poolInstance.updateInterval)
             .toNumber();
@@ -535,7 +535,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         console.debug(
             `Creating commit. Amount: ${ethers.utils.parseUnits(
                 amount.toFixed(),
-                quoteTokenDecimals,
+                settlementTokenDecimals,
             )}, Raw amount: ${amount.toFixed()}`,
         );
         if (handleTransaction) {
@@ -543,7 +543,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 committer.commit,
                 [
                     commitType,
-                    ethers.utils.parseUnits(amount.toFixed(), quoteTokenDecimals),
+                    ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
                     fromAggregatBalances(balanceType),
                     false,
                 ],
@@ -564,7 +564,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                     onClick={() =>
                                         watchAsset(provider as ethers.providers.JsonRpcProvider, {
                                             address: poolsState.pools[pool].poolInstance.address,
-                                            decimals: quoteTokenDecimals,
+                                            decimals: settlementTokenDecimals,
                                             symbol:
                                                 commitType === CommitEnum.longMint
                                                     ? poolsState.pools[pool].poolInstance.longToken.symbol
@@ -603,13 +603,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const approve: (pool: string, quoteTokenSymbol: string) => Promise<void> = async (pool, quoteTokenSymbol) => {
+    const approve: (pool: string, settlementTokenSymbol: string) => Promise<void> = async (
+        pool,
+        settlementTokenSymbol,
+    ) => {
         if (!signer) {
             console.error('Failed to approve token: signer undefined');
             return;
         }
 
-        const token = PoolToken__factory.connect(poolsState.pools[pool].poolInstance.quoteToken.address, signer);
+        const token = PoolToken__factory.connect(poolsState.pools[pool].poolInstance.settlementToken.address, signer);
         const network = await signer?.getChainId();
         if (handleTransaction) {
             handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
@@ -618,22 +621,22 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     console.debug('Successfully approved token', receipt);
                     poolsDispatch({
                         type: 'setTokenApproved',
-                        token: 'quoteToken',
+                        token: 'settlementToken',
                         pool: pool,
                         value: new BigNumber(Number.MAX_SAFE_INTEGER),
                     });
                 },
                 statusMessages: {
                     waiting: {
-                        title: `Unlocking ${quoteTokenSymbol}`,
+                        title: `Unlocking ${settlementTokenSymbol}`,
                         body: '',
                     },
                     success: {
-                        title: `${quoteTokenSymbol} Unlocked`,
+                        title: `${settlementTokenSymbol} Unlocked`,
                         body: '',
                     },
                     error: {
-                        title: `Unlock ${quoteTokenSymbol} Failed`,
+                        title: `Unlock ${settlementTokenSymbol} Failed`,
                         body: '',
                     },
                 },

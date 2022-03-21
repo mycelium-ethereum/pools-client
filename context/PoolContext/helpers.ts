@@ -14,7 +14,7 @@ export const fetchPoolBalances: (
     poolInfo: {
         keeper: string;
         address: string;
-        quoteTokenDecimals: number;
+        settlementTokenDecimals: number;
     },
     provider: ethers.providers.JsonRpcProvider | ethers.providers.WebSocketProvider,
 ) => Promise<{
@@ -50,8 +50,8 @@ export const fetchPoolBalances: (
     return {
         lastUpdate: new BigNumber(lastUpdate.toString()),
         lastPrice: new BigNumber(ethers.utils.formatEther(lastPrice)),
-        shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, poolInfo.quoteTokenDecimals)),
-        longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, poolInfo.quoteTokenDecimals)),
+        shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, poolInfo.settlementTokenDecimals)),
+        longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, poolInfo.settlementTokenDecimals)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
     };
 };
@@ -115,16 +115,16 @@ export const fetchAggregateBalance: (
     provider: ethers.providers.JsonRpcProvider,
     account: string,
     committer: string,
-    quoteTokenDecimals: number,
-) => Promise<AggregateBalances> = async (provider, account, committer, quoteTokenDecimals) => {
+    settlementTokenDecimals: number,
+) => Promise<AggregateBalances> = async (provider, account, committer, settlementTokenDecimals) => {
     const contract = PoolCommitter__factory.connect(committer, provider);
     const balances = await contract.getAggregateBalance(account);
 
     // const balances = await contract.getAggregateBalance('0x110af92Ba116fD7868216AA794a7E4dA3b9D7D11');
     return {
-        longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens, quoteTokenDecimals)),
-        shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens, quoteTokenDecimals)),
-        quoteTokens: new BigNumber(ethers.utils.formatUnits(balances.settlementTokens, quoteTokenDecimals)),
+        longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens, settlementTokenDecimals)),
+        shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens, settlementTokenDecimals)),
+        settlementTokens: new BigNumber(ethers.utils.formatUnits(balances.settlementTokens, settlementTokenDecimals)),
     };
 };
 

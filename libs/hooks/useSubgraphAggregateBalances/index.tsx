@@ -22,7 +22,7 @@ type ExepcetedGraphResponse = {
     shortTokenAvgBuyIn: string;
     pool: {
         id: string;
-        quoteTokenDecimals: string;
+        settlementTokenDecimals: string;
     };
 };
 
@@ -45,7 +45,7 @@ const fetchSubgraphAggregateBalance: (
               shortTokenAvgBuyIn
               pool {
                   id
-                  quoteTokenDecimals
+                  settlementTokenDecimals
               }
           }
       }`,
@@ -64,7 +64,7 @@ const fetchSubgraphAggregateBalance: (
         const balances = response.data.userAggregateBalances;
         const poolAggregateBalances: SubgraphAggregateBalances = {};
         balances.map((balance: ExepcetedGraphResponse) => {
-            const decimals = parseInt(balance.pool.quoteTokenDecimals);
+            const decimals = parseInt(balance.pool.settlementTokenDecimals);
             poolAggregateBalances[balance.pool.id] = {
                 longTokenHolding: new BigNumber(ethers.utils.formatUnits(balance.longTokenHolding, decimals)),
                 shortTokenHolding: new BigNumber(ethers.utils.formatUnits(balance.shortTokenHolding, decimals)),

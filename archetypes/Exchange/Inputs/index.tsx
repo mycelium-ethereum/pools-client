@@ -59,14 +59,14 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         userBalances.aggregateBalances.shortTokens,
     ]);
 
-    const quoteTokenBalance = useMemo(() => {
+    const settlementTokenBalance = useMemo(() => {
         switch (balanceType) {
             case BalanceTypeEnum.escrow:
-                return userBalances.aggregateBalances.quoteTokens;
+                return userBalances.aggregateBalances.settlementTokens;
             default:
-                return userBalances.quoteToken.balance;
+                return userBalances.settlementToken.balance;
         }
-    }, [balanceType, userBalances.quoteToken, userBalances.aggregateBalances.quoteTokens]);
+    }, [balanceType, userBalances.settlementToken, userBalances.aggregateBalances.settlementTokens]);
 
     const nextBalances = usePoolsNextBalances(pool);
     const notional = useMemo(() => (isLong ? nextBalances.nextLongBalance : nextBalances.nextShortBalance), [isLong]);
@@ -82,7 +82,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
         if (pool) {
             let currentBalance: BigNumber;
             if (commitAction === CommitActionEnum.mint) {
-                currentBalance = quoteTokenBalance;
+                currentBalance = settlementTokenBalance;
             } else {
                 currentBalance = tokenBalance;
             }
@@ -94,7 +94,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                 value: invalidAmount,
             });
         }
-    }, [commitAction, amount, notional, token, pendingBurns, quoteTokenBalance, tokenBalance]);
+    }, [commitAction, amount, notional, token, pendingBurns, settlementTokenBalance, tokenBalance]);
 
     return (
         <>
@@ -120,8 +120,8 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             invalidAmount={invalidAmount}
                             amount={amount}
                             amountBN={amountBN}
-                            balance={quoteTokenBalance}
-                            tokenSymbol={pool.quoteToken.symbol}
+                            balance={settlementTokenBalance}
+                            tokenSymbol={pool.settlementToken.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}
                             isPoolToken={false}

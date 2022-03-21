@@ -26,7 +26,7 @@ export default (() => {
                     }
                     const { poolInstance, userBalances } = pools[commit.pool];
 
-                    const { shortToken, longToken, quoteToken, frontRunningInterval, lastUpdate, updateInterval } =
+                    const { shortToken, longToken, settlementToken, frontRunningInterval, lastUpdate, updateInterval } =
                         poolInstance;
 
                     let tokenIn, tokenOut, tokenPrice;
@@ -65,7 +65,7 @@ export default (() => {
                         nextRebalance: lastUpdate.plus(updateInterval),
                         frontRunningInterval: frontRunningInterval,
                         updateInterval: updateInterval,
-                        quoteTokenSymbol: quoteToken.symbol,
+                        settlementTokenSymbol: settlementToken.symbol,
                     });
                 }
             }

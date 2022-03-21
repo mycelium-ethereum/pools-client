@@ -57,7 +57,7 @@ export interface BrowseTableRowData {
     market: string;
     address: string;
     decimals: number;
-    quoteTokenSymbol: string;
+    settlementTokenSymbol: string;
     leverage: number;
 
     lastPrice: number;

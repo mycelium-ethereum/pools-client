@@ -31,7 +31,7 @@ type ExchangeButton = {
 type UserBalances = {
     shortToken: TokenBalance;
     longToken: TokenBalance;
-    quoteToken: TokenBalance;
+    settlementToken: TokenBalance;
     aggregateBalances: AggregateBalances;
 };
 
@@ -72,8 +72,8 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
             </Button>
         );
     } else if (
-        (!userBalances.quoteToken.approvedAmount?.gte(userBalances.quoteToken.balance) ||
-            userBalances.quoteToken.approvedAmount.eq(0)) &&
+        (!userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
+            userBalances.settlementToken.approvedAmount.eq(0)) &&
         commitAction !== CommitActionEnum.burn
     ) {
         return (
@@ -86,14 +86,14 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                         if (!approve) {
                             return;
                         }
-                        approve(selectedPool ?? '', pool.quoteToken.symbol);
+                        approve(selectedPool ?? '', pool.settlementToken.symbol);
                     }}
                 >
-                    Unlock {pool.quoteToken.symbol}
+                    Unlock {pool.settlementToken.symbol}
                 </Button>
                 <Text>
-                    Unlock {pool.quoteToken.symbol} to start investing with Tracer. This is a one-time transaction for
-                    each pool.
+                    Unlock {pool.settlementToken.symbol} to start investing with Tracer. This is a one-time transaction
+                    for each pool.
                 </Text>
             </>
         );

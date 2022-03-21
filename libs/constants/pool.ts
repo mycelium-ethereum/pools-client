@@ -15,14 +15,14 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
-        quoteToken: {
+        settlementToken: {
             approvedAmount: new BigNumber(0),
             balance: new BigNumber(0),
         },
         aggregateBalances: {
             longTokens: new BigNumber(0),
             shortTokens: new BigNumber(0),
-            quoteTokens: new BigNumber(0),
+            settlementTokens: new BigNumber(0),
         },
     },
 };

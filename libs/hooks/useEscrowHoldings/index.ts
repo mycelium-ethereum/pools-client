@@ -35,7 +35,7 @@ export default (() => {
             Object.values(pools).forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 
-                const { shortToken, longToken, quoteToken, leverage, address, name } = poolInstance;
+                const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
 
                 const entryPrices = fetchEntryPrices();
 
@@ -44,11 +44,12 @@ export default (() => {
                 const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
 
                 // 1 for stable coins
-                const quoteTokenPrice = new BigNumber(1);
+                const settlementTokenPrice = new BigNumber(1);
 
                 const longTokenValue = userBalances.aggregateBalances.longTokens.times(nextLongTokenPrice);
                 const shortTokenValue = userBalances.aggregateBalances.shortTokens.times(nextShortTokenPrice);
-                const quoteTokenValue = userBalances.aggregateBalances.quoteTokens.times(quoteTokenPrice);
+                const settlementTokenValue =
+                    userBalances.aggregateBalances.settlementTokens.times(settlementTokenPrice);
 
                 const claimableLongTokens = {
                     symbol: longToken.symbol,
@@ -69,14 +70,14 @@ export default (() => {
                     notionalValue: shortTokenValue.times(leverage),
                 };
                 const claimableSettlementTokens = {
-                    symbol: quoteToken.symbol,
-                    balance: userBalances.aggregateBalances.quoteTokens,
-                    currentTokenPrice: quoteTokenPrice,
+                    symbol: settlementToken.symbol,
+                    balance: userBalances.aggregateBalances.settlementTokens,
+                    currentTokenPrice: settlementTokenPrice,
                     type: TokenType.Settlement,
-                    token: quoteToken.symbol,
-                    notionalValue: quoteTokenValue,
+                    token: settlementToken.symbol,
+                    notionalValue: settlementTokenValue,
                 };
-                const claimableSum = userBalances.aggregateBalances.quoteTokens
+                const claimableSum = userBalances.aggregateBalances.settlementTokens
                     .plus(userBalances.aggregateBalances.shortTokens.times(nextShortTokenPrice))
                     .plus(userBalances.aggregateBalances.longTokens.times(nextLongTokenPrice));
                 const numClaimable = [claimableSettlementTokens, claimableShortTokens, claimableLongTokens].reduce(

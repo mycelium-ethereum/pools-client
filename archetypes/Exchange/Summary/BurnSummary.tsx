@@ -11,7 +11,7 @@ export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice
             <ExpectedTokenValue
                 nextTokenPrice={nextTokenPrice}
                 amount={amount}
-                quoteTokenSymbol={pool.quoteTokenSymbol}
+                settlementTokenSymbol={pool.settlementTokenSymbol}
                 showTransactionDetails={showTransactionDetails}
             />
             <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />

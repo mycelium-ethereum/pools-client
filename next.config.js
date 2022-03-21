@@ -22,6 +22,8 @@ module.exports = {
             http: false,
             https: false,
             path: false,
+            process: false,
+            ws: false
         };
 
         config.module.rules.push(
@@ -51,6 +53,7 @@ module.exports = {
                 loader: 'ts-loader',
             },
         );
+
         return config;
     },
 };

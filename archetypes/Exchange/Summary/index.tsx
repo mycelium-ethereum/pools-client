@@ -47,7 +47,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             gasFee={gasFee}
                             token={token}
                             pool={{
-                                quoteTokenSymbol: pool.quoteToken.symbol,
+                                settlementTokenSymbol: pool.settlementToken.symbol,
                             }}
                         />
                     )}

@@ -66,7 +66,7 @@ export default (() => {
                         const {
                             shortToken,
                             longToken,
-                            quoteToken: { decimals },
+                            settlementToken: { decimals },
                         } = poolInstance;
 
                         let token;
