@@ -603,7 +603,10 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
     };
 
-    const approve: (pool: string, settlementTokenSymbol: string) => Promise<void> = async (pool, settlementTokenSymbol) => {
+    const approve: (pool: string, settlementTokenSymbol: string) => Promise<void> = async (
+        pool,
+        settlementTokenSymbol,
+    ) => {
         if (!signer) {
             console.error('Failed to approve token: signer undefined');
             return;

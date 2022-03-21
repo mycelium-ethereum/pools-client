@@ -48,7 +48,8 @@ export default (() => {
 
                 const longTokenValue = userBalances.aggregateBalances.longTokens.times(nextLongTokenPrice);
                 const shortTokenValue = userBalances.aggregateBalances.shortTokens.times(nextShortTokenPrice);
-                const settlementTokenValue = userBalances.aggregateBalances.settlementTokens.times(settlementTokenPrice);
+                const settlementTokenValue =
+                    userBalances.aggregateBalances.settlementTokens.times(settlementTokenPrice);
 
                 const claimableLongTokens = {
                     symbol: longToken.symbol,

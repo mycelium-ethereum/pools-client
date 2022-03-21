@@ -64,7 +64,12 @@ export type PoolAction =
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'incrementRetryCount' }
-    | { type: 'setTokenApproved'; pool: string; token: 'settlementToken' | 'shortToken' | 'longToken'; value: BigNumber }
+    | {
+          type: 'setTokenApproved';
+          pool: string;
+          token: 'settlementToken' | 'shortToken' | 'longToken';
+          value: BigNumber;
+      }
     | { type: 'resetPools' }
     | {
           type: 'setUpdatedPoolBalances';
