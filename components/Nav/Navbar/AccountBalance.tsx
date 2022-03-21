@@ -15,8 +15,8 @@ const useBalance = () => {
     useEffect(() => {
         if (pools && Object.keys(pools).length) {
             // it doesnt matter which pool we use
-            // since they should all have the same quote token
-            setBalance(Object.values(pools)[0]?.userBalances.quoteToken?.balance ?? new BigNumber(0));
+            // since they should all have the same settlement token
+            setBalance(Object.values(pools)[0]?.userBalances.settlementToken?.balance ?? new BigNumber(0));
         }
     }, [pools]);
 

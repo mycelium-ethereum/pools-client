@@ -221,7 +221,7 @@ const MintCommitRow: React.FC<
     frontRunningInterval,
     updateInterval,
     created,
-    quoteTokenSymbol,
+    settlementTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
@@ -258,7 +258,7 @@ const MintCommitRow: React.FC<
                     {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
                 </div>
                 <div className="text-cool-gray-500">
-                    at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
                 </div>
             </TableRowCell>
             <TableRowCell>
@@ -300,7 +300,7 @@ const BurnCommitRow: React.FC<
     frontRunningInterval,
     updateInterval,
     created,
-    quoteTokenSymbol,
+    settlementTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
@@ -337,7 +337,7 @@ const BurnCommitRow: React.FC<
                     {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
                 </div>
                 <div>
-                    at {toApproxCurrency(tokenPrice)} {quoteTokenSymbol}/token
+                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
                 </div>
             </TableRowCell>
             <TableRowCell>
@@ -380,7 +380,7 @@ const FlipCommitRow: React.FC<
     frontRunningInterval,
     updateInterval,
     created,
-    quoteTokenSymbol,
+    settlementTokenSymbol,
 }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
@@ -398,7 +398,7 @@ const FlipCommitRow: React.FC<
             <TableRowCell>
                 <div>{amount.toFixed(2)} tokens</div>
                 <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {quoteTokenSymbol}
+                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
                 </div>
             </TableRowCell>
             <TableRowCell>
@@ -413,7 +413,7 @@ const FlipCommitRow: React.FC<
             <TableRowCell>
                 <div>{amount.toFixed(2)} tokens</div>
                 <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {quoteTokenSymbol}
+                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
                 </div>
             </TableRowCell>
             <TableRowCell>

@@ -12,7 +12,7 @@ export type PoolInfo = {
     userBalances: {
         shortToken: TokenBalance;
         longToken: TokenBalance;
-        quoteToken: TokenBalance;
+        settlementToken: TokenBalance;
         aggregateBalances: AggregateBalances;
     };
 };
@@ -47,7 +47,7 @@ export type PoolAction =
           type: 'setTokenBalances';
           pool: string;
           shortTokenBalance: BigNumber;
-          quoteTokenBalance: BigNumber;
+          settlementTokenBalance: BigNumber;
           longTokenBalance: BigNumber;
       }
     | {
@@ -59,12 +59,12 @@ export type PoolAction =
           type: 'setTokenApprovals';
           pool: string;
           shortTokenAmount: BigNumber;
-          quoteTokenAmount: BigNumber;
+          settlementTokenAmount: BigNumber;
           longTokenAmount: BigNumber;
       }
     | { type: 'setPoolsInitialised'; value: boolean }
     | { type: 'incrementRetryCount' }
-    | { type: 'setTokenApproved'; pool: string; token: 'quoteToken' | 'shortToken' | 'longToken'; value: BigNumber }
+    | { type: 'setTokenApproved'; pool: string; token: 'settlementToken' | 'shortToken' | 'longToken'; value: BigNumber }
     | { type: 'resetPools' }
     | {
           type: 'setUpdatedPoolBalances';
@@ -156,9 +156,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                                 ...state.pools[action.pool].userBalances.longToken,
                                 balance: action.longTokenBalance,
                             },
-                            quoteToken: {
-                                ...state.pools[action.pool].userBalances.quoteToken,
-                                balance: action.quoteTokenBalance,
+                            settlementToken: {
+                                ...state.pools[action.pool].userBalances.settlementToken,
+                                balance: action.settlementTokenBalance,
                             },
                         },
                     },
@@ -201,9 +201,9 @@ export const reducer: (state: PoolState, action: PoolAction) => PoolState = (sta
                                 ...state.pools[action.pool].userBalances.longToken,
                                 approvedAmount: action.longTokenAmount,
                             },
-                            quoteToken: {
-                                ...state.pools[action.pool].userBalances.quoteToken,
-                                approvedAmount: action.quoteTokenAmount,
+                            settlementToken: {
+                                ...state.pools[action.pool].userBalances.settlementToken,
+                                approvedAmount: action.settlementTokenAmount,
                             },
                         },
                     },

@@ -78,7 +78,7 @@ export type CreatedCommitType = TypedEvent<
 export type AggregateBalances = {
     longTokens: BigNumber;
     shortTokens: BigNumber;
-    quoteTokens: BigNumber;
+    settlementTokens: BigNumber;
 };
 
 // for mint the amount is the amount of collateral spent
@@ -100,7 +100,7 @@ export type QueuedCommit = PendingCommitInfo & {
     nextRebalance: BigNumber;
     frontRunningInterval: BigNumber;
     updateInterval: BigNumber;
-    quoteTokenSymbol: string;
+    settlementTokenSymbol: string;
 };
 
 export type HistoricCommit = PendingCommitInfo & {

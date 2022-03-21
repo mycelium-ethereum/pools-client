@@ -43,7 +43,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
     useEffect(() => {
         let mounted = true;
         const poolInfo: StaticPoolInfo = poolList[network ?? NETWORKS.ARBITRUM][0];
-        const USDC_DECIMALS = poolInfo?.quoteToken?.decimals ?? 18;
+        const USDC_DECIMALS = poolInfo?.settlementToken?.decimals ?? 18;
         const fetchUpkeeps = async () => {
             const now = Math.floor(Date.now() / 1000);
             const from = now - (poolInfo?.updateInterval || ONE_HOUR) * 2;

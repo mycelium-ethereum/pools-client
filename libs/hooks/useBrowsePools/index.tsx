@@ -46,7 +46,7 @@ export default (() => {
                     longBalance,
                     leverage,
                     name,
-                    quoteToken,
+                    settlementToken,
                     updateInterval,
                     frontRunningInterval,
                     keeper,
@@ -77,8 +77,8 @@ export default (() => {
                     name: name,
                     market: tickerToName(name),
                     leverage: leverage,
-                    decimals: quoteToken.decimals,
-                    quoteTokenSymbol: quoteToken.symbol,
+                    decimals: settlementToken.decimals,
+                    settlementTokenSymbol: settlementToken.symbol,
 
                     lastPrice: pool.lastPrice.toNumber(),
                     oraclePrice: pool.oraclePrice.toNumber(),
@@ -119,8 +119,8 @@ export default (() => {
 
                     keeper: keeper,
                     committer: committer.address,
-                    collateralAsset: quoteToken.symbol,
-                    collateralAssetAddress: quoteToken.address,
+                    collateralAsset: settlementToken.symbol,
+                    collateralAssetAddress: settlementToken.address,
                 });
             });
 

@@ -77,15 +77,15 @@ export const ExpectedTokensMinted: React.FC<
 // Burn token value (BurnSummary)
 export const ExpectedTokenValue: React.FC<
     {
-        quoteTokenSymbol: string;
+        settlementTokenSymbol: string;
         amount: BigNumber;
         nextTokenPrice: BigNumber;
     } & BaseSection
-> = ({ amount, nextTokenPrice, quoteTokenSymbol, showTransactionDetails }) => (
+> = ({ amount, nextTokenPrice, settlementTokenSymbol, showTransactionDetails }) => (
     <>
         <Section label="Expected Token Value" className="header">
             <Styles.SumText>
-                {`${toApproxCurrency(calcNotionalValue(nextTokenPrice, amount), 2)} ${quoteTokenSymbol}`}
+                {`${toApproxCurrency(calcNotionalValue(nextTokenPrice, amount), 2)} ${settlementTokenSymbol}`}
             </Styles.SumText>
         </Section>
         {showTransactionDetails && (
@@ -177,7 +177,7 @@ export const ExpectedFlipAmounts: React.FC<
         isLong: boolean;
         flippedTokenSymbol: string;
         expectedNotionalReturn: BigNumber;
-        quoteTokenSymbol: string;
+        settlementTokenSymbol: string;
     } & BaseSection
 > = ({
     showTransactionDetails,
@@ -185,7 +185,7 @@ export const ExpectedFlipAmounts: React.FC<
     isLong,
     flippedTokenSymbol,
     expectedNotionalReturn,
-    quoteTokenSymbol,
+    settlementTokenSymbol,
 }) => {
     const expectedFlippedTokens: string = calcNumTokens(expectedNotionalReturn, nextFlipTokenPrice).toFixed(2);
     return (
@@ -197,7 +197,7 @@ export const ExpectedFlipAmounts: React.FC<
                 <Styles.SectionDetails>
                     <Section label={`Expected ${isLong ? 'Long' : 'Short'} Token Value`} showSectionDetails>
                         <Styles.Transparent>
-                            {`${toApproxCurrency(expectedNotionalReturn, 2)} ${quoteTokenSymbol}`}
+                            {`${toApproxCurrency(expectedNotionalReturn, 2)} ${settlementTokenSymbol}`}
                         </Styles.Transparent>
                     </Section>
                     <Section label={`Expected ${isLong ? 'Short' : 'Long'} Token Price`} showSectionDetails>

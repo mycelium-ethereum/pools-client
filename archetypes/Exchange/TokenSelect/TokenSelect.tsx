@@ -40,7 +40,7 @@ const TokenSelect: React.FC<{
 
     const searchFilter = (token: TokenRow): boolean => {
         const searchString = filter.toLowerCase();
-        const extendedTokenName = `${token.symbol}+${token.pool.quoteTokenSymbol}`.toLowerCase();
+        const extendedTokenName = `${token.symbol}+${token.pool.settlementTokenSymbol}`.toLowerCase();
         return Boolean(extendedTokenName.match(searchString));
     };
 
@@ -79,7 +79,7 @@ const TokenSelect: React.FC<{
                                 >
                                     <Styles.TokenSelectCell hasLogo>
                                         <Styles.TokenLogo size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                        {token.symbol}+{token.pool.quoteTokenSymbol}-01
+                                        {token.symbol}+{token.pool.settlementTokenSymbol}-01
                                     </Styles.TokenSelectCell>
                                     <Styles.TokenSelectCell hasBalance={token.escrowBalance.toNumber() > 0}>
                                         {token.escrowBalance.toNumber() > 0 ? (
