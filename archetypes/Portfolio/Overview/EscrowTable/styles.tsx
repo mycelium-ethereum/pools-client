@@ -3,7 +3,7 @@ import Button from '@components/General/Button';
 import { TableRowCell } from '@components/General/TWTable';
 import { ClaimableAsset } from '../state';
 
-export const Pool = styled.div`
+export const Pool = styled.tr`
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme['background-secondary']};
     display: flex;
@@ -48,7 +48,7 @@ const buttonStyles = `
     display: flex;
 `;
 
-export const Section = styled.div<{
+export const Section = styled.td<{
     variant?: 'title' | 'buttons';
 }>`
     margin: 1rem 2rem;

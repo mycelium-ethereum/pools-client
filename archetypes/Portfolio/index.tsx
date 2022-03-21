@@ -40,10 +40,8 @@ export const PortfolioNav: React.FC<{
     return (
         <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
             <div className="mr-5">
-                <Link href="/portfolio">
-                    <>
-                        <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
-                    </>
+                <Link href="/portfolio/">
+                    <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
                 </Link>
             </div>
             <div className="mr-5">
