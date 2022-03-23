@@ -33,7 +33,7 @@ export const CommitTypeMap = {
 const mintQueryFocus = 'mint';
 const burnQueryFocus = 'burn';
 const flipQueryFocus = 'flip';
-type QueryFocus = typeof mintQueryFocus | typeof burnQueryFocus | typeof flipQueryFocus;
+export type QueryFocus = typeof mintQueryFocus | typeof burnQueryFocus | typeof flipQueryFocus;
 
 export const CommitToQueryFocusMap: Record<CommitEnum, QueryFocus> = {
     [CommitEnum.longMint]: mintQueryFocus,

@@ -2,6 +2,10 @@
 process.traceDeprecation = true;
 
 import React, { useEffect } from 'react';
+
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
@@ -58,7 +62,6 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
-
             <ToastProvider components={{ Toast: Notification }}>
                 <ThemeStore>
                     <Web3Store
@@ -96,6 +99,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     </Web3Store>
                 </ThemeStore>
             </ToastProvider>
+            <ToastContainer />
         </div>
     );
 };

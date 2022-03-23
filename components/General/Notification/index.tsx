@@ -110,17 +110,12 @@ type HProps = {
     type?: typeof PENDING_COMMIT;
     commitInfo?: PendingCommitInfo;
 };
-const Hashie: React.FC<HProps | any> = ({
+export const Hashie: React.FC<HProps | any> = ({
     transitionDuration,
     transitionState,
     onDismiss,
     appearance: appearance_,
     placement,
-    // autoDismiss,
-    // autoDismissTimeout,
-    // type,
-    // commitInfo,
-    // isRunning,
     children,
 }: HProps) => {
     const appearance = appearances[appearance_] ?? appearances['info']; //default info
@@ -167,5 +162,18 @@ Hashie.defaultProps = {
     },
 };
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export const Notification = ({ children, ...props }: any) => <Hashie {...props}>{children}</Hashie>;
+type InjectedProps = {
+    closeToast?: any; // injected
+    toastProps?: any; // injected
+};
+type NotificationProps = {
+    title: React.ReactNode;
+    children?: React.ReactNode;
+};
+
+export const Notification = ({ title, children }: NotificationProps & InjectedProps): JSX.Element => (
+    <div>
+        <div>{title}</div>
+        <Content>{children}</Content>
+    </div>
+);
