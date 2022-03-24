@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { isSupportedNetwork, isSupportedBridgeNetwork } from '@libs/utils/supportedNetworks';
 import { ARBITRUM } from '@libs/constants';
 import { switchNetworks } from '@libs/utils/rpcMethods';
-import { useToasts } from 'react-toast-notifications';
 import { useRouter } from 'next/router';
+import { Notification } from '../Notification';
 
 const UnsupportedNetwork: React.FC = () => {
     const router = useRouter();
     const { account, network, provider, unsupportedNetworkPopupRef } = useWeb3();
-    const { addToast, updateToast } = useToasts();
+
     // unsupported network popup
     useEffect(() => {
         const bridgePage = router.pathname.startsWith('/bridge');
@@ -21,9 +22,8 @@ const UnsupportedNetwork: React.FC = () => {
             // ignore if we are already showing the error
             if (!unsupportedNetworkPopupRef.current) {
                 // @ts-ignore
-                unsupportedNetworkPopupRef.current = addToast(
-                    [
-                        'Unsupported Network',
+                unsupportedNetworkPopupRef.current = toast(
+                    <Notification title="Unsupported Network">
                         <span key="unsupported-network-content" className="text-sm">
                             <a
                                 className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
@@ -43,12 +43,13 @@ const UnsupportedNetwork: React.FC = () => {
                             >
                                 Get started
                             </a>
-                        </span>,
-                    ],
+                        </span>
+                        ,
+                    </Notification>,
                     {
-                        appearance: 'error',
-                        autoDismiss: false,
-                        onDismiss: () => {
+                        type: 'error',
+                        autoClose: false,
+                        onClose: () => {
                             unsupportedNetworkPopupRef.current = '';
                         },
                     },
@@ -56,10 +57,10 @@ const UnsupportedNetwork: React.FC = () => {
             }
         } else {
             if (unsupportedNetworkPopupRef.current) {
-                updateToast(unsupportedNetworkPopupRef.current as unknown as string, {
-                    content: 'Switched Network',
-                    appearance: 'success',
-                    autoDismiss: true,
+                toast.update(unsupportedNetworkPopupRef.current, {
+                    render: <Notification title="Switched Network" />,
+                    type: 'success',
+                    autoClose: 5000,
                 });
                 unsupportedNetworkPopupRef.current = '';
             }

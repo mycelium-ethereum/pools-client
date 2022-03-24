@@ -3,16 +3,13 @@ process.traceDeprecation = true;
 
 import React, { useEffect } from 'react';
 
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
-import { ToastProvider } from 'react-toast-notifications';
-import { Notification } from '@components/General/Notification';
-import { TransactionStore } from '@context/TransactionContext';
+import { ToastContainerWithStyles } from '@components/General/Notification/ToastContainerWithStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 import { ThemeStore } from '@context/ThemeContext';
@@ -62,44 +59,40 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
-            <ToastProvider components={{ Toast: Notification }}>
-                <ThemeStore>
-                    <Web3Store
-                        onboardConfig={{
-                            hideBranding: true,
-                            walletSelect: {
-                                heading: 'Connect Wallet',
-                                wallets: [
-                                    { walletName: 'metamask' },
-                                    { walletName: 'coinbase' },
-                                    { walletName: 'torus' },
-                                    // { walletName: "binance" },
+            <ThemeStore>
+                <Web3Store
+                    onboardConfig={{
+                        hideBranding: true,
+                        walletSelect: {
+                            heading: 'Connect Wallet',
+                            wallets: [
+                                { walletName: 'metamask' },
+                                { walletName: 'coinbase' },
+                                { walletName: 'torus' },
+                                // { walletName: "binance" },
 
-                                    {
-                                        walletName: 'walletConnect',
-                                        rpc: {
-                                            [ARBITRUM]: networkConfig[ARBITRUM].publicRPC,
-                                            [ARBITRUM_RINKEBY]: networkConfig[ARBITRUM_RINKEBY].publicRPC,
-                                            [MAINNET]: networkConfig[MAINNET].publicRPC,
-                                        },
+                                {
+                                    walletName: 'walletConnect',
+                                    rpc: {
+                                        [ARBITRUM]: networkConfig[ARBITRUM].publicRPC,
+                                        [ARBITRUM_RINKEBY]: networkConfig[ARBITRUM_RINKEBY].publicRPC,
+                                        [MAINNET]: networkConfig[MAINNET].publicRPC,
                                     },
-                                ],
-                                // agreement: {
-                                //     version: '1.0',
-                                //     termsUrl: 'https://google.com',
-                                // },
-                            },
-                        }}
-                    >
-                        <TransactionStore>
-                            <UsersCommitStore>
-                                <Component {...pageProps} />
-                            </UsersCommitStore>
-                        </TransactionStore>
-                    </Web3Store>
-                </ThemeStore>
-            </ToastProvider>
-            <ToastContainer />
+                                },
+                            ],
+                            // agreement: {
+                            //     version: '1.0',
+                            //     termsUrl: 'https://google.com',
+                            // },
+                        },
+                    }}
+                >
+                    <UsersCommitStore>
+                        <Component {...pageProps} />
+                    </UsersCommitStore>
+                </Web3Store>
+                <ToastContainerWithStyles />
+            </ThemeStore>
         </div>
     );
 };

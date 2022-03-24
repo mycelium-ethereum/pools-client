@@ -2,6 +2,7 @@ import React from 'react';
 import { CommitPendingNotification, CommitSuccessNotification } from '@components/General/Notification/Commit';
 import { ToastContent, ToastOptions, UpdateOptions } from 'react-toastify';
 import { TransactionType } from './types';
+import { Notification } from '@components/General/Notification';
 
 const AUTO_DISMISS = 5000; // 4 seconds
 
@@ -36,27 +37,37 @@ export const transactionMap: Record<
     }
 > = {
     DEFAULT: {
-        pending: () => ['Transaction Pending'],
+        pending: () => [
+            <>
+                <Notification title="Transaction Pending" />
+            </>,
+        ],
         success: () => ({
-            render: 'Order Submitted',
+            render: <Notification title="Order Submitted" />,
+            type: 'success',
+            isLoading: false,
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
-                render: 'Transaction Failed',
+                render: <Notification title="Transaction Failed" />,
                 type: 'error',
             },
     },
     APPROVE: {
-        pending: (props) => [`Approving ${props.tokenSymbol}`],
+        pending: (props) => [
+            <>
+                <Notification title={`Approving ${props.settlementToken}`} />
+            </>,
+        ],
         success: (props) => ({
-            render: `${props.settlementToken} Unlocked`,
+            render: <Notification title={`${props.settlementToken} Unlocked`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
         error: ({ props, error }) =>
             knownTransactionErrors(error) ?? {
-                render: `Unlock ${props.tokenSymbol}`,
+                render: <Notification title={`Unlock ${props.settlementToken} Failed`} />,
                 type: 'error',
                 isLoading: false,
                 autoClose: AUTO_DISMISS,
@@ -76,23 +87,27 @@ export const transactionMap: Record<
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
-                render: 'Transaction Failed',
+                render: <Notification title={`Transaction Failed`} />,
                 type: 'error',
                 isLoading: false,
                 autoClose: AUTO_DISMISS,
             },
     },
     CLAIM: {
-        pending: (props) => [`Claiming ${props.poolName} tokens`],
+        pending: (props) => [
+            <>
+                <Notification title={`Claiming ${props.poolName} Tokens`} />,
+            </>,
+        ],
         success: (props) => ({
-            render: `${props.poolName} Claim Queued`,
+            render: <Notification title={`${props.poolName} Claim Queued`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
         error: ({ props, error }) =>
             knownTransactionErrors(error) ?? {
-                render: `Claim from ${props.poolName} Failed`,
+                render: <Notification title={`Claim from ${props.poolName} Failed`} />,
                 type: 'error',
                 isLoading: false,
                 autoClose: AUTO_DISMISS,
