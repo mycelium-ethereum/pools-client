@@ -4,6 +4,7 @@ import { Result } from '@libs/types/General';
 import { QueryFocus } from '@libs/constants';
 import { ArbSys, L1GatewayRouter, L2GatewayRouter } from 'arb-ts/dist/lib/abi';
 import { Inbox } from 'arb-ts/dist/lib/abi/Inbox';
+import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
 
 export enum TransactionType {
     // STAKE = 'STAKE',
@@ -12,6 +13,8 @@ export enum TransactionType {
     APPROVE = 'APPROVE',
     ARB_ETH_DEPOSIT = 'ARB_ETH_DEPOSIT',
     ARB_BRIDGE = 'ARB_BRIDGE',
+    FARM_STAKE_WITHDRAW = 'FARM_STAKE_WITHDRAW',
+    FARM_CLAIM = 'FARM_CLAIM',
     DEFAULT = 'DEFAULT',
 }
 
@@ -24,11 +27,20 @@ type ArbBridgeETHDeposit =
 type ArbBridgeBridge =
     | L2GatewayRouter['functions']['outboundTransfer(address,address,uint256,bytes)'] // l2 to l1
     | L1GatewayRouter['outboundTransfer']; // l1 to l2
+type FarmStakeWithdraw = StakingRewards['withdraw'] | StakingRewards['stake'];
+type FarmClaim = StakingRewards['getReward'];
 
 // if adding a supportFunction ensure you add to the following
 // GetInjectedSuccessProps
 // AllTransactionParams
-export type SupportedFunctions = Commit | Claim | Approve | ArbBridgeETHDeposit | ArbBridgeBridge;
+export type SupportedFunctions =
+    | Commit
+    | Claim
+    | Approve
+    | ArbBridgeETHDeposit
+    | ArbBridgeBridge
+    | FarmStakeWithdraw
+    | FarmClaim;
 
 type ApproveProps = {
     tokenSymbol: string;
@@ -53,6 +65,11 @@ type ArbBridgeProps = {
     type: 'withdrawal' | 'deposit';
 };
 
+type FarmStakeWithdrawProps = {
+    type: 'stake' | 'withdraw';
+    farmName: string;
+};
+
 type GetInjectedSuccessProps<P extends TransactionType> = P extends TransactionType.APPROVE
     ? ApproveProps
     : P extends TransactionType.COMMIT
@@ -63,6 +80,10 @@ type GetInjectedSuccessProps<P extends TransactionType> = P extends TransactionT
     ? ArbBridgeProps
     : P extends TransactionType.ARB_ETH_DEPOSIT
     ? ArbBridgeProps
+    : P extends TransactionType.FARM_STAKE_WITHDRAW
+    ? FarmStakeWithdrawProps
+    : P extends TransactionType.FARM_CLAIM
+    ? undefined
     : P extends TransactionType.DEFAULT
     ? undefined
     : never;
@@ -86,7 +107,9 @@ export type AllTransactionParams =
     | TransactionParams<Commit, TransactionType.COMMIT>
     | TransactionParams<Claim, TransactionType.CLAIM>
     | TransactionParams<ArbBridgeETHDeposit, TransactionType.ARB_ETH_DEPOSIT>
-    | TransactionParams<ArbBridgeBridge, TransactionType.ARB_BRIDGE>;
+    | TransactionParams<ArbBridgeBridge, TransactionType.ARB_BRIDGE>
+    | TransactionParams<FarmClaim, TransactionType.FARM_CLAIM>
+    | TransactionParams<FarmStakeWithdraw, TransactionType.FARM_STAKE_WITHDRAW>;
 
 export interface ITransactionSlice {
     pendingCount: number;

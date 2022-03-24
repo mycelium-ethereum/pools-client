@@ -167,4 +167,38 @@ export const transactionMap: Record<
                 autoClose: AUTO_DISMISS,
             },
     },
+    FARM_CLAIM: {
+        pending: () => [
+            <>
+                <Notification title="Claiming TCR" />
+            </>,
+        ],
+        success: () => ({
+            render: <Notification title="TCR Claimed" />,
+            type: 'success',
+            isLoading: false,
+        }),
+        error: ({ error }) =>
+            knownTransactionErrors(error) ?? {
+                render: <Notification title="Claim TCR Failed" />,
+                type: 'error',
+            },
+    },
+    FARM_STAKE_WITHDRAW: {
+        pending: (props) => [
+            <>
+                <Notification title={`${props.type === 'withdraw' ? 'Unstaking' : 'Staking'} ${props.farmName}`} />
+            </>,
+        ],
+        success: (props) => ({
+            render: <Notification title={`${props.farmName} ${props.type === 'withdraw' ? 'Unstaked' : 'Staked'}`} />,
+            type: 'success',
+            isLoading: false,
+        }),
+        error: ({ props, error }) =>
+            knownTransactionErrors(error) ?? {
+                render: <Notification title={`${props.type === 'withdraw' ? 'Unstake' : 'Stake'} ${props.farmName}`} />,
+                type: 'error',
+            },
+    },
 };
