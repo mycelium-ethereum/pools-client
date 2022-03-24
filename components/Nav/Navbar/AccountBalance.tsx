@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
 
 import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
-import {useStore} from 'store/main';
+import { useStore } from 'store/main';
 
 const useBalance = () => {
     const { pools } = usePools();
@@ -24,7 +24,7 @@ const useBalance = () => {
 };
 
 export default (({ hide, className }) => {
-    const pendingCount = useStore(state => state.pendingCount);
+    const pendingCount = useStore((state) => state.pendingCount);
     const balance = useBalance();
 
     return (
