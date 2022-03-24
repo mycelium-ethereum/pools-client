@@ -1,7 +1,7 @@
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import { useStore } from '@store/main';
-import { selectThemeSlice } from 'store/ThemeSlice';
+import { selectThemeSlice } from '@store/ThemeSlice';
 
 const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 

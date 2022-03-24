@@ -1,12 +1,10 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { BigNumber } from 'bignumber.js';
+import { useStore } from '@store/main';
 import { usePools } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
-import { BigNumber } from 'bignumber.js';
 import { classNames } from '@libs/utils/functions';
-
 import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
-import { useStore } from 'store/main';
 
 const useBalance = () => {
     const { pools } = usePools();

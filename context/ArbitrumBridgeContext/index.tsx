@@ -16,8 +16,8 @@ import { Children } from '@libs/types/General';
 
 import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
-import { useStore } from 'store/main';
-import { TransactionType } from 'store/TransactionSlice/types';
+import { useStore } from '@store/main';
+import { TransactionType } from '@store/TransactionSlice/types';
 
 type CachedBridges = {
     [account: string]: {

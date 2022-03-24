@@ -1,4 +1,4 @@
-import { Theme } from 'store/ThemeSlice/themes';
+import { Theme } from '@store/ThemeSlice/themes';
 import styled from 'styled-components';
 
 const Max = styled.div`

@@ -9,7 +9,7 @@ import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { useStore } from '@store/main';
-import { selectIsDark } from 'store/ThemeSlice';
+import { selectIsDark } from '@store/ThemeSlice';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 

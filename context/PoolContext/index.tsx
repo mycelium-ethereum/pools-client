@@ -27,8 +27,8 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
-import { useStore } from 'store/main';
-import { TransactionType } from 'store/TransactionSlice/types';
+import { useStore } from '@store/main';
+import { TransactionType } from '@store/TransactionSlice/types';
 
 type Options = {
     onSuccess?: (...args: any) => any;

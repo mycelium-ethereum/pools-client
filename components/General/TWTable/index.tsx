@@ -1,7 +1,7 @@
-import { Theme } from 'store/ThemeSlice/themes';
-import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import styled from 'styled-components';
+import { Theme } from '@store/ThemeSlice/themes';
+import { classNames } from '@libs/utils/functions';
 
 export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
     showDivider = false,
