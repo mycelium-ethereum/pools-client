@@ -15,11 +15,12 @@ import {
 } from '../state';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { useTransactionContext } from '@context/TransactionContext';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
 import { Farm } from '@libs/types/Staking';
 import { Logo, LogoTicker } from '@components/General/Logo';
+import { useStore } from 'store/main';
+import { TransactionType } from 'store/TransactionSlice/types';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];
@@ -63,7 +64,8 @@ export default (({
     rewardsTokenUSDPrices,
 }) => {
     const { account } = useWeb3();
-    const { handleTransaction } = useTransactionContext();
+
+    const handleTransaction = useStore((state) => state.handleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
         const filterFields = farm?.poolDetails
@@ -222,26 +224,21 @@ export default (({
         console.debug(`staking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
-            handleTransaction(contract.stake, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
-                statusMessages: {
-                    waiting: {
-                        title: `Staking ${farm.name}`,
-                        body: '',
-                    },
-                    success: {
-                        title: `${farm.name} Staked`,
-                        body: '',
-                    },
-                    error: {
-                        title: `Stake ${farm.name} failed`,
-                        body: '',
-                    },
+            handleTransaction({
+                callMethod: contract.stake,
+                params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
+                type: TransactionType.FARM_STAKE_WITHDRAW,
+                injectedProps: {
+                    farmName: farm.name,
+                    type: 'stake',
                 },
-                onSuccess: () => {
-                    refreshFarm(farmAddress);
-                    dispatch({
-                        type: 'reset',
-                    });
+                callBacks: {
+                    onSuccess: () => {
+                        refreshFarm(farmAddress);
+                        dispatch({
+                            type: 'reset',
+                        });
+                    },
                 },
             });
         }
@@ -253,26 +250,21 @@ export default (({
         console.debug(`unstaking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
-            handleTransaction(contract.withdraw, [amount.times(10 ** stakingTokenDecimals).toFixed()], {
-                statusMessages: {
-                    waiting: {
-                        title: `Unstaking ${farm.name}`,
-                        body: '',
-                    },
-                    success: {
-                        title: `${farm.name} Unstaked`,
-                        body: '',
-                    },
-                    error: {
-                        title: `Unstake ${farm.name} failed`,
-                        body: '',
-                    },
+            handleTransaction({
+                callMethod: contract.withdraw,
+                params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
+                type: TransactionType.FARM_STAKE_WITHDRAW,
+                injectedProps: {
+                    farmName: farm.name,
+                    type: 'withdraw',
                 },
-                onSuccess: () => {
-                    refreshFarm(farmAddress);
-                    dispatch({
-                        type: 'reset',
-                    });
+                callBacks: {
+                    onSuccess: () => {
+                        refreshFarm(farmAddress);
+                        dispatch({
+                            type: 'reset',
+                        });
+                    },
                 },
             });
         }
@@ -281,27 +273,19 @@ export default (({
     const claim = (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { contract } = farm;
-
         if (handleTransaction) {
-            handleTransaction(contract.getReward, [], {
-                statusMessages: {
-                    waiting: {
-                        title: `Claiming TCR`,
-                        body: '',
+            handleTransaction({
+                callMethod: contract.getReward,
+                params: [],
+                type: TransactionType.FARM_CLAIM,
+                injectedProps: undefined,
+                callBacks: {
+                    onSuccess: () => {
+                        refreshFarm(farmAddress);
+                        dispatch({
+                            type: 'reset',
+                        });
                     },
-                    success: {
-                        title: `TCR Claimed`,
-                        body: '',
-                    },
-                    error: {
-                        title: `Claim TCR Failed`,
-                    },
-                },
-                onSuccess: () => {
-                    refreshFarm(farmAddress);
-                    dispatch({
-                        type: 'reset',
-                    });
                 },
             });
         }
@@ -312,23 +296,17 @@ export default (({
         const { stakingToken } = farm;
 
         if (handleTransaction) {
-            handleTransaction(stakingToken.approve, [farmAddress, MAX_SOL_UINT.toString()], {
-                statusMessages: {
-                    waiting: {
-                        title: `Unlocking ${farm.name}`,
-                        body: '',
-                    },
-                    success: {
-                        title: `${farm.name} Unlocked`,
-                        body: '',
-                    },
-                    error: {
-                        title: `Unlock ${farm.name} failed`,
-                        body: '',
-                    },
+            handleTransaction({
+                callMethod: stakingToken.approve,
+                params: [farmAddress, MAX_SOL_UINT],
+                type: TransactionType.APPROVE,
+                injectedProps: {
+                    tokenSymbol: farm.name,
                 },
-                onSuccess: () => {
-                    refreshFarm(farmAddress);
+                callBacks: {
+                    onSuccess: () => {
+                        refreshFarm(farmAddress);
+                    },
                 },
             });
         }

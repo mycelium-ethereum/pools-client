@@ -21,15 +21,14 @@ import {
     PoolKeeper__factory,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { useTransactionContext } from '@context/TransactionContext';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
-import { watchAsset } from '@libs/utils/rpcMethods';
-import { AvailableNetwork, networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
+import { useStore } from 'store/main';
+import { TransactionType } from 'store/TransactionSlice/types';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -71,7 +70,9 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useWeb3();
-    const { handleTransaction } = useTransactionContext();
+
+    const handleTransaction = useStore((state) => state.handleTransaction);
+
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
@@ -428,40 +429,38 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
      * @param options handleTransaction options
      */
     const claim: (pool: string, options?: Options) => Promise<void> = async (pool, options) => {
-        const committerAddress = poolsState.pools[pool].poolInstance.committer.address;
+        const {
+            name: poolName,
+            committer: { address: committerAddress },
+        } = poolsState.pools[pool].poolInstance;
+
         if (!committerAddress) {
             console.error('Failed to claim: Committer address undefined');
             // TODO handle error
         }
         if (!account) {
             console.error('Failed to claim: Account undefined');
+            return;
         }
-        const network = await signer?.getChainId();
         if (!signer) {
             console.error('Signer undefined when trying to mint');
             return;
         }
         const committer = PoolCommitter__factory.connect(committerAddress, signer);
         if (handleTransaction) {
-            const poolName = poolsState.pools[pool].poolInstance.name;
-
-            handleTransaction(committer.claim, [account], {
-                network: (network ?? '0') as AvailableNetwork,
-                onSuccess: (receipt) => {
-                    console.debug('Successfully submitted claim txn: ', receipt);
-                    // get and set token balances
-                    updateTokenBalances(poolsState.pools[pool].poolInstance, provider);
-                    options?.onSuccess ? options.onSuccess(receipt) : null;
+            handleTransaction({
+                callMethod: committer.claim,
+                params: [account],
+                type: TransactionType.CLAIM,
+                injectedProps: {
+                    poolName,
                 },
-                statusMessages: {
-                    waiting: {
-                        title: `Claiming ${poolName} tokens`,
-                    },
-                    success: {
-                        title: `${poolName} Claim Queued`,
-                    },
-                    error: {
-                        title: `Claim from ${poolName} Failed`,
+                callBacks: {
+                    onSuccess: (receipt) => {
+                        console.debug('Successfully submitted claim txn: ', receipt);
+                        // get and set token balances
+                        updateTokenBalances(poolsState.pools[pool].poolInstance, provider);
+                        options?.onSuccess ? options.onSuccess(receipt) : null;
                     },
                 },
             });
@@ -512,21 +511,26 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         amount: BigNumber,
         options?: Options,
     ) => Promise<void> = async (pool, commitType, balanceType, amount, options) => {
-        const committerAddress = poolsState.pools[pool].poolInstance.committer.address;
-        const settlementTokenDecimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
-        const nextRebalance = poolsState.pools[pool].poolInstance.lastUpdate
-            .plus(poolsState.pools[pool].poolInstance.updateInterval)
-            .toNumber();
-        const frontRunning = poolsState.pools[pool].poolInstance.frontRunningInterval.toNumber();
+        const {
+            lastUpdate,
+            updateInterval,
+            address: poolAddress,
+            frontRunningInterval: frontRunning,
+            committer: { address: committerAddress },
+            settlementToken: { decimals: settlementTokenDecimals },
+            longToken: { symbol: longTokenSymbol },
+            shortToken: { symbol: shortTokenSymbol },
+        } = poolsState.pools[pool].poolInstance;
+        const nextRebalance = lastUpdate.plus(updateInterval).toNumber();
         const targetTime =
-            nextRebalance - Date.now() / 1000 < frontRunning
+            nextRebalance - Date.now() / 1000 < frontRunning.toNumber()
                 ? nextRebalance + poolsState.pools[pool].poolInstance.updateInterval.toNumber()
                 : nextRebalance;
+
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
             // TODO handle error
         }
-        const network = await signer?.getChainId();
         if (!signer) {
             console.error('Signer undefined when trying to mint');
             return;
@@ -539,67 +543,32 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             )}, Raw amount: ${amount.toFixed()}`,
         );
         if (handleTransaction) {
-            handleTransaction(
-                committer.commit,
-                [
+            handleTransaction({
+                callMethod: committer.commit,
+                params: [
                     commitType,
                     ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
                     fromAggregatBalances(balanceType),
                     false,
                 ],
-                {
-                    network: (network ?? '0') as AvailableNetwork,
+                type: TransactionType.COMMIT,
+                injectedProps: {
+                    poolAddress,
+                    provider: provider as ethers.providers.JsonRpcProvider,
+                    tokenSymbol: commitType === CommitEnum.longMint ? longTokenSymbol : shortTokenSymbol,
+                    commitType: CommitToQueryFocusMap[commitType],
+                    settlementTokenDecimals,
+                    nextRebalance: targetTime,
+                },
+                callBacks: {
                     onSuccess: (receipt) => {
                         console.debug('Successfully submitted commit txn: ', receipt);
                         // get and set token balances
                         updateTokenBalances(poolsState.pools[pool].poolInstance, provider);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                     },
-                    statusMessages: {
-                        waiting: {
-                            title: 'Submitting Order',
-                            body: (
-                                <div
-                                    className="flex items-center cursor-pointer"
-                                    onClick={() =>
-                                        watchAsset(provider as ethers.providers.JsonRpcProvider, {
-                                            address: poolsState.pools[pool].poolInstance.address,
-                                            decimals: settlementTokenDecimals,
-                                            symbol:
-                                                commitType === CommitEnum.longMint
-                                                    ? poolsState.pools[pool].poolInstance.longToken.symbol
-                                                    : poolsState.pools[pool].poolInstance.shortToken.symbol,
-                                        })
-                                    }
-                                >
-                                    <Logo
-                                        className="mr-2"
-                                        size="md"
-                                        ticker={tokenSymbolToLogoTicker(
-                                            commitType === CommitEnum.longMint
-                                                ? poolsState.pools[pool].poolInstance.longToken.symbol
-                                                : poolsState.pools[pool].poolInstance.shortToken.symbol,
-                                        )}
-                                    />
-                                    <div>Add to wallet</div>
-                                </div>
-                            ),
-                        },
-                        symbol:
-                            commitType === CommitEnum.longMint
-                                ? poolsState.pools[pool].poolInstance.longToken.symbol
-                                : poolsState.pools[pool].poolInstance.shortToken.symbol,
-                        type: CommitToQueryFocusMap[commitType],
-                        nextRebalance: targetTime,
-                        success: {
-                            title: 'Order Submitted',
-                        },
-                        error: {
-                            title: 'Order Failed',
-                        },
-                    },
                 },
-            );
+            });
         }
     };
 
@@ -613,31 +582,24 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         }
 
         const token = PoolToken__factory.connect(poolsState.pools[pool].poolInstance.settlementToken.address, signer);
-        const network = await signer?.getChainId();
+
         if (handleTransaction) {
-            handleTransaction(token.approve, [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())], {
-                network: (network?.toString() ?? '0') as AvailableNetwork,
-                onSuccess: async (receipt) => {
-                    console.debug('Successfully approved token', receipt);
-                    poolsDispatch({
-                        type: 'setTokenApproved',
-                        token: 'settlementToken',
-                        pool: pool,
-                        value: new BigNumber(Number.MAX_SAFE_INTEGER),
-                    });
+            handleTransaction({
+                callMethod: token.approve,
+                params: [pool, ethers.utils.parseEther(Number.MAX_SAFE_INTEGER.toString())],
+                type: TransactionType.APPROVE,
+                injectedProps: {
+                    tokenSymbol: settlementTokenSymbol,
                 },
-                statusMessages: {
-                    waiting: {
-                        title: `Unlocking ${settlementTokenSymbol}`,
-                        body: '',
-                    },
-                    success: {
-                        title: `${settlementTokenSymbol} Unlocked`,
-                        body: '',
-                    },
-                    error: {
-                        title: `Unlock ${settlementTokenSymbol} Failed`,
-                        body: '',
+                callBacks: {
+                    onSuccess: async (receipt) => {
+                        console.debug('Successfully approved token', receipt);
+                        poolsDispatch({
+                            type: 'setTokenApproved',
+                            token: 'settlementToken',
+                            pool: pool,
+                            value: new BigNumber(Number.MAX_SAFE_INTEGER),
+                        });
                     },
                 },
             });
