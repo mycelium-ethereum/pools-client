@@ -1,7 +1,15 @@
-import { GetState, SetState } from 'zustand';
+import { SetState, GetState } from 'zustand';
 import { ITransactionSlice } from './TransactionSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
 
-export type StoreState = ITransactionSlice & IThemeSlice;
+// global store state
+export type StoreState = {
+    transactionSlice: ITransactionSlice;
+    themeSlice: IThemeSlice;
+};
 
-export type StoreSlice<T> = (set: SetState<StoreState>, get: GetState<StoreState>) => T;
+// Seperated return type to allow for a different
+//  eg a slice with no lends would be StateSlice<StoreState, INoLensSlice>
+//  since it receives a StoreState get and set but does not have to return the entire store state
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type StateSlice<T extends object, R extends object> = (set: SetState<T>, get: GetState<T>) => R;

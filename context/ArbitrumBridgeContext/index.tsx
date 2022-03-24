@@ -18,6 +18,7 @@ import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
+import { selectHandleTransaction } from '@store/TransactionSlice';
 
 type CachedBridges = {
     [account: string]: {
@@ -62,7 +63,7 @@ const BRIDGEABLE_ASSET_ETH = {
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = MAINNET } = useWeb3();
 
-    const handleTransaction = useStore((state) => state.handleTransaction);
+    const handleTransaction = useStore(selectHandleTransaction);
 
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
