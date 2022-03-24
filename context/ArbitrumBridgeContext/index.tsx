@@ -62,7 +62,7 @@ const BRIDGEABLE_ASSET_ETH = {
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = MAINNET } = useWeb3();
 
-    const newHandleTransaction = useStore((state) => state.handleTransaction);
+    const handleTransaction = useStore((state) => state.handleTransaction);
 
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
@@ -111,7 +111,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     }, [fromNetwork?.id, toNetwork?.id, account, provider]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
-        if (!newHandleTransaction) {
+        if (!handleTransaction) {
             console.error('Failed to bridge ETH: handleTransaction is unavailable');
             return;
         }
@@ -140,7 +140,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         if (isArbitrumNetwork(fromNetwork.id)) {
             // on layer 2, withdraw eth to layer 1
             const arbSys = bridge.l2Bridge.arbSys;
-            newHandleTransaction({
+            handleTransaction({
                 callMethod: arbSys.withdrawEth,
                 params: [account, { value: ethers.utils.parseEther(amount.toFixed()) }],
                 type: TransactionType.ARB_ETH_DEPOSIT,
@@ -167,7 +167,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
             const [maxSubmissionPrice] = await bridge.l2Bridge.getTxnSubmissionPrice(0);
 
-            newHandleTransaction({
+            handleTransaction({
                 callMethod: inbox.depositEth,
                 params: [maxSubmissionPrice, { value: ethers.utils.parseEther(amount.toFixed()) }],
                 type: TransactionType.ARB_ETH_DEPOSIT,
@@ -192,7 +192,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     // takes the token address and an amount to deposit
     // wrote these two to be not be hard fixed to USDC
     const bridgeToken = async (tokenAddress: string, amount: BigNumber, callback: () => void) => {
-        if (!newHandleTransaction) {
+        if (!handleTransaction) {
             console.error('Failed to bridge ERC20, handleTransaction is unavailable');
             return;
         }
@@ -229,7 +229,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                 console.error('Failed to bridge ERC20: l1TokenAddress undefined');
                 return;
             }
-            newHandleTransaction({
+            handleTransaction({
                 callMethod:
                     bridge.l2Bridge.l2GatewayRouter.functions['outboundTransfer(address,address,uint256,bytes)'],
                 params: [
@@ -266,7 +266,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             const abiCoder = new ethers.utils.AbiCoder();
             const data = abiCoder.encode(['uint256', 'bytes'], [depositParams.maxSubmissionCost, '0x']);
 
-            newHandleTransaction({
+            handleTransaction({
                 callMethod: bridge.l1GatewayRouter.outboundTransfer,
                 params: [
                     depositParams.erc20L1Address,
@@ -299,7 +299,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     };
 
     const approveToken = (tokenAddress: string, spender: string) => {
-        if (!newHandleTransaction) {
+        if (!handleTransaction) {
             console.error('Failed to approve bridgeable token: handleTransaction unavailable');
             return;
         }
@@ -318,7 +318,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
-        newHandleTransaction({
+        handleTransaction({
             callMethod: token.approve,
             params: [spender, MAX_SOL_UINT],
             type: TransactionType.APPROVE,
