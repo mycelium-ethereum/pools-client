@@ -7,7 +7,6 @@ import { Inbox } from 'arb-ts/dist/lib/abi/Inbox';
 import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
 
 export enum TransactionType {
-    // STAKE = 'STAKE',
     COMMIT = 'COMMIT',
     CLAIM = 'CLAIM',
     APPROVE = 'APPROVE',

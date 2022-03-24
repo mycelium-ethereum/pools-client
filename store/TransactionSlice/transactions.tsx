@@ -7,7 +7,6 @@ import { Notification } from '@components/General/Notification';
 const AUTO_DISMISS = 5000; // 4 seconds
 
 const knownTransactionErrors: (error: any) => UpdateOptions | undefined = (error) => {
-    console.log('error', error);
     if (error?.code === 4001) {
         // user denied txn
         return {
