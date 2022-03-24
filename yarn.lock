@@ -1080,6 +1080,18 @@
     react-qr-reader "^2.2.1"
     rxjs "^6.6.3"
 
+"@dhmk/utils@^2.4.0":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@dhmk/utils/-/utils-2.4.0.tgz#3791b2301d7144b150d3c148392c710eb9dd310b"
+  integrity sha512-jECoYCI3FQZs8NQ/f+s91HZYPmpa/J4RKAU0OPWNb9om7yjdadcwRk2UQsbf2cgLat4Z9xQFQg72GPKBClZu2Q==
+
+"@dhmk/zustand-lens@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@dhmk/zustand-lens/-/zustand-lens-1.0.0.tgz#9913768349572637b3d916fed3c540db70619c8b"
+  integrity sha512-QcxvPhGhbQIfWXCAbwOAK+S6pc2pGQyaScVb7aEdTWyGNLqjoE4nKow4GS4Ylb4K1nZTYZQhdhCguWDrcOyYAA==
+  dependencies:
+    "@dhmk/utils" "^2.4.0"
+
 "@emotion/is-prop-valid@^0.8.8":
   version "0.8.8"
   resolved "https://registry.yarnpkg.com/@emotion/is-prop-valid/-/is-prop-valid-0.8.8.tgz#db28b1c4368a259b60a97311d6a952d4fd01ac1a"
@@ -7641,6 +7653,11 @@ immediate@^3.2.3:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.3.0.tgz#1aef225517836bcdf7f2a2de2600c79ff0269266"
   integrity sha512-HR7EVodfFUdQCTIeySw+WDRFJlPcLOJbXfwwZ7Oom6tjsvZ3bOkCDJHehQC3nxJrv7+f9XecwazynjU8e4Vw3Q==
+
+immer@^9.0.12:
+  version "9.0.12"
+  resolved "https://registry.yarnpkg.com/immer/-/immer-9.0.12.tgz#2d33ddf3ee1d247deab9d707ca472c8c942a0f20"
+  integrity sha512-lk7UNmSbAukB5B6dh9fnh5D0bJTOFKxVg2cyJWTYrWRfhLrLMBquONcUs3aFq507hNoIZEDDh8lb8UtOizSMhA==
 
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"

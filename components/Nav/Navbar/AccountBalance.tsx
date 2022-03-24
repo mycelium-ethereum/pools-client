@@ -5,6 +5,7 @@ import { usePools } from '@context/PoolContext';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { classNames } from '@libs/utils/functions';
 import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
+import { selectPendingCount } from '@store/TransactionSlice';
 
 const useBalance = () => {
     const { pools } = usePools();
@@ -22,7 +23,7 @@ const useBalance = () => {
 };
 
 export default (({ hide, className }) => {
-    const pendingCount = useStore((state) => state.pendingCount);
+    const pendingCount = useStore(selectPendingCount);
     const balance = useBalance();
 
     return (
