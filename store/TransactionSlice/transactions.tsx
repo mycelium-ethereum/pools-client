@@ -1,7 +1,14 @@
 import React from 'react';
 import { CommitPendingNotification, CommitSuccessNotification } from '@components/General/Notification/Commit';
 import { ToastContent, ToastOptions, UpdateOptions } from 'react-toastify';
-import { TransactionType } from './types';
+import {
+    ApproveProps,
+    ArbBridgeProps,
+    ClaimProps,
+    CommitProps,
+    FarmStakeWithdrawProps,
+    TransactionType,
+} from './types';
 import { Notification } from '@components/General/Notification';
 
 const AUTO_DISMISS = 5000; // 4 seconds
@@ -32,7 +39,7 @@ export const transactionMap: Record<
     {
         pending: (props: any) => [ToastContent, ToastOptions?];
         success: (props: any) => UpdateOptions;
-        error: ({ props, error }: { props?: any; error: any }) => UpdateOptions;
+        error: ({ props, error }: { props: any; error: any }) => UpdateOptions;
     }
 > = {
     DEFAULT: {
@@ -50,35 +57,36 @@ export const transactionMap: Record<
             knownTransactionErrors(error) ?? {
                 render: <Notification title="Transaction Failed" />,
                 type: 'error',
+                isLoading: false,
             },
     },
     APPROVE: {
-        pending: (props) => [
+        pending: (props: ApproveProps) => [
             <>
-                <Notification title={`Approving ${props.settlementToken}`} />
+                <Notification title={`Approving ${props.tokenSymbol}`} />
             </>,
         ],
-        success: (props) => ({
-            render: <Notification title={`${props.settlementToken} Unlocked`} />,
+        success: (props: ApproveProps) => ({
+            render: <Notification title={`${props.tokenSymbol} Unlocked`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
-        error: ({ props, error }) =>
+        error: ({ props, error }: { props: ApproveProps; error: any }) =>
             knownTransactionErrors(error) ?? {
-                render: <Notification title={`Unlock ${props.settlementToken} Failed`} />,
+                render: <Notification title={`Unlock ${props.tokenSymbol} Failed`} />,
                 type: 'error',
                 isLoading: false,
                 autoClose: AUTO_DISMISS,
             },
     },
     COMMIT: {
-        pending: (props) => [
+        pending: (props: CommitProps) => [
             <>
                 <CommitPendingNotification {...props} />
             </>,
         ],
-        success: (props) => ({
+        success: (props: CommitProps) => ({
             render: <CommitSuccessNotification {...props} />,
             type: 'success',
             isLoading: false,
@@ -93,18 +101,18 @@ export const transactionMap: Record<
             },
     },
     CLAIM: {
-        pending: (props) => [
+        pending: (props: ClaimProps) => [
             <>
                 <Notification title={`Claiming ${props.poolName} Tokens`} />,
             </>,
         ],
-        success: (props) => ({
+        success: (props: ClaimProps) => ({
             render: <Notification title={`${props.poolName} Claim Queued`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
-        error: ({ props, error }) =>
+        error: ({ props, error }: { props: ClaimProps; error: any }) =>
             knownTransactionErrors(error) ?? {
                 render: <Notification title={`Claim from ${props.poolName} Failed`} />,
                 type: 'error',
@@ -113,18 +121,18 @@ export const transactionMap: Record<
             },
     },
     ARB_ETH_DEPOSIT: {
-        pending: (props) => [
+        pending: (props: ArbBridgeProps) => [
             <>
-                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
+                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
             </>,
         ],
-        success: (props) => ({
+        success: (props: ArbBridgeProps) => ({
             render: <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
-        error: ({ props, error }) =>
+        error: ({ props, error }: { props: ArbBridgeProps; error: any }) =>
             knownTransactionErrors(error) ?? {
                 render: (
                     <Notification
@@ -137,12 +145,12 @@ export const transactionMap: Record<
             },
     },
     ARB_BRIDGE: {
-        pending: (props) => [
+        pending: (props: ArbBridgeProps) => [
             <>
-                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
+                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
             </>,
         ],
-        success: (props) => ({
+        success: (props: ArbBridgeProps) => ({
             render: (
                 <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`}>
                     {props.type === 'deposit'
@@ -154,7 +162,7 @@ export const transactionMap: Record<
             isLoading: false,
             autoClose: AUTO_DISMISS,
         }),
-        error: ({ props, error }) =>
+        error: ({ props, error }: { props: ArbBridgeProps; error: any }) =>
             knownTransactionErrors(error) ?? {
                 render: (
                     <Notification
@@ -184,20 +192,21 @@ export const transactionMap: Record<
             },
     },
     FARM_STAKE_WITHDRAW: {
-        pending: (props) => [
+        pending: (props: FarmStakeWithdrawProps) => [
             <>
                 <Notification title={`${props.type === 'withdraw' ? 'Unstaking' : 'Staking'} ${props.farmName}`} />
             </>,
         ],
-        success: (props) => ({
+        success: (props: FarmStakeWithdrawProps) => ({
             render: <Notification title={`${props.farmName} ${props.type === 'withdraw' ? 'Unstaked' : 'Staked'}`} />,
             type: 'success',
             isLoading: false,
         }),
-        error: ({ props, error }) =>
+        error: ({ props, error }: { props: FarmStakeWithdrawProps; error: any }) =>
             knownTransactionErrors(error) ?? {
                 render: <Notification title={`${props.type === 'withdraw' ? 'Unstake' : 'Stake'} ${props.farmName}`} />,
                 type: 'error',
+                isLoading: false,
             },
     },
 };

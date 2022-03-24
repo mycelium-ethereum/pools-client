@@ -41,7 +41,7 @@ export type SupportedFunctions =
     | FarmStakeWithdraw
     | FarmClaim;
 
-type ApproveProps = {
+export type ApproveProps = {
     tokenSymbol: string;
 };
 
@@ -58,13 +58,13 @@ export type ClaimProps = {
     poolName: string;
 };
 
-type ArbBridgeProps = {
+export type ArbBridgeProps = {
     tokenSymbol: string;
     networkName: string;
     type: 'withdrawal' | 'deposit';
 };
 
-type FarmStakeWithdrawProps = {
+export type FarmStakeWithdrawProps = {
     type: 'stake' | 'withdraw';
     farmName: string;
 };
