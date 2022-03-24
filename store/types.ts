@@ -1,14 +1,7 @@
-import { SetState, GetState } from 'zustand';
+import { GetState, SetState } from 'zustand';
+import { ITransactionSlice } from './TransactionSlice/types';
+import { IThemeSlice } from './ThemeSlice/types';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-export type StoreSlice<T extends object, E extends object = T> = (
-    set: SetState<E extends T ? E : E & T>,
-    get: GetState<E extends T ? E : E & T>,
-) => T;
+export type StoreState = ITransactionSlice & IThemeSlice;
 
-export type StateFromFunctions<T extends [...any]> = T extends [infer F, ...infer R]
-    ? // eslint-disable-next-line @typescript-eslint/ban-types
-      F extends (...args: any) => object
-        ? StateFromFunctions<R> & ReturnType<F>
-        : unknown
-    : unknown;
+export type StoreSlice<T> = (set: SetState<StoreState>, get: GetState<StoreState>) => T;

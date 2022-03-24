@@ -1,9 +1,9 @@
 import create from 'zustand';
-import { StateFromFunctions } from './types';
 import { createTransactionSlice } from './TransactionSlice';
+import { createThemeSlice } from './ThemeSlice';
+import { StoreState } from './types';
 
-type State = StateFromFunctions<[typeof createTransactionSlice]>;
-
-export const useStore = create<State>((set, get) => ({
+export const useStore = create<StoreState>((set, get) => ({
     ...createTransactionSlice(set, get),
+    ...createThemeSlice(set, get),
 }));

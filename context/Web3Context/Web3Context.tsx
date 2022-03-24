@@ -7,8 +7,9 @@ import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onbo
 import { Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { ARBITRUM } from '@libs/constants';
-import { useTheme } from '@context/ThemeContext';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { useStore } from '@store/main';
+import { selectIsDark } from 'store/ThemeSlice';
 
 export type OnboardConfig = Partial<Omit<Initialization, 'networkId'>>;
 
@@ -55,7 +56,7 @@ const Web3Store: React.FC<Web3ContextProps> = ({
     networkIds,
     cacheWalletSelection = true,
 }) => {
-    const { isDark } = useTheme();
+    const isDark = useStore(selectIsDark);
     const [account, setAccount] = useState<string | undefined>(undefined);
     const [signer, setSigner] = useState<ethers.Signer | undefined>(undefined);
     const [network, setNetwork] = useState<KnownNetwork | undefined>(undefined);

@@ -16,7 +16,7 @@ import useIntervalCheck from '@libs/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
 import PoolDetailsModal from '../PoolDetailsModal';
 import styled from 'styled-components';
-import { Theme } from '@context/ThemeContext/themes';
+import { Theme } from 'store/ThemeSlice/themes';
 
 import Close from '/public/img/general/close.svg';
 import { classNames } from '@libs/utils/functions';

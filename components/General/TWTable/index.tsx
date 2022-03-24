@@ -1,4 +1,4 @@
-import { Theme } from '@context/ThemeContext/themes';
+import { Theme } from 'store/ThemeSlice/themes';
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
 import styled from 'styled-components';

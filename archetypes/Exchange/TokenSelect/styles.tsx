@@ -1,7 +1,7 @@
 import { HiddenExpand, Logo } from '@components/General';
 import { Table } from '@components/General/TWTable';
 import styled from 'styled-components';
-import { device } from '@context/ThemeContext/themes';
+import { device } from 'store/ThemeSlice/themes';
 import { InnerSearchInput, InputWrapper } from '@components/General/SearchInput';
 import { DownOutlined, SearchOutlined } from '@ant-design/icons';
 

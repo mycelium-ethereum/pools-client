@@ -32,6 +32,9 @@
       "@types/*": [
         "types/*"
       ],
+      "@store/*": [
+        "store/*"
+      ],
       "@context/*": [
         "context/*"
       ],

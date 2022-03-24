@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { StoreSlice } from 'store/types';
+import { StoreSlice } from '../types';
 import { transactionMap } from './transactions';
 import { ITransactionSlice } from './types';
 

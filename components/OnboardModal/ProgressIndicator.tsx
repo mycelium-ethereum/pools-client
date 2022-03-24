@@ -1,6 +1,6 @@
-import { Theme } from '@context/ThemeContext/themes';
 import React from 'react';
 import styled from 'styled-components';
+import { Theme } from 'store/ThemeSlice/themes';
 import { ProgressIndicatorProps } from './types';
 
 const StepsContainer = styled.div`
