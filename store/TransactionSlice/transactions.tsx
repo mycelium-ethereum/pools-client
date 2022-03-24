@@ -113,4 +113,58 @@ export const transactionMap: Record<
                 autoClose: AUTO_DISMISS,
             },
     },
+    ARB_ETH_DEPOSIT: {
+        pending: (props) => [
+            <>
+                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
+            </>,
+        ],
+        success: (props) => ({
+            render: <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
+            type: 'success',
+            isLoading: false,
+            autoClose: AUTO_DISMISS,
+        }),
+        error: ({ props, error }) =>
+            knownTransactionErrors(error) ?? {
+                render: (
+                    <Notification
+                        title={`Failed to submit ${props.tokenSymbol} ${props.type} from ${props.networkName}`}
+                    />
+                ),
+                type: 'error',
+                isLoading: false,
+                autoClose: AUTO_DISMISS,
+            },
+    },
+    ARB_BRIDGE: {
+        pending: (props) => [
+            <>
+                <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
+            </>,
+        ],
+        success: (props) => ({
+            render: (
+                <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`}>
+                    {props.type === 'deposit'
+                        ? 'It may take up to 10 minutes to receive your funds on Arbitrum. To view pending deposits, visit the official Arbitrum bridge.'
+                        : 'It will take approximately 8 days to receive your funds on Ethereum. To view pending withdrawals, visit the official Arbitrum bridge.'}
+                </Notification>
+            ),
+            type: 'success',
+            isLoading: false,
+            autoClose: AUTO_DISMISS,
+        }),
+        error: ({ props, error }) =>
+            knownTransactionErrors(error) ?? {
+                render: (
+                    <Notification
+                        title={`Failed to submit ${props.tokenSymbol} ${props.type} from ${props.networkName}`}
+                    />
+                ),
+                type: 'error',
+                isLoading: false,
+                autoClose: AUTO_DISMISS,
+            },
+    },
 };

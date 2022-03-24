@@ -3,7 +3,6 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
-import { useTransactionContext } from '../TransactionContext';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import {
     destinationNetworkLookup,
@@ -17,6 +16,8 @@ import { Children } from '@libs/types/General';
 
 import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
 import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@libs/constants';
+import { useStore } from 'store/main';
+import { TransactionType } from 'store/TransactionSlice/types';
 
 type CachedBridges = {
     [account: string]: {
@@ -58,23 +59,11 @@ const BRIDGEABLE_ASSET_ETH = {
     decimals: 18,
 };
 
-const withdrawalToastBody = (
-    <>
-        It will take approximately 8 days to receive your funds on Ethereum. To view pending withdrawals, visit the
-        official Arbitrum bridge.
-    </>
-);
-
-const depositToastBody = (
-    <>
-        It may take up to 10 minutes to receive your funds on Arbitrum. To view pending deposits, visit the official
-        Arbitrum bridge.
-    </>
-);
-
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     const { account, signer, provider, network = MAINNET } = useWeb3();
-    const { handleTransaction } = useTransactionContext();
+
+    const newHandleTransaction = useStore((state) => state.handleTransaction);
+
     const [bridgeableBalances, setBridgeableBalances] = useState<BridgeableBalances>({});
     const [cachedBridges, setCachedBridges] = useState<CachedBridges>({});
 
@@ -122,7 +111,7 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
     }, [fromNetwork?.id, toNetwork?.id, account, provider]);
 
     const bridgeEth = async (amount: BigNumber, callback: () => void) => {
-        if (!handleTransaction) {
+        if (!newHandleTransaction) {
             console.error('Failed to bridge ETH: handleTransaction is unavailable');
             return;
         }
@@ -151,27 +140,22 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
         if (isArbitrumNetwork(fromNetwork.id)) {
             // on layer 2, withdraw eth to layer 1
             const arbSys = bridge.l2Bridge.arbSys;
-
-            handleTransaction(arbSys.withdrawEth, [account, { value: ethers.utils.parseEther(amount.toFixed()) }], {
-                onSuccess: () => {
-                    callback();
-                    refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
+            newHandleTransaction({
+                callMethod: arbSys.withdrawEth,
+                params: [account, { value: ethers.utils.parseEther(amount.toFixed()) }],
+                type: TransactionType.ARB_ETH_DEPOSIT,
+                injectedProps: {
+                    tokenSymbol: 'ETH',
+                    networkName: fromNetwork.name,
+                    type: 'withdrawal' as const,
                 },
-                onError: () => {
-                    callback();
-                },
-                statusMessages: {
-                    waiting: {
-                        title: `Submitting ETH withdrawal from ${fromNetwork.name}`,
-                        body: '',
+                callBacks: {
+                    onSuccess: () => {
+                        callback();
+                        refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
                     },
-                    success: {
-                        title: `Submitted ETH withdrawal from ${fromNetwork.name}`,
-                        body: withdrawalToastBody,
-                    },
-                    error: {
-                        title: `Failed to submit ETH withdrawal from ${fromNetwork.name}`,
-                        body: '',
+                    onError: () => {
+                        callback();
                     },
                 },
             });
@@ -183,10 +167,16 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
 
             const [maxSubmissionPrice] = await bridge.l2Bridge.getTxnSubmissionPrice(0);
 
-            handleTransaction(
-                inbox.depositEth,
-                [maxSubmissionPrice, { value: ethers.utils.parseEther(amount.toFixed()) }],
-                {
+            newHandleTransaction({
+                callMethod: inbox.depositEth,
+                params: [maxSubmissionPrice, { value: ethers.utils.parseEther(amount.toFixed()) }],
+                type: TransactionType.ARB_ETH_DEPOSIT,
+                injectedProps: {
+                    tokenSymbol: 'ETH',
+                    networkName: fromNetwork.name,
+                    type: 'deposit' as const,
+                },
+                callBacks: {
                     onSuccess: () => {
                         callback();
                         refreshBridgeableBalance(BRIDGEABLE_ASSET_ETH);
@@ -194,29 +184,15 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     onError: () => {
                         callback();
                     },
-                    statusMessages: {
-                        waiting: {
-                            title: `Submitting ETH deposit to ${toNetwork.name}`,
-                            body: '',
-                        },
-                        success: {
-                            title: `Submitted ETH deposit to ${toNetwork.name}`,
-                            body: depositToastBody,
-                        },
-                        error: {
-                            title: `Failed to submit ETH deposit to ${toNetwork.name}`,
-                            body: '',
-                        },
-                    },
                 },
-            );
+            });
         }
     };
 
     // takes the token address and an amount to deposit
     // wrote these two to be not be hard fixed to USDC
     const bridgeToken = async (tokenAddress: string, amount: BigNumber, callback: () => void) => {
-        if (!handleTransaction) {
+        if (!newHandleTransaction) {
             console.error('Failed to bridge ERC20, handleTransaction is unavailable');
             return;
         }
@@ -249,11 +225,26 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             // we are on layer 2, withdraw back to layer 1
 
             const l1TokenAddress = await bridge.l2Bridge.getERC20L1Address(tokenAddress);
-
-            handleTransaction(
-                bridge.l2Bridge.l2GatewayRouter.functions['outboundTransfer(address,address,uint256,bytes)'],
-                [l1TokenAddress, account, ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals), '0x'],
-                {
+            if (!l1TokenAddress) {
+                console.error('Failed to bridge ERC20: l1TokenAddress undefined');
+                return;
+            }
+            newHandleTransaction({
+                callMethod:
+                    bridge.l2Bridge.l2GatewayRouter.functions['outboundTransfer(address,address,uint256,bytes)'],
+                params: [
+                    l1TokenAddress,
+                    account,
+                    ethers.utils.parseUnits(amount.toFixed(), bridgeableToken.decimals),
+                    '0x',
+                ],
+                type: TransactionType.ARB_BRIDGE,
+                injectedProps: {
+                    tokenSymbol: bridgeableToken.symbol,
+                    networkName: fromNetwork.name,
+                    type: 'withdrawal' as const,
+                },
+                callBacks: {
                     onSuccess: () => {
                         callback();
                         refreshBridgeableBalance(bridgeableToken);
@@ -261,22 +252,8 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     onError: () => {
                         callback();
                     },
-                    statusMessages: {
-                        waiting: {
-                            title: `Submitting ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
-                            body: '',
-                        },
-                        success: {
-                            title: `Submitted ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
-                            body: withdrawalToastBody,
-                        },
-                        error: {
-                            title: `Failed to submit ${bridgeableToken.symbol} withdrawal from ${fromNetwork.name}`,
-                            body: '',
-                        },
-                    },
                 },
-            );
+            });
         } else {
             // we are on layer 1, deposit into layer 2
 
@@ -289,9 +266,9 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             const abiCoder = new ethers.utils.AbiCoder();
             const data = abiCoder.encode(['uint256', 'bytes'], [depositParams.maxSubmissionCost, '0x']);
 
-            handleTransaction(
-                bridge.l1GatewayRouter.outboundTransfer,
-                [
+            newHandleTransaction({
+                callMethod: bridge.l1GatewayRouter.outboundTransfer,
+                params: [
                     depositParams.erc20L1Address,
                     depositParams.destinationAddress || account,
                     depositParams.amount,
@@ -302,7 +279,13 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                         value: depositParams.l1CallValue,
                     },
                 ],
-                {
+                type: TransactionType.ARB_BRIDGE,
+                injectedProps: {
+                    tokenSymbol: bridgeableToken.symbol,
+                    networkName: fromNetwork.name,
+                    type: 'deposit' as const,
+                },
+                callBacks: {
                     onSuccess: () => {
                         callback();
                         refreshBridgeableBalance(bridgeableToken);
@@ -310,27 +293,13 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
                     onError: () => {
                         callback();
                     },
-                    statusMessages: {
-                        waiting: {
-                            title: `Submitting ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
-                            body: '',
-                        },
-                        success: {
-                            title: `Submitted ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
-                            body: depositToastBody,
-                        },
-                        error: {
-                            title: `Failed to submit ${bridgeableToken.symbol} deposit to ${toNetwork.name}`,
-                            body: '',
-                        },
-                    },
                 },
-            );
+            });
         }
     };
 
     const approveToken = (tokenAddress: string, spender: string) => {
-        if (!handleTransaction) {
+        if (!newHandleTransaction) {
             console.error('Failed to approve bridgeable token: handleTransaction unavailable');
             return;
         }
@@ -349,27 +318,21 @@ export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
             return;
         }
 
-        handleTransaction(token.approve, [spender, MAX_SOL_UINT], {
-            onSuccess: () => {
-                // TODO convert to hashmap to avoid looping both here and in bridgeToken
-                if (fromNetwork) {
-                    if (bridgeableToken) {
-                        refreshBridgeableBalance(bridgeableToken);
-                    }
-                }
+        newHandleTransaction({
+            callMethod: token.approve,
+            params: [spender, MAX_SOL_UINT],
+            type: TransactionType.APPROVE,
+            injectedProps: {
+                tokenSymbol: bridgeableToken.symbol,
             },
-            statusMessages: {
-                waiting: {
-                    title: `Unlocking ${bridgeableToken.symbol}`,
-                    body: '',
-                },
-                success: {
-                    title: `Unlocked ${bridgeableToken.symbol}`,
-                    body: '',
-                },
-                error: {
-                    title: `Unlock ${bridgeableToken.symbol} failed`,
-                    body: '',
+            callBacks: {
+                onSuccess: () => {
+                    // TODO convert to hashmap to avoid looping both here and in bridgeToken
+                    if (fromNetwork) {
+                        if (bridgeableToken) {
+                            refreshBridgeableBalance(bridgeableToken);
+                        }
+                    }
                 },
             },
         });
