@@ -22,8 +22,10 @@ export default (() => {
                         !pools[commit.pool] || // pools doesnt exist
                         commit.from?.toLowerCase() !== accountLower // not committed by connected account
                     ) {
+                        // skip this entry
                         continue;
                     }
+
                     const { poolInstance, userBalances } = pools[commit.pool];
 
                     const { shortToken, longToken, settlementToken, frontRunningInterval, lastUpdate, updateInterval } =
