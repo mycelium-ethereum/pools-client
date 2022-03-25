@@ -1,9 +1,9 @@
 import { toast } from 'react-toastify';
-import { StoreSlice } from 'store/types';
+import { StateSlice, StoreState } from '@store/types';
 import { transactionMap } from './transactions';
 import { ITransactionSlice } from './types';
 
-export const createTransactionSlice: StoreSlice<ITransactionSlice> = (set, _get) => ({
+export const createTransactionSlice: StateSlice<ITransactionSlice, ITransactionSlice> = (set) => ({
     pendingCount: 0,
     handleTransaction: async ({ callMethod, params, type, injectedProps, callBacks }) => {
         const steps = transactionMap[type];
@@ -51,3 +51,8 @@ export const createTransactionSlice: StoreSlice<ITransactionSlice> = (set, _get)
         }
     },
 });
+
+export const selectHandleTransaction: (state: StoreState) => ITransactionSlice['handleTransaction'] = (state) =>
+    state.transactionSlice.handleTransaction;
+export const selectPendingCount: (state: StoreState) => ITransactionSlice['pendingCount'] = (state) =>
+    state.transactionSlice.pendingCount;

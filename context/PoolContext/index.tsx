@@ -27,8 +27,9 @@ import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
-import { useStore } from 'store/main';
-import { TransactionType } from 'store/TransactionSlice/types';
+import { useStore } from '@store/main';
+import { TransactionType } from '@store/TransactionSlice/types';
+import { selectHandleTransaction } from '@store/TransactionSlice';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -71,7 +72,7 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useWeb3();
 
-    const handleTransaction = useStore((state) => state.handleTransaction);
+    const handleTransaction = useStore(selectHandleTransaction);
 
     const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);

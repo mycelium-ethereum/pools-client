@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import TimeLeft from '@components/TimeLeft';
 import { watchAsset } from '@libs/utils/rpcMethods';
-import { CommitProps } from 'store/TransactionSlice/types';
+import { CommitProps } from '@store/TransactionSlice/types';
 import { Notification } from '.';
 import { Logo, tokenSymbolToLogoTicker } from '..';
 

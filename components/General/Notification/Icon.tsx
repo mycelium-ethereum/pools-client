@@ -2,7 +2,7 @@ import React from 'react';
 import Icon, { InfoCircleFilled } from '@ant-design/icons';
 import { ToastOptions } from 'react-toastify';
 import styled from 'styled-components';
-import { Theme } from '@context/ThemeContext/themes';
+import { Theme } from '@store/ThemeSlice/themes';
 import Success from '@public/img/notifications/success.svg';
 import Warning from '@public/img/notifications/warning.svg';
 import Error from '@public/img/notifications/error.svg';

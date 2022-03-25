@@ -1,11 +1,12 @@
-import { useTheme } from '@context/ThemeContext';
 import { classNames } from '@libs/utils/functions';
 import React from 'react';
+import { useStore } from '@store/main';
+import { selectThemeSlice } from '@store/ThemeSlice';
 
 const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 
 export default (() => {
-    const { isDark, toggleTheme } = useTheme();
+    const { isDark, toggleTheme } = useStore(selectThemeSlice);
 
     return (
         <div onClick={toggleTheme} className={'relative inline-block w-12 h-6 my-auto mx-0'}>

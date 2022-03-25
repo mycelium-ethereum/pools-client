@@ -2,9 +2,7 @@
 process.traceDeprecation = true;
 
 import React, { useEffect } from 'react';
-
 import 'react-toastify/dist/ReactToastify.css';
-
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import 'antd/dist/antd.css';
@@ -12,14 +10,15 @@ import '../styles/index.css';
 import { ToastContainerWithStyles } from '@components/General/Notification/ToastContainerWithStyles';
 import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
-import { ThemeStore } from '@context/ThemeContext';
-import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET } from '@libs/constants';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { StyledThemeProvider } from '@context/ThemeContext';
+import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET } from '@libs/constants';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
+    // load usersnap
     useEffect(() => {
         // @ts-ignore
         window.onUsersnapCXLoad = function (api) {
@@ -59,7 +58,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
-            <ThemeStore>
+            <StyledThemeProvider>
                 <Web3Store
                     onboardConfig={{
                         hideBranding: true,
@@ -92,7 +91,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     </UsersCommitStore>
                 </Web3Store>
                 <ToastContainerWithStyles />
-            </ThemeStore>
+            </StyledThemeProvider>
         </div>
     );
 };

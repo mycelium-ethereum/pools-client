@@ -1,6 +1,6 @@
-import TWPopup from '@components/General/TWPopup';
-import { device } from '@context/ThemeContext/themes';
 import styled from 'styled-components';
+import TWPopup from '@components/General/TWPopup';
+import { device } from '@store/ThemeSlice/themes';
 
 export const MenuItem = styled.div<{
     selected: boolean;

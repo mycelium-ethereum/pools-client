@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import CloseSVG from '/public/img/general/close.svg';
 import WaveSVG from '/public/img/onboard/wave.svg';
 import QuestionSVG from '/public/img/onboard/question.svg';
-import { Theme } from '@context/ThemeContext/themes';
+import { Theme } from '@store/ThemeSlice/themes';
 
 export const OnboardContent = styled.div`
     a {

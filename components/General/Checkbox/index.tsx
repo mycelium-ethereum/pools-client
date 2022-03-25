@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '@context/ThemeContext/themes';
+import { Theme } from '@store/ThemeSlice/themes';
 
 export default (({ onClick, isChecked, className, label, subtext }) => {
     return (
