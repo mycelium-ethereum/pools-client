@@ -66,13 +66,6 @@ export const fetchPoolCommits: (
 ) => Promise<APICommitReturn[]> = async (_network, { pool, account, from }) => {
     // unfortunately for now we will just sacrifice the network param (will only query testnet)
     // committing will not even work on mainnet since the abi's differ
-
-    // const tracerRoute =
-    // `${BASE_TRACER_API}/poolsv2/tradeHistory` +
-    // `?network=${network}&from=${from ?? 0}&to=${to ?? Math.floor(Date.now() / 1000)}` +
-    // `${!!pool ? `&poolAddress=${pool}` : ''}` +
-    // `${!!account ? `&userAddress=${account}` : ''}`;
-
     const tracerCommits = await fetch(V2_GRAPH_URI_TESTNET, {
         method: 'POST',
         body: JSON.stringify({
