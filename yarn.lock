@@ -2557,6 +2557,11 @@
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.1.0.tgz#d7e515a355b5165a0747e323384d84d0ca3f3cd1"
   integrity sha512-scXRawfjKgMfU16xbTpP2z468O2vQBJ8Ab7pLvWjAMBTCJisbbK1iRH2DJ5aBPnVGzDiuMFtX/8U840otps09A==
 
+"@tracer-protocol/perpetual-pools-contracts@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.1.1.tgz#8fe7643d467b898c453847647db002d8914fca32"
+  integrity sha512-/7SogMb9XYkrJ1m3uQqUMt3p5Wr3KqqGiks0XeZ2Nu9lDBEtGj44dcYLLlF264gAhF9IqfqLlroCjC/R7hcz6Q==
+
 "@tracer-protocol/pools-js@^3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-3.1.0.tgz#b9b1643123b3ed187e139f59e904c324930c1926"
