@@ -1,11 +1,13 @@
 import { SetState, GetState } from 'zustand';
 import { ITransactionSlice } from './TransactionSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
+import { IPoolsSlice } from './PoolsSlice/types';
 
 // global store state
 export type StoreState = {
     transactionSlice: ITransactionSlice;
     themeSlice: IThemeSlice;
+    poolsSlice: IPoolsSlice;
 };
 
 // Seperated return type to allow for a different

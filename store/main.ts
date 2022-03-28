@@ -6,6 +6,8 @@ import { createThemeSlice } from './ThemeSlice';
 import { StoreState } from './types';
 import { ITransactionSlice } from './TransactionSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
+import { IPoolsSlice } from './PoolsSlice/types';
+import { createPoolsSlice } from './PoolsSlice';
 
 // Turn the set method into an immer proxy
 const immer =
@@ -39,6 +41,7 @@ export const useStore = create<StoreState>(
         withLenses(() => ({
             transactionSlice: lens<ITransactionSlice>(createTransactionSlice),
             themeSlice: lens<IThemeSlice>(createThemeSlice),
+            poolsSlice: lens<IPoolsSlice>(createPoolsSlice),
             // can add global dispatches here
         })),
     ),
