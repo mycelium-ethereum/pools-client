@@ -36,7 +36,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);
         } else if (isValidAddress && handleImported) {
-            handleImported(userInput);
+            handleImported({ address: userInput });
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);
