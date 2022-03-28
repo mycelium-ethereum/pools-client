@@ -84,7 +84,7 @@ export type AggregateBalances = {
 // for burn the amount is the amount of tokens
 export type PendingCommitInfo = {
     pool: string;
-    id: number;
+    id: string;
     type: CommitEnum;
     amount: BigNumber;
     txnHash: string;

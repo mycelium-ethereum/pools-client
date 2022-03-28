@@ -1,28 +1,46 @@
+import { constructCommitID } from '@context/UsersCommitContext/commitDispatch';
 import { ARBITRUM, ARBITRUM_RINKEBY, CommitTypeMap } from '@libs/constants';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 
 export type SourceType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
 
-const BASE_TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
+const query: (props: { pool?: string; account?: string; from?: number }) => string = ({ pool, account, from }) => `{
+    commits (where: { 
+        ${!!pool ? `pool: "${pool.toLowerCase()}",` : ''}
+        ${!!account ? `trader: "${account.toLowerCase()}",` : ''}
+        ${!!from ? `created_gt: ${from},` : ''}
+    }) {
+        id
+        type
+        txnHash
+        amount
+        pool
+        created
+        trader
+        upkeep {
+          longTokenPrice
+          longTokenPriceRaw
+          shortTokenPrice
+          shortTokenPrice
+        }
+      }
+}`;
 
-export type TracerAPICommit = {
-    date: number;
+type GraphCommitType = 'ShortMint' | 'ShortBurn' | 'LongMint' | 'LongBurn' | 'LongBurnShortMint' | 'ShortBurnLongMint';
+
+export type GraphCommit = {
+    id: string;
+    type: GraphCommitType;
+    amount: string;
     pool: string;
-    userAddress: string;
-    type: 'LongBurn' | 'LongMint' | 'ShortMint' | 'ShortBurn' | 'LongBurnShortMint' | 'ShortBurnLongMint';
-    transactionHashIn: string;
-    tokenInAmount: string;
-    // transactionHashOut: string,
-    // tokenDecimals: 18,
-    // tokenInAddress: string,
-    // tokenInSymbol: string,
-    // tokenInName: string,
-    // price: string,
-    // fee: string,
-    // tokenOutAddress: string,
-    // tokenOutSymbol: string,
-    // tokenOutName: string,
-    // tokenOutAmount: string
+    trader: string;
+    created: string;
+    txnHash: string;
+    upkeep: {
+        longTokenPrice: string;
+        longTokenPriceRaw: string;
+        shortTokenPrice: string;
+    };
 };
 
 export type APICommitReturn = {
@@ -31,9 +49,11 @@ export type APICommitReturn = {
     txnHash: string;
     timestamp: number; // seconds
     from: string;
-    commitID: number;
+    commitID: string;
     pool: string; // pool address
 };
+
+const V2_GRAPH_URI_TESTNET = 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby';
 
 export const fetchPoolCommits: (
     network: SourceType,
@@ -43,28 +63,28 @@ export const fetchPoolCommits: (
         to?: number;
         account?: string;
     },
-) => Promise<APICommitReturn[]> = async (network, { pool, from, to, account }) => {
-    const tracerRoute =
-        `${BASE_TRACER_API}/poolsv2/tradeHistory` +
-        `?network=${network}&from=${from ?? 0}&to=${to ?? Math.floor(Date.now() / 1000)}` +
-        `${!!pool ? `&poolAddress=${pool}` : ''}` +
-        `${!!account ? `&userAddress=${account}` : ''}`;
-    const tracerCommits = await fetch(tracerRoute)
+) => Promise<APICommitReturn[]> = async (_network, { pool, account, from }) => {
+    // unfortunately for now we will just sacrifice the network param (will only query testnet)
+    // committing will not even work on mainnet since the abi's differ
+    const tracerCommits = await fetch(V2_GRAPH_URI_TESTNET, {
+        method: 'POST',
+        body: JSON.stringify({
+            query: query({ pool, account, from }),
+        }),
+    })
         .then((res) => res.json())
         .then((allCommits) => {
-            console.log(allCommits);
             const parsedCommits: APICommitReturn[] = [];
 
-            allCommits.rows.forEach((commit: TracerAPICommit, index: number) => {
+            allCommits.data.commits.forEach((commit: GraphCommit) => {
                 parsedCommits.push({
-                    amount: commit.tokenInAmount,
+                    amount: commit.amount,
                     commitType: CommitTypeMap[commit.type],
-                    from: commit.userAddress,
-                    txnHash: commit.transactionHashIn,
-                    timestamp: parseInt(commit.date.toString()),
+                    from: commit.trader,
+                    txnHash: commit.txnHash,
+                    timestamp: parseInt(commit.created),
                     pool: commit.pool,
-                    // hacky solution while I wait for chris to push commitID
-                    commitID: index,
+                    commitID: constructCommitID(commit.txnHash),
                 });
             });
 

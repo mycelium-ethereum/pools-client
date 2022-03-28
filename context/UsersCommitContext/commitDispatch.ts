@@ -1,6 +1,9 @@
 import { PendingCommitInfo } from '@libs/types/General';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
+// if we ever need to change this it can just be in one spot
+export const constructCommitID: (txnHash: string) => string = (txnHash) => txnHash;
+
 export type CommitsState = {
     commits: Record<string, Record<string, PendingCommitInfo>>; // id is {POOL_ADDRESS}-{COMMIT_ID}
     updateCommits: boolean; // trigger that can be used to listen on commit updates
