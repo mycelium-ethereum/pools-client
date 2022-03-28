@@ -337,14 +337,20 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
 
-            // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
                 console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.filters.CreateCommit;
                 committer.on(
                     committer.filters.CreateCommit(),
-                    (id, amount, type, _appropriateUpdateInterval, _mintingFee, log) => {
-                        // TODO id is now user
+                    (
+                        id,
+                        amount,
+                        type,
+                        _appropriateUpdateInterval,
+                        _fromAggregateBalances,
+                        _payForClaim,
+                        _mintingFee,
+                        log,
+                    ) => {
                         console.debug('Commit created', {
                             id,
                             amount,
@@ -353,7 +359,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                         const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
-                        // @ts-ignore
                         log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                             if (commitDispatch) {
                                 commitDispatch({
@@ -370,9 +375,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 });
                             }
                         });
-
-                        // const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
-                        // poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
                     },
                 );
 
