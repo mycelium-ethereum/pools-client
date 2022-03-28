@@ -1,21 +1,19 @@
 import React from 'react';
+import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum } from '@tracer-protocol/pools-js';
 import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
-import { ARBITRUM, SideEnum } from '@libs/constants';
+import { ARBITRUM } from '@libs/constants';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
-import { poolMap } from '@tracer-protocol/pools-js';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { classNames } from '@libs/utils/functions';
 import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 export default (() => {
     const { network = ARBITRUM, account } = useWeb3();

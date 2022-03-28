@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import History from './History';
 import Overview from './Overview';
 import Queued from './Queued';
 import Link from 'next/link';
 import Button from '@components/General/Button';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import { browseReducer, BrowseState } from '@archetypes/Pools/state';

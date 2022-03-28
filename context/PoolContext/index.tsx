@@ -8,9 +8,16 @@ import {
     fetchPoolBalances,
     fetchTokenApprovals,
     fetchTokenBalances,
-    fromAggregatBalances,
+    fromAggregateBalances,
 } from './helpers';
-import { Pool, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
+import {
+    Pool,
+    KnownNetwork,
+    CommitEnum,
+    encodeCommitParams,
+    BalanceTypeEnum,
+    calcNextValueTransfer,
+} from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -22,11 +29,10 @@ import {
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
-import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
+import { CommitToQueryFocusMap } from '@libs/constants';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
@@ -331,14 +337,20 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
             const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
 
-            // @ts-ignore
             if (!subscriptions.current[committerInfo.address]) {
                 console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.filters.CreateCommit;
                 committer.on(
                     committer.filters.CreateCommit(),
-                    (id, amount, type, _appropriateUpdateInterval, _mintingFee, log) => {
-                        // TODO id is now user
+                    (
+                        id,
+                        amount,
+                        type,
+                        _appropriateUpdateInterval,
+                        _fromAggregateBalances,
+                        _payForClaim,
+                        _mintingFee,
+                        log,
+                    ) => {
                         console.debug('Commit created', {
                             id,
                             amount,
@@ -347,7 +359,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
                         const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
-                        // @ts-ignore
                         log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
                             if (commitDispatch) {
                                 commitDispatch({
@@ -364,9 +375,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 });
                             }
                         });
-
-                        // const amount_ = new BigNumber(ethers.utils.formatUnits(amount, decimals));
-                        // poolsDispatch({ type: 'addToPending', pool: pool, commitType: type, amount: amount_ });
                     },
                 );
 
@@ -488,10 +496,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
         try {
             const gasEstimate = await committer?.estimateGas?.commit(
-                commitType,
-                ethers?.utils?.parseUnits(amount?.toFixed(), 18),
-                fromAggregatBalances(balanceType),
-                false,
+                encodeCommitParams(
+                    false,
+                    fromAggregateBalances(balanceType),
+                    commitType,
+                    ethers.utils.parseUnits(amount?.toFixed(), 18),
+                ),
             );
             const formattedGasEstimate = new BigNumber(gasEstimate.toString());
             return formattedGasEstimate;
@@ -548,10 +558,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             handleTransaction({
                 callMethod: committer.commit,
                 params: [
-                    commitType,
-                    ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
-                    fromAggregatBalances(balanceType),
-                    false,
+                    encodeCommitParams(
+                        false,
+                        fromAggregateBalances(balanceType),
+                        commitType,
+                        ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
+                    ),
                 ],
                 type: TransactionType.COMMIT,
                 injectedProps: {

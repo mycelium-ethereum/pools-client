@@ -1,7 +1,8 @@
-import { ethers } from 'ethers';
-import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
-import { ARBITRUM, CommitActionEnum, CommitActionToQueryFocusMap } from '@libs/constants';
+import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import { ARBITRUM, CommitActionToQueryFocusMap } from '@libs/constants';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';

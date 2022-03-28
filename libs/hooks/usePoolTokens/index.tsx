@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { usePools } from '@context/PoolContext';
-import { SideEnum } from '@libs/constants';
 import BigNumber from 'bignumber.js';
+import { SideEnum } from '@tracer-protocol/pools-js';
+import { usePools } from '@context/PoolContext';
 
 export type TokenRow = {
     side: SideEnum;

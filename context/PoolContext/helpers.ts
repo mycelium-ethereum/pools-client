@@ -1,14 +1,15 @@
-import { ARBITRUM, ARBITRUM_RINKEBY, BalanceTypeEnum } from '@libs/constants';
-import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
-import { AggregateBalances } from '@libs/types/General';
+import BigNumber from 'bignumber.js';
+import { ethers, BigNumber as EthersBigNumber } from 'ethers';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import {
     LeveragedPool__factory,
     PoolCommitter__factory,
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import BigNumber from 'bignumber.js';
-import { ethers, BigNumber as EthersBigNumber } from 'ethers';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
+import { AggregateBalances } from '@libs/types/General';
 
 export const fetchPoolBalances: (
     poolInfo: {
@@ -144,5 +145,5 @@ export const fetchTokenApprovals: (
     );
 };
 
-export const fromAggregatBalances: (balanceType: BalanceTypeEnum) => boolean = (balanceType) =>
+export const fromAggregateBalances: (balanceType: BalanceTypeEnum) => boolean = (balanceType) =>
     balanceType === BalanceTypeEnum.escrow;

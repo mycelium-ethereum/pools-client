@@ -4,7 +4,6 @@ import Footer from '@components/Footer';
 import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
 import StakePool from '@archetypes/Stake/StakePool';
-import PendingCommits from '@components/PendingCommits';
 import OnboardStakeModal from '@components/OnboardModal/Stake';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 
@@ -25,7 +24,6 @@ export default (() => {
             </FarmStore>
             <UnsupportedNetworkPopup />
             <Footer />
-            <PendingCommits />
 
             <OnboardStakeModal
                 onboardStep={onboardStep}

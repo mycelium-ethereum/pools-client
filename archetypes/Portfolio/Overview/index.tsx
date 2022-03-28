@@ -1,4 +1,5 @@
 import React, { useReducer } from 'react';
+import { SideEnum } from '@tracer-protocol/pools-js';
 
 import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
@@ -9,7 +10,6 @@ import { MarketFilterEnum } from '@libs/types/General';
 import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
 import { marketFilter } from '@libs/utils/functions';
 import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { SideEnum } from '@libs/constants';
 import { toApproxCurrency } from '@libs/utils/converters';
 import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
 

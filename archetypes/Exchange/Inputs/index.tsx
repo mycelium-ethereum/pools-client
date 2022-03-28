@@ -1,9 +1,9 @@
 import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
+import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
-import { BalanceTypeEnum, CommitActionEnum, SideEnum } from '@libs/constants';
 import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
 import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';

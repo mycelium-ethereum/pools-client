@@ -1,5 +1,8 @@
-import { CommitActionEnum } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
+
+// if we ever need to change this it can just be in one spot
+export const constructCommitID: (txnHash: string) => string = (txnHash) => txnHash;
 
 // if we ever need to change this it can just be in one spot
 export const constructCommitID: (txnHash: string) => string = (txnHash) => txnHash;
