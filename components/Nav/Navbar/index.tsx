@@ -5,7 +5,6 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-// import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
@@ -34,9 +33,6 @@ export const NavBarContent: React.FC<{
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account } = useWeb3();
-
-    // controls displaying queued commits
-    // const [showQueued, setShowQueued] = useState(false);
 
     const linkStyles = 'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
@@ -96,7 +92,6 @@ export const NavBarContent: React.FC<{
                     {/* Hide if showing queued */}
                     <AccountBalance className="my-auto mx-2" />
 
-                    {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
 

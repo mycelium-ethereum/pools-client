@@ -494,10 +494,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
 
         try {
             const gasEstimate = await committer?.estimateGas?.commit(
-                commitType,
-                ethers?.utils?.parseUnits(amount?.toFixed(), 18),
-                fromAggregatBalances(balanceType),
-                false,
+                encodeCommitParams(
+                    false,
+                    fromAggregateBalances(balanceType),
+                    commitType,
+                    ethers.utils.parseUnits(amount?.toFixed(), 18),
+                ),
             );
             const formattedGasEstimate = new BigNumber(gasEstimate.toString());
             return formattedGasEstimate;

@@ -3,7 +3,6 @@ import NavBar from '@components/Nav/Navbar';
 import Footer from '@components/Footer';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
-import PendingCommits from '@components/PendingCommits';
 import { SecurityWidget } from '@reputation.link/vyps-kit';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 import { WarningBanners } from '@components/WarningBanner';
@@ -19,7 +18,6 @@ export default (() => {
                     <BalancerBuySell />
                 </SwapStore>
                 <UnsupportedNetworkPopup />
-                <PendingCommits />
             </PoolStore>
             <Footer />
             <CorWidget />

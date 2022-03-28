@@ -5,7 +5,6 @@ import Portfolio, { TradePortfolioPage } from '@archetypes/Portfolio';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
 import { useRouter } from 'next/router';
-import PendingCommits from '@components/PendingCommits';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
 import { WarningBanners } from '@components/WarningBanner';
 
@@ -24,7 +23,6 @@ export default (() => {
                 <SwapStore>
                     <Portfolio page={TradePortfolioPage.Overview} />
                 </SwapStore>
-                <PendingCommits />
                 <UnsupportedNetworkPopup />
             </PoolStore>
             <Footer />
