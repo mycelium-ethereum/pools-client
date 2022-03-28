@@ -10,7 +10,7 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
 import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
-import { TCR_DECIMALS, USDC_DECIMALS } from '@libs/constants';
+import { TCR_DECIMALS, USDC_DECIMALS } from '@constants/pools';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '@libs/types/Staking';

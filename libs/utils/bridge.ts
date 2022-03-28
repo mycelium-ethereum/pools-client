@@ -1,4 +1,4 @@
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@libs/constants';
+import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@constants/networks';
 import { BridgeableAsset } from '@libs/types/General';
 import { LogoTicker } from '@components/General/Logo';
 import BigNumber from 'bignumber.js';

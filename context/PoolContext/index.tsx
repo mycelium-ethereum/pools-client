@@ -19,7 +19,7 @@ import {
     calcNextValueTransfer,
 } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
-import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
+import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '@constants/index';
 import BigNumber from 'bignumber.js';
 import {
     LeveragedPool,
@@ -32,7 +32,6 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
-import { CommitToQueryFocusMap } from '@libs/constants';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';

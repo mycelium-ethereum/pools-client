@@ -1,5 +1,5 @@
 import React from 'react';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@constants/networks';
 import { classNames } from '@libs/utils/functions';
 
 import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';

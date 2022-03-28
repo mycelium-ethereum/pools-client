@@ -4,7 +4,7 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
-import { ARBITRUM } from '@libs/constants';
+import { ARBITRUM } from '@constants/networks';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 // const Actions

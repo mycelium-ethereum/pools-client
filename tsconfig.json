@@ -47,6 +47,10 @@
       "@archetypes/*": [
         "archetypes/*"
       ],
+      "@constants/*": [
+        "constants/*",
+        "constants"
+      ],
       "@public/*": [
         "public/*"
       ]

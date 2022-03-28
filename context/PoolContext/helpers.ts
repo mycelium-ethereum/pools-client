@@ -7,7 +7,7 @@ import {
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '@constants/networks';
 import { PendingCommits, V2_SUPPORTED_NETWORKS, fetchPendingCommits } from '@libs/utils/tracerAPI';
 import { AggregateBalances } from '@libs/types/General';
 

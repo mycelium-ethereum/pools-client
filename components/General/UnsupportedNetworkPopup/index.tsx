@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { isSupportedNetwork, isSupportedBridgeNetwork } from '@libs/utils/supportedNetworks';
-import { ARBITRUM } from '@libs/constants';
+import { ARBITRUM } from '@constants/networks';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { useRouter } from 'next/router';
 import { Notification } from '../Notification';
