@@ -1,17 +1,17 @@
 import React, { useMemo } from 'react';
+import { ethers } from 'ethers';
+import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
+import { SideEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Loading from '@components/General/Loading';
 import { DenotedInEnum, TokenRowProps } from '../state';
-import { ethers } from 'ethers';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { toApproxCurrency } from '@libs/utils/converters';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Button from '@components/General/Button';
-import { SideEnum } from '@libs/constants';
-import BigNumber from 'bignumber.js';
-import { useRouter } from 'next/router';
 
 export default (({ rows, onClickBurn, denotedIn }) => {
     const { provider } = useWeb3();

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { ARBITRUM, CommitActionEnum, SideEnum } from '@libs/constants';
+import { ARBITRUM } from '@libs/constants';
 import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '@libs/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';

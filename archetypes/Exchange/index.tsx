@@ -1,6 +1,8 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react';
+import BigNumber from 'bignumber.js';
+import styled from 'styled-components';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
-import { CommitActionEnum, SideEnum } from '@libs/constants';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Divider from '@components/General/Divider';
@@ -12,9 +14,7 @@ import { usePool, usePoolActions } from '@context/PoolContext';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
-import styled from 'styled-components';
 import useBalancerETHPrice from '@libs/hooks/useBalancerETHPrice';
-import BigNumber from 'bignumber.js';
 
 const TRADE_OPTIONS = [
     {

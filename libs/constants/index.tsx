@@ -1,18 +1,5 @@
 import { ethers } from 'ethers';
-import { CommitEnum } from '@tracer-protocol/pools-js/types';
-
-// Side types
-export enum SideEnum {
-    long = 0,
-    short = 1,
-}
-
-// Commit actions enum
-export enum CommitActionEnum {
-    mint = 0,
-    burn = 1,
-    flip = 2,
-}
+import { CommitActionEnum, CommitEnum } from '@tracer-protocol/pools-js/types';
 
 export const CommitTypeMap = {
     LongBurn: CommitEnum.longBurn,
