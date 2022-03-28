@@ -2552,11 +2552,6 @@
     walletlink "^2.1.11"
     web3-provider-engine "^15.0.4"
 
-"@tracer-protocol/perpetual-pools-contracts@1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.0.2.tgz#e05a23bf6f919fc2aae47e1fd56dec9cf5698f28"
-  integrity sha512-/AMXMwUkvTRWIUtp/sX/aObzhpTe1P0ThisvWqXovTj32eCneP6DAf+1Hq9ewlMQzTLpwN6Ns7RRIyYuEfDAmA==
-
 "@tracer-protocol/perpetual-pools-contracts@^1.1.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.1.0.tgz#d7e515a355b5165a0747e323384d84d0ca3f3cd1"
