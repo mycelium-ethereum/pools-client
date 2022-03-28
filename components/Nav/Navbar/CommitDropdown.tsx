@@ -1,11 +1,11 @@
 import React, { useMemo } from 'react';
-import TimeLeft from '@components/TimeLeft';
-import { CommitActionEnum } from '@libs/constants';
+import { useRouter } from 'next/router';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import useCommitsBreakdown from '@libs/hooks/useCommitsBreakdown';
 import { classNames } from '@libs/utils/functions';
+import TimeLeft from '@components/TimeLeft';
 import TWPopup from '@components/General/TWPopup';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
-import { useRouter } from 'next/router';
 
 const linkStyles = 'my-2 mx-4 text-sm text-blue-500 cursor-pointer underline hover:opacity-80 ';
 

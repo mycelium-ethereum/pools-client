@@ -1,8 +1,7 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children, PoolType } from '@libs/types/General';
-import { CommitActionEnum } from '@libs/constants';
 import { useRouter } from 'next/router';
 import { usePools } from './PoolContext';
 

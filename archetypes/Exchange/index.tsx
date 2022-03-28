@@ -1,7 +1,7 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
 import Gas from './Gas';
 import Inputs from './Inputs';
@@ -11,7 +11,6 @@ import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import { CommitEnum } from '@tracer-protocol/pools-js';
 import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
 import CloseIcon from '/public/img/general/close.svg';
 import useBalancerETHPrice from '@libs/hooks/useBalancerETHPrice';

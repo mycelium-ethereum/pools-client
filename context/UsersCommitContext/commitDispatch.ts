@@ -1,5 +1,5 @@
-import { CommitActionEnum } from '@libs/constants';
 import { PendingCommitInfo } from '@libs/types/General';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
 export type CommitsState = {
     commits: Record<string, Record<string, PendingCommitInfo>>; // id is {POOL_ADDRESS}-{COMMIT_ID}

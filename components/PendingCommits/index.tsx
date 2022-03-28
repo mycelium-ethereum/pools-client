@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { CommitActionEnum, CommitEnum } from '@tracer-protocol/pools-js';
 import { QueuedCommit } from '@libs/types/General';
 import usePendingCommits from '@libs/hooks/useQueuedCommits';
 import { toApproxCurrency } from '@libs/utils/converters';
@@ -6,15 +9,11 @@ import TimeLeft from '@components/TimeLeft';
 import { useCommitActions, useCommits } from '@context/UsersCommitContext';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { ethers } from 'ethers';
 import { TWModal } from '@components/General/TWModal';
-import { CommitActionEnum } from '@libs/constants';
-import { CommitEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Actions from '@components/TokenActions';
 import Close from '/public/img/general/close.svg';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
-import BigNumber from 'bignumber.js';
 
 export default (() => {
     const { provider } = useWeb3();

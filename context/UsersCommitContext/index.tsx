@@ -1,14 +1,13 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useReducer } from 'react';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { Children, PendingCommitInfo } from '@libs/types/General';
-import { useReducer } from 'react';
 import { CommitAction, initialCommitState, reducer } from './commitDispatch';
-import { CommitActionEnum } from '@libs/constants';
+
 interface CommitActionsProps {
     commitDispatch: React.Dispatch<CommitAction>;
 }
 interface CommitContextProps {
     commits: Record<string, Record<string, PendingCommitInfo>>;
-    showCommits: boolean;
     focus: CommitActionEnum;
 }
 
@@ -24,7 +23,6 @@ export const UsersCommitStore: React.FC = ({ children }: Children) => {
         <CommitContext.Provider
             value={{
                 commits: state.commits,
-                showCommits: state.showCommits,
                 focus: state.focus,
             }}
         >

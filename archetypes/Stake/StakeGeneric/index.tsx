@@ -1,9 +1,10 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
+import { SideEnum } from '@tracer-protocol/pools-js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
+import { MAX_SOL_UINT } from '@libs/constants';
 import {
     stakeReducer,
     StakeAction,
