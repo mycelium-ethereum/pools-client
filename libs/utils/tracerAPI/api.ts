@@ -1,68 +1,57 @@
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
 import BigNumber from 'bignumber.js';
+import { ARBITRUM } from '@libs/constants';
+import { TradeHistoryResult, PendingCommitsResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS } from './types';
 
 // Base API URL
-const BASE_TRADE_HISTORY_API = process.env.NEXT_PUBLIC_TRADE_HISTORY_API;
+const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 
-type NetworkType = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
+export const fetchPendingCommits: (
+    network: V2_SUPPORTED_NETWORKS,
+    params: {
+        pool?: string;
+        from?: number;
+        to?: number;
+        account?: string;
+    },
+) => Promise<PendingCommits[]> = async (network, { pool, account }) => {
+    // unfortunately for now we will just sacrifice the network param (will only query testnet)
+    // committing will not even work on mainnet since the abi's differ
+    const pendingCommits =
+        `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
+        `${pool ? `&poolAddress=${pool}` : ''}` +
+        `${account ? `&userAddress=${account}` : ''}`;
 
-export const V2_API_COMMIT_TYPES = {
-    LONG_MINT: 'LongMint',
-    LONG_BURN: 'LongBurn',
-    SHORT_MINT: 'ShortMint',
-    SHORT_BURN: 'ShortBurn',
-    LONG_BURN_SHORT_MINT: 'LongBurnShortMint',
-    SHORT_BURN_LONG_MINT: 'ShortBurnLongMint',
-} as const;
+    console.log(pendingCommits);
+    const tracerCommits = await fetch(pendingCommits)
+        .then((res) => {
+            console.log(res);
+            return res.json();
+        })
+        .then((allCommits) => {
+            const parsedCommits: PendingCommits[] = [];
+            allCommits.data.forEach((commit: PendingCommitsResult) => {
+                parsedCommits.push({
+                    amount: commit.amount,
+                    commitType: commit.commitType,
+                    from: commit.from,
+                    txnHash: commit.txnHash,
+                    timestamp: commit.timestamp,
+                    pool: commit.pool,
+                    commitID: commit.txnHash,
+                });
+            });
 
-type V2_API_COMMIT_TYPE = typeof V2_API_COMMIT_TYPES[keyof typeof V2_API_COMMIT_TYPES];
-
-// Raw API return types
-type Result = {
-    date: number;
-    type: V2_API_COMMIT_TYPE;
-    tokenDecimals: number;
-    tokenInAddress: string;
-    tokenInSymbol: string;
-    tokenInName: string;
-    tokenInAmount: string;
-    price: string;
-    fee: string;
-    tokenOutAddress: string;
-    tokenOutSymbol: string;
-    tokenOutName: string;
-    tokenOutAmount: string;
-    transactionHashIn: string;
-    transactionHashOut: string;
-    priceTokenAddress: string;
-    priceTokenName: string;
-    priceTokenSymbol: string;
+            return parsedCommits;
+        })
+        .catch((err) => {
+            console.error('Failed to fetch commits', err);
+            return [];
+        });
+    return tracerCommits;
 };
 
-// Parsed types
-export type TradeHistory = {
-    date: number;
-    type: V2_API_COMMIT_TYPE;
-    tokenDecimals: number;
-    tokenInAddress: string;
-    tokenInSymbol: string;
-    tokenInName: string;
-    tokenInAmount: BigNumber;
-    price: BigNumber;
-    fee: BigNumber;
-    tokenOutAddress: string;
-    tokenOutSymbol: string;
-    tokenOutName: string;
-    tokenOutAmount: BigNumber;
-    transactionHashIn: string;
-    transactionHashOut: string;
-    priceTokenAddress: string;
-    priceTokenName: string;
-    priceTokenSymbol: string;
-};
-
-const fetchTradeHistory: (params: {
-    network?: NetworkType;
+export const fetchCommitHistory: (params: {
+    network?: V2_SUPPORTED_NETWORKS;
     account: string;
     type: 'mint' | 'burn' | 'flip';
     page: number;
@@ -74,9 +63,7 @@ const fetchTradeHistory: (params: {
     page,
     pageSize,
 }) => {
-    let route = `${BASE_TRADE_HISTORY_API}?page=${page}&pageSize=${pageSize}&network=${
-        network ?? ARBITRUM
-    }&userAddress=${account}`;
+    let route = `${TRACER_API}?page=${page}&pageSize=${pageSize}&network=${network ?? ARBITRUM}&userAddress=${account}`;
     if (type === 'mint') {
         route += '&types=LongMint&types=ShortMint';
     } else if (type === 'burn') {
@@ -88,7 +75,7 @@ const fetchTradeHistory: (params: {
         .then((res) => res.json())
         .then((results) => {
             const parsedResults: TradeHistory[] = [];
-            results.rows.forEach((row: Result) => {
+            results.rows.forEach((row: TradeHistoryResult) => {
                 // Parse the raw results to the types you want,
                 // which you can adjust in the TradeHistory type
                 parsedResults.push({
@@ -126,5 +113,3 @@ const fetchTradeHistory: (params: {
         });
     return fetchedTradeHistory;
 };
-
-export default fetchTradeHistory;

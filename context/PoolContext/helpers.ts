@@ -8,7 +8,7 @@ import {
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
+import { PendingCommits, V2_SUPPORTED_NETWORKS, fetchPendingCommits } from '@libs/utils/tracerAPI';
 import { AggregateBalances } from '@libs/types/General';
 
 export const fetchPoolBalances: (
@@ -57,16 +57,15 @@ export const fetchPoolBalances: (
     };
 };
 
-export const fetchCommits: (
+export const fetchUnexcutedCommits: (
     poolInfo: {
         address: string;
         committer: string;
-        lastUpdate: number;
     },
     provider: ethers.providers.JsonRpcProvider,
 ) => Promise<{
-    allUnexecutedCommits: APICommitReturn[];
-}> = async ({ committer, address: pool, lastUpdate }, provider) => {
+    allUnexecutedCommits: PendingCommits[];
+}> = async ({ committer, address: pool }, provider) => {
     console.debug(`Initialising committer: ${committer}`);
 
     if (!provider || !committer) {
@@ -75,20 +74,14 @@ export const fetchCommits: (
         };
     }
 
-    let allUnexecutedCommits: APICommitReturn[] = [];
+    let allUnexecutedCommits: PendingCommits[] = [];
     const network = provider.network.chainId;
     if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        allUnexecutedCommits = await fetchPoolCommits(network.toString() as SourceType, {
-            from: lastUpdate,
+        allUnexecutedCommits = await fetchPendingCommits(network.toString() as V2_SUPPORTED_NETWORKS, {
             pool,
         });
     }
 
-    // const contract = PoolCommitter__factory.connect(committer, provider);
-    // const updateInterval = await contract.updateIntervalId();
-    // const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
-    // console.info('Pending mint amounts', pendingAmounts);
-    //
     console.debug('All commits unfiltered', allUnexecutedCommits);
 
     return {

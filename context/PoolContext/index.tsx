@@ -4,10 +4,10 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import {
     fetchAggregateBalance,
-    fetchCommits,
     fetchPoolBalances,
     fetchTokenApprovals,
     fetchTokenBalances,
+    fetchUnexcutedCommits,
     fromAggregateBalances,
 } from './helpers';
 import {
@@ -163,10 +163,9 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             Object.values(poolsState.pools).map((pool) => {
                 const decimals = pool.poolInstance.settlementToken.decimals;
                 // fetch commits
-                fetchCommits(
+                fetchUnexcutedCommits(
                     {
                         committer: pool.poolInstance.committer.address,
-                        lastUpdate: pool.poolInstance.lastUpdate.toNumber(),
                         address: pool.poolInstance.address,
                     },
                     provider,
