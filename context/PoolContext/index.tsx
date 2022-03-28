@@ -10,7 +10,14 @@ import {
     fetchTokenBalances,
     fromAggregateBalances,
 } from './helpers';
-import { Pool, KnownNetwork, CommitEnum, encodeCommitParams, BalanceTypeEnum, calcNextValueTransfer } from '@tracer-protocol/pools-js';
+import {
+    Pool,
+    KnownNetwork,
+    CommitEnum,
+    encodeCommitParams,
+    BalanceTypeEnum,
+    calcNextValueTransfer,
+} from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
