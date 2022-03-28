@@ -1,12 +1,12 @@
 import React from 'react';
 import { SwapAction, SwapState } from '@context/SwapContext';
-import { BalanceTypeEnum, CommitActionEnum } from '@libs/constants';
+import { CommitActionEnum } from '@libs/constants';
 import Button from '@components/General/Button';
 import styled from 'styled-components';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { BigNumber } from 'bignumber.js';
 import { AggregateBalances } from '@libs/types/General';
-import { CommitEnum } from '@tracer-protocol/pools-js';
+import { BalanceTypeEnum, CommitEnum } from '@tracer-protocol/pools-js';
 
 type ExchangeButton = {
     onClose: () => void;

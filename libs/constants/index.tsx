@@ -7,13 +7,6 @@ export enum SideEnum {
     short = 1,
 }
 
-// Balance types since users can have some balance in escrow
-//  or use the balance from their wallet
-export enum BalanceTypeEnum {
-    wallet = 0,
-    escrow = 1,
-}
-
 // Commit actions enum
 export enum CommitActionEnum {
     mint = 0,

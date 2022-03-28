@@ -8,9 +8,9 @@ import {
     fetchPoolBalances,
     fetchTokenApprovals,
     fetchTokenBalances,
-    fromAggregatBalances,
+    fromAggregateBalances,
 } from './helpers';
-import { Pool, KnownNetwork, CommitEnum } from '@tracer-protocol/pools-js';
+import { Pool, KnownNetwork, CommitEnum, encodeCommitParams, BalanceTypeEnum, calcNextValueTransfer } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import BigNumber from 'bignumber.js';
@@ -22,14 +22,14 @@ import {
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { calcNextValueTransfer } from '@tracer-protocol/pools-js';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import PoolListService, { PoolList } from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
-import { BalanceTypeEnum, CommitToQueryFocusMap } from '@libs/constants';
+import { CommitToQueryFocusMap } from '@libs/constants';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
+import { constructCommitID } from '@context/UsersCommitContext/commitDispatch';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -352,7 +352,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 commitDispatch({
                                     type: 'addCommit',
                                     commitInfo: {
-                                        id: parseInt(id),
+                                        id: constructCommitID(txn.hash),
                                         pool,
                                         from: txn?.from, // from address
                                         txnHash: txn.hash,
@@ -547,10 +547,12 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             handleTransaction({
                 callMethod: committer.commit,
                 params: [
-                    commitType,
-                    ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
-                    fromAggregatBalances(balanceType),
-                    false,
+                    encodeCommitParams(
+                        false,
+                        fromAggregateBalances(balanceType),
+                        commitType,
+                        ethers.utils.parseUnits(amount.toFixed(), settlementTokenDecimals),
+                    ),
                 ],
                 type: TransactionType.COMMIT,
                 injectedProps: {
