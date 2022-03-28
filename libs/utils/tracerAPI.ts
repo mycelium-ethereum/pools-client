@@ -1,4 +1,3 @@
-import { constructCommitID } from '@context/UsersCommitContext/commitDispatch';
 import { ARBITRUM, ARBITRUM_RINKEBY, CommitTypeMap } from '@libs/constants';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 
@@ -84,7 +83,7 @@ export const fetchPoolCommits: (
                     txnHash: commit.txnHash,
                     timestamp: parseInt(commit.created),
                     pool: commit.pool,
-                    commitID: constructCommitID(commit.txnHash),
+                    commitID: commit.txnHash,
                 });
             });
 

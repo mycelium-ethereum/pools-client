@@ -36,7 +36,6 @@ import { CommitToQueryFocusMap } from '@libs/constants';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
-import { constructCommitID } from '@context/UsersCommitContext/commitDispatch';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -364,7 +363,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                 commitDispatch({
                                     type: 'addCommit',
                                     commitInfo: {
-                                        id: constructCommitID(txn.hash),
+                                        id: txn.hash,
                                         pool,
                                         from: txn?.from, // from address
                                         txnHash: txn.hash,
