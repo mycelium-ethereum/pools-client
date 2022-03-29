@@ -1,31 +1,7 @@
-import React from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
 import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
-import { LogoTicker } from '@components/General';
-
-/**
- * Can be used when component passes down children
- */
-export type Children = {
-    children?: React.ReactNode;
-};
-
-/**
- * Universal result object
- */
-export type Result = {
-    status: 'error' | 'success';
-    message?: string;
-    error?: string;
-};
-
-export type APIResult = {
-    status: 'error' | 'success';
-    message: string;
-    data: any;
-};
 
 // name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {
@@ -79,7 +55,6 @@ export type AggregateBalances = {
     shortTokens: BigNumber;
     settlementTokens: BigNumber;
 };
-
 // for mint the amount is the amount of collateral spent
 // for burn the amount is the amount of tokens
 export type PendingCommitInfo = {
@@ -107,37 +82,3 @@ export type HistoricCommit = PendingCommitInfo & {
     tokenPrice: BigNumber;
     fee: BigNumber;
 };
-
-// table heading initialiser
-export type Heading = {
-    text: string;
-    width: string; // string width
-};
-
-export type BridgeableAsset = {
-    name: string;
-    symbol: LogoTicker;
-    address: string | null;
-    decimals: number;
-    displayDecimals: number;
-};
-
-export type BridgeableBalance = {
-    balance: BigNumber;
-    allowance: BigNumber;
-    spender: string; // address that allowance corresponds to
-};
-
-export type BridgeableBalances = { [network: string]: { [account: string]: { [symbol: string]: BridgeableBalance } } };
-
-export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };
-
-export enum MarketFilterEnum {
-    All = 'All',
-    ETH = 'Ethereum',
-    BTC = 'Bitcoin',
-    TOKE = 'Tokemak',
-    LINK = 'Chainlink',
-    EUR = 'Euro',
-    AAVE = 'Aave',
-}

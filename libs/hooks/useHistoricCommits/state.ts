@@ -1,4 +1,4 @@
-import { HistoricCommit } from '@libs/types/General';
+import { HistoricCommit } from '@/types/pools';
 
 export enum LoadingState {
     Idle = 0,

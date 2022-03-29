@@ -1,4 +1,4 @@
-import { MarketFilterEnum } from '@libs/types/General';
+import { MarketFilterEnum } from '@libs/general';
 
 export function classNames(...classes: string[]): string {
     return classes.filter(Boolean).join(' ');

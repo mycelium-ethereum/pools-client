@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Children } from 'libs/types/General';
+import { Children } from '@/types/general';
 import styled from 'styled-components';
 
 const BGSlider = styled.div<{ selected: number; width: number; numChildren: number }>`

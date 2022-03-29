@@ -18,3 +18,6 @@ export const isSupportedBridgeNetwork = (networkId?: KnownNetwork): boolean => {
 
     return supportedBridgeNetworks.includes(networkIdString ?? '');
 };
+
+export const isArbitrumNetwork = (networkId: string): boolean =>
+    networkId === NETWORKS.ARBITRUM || networkId === NETWORKS.ARBITRUM_RINKEBY;

@@ -4,7 +4,7 @@ import { HistoricCommit } from '@libs/types/General';
 import { HistoricCommitsState, historicsReducer, initialHistoricsState, LoadingState } from './state';
 import { fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
 import BigNumber from 'bignumber.js';
-import { DEFAULT_POOLSTATE } from '@constants/pools/pools';
+import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
 import { ethers } from 'ethers';
 import { usePools } from '@context/PoolContext';
 import { CommitEnum } from '@tracer-protocol/pools-js';

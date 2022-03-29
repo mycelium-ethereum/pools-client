@@ -1,5 +1,5 @@
 import { classNames } from '@libs/utils/functions';
-import { Children } from 'libs/types/General';
+import { Children } from '@/types/general';
 import React from 'react';
 import styled from 'styled-components';
 

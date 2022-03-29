@@ -5,7 +5,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { useRouter } from 'next/router';
-import { QueuedCommit } from '@libs/types/General';
+import { QueuedCommit } from '@/types/pools';
 import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';

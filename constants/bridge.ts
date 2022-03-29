@@ -1,10 +1,7 @@
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@constants/networks';
-import { BridgeableAsset } from '@libs/types/General';
-import { LogoTicker } from '@components/General/Logo';
-import BigNumber from 'bignumber.js';
 import { tokenMap } from '@tracer-protocol/pools-js/data';
-
-type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;
+import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@constants/networks';
+import { LogoTicker } from '@components/General/Logo';
+import { BridgeableAssets, BridgeableAssetWarnings, DestinationNetwork } from '@/types/bridge';
 
 export const destinationNetworkLookup: Record<string, DestinationNetwork> = {
     [RINKEBY]: ARBITRUM_RINKEBY,
@@ -18,11 +15,11 @@ export const bridgeableTickers: { [symbol: string]: LogoTicker } = {
     USDC: 'USDC',
 };
 
-const usdcSharedDetails = {
+export const usdcSharedDetails = {
     displayDecimals: 2,
 };
 
-const BRIDGEABLE_ASSET_ETH = {
+export const BRIDGEABLE_ASSET_ETH = {
     name: 'Ethereum',
     symbol: bridgeableTickers.ETH,
     address: null,
@@ -30,16 +27,12 @@ const BRIDGEABLE_ASSET_ETH = {
     decimals: 18,
 };
 
-const BRIDGEABLE_ASSET_USDC = {
+export const BRIDGEABLE_ASSET_USDC = {
     name: 'USDC',
     symbol: bridgeableTickers.USDC,
     address: null,
     displayDecimals: 6,
     decimals: 6,
-};
-
-export type BridgeableAssets = {
-    [networkId: string]: BridgeableAsset[];
 };
 
 export const bridgeableAssets: BridgeableAssets = {
@@ -80,11 +73,7 @@ export const bridgeableAssets: BridgeableAssets = {
 
 const minUSDCWarning =
     'Please note that the minimum order size for Perpetual Pools is $1,000 USDC. Ensure that you deposit enough USDC to meet the order size requirement.';
-type BridgeableAssetWarnings = {
-    [networkId: string]: {
-        [ticker: string]: { getWarningText: ({ amount }: { amount: BigNumber }) => string | null };
-    };
-};
+
 export const bridgeableAssetWarnings: BridgeableAssetWarnings = {
     [MAINNET]: {
         [bridgeableTickers.USDC]: {
@@ -107,6 +96,3 @@ export const bridgeableAssetWarnings: BridgeableAssetWarnings = {
         },
     },
 };
-
-export const isArbitrumNetwork = (networkId: string): boolean =>
-    networkId === ARBITRUM || networkId === ARBITRUM_RINKEBY;
