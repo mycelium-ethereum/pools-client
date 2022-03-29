@@ -10,7 +10,7 @@ import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2
 import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
 import { Children } from '~/types/general';
 import { StakingRewards } from '~/types/staking/typechain';
-import { TCR_DECIMALS, USDC_DECIMALS } from '@constants/pools';
+import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
 import { BalancerPoolAsset, Farm } from '~/types/staking';

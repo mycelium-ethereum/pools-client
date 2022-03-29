@@ -4,13 +4,13 @@ import BigNumber from 'bignumber.js';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '@constants/bridge';
 
 import { isArbitrumNetwork } from '@libs/utils/supportedNetworks';
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { Children } from '~/types/general';
 import { BridgeableAsset, BridgeableAssets, BridgeableBalances } from '~/types/bridge';
-import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@constants/index';
+import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '~/constants/bridge';
+import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '~/constants/index';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';

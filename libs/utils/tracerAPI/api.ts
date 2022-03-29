@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { ARBITRUM } from '@constants/networks';
+import { ARBITRUM } from '~/constants/networks';
 import { TradeHistoryResult, PendingCommitsResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS } from './types';
 
 // Base API URL

@@ -18,7 +18,7 @@ import {
     calcNextValueTransfer,
 } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
-import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '@constants/index';
+import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import BigNumber from 'bignumber.js';
 import {
     LeveragedPool,

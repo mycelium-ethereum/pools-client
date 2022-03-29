@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@constants/networks';
+import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '~/constants/networks';
 import { LogoTicker } from '@components/General';
 
 export type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;

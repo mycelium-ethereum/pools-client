@@ -1,5 +1,5 @@
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
-import { POOL_LIST_MAP } from '@constants/pools';
+import { POOL_LIST_MAP } from '~/constants/pools';
 import { PoolList, PoolLists, PoolListUris } from '~/types/pools';
 
 export default class PoolListService {

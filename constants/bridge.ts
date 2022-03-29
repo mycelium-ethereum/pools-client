@@ -1,5 +1,5 @@
 import { tokenMap } from '@tracer-protocol/pools-js/data';
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '@constants/networks';
+import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '~/constants/networks';
 import { LogoTicker } from '@components/General/Logo';
 import { BridgeableAssets, BridgeableAssetWarnings, DestinationNetwork } from '~/types/bridge';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum } from '@tracer-protocol/pools-js';
 import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
-import { ARBITRUM } from '@constants/networks';
+import { ARBITRUM } from '~/constants/networks';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
