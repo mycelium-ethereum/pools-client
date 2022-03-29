@@ -25,7 +25,7 @@ export const InputWrapper = styled.div`
     }
 `;
 
-const SearchIconWrap = styled.div`
+export const SearchIconWrap = styled.div`
     position: absolute;
     display: flex;
     align-items: center;
