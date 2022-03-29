@@ -7,8 +7,6 @@ import {
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { PendingCommits, V2_SUPPORTED_NETWORKS, fetchPendingCommits } from '@libs/utils/tracerAPI';
 import { AggregateBalances } from '@libs/types/General';
 
 export const fetchPoolBalances: (
@@ -54,38 +52,6 @@ export const fetchPoolBalances: (
         shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, poolInfo.settlementTokenDecimals)),
         longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, poolInfo.settlementTokenDecimals)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
-    };
-};
-
-export const fetchUnexcutedCommits: (
-    poolInfo: {
-        address: string;
-        committer: string;
-    },
-    provider: ethers.providers.JsonRpcProvider,
-) => Promise<{
-    allUnexecutedCommits: PendingCommits[];
-}> = async ({ committer, address: pool }, provider) => {
-    console.debug(`Initialising committer: ${committer}`);
-
-    if (!provider || !committer) {
-        return {
-            allUnexecutedCommits: [],
-        };
-    }
-
-    let allUnexecutedCommits: PendingCommits[] = [];
-    const network = provider.network.chainId;
-    if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        allUnexecutedCommits = await fetchPendingCommits(network.toString() as V2_SUPPORTED_NETWORKS, {
-            pool,
-        });
-    }
-
-    console.debug('All commits unfiltered', allUnexecutedCommits);
-
-    return {
-        allUnexecutedCommits,
     };
 };
 
