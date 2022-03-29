@@ -13,7 +13,7 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-import useIntervalCheck from '@libs/hooks/useIntervalCheck';
+import useIntervalCheck from '~/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
 import PoolDetailsModal from '../PoolDetailsModal';
 import styled from 'styled-components';

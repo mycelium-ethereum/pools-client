@@ -4,9 +4,9 @@ import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/po
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
-import usePoolTokens from '@libs/hooks/usePoolTokens';
 import { toApproxCurrency } from '@libs/utils/converters';
-import usePoolsNextBalances from '@libs/hooks/usePoolsNextBalances';
+import usePoolTokens from '~/hooks/usePoolTokens';
+import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import TokenSelect from '../TokenSelect';
 import AmountInput from './AmountInput';
 import * as Styles from './styles';

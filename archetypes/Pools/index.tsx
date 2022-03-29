@@ -13,7 +13,7 @@ import {
     SortByEnum,
 } from './state';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
-import useBrowsePools from '@libs/hooks/useBrowsePools';
+import useBrowsePools from '~/hooks/useBrowsePools';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 import { marketFilter } from '@libs/utils/functions';

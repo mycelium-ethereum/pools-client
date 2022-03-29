@@ -38,7 +38,7 @@
       "@context/*": [
         "context/*"
       ],
-      "@hooks/*": [
+      "~/hooks/*": [
         "hooks/*"
       ],
       "@libs/*": [

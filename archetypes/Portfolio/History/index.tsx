@@ -8,7 +8,7 @@ import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@co
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
-import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
+import usePagination, { PAGE_ENTRIES } from '~/hooks/usePagination';
 import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '@libs/utils/tracerAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import Loading from '@components/General/Loading';
