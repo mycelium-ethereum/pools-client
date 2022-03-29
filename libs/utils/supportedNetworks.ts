@@ -1,7 +1,7 @@
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 
-export const isSupportedNetwork = (networkId: number | string): boolean => {
-    const networkIdString = networkId.toString();
+export const isSupportedNetwork = (networkId: number | string | undefined): boolean => {
+    const networkIdString = networkId?.toString();
 
     return networkIdString === NETWORKS.ARBITRUM || networkIdString === NETWORKS.ARBITRUM_RINKEBY;
 };
