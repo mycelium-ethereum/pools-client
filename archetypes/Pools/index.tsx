@@ -18,6 +18,7 @@ import { noDispatch, useSwapContext } from '@context/SwapContext';
 import MintBurnModal from './MintBurnModal';
 import { marketFilter } from '@libs/utils/functions';
 import Loading from '@components/General/Loading';
+import AddAltPoolModal from './AddAltPoolModal';
 
 export const Browse: React.FC = () => {
     const { account } = useWeb3();
@@ -31,6 +32,7 @@ export const Browse: React.FC = () => {
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
         mintBurnModalOpen: false,
+        addAltPoolModalOpen: false,
         deltaDenotation: DeltaEnum.Percentile,
     } as BrowseState);
 
@@ -102,9 +104,9 @@ export const Browse: React.FC = () => {
         dispatch({ type: 'setMintBurnModalOpen', open: true });
     };
 
-    const handleModalClose = () => {
+    const handleModalClose = (val: 'setAddAltPoolModalOpen' | 'setMintBurnModalOpen') => {
         dispatch({
-            type: 'setMintBurnModalOpen',
+            type: val,
             open: false,
         });
     };
@@ -138,7 +140,12 @@ export const Browse: React.FC = () => {
                     );
                 })}
             </div>
-            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
+            <MintBurnModal open={state.mintBurnModalOpen} onClose={() => handleModalClose('setMintBurnModalOpen')} />
+            <AddAltPoolModal
+                open={state.addAltPoolModalOpen}
+                onClose={() => handleModalClose('setAddAltPoolModalOpen')}
+                sortedFilteredTokens={sortedFilteredTokens}
+            />
         </>
     );
 };

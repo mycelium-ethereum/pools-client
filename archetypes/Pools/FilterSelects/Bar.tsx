@@ -250,11 +250,13 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                     Display Alternative Pool
                                 </Button>
                             </TooltipSelector>
-                            <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                                <Button variant="primary" size="sm" className="cursor-not-allowed opacity-50">
-                                    Deploy New Pool
-                                </Button>
-                            </TooltipSelector>
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
+                            >
+                                Deploy New Pool
+                            </Button>
                         </div>
                     </div>
                 </div>

@@ -95,6 +95,7 @@ export interface BrowseState {
     sortBy: SortByEnum;
     filtersOpen: boolean;
     mintBurnModalOpen: boolean;
+    addAltPoolModalOpen: boolean;
 }
 
 export type BrowseAction =
@@ -105,6 +106,7 @@ export type BrowseAction =
     | { type: 'setLeverageFilter'; leverage: LeverageEnum }
     | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
+    | { type: 'setAddAltPoolModalOpen'; open: boolean }
     | { type: 'setDenotation'; denotation: DeltaEnum }
     | { type: 'setSortBy'; sortBy: SortByEnum };
 
@@ -154,6 +156,11 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
             return {
                 ...state,
                 mintBurnModalOpen: action.open,
+            };
+        case 'setAddAltPoolModalOpen':
+            return {
+                ...state,
+                addAltPoolModalOpen: action.open,
             };
         default:
             throw new Error('Unexpected action');
