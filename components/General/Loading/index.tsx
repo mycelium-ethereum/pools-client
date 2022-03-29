@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 export default (({ className }) => {
     return <img className={classNames(className ?? '')} src="/img/general/loading.gif" />;

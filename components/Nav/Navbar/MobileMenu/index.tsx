@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Hamburger from './Hamburger';
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import NetworkDropdown from '../NetworkDropdown';
 import AccountDropdown from '../AccountDropdown';
 

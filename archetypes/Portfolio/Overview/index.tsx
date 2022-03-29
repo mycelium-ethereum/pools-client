@@ -8,9 +8,9 @@ import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
 import { MarketFilterEnum } from '~/types/filters';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
-import { marketFilter } from '@libs/utils/functions';
+import { marketFilter } from '~/utils/filters';
 import useBrowsePools from '~/hooks/useBrowsePools';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 
 import CTABackground from '@public/img/cta-bg.svg';

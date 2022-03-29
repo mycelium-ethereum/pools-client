@@ -8,9 +8,9 @@ import { useRouter } from 'next/router';
 import { QueuedCommit } from '~/types/pools';
 import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
+import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 import Actions from '@components/TokenActions';
-import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
