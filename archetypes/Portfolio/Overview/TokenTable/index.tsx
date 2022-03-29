@@ -9,8 +9,8 @@ import Loading from '@components/General/Loading';
 import { DenotedInEnum, TokenRowProps } from '../state';
 import Actions from '@components/TokenActions';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { toApproxCurrency } from '@libs/utils/converters';
-import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import { toApproxCurrency } from '~/utils/converters';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
 import Button from '@components/General/Button';
 
 export default (({ rows, onClickBurn, denotedIn }) => {

@@ -31,11 +31,11 @@ import { useCommitActions } from '@context/UsersCommitContext';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { PoolList } from '~/types/pools';
 import PoolListService from '@libs/services/poolList';
-import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
+import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
-import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '@libs/utils/tracerAPI';
+import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
 
 type Options = {
     onSuccess?: (...args: any) => any;

@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { MultiBridge } from './MultiBridge';
-import { switchNetworks } from '@libs/utils/rpcMethods';
+import { switchNetworks } from '~/utils/rpcMethods';
 import { Network } from '@context/Web3Context/Web3Context.Config';
 import { BridgeableAsset } from '~/types/bridge';
 import { bridgeableTickers } from '~/constants/bridge';

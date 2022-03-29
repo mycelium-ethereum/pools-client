@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import Exclamation from '@public/img/general/exclamation-circle.svg';
 import Close from '@public/img/general/close.svg';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 type Warning = 'auditWarning' | 'decayWarning';
 
