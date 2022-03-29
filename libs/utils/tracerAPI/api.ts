@@ -14,22 +14,15 @@ export const fetchPendingCommits: (
         account?: string;
     },
 ) => Promise<PendingCommits[]> = async (network, { pool, account }) => {
-    // unfortunately for now we will just sacrifice the network param (will only query testnet)
-    // committing will not even work on mainnet since the abi's differ
     const pendingCommits =
         `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
         `${pool ? `&poolAddress=${pool}` : ''}` +
         `${account ? `&userAddress=${account}` : ''}`;
-
-    console.log(pendingCommits);
     const tracerCommits = await fetch(pendingCommits)
-        .then((res) => {
-            console.log(res);
-            return res.json();
-        })
+        .then((res) => res.json())
         .then((allCommits) => {
             const parsedCommits: PendingCommits[] = [];
-            allCommits.data.forEach((commit: PendingCommitsResult) => {
+            allCommits.forEach((commit: PendingCommitsResult) => {
                 parsedCommits.push({
                     amount: commit.amount,
                     commitType: commit.commitType,
