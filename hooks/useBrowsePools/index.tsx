@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useUpkeeps } from '../useUpkeeps';
-import { tickerToName } from '@libs/utils/converters';
+import { tickerToName } from '~/utils/converters';
 
 const STATIC_DEFAULT_UPKEEP = {
     pool: '',

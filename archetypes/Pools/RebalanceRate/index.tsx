@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 // the value of each < or >
 const INCREMENT = 0.02;

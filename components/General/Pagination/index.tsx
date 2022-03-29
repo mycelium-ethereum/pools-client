@@ -1,6 +1,6 @@
 import React from 'react';
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 // display three numbers on the left and 3 numbers on the right
 const MIN_SIDE = 3;

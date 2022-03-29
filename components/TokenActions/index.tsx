@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Logo, LogoTicker } from '@components/General';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
-import { ArbiscanEnum, openArbiscan, watchAsset } from '@libs/utils/rpcMethods';
+import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
 import { ARBITRUM } from '~/constants/networks';
 import { KnownNetwork } from '@tracer-protocol/pools-js';

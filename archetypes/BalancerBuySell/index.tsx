@@ -9,7 +9,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 

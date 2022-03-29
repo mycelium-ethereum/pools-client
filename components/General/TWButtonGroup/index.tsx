@@ -1,4 +1,4 @@
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import React from 'react';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import styled from 'styled-components';

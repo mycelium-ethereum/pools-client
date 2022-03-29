@@ -41,6 +41,9 @@
       "~/hooks/*": [
         "hooks/*"
       ],
+      "~/utils/*": [
+        "utils/*"
+      ],
       "@libs/*": [
         "libs/*"
       ],
