@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children } from 'libs/types/General';
+import { Children } from '~/types/general';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import {
@@ -29,7 +29,8 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import PoolListService, { PoolList } from '@libs/services/poolList';
+import { PoolList } from '~/types/pools';
+import PoolListService from '@libs/services/poolList';
 import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';

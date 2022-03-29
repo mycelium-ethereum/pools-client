@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { FarmTableDetails } from '@libs/types/Staking';
+import { FarmTableDetails } from '~/types/staking';
 
 export enum LeverageFilterEnum {
     All = 'All',

@@ -7,7 +7,7 @@ import {
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { AggregateBalances } from '@libs/types/General';
+import { AggregateBalances } from '~/types/pools';
 
 export const fetchPoolBalances: (
     poolInfo: {

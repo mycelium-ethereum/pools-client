@@ -6,7 +6,7 @@ import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
-import { MarketFilterEnum } from '@libs/types/General';
+import { MarketFilterEnum } from '~/types/filters';
 import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
 import { marketFilter } from '@libs/utils/functions';
 import useBrowsePools from '@libs/hooks/useBrowsePools';

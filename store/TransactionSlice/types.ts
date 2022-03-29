@@ -1,10 +1,10 @@
 import { ContractReceipt, ethers } from 'ethers';
 import { PoolCommitter, PoolToken } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { Result } from '@libs/types/General';
 import { QueryFocus } from '~/constants/index';
 import { ArbSys, L1GatewayRouter, L2GatewayRouter } from 'arb-ts/dist/lib/abi';
 import { Inbox } from 'arb-ts/dist/lib/abi/Inbox';
-import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
+import { StakingRewards } from '~/types/staking/typechain/StakingRewards';
+import { Result } from '~/types/general';
 
 export enum TransactionType {
     COMMIT = 'COMMIT',

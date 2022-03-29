@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { Children } from 'libs/types/General';
+import { Children } from '~/types/general';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';

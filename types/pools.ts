@@ -1,31 +1,7 @@
-import React from 'react';
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js';
+import { SideEnum, CommitEnum, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
-import { LogoTicker } from '@components/General';
-
-/**
- * Can be used when component passes down children
- */
-export type Children = {
-    children?: React.ReactNode;
-};
-
-/**
- * Universal result object
- */
-export type Result = {
-    status: 'error' | 'success';
-    message?: string;
-    error?: string;
-};
-
-export type APIResult = {
-    status: 'error' | 'success';
-    message: string;
-    data: any;
-};
 
 // name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {
@@ -108,36 +84,27 @@ export type HistoricCommit = PendingCommitInfo & {
     fee: BigNumber;
 };
 
-// table heading initialiser
-export type Heading = {
-    text: string;
-    width: string; // string width
-};
-
-export type BridgeableAsset = {
+/*
+ * PoolList interface. Every poolsList must conform to this
+ *  structure
+ */
+export interface PoolList {
     name: string;
-    symbol: LogoTicker;
-    address: string | null;
-    decimals: number;
-    displayDecimals: number;
-};
+    timestamp: string;
+    // readonly version: Version;
+    pools: StaticPoolInfo[];
+    keywords?: string[];
+    logoURI?: string;
+}
 
-export type BridgeableBalance = {
-    balance: BigNumber;
-    allowance: BigNumber;
-    spender: string; // address that allowance corresponds to
-};
+export interface PoolLists {
+    All: PoolList[];
+    Tracer: PoolList[];
+    External: PoolList[];
+}
 
-export type BridgeableBalances = { [network: string]: { [account: string]: { [symbol: string]: BridgeableBalance } } };
-
-export type BridgeProviders = { [network: string]: ethers.providers.JsonRpcProvider };
-
-export enum MarketFilterEnum {
-    All = 'All',
-    ETH = 'Ethereum',
-    BTC = 'Bitcoin',
-    TOKE = 'Tokemak',
-    LINK = 'Chainlink',
-    EUR = 'Euro',
-    AAVE = 'Aave',
+export interface PoolListUris {
+    All: string[];
+    Tracer: string[];
+    External: string[];
 }

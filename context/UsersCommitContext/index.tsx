@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useReducer } from 'react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
-import { Children, PendingCommitInfo } from '@libs/types/General';
+import { Children } from '~/types/general';
+import { PendingCommitInfo } from '~/types/pools';
 import { CommitAction, initialCommitState, reducer } from './commitDispatch';
 
 interface CommitActionsProps {
