@@ -12,7 +12,7 @@ import { Children } from '~/types/general';
 import { StakingRewards } from '~/types/staking/typechain';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import BigNumber from 'bignumber.js';
-import { fetchTokenPrice } from './helpers';
+import { fetchTokenPrice } from '~/utils/farms';
 import { BalancerPoolAsset, Farm } from '~/types/staking';
 import { poolMap } from '@tracer-protocol/pools-js/data';
 import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';

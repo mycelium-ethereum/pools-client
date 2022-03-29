@@ -8,7 +8,7 @@ import {
     fetchTokenApprovals,
     fetchTokenBalances,
     fromAggregateBalances,
-} from './helpers';
+} from '~/utils/pools';
 import {
     Pool,
     KnownNetwork,
