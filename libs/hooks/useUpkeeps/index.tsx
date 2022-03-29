@@ -34,7 +34,7 @@ type RawUpkeep = {
     block_timestamp: string;
 };
 
-const POOLS_API = process.env.NEXT_PUBLIC_POOLS_API;
+const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 
 // const useUpkeeps
 export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
@@ -48,7 +48,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
             const now = Math.floor(Date.now() / 1000);
             const from = now - (poolInfo?.updateInterval || ONE_HOUR) * 2;
 
-            const rawUpkeeps = await fetch(`${POOLS_API}/upkeeps?network=${network}&from=${from}`)
+            const rawUpkeeps = await fetch(`${TRACER_API}/pools/upkeeps?network=${network}&from=${from}`)
                 .then(async (res) => {
                     const response = await res.json();
                     if (res.ok) {

@@ -7,8 +7,6 @@ import {
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { APICommitReturn, fetchPoolCommits, SourceType } from '@libs/utils/tracerAPI';
 import { AggregateBalances } from '@libs/types/General';
 
 export const fetchPoolBalances: (
@@ -54,45 +52,6 @@ export const fetchPoolBalances: (
         shortBalance: new BigNumber(ethers.utils.formatUnits(shortBalance, poolInfo.settlementTokenDecimals)),
         longBalance: new BigNumber(ethers.utils.formatUnits(longBalance, poolInfo.settlementTokenDecimals)),
         oraclePrice: new BigNumber(ethers.utils.formatEther(oraclePrice)),
-    };
-};
-
-export const fetchCommits: (
-    poolInfo: {
-        address: string;
-        committer: string;
-        lastUpdate: number;
-    },
-    provider: ethers.providers.JsonRpcProvider,
-) => Promise<{
-    allUnexecutedCommits: APICommitReturn[];
-}> = async ({ committer, address: pool, lastUpdate }, provider) => {
-    console.debug(`Initialising committer: ${committer}`);
-
-    if (!provider || !committer) {
-        return {
-            allUnexecutedCommits: [],
-        };
-    }
-
-    let allUnexecutedCommits: APICommitReturn[] = [];
-    const network = provider.network.chainId;
-    if (network === parseInt(ARBITRUM_RINKEBY) || network === parseInt(ARBITRUM)) {
-        allUnexecutedCommits = await fetchPoolCommits(network.toString() as SourceType, {
-            from: lastUpdate,
-            pool,
-        });
-    }
-
-    // const contract = PoolCommitter__factory.connect(committer, provider);
-    // const updateInterval = await contract.updateIntervalId();
-    // const pendingAmounts = await contract.totalPoolCommitments(updateInterval);
-    // console.info('Pending mint amounts', pendingAmounts);
-    //
-    console.debug('All commits unfiltered', allUnexecutedCommits);
-
-    return {
-        allUnexecutedCommits,
     };
 };
 

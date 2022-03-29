@@ -9,14 +9,13 @@ import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
 import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
-import fetchTradeHistory, { V2_API_COMMIT_TYPES, TradeHistory } from '@libs/utils/tradeHistoryAPI';
+import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '@libs/utils/tracerAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import Loading from '@components/General/Loading';
 import { ArbiscanEnum } from '@libs/utils/rpcMethods';
 import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
-import { SourceType } from '@libs/utils/tracerAPI';
 import { PageOptions } from '..';
 
 const historyOptions: PageOptions = [
@@ -90,9 +89,9 @@ export default (({ focus }) => {
     useEffect(() => {
         setLoading(true);
         if (account) {
-            fetchTradeHistory({
+            fetchCommitHistory({
                 account: account ?? '0',
-                network: (network as SourceType) ?? ARBITRUM,
+                network: (network as V2_SUPPORTED_NETWORKS) ?? ARBITRUM,
                 type: CommitActionToQueryFocusMap[focus as CommitActionEnum],
                 page,
                 pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
