@@ -9,7 +9,7 @@ import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances } from '@libs/types/General';
 import { BridgeableAssets, bridgeableAssetWarnings } from '@libs/utils/bridge';
-import { MAINNET } from '@constants/networks';
+import { MAINNET } from '~/constants/networks';
 import { Logo } from '@components/General';
 import { StyledTooltip } from '@components/Tooltips';
 import { ethers } from 'ethers';

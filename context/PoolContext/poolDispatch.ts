@@ -1,4 +1,4 @@
-import { DEFAULT_POOLSTATE } from '@constants/pools';
+import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { AggregateBalances } from '@libs/types/General';
 import { BigNumber } from 'bignumber.js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';

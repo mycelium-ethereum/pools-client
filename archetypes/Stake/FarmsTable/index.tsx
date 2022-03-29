@@ -11,7 +11,7 @@ import Loading from '@components/General/Loading';
 import { BalancerPoolAsset } from '@libs/types/Staking';
 import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { APYTip, RewardsEndedTip } from '@components/Tooltips';
-import { TokenToFarmAddressMap } from '@constants/farms';
+import { TokenToFarmAddressMap } from '~/constants/farms';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);

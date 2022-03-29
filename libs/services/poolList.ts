@@ -1,5 +1,5 @@
 import { KnownNetwork, NETWORKS, StaticPoolInfo } from '@tracer-protocol/pools-js';
-import { POOL_LIST_MAP } from '@constants/pools';
+import { POOL_LIST_MAP } from '~/constants/pools';
 
 export interface PoolList {
     name: string;

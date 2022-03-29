@@ -4,7 +4,7 @@ import { SideEnum } from '@tracer-protocol/pools-js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { MAX_SOL_UINT } from '@constants/general';
+import { MAX_SOL_UINT } from '~/constants/general';
 import {
     stakeReducer,
     StakeAction,

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { ARBITRUM } from '@constants/networks';
+import { ARBITRUM } from '~/constants/networks';
 import useEnsName from '@libs/hooks/useEnsName';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';

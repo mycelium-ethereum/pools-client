@@ -3,7 +3,7 @@ import { Logo, LogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '@libs/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@constants/networks';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
 import TWPopup from '@components/General/TWPopup';
 
 import Icon from '@ant-design/icons';

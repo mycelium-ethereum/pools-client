@@ -15,7 +15,7 @@ import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { Children } from '@libs/types/General';
 
 import { BridgeableAsset, BridgeableBalances } from '../../libs/types/General';
-import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '@constants/index';
+import { ARBITRUM, MAINNET, MAX_SOL_UINT } from '~/constants/index';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
