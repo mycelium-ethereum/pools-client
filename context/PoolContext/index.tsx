@@ -7,7 +7,6 @@ import {
     fetchPoolBalances,
     fetchTokenApprovals,
     fetchTokenBalances,
-    fetchUnexcutedCommits,
     fromAggregateBalances,
 } from './helpers';
 import {
@@ -35,6 +34,7 @@ import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
+import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '@libs/utils/tracerAPI';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -93,7 +93,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         console.debug('Attempting to initialise pools');
         if (provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
-            if (isSupportedNetwork(network as KnownNetwork)) {
+            if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
                     // for now just select the Tracer verfied pools (Tracer[0])
                     // this can be changed to select all or a specific list
@@ -161,37 +161,35 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && poolsState.poolsInitialised) {
             Object.values(poolsState.pools).map((pool) => {
                 const decimals = pool.poolInstance.settlementToken.decimals;
-                // fetch commits
-                fetchUnexcutedCommits(
-                    {
-                        committer: pool.poolInstance.committer.address,
-                        address: pool.poolInstance.address,
-                    },
-                    provider,
-                )
-                    .then((committerInfo) => {
-                        if (mounted) {
-                            setExpectedPrice(pool.poolInstance);
-
-                            committerInfo.allUnexecutedCommits.map(async (commit) => {
-                                commitDispatch({
-                                    type: 'addCommit',
-                                    commitInfo: {
-                                        pool: pool.poolInstance.address,
-                                        id: commit.commitID,
-                                        amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
-                                        type: commit.commitType,
-                                        from: commit.from,
-                                        txnHash: commit.txnHash,
-                                        created: commit.timestamp,
-                                    },
-                                });
-                            });
-                        }
+                const network = provider.network.chainId;
+                if (isSupportedNetwork(network)) {
+                    // fetch commits
+                    fetchPendingCommits(network.toString() as V2_SUPPORTED_NETWORKS, {
+                        pool: pool.poolInstance.address,
                     })
-                    .catch((err) => {
-                        console.error('Failed to initialise committer', err);
-                    });
+                        .then((pendingCommits) => {
+                            if (mounted) {
+                                setExpectedPrice(pool.poolInstance);
+                                pendingCommits.map((commit) => {
+                                    commitDispatch({
+                                        type: 'addCommit',
+                                        commitInfo: {
+                                            pool: pool.poolInstance.address,
+                                            id: commit.commitID,
+                                            amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
+                                            type: commit.commitType,
+                                            from: commit.from,
+                                            txnHash: commit.txnHash,
+                                            created: commit.timestamp,
+                                        },
+                                    });
+                                });
+                            }
+                        })
+                        .catch((err) => {
+                            console.error('Failed to initialise committer', err);
+                        });
+                }
                 // subscribe
                 subscribeToPool(pool.poolInstance.address);
             });
