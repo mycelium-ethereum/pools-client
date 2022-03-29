@@ -29,7 +29,7 @@
       "@components/*": [
         "components/*"
       ],
-      "@types/*": [
+      "~/types/*": [
         "types/*"
       ],
       "@store/*": [
@@ -49,9 +49,6 @@
       ],
       "@constants/*": [
         "constants/*"
-      ],
-      "@/types/*": [
-        "types/*"
       ],
       "@public/*": [
         "public/*"

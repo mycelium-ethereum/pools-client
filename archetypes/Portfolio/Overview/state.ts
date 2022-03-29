@@ -1,5 +1,5 @@
 import { LogoTicker } from '@components/General';
-import { MarketFilterEnum } from '@/types/filters';
+import { MarketFilterEnum } from '~/types/filters';
 import BigNumber from 'bignumber.js';
 
 export enum DenotedInEnum {

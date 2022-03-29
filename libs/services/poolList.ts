@@ -1,28 +1,6 @@
-import { KnownNetwork, NETWORKS, StaticPoolInfo } from '@tracer-protocol/pools-js';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { POOL_LIST_MAP } from '@constants/pools';
-
-export interface PoolList {
-    name: string;
-    timestamp: string;
-    // readonly version: Version;
-    pools: StaticPoolInfo[];
-    keywords?: string[];
-    logoURI?: string;
-}
-
-// the string key is a the uri that can be used to check
-// if the pool is a Tracer verified pool or an external pool
-export interface PoolLists {
-    All: PoolList[];
-    Tracer: PoolList[];
-    External: PoolList[];
-}
-
-interface PoolListUris {
-    All: string[];
-    Tracer: string[];
-    External: string[];
-}
+import { PoolList, PoolLists, PoolListUris } from '~/types/pools';
 
 export default class PoolListService {
     network: KnownNetwork;

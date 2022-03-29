@@ -1,19 +1,19 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { Children } from 'libs/types/General';
 import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
-import { StakingRewards } from '@libs/staking/typechain';
 import {
     AggregatorV3Interface,
     AggregatorV3Interface__factory,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { UniswapV2Router02__factory, UniswapV2Router02 } from '@libs/uniswapV2Router';
-import { Vault, Vault__factory } from '@libs/staking/balancerV2Vault';
+import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
+import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
+import { Children } from '~/types/general';
+import { StakingRewards } from '~/types/staking/typechain';
 import { TCR_DECIMALS, USDC_DECIMALS } from '@constants/pools';
 import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from './helpers';
-import { BalancerPoolAsset, Farm } from '@libs/types/Staking';
+import { BalancerPoolAsset, Farm } from '~/types/staking';
 import { poolMap } from '@tracer-protocol/pools-js/data';
 import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { Provider } from '@ethersproject/providers';

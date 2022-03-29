@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { SideEnum, CommitEnum } from '@tracer-protocol/pools-js';
+import { SideEnum, CommitEnum, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
 
 // name is in the form {leverage}-${asset}/${collateral}
@@ -55,6 +55,7 @@ export type AggregateBalances = {
     shortTokens: BigNumber;
     settlementTokens: BigNumber;
 };
+
 // for mint the amount is the amount of collateral spent
 // for burn the amount is the amount of tokens
 export type PendingCommitInfo = {
@@ -82,3 +83,28 @@ export type HistoricCommit = PendingCommitInfo & {
     tokenPrice: BigNumber;
     fee: BigNumber;
 };
+
+/*
+ * PoolList interface. Every poolsList must conform to this
+ *  structure
+ */
+export interface PoolList {
+    name: string;
+    timestamp: string;
+    // readonly version: Version;
+    pools: StaticPoolInfo[];
+    keywords?: string[];
+    logoURI?: string;
+}
+
+export interface PoolLists {
+    All: PoolList[];
+    Tracer: PoolList[];
+    External: PoolList[];
+}
+
+export interface PoolListUris {
+    All: string[];
+    Tracer: string[];
+    External: string[];
+}

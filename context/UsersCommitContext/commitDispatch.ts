@@ -1,4 +1,4 @@
-import { PendingCommitInfo } from '@libs/types/General';
+import { PendingCommitInfo } from '~/types/pools';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
 export type CommitsState = {

@@ -7,7 +7,7 @@ import { InnerInputText, InputContainer } from '@components/General/Input';
 import { Currency } from '@components/General/Currency';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '@/types/bridge';
+import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '~/types/bridge';
 import { bridgeableAssetWarnings } from '@constants/bridge';
 import { MAINNET } from '@constants/networks';
 import { Logo } from '@components/General';
