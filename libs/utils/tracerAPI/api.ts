@@ -56,7 +56,7 @@ export const fetchCommitHistory: (params: {
     page,
     pageSize,
 }) => {
-    let route = `${TRACER_API}?page=${page}&pageSize=${pageSize}&network=${network ?? ARBITRUM}&userAddress=${account}`;
+    let route = `${TRACER_API}/poolsv2/tradeHistory?page=${page}&pageSize=${pageSize}&network=${network ?? ARBITRUM}&userAddress=${account}`;
     if (type === 'mint') {
         route += '&types=LongMint&types=ShortMint';
     } else if (type === 'burn') {
