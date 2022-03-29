@@ -11,9 +11,9 @@ import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Summary from './Summary';
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 import { usePool, usePoolActions } from '@context/PoolContext';
-import useExpectedCommitExecution from '@libs/hooks/useExpectedCommitExecution';
+import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
+import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import CloseIcon from '/public/img/general/close.svg';
-import useBalancerETHPrice from '@libs/hooks/useBalancerETHPrice';
 
 const TRADE_OPTIONS = [
     {

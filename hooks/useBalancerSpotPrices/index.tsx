@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
-import { getBalancerPrices } from '@libs/utils/rpcMethods';
 import BigNumber from 'bignumber.js';
-import { DEFAULT_NETWORK, networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { getBalancerPrices } from '~/utils/balancer';
+import { DEFAULT_NETWORK, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 export default ((network = DEFAULT_NETWORK) => {
     const [tokenPrices, setTokenPrices] = useState<Record<string, BigNumber>>({});

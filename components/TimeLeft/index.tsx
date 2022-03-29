@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { timeTill } from '@libs/utils/converters';
+import { timeTill } from '~/utils/converters';
 
 /**
  * Counts down to targetTime. This is generally lastUpdatedTime + updateInterval

@@ -1,4 +1,4 @@
-import { Upkeep } from '@libs/hooks/useUpkeeps';
+import { Upkeep } from '~/hooks/useUpkeeps';
 
 export enum MarketFilterEnum {
     All = 'All',

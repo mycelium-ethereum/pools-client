@@ -2,7 +2,7 @@ import React from 'react';
 import { DeltaEnum } from '@archetypes/Pools/state';
 import { TableRowCell, TableRow } from '@components/General/TWTable';
 import UpOrDown from '@components/UpOrDown';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
 import { ClaimableAsset, ClaimablePoolToken } from '../state';
 

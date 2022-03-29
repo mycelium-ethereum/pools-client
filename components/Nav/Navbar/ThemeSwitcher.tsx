@@ -1,4 +1,4 @@
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import React from 'react';
 import { useStore } from '@store/main';
 import { selectThemeSlice } from '@store/ThemeSlice';

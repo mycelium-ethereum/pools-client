@@ -7,7 +7,7 @@ import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import ThemeSwitcher from './ThemeSwitcher';
 import VersionToggle from './VersionToggle';
 

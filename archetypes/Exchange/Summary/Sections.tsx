@@ -1,7 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import { Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import ApproxCommitGasFee from './ApproxCommitGasFee';
 import { BaseSection } from './types';

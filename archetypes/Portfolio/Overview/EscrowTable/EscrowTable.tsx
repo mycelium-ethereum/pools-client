@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HiddenExpand, Logo } from '@components/General';
 import Loading from '@components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '@components/General/TWTable';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import { usePoolActions } from '@context/PoolContext';
 
 import * as Styles from './styles';

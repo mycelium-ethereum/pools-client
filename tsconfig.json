@@ -38,8 +38,11 @@
       "@context/*": [
         "context/*"
       ],
-      "@hooks/*": [
+      "~/hooks/*": [
         "hooks/*"
+      ],
+      "~/utils/*": [
+        "utils/*"
       ],
       "@libs/*": [
         "libs/*"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 const SIZE: Record<ButtonSize, string> = {
     xs: 'px-2 py-1 text-xs ',

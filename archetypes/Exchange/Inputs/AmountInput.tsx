@@ -5,7 +5,7 @@ import Max from '@components/General/Max';
 import * as Styles from './styles';
 import { AmountProps } from './types';
 import BigNumber from 'bignumber.js';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 
 const Available: React.FC<{
     amountBN: BigNumber;

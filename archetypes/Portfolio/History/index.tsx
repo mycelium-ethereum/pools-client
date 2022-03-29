@@ -7,12 +7,12 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { marketSymbolToAssetName, toApproxCurrency } from '@libs/utils/converters';
-import usePagination, { PAGE_ENTRIES } from '@libs/hooks/usePagination';
-import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '@libs/utils/tracerAPI';
+import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import usePagination, { PAGE_ENTRIES } from '~/hooks/usePagination';
+import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '~/utils/tracerAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import Loading from '@components/General/Loading';
-import { ArbiscanEnum } from '@libs/utils/rpcMethods';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
 import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';

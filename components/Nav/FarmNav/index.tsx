@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 
 const POOLTOKEN = 0;
 const BPT = 1;

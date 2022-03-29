@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import { toApproxCurrency } from '@libs/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import Close from '/public/img/general/close.svg';

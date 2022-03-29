@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Link from 'next/link';
 import Icon from '@ant-design/icons';
 
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import { Transition } from '@headlessui/react';
 import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
 
