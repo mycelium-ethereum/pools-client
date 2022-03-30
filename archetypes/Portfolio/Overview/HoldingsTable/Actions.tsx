@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, LogoTicker } from '@components/General';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-import { MarketFilterEnum } from '~/types/General';
+import { MarketFilterEnum } from '~/types/filters';
 import { DenotedInEnum, PortfolioAction, PortfolioState } from '../state';
 import { SearchInput } from './styles';
 
