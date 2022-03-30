@@ -2,7 +2,6 @@ import { StateSlice } from '@store/types';
 import Onboard from '@tracer-protocol/onboard';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
-// import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { onboardConfig } from '~/constants/onboard';
 import { StoreState } from '..';
 import { IWeb3Slice } from './types';
@@ -21,14 +20,12 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
             address: (address) => {
                 console.info(`Changing address: ${address}`);
                 set({ account: address });
-                // onboardConfig?.subscriptions?.address && onboardConfig?.subscriptions?.address(address);
             },
             wallet: (wallet) => {
                 console.debug('Detected wallet change');
                 if (wallet.provider) {
                     console.debug('Setting wallet provider');
-                    if (wallet.name) {
-                        // cacheWalletSelection
+                    if (wallet.name) { // cacheWalletSelection
                         window.localStorage.setItem('onboard.selectedWallet', wallet.name);
                     }
                     const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');
@@ -46,14 +43,12 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                 } else {
                     set({ wallet: undefined });
                 }
-                // onboardConfig?.subscriptions?.wallet && onboardConfig.subscriptions.wallet(wallet);
             },
             network: (network) => {
                 get().onboard.config({ networkId: network });
                 console.info(`Changing network ${network}`);
                 const network_ = network?.toString() as KnownNetwork;
                 set({ network: network_ });
-                // onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
             },
         },
     }),
@@ -74,7 +69,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     },
 
     handleConnect: async () => {
-        if (get().onboard) {
+        if (!!get().onboard) {
             try {
                 const selectedWallet = await get().onboard?.walletSelect();
                 if (selectedWallet) {
