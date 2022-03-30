@@ -6,7 +6,7 @@ import {
     AggregatorV3Interface__factory,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { KnownNetwork, calcBptTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
+import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { poolMap } from '@tracer-protocol/pools-js/data';
 
 import { useStore } from '@store/main';
@@ -15,11 +15,12 @@ import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2
 import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
 import { Children } from '~/types/general';
 import { StakingRewards } from '~/types/staking/typechain';
-import { BalancerPoolAsset, Farm } from '~/types/staking';
+import { BalancerPoolAsset, Farm, FarmConfig } from '~/types/staking';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { fetchTokenPrice } from '~/utils/farms';
+import { Network } from '~/types/networks';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -47,13 +48,14 @@ export const FarmStore: React.FC<
         farmContext: FarmContexts;
     } & Children
 > = ({ farmContext, children }) => {
-    const { signer, account, provider, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
+    const { signer, account, provider, network } = useStore(selectWeb3Info);
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
     const [rewardsTokenUSDPrices, setRewardsTokenUSDPrices] = useState<Record<string, BigNumber>>({});
 
-    const config = farmConfig[network];
-    const networkConfig = networkConfig_[network];
+    // want to fail over to undefined
+    const config: FarmConfig | undefined = farmConfig[network ?? ('0' as KnownNetwork)];
+    const networkConfig: Network | undefined = networkConfig_[network ?? ('0' as KnownNetwork)];
 
     // used to fetch details of tokens that make up a balancer pool
     const getBptDetails = async (
@@ -61,8 +63,8 @@ export const FarmStore: React.FC<
         pool: string,
         balancerPoolName: string,
     ): Promise<Farm['bptDetails']> => {
-        if (!config) {
-            // return undefined;
+        if (!network) {
+            return undefined;
         }
 
         const balancerPool = new ethers.Contract(config.balancerVaultAddress, Vault__factory.abi, provider) as Vault;
@@ -326,7 +328,12 @@ export const FarmStore: React.FC<
 
         const oneUnit = new BigNumber('1').times(10 ** decimals);
 
-        const [, buyPrice] = await sushiRouter.getAmountsOut(oneUnit.toFixed(), [address, networkConfig.usdcAddress]);
+        const [, buyPrice] = await sushiRouter
+            .getAmountsOut(oneUnit.toFixed(), [address, networkConfig.usdcAddress])
+            .catch((_err) => {
+                console.error('Failed to fetch rewardsTokenPrice');
+                return [0, 0];
+            });
 
         const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(buyPrice, USDC_DECIMALS));
 

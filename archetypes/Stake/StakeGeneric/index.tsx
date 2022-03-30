@@ -6,8 +6,8 @@ import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
 import { selectAccount } from '@store/Web3Slice';
-import { MAX_SOL_UINT } from '~/constants/general';
 import { Farm } from '~/types/staking';
+import { MAX_SOL_UINT } from '~/constants/general';
 import FarmNav from '@components/Nav/FarmNav';
 import { Logo, LogoTicker } from '@components/General/Logo';
 
@@ -68,7 +68,6 @@ export default (({
     rewardsTokenUSDPrices,
 }) => {
     const account = useStore(selectAccount);
-
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {

@@ -41,7 +41,7 @@ const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => P
 
 export default (({ focus, commits }) => {
     const router = useRouter();
-    const { provider } = useStore(selectProvider);
+    const provider = useStore(selectProvider);
 
     const { mintCommits, burnCommits, flipCommits } = useMemo(
         () => ({

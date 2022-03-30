@@ -24,7 +24,6 @@ const UnsupportedNetwork: React.FC = () => {
         ) {
             // ignore if we are already showing the error
             if (!unsupportedNetworkPopupRef) {
-                // @ts-ignore
                 const toastId = toast(
                     <Notification title="Unsupported Network">
                         <span key="unsupported-network-content" className="text-sm">
@@ -57,7 +56,7 @@ const UnsupportedNetwork: React.FC = () => {
                         },
                     },
                 );
-                setUnsupportedNetworkPopupRef(toastId);
+                setUnsupportedNetworkPopupRef(toastId.toString());
             }
         } else {
             if (unsupportedNetworkPopupRef) {
