@@ -4,21 +4,17 @@ import BigNumber from 'bignumber.js';
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-
-import { isArbitrumNetwork } from '~/utils/supportedNetworks';
-import { Children } from '~/types/general';
-import { BridgeableAsset, BridgeableAssets, BridgeableBalances } from '~/types/bridge';
-
-import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '~/constants/bridge';
-import { MAX_SOL_UINT } from '~/constants/general';
-
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
-
-import { useWeb3 } from '../Web3Context/Web3Context';
-import { networkConfig } from '~/constants/networks';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { Network } from '~/types/networks';
+import { Children } from '~/types/general';
+import { BridgeableAsset, BridgeableAssets, BridgeableBalances } from '~/types/bridge';
+import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '~/constants/bridge';
+import { MAX_SOL_UINT } from '~/constants/general';
+import { networkConfig } from '~/constants/networks';
+import { isArbitrumNetwork } from '~/utils/supportedNetworks';
 
 type CachedBridges = {
     [account: string]: {
@@ -61,7 +57,7 @@ const BRIDGEABLE_ASSET_ETH = {
 };
 
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
-    const { account, signer, provider, network = NETWORKS.MAINNET } = useWeb3();
+    const { account, signer, provider, network = NETWORKS.MAINNET } = useStore(selectWeb3Info);
 
     const handleTransaction = useStore(selectHandleTransaction);
 

@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { knownNetworkToSubgraphUrl, networkConfig } from '~/constants/networks';
 
 type SubgraphAggregateBalances = Record<
@@ -79,7 +80,7 @@ const fetchSubgraphAggregateBalance: (
 };
 
 export default (() => {
-    const { account, network } = useWeb3();
+    const { account, network } = useStore(selectWeb3Info);
     const [aggregateBalances, setAggregateBalances] = useState({});
     useMemo(() => {
         if (!!account && !!network) {

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 // @ts-ignore
 import ENS, { getEnsAddress } from '@ensdomains/ensjs';
+import { useStore } from '@store/main';
+import { selectProvider } from '@store/Web3Slice';
 
 // const useEnsName
 export default ((account: string) => {
+    const provider = useStore(selectProvider);
     const [ensName, setEnsName] = useState('');
     const [ens, setEns] = useState(undefined);
-    const { provider } = useWeb3();
 
     useEffect(() => {
         if (provider) {

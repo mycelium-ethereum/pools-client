@@ -4,6 +4,7 @@ import { IThemeSlice } from './ThemeSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { IWeb3Slice } from './Web3Slice/types';
 import { IGasSlice } from './GasSlice/types';
+import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
 
 // global store state
 export type StoreState = {
@@ -12,6 +13,7 @@ export type StoreState = {
     poolsSlice: IPoolsSlice;
     web3Slice: IWeb3Slice;
     gasSlice: IGasSlice;
+    unsupportedNetworkSlice: IUnsupportedNetworkSlice;
 };
 
 // Seperated return type to allow for a different

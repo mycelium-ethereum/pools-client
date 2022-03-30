@@ -8,14 +8,17 @@ import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '@components/General/Notification/ToastContainerWithStyles';
-import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 import { StyledThemeProvider } from '@context/ThemeContext';
+import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
+    // any store hooks
+    useUpdateWeb3Store();
+
     // load usersnap
     useEffect(() => {
         // @ts-ignore
@@ -57,11 +60,9 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
             <StyledThemeProvider>
-                <Web3Store>
-                    <UsersCommitStore>
-                        <Component {...pageProps} />
-                    </UsersCommitStore>
-                </Web3Store>
+                <UsersCommitStore>
+                    <Component {...pageProps} />
+                </UsersCommitStore>
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
         </div>

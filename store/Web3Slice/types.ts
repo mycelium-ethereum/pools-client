@@ -13,6 +13,4 @@ export interface IWeb3Slice {
     checkIsReady: () => Promise<boolean>;
     resetOnboard: () => Promise<void>;
     handleConnect: () => Promise<void>;
-
-    // unsupportedNetworkPopupRef: React.MutableRefObject<string>;
 }

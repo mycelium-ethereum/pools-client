@@ -89,6 +89,19 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
 
 export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;
 export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) => state.web3Slice.provider;
+export const selectNetwork: (state: StoreState) => IWeb3Slice['network'] = (state) => state.web3Slice.network;
+export const selectAccount: (state: StoreState) => IWeb3Slice['account'] = (state) => state.web3Slice.account;
+export const selectOnboard: (state: StoreState) => IWeb3Slice['onboard'] = (state) => state.web3Slice.onboard;
+
+export const selectWalletInfo: (state: StoreState) => {
+    wallet: IWeb3Slice['wallet'];
+    account: IWeb3Slice['account'];
+    network: IWeb3Slice['network'];
+} = (state) => ({
+    account: state.web3Slice.account,
+    wallet: state.web3Slice.wallet,
+    network: state.web3Slice.network,
+});
 
 export const selectOnboardActions: (state: StoreState) => {
     resetOnboard: IWeb3Slice['resetOnboard'];
@@ -96,4 +109,16 @@ export const selectOnboardActions: (state: StoreState) => {
 } = (state) => ({
     handleConnect: state.web3Slice.handleConnect,
     resetOnboard: state.web3Slice.resetOnboard,
+});
+
+export const selectWeb3Info: (state: StoreState) => {
+    provider: IWeb3Slice['provider'];
+    network: IWeb3Slice['network'];
+    account: IWeb3Slice['account'];
+    signer?: ethers.providers.JsonRpcSigner;
+} = (state) => ({
+    provider: state.web3Slice.provider,
+    network: state.web3Slice.network,
+    account: state.web3Slice.account,
+    signer: state.web3Slice.provider?.getSigner(),
 });

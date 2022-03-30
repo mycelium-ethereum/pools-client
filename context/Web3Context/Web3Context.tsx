@@ -134,12 +134,4 @@ const Web3Store: React.FC<Web3ContextProps> = ({ children }) => {
     );
 };
 
-const useWeb3: () => Web3Context = () => {
-    const context = React.useContext(Web3Context);
-    if (context === undefined) {
-        throw new Error('useWeb3 must be used within a OnboardProvider');
-    }
-    return context;
-};
-
-export { Web3Store, useWeb3 };
+export { Web3Store };

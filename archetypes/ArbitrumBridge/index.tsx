@@ -1,16 +1,19 @@
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
 import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { MultiBridge } from './MultiBridge';
-import { switchNetworks } from '~/utils/rpcMethods';
+
+import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { Network } from '~/types/networks';
 import { BridgeableAsset } from '~/types/bridge';
 import { bridgeableTickers } from '~/constants/bridge';
+import { switchNetworks } from '~/utils/rpcMethods';
+
+import { MultiBridge } from './MultiBridge';
 
 // ArbitrumBridge
 export const ArbitrumBridge: React.FC = (() => {
-    const { provider, account } = useWeb3();
+    const { provider, account } = useStore(selectWeb3Info);
     const {
         bridgeToken,
         bridgeEth,

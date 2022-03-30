@@ -2,18 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
+
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '~/utils/tracerAPI';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
+import usePagination, { PAGE_ENTRIES } from '~/hooks/usePagination';
+import Actions from '@components/TokenActions';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
-import usePagination, { PAGE_ENTRIES } from '~/hooks/usePagination';
-import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '~/utils/tracerAPI';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import Loading from '@components/General/Loading';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
-import Actions from '@components/TokenActions';
 
 import NoQueued from '@public/img/no-queued.svg';
 import { PageOptions } from '..';
@@ -83,7 +85,7 @@ export default (({ focus }) => {
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const router = useRouter();
-    const { provider, account, network } = useWeb3();
+    const { provider, account, network } = useStore(selectWeb3Info);
     const { setPage, page } = usePagination(tradeHistory);
 
     useEffect(() => {

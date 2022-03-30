@@ -1,24 +1,25 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { useWeb3 } from '../Web3Context/Web3Context';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 import {
     AggregatorV3Interface,
     AggregatorV3Interface__factory,
     ERC20__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { KnownNetwork, calcBptTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
+import { poolMap } from '@tracer-protocol/pools-js/data';
+
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
 import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
 import { Children } from '~/types/general';
 import { StakingRewards } from '~/types/staking/typechain';
-import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
-import BigNumber from 'bignumber.js';
-import { fetchTokenPrice } from '~/utils/farms';
 import { BalancerPoolAsset, Farm } from '~/types/staking';
-import { poolMap } from '@tracer-protocol/pools-js/data';
-import { KnownNetwork, calcBptTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
-import { Provider } from '@ethersproject/providers';
+import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
+import { fetchTokenPrice } from '~/utils/farms';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -46,7 +47,7 @@ export const FarmStore: React.FC<
         farmContext: FarmContexts;
     } & Children
 > = ({ farmContext, children }) => {
-    const { signer, account, provider, network = NETWORKS.ARBITRUM } = useWeb3();
+    const { signer, account, provider, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
     const [rewardsTokenUSDPrices, setRewardsTokenUSDPrices] = useState<Record<string, BigNumber>>({});
@@ -94,7 +95,7 @@ export const FarmStore: React.FC<
                     // known market price feed addresses are configured in Web3Context.Config.ts
                     const priceFeedAggregator = AggregatorV3Interface__factory.connect(
                         config.knownUSDCPriceFeeds[address],
-                        provider as Provider,
+                        provider as ethers.providers.Provider,
                     ) as AggregatorV3Interface;
 
                     const [{ answer }, priceFeedDecimals] = await Promise.all([

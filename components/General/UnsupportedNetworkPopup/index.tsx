@@ -2,14 +2,17 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
+import { selectUnsupportedNetworkRef } from '@store/UnsupportedNetworkSlice';
 import { switchNetworks } from '~/utils/rpcMethods';
+import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
 import { Notification } from '../Notification';
 
 const UnsupportedNetwork: React.FC = () => {
     const router = useRouter();
-    const { account, network, provider, unsupportedNetworkPopupRef } = useWeb3();
+    const { account, network, provider } = useStore(selectWeb3Info);
+    const { unsupportedNetworkPopupRef, setUnsupportedNetworkPopupRef } = useStore(selectUnsupportedNetworkRef);
 
     // unsupported network popup
     useEffect(() => {
@@ -20,9 +23,9 @@ const UnsupportedNetwork: React.FC = () => {
             !!account
         ) {
             // ignore if we are already showing the error
-            if (!unsupportedNetworkPopupRef.current) {
+            if (!unsupportedNetworkPopupRef) {
                 // @ts-ignore
-                unsupportedNetworkPopupRef.current = toast(
+                const toastId = toast(
                     <Notification title="Unsupported Network">
                         <span key="unsupported-network-content" className="text-sm">
                             <a
@@ -50,19 +53,20 @@ const UnsupportedNetwork: React.FC = () => {
                         type: 'error',
                         autoClose: false,
                         onClose: () => {
-                            unsupportedNetworkPopupRef.current = '';
+                            setUnsupportedNetworkPopupRef(undefined);
                         },
                     },
                 );
+                setUnsupportedNetworkPopupRef(toastId);
             }
         } else {
-            if (unsupportedNetworkPopupRef.current) {
-                toast.update(unsupportedNetworkPopupRef.current, {
+            if (unsupportedNetworkPopupRef) {
+                toast.update(unsupportedNetworkPopupRef, {
                     render: <Notification title="Switched Network" />,
                     type: 'success',
                     autoClose: 5000,
                 });
-                unsupportedNetworkPopupRef.current = '';
+                setUnsupportedNetworkPopupRef(undefined);
             }
         }
     }, [router.pathname, network, account, provider]);

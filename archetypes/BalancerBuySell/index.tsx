@@ -9,9 +9,8 @@ import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelect
 import Divider from '@components/General/Divider';
 import { StyledTooltip } from '@components/Tooltips';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { useStore } from '@store/main';
-import { selectOnboardActions } from '@store/Web3Slice';
+import { selectOnboardActions, selectWeb3Info } from '@store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
 
@@ -19,7 +18,7 @@ import { networkConfig } from '~/constants/networks';
 import { balancerConfig } from '~/constants/balancer';
 
 export default (() => {
-    const { network = NETWORKS.ARBITRUM, account } = useWeb3();
+    const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info);
     const { handleConnect } = useStore(selectOnboardActions);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;

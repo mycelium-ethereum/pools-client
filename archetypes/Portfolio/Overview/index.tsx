@@ -1,20 +1,18 @@
 import React, { useReducer } from 'react';
 import { SideEnum } from '@tracer-protocol/pools-js';
 
+import { useStore } from '@store/main';
+import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
+
 import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-
-import { useStore } from '@store/main';
-import { selectOnboardActions } from '@store/Web3Slice';
-
 import { MarketFilterEnum } from '~/types/filters';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
-import { marketFilter } from '~/utils/filters';
 import useBrowsePools from '~/hooks/useBrowsePools';
-import { toApproxCurrency } from '~/utils/converters';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
+import { marketFilter } from '~/utils/filters';
+import { toApproxCurrency } from '~/utils/converters';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
@@ -46,7 +44,7 @@ enum PriceByEnum {
 
 // const Overview
 export default (({ onClickBurn }) => {
-    const { account } = useWeb3();
+    const account = useStore(selectAccount);
     const { handleConnect } = useStore(selectOnboardActions);
 
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
