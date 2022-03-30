@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { Children } from 'libs/types/General';
+import { Children } from '~/types/general';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import {
@@ -8,7 +8,7 @@ import {
     fetchTokenApprovals,
     fetchTokenBalances,
     fromAggregateBalances,
-} from './helpers';
+} from '~/utils/pools';
 import {
     Pool,
     KnownNetwork,
@@ -18,7 +18,7 @@ import {
     calcNextValueTransfer,
 } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
-import { DEFAULT_POOLSTATE } from '@libs/constants/pool';
+import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import BigNumber from 'bignumber.js';
 import {
     LeveragedPool,
@@ -29,13 +29,13 @@ import {
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import PoolListService, { PoolList } from '@libs/services/poolList';
-import { isSupportedNetwork } from '@libs/utils/supportedNetworks';
-import { CommitToQueryFocusMap } from '@libs/constants';
+import { PoolList } from '~/types/pools';
+import PoolListService from '@libs/services/poolList';
+import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
-import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '@libs/utils/tracerAPI';
+import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
 
 type Options = {
     onSuccess?: (...args: any) => any;

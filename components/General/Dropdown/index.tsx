@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { Children } from 'libs/types/General';
+import { Children } from '~/types/general';
 import { useResizeDetector } from 'react-resize-detector';
 import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
 

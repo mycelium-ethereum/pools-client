@@ -1,5 +1,5 @@
 import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { StakingRewards__factory } from '@libs/staking/typechain/factories/StakingRewards__factory';
+import { StakingRewards__factory } from '~/types/staking/typechain/factories/StakingRewards__factory';
 
 import { ethers } from 'ethers';
 import { LogoTicker } from '@components/General';

@@ -55,3 +55,6 @@ export const POOL_LIST_MAP: TokenListMapByNetwork = {
         External: [],
     },
 };
+
+export const TCR_DECIMALS = 18;
+export const USDC_DECIMALS = 6;

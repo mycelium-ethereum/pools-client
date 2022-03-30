@@ -6,12 +6,12 @@ import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
-import { MarketFilterEnum } from '@libs/types/General';
-import useEscrowHoldings from '@libs/hooks/useEscrowHoldings';
-import { marketFilter } from '@libs/utils/functions';
-import useBrowsePools from '@libs/hooks/useBrowsePools';
-import { toApproxCurrency } from '@libs/utils/converters';
-import useUserTokenOverview from '@libs/hooks/useUserTokenOverview';
+import { MarketFilterEnum } from '~/types/filters';
+import useEscrowHoldings from '~/hooks/useEscrowHoldings';
+import { marketFilter } from '~/utils/filters';
+import useBrowsePools from '~/hooks/useBrowsePools';
+import { toApproxCurrency } from '~/utils/converters';
+import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';

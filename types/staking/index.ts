@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { StakingRewards } from '@libs/staking/typechain/StakingRewards';
+import { StakingRewards } from './typechain/StakingRewards';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 
 export type BalancerPoolAsset = {

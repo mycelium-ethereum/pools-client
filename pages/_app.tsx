@@ -12,7 +12,7 @@ import { Web3Store } from '@context/Web3Context/Web3Context';
 import { UsersCommitStore } from '@context/UsersCommitContext';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
 import { StyledThemeProvider } from '@context/ThemeContext';
-import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET } from '@libs/constants';
+import { ARBITRUM, ARBITRUM_RINKEBY, MAINNET } from '~/constants/networks';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;

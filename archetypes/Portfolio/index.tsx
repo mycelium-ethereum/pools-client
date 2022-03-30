@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import { browseReducer, BrowseState } from '@archetypes/Pools/state';
 import MintBurnModal from '@archetypes/Pools/MintBurnModal';
-import usePendingCommits from '@libs/hooks/useQueuedCommits';
+import usePendingCommits from '~/hooks/useQueuedCommits';
 
 export enum PortfolioPage {
     TradePortfolio = 0,

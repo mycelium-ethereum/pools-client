@@ -1,12 +1,4 @@
-import { MarketFilterEnum } from '@libs/types/General';
-
-export function classNames(...classes: string[]): string {
-    return classes.filter(Boolean).join(' ');
-}
-
-export function escapeRegExp(string: string): string {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
+import { MarketFilterEnum } from '~/types/filters';
 
 export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnum) => boolean = (
     poolName,

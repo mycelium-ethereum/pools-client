@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, CommitEnum } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { SwapAction, SwapState } from '@context/SwapContext';
-import { AggregateBalances } from '@libs/types/General';
+import { AggregateBalances } from '~/types/pools';
 import Button from '@components/General/Button';
 
 type ExchangeButton = {

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { DeltaEnum } from '@archetypes/Pools/state';
-import { calcPercentageDifference, toApproxCurrency } from '@libs/utils/converters';
+import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import styled from 'styled-components';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';

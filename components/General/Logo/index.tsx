@@ -1,6 +1,6 @@
 import React from 'react';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '@libs/constants';
-import { classNames } from '@libs/utils/functions';
+import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
+import { classNames } from '~/utils/helpers';
 
 import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
 import Etherscan from '@public/img/logos/currencies/etherscan.svg';

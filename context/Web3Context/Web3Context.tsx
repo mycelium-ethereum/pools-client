@@ -6,7 +6,7 @@ import Onboard from '@tracer-protocol/onboard';
 import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { Network, networkConfig } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
-import { ARBITRUM } from '@libs/constants';
+import { ARBITRUM } from '~/constants/networks';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { useStore } from '@store/main';
 import { selectIsDark } from '@store/ThemeSlice';

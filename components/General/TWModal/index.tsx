@@ -1,7 +1,7 @@
 import React from 'react';
 import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
-import { classNames } from '@libs/utils/functions';
+import { classNames } from '~/utils/helpers';
 import styled from 'styled-components';
 
 interface TWModalProps {

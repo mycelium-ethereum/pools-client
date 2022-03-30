@@ -3,7 +3,7 @@ import { TWModal } from '@components/General/TWModal';
 import Button from '@components/General/Button';
 import { BrowseTableRowData } from '../state';
 import { HiddenExpand } from '@components/General/Dropdown';
-import { isAddress } from '@libs/utils/address';
+import { isAddress } from '~/utils/rpcMethods';
 import { useStore } from '@store/main';
 import { Imported } from '@store/PoolsSlice/types';
 import { selectHandleImport, selectImported } from '@store/PoolsSlice';

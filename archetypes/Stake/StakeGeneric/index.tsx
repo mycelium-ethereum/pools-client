@@ -4,7 +4,7 @@ import { SideEnum } from '@tracer-protocol/pools-js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
 import FarmsTable from '../FarmsTable';
-import { MAX_SOL_UINT } from '@libs/constants';
+import { MAX_SOL_UINT } from '~/constants/general';
 import {
     stakeReducer,
     StakeAction,
@@ -18,7 +18,7 @@ import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import FarmNav from '@components/Nav/FarmNav';
 import StakeModal from '../StakeModal';
-import { Farm } from '@libs/types/Staking';
+import { Farm } from '~/types/staking';
 import { Logo, LogoTicker } from '@components/General/Logo';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';

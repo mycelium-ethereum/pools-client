@@ -6,7 +6,7 @@ import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } fro
 import { FlipSummaryProps } from './types';
 
 import ArrowDown from '@public/img/general/caret-down-white.svg';
-import { getBaseAsset } from '@libs/utils/converters';
+import { getBaseAsset } from '~/utils/converters';
 
 const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTokenPrice, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);

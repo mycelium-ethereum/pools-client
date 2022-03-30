@@ -4,7 +4,7 @@ import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sectio
 import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 import { calcExposure, calcNumTokens } from './utils';
-import { getBaseAsset } from '@libs/utils/converters';
+import { getBaseAsset } from '~/utils/converters';
 
 const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
