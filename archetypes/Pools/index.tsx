@@ -128,7 +128,7 @@ export const Browse: React.FC = () => {
                     return (
                         <div
                             key={index}
-                            className="p-4 md:p-8 lg:px-16 mb-10 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
+                            className="p-4 md:p-8 mb-10 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
                         >
                             <PoolsTable
                                 rows={dataRows}

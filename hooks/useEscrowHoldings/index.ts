@@ -23,15 +23,17 @@ const fetchEntryPrices: () => {
     };
 };
 
+type EscrowRowInfo = Omit<EscrowRowProps, 'onClickCommitAction'>;
+
 export default (() => {
     const { pools } = usePools();
     const subgraphAggregateBalances = useSubgraphAggregateBalances();
-    const [rows, setRows] = useState<EscrowRowProps[]>([]);
-    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowProps[]>([]);
+    const [rows, setRows] = useState<EscrowRowInfo[]>([]);
+    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowInfo[]>([]);
 
     useEffect(() => {
         if (pools) {
-            const _rows: EscrowRowProps[] = [];
+            const _rows: EscrowRowInfo[] = [];
             Object.values(pools).forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 

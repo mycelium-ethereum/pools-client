@@ -54,9 +54,12 @@ export type ClaimableAsset = {
 };
 export type ClaimablePoolToken = {
     entryPrice: EntryPrice;
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-    poolAddress: string;
 } & ClaimableAsset;
+
+export type ClaimablePoolTokenRowProps = ClaimablePoolToken & {
+    poolAddress: EscrowRowProps['poolAddress'];
+    onClickCommitAction: EscrowRowProps['onClickCommitAction'];
+};
 
 export interface PortfolioState {
     positionsDenotedIn: DenotedInEnum;

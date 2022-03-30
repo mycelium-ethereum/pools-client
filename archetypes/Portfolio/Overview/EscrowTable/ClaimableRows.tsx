@@ -4,10 +4,10 @@ import { TableRowCell, TableRow } from '@components/General/TWTable';
 import UpOrDown from '@components/UpOrDown';
 import { toApproxCurrency } from '~/utils/converters';
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
-import { ClaimableAsset, ClaimablePoolToken } from '../state';
+import { ClaimableAsset, ClaimablePoolTokenRowProps } from '../state';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
-export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
+export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
     token,
     balance,
     notionalValue,
