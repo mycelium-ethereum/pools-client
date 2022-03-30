@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
-import { SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Loading from '@components/General/Loading';
@@ -13,7 +13,7 @@ import { toApproxCurrency } from '~/utils/converters';
 import { ArbiscanEnum } from '~/utils/rpcMethods';
 import Button from '@components/General/Button';
 
-export default (({ rows, onClickBurn, denotedIn }) => {
+export default (({ rows, onClickCommitAction, denotedIn }) => {
     const { provider } = useWeb3();
 
     return (
@@ -37,7 +37,7 @@ export default (({ rows, onClickBurn, denotedIn }) => {
                                     {...token}
                                     key={token.address}
                                     provider={provider ?? null}
-                                    onClickBurn={onClickBurn}
+                                    onClickCommitAction={onClickCommitAction}
                                     denotedIn={denotedIn}
                                 />
                             );
@@ -50,13 +50,13 @@ export default (({ rows, onClickBurn, denotedIn }) => {
     );
 }) as React.FC<{
     rows: TokenRowProps[];
-    onClickBurn: (pool: string, side: SideEnum) => void;
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
     denotedIn: DenotedInEnum;
 }>;
 
 export const TokenRow: React.FC<
     TokenRowProps & {
-        onClickBurn: (pool: string, side: SideEnum) => void;
+        onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
         provider: ethers.providers.JsonRpcProvider | null;
         denotedIn: DenotedInEnum;
     }
@@ -71,7 +71,7 @@ export const TokenRow: React.FC<
     holdings,
     provider,
     // deposits,
-    onClickBurn,
+    onClickCommitAction,
     oraclePrice,
     denotedIn,
 }) => {
@@ -159,7 +159,7 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex">
                 <Button
-                    className="mx-1 w-[70px] my-auto ml-auto font-bold uppercase "
+                    className="mx-1 w-[70px] my-auto ml-auto uppercase border-0 py-2"
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
@@ -171,13 +171,22 @@ export const TokenRow: React.FC<
                     Stake
                 </Button>
                 <Button
-                    className="mx-1 w-[70px] my-auto font-bold uppercase "
+                    className="mx-1 w-[70px] my-auto uppercase border-0 py-2"
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
-                    onClick={() => onClickBurn(poolAddress, side)}
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
                 >
                     Burn
+                </Button>
+                <Button
+                    className="mx-1 w-[70px] my-auto uppercase border-0 py-2"
+                    size="xs"
+                    variant="primary-light"
+                    disabled={!netValue.toNumber()}
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                >
+                    Flip
                 </Button>
                 <Actions
                     token={{

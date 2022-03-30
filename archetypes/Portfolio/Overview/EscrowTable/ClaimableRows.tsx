@@ -5,6 +5,7 @@ import UpOrDown from '@components/UpOrDown';
 import { toApproxCurrency } from '~/utils/converters';
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
 import { ClaimableAsset, ClaimablePoolToken } from '../state';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
     token,
@@ -12,9 +13,14 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
     notionalValue,
     entryPrice,
     currentTokenPrice,
+    onClickCommitAction,
+    poolAddress,
 }) => {
     // TODO assume this will want to be interchangeable with USD
     const currency = 'USD';
+
+    // @ts-ignore
+    const side: number = SideEnum[token.toLocaleLowerCase()];
 
     return (
         <TableRow>
@@ -48,10 +54,18 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolToken> = ({
                 <InnerText>{`${notionalValue.toFixed(3)} ${currency}`}</InnerText>
             </TableRowCell>
             <Buttons>
-                <EscrowButton size="sm" variant="primary-light">
+                <EscrowButton
+                    size="xs"
+                    variant="primary-light"
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                >
                     Burn
                 </EscrowButton>
-                <EscrowButton size="sm" variant="primary-light">
+                <EscrowButton
+                    size="xs"
+                    variant="primary-light"
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                >
                     Flip
                 </EscrowButton>
             </Buttons>

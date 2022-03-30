@@ -69,6 +69,9 @@ export const ClaimButton = styled(Button)`
     height: 44px;
     width: 112px !important;
     margin-right: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const DropdownButton = styled(Button)`
@@ -79,6 +82,14 @@ export const DropdownButton = styled(Button)`
 
 export const DropdownArrow = styled.img`
     width: 10px;
+
+    transform: rotate(0deg);
+    transition: transform 0.1s linear;
+
+    &.open {
+        transform: rotate(180deg);
+        transition: transform 0.1s linear;
+    }
 `;
 
 // ROWS
@@ -96,7 +107,10 @@ export const InnerText = styled.div`
 `;
 
 export const EscrowButton = styled(Button)`
-    width: 60px !important;
+    border: 0;
+    width: 70px !important;
+    padding: 8px 0 !important;
+    text-transform: uppercase;
     &:first-child {
         margin-right: 0.5rem;
     }

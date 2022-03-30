@@ -1,25 +1,25 @@
-import React, { useReducer } from 'react';
-import { SideEnum } from '@tracer-protocol/pools-js';
-
-import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import React, { useReducer, useMemo } from 'react';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
 
-import { MarketFilterEnum } from '~/types/filters';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import { marketFilter } from '~/utils/filters';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { toApproxCurrency } from '~/utils/converters';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 
-import CTABackground from '@public/img/cta-bg.svg';
-import BVector from '@public/img/b-vector.svg';
-
 import * as Styles from './styles';
 import TokenTable from './TokenTable';
 import EscrowTable from './EscrowTable';
-import { portfolioReducer, initialPortfolioState, DenotedInEnum, EscrowRowProps } from './state';
+import { portfolioReducer, initialPortfolioState, EscrowRowProps } from './state';
+import { ConnectWalletBanner } from './ConnectWalletBanner';
+import { TradeOverviewBanner } from './TradeOverviewBanner';
+import { SkewCard } from './SkewCard';
+import { HelpCard } from './HelpCard';
+import { HoldingsTable } from './HoldingsTable';
+import { emptyStateHelpCardContent } from './content';
+import { PriceByDropDown, DenoteInDropDown, MarketDropdown, EscrowSearch } from './HoldingsTable/Actions';
 
 export enum LoadingState {
     Idle = 0,
@@ -36,13 +36,8 @@ export enum CurrencyEnum {
     AUD = 'AUD',
 }
 
-enum PriceByEnum {
-    Tracer = 'Tracer',
-    Balancer = 'Balancer',
-}
-
 // const Overview
-export default (({ onClickBurn }) => {
+export default (({ onClickCommitAction }) => {
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
@@ -69,257 +64,97 @@ export default (({ onClickBurn }) => {
         .filter((pool: EscrowRowProps) => marketFilter(pool.poolName, state.escrowMarketFilter))
         .filter(searchFilter);
 
+    const showFilledState = useMemo(() => {
+        const isClaimable = filteredEscrowRows.some((v) => v.numClaimable === 1);
+        const isHoldings = rows.some((v) => !v.holdings.eq(0));
+
+        return isClaimable || isHoldings;
+    }, [filteredEscrowRows, rows]);
+
+    //TODO: calculate PnP and Net Acquisition Costs
+    const portfolioOverview = [
+        { title: 'Portfolio Valuation', value: toApproxCurrency(totalValuation()) },
+        { title: 'Unrealised Profit and Loss', value: toApproxCurrency(totalValuation()) },
+        { title: 'Net Acquisition Costs', value: toApproxCurrency(totalValuation()) },
+    ];
+
     const emptyState = () => {
         return (
-            <div className="mt-5">
-                <div className="flex flex-col xl:flex-row">
-                    <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
-                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
-                        <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
-                            <div className="font-bold text-2xl opacity-50">0.00</div>
-                            <div className="font-bold text-md text-cool-gray-500 opacity-50">Portfolio Valuation</div>
-                        </div>
-                    </div>
-                    <div className="relative overflow-hidden xl:w-1/3 mt-5 xl:mt-0 p-5 rounded-xl shadow-md bg-tracer-50">
-                        <CTABackground className="w-full absolute bottom-0 right-0" />
-                        <div className="relative flex flex-col justify-center items-center p-5">
-                            <div className="text-white mb-5 text-2xl text-center">
-                                Connect to Arbitrum to get started with Perpetual Pools
-                            </div>
-                            <div
-                                className="bg-blue-600 flex items-center justify-center rounded-lg h-12 w-48 text-white cursor-pointer"
-                                onClick={handleConnect}
-                            >
-                                Connect Wallet
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="flex my-5 flex-col xl:flex-row">
-                    <div className={`${maxSkew === undefined ? '' : 'xl:w-2/3 xl:mr-12'} flex flex-col xl:flex-row`}>
-                        <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">TIP</div>
-                            <div className="mb-3 text-2xl font-semibold">Earn TCR Now!</div>
-                            <div className="mb-3">Do you hold pool tokens? Stake them now to earn APY in TCR!</div>
-                            <a
-                                href="https://pools.tracer.finance/stakepooltoken/"
-                                target="_blank"
-                                className="text-tracer-400 underline"
-                                rel="noreferrer"
-                            >
-                                View staking pools
-                            </a>
-                        </div>
-                        <div className="my-2 xl:w-1/3 xl:mr-5 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                            <div className="mb-3 text-2xl font-semibold">
-                                Leveraged Token Designs: Compare the Market
-                            </div>
-                            <div className="mb-3">
-                                {`Find out how Tracer's Pool tokens stack up to similar products and how you can benefit from the novel design.`}
-                            </div>
-                            <a
-                                href="https://tracer.finance/radar/leveraged-tokens/"
-                                target="_blank"
-                                className="text-tracer-400 underline"
-                                rel="noreferrer"
-                            >
-                                Read article
-                            </a>
-                        </div>
-                        <div className="my-2 xl:w-1/3 px-4 py-6 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                            <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                            <div className="mb-3 text-2xl font-semibold">Skew Farming: How To</div>
-                            <div className="mb-3">
-                                Know this strategy to recognise opportunities for excess risk-adjusted returns. Take
-                                advantage of the skew in Perpetual Pools.
-                            </div>
-                            <a
+            <Styles.Container>
+                <Styles.Wrapper isFullWidth={!!account}>
+                    <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
+                    {!account && <ConnectWalletBanner onClick={handleConnect} />}
+                </Styles.Wrapper>
+                <Styles.Wrapper isFullWidth={maxSkew === undefined}>
+                    <Styles.Banner>
+                        {emptyStateHelpCardContent.map((v, i) => (
+                            <HelpCard
+                                badge={v.badge}
+                                title={v.title}
+                                content={v.content}
+                                href={v.href}
+                                linkText={v.linkText}
+                                key={`${v.title}-${i}`}
+                            />
+                        ))}
+                    </Styles.Banner>
+                    {maxSkew !== undefined && (
+                        <div>
+                            <SkewCard maxSkew={maxSkew} />
+
+                            <HelpCard
+                                title={`Skew Farming Opportunity: ${maxSkew?.name}`}
+                                content={`Take a position in ${maxSkew?.name} and also take the opposite position of equal
+                                magnitude on another platform.`}
                                 href="https://tracer.finance/radar/skew-farming-explained/"
-                                target="_blank"
-                                className="text-tracer-400 underline"
-                                rel="noreferrer"
-                            >
-                                Read guide
-                            </a>
-                        </div>
-                    </div>
-                    {maxSkew === undefined ? null : (
-                        <div className="my-2 xl:w-1/3 flex flex-col">
-                            <div className="relative overflow-hidden rounded-t-xl">
-                                <CTABackground className="w-full absolute bottom-0 right-0" />
-                                <div className="relative flex">
-                                    <div
-                                        className="p-16"
-                                        style={{
-                                            background:
-                                                'linear-gradient(90deg, rgba(0, 0, 0, 0.23) 6.59%, rgba(0, 0, 0, 0.73) 96.04%)',
-                                        }}
-                                    >
-                                        <BVector />
-                                    </div>
-                                    <div className="m-auto">
-                                        <div className="flex mb-5">
-                                            <Logo
-                                                size="lg"
-                                                ticker={tokenSymbolToLogoTicker(maxSkew?.longToken?.symbol)}
-                                                className="mr-5 my-auto"
-                                            />
-                                            <div className="my-auto text-white">
-                                                <div>{maxSkew?.longToken?.symbol}</div>
-                                                <div>
-                                                    Leverage on gains: {maxSkew?.longToken?.effectiveGain.toFixed(3)}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="flex">
-                                            <Logo
-                                                size="lg"
-                                                ticker={tokenSymbolToLogoTicker(maxSkew?.shortToken?.symbol)}
-                                                className="mr-5 my-auto"
-                                            />
-                                            <div className="my-auto text-white">
-                                                <div>{maxSkew?.shortToken?.symbol}</div>
-                                                <div>
-                                                    Leverage on gains: {maxSkew?.shortToken?.effectiveGain.toFixed(3)}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="px-4 py-6 rounded-b-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                                <div className="mb-3 text-2xl font-semibold">
-                                    Skew Farming Opportunity: {maxSkew?.name}
-                                </div>
-                                <div className="mb-3">
-                                    Take a position in {maxSkew?.name} and also take the opposite position of equal
-                                    magnitude on another platform.
-                                </div>
-                                <a
-                                    href="https://tracer.finance/radar/skew-farming-explained/"
-                                    target="_blank"
-                                    className="text-tracer-400 underline"
-                                    rel="noreferrer"
-                                >
-                                    Learn how to skew farm
-                                </a>
-                            </div>
+                                linkText="Learn how to skew farm"
+                            />
                         </div>
                     )}
-                </div>
-            </div>
+                </Styles.Wrapper>
+            </Styles.Container>
         );
     };
 
     const filledState = () => {
         return (
-            <div className="mt-5">
-                <div className="flex flex-col xl:flex-row">
-                    <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
-                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
-                        <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
-                            <div className="flex">
-                                {/* <Logo size="md" ticker="USD" className="mr-1 my-auto" /> */}
-                                <div className="font-bold text-2xl">{toApproxCurrency(totalValuation())}</div>
-                            </div>
-                            <div className="font-bold text-md text-cool-gray-500">Portfolio Valuation (USD)</div>
-                        </div>
-                    </div>
-                    <div className="xl:w-1/3 mt-5 xl:mt-0 p-5 rounded-xl shadow-md bg-tracer-50 dark:bg-theme-background">
-                        <div className="w-min mb-3 px-3 py-1 text-sm text-white bg-tracer-900 rounded">GUIDE</div>
-                        <div className="mb-3 text-2xl font-semibold">Skew Farming: How To</div>
-                        <div className="mb-3">
-                            Know this strategy to recognise opportunities for excess risk-adjusted returns. Take
-                            advantage of the skew in Perpetual Pools.
-                        </div>
-                        <a
-                            href="https://tracer.finance/radar/skew-farming-explained/"
-                            target="_blank"
-                            className="text-tracer-400 underline"
-                            rel="noreferrer"
-                        >
-                            Read guide
-                        </a>
-                    </div>
-                </div>
-                <Styles.TableSection>
-                    <div className="sm:flex sm:justify-between whitespace-nowrap">
-                        <div className="font-semibold text-2xl my-4">Token Holdings</div>
-                        <div className="flex my-auto">
-                            <div className="flex mr-2 sm:mr-5">
-                                <div className="mr-2 my-auto">Price by</div>
-                                <Dropdown
-                                    size="sm"
-                                    value="Tracer"
-                                    options={[
-                                        { key: PriceByEnum.Tracer },
-                                        {
-                                            key: PriceByEnum.Balancer,
-                                            disabled: true,
-                                            tooltip: { key: TooltipKeys.ComingSoon },
-                                        },
-                                    ]}
-                                    onSelect={(val) => {
-                                        console.debug(val);
-                                    }}
-                                />
-                            </div>
-                            <div className="flex">
-                                <div className="mr-2 my-auto">Denote in</div>
-                                <Dropdown
-                                    size="sm"
-                                    iconSize="xs"
-                                    placeHolderIcon={state.positionsDenotedIn as LogoTicker}
-                                    value={state.positionsDenotedIn}
-                                    options={Object.keys(DenotedInEnum).map((key) => ({
-                                        key: key,
-                                        ticker: key as LogoTicker,
-                                    }))}
-                                    onSelect={(val) =>
-                                        dispatch({ type: 'setDenotation', denotedIn: val as DenotedInEnum })
-                                    }
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <TokenTable rows={rows} onClickBurn={onClickBurn} denotedIn={state.positionsDenotedIn} />
-                </Styles.TableSection>
-                <Styles.TableSection>
-                    <div className="sm:flex sm:justify-between whitespace-nowrap">
-                        <div className="font-semibold text-2xl my-4">Escrow Holdings</div>
-                        <div className="flex my-auto">
-                            <div className="flex mr-2 sm:mr-5">
-                                <div className="mr-2 my-auto">Market</div>
-                                <Dropdown
-                                    size="sm"
-                                    value={state.escrowMarketFilter}
-                                    className="w-32 mt-auto"
-                                    options={Object.keys(MarketFilterEnum).map((key) => ({
-                                        key: (MarketFilterEnum as any)[key],
-                                        ticker: (key !== 'All' ? key : '') as LogoTicker,
-                                    }))}
-                                    onSelect={(val) =>
-                                        dispatch({ type: 'setEscrowMarketFilter', market: val as MarketFilterEnum })
-                                    }
-                                />
-                            </div>
-                            <div className="flex">
-                                <Styles.SearchInput
-                                    placeholder="Search"
-                                    value={state.escrowSearch}
-                                    onChange={(search) => dispatch({ type: 'setEscrowSearch', search })}
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <EscrowTable rows={filteredEscrowRows} />
-                </Styles.TableSection>
-            </div>
+            <Styles.Container>
+                <Styles.Wrapper>
+                    <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
+                    <HelpCard
+                        badge="Guide"
+                        title="Minting and Burning Pool Tokens Guide"
+                        content="A step-by-step on minting and burning tokens using the Perpetual Pools interface."
+                        href="https://tracer.finance/radar/minting-burning/"
+                        linkText="Read guide"
+                    />
+                </Styles.Wrapper>
+                <HoldingsTable
+                    title="Wallet Holdings"
+                    firstActionTitle="Price by"
+                    firstAction={<PriceByDropDown />}
+                    secondActionTitle="Denote in"
+                    secondAction={<DenoteInDropDown state={state} dispatch={dispatch} />}
+                >
+                    <TokenTable
+                        rows={rows}
+                        onClickCommitAction={onClickCommitAction}
+                        denotedIn={state.positionsDenotedIn}
+                    />
+                </HoldingsTable>
+                <HoldingsTable
+                    title="Escrow Holdings"
+                    firstActionTitle="Market"
+                    firstAction={<MarketDropdown state={state} dispatch={dispatch} />}
+                    secondAction={<EscrowSearch state={state} dispatch={dispatch} />}
+                >
+                    <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
+                </HoldingsTable>
+            </Styles.Container>
         );
     };
 
-    return <>{account ? filledState() : emptyState()}</>;
+    return <>{showFilledState ? filledState() : emptyState()}</>;
 }) as React.FC<{
-    onClickBurn: (pool: string, side: SideEnum) => void;
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
 }>;

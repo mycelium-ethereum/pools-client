@@ -4,6 +4,7 @@ import Loading from '@components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '@components/General/TWTable';
 import { toApproxCurrency } from '~/utils/converters';
 import { usePoolActions } from '@context/PoolContext';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 import * as Styles from './styles';
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
@@ -11,7 +12,7 @@ import { ClaimablePoolToken, TokenType, EscrowRowProps } from '../state';
 
 const ArrowDown = '/img/general/caret-down-white.svg';
 
-export const EscrowTable = (({ rows }) => {
+export const EscrowTable = (({ rows, onClickCommitAction }) => {
     return (
         <>
             <Table>
@@ -29,6 +30,7 @@ export const EscrowTable = (({ rows }) => {
                                     claimableSettlementTokens={pool.claimableSettlementTokens}
                                     numClaimable={pool.numClaimable}
                                     claimableSum={pool.claimableSum}
+                                    onClickCommitAction={onClickCommitAction}
                                 />
                             )
                         );
@@ -40,6 +42,7 @@ export const EscrowTable = (({ rows }) => {
     );
 }) as React.FC<{
     rows: EscrowRowProps[];
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
 }>;
 
 const PoolRow: React.FC<EscrowRowProps> = ({
@@ -51,6 +54,7 @@ const PoolRow: React.FC<EscrowRowProps> = ({
     claimableSettlementTokens,
     numClaimable,
     claimableSum,
+    onClickCommitAction,
 }) => {
     const { claim = () => console.error('Failed to claim: claim function not defined in context') } = usePoolActions();
     const [expanded, setExpanded] = useState<boolean>(false);
@@ -123,6 +127,8 @@ const PoolRow: React.FC<EscrowRowProps> = ({
                                                     <ClaimablePoolTokenRow
                                                         key={`${poolAddress}-${claimableAsset.symbol}`}
                                                         {...(claimableAsset as ClaimablePoolToken)}
+                                                        poolAddress={poolAddress}
+                                                        onClickCommitAction={onClickCommitAction}
                                                     />
                                                 )
                                             );
