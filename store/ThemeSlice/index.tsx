@@ -2,7 +2,7 @@ import { StateSlice, StoreState } from '@store/types';
 import { Theme } from './themes';
 import { IThemeSlice } from './types';
 
-export const createThemeSlice: StateSlice<IThemeSlice, IThemeSlice> = (set, get) => ({
+export const createThemeSlice: StateSlice<IThemeSlice> = (set, get) => ({
     theme: Theme.Dark,
     toggleTheme: () => {
         const head = document.getElementsByTagName('html')[0];

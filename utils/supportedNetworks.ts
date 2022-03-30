@@ -12,6 +12,7 @@ export const isSupportedNetwork = (networkId: number | string | undefined): bool
     return supportedNetworks.includes(networkIdString ?? '');
 };
 
+
 const supportedBridgeNetworks: string[] = [
     NETWORKS.ARBITRUM,
     NETWORKS.ARBITRUM_RINKEBY,
@@ -24,3 +25,6 @@ export const isSupportedBridgeNetwork = (networkId?: KnownNetwork): boolean => {
 
     return supportedBridgeNetworks.includes(networkIdString ?? '');
 };
+
+const knownNetworks: string[] = [NETWORKS.ARBITRUM, NETWORKS.MAINNET, NETWORKS.ARBITRUM_RINKEBY, NETWORKS.RINKEBY];
+export const isKnownNetwork = (networkId: string): boolean => knownNetworks.includes(networkId);
