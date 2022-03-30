@@ -1,5 +1,7 @@
+import { ethers } from 'ethers';
+
 export interface IGasSlice {
     gasPrice: number;
     fetchingGasPrice: boolean;
-    getGasPrice: () => void;
+    getGasPrice: (provider: ethers.providers.JsonRpcProvider) => void;
 }

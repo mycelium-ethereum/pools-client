@@ -3,7 +3,7 @@ import { ITransactionSlice } from './TransactionSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { IWeb3Slice } from './Web3Slice/types';
-// import {IGasSlice} from './GasSlice/types';
+import { IGasSlice } from './GasSlice/types';
 
 // global store state
 export type StoreState = {
@@ -11,9 +11,7 @@ export type StoreState = {
     themeSlice: IThemeSlice;
     poolsSlice: IPoolsSlice;
     web3Slice: IWeb3Slice;
-    // & {
-    // gasSlice: IGasSlice
-    // }
+    gasSlice: IGasSlice;
 };
 
 // Seperated return type to allow for a different

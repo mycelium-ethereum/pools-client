@@ -11,8 +11,8 @@ import { IThemeSlice } from './ThemeSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { IWeb3Slice } from './Web3Slice/types';
 import { subscribeWithSelector } from 'zustand/middleware';
-// import {IGasSlice} from './GasSlice/types';
-// import {createGasSlice} from './GasSlice';
+import { IGasSlice } from './GasSlice/types';
+import { createGasSlice } from './GasSlice';
 
 // Turn the set method into an immer proxy
 const immer =
@@ -54,9 +54,22 @@ export const useStore = create<
                 themeSlice: lens<IThemeSlice>(createThemeSlice),
                 poolsSlice: lens<IPoolsSlice>(createPoolsSlice),
                 web3Slice: lens<IWeb3Slice>(createWeb3Slice),
-                // gasSlice: lens<IGasSlice>(createGasSlice)
-                // }
+                gasSlice: lens<IGasSlice>(createGasSlice),
             })),
         ),
     ),
+);
+
+useStore.subscribe(
+    (state) => state.web3Slice.provider,
+    (_prevProvider, newProvder) => {
+        // add any on provider change here
+        console.log('provider changed');
+        if (newProvder) {
+            useStore.getState().gasSlice.getGasPrice(newProvder);
+        }
+    },
+    {
+        equalityFn: (a, b) => a?.network === b?.network,
+    },
 );

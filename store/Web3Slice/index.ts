@@ -88,3 +88,4 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
 });
 
 export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;
+export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) => state.web3Slice.provider;

@@ -14,6 +14,7 @@ import { usePool, usePoolActions } from '@context/PoolContext';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import CloseIcon from '/public/img/general/close.svg';
+import { useGasPrice } from '~/hooks/useGasPrice';
 
 const TRADE_OPTIONS = [
     {
@@ -33,7 +34,8 @@ const TRADE_OPTIONS = [
 const DEFAULT_GAS_FEE = new BigNumber(0);
 
 export default styled((({ onClose, className }) => {
-    const { account, gasPrice } = useWeb3();
+    const { account } = useWeb3();
+    const gasPrice = useGasPrice();
     const { handleConnect } = useWeb3Actions();
 
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);

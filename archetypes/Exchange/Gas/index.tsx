@@ -4,9 +4,11 @@ import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { GasPriceTooltip } from '@components/Tooltips';
 import { networkConfig } from '~/constants/networks';
 import GasIcon from '@public/img/general/gas_icon.svg';
+import { useGasPrice } from '~/hooks/useGasPrice';
 
 export default (() => {
-    const { gasPrice, wallet, network } = useWeb3();
+    const { wallet, network } = useWeb3();
+    const gasPrice = useGasPrice();
     return (
         <Container>
             <GasPriceTooltip
