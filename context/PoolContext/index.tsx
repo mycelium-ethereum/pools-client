@@ -491,7 +491,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const committer = PoolCommitter__factory?.connect(committerAddress, signer);
 
         try {
-            console.log('estiating gas');
             const gasEstimate = await committer?.estimateGas?.commit(
                 encodeCommitParams(
                     false,
