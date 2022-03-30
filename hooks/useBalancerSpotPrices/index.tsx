@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { getBalancerPrices } from '~/utils/balancer';
-import { DEFAULT_NETWORK } from '@context/Web3Context/Web3Context.Config';
+import { DEFAULT_NETWORK } from '~/constants/networks';
 import { balancerConfig } from '~/constants/balancer';
 
 export default ((network = DEFAULT_NETWORK) => {

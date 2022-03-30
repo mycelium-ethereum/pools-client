@@ -25,7 +25,7 @@ import { StyledTooltip } from '@components/Tooltips';
 import { default as UpOrDown } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { networkConfig } from '~/constants/networks';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;

@@ -4,7 +4,7 @@ import type { BigNumber } from 'bignumber.js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { MultiBridge } from './MultiBridge';
 import { switchNetworks } from '~/utils/rpcMethods';
-import { Network } from '@context/Web3Context/Web3Context.Config';
+import { Network } from '~/types/networks';
 import { BridgeableAsset } from '~/types/bridge';
 import { bridgeableTickers } from '~/constants/bridge';
 

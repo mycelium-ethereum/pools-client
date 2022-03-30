@@ -1,9 +1,9 @@
 import { useMemo, useState } from 'react';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { knownNetworkToSubgraphUrl, networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { knownNetworkToSubgraphUrl, networkConfig } from '~/constants/networks';
 
 type SubgraphAggregateBalances = Record<
     string,

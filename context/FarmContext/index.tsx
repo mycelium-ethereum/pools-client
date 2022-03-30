@@ -18,7 +18,7 @@ import { poolMap } from '@tracer-protocol/pools-js/data';
 import { KnownNetwork, calcBptTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
 import { Provider } from '@ethersproject/providers';
 import { farmConfig } from '~/constants/staking';
-import { networkConfig as networkConfig_ } from '@context/Web3Context/Web3Context.Config';
+import { networkConfig as networkConfig_ } from '~/constants/networks';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };

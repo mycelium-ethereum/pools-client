@@ -28,7 +28,7 @@ import {
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { networkConfig } from '~/constants/networks';
 import { PoolList } from '~/types/pools';
 import PoolListService from '@libs/services/poolList';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';

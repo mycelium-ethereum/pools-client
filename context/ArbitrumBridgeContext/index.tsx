@@ -17,7 +17,8 @@ import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
 
 import { useWeb3 } from '../Web3Context/Web3Context';
-import { networkConfig, Network } from '../Web3Context/Web3Context.Config';
+import { networkConfig } from '~/constants/networks';
+import { Network } from '~/types/networks';
 
 type CachedBridges = {
     [account: string]: {

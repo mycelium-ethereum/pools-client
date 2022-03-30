@@ -12,7 +12,7 @@ import { classNames } from '~/utils/helpers';
 import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { networkConfig } from '~/constants/networks';
 import { balancerConfig } from '~/constants/balancer';
 
 export default (() => {

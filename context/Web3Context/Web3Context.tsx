@@ -1,8 +1,8 @@
 import React, { createContext, useEffect, useMemo, useRef } from 'react';
-import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
-import { Network } from './Web3Context.Config';
 import { ethers, providers } from 'ethers';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { Network } from '~/types/networks';
 import { useStore } from '@store/main';
 import { selectIsDark } from '@store/ThemeSlice';
 import { selectWeb3Slice } from '@store/Web3Slice';

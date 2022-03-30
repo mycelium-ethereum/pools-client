@@ -1,9 +1,9 @@
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import React from 'react';
-import { GasPriceTooltip } from '@components/Tooltips';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import GasIcon from '@public/img/general/gas_icon.svg';
 import styled from 'styled-components';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { GasPriceTooltip } from '@components/Tooltips';
+import { networkConfig } from '~/constants/networks';
+import GasIcon from '@public/img/general/gas_icon.svg';
 
 export default (() => {
     const { gasPrice, wallet, network } = useWeb3();

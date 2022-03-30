@@ -1,10 +1,10 @@
 import React from 'react';
 import { NETWORKS } from '@tracer-protocol/pools-js';
+import TWPopup from '@components/General/TWPopup';
 import { Logo, LogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { networkConfig } from '~/constants/networks';
 import { switchNetworks } from '~/utils/rpcMethods';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import TWPopup from '@components/General/TWPopup';
 
 import Icon from '@ant-design/icons';
 import Error from '@public/img/notifications/error.svg';

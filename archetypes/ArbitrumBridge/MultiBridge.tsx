@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { Network } from '@context/Web3Context/Web3Context.Config';
+import { Network } from '~/types/networks';
 import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
