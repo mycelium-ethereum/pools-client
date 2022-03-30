@@ -1,11 +1,11 @@
 import { StateSlice } from '@store/types';
 import Onboard from '@tracer-protocol/onboard';
-import {KnownNetwork} from '@tracer-protocol/pools-js';
-import {ethers} from 'ethers';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { ethers } from 'ethers';
 // import { API as OnboardApi, Initialization, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
 import { onboardConfig } from '~/constants/onboard';
-import {StoreState} from '..';
-import {IWeb3Slice } from './types';
+import { StoreState } from '..';
+import { IWeb3Slice } from './types';
 
 export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     account: undefined,
@@ -20,14 +20,15 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
         subscriptions: {
             address: (address) => {
                 console.info(`Changing address: ${address}`);
-                set({ account: address })
+                set({ account: address });
                 // onboardConfig?.subscriptions?.address && onboardConfig?.subscriptions?.address(address);
             },
             wallet: (wallet) => {
                 console.debug('Detected wallet change');
                 if (wallet.provider) {
                     console.debug('Setting wallet provider');
-                    if (wallet.name) { // cacheWalletSelection
+                    if (wallet.name) {
+                        // cacheWalletSelection
                         window.localStorage.setItem('onboard.selectedWallet', wallet.name);
                     }
                     const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');
@@ -35,15 +36,15 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                     provider_.ready.then(() => {
                         console.debug('Injected wallet provider ready');
                         console.debug('Setting injected wallet provider', provider_);
-                        set({ wallet })
+                        set({ wallet });
                         // usingDefaultProvider.current = false;
-                        set({ provider: provider_ })
+                        set({ provider: provider_ });
                         if (provider_?.network.chainId) {
-                            set({ network: provider_.network.chainId.toString() as KnownNetwork })
+                            set({ network: provider_.network.chainId.toString() as KnownNetwork });
                         }
                     });
                 } else {
-                    set({ wallet: undefined })
+                    set({ wallet: undefined });
                 }
                 // onboardConfig?.subscriptions?.wallet && onboardConfig.subscriptions.wallet(wallet);
             },
@@ -51,22 +52,24 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                 get().onboard.config({ networkId: network });
                 console.info(`Changing network ${network}`);
                 const network_ = network?.toString() as KnownNetwork;
-                set({ network: network_ })
+                set({ network: network_ });
                 // onboardConfig?.subscriptions?.network && onboardConfig.subscriptions.network(network);
             },
         },
     }),
 
     checkIsReady: async () => {
-        const isReady = await get().onboard?.walletCheck().catch((_err) => false);
+        const isReady = await get()
+            .onboard?.walletCheck()
+            .catch((_err) => false);
         console.debug('Wallet is ready', isReady);
-        set({ isReady: !!isReady })
+        set({ isReady: !!isReady });
         return !!isReady;
     },
 
     resetOnboard: async () => {
         window.localStorage.setItem('onboard.selectedWallet', '');
-        set({ isReady: false })
+        set({ isReady: false });
         get().onboard?.walletReset();
     },
 
@@ -81,8 +84,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                 console.error(err);
             }
         }
-    }
+    },
 });
 
-
-export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => (state.web3Slice)
+export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;

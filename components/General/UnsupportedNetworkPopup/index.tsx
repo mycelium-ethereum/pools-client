@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
-import { ARBITRUM } from '~/constants/networks';
 import { switchNetworks } from '~/utils/rpcMethods';
-import { useRouter } from 'next/router';
 import { Notification } from '../Notification';
 
 const UnsupportedNetwork: React.FC = () => {
@@ -28,7 +28,7 @@ const UnsupportedNetwork: React.FC = () => {
                             <a
                                 className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                                 onClick={() => {
-                                    switchNetworks(provider, ARBITRUM);
+                                    switchNetworks(provider, NETWORKS.ARBITRUM);
                                 }}
                             >
                                 Switch to Arbitrum Mainnet

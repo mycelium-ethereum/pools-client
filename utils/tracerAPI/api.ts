@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { ARBITRUM } from '~/constants/networks';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { TradeHistoryResult, PendingCommitsResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS } from './types';
 
 // Base API URL
@@ -56,7 +56,9 @@ export const fetchCommitHistory: (params: {
     page,
     pageSize,
 }) => {
-    let route = `${TRACER_API}/poolsv2/tradeHistory?page=${page}&pageSize=${pageSize}&network=${network ?? ARBITRUM}&userAddress=${account}`;
+    let route = `${TRACER_API}/poolsv2/tradeHistory?page=${page}&pageSize=${pageSize}&network=${
+        network ?? NETWORKS.ARBITRUM
+    }&userAddress=${account}`;
     if (type === 'mint') {
         route += '&types=LongMint&types=ShortMint';
     } else if (type === 'burn') {

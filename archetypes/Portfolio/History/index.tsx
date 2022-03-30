@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
-import { CommitActionEnum } from '@tracer-protocol/pools-js';
-import { ARBITRUM, CommitActionToQueryFocusMap } from '~/constants/index';
+import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Pagination, { PageNumber } from '@components/General/Pagination';
@@ -91,7 +91,7 @@ export default (({ focus }) => {
         if (account) {
             fetchCommitHistory({
                 account: account ?? '0',
-                network: (network as V2_SUPPORTED_NETWORKS) ?? ARBITRUM,
+                network: (network as V2_SUPPORTED_NETWORKS) ?? NETWORKS.ARBITRUM,
                 type: CommitActionToQueryFocusMap[focus as CommitActionEnum],
                 page,
                 pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
@@ -264,13 +264,13 @@ const CommitRow: React.FC<
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashIn,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashOut,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',
                             },
                         ]}
@@ -336,13 +336,13 @@ const CommitRow: React.FC<
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashIn,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashOut,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',
                             },
                         ]}
@@ -425,13 +425,13 @@ const CommitRow: React.FC<
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashIn,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
                                 type: ArbiscanEnum.txn,
                                 target: transactionHashOut,
-                                logo: ARBITRUM,
+                                logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',
                             },
                         ]}

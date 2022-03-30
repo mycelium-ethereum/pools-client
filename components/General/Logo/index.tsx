@@ -1,5 +1,5 @@
 import React from 'react';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { classNames } from '~/utils/helpers';
 
 import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
@@ -74,13 +74,13 @@ export type LogoTicker =
     | 'SUSHI'
     | 'BALANCER'
     | 'BASE'
-    | typeof ARBITRUM
-    | typeof ARBITRUM_RINKEBY
+    | typeof NETWORKS.ARBITRUM
+    | typeof NETWORKS.ARBITRUM_RINKEBY
     | 'DEFAULT';
 
 const logos: Record<LogoTicker, any> = {
-    [ARBITRUM]: Arbitrum,
-    [ARBITRUM_RINKEBY]: Arbitrum,
+    [NETWORKS.ARBITRUM]: Arbitrum,
+    [NETWORKS.ARBITRUM_RINKEBY]: Arbitrum,
     ETHERSCAN: Etherscan,
     USDC: USDC,
     USD: USD,

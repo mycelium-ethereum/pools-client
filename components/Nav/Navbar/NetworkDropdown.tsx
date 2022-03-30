@@ -1,9 +1,9 @@
 import React from 'react';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '@components/General';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { switchNetworks } from '~/utils/rpcMethods';
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
 import TWPopup from '@components/General/TWPopup';
 
 import Icon from '@ant-design/icons';
@@ -28,13 +28,17 @@ export default (({ className }) => {
                 />
             }
         >
-            <option className={option} value={ARBITRUM} onClick={() => switchNetworks(provider, ARBITRUM)}>
+            <option
+                className={option}
+                value={NETWORKS.ARBITRUM}
+                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}
+            >
                 Arbitrum
             </option>
             <option
                 className={option}
-                value={ARBITRUM_RINKEBY}
-                onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}
+                value={NETWORKS.ARBITRUM_RINKEBY}
+                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
             >
                 Arbitrum Rinkeby
             </option>

@@ -15,8 +15,10 @@ import BigNumber from 'bignumber.js';
 import { fetchTokenPrice } from '~/utils/farms';
 import { BalancerPoolAsset, Farm } from '~/types/staking';
 import { poolMap } from '@tracer-protocol/pools-js/data';
-import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
+import { KnownNetwork, calcBptTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
 import { Provider } from '@ethersproject/providers';
+import { farmConfig } from '~/constants/staking';
+import { networkConfig as networkConfig_ } from '@context/Web3Context/Web3Context.Config';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -44,10 +46,13 @@ export const FarmStore: React.FC<
         farmContext: FarmContexts;
     } & Children
 > = ({ farmContext, children }) => {
-    const { signer, config, account, provider } = useWeb3();
+    const { signer, account, provider, network = NETWORKS.ARBITRUM } = useWeb3();
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
     const [rewardsTokenUSDPrices, setRewardsTokenUSDPrices] = useState<Record<string, BigNumber>>({});
+
+    const config = farmConfig[network];
+    const networkConfig = networkConfig_[network];
 
     // used to fetch details of tokens that make up a balancer pool
     const getBptDetails = async (
@@ -56,7 +61,7 @@ export const FarmStore: React.FC<
         balancerPoolName: string,
     ): Promise<Farm['bptDetails']> => {
         if (!config) {
-            return undefined;
+            // return undefined;
         }
 
         const balancerPool = new ethers.Contract(config.balancerVaultAddress, Vault__factory.abi, provider) as Vault;
@@ -82,7 +87,7 @@ export const FarmStore: React.FC<
 
                 let usdPrice = new BigNumber(0);
 
-                if (address.toLowerCase() === config.usdcAddress.toLowerCase()) {
+                if (address.toLowerCase() === networkConfig.usdcAddress.toLowerCase()) {
                     usdPrice = new BigNumber(1);
                 } else if (config?.knownUSDCPriceFeeds?.[address]) {
                     // fetch USDC price for known markets (BTC and ETH)
@@ -180,7 +185,7 @@ export const FarmStore: React.FC<
 
     const fetchFarms = useCallback(
         async ({ reset }: { reset: boolean }) => {
-            if (signer && provider && config && account) {
+            if (signer && provider && account) {
                 if (reset) {
                     setFarms({});
                     setFetchingFarms(true);
@@ -303,11 +308,11 @@ export const FarmStore: React.FC<
                 });
             }
         },
-        [signer, provider, config, account],
+        [signer, provider, account],
     );
 
     const refreshRewardsTokenPriceUSDC = async ({ address, decimals }: { address?: string; decimals?: number }) => {
-        if (!config?.sushiRouterAddress || !address || !decimals || !config.usdcAddress || !signer) {
+        if (!config?.sushiRouterAddress || !address || !decimals || !networkConfig.usdcAddress || !signer) {
             // no update to perform
             return;
         }
@@ -320,7 +325,7 @@ export const FarmStore: React.FC<
 
         const oneUnit = new BigNumber('1').times(10 ** decimals);
 
-        const [, buyPrice] = await sushiRouter.getAmountsOut(oneUnit.toFixed(), [address, config.usdcAddress]);
+        const [, buyPrice] = await sushiRouter.getAmountsOut(oneUnit.toFixed(), [address, networkConfig.usdcAddress]);
 
         const formattedUSDCPrice = new BigNumber(ethers.utils.formatUnits(buyPrice, USDC_DECIMALS));
 
@@ -333,7 +338,7 @@ export const FarmStore: React.FC<
 
     const refreshTcrPriceUSDC = async () => {
         refreshRewardsTokenPriceUSDC({
-            address: config?.tcrAddress,
+            address: networkConfig?.tcrAddress,
             decimals: TCR_DECIMALS,
         });
     };

@@ -4,8 +4,7 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
 import { Popover, Transition } from '@headlessui/react';
-import { ARBITRUM } from '~/constants/networks';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget, otherActions }) => (
@@ -53,7 +52,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                             )
                                         }
                                     >
-                                        <Logo className="relative inline mr-2" ticker={ARBITRUM} />
+                                        <Logo className="relative inline mr-2" ticker={NETWORKS.ARBITRUM} />
                                         View on Arbiscan
                                     </div>
                                 ) : null}

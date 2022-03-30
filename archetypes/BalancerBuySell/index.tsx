@@ -1,8 +1,7 @@
 import React from 'react';
-import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum } from '@tracer-protocol/pools-js';
+import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
-import { ARBITRUM } from '~/constants/networks';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
@@ -14,9 +13,10 @@ import { StyledTooltip } from '@components/Tooltips';
 import Link from 'next/link';
 
 import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { balancerConfig } from '~/constants/balancer';
 
 export default (() => {
-    const { network = ARBITRUM, account } = useWeb3();
+    const { network = NETWORKS.ARBITRUM, account } = useWeb3();
     const { handleConnect } = useWeb3Actions();
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
@@ -42,7 +42,9 @@ export default (() => {
                         <Button
                             size="lg"
                             variant="primary"
-                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                            onClick={() =>
+                                open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')
+                            }
                             disabled={true}
                         >
                             Take me to Balancer
@@ -64,7 +66,9 @@ export default (() => {
                         <Button
                             size="lg"
                             variant="primary"
-                            onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                            onClick={() =>
+                                open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')
+                            }
                             disabled={true}
                         >
                             Take me to Balancer
@@ -77,7 +81,7 @@ export default (() => {
                 <Button
                     size="lg"
                     variant="primary"
-                    onClick={() => open(constructBalancerLink(token?.address, ARBITRUM, true), '_blank')}
+                    onClick={() => open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')}
                     disabled={!valid}
                 >
                     Take me to Balancer
@@ -176,7 +180,9 @@ export const constructBalancerLink: (token: string | undefined, network: KnownNe
     network,
     isBuy,
 ) => {
-    const { usdcAddress, balancerInfo } = networkConfig[network];
+    const { usdcAddress } = networkConfig[network];
+    const balancerInfo = balancerConfig[network];
+
     // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
     return isBuy
         ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`

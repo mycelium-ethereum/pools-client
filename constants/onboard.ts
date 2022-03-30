@@ -1,7 +1,6 @@
-import { NETWORKS } from "@tracer-protocol/pools-js"
-import {Initialization} from "@tracer-protocol/onboard/dist/src/interfaces";
-import {DEFAULT_NETWORK, networkConfig} from "@context/Web3Context/Web3Context.Config"
-
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { DEFAULT_NETWORK, networkConfig } from '@context/Web3Context/Web3Context.Config';
 
 export const onboardConfig: Initialization = {
     networkId: parseInt(DEFAULT_NETWORK),
@@ -23,7 +22,6 @@ export const onboardConfig: Initialization = {
                 },
             },
         ],
-
     },
-    walletCheck: [{ checkName: 'accounts' }, { checkName: 'connect' }]
-}
+    walletCheck: [{ checkName: 'accounts' }, { checkName: 'connect' }],
+};

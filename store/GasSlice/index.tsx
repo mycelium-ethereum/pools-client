@@ -5,6 +5,8 @@ export const createGasSlice: StateSlice<IGasSlice> = (_set, get) => ({
     gasPrice: 0,
     fetchingGasPrice: false,
     getGasPrice: async () => {
-        if (get().fetchingGasPrice) return
-    }
+        if (get().fetchingGasPrice) {
+            return;
+        }
+    },
 });

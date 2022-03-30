@@ -10,9 +10,9 @@ export type StoreState = {
     transactionSlice: ITransactionSlice;
     themeSlice: IThemeSlice;
     poolsSlice: IPoolsSlice;
-    web3Slice: IWeb3Slice
+    web3Slice: IWeb3Slice;
     // & {
-        // gasSlice: IGasSlice
+    // gasSlice: IGasSlice
     // }
 };
 

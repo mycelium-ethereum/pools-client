@@ -5,12 +5,12 @@ import { createTransactionSlice } from './TransactionSlice';
 import { createThemeSlice } from './ThemeSlice';
 import { StoreState } from './types';
 import { createPoolsSlice } from './PoolsSlice';
-import {createWeb3Slice} from './Web3Slice';
+import { createWeb3Slice } from './Web3Slice';
 import { ITransactionSlice } from './TransactionSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { IWeb3Slice } from './Web3Slice/types';
-import { subscribeWithSelector } from 'zustand/middleware'
+import { subscribeWithSelector } from 'zustand/middleware';
 // import {IGasSlice} from './GasSlice/types';
 // import {createGasSlice} from './GasSlice';
 
@@ -45,12 +45,7 @@ export const useStore = create<
     StoreState,
     SetState<StoreState>,
     GetState<StoreState>,
-    Mutate<
-        StoreApi<StoreState>,
-        [
-          ['zustand/subscribeWithSelector', never],
-        ]
-    >
+    Mutate<StoreApi<StoreState>, [['zustand/subscribeWithSelector', never]]>
 >(
     subscribeWithSelector(
         immer(
@@ -59,9 +54,9 @@ export const useStore = create<
                 themeSlice: lens<IThemeSlice>(createThemeSlice),
                 poolsSlice: lens<IPoolsSlice>(createPoolsSlice),
                 web3Slice: lens<IWeb3Slice>(createWeb3Slice),
-                    // gasSlice: lens<IGasSlice>(createGasSlice)
+                // gasSlice: lens<IGasSlice>(createGasSlice)
                 // }
             })),
         ),
-    )
+    ),
 );

@@ -1,3 +1,3 @@
-import { useStore } from ".";
+import { useStore } from '.';
 
-useStore.subscribe(state => state.web3Slice.onboard, console.log)
+useStore.subscribe((state) => state.web3Slice.onboard, console.log);

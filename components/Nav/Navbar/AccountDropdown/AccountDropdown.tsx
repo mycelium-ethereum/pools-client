@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { ARBITRUM } from '~/constants/networks';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import useEnsName from '~/hooks/useEnsName';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';
@@ -66,7 +66,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <Styled.ArbitrumLogo ticker={ARBITRUM} />
+                    <Styled.ArbitrumLogo ticker={NETWORKS.ARBITRUM} />
                     <div>View on Arbiscan</div>
                 </Styled.ViewOnArbiscanOption>
             </Styled.Options>
