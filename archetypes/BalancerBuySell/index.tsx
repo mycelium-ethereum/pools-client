@@ -1,23 +1,26 @@
 import React from 'react';
+import Link from 'next/link';
 import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
-import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { classNames } from '~/utils/helpers';
 import { StyledTooltip } from '@components/Tooltips';
-import Link from 'next/link';
+import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { useStore } from '@store/main';
+import { selectOnboardActions } from '@store/Web3Slice';
+
+import { classNames } from '~/utils/helpers';
 
 import { networkConfig } from '~/constants/networks';
 import { balancerConfig } from '~/constants/balancer';
 
 export default (() => {
     const { network = NETWORKS.ARBITRUM, account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
+    const { handleConnect } = useStore(selectOnboardActions);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
     const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];

@@ -89,3 +89,11 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
 
 export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;
 export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) => state.web3Slice.provider;
+
+export const selectOnboardActions: (state: StoreState) => {
+    resetOnboard: IWeb3Slice['resetOnboard'];
+    handleConnect: IWeb3Slice['handleConnect'];
+} = (state) => ({
+    handleConnect: state.web3Slice.handleConnect,
+    resetOnboard: state.web3Slice.resetOnboard,
+});

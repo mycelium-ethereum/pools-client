@@ -4,7 +4,10 @@ import { SideEnum } from '@tracer-protocol/pools-js';
 import { Dropdown, Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import { useWeb3 } from '@context/Web3Context/Web3Context';
+
+import { useStore } from '@store/main';
+import { selectOnboardActions } from '@store/Web3Slice';
 
 import { MarketFilterEnum } from '~/types/filters';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
@@ -43,12 +46,13 @@ enum PriceByEnum {
 
 // const Overview
 export default (({ onClickBurn }) => {
+    const { account } = useWeb3();
+    const { handleConnect } = useStore(selectOnboardActions);
+
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
     const escrowRows = useEscrowHoldings();
-    const { account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
 
     const totalValuation = function () {
         let total = 0;
