@@ -10,6 +10,9 @@ export interface IWeb3Slice {
     provider: ethers.providers.JsonRpcProvider | undefined;
     wallet: Wallet | undefined;
 
+    defaultProvider: ethers.providers.WebSocketProvider | undefined;
+    setDefaultProvider: () => Promise<void>;
+
     checkIsReady: () => Promise<boolean>;
     resetOnboard: () => Promise<void>;
     handleConnect: () => Promise<void>;

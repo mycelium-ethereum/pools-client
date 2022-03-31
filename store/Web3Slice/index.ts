@@ -2,6 +2,7 @@ import { StateSlice } from '@store/types';
 import Onboard from '@tracer-protocol/onboard';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
+import { DEFAULT_WSS_RPC, DEFAULT_NETWORK } from '~/constants/networks';
 import { onboardConfig } from '~/constants/onboard';
 import { StoreState } from '..';
 import { IWeb3Slice } from './types';
@@ -25,7 +26,8 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                 console.debug('Detected wallet change');
                 if (wallet.provider) {
                     console.debug('Setting wallet provider');
-                    if (wallet.name) { // cacheWalletSelection
+                    if (wallet.name) {
+                        // cacheWalletSelection
                         window.localStorage.setItem('onboard.selectedWallet', wallet.name);
                     }
                     const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');
@@ -52,6 +54,19 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
             },
         },
     }),
+
+    defaultProvider: undefined,
+    setDefaultProvider: async () => {
+        if (!!DEFAULT_WSS_RPC) {
+            const defaultProvider = new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC);
+            await defaultProvider.ready;
+            // if a provider is already set dont set it again
+            if (!get().provider) {
+                console.debug('Provider not set, using default provider');
+                set({ defaultProvider, network: DEFAULT_NETWORK });
+            }
+        }
+    },
 
     checkIsReady: async () => {
         const isReady = await get()
@@ -83,10 +98,13 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
 });
 
 export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;
-export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) => state.web3Slice.provider;
+export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) =>
+    state.web3Slice.provider ?? state.web3Slice.defaultProvider;
 export const selectNetwork: (state: StoreState) => IWeb3Slice['network'] = (state) => state.web3Slice.network;
 export const selectAccount: (state: StoreState) => IWeb3Slice['account'] = (state) => state.web3Slice.account;
 export const selectOnboard: (state: StoreState) => IWeb3Slice['onboard'] = (state) => state.web3Slice.onboard;
+export const selectSetDefaultProvider: (state: StoreState) => IWeb3Slice['setDefaultProvider'] = (state) =>
+    state.web3Slice.setDefaultProvider;
 
 export const selectWalletInfo: (state: StoreState) => {
     wallet: IWeb3Slice['wallet'];
@@ -112,7 +130,7 @@ export const selectWeb3Info: (state: StoreState) => {
     account: IWeb3Slice['account'];
     signer?: ethers.providers.JsonRpcSigner;
 } = (state) => ({
-    provider: state.web3Slice.provider,
+    provider: state.web3Slice.provider ?? state.web3Slice.defaultProvider,
     network: state.web3Slice.network,
     account: state.web3Slice.account,
     signer: state.web3Slice.provider?.getSigner(),

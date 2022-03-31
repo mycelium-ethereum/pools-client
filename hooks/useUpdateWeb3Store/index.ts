@@ -1,13 +1,13 @@
 import { useEffect } from 'react';
 import { useStore } from '@store/main';
 import { selectIsDark } from '@store/ThemeSlice';
-import { selectOnboard } from '@store/Web3Slice';
+import { selectOnboard, selectSetDefaultProvider } from '@store/Web3Slice';
 
 // custom hook to handle any updates to the web3Store
 export const useUpdateWeb3Store: () => void = () => {
     const isDark = useStore(selectIsDark);
-
     const onboard = useStore(selectOnboard);
+    const setDefaultProvider = useStore(selectSetDefaultProvider);
 
     // connect wallet on start if saved wallet
     useEffect(() => {
@@ -18,6 +18,10 @@ export const useUpdateWeb3Store: () => void = () => {
                 await onboard.walletCheck();
             })();
         }
+    }, []);
+
+    useEffect(() => {
+        setDefaultProvider();
     }, []);
 
     // change theme
