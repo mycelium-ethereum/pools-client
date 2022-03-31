@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Button from '@components/General/Button';
 import { TableRowCell } from '@components/General/TWTable';
-import { ClaimableAsset } from '../state';
+import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.tr`
     color: ${({ theme }) => theme.text};
@@ -120,14 +120,14 @@ export const Buttons = styled(TableRowCell)`
     text-align: right;
 `;
 
-export const TokenType = styled.div.attrs<{ type: ClaimableAsset['token'] }>((props) => ({
+export const TokenType = styled.div.attrs<{ type: TokenTypeEnum }>((props) => ({
     type: props.type,
-}))<{ type: ClaimableAsset['token'] }>`
+}))<{ type: TokenTypeEnum }>`
     color: ${({ type }) => {
         switch (type) {
-            case 'Long':
+            case TokenTypeEnum.Long:
                 return '#0E9F6E';
-            case 'Short':
+            case TokenTypeEnum.Short:
                 return '#F05252';
             default:
                 return 'inherit';

@@ -5,26 +5,25 @@ import UpOrDown from '@components/UpOrDown';
 import { toApproxCurrency } from '~/utils/converters';
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
 import { ClaimableAsset, ClaimablePoolTokenRowProps } from '../state';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
-    token,
     balance,
     notionalValue,
     entryPrice,
     currentTokenPrice,
     onClickCommitAction,
+    type,
+    side,
     poolAddress,
 }) => {
     // TODO assume this will want to be interchangeable with USD
     const currency = 'USD';
 
-    const side: string | number = SideEnum[token.toLocaleLowerCase()];
-
     return (
         <TableRow>
             <TableRowCell>
-                <TokenType type={token}>{token}</TokenType>
+                <TokenType type={type}>{type}</TokenType>
             </TableRowCell>
             <TableRowCell>
                 <InnerText>{toApproxCurrency(currentTokenPrice.times(balance), 3)}</InnerText>
@@ -52,34 +51,36 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
             <TableRowCell>
                 <InnerText>{`${notionalValue.toFixed(3)} ${currency}`}</InnerText>
             </TableRowCell>
-            <Buttons>
-                <EscrowButton
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                >
-                    Burn
-                </EscrowButton>
-                <EscrowButton
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
-                >
-                    Flip
-                </EscrowButton>
-            </Buttons>
+            {type !== TokenType.Settlement ? (
+                <Buttons>
+                    <EscrowButton
+                        size="xs"
+                        variant="primary-light"
+                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                    >
+                        Burn
+                    </EscrowButton>
+                    <EscrowButton
+                        size="xs"
+                        variant="primary-light"
+                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                    >
+                        Flip
+                    </EscrowButton>
+                </Buttons>
+            ) : null}
         </TableRow>
     );
 };
 
-export const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ token, balance }) => (
+export const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ type, symbol, balance }) => (
     <TableRow>
         <TableRowCell>
-            <TokenType type={token}>{token}</TokenType>
+            <TokenType type={type}>{type}</TokenType>
         </TableRowCell>
         <TableRowCell>
             <InnerText>
-                {balance.toFixed(2)} {token}
+                {balance.toFixed(2)} {symbol}
             </InnerText>
         </TableRowCell>
         <TableRowCell>

@@ -9,9 +9,9 @@ export enum DenotedInEnum {
 }
 
 export enum TokenType {
-    Short = 0,
-    Long = 1,
-    Settlement = 2,
+    Short = 'Short',
+    Long = 'Long',
+    Settlement = 'Settlement',
 }
 
 export type TokenRowProps = {
@@ -49,11 +49,11 @@ export type ClaimableAsset = {
     balance: BigNumber;
     currentTokenPrice: BigNumber;
     type: TokenType;
-    token: string;
     notionalValue: BigNumber;
 };
 export type ClaimablePoolToken = {
     entryPrice: EntryPrice;
+    side: SideEnum;
 } & ClaimableAsset;
 
 export type ClaimablePoolTokenRowProps = ClaimablePoolToken & {
