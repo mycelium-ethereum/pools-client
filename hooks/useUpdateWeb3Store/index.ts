@@ -20,6 +20,7 @@ export const useUpdateWeb3Store: () => void = () => {
         }
     }, []);
 
+    // set default provider if we need to
     useEffect(() => {
         setDefaultProvider();
     }, []);

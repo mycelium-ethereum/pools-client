@@ -4,8 +4,8 @@ import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { ethers } from 'ethers';
 import { DEFAULT_WSS_RPC, DEFAULT_NETWORK } from '~/constants/networks';
 import { onboardConfig } from '~/constants/onboard';
-import { StoreState } from '..';
 import { IWeb3Slice } from './types';
+import { StoreState } from '..';
 
 export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     account: undefined,
@@ -26,8 +26,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                 console.debug('Detected wallet change');
                 if (wallet.provider) {
                     console.debug('Setting wallet provider');
-                    if (wallet.name) {
-                        // cacheWalletSelection
+                    if (wallet.name) { // cacheWalletSelection
                         window.localStorage.setItem('onboard.selectedWallet', wallet.name);
                     }
                     const provider_ = new ethers.providers.Web3Provider(wallet.provider, 'any');

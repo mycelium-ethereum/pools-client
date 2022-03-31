@@ -13,8 +13,6 @@ export const knownNetworkToSubgraphUrl: Partial<Record<KnownNetwork, string>> = 
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
- * The 0 network is a default network when the user has not connected their address.
- *  The data sources for the 0 network are populated from the env variables.
  */
 export const networkConfig: Record<KnownNetwork, Network> = {
     [NETWORKS.ARBITRUM_RINKEBY]: {
