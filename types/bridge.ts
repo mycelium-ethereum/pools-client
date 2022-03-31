@@ -1,9 +1,13 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '~/constants/networks';
 import { LogoTicker } from '@components/General';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 
-export type DestinationNetwork = typeof RINKEBY | typeof ARBITRUM_RINKEBY | typeof MAINNET | typeof ARBITRUM;
+export type DestinationNetwork =
+    | typeof NETWORKS.RINKEBY
+    | typeof NETWORKS.ARBITRUM_RINKEBY
+    | typeof NETWORKS.MAINNET
+    | typeof NETWORKS.ARBITRUM;
 
 export type BridgeableAssetWarnings = {
     [networkId: string]: {

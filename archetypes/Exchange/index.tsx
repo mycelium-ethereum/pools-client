@@ -3,17 +3,21 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
-import Gas from './Gas';
-import Inputs from './Inputs';
+import { usePool, usePoolActions } from '@context/PoolContext';
+import { useStore } from '@store/main';
+import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
+import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
+import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
+import { useGasPrice } from '~/hooks/useGasPrice';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import ExchangeButton from '@components/General/Button/ExchangeButton';
+
 import Summary from './Summary';
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { usePool, usePoolActions } from '@context/PoolContext';
-import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
-import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
-import CloseIcon from '/public/img/general/close.svg';
+import Gas from './Gas';
+import Inputs from './Inputs';
+
+import CloseIcon from '@public/img/general/close.svg';
 
 const TRADE_OPTIONS = [
     {
@@ -33,8 +37,9 @@ const TRADE_OPTIONS = [
 const DEFAULT_GAS_FEE = new BigNumber(0);
 
 export default styled((({ onClose, className }) => {
-    const { account, gasPrice } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
+    const account = useStore(selectAccount);
+    const { handleConnect } = useStore(selectOnboardActions);
+    const gasPrice = useGasPrice();
 
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};

@@ -3,7 +3,7 @@ import { StateSlice, StoreState } from '@store/types';
 import { transactionMap } from './transactions';
 import { ITransactionSlice } from './types';
 
-export const createTransactionSlice: StateSlice<ITransactionSlice, ITransactionSlice> = (set) => ({
+export const createTransactionSlice: StateSlice<ITransactionSlice> = (set) => ({
     pendingCount: 0,
     handleTransaction: async ({ callMethod, params, type, injectedProps, callBacks }) => {
         const steps = transactionMap[type];

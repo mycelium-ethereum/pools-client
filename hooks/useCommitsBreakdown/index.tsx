@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
+import { CommitEnum } from '@tracer-protocol/pools-js';
 import { usePools } from '@context/PoolContext';
 import { useCommits } from '@context/UsersCommitContext';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { CommitEnum } from '@tracer-protocol/pools-js';
+import { useStore } from '@store/main';
+import { selectAccount } from '@store/Web3Slice';
 
 export default (() => {
-    const { account = '' } = useWeb3();
+    const account = useStore(selectAccount);
     const { commits = {} } = useCommits();
     const { pools = {} } = usePools();
     const [mints, setMints] = useState<number>(0);

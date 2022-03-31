@@ -1,7 +1,9 @@
 import { tokenMap } from '@tracer-protocol/pools-js/data';
-import { ARBITRUM_RINKEBY, ARBITRUM, MAINNET, RINKEBY } from '~/constants/networks';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { LogoTicker } from '@components/General/Logo';
 import { BridgeableAssets, BridgeableAssetWarnings, DestinationNetwork } from '~/types/bridge';
+
+const { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } = NETWORKS;
 
 export const destinationNetworkLookup: Record<string, DestinationNetwork> = {
     [RINKEBY]: ARBITRUM_RINKEBY,

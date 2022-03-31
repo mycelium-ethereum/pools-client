@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo } from 'react';
+import { BigNumber } from 'bignumber.js';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
 import { BrowseTableRowData } from '@archetypes/Pools/state';
 import { usePools } from '@context/PoolContext';
-import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
-import { BigNumber } from 'bignumber.js';
-import useBalancerSpotPrices from '../useBalancerSpotPrices';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { useUpkeeps } from '../useUpkeeps';
+import { useStore } from '@store/main';
+import { selectNetwork } from '@store/Web3Slice';
 import { tickerToName } from '~/utils/converters';
+import useBalancerSpotPrices from '../useBalancerSpotPrices';
+import { useUpkeeps } from '../useUpkeeps';
 
 const STATIC_DEFAULT_UPKEEP = {
     pool: '',
@@ -25,7 +26,7 @@ const STATIC_DEFAULT_UPKEEP = {
 
 // const useBrowsePools
 export default (() => {
-    const { network } = useWeb3();
+    const network = useStore(selectNetwork);
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const balancerPoolPrices = useBalancerSpotPrices(network);

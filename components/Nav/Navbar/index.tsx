@@ -1,8 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+
+import { useStore } from '@store/main';
+import { selectAccount } from '@store/Web3Slice';
+
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
 import NetworkDropdown from './NetworkDropdown';
@@ -32,7 +35,7 @@ export const NavBarContent: React.FC<{
 }> = ({ setShowOnboardModal }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
-    const { account } = useWeb3();
+    const account = useStore(selectAccount);
 
     const linkStyles = 'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';

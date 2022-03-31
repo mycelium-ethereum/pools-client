@@ -1,5 +1,14 @@
 import React, { useEffect, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { noDispatch, useSwapContext } from '@context/SwapContext';
+import { useStore } from '@store/main';
+import { selectAccount } from '@store/Web3Slice';
+import useBrowsePools from '~/hooks/useBrowsePools';
+import { marketFilter } from '~/utils/filters';
+import Loading from '@components/General/Loading';
+
+import MintBurnModal from './MintBurnModal';
+import AddAltPoolModal from './AddAltPoolModal';
 import FilterBar from './FilterSelects/Bar';
 import PoolsTable from './PoolsTable';
 import {
@@ -12,16 +21,9 @@ import {
     RebalanceEnum,
     SortByEnum,
 } from './state';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import useBrowsePools from '~/hooks/useBrowsePools';
-import { noDispatch, useSwapContext } from '@context/SwapContext';
-import MintBurnModal from './MintBurnModal';
-import { marketFilter } from '~/utils/filters';
-import Loading from '@components/General/Loading';
-import AddAltPoolModal from './AddAltPoolModal';
 
 export const Browse: React.FC = () => {
-    const { account } = useWeb3();
+    const account = useStore(selectAccount);
     const { swapDispatch = noDispatch } = useSwapContext();
 
     const [state, dispatch] = useReducer(browseReducer, {

@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 import Button from '@components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { ARBITRUM } from '~/constants/networks';
 import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 import { TWModal } from '@components/General/TWModal';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { ethers } from 'ethers';
 import { ArbiscanEnum } from '~/utils/rpcMethods';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
@@ -26,6 +24,9 @@ import { StyledTooltip } from '@components/Tooltips';
 import { default as UpOrDown } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
+import { networkConfig } from '~/constants/networks';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
@@ -94,7 +95,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
     const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
-    const { provider, account, config } = useWeb3();
+    const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
 
     const handlePoolDetailsClick = (data: any) => {
         setShowModalPoolDetails(true);
@@ -266,7 +267,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                 open={showModalPoolDetails}
                 onClose={() => setShowModalPoolDetails(false)}
                 poolDetails={poolDetails}
-                previewUrl={config?.previewUrl || ''}
+                previewUrl={networkConfig[network]?.previewUrl || ''}
             />
         </>
     );
@@ -616,7 +617,7 @@ const TokenRows: React.FC<
                             <LinkOutlined
                                 className="align-middle ml-1"
                                 onClick={() => {
-                                    open(constructBalancerLink(tokenInfo.address, ARBITRUM, true), 'blank');
+                                    open(constructBalancerLink(tokenInfo.address, NETWORKS.ARBITRUM, true), 'blank');
                                 }}
                             />
                         </>

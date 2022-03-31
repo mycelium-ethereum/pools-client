@@ -1,13 +1,14 @@
 import React, { useReducer, useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
-import { useWeb3, useWeb3Actions } from '@context/Web3Context/Web3Context';
+import { useStore } from '@store/main';
+import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
 
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
-import { marketFilter } from '~/utils/filters';
 import useBrowsePools from '~/hooks/useBrowsePools';
-import { toApproxCurrency } from '~/utils/converters';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
+import { marketFilter } from '~/utils/filters';
+import { toApproxCurrency } from '~/utils/converters';
 
 import * as Styles from './styles';
 import TokenTable from './TokenTable';
@@ -38,12 +39,13 @@ export enum CurrencyEnum {
 
 // const Overview
 export default (({ onClickCommitAction }) => {
+    const account = useStore(selectAccount);
+    const { handleConnect } = useStore(selectOnboardActions);
+
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
     const escrowRows = useEscrowHoldings();
-    const { account } = useWeb3();
-    const { handleConnect } = useWeb3Actions();
 
     const totalValuation = function () {
         let total = 0;

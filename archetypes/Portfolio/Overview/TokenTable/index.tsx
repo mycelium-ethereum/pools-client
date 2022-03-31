@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import Loading from '@components/General/Loading';
 import { DenotedInEnum, TokenRowProps } from '../state';
 import Actions from '@components/TokenActions';
@@ -12,9 +11,11 @@ import { Logo, tokenSymbolToLogoTicker } from '@components/General';
 import { toApproxCurrency } from '~/utils/converters';
 import { ArbiscanEnum } from '~/utils/rpcMethods';
 import Button from '@components/General/Button';
+import { useStore } from '@store/main';
+import { selectProvider } from '@store/Web3Slice';
 
 export default (({ rows, onClickCommitAction, denotedIn }) => {
-    const { provider } = useWeb3();
+    const provider = useStore(selectProvider);
 
     return (
         <>

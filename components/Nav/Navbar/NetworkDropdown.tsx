@@ -1,19 +1,20 @@
 import React from 'react';
-import { Logo, LogoTicker } from '@components/General';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { switchNetworks } from '~/utils/rpcMethods';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
-import TWPopup from '@components/General/TWPopup';
-
 import Icon from '@ant-design/icons';
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
+import TWPopup from '@components/General/TWPopup';
+import { Logo, LogoTicker } from '@components/General';
+import { networkConfig } from '~/constants/networks';
+import { switchNetworks } from '~/utils/rpcMethods';
+
 import Error from '@public/img/notifications/error.svg';
 
 const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
 
 export default (({ className }) => {
-    const { provider, network } = useWeb3();
+    const { provider, network } = useStore(selectWeb3Info);
 
     return (
         <TWPopup
@@ -28,13 +29,17 @@ export default (({ className }) => {
                 />
             }
         >
-            <option className={option} value={ARBITRUM} onClick={() => switchNetworks(provider, ARBITRUM)}>
+            <option
+                className={option}
+                value={NETWORKS.ARBITRUM}
+                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}
+            >
                 Arbitrum
             </option>
             <option
                 className={option}
-                value={ARBITRUM_RINKEBY}
-                onClick={() => switchNetworks(provider, ARBITRUM_RINKEBY)}
+                value={NETWORKS.ARBITRUM_RINKEBY}
+                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
             >
                 Arbitrum Rinkeby
             </option>
