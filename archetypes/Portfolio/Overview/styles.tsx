@@ -1,16 +1,29 @@
 import styled from 'styled-components';
-import { SearchInput as UnstyledSearchInput } from '@components/General/SearchInput';
 
-export const TableSection = styled.div`
-    border-radius: 0.75rem;
-    margin-top: 2.5rem;
-    padding: 1.25rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    background: ${({ theme }) => theme.background};
+export const Container = styled.div`
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-gap: 30px;
 `;
 
-export const SearchInput = styled(UnstyledSearchInput)`
-    input {
-        padding: calc(0.5rem - 1px) 1rem calc(0.5rem - 1px) 2.5rem;
+export const Wrapper = styled.div<{ isFullWidth?: boolean }>`
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-gap: 30px;
+
+    @media (min-width: 1280px) {
+        display: grid;
+        grid-template-columns: ${({ isFullWidth }) =>
+            isFullWidth ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
+    }
+`;
+
+export const Banner = styled.div`
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 30px;
+    @media (min-width: 768px) {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 `;

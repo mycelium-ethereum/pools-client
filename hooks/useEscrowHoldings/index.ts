@@ -1,43 +1,37 @@
 import { useEffect, useState } from 'react';
-import { EscrowRowProps, EntryPrice, TokenType } from '@archetypes/Portfolio/Overview/state';
+import { BigNumber } from 'bignumber.js';
+import { SideEnum } from '@tracer-protocol/pools-js';
+import { EscrowRowProps, TokenType } from '@archetypes/Portfolio/Overview/state';
 import { usePools } from '@context/PoolContext';
 import { LogoTicker } from '@components/General';
-import { BigNumber } from 'bignumber.js';
 import useSubgraphAggregateBalances from '../useSubgraphAggregateBalances';
 
-// TODO fetch acquisition prices from API
-// mock return of prices
-const fetchEntryPrices: () => {
-    shortToken: EntryPrice;
-    longToken: EntryPrice;
-} = () => {
-    return {
-        shortToken: {
-            tokenPrice: new BigNumber(1),
-            basePrice: new BigNumber(100),
-        },
-        longToken: {
-            tokenPrice: new BigNumber(1),
-            basePrice: new BigNumber(100),
-        },
-    };
+const DEFAULT_ENTRY_PRICES = {
+    shortToken: {
+        tokenPrice: new BigNumber(1),
+        basePrice: new BigNumber(100),
+    },
+    longToken: {
+        tokenPrice: new BigNumber(1),
+        basePrice: new BigNumber(100),
+    },
 };
+
+type EscrowRowInfo = Omit<EscrowRowProps, 'onClickCommitAction'>;
 
 export default (() => {
     const { pools } = usePools();
     const subgraphAggregateBalances = useSubgraphAggregateBalances();
-    const [rows, setRows] = useState<EscrowRowProps[]>([]);
-    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowProps[]>([]);
+    const [rows, setRows] = useState<EscrowRowInfo[]>([]);
+    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowInfo[]>([]);
 
     useEffect(() => {
         if (pools) {
-            const _rows: EscrowRowProps[] = [];
+            const _rows: EscrowRowInfo[] = [];
             Object.values(pools).forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 
                 const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
-
-                const entryPrices = fetchEntryPrices();
 
                 const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
 
@@ -56,8 +50,8 @@ export default (() => {
                     balance: userBalances.aggregateBalances.longTokens,
                     currentTokenPrice: nextLongTokenPrice,
                     type: TokenType.Long,
-                    token: 'Long',
-                    entryPrice: entryPrices?.longToken,
+                    side: SideEnum.long,
+                    entryPrice: DEFAULT_ENTRY_PRICES.longToken,
                     notionalValue: longTokenValue.times(leverage),
                 };
                 const claimableShortTokens = {
@@ -65,8 +59,8 @@ export default (() => {
                     balance: userBalances.aggregateBalances.shortTokens,
                     currentTokenPrice: nextShortTokenPrice,
                     type: TokenType.Short,
-                    token: 'Short',
-                    entryPrice: entryPrices?.shortToken,
+                    side: SideEnum.short,
+                    entryPrice: DEFAULT_ENTRY_PRICES.shortToken,
                     notionalValue: shortTokenValue.times(leverage),
                 };
                 const claimableSettlementTokens = {
@@ -74,7 +68,6 @@ export default (() => {
                     balance: userBalances.aggregateBalances.settlementTokens,
                     currentTokenPrice: settlementTokenPrice,
                     type: TokenType.Settlement,
-                    token: settlementToken.symbol,
                     notionalValue: settlementTokenValue,
                 };
                 const claimableSum = userBalances.aggregateBalances.settlementTokens

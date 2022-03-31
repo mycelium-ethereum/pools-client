@@ -83,10 +83,10 @@ export default (({ page }) => {
 
     const commits = usePendingCommits();
 
-    const handleBurn = (pool: string, side: SideEnum) => {
+    const handleCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
         swapDispatch({ type: 'setSelectedPool', value: pool });
         swapDispatch({ type: 'setSide', value: side });
-        swapDispatch({ type: 'setCommitAction', value: CommitActionEnum.burn });
+        swapDispatch({ type: 'setCommitAction', value: action });
         dispatch({ type: 'setMintBurnModalOpen', open: true });
     };
 
@@ -114,7 +114,7 @@ export default (({ page }) => {
             case TradePortfolioPage.Queued:
                 return <Queued focus={focus} commits={commits} />;
             default:
-                return <Overview onClickBurn={handleBurn} />;
+                return <Overview onClickCommitAction={handleCommitAction} />;
         }
     };
 

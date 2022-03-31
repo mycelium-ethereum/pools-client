@@ -1,6 +1,7 @@
 import { LogoTicker } from '@components/General';
 import { MarketFilterEnum } from '~/types/filters';
 import BigNumber from 'bignumber.js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 export enum DenotedInEnum {
     BASE = 'BASE',
@@ -8,9 +9,9 @@ export enum DenotedInEnum {
 }
 
 export enum TokenType {
-    Short = 0,
-    Long = 1,
-    Settlement = 2,
+    Short = 'Short',
+    Long = 'Long',
+    Settlement = 'Settlement',
 }
 
 export type TokenRowProps = {
@@ -35,6 +36,7 @@ export interface EscrowRowProps {
     claimableSettlementTokens: ClaimableAsset;
     claimableSum: BigNumber;
     numClaimable: number;
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
 }
 
 export type EntryPrice = {
@@ -47,12 +49,17 @@ export type ClaimableAsset = {
     balance: BigNumber;
     currentTokenPrice: BigNumber;
     type: TokenType;
-    token: string;
     notionalValue: BigNumber;
 };
 export type ClaimablePoolToken = {
     entryPrice: EntryPrice;
+    side: SideEnum;
 } & ClaimableAsset;
+
+export type ClaimablePoolTokenRowProps = ClaimablePoolToken & {
+    poolAddress: EscrowRowProps['poolAddress'];
+    onClickCommitAction: EscrowRowProps['onClickCommitAction'];
+};
 
 export interface PortfolioState {
     positionsDenotedIn: DenotedInEnum;
