@@ -26,7 +26,6 @@ import {
     PoolKeeper__factory,
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { useCommitActions } from '@context/UsersCommitContext';
 import { networkConfig } from '~/constants/networks';
 import { PoolList } from '~/types/pools';
 import PoolListService from '@libs/services/poolList';
@@ -36,6 +35,7 @@ import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
 import { selectWeb3Info } from '@store/Web3Slice';
 import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { selectUserCommitActions } from '@store/PendingCommitSlice';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -79,8 +79,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useStore(selectWeb3Info);
 
     const handleTransaction = useStore(selectHandleTransaction);
-
-    const { commitDispatch = () => console.error('Commit dispatch undefined') } = useCommitActions();
+    const { addCommit, resetCommits } = useStore(selectUserCommitActions);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
     // ref to assist in the ensuring that the pools are not getting set twice
@@ -172,17 +171,14 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                             if (mounted) {
                                 setExpectedPrice(pool.poolInstance);
                                 pendingCommits.map((commit) => {
-                                    commitDispatch({
-                                        type: 'addCommit',
-                                        commitInfo: {
-                                            pool: pool.poolInstance.address,
-                                            id: commit.commitID,
-                                            amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
-                                            type: commit.commitType,
-                                            from: commit.from,
-                                            txnHash: commit.txnHash,
-                                            created: commit.timestamp,
-                                        },
+                                    addCommit({
+                                        pool: pool.poolInstance.address,
+                                        id: commit.commitID,
+                                        amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
+                                        type: commit.commitType,
+                                        from: commit.from,
+                                        txnHash: commit.txnHash,
+                                        created: commit.timestamp,
                                     });
                                 });
                             }
@@ -356,20 +352,15 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
                         log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
-                            if (commitDispatch) {
-                                commitDispatch({
-                                    type: 'addCommit',
-                                    commitInfo: {
-                                        id: txn.hash,
-                                        pool,
-                                        from: txn?.from, // from address
-                                        txnHash: txn.hash,
-                                        type: type as CommitEnum,
-                                        amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                        created: txn.timestamp ?? Date.now() / 1000,
-                                    },
-                                });
-                            }
+                            addCommit({
+                                id: txn.hash,
+                                pool,
+                                from: txn?.from, // from address
+                                txnHash: txn.hash,
+                                type: type as CommitEnum,
+                                amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
+                                created: txn.timestamp ?? Date.now() / 1000,
+                            });
                         });
                     },
                 );
@@ -413,10 +404,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
                         updateTokenBalances(poolInstance, subscriptionProvider);
                         updatePoolBalances(poolInstance, subscriptionProvider);
-                        commitDispatch({
-                            type: 'resetCommits',
-                            pool: pool,
-                        });
+                        resetCommits(pool);
                     }
                 });
                 subscriptions.current = {

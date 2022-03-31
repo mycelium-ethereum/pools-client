@@ -15,6 +15,8 @@ import { IGasSlice } from './GasSlice/types';
 import { createGasSlice } from './GasSlice';
 import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
 import { createUnsupportedNetwork } from './UnsupportedNetworkSlice';
+import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { createPendingCommitSlice } from './PendingCommitSlice';
 
 // Turn the set method into an immer proxy
 const immer =
@@ -58,6 +60,7 @@ export const useStore = create<
                 web3Slice: lens<IWeb3Slice>(createWeb3Slice),
                 gasSlice: lens<IGasSlice>(createGasSlice),
                 unsupportedNetworkSlice: lens<IUnsupportedNetworkSlice>(createUnsupportedNetwork),
+                pendingCommitSlice: lens<IPendingCommitSlice>(createPendingCommitSlice),
             })),
         ),
     ),

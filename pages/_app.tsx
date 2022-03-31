@@ -8,7 +8,6 @@ import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '@components/General/Notification/ToastContainerWithStyles';
-import { UsersCommitStore } from '@context/UsersCommitContext';
 import { StyledThemeProvider } from '@context/ThemeContext';
 import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
@@ -60,9 +59,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
             </Head>
             <StyledThemeProvider>
-                <UsersCommitStore>
-                    <Component {...pageProps} />
-                </UsersCommitStore>
+                <Component {...pageProps} />
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
         </div>
