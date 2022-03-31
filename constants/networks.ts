@@ -4,8 +4,6 @@ import { Network } from '~/types/networks';
 
 export const UNKNOWN_NETWORK = '0';
 
-export const DEFAULT_NETWORK = NETWORKS.ARBITRUM;
-
 export const knownNetworkToSubgraphUrl: Partial<Record<KnownNetwork, string>> = {
     [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-one',
     // [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-rinkeby'
@@ -15,8 +13,6 @@ export const knownNetworkToSubgraphUrl: Partial<Record<KnownNetwork, string>> = 
 /**
  * Network store which allows swapping between networks and fetching from different data sources.
  * Keys are the ID of the network.
- * The 0 network is a default network when the user has not connected their address.
- *  The data sources for the 0 network are populated from the env variables.
  */
 export const networkConfig: Record<KnownNetwork, Network> = {
     [NETWORKS.ARBITRUM_RINKEBY]: {
@@ -73,3 +69,6 @@ export const networkConfig: Record<KnownNetwork, Network> = {
         tcrAddress: '',
     },
 };
+
+export const DEFAULT_NETWORK = NETWORKS.ARBITRUM_RINKEBY;
+export const DEFAULT_WSS_RPC = networkConfig[DEFAULT_NETWORK].publicWebsocketRPC;

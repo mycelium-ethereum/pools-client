@@ -154,7 +154,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider?.network.chainId, poolsState.retryCount]);
+    }, [provider?.network?.chainId, poolsState.retryCount]);
 
     // fetch all pending commits
     useEffect(() => {
