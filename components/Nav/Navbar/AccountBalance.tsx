@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { useStore } from '@store/main';
-import { usePools } from '@context/PoolContext';
+import { usePools } from '~/context/PoolContext';
+import TracerLoading from '~/public/img/logos/tracer/tracer-loading-white.svg';
+import { useStore } from '~/store/main';
+import { selectPendingCount } from '~/store/TransactionSlice';
 import { toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
-import { selectPendingCount } from '@store/TransactionSlice';
 
 const useBalance = () => {
     const { pools } = usePools();

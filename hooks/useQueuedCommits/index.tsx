@@ -1,9 +1,9 @@
 import { useState, useMemo } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
-import { usePools } from '@context/PoolContext';
-import { useStore } from '@store/main';
-import { selectWeb3Info } from '@store/Web3Slice';
-import { selectCommits } from '@store/PendingCommitSlice';
+import { usePools } from '~/context/PoolContext';
+import { useStore } from '~/store/main';
+import { selectCommits } from '~/store/PendingCommitSlice';
+import { selectWeb3Info } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/pools';
 
 export default (() => {

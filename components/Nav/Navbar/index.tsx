@@ -2,8 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { useStore } from '@store/main';
-import { selectAccount } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectAccount } from '~/store/Web3Slice';
 
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import AccountDropdown from './AccountDropdown';

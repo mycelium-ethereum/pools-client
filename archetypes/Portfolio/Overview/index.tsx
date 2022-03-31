@@ -1,26 +1,25 @@
 import React, { useReducer, useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
-import { useStore } from '@store/main';
-import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
-
-import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useBrowsePools from '~/hooks/useBrowsePools';
+import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
-import { marketFilter } from '~/utils/filters';
+import { useStore } from '~/store/main';
+import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
 import { toApproxCurrency } from '~/utils/converters';
+import { marketFilter } from '~/utils/filters';
 
-import * as Styles from './styles';
-import TokenTable from './TokenTable';
-import EscrowTable from './EscrowTable';
-import { portfolioReducer, initialPortfolioState, EscrowRowProps } from './state';
 import { ConnectWalletBanner } from './ConnectWalletBanner';
-import { TradeOverviewBanner } from './TradeOverviewBanner';
-import { SkewCard } from './SkewCard';
+import { emptyStateHelpCardContent } from './content';
+import EscrowTable from './EscrowTable';
 import { HelpCard } from './HelpCard';
 import { HoldingsTable } from './HoldingsTable';
-import { emptyStateHelpCardContent } from './content';
 import { PriceByDropDown, DenoteInDropDown, MarketDropdown, EscrowSearch } from './HoldingsTable/Actions';
+import { SkewCard } from './SkewCard';
+import { portfolioReducer, initialPortfolioState, EscrowRowProps } from './state';
+import * as Styles from './styles';
+import TokenTable from './TokenTable';
+import { TradeOverviewBanner } from './TradeOverviewBanner';
 
 export enum LoadingState {
     Idle = 0,

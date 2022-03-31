@@ -9,18 +9,18 @@ import {
 import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { poolMap } from '@tracer-protocol/pools-js/data';
 
-import { useStore } from '@store/main';
-import { selectWeb3Info } from '@store/Web3Slice';
-import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
-import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
-import { Children } from '~/types/general';
-import { StakingRewards } from '~/types/staking/typechain';
-import { BalancerPoolAsset, Farm, FarmConfig } from '~/types/staking';
+import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
-import { networkConfig as networkConfig_ } from '~/constants/networks';
-import { fetchTokenPrice } from '~/utils/farms';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
+import { Children } from '~/types/general';
 import { Network } from '~/types/networks';
+import { BalancerPoolAsset, Farm, FarmConfig } from '~/types/staking';
+import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
+import { StakingRewards } from '~/types/staking/typechain';
+import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
+import { fetchTokenPrice } from '~/utils/farms';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };

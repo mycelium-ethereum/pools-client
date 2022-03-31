@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import { Logo, LogoTicker } from '@components/General';
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { ethers } from 'ethers';
-import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
+import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { Popover, Transition } from '@headlessui/react';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
+import { Logo, LogoTicker } from '~/components/General';
+import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget, otherActions }) => (

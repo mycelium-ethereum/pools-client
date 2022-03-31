@@ -1,18 +1,18 @@
 import React, { useMemo } from 'react';
-import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import Loading from '@components/General/Loading';
-import { DenotedInEnum, TokenRowProps } from '../state';
-import Actions from '@components/TokenActions';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import Button from '~/components/General/Button';
+import Loading from '~/components/General/Loading';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import Actions from '~/components/TokenActions';
+import { useStore } from '~/store/main';
+import { selectProvider } from '~/store/Web3Slice';
 import { toApproxCurrency } from '~/utils/converters';
 import { ArbiscanEnum } from '~/utils/rpcMethods';
-import Button from '@components/General/Button';
-import { useStore } from '@store/main';
-import { selectProvider } from '@store/Web3Slice';
+import { DenotedInEnum, TokenRowProps } from '../state';
 
 export default (({ rows, onClickCommitAction, denotedIn }) => {
     const provider = useStore(selectProvider);

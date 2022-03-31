@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { tokenSymbolToLogoTicker } from '@components/General';
+import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
 
 const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';

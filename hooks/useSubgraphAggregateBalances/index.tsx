@@ -2,9 +2,9 @@ import { useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { useStore } from '@store/main';
-import { selectWeb3Info } from '@store/Web3Slice';
 import { knownNetworkToSubgraphUrl, networkConfig } from '~/constants/networks';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
 
 type SubgraphAggregateBalances = Record<
     string,

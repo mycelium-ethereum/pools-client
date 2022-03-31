@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import Tooltip from 'antd/lib/tooltip';
+import styled from 'styled-components';
 
 export const StyledTooltip = styled(Tooltip).attrs((props: { forwardRef: any }) => ({
     forwardRef: props.forwardRef,

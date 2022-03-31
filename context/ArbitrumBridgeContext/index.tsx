@@ -2,18 +2,18 @@ import React, { useContext, useCallback, useState, useMemo } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
-import { NETWORKS } from '@tracer-protocol/pools-js';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { useStore } from '@store/main';
-import { TransactionType } from '@store/TransactionSlice/types';
-import { selectHandleTransaction } from '@store/TransactionSlice';
-import { selectWeb3Info } from '@store/Web3Slice';
-import { Network } from '~/types/networks';
-import { Children } from '~/types/general';
-import { BridgeableAsset, BridgeableAssets, BridgeableBalances } from '~/types/bridge';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '~/constants/bridge';
 import { MAX_SOL_UINT } from '~/constants/general';
 import { networkConfig } from '~/constants/networks';
+import { useStore } from '~/store/main';
+import { selectHandleTransaction } from '~/store/TransactionSlice';
+import { TransactionType } from '~/store/TransactionSlice/types';
+import { selectWeb3Info } from '~/store/Web3Slice';
+import { BridgeableAsset, BridgeableAssets, BridgeableBalances } from '~/types/bridge';
+import { Children } from '~/types/general';
+import { Network } from '~/types/networks';
 import { isArbitrumNetwork } from '~/utils/supportedNetworks';
 
 type CachedBridges = {

@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { TWModal } from '@components/General/TWModal';
-import Button from '@components/General/Button';
-import { BrowseTableRowData } from '../state';
-import { HiddenExpand } from '@components/General/Dropdown';
+import Button from '~/components/General/Button';
+import { HiddenExpand } from '~/components/General/Dropdown';
+import { TWModal } from '~/components/General/TWModal';
+import { useStore } from '~/store/main';
+import { selectHandleImport, selectImported } from '~/store/PoolsSlice';
+import { Imported } from '~/store/PoolsSlice/types';
 import { isAddress } from '~/utils/rpcMethods';
-import { useStore } from '@store/main';
-import { Imported } from '@store/PoolsSlice/types';
-import { selectHandleImport, selectImported } from '@store/PoolsSlice';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
+import { BrowseTableRowData } from '../state';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
     const [userInput, setUserInput] = useState<string>('');

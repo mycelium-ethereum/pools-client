@@ -1,6 +1,6 @@
-import { Pool } from '@tracer-protocol/pools-js';
-import BigNumber from 'bignumber.js';
 import { useMemo } from 'react';
+import BigNumber from 'bignumber.js';
+import { Pool } from '@tracer-protocol/pools-js';
 
 export default ((pool) => {
     const valueTransfer = useMemo(() => pool.getNextValueTransfer(), [pool]);

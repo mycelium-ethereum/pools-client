@@ -1,6 +1,6 @@
-import { tokenMap } from '@tracer-protocol/pools-js/data';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { LogoTicker } from '@components/General/Logo';
+import { tokenMap } from '@tracer-protocol/pools-js/data';
+import { LogoTicker } from '~/components/General/Logo';
 import { BridgeableAssets, BridgeableAssetWarnings, DestinationNetwork } from '~/types/bridge';
 
 const { ARBITRUM, ARBITRUM_RINKEBY, MAINNET, RINKEBY } = NETWORKS;

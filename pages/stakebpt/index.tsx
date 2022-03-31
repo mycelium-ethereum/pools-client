@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
-import StakeBPT from '@archetypes/Stake/StakeBPT';
-import { FarmStore } from '@context/FarmContext';
 import { useRouter } from 'next/router';
-import OnboardStakeModal from '@components/OnboardModal/Stake';
-import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import StakeBPT from '~/archetypes/Stake/StakeBPT';
+import Footer from '~/components/Footer';
+import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
+import NavBar from '~/components/Nav/Navbar';
+import OnboardStakeModal from '~/components/OnboardModal/Stake';
+import { FarmStore } from '~/context/FarmContext';
 
 export default (() => {
     const router = useRouter();

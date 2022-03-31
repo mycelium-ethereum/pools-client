@@ -1,6 +1,6 @@
 import React from 'react';
-import { Logo, LogoTicker } from '../Logo';
 import { classNames } from '~/utils/helpers';
+import { Logo, LogoTicker } from '../Logo';
 
 export const Currency: React.FC<{
     className?: string;

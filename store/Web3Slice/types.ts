@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { API as OnboardApi, Wallet } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 export interface IWeb3Slice {
     onboard: OnboardApi;

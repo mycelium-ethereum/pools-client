@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import Hamburger from './Hamburger';
 import { Fragment } from 'react';
+import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
 import { classNames } from '~/utils/helpers';
-import NetworkDropdown from '../NetworkDropdown';
+import Hamburger from './Hamburger';
 import AccountDropdown from '../AccountDropdown';
+import NetworkDropdown from '../NetworkDropdown';
 
-import { useRouter } from 'next/router';
 import ThemeSwitcher from '../ThemeSwitcher';
 
 export default (({ account, className }) => {

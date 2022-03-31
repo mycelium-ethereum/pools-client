@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { Pool } from '@tracer-protocol/pools-js';
-import { tokenSymbolToLogoTicker } from '@components/General';
+import { tokenSymbolToLogoTicker } from '~/components/General';
 import { TokenRow } from '~/hooks/usePoolTokens';
 import * as Styles from './styles';
 

@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import { Transition } from '@headlessui/react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
-import * as Styles from './styles';
+import BurnSummary from './BurnSummary';
 import FlipSummary from './FlipSummary';
 import MintSummary from './MintSummary';
-import BurnSummary from './BurnSummary';
+import * as Styles from './styles';
 import { SummaryProps } from './types';
 
 export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {

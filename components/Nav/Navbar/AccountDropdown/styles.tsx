@@ -1,6 +1,6 @@
-import { Logo } from '@components/General';
 import { CopyOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import { Logo } from '~/components/General';
 
 export const ArbitrumLogo = styled(Logo)`
     display: inline;

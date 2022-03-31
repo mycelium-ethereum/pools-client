@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import BigNumber from 'bignumber.js';
-import Button from '@components/General/Button';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
+import React, { useEffect, useMemo, useState } from 'react';
+import Button from '~/components/General/Button';
+import Loading from '~/components/General/Loading';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
+import { TWModal } from '~/components/General/TWModal';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { APYTip, RewardsEndedTip } from '~/components/Tooltips';
+import { TokenToFarmAddressMap } from '~/constants/staking';
+import { BalancerPoolAsset } from '~/types/staking';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
-import { TWModal } from '@components/General/TWModal';
 import Close from '/public/img/general/close.svg';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
-import Loading from '@components/General/Loading';
-import { BalancerPoolAsset } from '~/types/staking';
-import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
-import { APYTip, RewardsEndedTip } from '@components/Tooltips';
-import { TokenToFarmAddressMap } from '~/constants/staking';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
-import { Browse } from '@archetypes/Pools';
-import { PoolStore } from '@context/PoolContext';
 import { useRouter } from 'next/router';
-import { SwapStore } from '@context/SwapContext';
-import OnboardTradeModal from '@components/OnboardModal/Trade';
-import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
-import { WarningBanners } from '@components/WarningBanner';
+import { Browse } from '~/archetypes/Pools';
+import Footer from '~/components/Footer';
+import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
+import NavBar from '~/components/Nav/Navbar';
+import OnboardTradeModal from '~/components/OnboardModal/Trade';
+import { WarningBanners } from '~/components/WarningBanner';
+import { PoolStore } from '~/context/PoolContext';
+import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
     const router = useRouter();

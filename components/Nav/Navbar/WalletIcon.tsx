@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useStore } from '@store/main';
-import { selectWalletInfo } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectWalletInfo } from '~/store/Web3Slice';
 import Identicon from './Identicon';
 
 const WalletIconImage = styled.img`

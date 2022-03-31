@@ -1,11 +1,11 @@
 import React from 'react';
-import { InnerInputText } from '@components/General/Input';
-import Max from '@components/General/Max';
+import BigNumber from 'bignumber.js';
+import { InnerInputText } from '~/components/General/Input';
+import Max from '~/components/General/Max';
 
+import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { AmountProps } from './types';
-import BigNumber from 'bignumber.js';
-import { toApproxCurrency } from '~/utils/converters';
 
 const Available: React.FC<{
     amountBN: BigNumber;

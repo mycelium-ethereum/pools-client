@@ -1,6 +1,12 @@
 import React from 'react';
-import { Dropdown, HiddenExpand, LogoTicker } from '@components/General';
-import { SearchInput } from '@components/General/SearchInput';
+import { Dropdown, HiddenExpand, LogoTicker } from '~/components/General';
+import Button from '~/components/General/Button';
+import { SearchInput } from '~/components/General/SearchInput';
+import TWButtonGroup from '~/components/General/TWButtonGroup';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
+
+import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
+import FilterToggleIcon from '~/public/img/general/filters.svg';
 import {
     BrowseAction,
     BrowseState,
@@ -10,12 +16,6 @@ import {
     MarketFilterEnum,
     RebalanceEnum,
 } from '../state';
-import TWButtonGroup from '@components/General/TWButtonGroup';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-import Button from '@components/General/Button';
-
-import FilterToggleIcon from '@public/img/general/filters.svg';
-import ArrowDownIcon from '@public/img/general/arrow-circle-down.svg';
 
 interface FilterSelectsProps {
     state: BrowseState;

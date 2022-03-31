@@ -1,21 +1,21 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import BigNumber from 'bignumber.js';
-import { NETWORKS } from '@tracer-protocol/pools-js';
-import { Network } from '~/types/networks';
-import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-import { Input } from '@components/General/Input/Numeric';
-import { InnerInputText, InputContainer } from '@components/General/Input';
-import { Currency } from '@components/General/Currency';
-import Button from '@components/General/Button';
-import TWButtonGroup from '@components/General/TWButtonGroup';
-import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '~/types/bridge';
-import { bridgeableAssetWarnings } from '~/constants/bridge';
-import { Logo } from '@components/General';
-import { StyledTooltip } from '@components/Tooltips';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { Logo } from '~/components/General';
+import Button from '~/components/General/Button';
+import { Currency } from '~/components/General/Currency';
+import { InnerInputText, InputContainer } from '~/components/General/Input';
+import { Input } from '~/components/General/Input/Numeric';
 
-import Error from '@public/img/notifications/error.svg';
-import Max from '@components/General/Max';
+import Max from '~/components/General/Max';
+import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { StyledTooltip } from '~/components/Tooltips';
+import { bridgeableAssetWarnings } from '~/constants/bridge';
+import Error from '~/public/img/notifications/error.svg';
+import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '~/types/bridge';
+import { Network } from '~/types/networks';
 
 interface MultiBridgeProps {
     fromNetwork: Network;

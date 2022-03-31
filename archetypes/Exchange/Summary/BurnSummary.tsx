@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { ShowDetailsButton } from './styles';
+import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import { ExpectedFees, ExpectedTokenValue } from './Sections';
+import { ShowDetailsButton } from './styles';
 import { BurnSummaryProps } from './types';
-import ArrowDown from '@public/img/general/caret-down-white.svg';
 
 export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);

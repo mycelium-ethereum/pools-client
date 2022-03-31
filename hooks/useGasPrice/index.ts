@@ -1,7 +1,7 @@
-import { selectGasSlice } from '@store/GasSlice';
-import { useStore } from '@store/main';
-import { selectProvider } from '@store/Web3Slice';
 import { useMemo } from 'react';
+import { selectGasSlice } from '~/store/GasSlice';
+import { useStore } from '~/store/main';
+import { selectProvider } from '~/store/Web3Slice';
 
 // fetch gas price from store
 export const useGasPrice: () => number = () => {

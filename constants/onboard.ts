@@ -1,5 +1,5 @@
-import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Initialization } from '@tracer-protocol/onboard/dist/src/interfaces';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { DEFAULT_NETWORK, networkConfig } from '~/constants/networks';
 
 export const onboardConfig: Initialization = {

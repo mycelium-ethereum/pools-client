@@ -1,8 +1,8 @@
 import React from 'react';
-import { TWModal } from '@components/General/TWModal';
-import Divider from '@components/General/Divider';
-import Button from '@components/General/Button';
-import ProgressIndicator from '@components/OnboardModal/ProgressIndicator';
+import Button from '~/components/General/Button';
+import Divider from '~/components/General/Divider';
+import { TWModal } from '~/components/General/TWModal';
+import ProgressIndicator from '~/components/OnboardModal/ProgressIndicator';
 import * as Styled from './styles';
 import { OnboardModalProps } from './types';
 

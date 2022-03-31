@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useStore } from '@store/main';
-import { selectWalletInfo } from '@store/Web3Slice';
+import { GasPriceTooltip } from '~/components/Tooltips';
 import { networkConfig } from '~/constants/networks';
 import { useGasPrice } from '~/hooks/useGasPrice';
-import { GasPriceTooltip } from '@components/Tooltips';
-import GasIcon from '@public/img/general/gas_icon.svg';
+import GasIcon from '~/public/img/general/gas_icon.svg';
+import { useStore } from '~/store/main';
+import { selectWalletInfo } from '~/store/Web3Slice';
 
 export default (() => {
     const { wallet, network } = useStore(selectWalletInfo);

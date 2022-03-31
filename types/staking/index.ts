@@ -1,7 +1,7 @@
-import BigNumber from 'bignumber.js';
-import { StakingRewards } from './typechain/StakingRewards';
-import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
+import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { StakingRewards } from './typechain/StakingRewards';
 
 export type BalancerPoolAsset = {
     address: string;

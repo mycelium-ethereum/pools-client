@@ -1,7 +1,7 @@
-import { classNames } from '~/utils/helpers';
-import { Children } from '~/types/general';
 import React from 'react';
 import styled from 'styled-components';
+import { Children } from '~/types/general';
+import { classNames } from '~/utils/helpers';
 
 type SProps = {
     className?: string;

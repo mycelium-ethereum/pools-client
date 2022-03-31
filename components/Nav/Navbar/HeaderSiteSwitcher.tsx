@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
 import Icon from '@ant-design/icons';
-
-import { classNames } from '~/utils/helpers';
 import { Transition } from '@headlessui/react';
-import TracerBox from '@public/img/logos/tracer/tracer_icon_box.svg';
+import styled from 'styled-components';
+
+import Folder from '~/public/img/general/folder.svg';
+import TracerBox from '~/public/img/logos/tracer/tracer_icon_box.svg';
+import DiscordLogo from '~/public/img/socials/discord.svg';
+import DiscourseLogo from '~/public/img/socials/discourse.svg';
+import GitHubLogo from '~/public/img/socials/github.svg';
+import TwitterLogo from '~/public/img/socials/twitter.svg';
+import { classNames } from '~/utils/helpers';
 
 // Images
-import DiscourseLogo from '@public/img/socials/discourse.svg';
-import TwitterLogo from '@public/img/socials/twitter.svg';
-import GitHubLogo from '@public/img/socials/github.svg';
-import DiscordLogo from '@public/img/socials/discord.svg';
-import Folder from '@public/img/general/folder.svg';
 
 const icon = 'w-5 mr-2 opacity-70 text-white';
 const Icons = [

@@ -1,6 +1,6 @@
-import { StateSlice } from '@store/types';
-import { StoreState } from '..';
+import { StateSlice } from '~/store/types';
 import { IUnsupportedNetworkSlice } from './types';
+import { StoreState } from '..';
 
 export const createUnsupportedNetwork: StateSlice<IUnsupportedNetworkSlice> = (set) => ({
     unsupportedNetworkPopupRef: undefined,

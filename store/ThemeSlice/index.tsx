@@ -1,4 +1,4 @@
-import { StateSlice, StoreState } from '@store/types';
+import { StateSlice, StoreState } from '~/store/types';
 import { Theme } from './themes';
 import { IThemeSlice } from './types';
 

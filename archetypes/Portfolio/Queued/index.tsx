@@ -3,19 +3,19 @@ import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { useStore } from '@store/main';
-import { selectProvider } from '@store/Web3Slice';
+import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import TimeLeft from '~/components/TimeLeft';
+import Actions from '~/components/TokenActions';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
+import NoQueued from '~/public/img/no-queued.svg';
+import { useStore } from '~/store/main';
+import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/pools';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 import { ArbiscanEnum } from '~/utils/rpcMethods';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import TWButtonGroup from '@components/General/TWButtonGroup';
-import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import Actions from '@components/TokenActions';
-import TimeLeft from '@components/TimeLeft';
 
-import NoQueued from '@public/img/no-queued.svg';
 import { PageOptions } from '..';
 
 const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (

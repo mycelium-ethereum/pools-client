@@ -1,7 +1,7 @@
-import { StateSlice } from '@store/types';
 import { ethers } from 'ethers';
-import { StoreState } from '..';
+import { StateSlice } from '~/store/types';
 import { IGasSlice } from './types';
+import { StoreState } from '..';
 
 export const createGasSlice: StateSlice<IGasSlice> = (set, get) => ({
     gasPrice: 0,

@@ -26,16 +26,16 @@
     "jsx": "preserve",
     "baseUrl": ".",
     "paths": {
-      "@components/*": [
+      "~/components/*": [
         "components/*"
       ],
       "~/types/*": [
         "types/*"
       ],
-      "@store/*": [
+      "~/store/*": [
         "store/*"
       ],
-      "@context/*": [
+      "~/context/*": [
         "context/*"
       ],
       "~/hooks/*": [
@@ -44,16 +44,16 @@
       "~/utils/*": [
         "utils/*"
       ],
-      "@libs/*": [
+      "~/libs/*": [
         "libs/*"
       ],
-      "@archetypes/*": [
+      "~/archetypes/*": [
         "archetypes/*"
       ],
       "~/constants/*": [
         "constants/*",
       ],
-      "@public/*": [
+      "~/public/*": [
         "public/*"
       ]
     },

@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js';
 import { CommitActionEnum, PoolToken } from '@tracer-protocol/pools-js';
-import { PoolInfo } from '@context/PoolContext/poolDispatch';
+import { PoolInfo } from '~/context/PoolContext/poolDispatch';
 
 export type SummaryProps = {
     pool: PoolInfo['poolInstance'];

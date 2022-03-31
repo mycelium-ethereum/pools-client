@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
-import { useStore } from '@store/main';
-import { selectWeb3Info } from '@store/Web3Slice';
-import { Network } from '~/types/networks';
-import { BridgeableAsset } from '~/types/bridge';
 import { bridgeableTickers } from '~/constants/bridge';
+import { useArbitrumBridge } from '~/context/ArbitrumBridgeContext';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
+import { BridgeableAsset } from '~/types/bridge';
+import { Network } from '~/types/networks';
 import { switchNetworks } from '~/utils/rpcMethods';
 
 import { MultiBridge } from './MultiBridge';

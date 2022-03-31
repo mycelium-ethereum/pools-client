@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 // @ts-ignore
 import ENS, { getEnsAddress } from '@ensdomains/ensjs';
-import { useStore } from '@store/main';
-import { selectProvider } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectProvider } from '~/store/Web3Slice';
 
 // const useEnsName
 export default ((account: string) => {
