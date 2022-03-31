@@ -5,6 +5,7 @@ import { IPoolsSlice } from './PoolsSlice/types';
 import { IWeb3Slice } from './Web3Slice/types';
 import { IGasSlice } from './GasSlice/types';
 import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
+import { IPendingCommitSlice } from './PendingCommitSlice/types';
 
 // global store state
 export type StoreState = {
@@ -14,6 +15,7 @@ export type StoreState = {
     web3Slice: IWeb3Slice;
     gasSlice: IGasSlice;
     unsupportedNetworkSlice: IUnsupportedNetworkSlice;
+    pendingCommitSlice: IPendingCommitSlice;
 };
 
 // Seperated return type to allow for a different
