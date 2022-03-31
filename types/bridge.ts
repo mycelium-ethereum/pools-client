@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { LogoTicker } from '@components/General';
+import { LogoTicker } from '~/components/General';
 
 export type DestinationNetwork =
     | typeof NETWORKS.RINKEBY

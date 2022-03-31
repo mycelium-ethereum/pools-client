@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
-import { SwapAction } from '@context/SwapContext';
+import { SwapAction } from '~/context/SwapContext';
 
 export type InvalidAmount = {
     isInvalid: boolean;

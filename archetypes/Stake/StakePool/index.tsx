@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useFarms } from '@context/FarmContext';
+import { useFarms } from '~/context/FarmContext';
 import StakeGeneric from '../StakeGeneric';
 
 export default (() => {

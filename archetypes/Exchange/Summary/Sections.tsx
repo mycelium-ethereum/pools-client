@@ -1,7 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
-import { Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
+import { Logo, Section, tokenSymbolToLogoTicker } from '~/components/General';
 import { toApproxCurrency } from '~/utils/converters';
 import ApproxCommitGasFee from './ApproxCommitGasFee';
 import * as Styles from './styles';

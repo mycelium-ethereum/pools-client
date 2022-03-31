@@ -1,5 +1,5 @@
 import React from 'react';
-import { tokenSymbolToLogoTicker } from '@components/General';
+import { tokenSymbolToLogoTicker } from '~/components/General';
 import BVector from '~/public/img/b-vector.svg';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../../../Pools/state';

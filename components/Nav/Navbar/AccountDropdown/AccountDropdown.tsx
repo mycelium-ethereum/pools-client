@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import Button from '@components/General/Button';
-import TWPopup from '@components/General/TWPopup';
-import TooltipSelector from '@components/Tooltips/TooltipSelector';
+import Button from '~/components/General/Button';
+import TWPopup from '~/components/General/TWPopup';
+import TooltipSelector from '~/components/Tooltips/TooltipSelector';
 import { useStore } from '@store/main';
 import { selectOnboardActions } from '@store/Web3Slice';
 import useEnsName from '~/hooks/useEnsName';

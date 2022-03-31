@@ -1,6 +1,6 @@
 import React from 'react';
-import { TWModal } from '@components/General/TWModal';
-import { Table, TableRow, TableRowCell } from '@components/General/TWTable';
+import { TWModal } from '~/components/General/TWModal';
+import { Table, TableRow, TableRowCell } from '~/components/General/TWTable';
 import styled from 'styled-components';
 import { getPriceFeedUrl } from '~/utils/converters';
 import { Theme } from '@store/ThemeSlice/themes';

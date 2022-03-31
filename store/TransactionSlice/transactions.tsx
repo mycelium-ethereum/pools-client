@@ -1,7 +1,7 @@
 import React from 'react';
 import { ToastContent, ToastOptions, UpdateOptions } from 'react-toastify';
-import { Notification } from '@components/General/Notification';
-import { CommitPendingNotification, CommitSuccessNotification } from '@components/General/Notification/Commit';
+import { Notification } from '~/components/General/Notification';
+import { CommitPendingNotification, CommitSuccessNotification } from '~/components/General/Notification/Commit';
 import {
     ApproveProps,
     ArbBridgeProps,

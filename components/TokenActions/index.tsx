@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { Popover, Transition } from '@headlessui/react';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
-import { Logo, LogoTicker } from '@components/General';
+import { Logo, LogoTicker } from '~/components/General';
 import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
 
 // const Actions

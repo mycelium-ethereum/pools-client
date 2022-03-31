@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Button from '@components/General/Button';
-import { TableRowCell } from '@components/General/TWTable';
+import Button from '~/components/General/Button';
+import { TableRowCell } from '~/components/General/TWTable';
 import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.tr`

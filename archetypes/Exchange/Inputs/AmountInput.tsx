@@ -1,7 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
-import { InnerInputText } from '@components/General/Input';
-import Max from '@components/General/Max';
+import { InnerInputText } from '~/components/General/Input';
+import Max from '~/components/General/Max';
 
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';

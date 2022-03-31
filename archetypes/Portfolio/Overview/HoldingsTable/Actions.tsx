@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dropdown, LogoTicker } from '@components/General';
-import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import { Dropdown, LogoTicker } from '~/components/General';
+import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { MarketFilterEnum } from '~/types/filters';
 import { SearchInput } from './styles';
 import { DenotedInEnum, PortfolioAction, PortfolioState } from '../state';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useReducer } from 'react';
-import { TWModal } from '@components/General/TWModal';
+import { TWModal } from '~/components/General/TWModal';
 import { toApproxCurrency } from '~/utils/converters';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
 

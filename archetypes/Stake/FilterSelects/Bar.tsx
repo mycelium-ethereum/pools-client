@@ -1,7 +1,7 @@
 import React from 'react';
-import { Dropdown } from '@components/General';
-import { SearchInput } from '@components/General/SearchInput';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import { Dropdown } from '~/components/General';
+import { SearchInput } from '~/components/General/SearchInput';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 interface FilterSelectsProps {
     state: StakeState;

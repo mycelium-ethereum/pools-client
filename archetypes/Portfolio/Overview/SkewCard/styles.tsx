@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Logo as UnstyledLogo } from '@components/General';
+import { Logo as UnstyledLogo } from '~/components/General';
 import CTABackground from '~/public/img/cta-bg.svg';
 
 export const Container = styled.div`

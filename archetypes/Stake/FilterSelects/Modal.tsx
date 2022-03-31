@@ -1,7 +1,7 @@
 import React from 'react';
-import { SearchInput } from '@components/General/SearchInput';
-import { Select } from '@components/General/Select';
-import { TWModal } from '@components/General/TWModal';
+import { SearchInput } from '~/components/General/SearchInput';
+import { Select } from '~/components/General/Select';
+import { TWModal } from '~/components/General/TWModal';
 import { StakeAction, StakeState, LeverageFilterEnum, SideFilterEnum, SortByEnum } from '../state';
 
 interface FilterModalProps {

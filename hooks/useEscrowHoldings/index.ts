@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { EscrowRowProps, TokenType } from '@archetypes/Portfolio/Overview/state';
-import { LogoTicker } from '@components/General';
-import { usePools } from '@context/PoolContext';
+import { LogoTicker } from '~/components/General';
+import { usePools } from '~/context/PoolContext';
 import useSubgraphAggregateBalances from '../useSubgraphAggregateBalances';
 
 const DEFAULT_ENTRY_PRICES = {

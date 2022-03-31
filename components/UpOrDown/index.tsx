@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { DeltaEnum } from '@archetypes/Pools/state';
-import { LogoTicker } from '@components/General';
+import { LogoTicker } from '~/components/General';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';

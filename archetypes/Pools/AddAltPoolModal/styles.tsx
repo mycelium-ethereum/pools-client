@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CloseIcon from '/public/img/general/close.svg';
-import { SearchInput, InnerSearchInput, SearchIconWrap } from '@components/General/SearchInput';
+import { SearchInput, InnerSearchInput, SearchIconWrap } from '~/components/General/SearchInput';
 
 export const Close = styled(CloseIcon)`
     position: absolute;

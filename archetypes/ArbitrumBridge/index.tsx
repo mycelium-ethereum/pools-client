@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 
-import { useArbitrumBridge } from '@context/ArbitrumBridgeContext';
+import { useArbitrumBridge } from '~/context/ArbitrumBridgeContext';
 import { useStore } from '@store/main';
 import { selectWeb3Info } from '@store/Web3Slice';
 import { bridgeableTickers } from '~/constants/bridge';

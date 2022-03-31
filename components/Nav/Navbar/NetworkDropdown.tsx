@@ -1,8 +1,8 @@
 import React from 'react';
 import Icon from '@ant-design/icons';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { Logo, LogoTicker } from '@components/General';
-import TWPopup from '@components/General/TWPopup';
+import { Logo, LogoTicker } from '~/components/General';
+import TWPopup from '~/components/General/TWPopup';
 import Error from '~/public/img/notifications/error.svg';
 import { useStore } from '@store/main';
 import { selectWeb3Info } from '@store/Web3Slice';

@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
-import { HiddenExpand as UnstyledHiddenExpand } from '@components/General';
-import Button from '@components/General/Button';
-import { default as UnstyledTimeLeft } from '@components/TimeLeft';
+import { HiddenExpand as UnstyledHiddenExpand } from '~/components/General';
+import Button from '~/components/General/Button';
+import { default as UnstyledTimeLeft } from '~/components/TimeLeft';
 
 export const HiddenExpand = styled(UnstyledHiddenExpand)<{ showBorder: boolean }>`
     margin-bottom: 2rem !important;

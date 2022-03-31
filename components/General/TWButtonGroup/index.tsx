@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { classNames } from '~/utils/helpers';
 
 // the difference here is the bg on unselected

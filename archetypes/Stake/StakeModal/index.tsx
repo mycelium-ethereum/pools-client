@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
-import { tokenSymbolToLogoTicker } from '@components/General';
-import Button from '@components/General/Button';
+import { tokenSymbolToLogoTicker } from '~/components/General';
+import Button from '~/components/General/Button';
 import Close from '/public/img/general/close.svg';
-import { Currency } from '@components/General/Currency';
-import { InnerInputText, InputContainer } from '@components/General/Input';
-import { Input as NumericInput } from '@components/General/Input/Numeric';
-import { TWModal } from '@components/General/TWModal';
-import { useFarms } from '@context/FarmContext';
+import { Currency } from '~/components/General/Currency';
+import { InnerInputText, InputContainer } from '~/components/General/Input';
+import { Input as NumericInput } from '~/components/General/Input/Numeric';
+import { TWModal } from '~/components/General/TWModal';
+import { useFarms } from '~/context/FarmContext';
 import { StakeAction, StakeState } from '../state';
 interface StakeModalProps {
     state: StakeState;

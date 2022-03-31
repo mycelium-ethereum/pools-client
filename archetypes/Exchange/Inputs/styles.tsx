@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import { InputContainer } from '@components/General/Input';
-import { Input } from '@components/General/Input/Numeric';
+import { InputContainer } from '~/components/General/Input';
+import { Input } from '~/components/General/Input/Numeric';
 
 export const Container = styled.div`
     @media (min-width: 640px) {

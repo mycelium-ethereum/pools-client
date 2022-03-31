@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import TWPopup from '@components/General/TWPopup';
+import TWPopup from '~/components/General/TWPopup';
 import { device } from '@store/ThemeSlice/themes';
 
 export const MenuItem = styled.div<{

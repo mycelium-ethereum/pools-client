@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { HiddenExpand, Logo } from '@components/General';
-import Loading from '@components/General/Loading';
-import { Table, TableHeader, TableHeaderCell } from '@components/General/TWTable';
-import { usePoolActions } from '@context/PoolContext';
+import { HiddenExpand, Logo } from '~/components/General';
+import Loading from '~/components/General/Loading';
+import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { usePoolActions } from '~/context/PoolContext';
 import { toApproxCurrency } from '~/utils/converters';
 
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';

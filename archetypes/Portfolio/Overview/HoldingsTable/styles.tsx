@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SearchInput as UnstyledSearchInput } from '@components/General/SearchInput';
+import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 
 export const Container = styled.div`
     border-radius: 0.75rem;

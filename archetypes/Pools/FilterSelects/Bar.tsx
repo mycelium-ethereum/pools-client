@@ -1,9 +1,9 @@
 import React from 'react';
-import { Dropdown, HiddenExpand, LogoTicker } from '@components/General';
-import Button from '@components/General/Button';
-import { SearchInput } from '@components/General/SearchInput';
-import TWButtonGroup from '@components/General/TWButtonGroup';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import { Dropdown, HiddenExpand, LogoTicker } from '~/components/General';
+import Button from '~/components/General/Button';
+import { SearchInput } from '~/components/General/SearchInput';
+import TWButtonGroup from '~/components/General/TWButtonGroup';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 
 import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';

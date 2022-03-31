@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import Footer from '@components/Footer';
-import NavBar from '@components/Nav';
+import Footer from '~/components/Footer';
+import NavBar from '~/components/Nav';
 import * as Styled from './styles';
 
 const LegalPageLayout: React.FC = ({ children }) => {

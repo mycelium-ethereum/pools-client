@@ -1,12 +1,12 @@
 import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import BigNumber from 'bignumber.js';
 import React, { useEffect, useMemo, useState } from 'react';
-import Button from '@components/General/Button';
-import Loading from '@components/General/Loading';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General/Logo';
-import { TWModal } from '@components/General/TWModal';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
-import { APYTip, RewardsEndedTip } from '@components/Tooltips';
+import Button from '~/components/General/Button';
+import Loading from '~/components/General/Loading';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
+import { TWModal } from '~/components/General/TWModal';
+import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { APYTip, RewardsEndedTip } from '~/components/Tooltips';
 import { TokenToFarmAddressMap } from '~/constants/staking';
 import { BalancerPoolAsset } from '~/types/staking';
 import { toApproxCurrency } from '~/utils/converters';

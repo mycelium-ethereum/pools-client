@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GasPriceTooltip } from '@components/Tooltips';
+import { GasPriceTooltip } from '~/components/Tooltips';
 import GasIcon from '~/public/img/general/gas_icon.svg';
 import { useStore } from '@store/main';
 import { selectWalletInfo } from '@store/Web3Slice';
