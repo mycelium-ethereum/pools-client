@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Children } from '~/types/general';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
 import {
     fetchAggregateBalance,
@@ -28,13 +27,14 @@ import {
     PoolToken__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { useCommitActions } from '@context/UsersCommitContext';
-import { networkConfig } from '@context/Web3Context/Web3Context.Config';
+import { networkConfig } from '~/constants/networks';
 import { PoolList } from '~/types/pools';
 import PoolListService from '@libs/services/poolList';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { useStore } from '@store/main';
 import { TransactionType } from '@store/TransactionSlice/types';
 import { selectHandleTransaction } from '@store/TransactionSlice';
+import { selectWeb3Info } from '@store/Web3Slice';
 import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
 
 type Options = {
@@ -76,7 +76,7 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  * Wrapper store for all pools information
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
-    const { provider, account, signer } = useWeb3();
+    const { provider, account, signer } = useStore(selectWeb3Info);
 
     const handleTransaction = useStore(selectHandleTransaction);
 

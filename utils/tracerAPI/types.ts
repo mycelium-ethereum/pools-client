@@ -1,8 +1,7 @@
 import BigNumber from 'bignumber.js';
-import { CommitEnum } from '@tracer-protocol/pools-js';
-import { ARBITRUM, ARBITRUM_RINKEBY } from '~/constants/networks';
+import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
 
-export type V2_SUPPORTED_NETWORKS = typeof ARBITRUM_RINKEBY | typeof ARBITRUM;
+export type V2_SUPPORTED_NETWORKS = typeof NETWORKS.ARBITRUM_RINKEBY | typeof NETWORKS.ARBITRUM;
 export type V2_API_COMMIT_TYPE = typeof V2_API_COMMIT_TYPES[keyof typeof V2_API_COMMIT_TYPES];
 
 export const V2_API_COMMIT_TYPES = {

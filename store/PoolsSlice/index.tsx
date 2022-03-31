@@ -1,7 +1,7 @@
 import { StateSlice, StoreState } from '@store/types';
 import { IPoolsSlice, Imported } from './types';
 
-export const createPoolsSlice: StateSlice<IPoolsSlice, IPoolsSlice> = (set: any) => ({
+export const createPoolsSlice: StateSlice<IPoolsSlice> = (set: any) => ({
     imported: [],
     handleImport: (val: Imported) => {
         set((prev: IPoolsSlice) => ({

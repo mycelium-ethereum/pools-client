@@ -1,8 +1,8 @@
 import BigNumber from 'bignumber.js';
 import { calcBptTokenSpotPrice } from '@tracer-protocol/pools-js';
-import { Network } from '@context/Web3Context/Web3Context.Config';
+import { BalancerInfo } from '~/types/balancer';
 
-export const getBalancerPrices: (balancerInfo?: Network['balancerInfo']) => Promise<Record<string, BigNumber>> = async (
+export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<string, BigNumber>> = async (
     balancerInfo,
 ) => {
     if (!balancerInfo) {

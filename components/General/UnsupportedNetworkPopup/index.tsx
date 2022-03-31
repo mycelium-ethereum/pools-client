@@ -1,15 +1,18 @@
 import React, { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
-import { ARBITRUM } from '~/constants/networks';
-import { switchNetworks } from '~/utils/rpcMethods';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
+import { selectUnsupportedNetworkRef } from '@store/UnsupportedNetworkSlice';
+import { switchNetworks } from '~/utils/rpcMethods';
+import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
 import { Notification } from '../Notification';
 
 const UnsupportedNetwork: React.FC = () => {
     const router = useRouter();
-    const { account, network, provider, unsupportedNetworkPopupRef } = useWeb3();
+    const { account, network, provider } = useStore(selectWeb3Info);
+    const { unsupportedNetworkPopupRef, setUnsupportedNetworkPopupRef } = useStore(selectUnsupportedNetworkRef);
 
     // unsupported network popup
     useEffect(() => {
@@ -20,15 +23,14 @@ const UnsupportedNetwork: React.FC = () => {
             !!account
         ) {
             // ignore if we are already showing the error
-            if (!unsupportedNetworkPopupRef.current) {
-                // @ts-ignore
-                unsupportedNetworkPopupRef.current = toast(
+            if (!unsupportedNetworkPopupRef) {
+                const toastId = toast(
                     <Notification title="Unsupported Network">
                         <span key="unsupported-network-content" className="text-sm">
                             <a
                                 className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
                                 onClick={() => {
-                                    switchNetworks(provider, ARBITRUM);
+                                    switchNetworks(provider, NETWORKS.ARBITRUM);
                                 }}
                             >
                                 Switch to Arbitrum Mainnet
@@ -50,19 +52,20 @@ const UnsupportedNetwork: React.FC = () => {
                         type: 'error',
                         autoClose: false,
                         onClose: () => {
-                            unsupportedNetworkPopupRef.current = '';
+                            setUnsupportedNetworkPopupRef(undefined);
                         },
                     },
                 );
+                setUnsupportedNetworkPopupRef(toastId.toString());
             }
         } else {
-            if (unsupportedNetworkPopupRef.current) {
-                toast.update(unsupportedNetworkPopupRef.current, {
+            if (unsupportedNetworkPopupRef) {
+                toast.update(unsupportedNetworkPopupRef, {
                     render: <Notification title="Switched Network" />,
                     type: 'success',
                     autoClose: 5000,
                 });
-                unsupportedNetworkPopupRef.current = '';
+                setUnsupportedNetworkPopupRef(undefined);
             }
         }
     }, [router.pathname, network, account, provider]);

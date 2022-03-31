@@ -1,101 +1,43 @@
-import { PoolFactory__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
+import { FarmConfig } from '~/types/staking';
 import { StakingRewards__factory } from '~/types/staking/typechain/factories/StakingRewards__factory';
 
-import { ethers } from 'ethers';
-import { LogoTicker } from '@components/General';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { NETWORKS } from '@tracer-protocol/pools-js/utils/constants';
+export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {
+    switch (tokenAddress) {
+        // 1L-BTC/USD
+        case '0x1616bF7bbd60E57f961E83A602B6b9Abb6E6CAFc':
+            return '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0';
+        // 1S-BTC/USD
+        case '0x052814194f459aF30EdB6a506eABFc85a4D99501':
+            return '0xD04dDCAEca6bf283A430Cb9E847CEEd5Da419Fa0';
+        // 3L-BTC/USD
+        case '0x05A131B3Cd23Be0b4F7B274B3d237E73650e543d':
+            return '0xEb05e160D3C1990719aa25d74294783fE4e3D3Ef';
+        // 3S-BTC/USD
+        case '0x85700dC0bfD128DD0e7B9eD38496A60baC698fc8':
+            return '0xeA4FF5ED11F93AA0Ce7744B1D40093f52eA1cda8';
+        // 1L-ETH/USD
+        case '0x38c0a5443c7427e65A9Bf15AE746a28BB9a052cc':
+            return '0xA18413dC5506A91138e0604C283E36B021b8849B';
+        // 1S-ETH/USD
+        case '0xf581571DBcCeD3A59AaaCbf90448E7B3E1704dcD':
+            return '0x9769F208239C740cC40E9CB3427c34513213B83f';
+        // 3L-ETH/USD
+        case '0xaA846004Dc01b532B63FEaa0b7A0cB0990f19ED9':
+            return '0x07cCcDC913bCbab246fC6E38E81b0C53AaB3De9b';
+        // 3S-ETH/USD
+        case '0x7d7E4f49a29dDA8b1eCDcf8a8bc85EdcB234E997':
+            return '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC';
+        default:
+            return '';
+    }
+};
 
 // the vault address is the same on all networks
 const BALANCER_VAULT_ADDRESS = '0xBA12222222228d8Ba445958a75a0704d566BF2C8';
 
-type Farm = {
-    address: string;
-    abi: ethers.ContractInterface;
-    pool: string;
-    balancerPoolId?: string;
-    link?: string;
-    linkText?: string;
-    rewardsEnded?: boolean;
-};
-
-export type AvailableNetwork = KnownNetwork | typeof UNKNOWN_NETWORK;
-export const UNKNOWN_NETWORK = '0';
-
-export type Network = {
-    id: KnownNetwork;
-    name: string;
-    logoTicker: LogoTicker;
-    previewUrl: string;
-    contracts: {
-        [name: string]: {
-            address: string | undefined;
-            abi: ethers.ContractInterface;
-        };
-    };
-    poolFarms: Farm[];
-    bptFarms: Farm[];
-    hex: string;
-    publicRPC: string;
-    publicWebsocketRPC?: string;
-    balancerVaultAddress: string;
-    usdcAddress: string;
-    // lookup from known token addresses to Chainink price feed address
-    // https://docs.chain.link/docs/arbitrum-price-feeds/
-    knownUSDCPriceFeeds: {
-        [address: string]: string;
-    };
-    tcrAddress: string;
-    sushiRouterAddress: string;
-    stakingRewardTokens?: {
-        [key: string]: {
-            address: string;
-            decimals: number;
-        };
-    };
-    balancerInfo?: {
-        graphUri: string;
-        baseUri: string; // base link to balancer trading page
-        pools: string[];
-        leveragedPools: string[];
-        wPool: string;
-    };
-};
-
-export const DEFAULT_NETWORK = NETWORKS.ARBITRUM;
-
-type KnownNetworkToSubgraphUrl = {
-    // eslint-disable-next-line
-  [K in KnownNetwork]?: string
-};
-
-export const knownNetworkToSubgraphUrl: KnownNetworkToSubgraphUrl = {
-    [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-one',
-    // [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-rinkeby'
-    [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby',
-};
-
-/**
- * Network store which allows swapping between networks and fetching from different data sources.
- * Keys are the ID of the network.
- * The 0 network is a default network when the user has not connected their address.
- *  The data sources for the 0 network are populated from the env variables.
- * The local config also uses the ENV variables so the commit history is not riddled with updates to
- *  this config.
- * Do not change the other network configs unless the contract addresses have changed.
- */
-export const networkConfig: Record<KnownNetwork, Network> = {
+export const farmConfig: Record<KnownNetwork, FarmConfig> = {
     [NETWORKS.ARBITRUM_RINKEBY]: {
-        id: NETWORKS.ARBITRUM_RINKEBY,
-        name: 'Arbitrum Rinkeby',
-        logoTicker: NETWORKS.ARBITRUM,
-        previewUrl: 'https://testnet.arbiscan.io',
-        contracts: {
-            poolFactory: {
-                address: '0x69D044eCf45500882FdA0A796744231b1Fb5eFD5',
-                abi: PoolFactory__factory.abi,
-            },
-        },
         poolFarms: [
             {
                 address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
@@ -109,26 +51,11 @@ export const networkConfig: Record<KnownNetwork, Network> = {
             },
         ],
         bptFarms: [],
-        hex: '0x66EEB',
-        publicRPC: process.env.NEXT_PUBLIC_TESTNET_RPC ?? 'https://rinkeby.arbitrum.io/rpc',
-        publicWebsocketRPC: process.env.NEXT_PUBLIC_TESTNET_WSS_RPC,
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '',
-        tcrAddress: '',
         sushiRouterAddress: '',
         knownUSDCPriceFeeds: {},
     },
     [NETWORKS.ARBITRUM]: {
-        id: NETWORKS.ARBITRUM,
-        name: 'Arbitrum',
-        logoTicker: NETWORKS.ARBITRUM,
-        previewUrl: 'https://arbiscan.io/',
-        contracts: {
-            poolFactory: {
-                address: '0x98C58c1cEb01E198F8356763d5CbA8EB7b11e4E2',
-                abi: PoolFactory__factory.abi,
-            },
-        },
         poolFarms: [
             {
                 address: '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0', // 1-BTC/USDC-long
@@ -263,11 +190,7 @@ export const networkConfig: Record<KnownNetwork, Network> = {
                 link: 'https://arbitrum.balancer.fi/#/pool/0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
             },
         ],
-        hex: '0xA4B1',
-        publicRPC: process.env.NEXT_PUBLIC_MAINNET_RPC ?? 'https://arb1.arbitrum.io/rpc',
-        publicWebsocketRPC: process.env.NEXT_PUBLIC_MAINNET_WSS_RPC,
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         knownUSDCPriceFeeds: {
             // wBTC: BTC/USD
             '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': '0x6ce185860a4963106506C203335A2910413708e9',
@@ -275,89 +198,32 @@ export const networkConfig: Record<KnownNetwork, Network> = {
             '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
         },
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
-        tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
         stakingRewardTokens: {
             fxs: {
                 address: '0x9d2f299715d94d8a7e6f5eaa8e654e8c74a988a7',
                 decimals: 18,
             },
         },
-        balancerInfo: {
-            graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
-            baseUri: 'https://arbitrum.balancer.fi/#/trade',
-            // 1-BTC/USD and 1-ETH/USD
-            pools: ['0x6ee86e032173716a41818e6d6d320a752176d697', '0x17a35e3d578797e34131d10e66c11170848c6da1'],
-            // 3-BTC/USD and 3-ETH/USD
-            leveragedPools: [
-                '0xcf3ae4b9235b1c203457e472a011c12c3a2fde93',
-                '0x996616bde0cb4974e571f17d31c844da2bd177f8',
-            ],
-            // wETH wBTC USDC pool
-            wPool: '0x64541216bafffeec8ea535bb71fbc927831d0595',
-        },
     },
     [NETWORKS.MAINNET]: {
-        id: NETWORKS.MAINNET,
-        name: 'Ethereum',
-        logoTicker: 'ETH',
-        previewUrl: '',
-        contracts: {
-            poolFactory: {
-                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
-                abi: PoolFactory__factory.abi,
-            },
-        },
-        hex: '0x1',
         poolFarms: [],
         bptFarms: [],
-        publicRPC: process.env.NEXT_PUBLIC_MAINNET_L1_RPC || '',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
         sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
-        tcrAddress: '0x9c4a4204b79dd291d6b6571c5be8bbcd0622f050',
         knownUSDCPriceFeeds: {},
     },
     [NETWORKS.RINKEBY]: {
-        id: NETWORKS.RINKEBY,
-        name: 'Rinkeby',
-        logoTicker: 'ETH',
-        previewUrl: '',
-        contracts: {
-            poolFactory: {
-                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
-                abi: PoolFactory__factory.abi,
-            },
-        },
-        hex: '0x4',
         poolFarms: [],
         bptFarms: [],
-        publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
         sushiRouterAddress: '',
-        tcrAddress: '',
         knownUSDCPriceFeeds: {},
     },
     [NETWORKS.KOVAN]: {
-        // TODO fill this out properly
-        id: NETWORKS.KOVAN,
-        name: 'Kovan',
-        logoTicker: 'ETH',
-        previewUrl: '',
-        contracts: {
-            poolFactory: {
-                address: process.env.NEXT_PUBLIC_POOL_FACTORY_ADDRESS,
-                abi: PoolFactory__factory.abi,
-            },
-        },
-        hex: '0x4',
         poolFarms: [],
         bptFarms: [],
-        publicRPC: 'https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161',
         balancerVaultAddress: BALANCER_VAULT_ADDRESS,
-        usdcAddress: '0x4dbcdf9b62e891a7cec5a2568c3f4faf9e8abe2b',
         sushiRouterAddress: '',
-        tcrAddress: '',
         knownUSDCPriceFeeds: {},
     },
 };

@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import { Network } from '@context/Web3Context/Web3Context.Config';
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { Network } from '~/types/networks';
 import { ArrowRightOutlined, LoadingOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { Input } from '@components/General/Input/Numeric';
 import { InnerInputText, InputContainer } from '@components/General/Input';
@@ -9,7 +10,6 @@ import Button from '@components/General/Button';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '~/types/bridge';
 import { bridgeableAssetWarnings } from '~/constants/bridge';
-import { MAINNET } from '~/constants/networks';
 import { Logo } from '@components/General';
 import { StyledTooltip } from '@components/Tooltips';
 import { ethers } from 'ethers';
@@ -54,9 +54,9 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
     // if this is the first time using the bridge, automatically switch them to L1 Mainnet
     useEffect(() => {
         const hasUsedBridge = localStorage.getItem('hasUsedBridge') === 'true';
-        if (!hasUsedBridge && fromNetwork.id !== MAINNET) {
+        if (!hasUsedBridge && fromNetwork.id !== NETWORKS.MAINNET) {
             // if its the first time using the bridge and they aren't already on L1 Mainnet
-            onSwitchNetwork(MAINNET, () => {
+            onSwitchNetwork(NETWORKS.MAINNET, () => {
                 localStorage.setItem('hasUsedBridge', 'true');
             });
         }

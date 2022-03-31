@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
-import { useWeb3Actions } from '@context/Web3Context/Web3Context';
-import { ARBITRUM } from '~/constants/networks';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import useEnsName from '~/hooks/useEnsName';
 import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';
 import TWPopup from '@components/General/TWPopup';
+import { useStore } from '@store/main';
+import { selectOnboardActions } from '@store/Web3Slice';
 import { AccountDropdownButtonProps } from './types';
 import * as Styled from './styles';
 import WalletIcon from '../WalletIcon';
@@ -12,7 +13,7 @@ import WalletIcon from '../WalletIcon';
 const ARBISCAN_URI = 'https://arbiscan.io';
 
 export default (({ account, className }) => {
-    const { resetOnboard, handleConnect } = useWeb3Actions();
+    const { resetOnboard, handleConnect } = useStore(selectOnboardActions);
     const ensName = useEnsName(account ?? '');
 
     return (
@@ -66,7 +67,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     target="_blank"
                     rel="noopener noreferrer"
                 >
-                    <Styled.ArbitrumLogo ticker={ARBITRUM} />
+                    <Styled.ArbitrumLogo ticker={NETWORKS.ARBITRUM} />
                     <div>View on Arbiscan</div>
                 </Styled.ViewOnArbiscanOption>
             </Styled.Options>

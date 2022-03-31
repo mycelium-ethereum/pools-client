@@ -1,17 +1,18 @@
 import React, { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { useStore } from '@store/main';
+import { selectProvider } from '@store/Web3Slice';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
+import { QueuedCommit } from '~/types/pools';
+import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import { useRouter } from 'next/router';
-import { QueuedCommit } from '~/types/pools';
-import { ethers } from 'ethers';
 import { Logo, tokenSymbolToLogoTicker } from '@components/General';
-import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 import Actions from '@components/TokenActions';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
-import BigNumber from 'bignumber.js';
 import TimeLeft from '@components/TimeLeft';
 
 import NoQueued from '@public/img/no-queued.svg';
@@ -40,7 +41,7 @@ const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => P
 
 export default (({ focus, commits }) => {
     const router = useRouter();
-    const { provider } = useWeb3();
+    const provider = useStore(selectProvider);
 
     const { mintCommits, burnCommits, flipCommits } = useMemo(
         () => ({

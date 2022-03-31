@@ -1,10 +1,16 @@
 import React, { useEffect, useReducer } from 'react';
+import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import FilterBar from '../FilterSelects/Bar';
-import FilterModal from '../FilterSelects/Modal';
-import FarmsTable from '../FarmsTable';
+import { useStore } from '@store/main';
+import { TransactionType } from '@store/TransactionSlice/types';
+import { selectHandleTransaction } from '@store/TransactionSlice';
+import { selectAccount } from '@store/Web3Slice';
+import { Farm } from '~/types/staking';
 import { MAX_SOL_UINT } from '~/constants/general';
+import FarmNav from '@components/Nav/FarmNav';
+import { Logo, LogoTicker } from '@components/General/Logo';
+
 import {
     stakeReducer,
     StakeAction,
@@ -14,15 +20,11 @@ import {
     SortByEnum,
     FarmTableRowData,
 } from '../state';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import FarmNav from '@components/Nav/FarmNav';
+
+import FilterBar from '../FilterSelects/Bar';
+import FilterModal from '../FilterSelects/Modal';
+import FarmsTable from '../FarmsTable';
 import StakeModal from '../StakeModal';
-import { Farm } from '~/types/staking';
-import { Logo, LogoTicker } from '@components/General/Logo';
-import { useStore } from '@store/main';
-import { TransactionType } from '@store/TransactionSlice/types';
-import { selectHandleTransaction } from '@store/TransactionSlice';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];
@@ -65,8 +67,7 @@ export default (({
     fetchingFarms,
     rewardsTokenUSDPrices,
 }) => {
-    const { account } = useWeb3();
-
+    const account = useStore(selectAccount);
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {

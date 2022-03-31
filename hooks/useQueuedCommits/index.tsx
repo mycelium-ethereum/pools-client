@@ -1,12 +1,13 @@
 import { useState, useMemo } from 'react';
-import { usePools } from '@context/PoolContext';
-import { useWeb3 } from '@context/Web3Context/Web3Context';
-import { QueuedCommit } from '~/types/pools';
-import { useCommits } from '@context/UsersCommitContext';
 import { CommitEnum } from '@tracer-protocol/pools-js';
+import { usePools } from '@context/PoolContext';
+import { useCommits } from '@context/UsersCommitContext';
+import { useStore } from '@store/main';
+import { selectWeb3Info } from '@store/Web3Slice';
+import { QueuedCommit } from '~/types/pools';
 
 export default (() => {
-    const { account = '', provider } = useWeb3();
+    const { account = '', provider } = useStore(selectWeb3Info);
     const { commits = {} } = useCommits();
     const { pools } = usePools();
     const [allQueuedCommits, setAllQueuedCommits] = useState<QueuedCommit[]>([]);
