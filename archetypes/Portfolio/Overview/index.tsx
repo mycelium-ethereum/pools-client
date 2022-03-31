@@ -83,7 +83,7 @@ export default (({ onClickCommitAction }) => {
             <Styles.Container>
                 <Styles.Wrapper isFullWidth={!!account}>
                     <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
-                    {!account && <ConnectWalletBanner onClick={handleConnect} />}
+                    {!account && <ConnectWalletBanner handleConnect={handleConnect} />}
                 </Styles.Wrapper>
                 <Styles.Wrapper isFullWidth={maxSkew === undefined}>
                     <Styles.Banner>

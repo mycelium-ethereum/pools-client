@@ -19,8 +19,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
     // TODO assume this will want to be interchangeable with USD
     const currency = 'USD';
 
-    // @ts-ignore
-    const side: number = SideEnum[token.toLocaleLowerCase()];
+    const side: string | number = SideEnum[token.toLocaleLowerCase()];
 
     return (
         <TableRow>
