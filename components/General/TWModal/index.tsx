@@ -1,8 +1,8 @@
 import React from 'react';
-import { Transition, Dialog } from '@headlessui/react';
 import { Fragment } from 'react';
-import { classNames } from '~/utils/helpers';
+import { Transition, Dialog } from '@headlessui/react';
 import styled from 'styled-components';
+import { classNames } from '~/utils/helpers';
 
 interface TWModalProps {
     open: boolean;

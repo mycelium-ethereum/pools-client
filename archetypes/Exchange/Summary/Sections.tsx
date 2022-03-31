@@ -1,11 +1,11 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
+import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { Logo, Section, tokenSymbolToLogoTicker } from '@components/General';
 import { toApproxCurrency } from '~/utils/converters';
-import * as Styles from './styles';
 import ApproxCommitGasFee from './ApproxCommitGasFee';
+import * as Styles from './styles';
 import { BaseSection } from './types';
-import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { calcNumTokens } from './utils';
 
 export const ExpectedTokenPrice: React.FC<{

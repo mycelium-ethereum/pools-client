@@ -1,12 +1,12 @@
-import BigNumber from 'bignumber.js';
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
-import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
+import BigNumber from 'bignumber.js';
 import {
     LeveragedPool__factory,
     PoolCommitter__factory,
     ERC20__factory,
     PoolKeeper__factory,
 } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import { AggregateBalances } from '~/types/pools';
 
 export const fetchPoolBalances: (

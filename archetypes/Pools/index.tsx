@@ -1,15 +1,15 @@
 import React, { useEffect, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import Loading from '@components/General/Loading';
 import { noDispatch, useSwapContext } from '@context/SwapContext';
 import { useStore } from '@store/main';
 import { selectAccount } from '@store/Web3Slice';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { marketFilter } from '~/utils/filters';
-import Loading from '@components/General/Loading';
 
-import MintBurnModal from './MintBurnModal';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterBar from './FilterSelects/Bar';
+import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
 import {
     browseReducer,

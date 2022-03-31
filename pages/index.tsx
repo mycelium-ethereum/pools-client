@@ -1,12 +1,12 @@
 import React from 'react';
-import NavBar from '@components/Nav/Navbar';
+import { SecurityWidget } from '@reputation.link/vyps-kit';
+import BalancerBuySell from '@archetypes/BalancerBuySell';
 import Footer from '@components/Footer';
+import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import NavBar from '@components/Nav/Navbar';
+import { WarningBanners } from '@components/WarningBanner';
 import { PoolStore } from '@context/PoolContext';
 import { SwapStore } from '@context/SwapContext';
-import { SecurityWidget } from '@reputation.link/vyps-kit';
-import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
-import { WarningBanners } from '@components/WarningBanner';
-import BalancerBuySell from '@archetypes/BalancerBuySell';
 
 export default (() => {
     return (

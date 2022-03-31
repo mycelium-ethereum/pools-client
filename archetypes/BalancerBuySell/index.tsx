@@ -1,21 +1,20 @@
 import React from 'react';
 import Link from 'next/link';
 import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
-import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import Button from '@components/General/Button';
-import TWButtonGroup from '@components/General/TWButtonGroup';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import Divider from '@components/General/Divider';
+import { Dropdown, HiddenExpand } from '@components/General/Dropdown';
+import TWButtonGroup from '@components/General/TWButtonGroup';
 import { StyledTooltip } from '@components/Tooltips';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '@context/SwapContext';
 import { useStore } from '@store/main';
 import { selectOnboardActions, selectWeb3Info } from '@store/Web3Slice';
 
-import { classNames } from '~/utils/helpers';
-
-import { networkConfig } from '~/constants/networks';
 import { balancerConfig } from '~/constants/balancer';
+import { networkConfig } from '~/constants/networks';
+import { classNames } from '~/utils/helpers';
 
 export default (() => {
     const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info);

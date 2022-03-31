@@ -1,6 +1,6 @@
 import React from 'react';
-import TimeLeft from '@components/TimeLeft';
 import { HiddenExpand } from '@components/General';
+import TimeLeft from '@components/TimeLeft';
 
 interface FeeNoteProps {
     poolName: string;

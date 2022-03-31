@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
-import { DeltaEnum } from '@archetypes/Pools/state';
-import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import styled from 'styled-components';
+import { DeltaEnum } from '@archetypes/Pools/state';
+import { LogoTicker } from '@components/General';
+import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import ArrowDown from '/public/img/general/arrow-circle-down.svg';
 import Equal from '/public/img/general/circle-equal.svg';
-import { LogoTicker } from '@components/General';
 
 const IconBox = styled.div`
     margin-right: 0.25rem;

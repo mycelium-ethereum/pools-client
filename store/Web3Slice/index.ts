@@ -1,7 +1,7 @@
-import { StateSlice } from '@store/types';
+import { ethers } from 'ethers';
 import Onboard from '@tracer-protocol/onboard';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { ethers } from 'ethers';
+import { StateSlice } from '@store/types';
 import { DEFAULT_WSS_RPC, DEFAULT_NETWORK } from '~/constants/networks';
 import { onboardConfig } from '~/constants/onboard';
 import { IWeb3Slice } from './types';

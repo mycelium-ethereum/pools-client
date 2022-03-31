@@ -1,33 +1,33 @@
 import React from 'react';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { classNames } from '~/utils/helpers';
 
-import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
-import Etherscan from '@public/img/logos/currencies/etherscan.svg';
-import ETH_L from '@public/img/logos/currencies/eth_long.svg';
-import ETH_S from '@public/img/logos/currencies/eth_short.svg';
-import EUR_L from '@public/img/logos/currencies/eur_long.svg';
-import EUR_S from '@public/img/logos/currencies/eur_short.svg';
-import BTC_L from '@public/img/logos/currencies/btc_long.svg';
-import BTC_S from '@public/img/logos/currencies/btc_short.svg';
-import TOKE_L from '@public/img/logos/currencies/toke_long.svg';
-import TOKE_S from '@public/img/logos/currencies/toke_short.svg';
-import LINK_L from '@public/img/logos/currencies/link_long.svg';
-import LINK_S from '@public/img/logos/currencies/link_short.svg';
+import AAVE from '@public/img/logos/currencies/aave.svg';
 import AAVE_L from '@public/img/logos/currencies/aave_long.svg';
 import AAVE_S from '@public/img/logos/currencies/aave_short.svg';
-import ETH from '@public/img/logos/currencies/eth.svg';
-import EUR from '@public/img/logos/currencies/eur.svg';
-import BTC from '@public/img/logos/currencies/btc.svg';
-import TOKE from '@public/img/logos/currencies/toke.svg';
-import FRAX from '@public/img/logos/currencies/frax.svg';
-import AAVE from '@public/img/logos/currencies/aave.svg';
-import LINK from '@public/img/logos/currencies/link.svg';
-import SUSHI from '@public/img/logos/currencies/sushi.svg';
+import Arbitrum from '@public/img/logos/currencies/arbitrum.svg';
 import BALANCER from '@public/img/logos/currencies/balancer.svg';
-import USDC from '@public/img/logos/currencies/usdc.svg';
-import USD from '@public/img/logos/currencies/usd.svg';
 import BASE from '@public/img/logos/currencies/base.svg';
+import BTC from '@public/img/logos/currencies/btc.svg';
+import BTC_L from '@public/img/logos/currencies/btc_long.svg';
+import BTC_S from '@public/img/logos/currencies/btc_short.svg';
+import ETH from '@public/img/logos/currencies/eth.svg';
+import ETH_L from '@public/img/logos/currencies/eth_long.svg';
+import ETH_S from '@public/img/logos/currencies/eth_short.svg';
+import Etherscan from '@public/img/logos/currencies/etherscan.svg';
+import EUR from '@public/img/logos/currencies/eur.svg';
+import EUR_L from '@public/img/logos/currencies/eur_long.svg';
+import EUR_S from '@public/img/logos/currencies/eur_short.svg';
+import FRAX from '@public/img/logos/currencies/frax.svg';
+import LINK from '@public/img/logos/currencies/link.svg';
+import LINK_L from '@public/img/logos/currencies/link_long.svg';
+import LINK_S from '@public/img/logos/currencies/link_short.svg';
+import SUSHI from '@public/img/logos/currencies/sushi.svg';
+import TOKE from '@public/img/logos/currencies/toke.svg';
+import TOKE_L from '@public/img/logos/currencies/toke_long.svg';
+import TOKE_S from '@public/img/logos/currencies/toke_short.svg';
+import USD from '@public/img/logos/currencies/usd.svg';
+import USDC from '@public/img/logos/currencies/usdc.svg';
+import { classNames } from '~/utils/helpers';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}

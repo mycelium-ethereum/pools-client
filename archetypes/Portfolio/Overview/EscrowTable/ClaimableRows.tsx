@@ -1,11 +1,11 @@
 import React from 'react';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '@archetypes/Pools/state';
 import { TableRowCell, TableRow } from '@components/General/TWTable';
 import UpOrDown from '@components/UpOrDown';
 import { toApproxCurrency } from '~/utils/converters';
 import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
 import { ClaimableAsset, ClaimablePoolTokenRowProps } from '../state';
-import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
     balance,

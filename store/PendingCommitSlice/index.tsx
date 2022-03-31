@@ -1,6 +1,6 @@
 import { StateSlice } from '@store/types';
-import { StoreState } from '..';
 import { IPendingCommitSlice } from './types';
+import { StoreState } from '..';
 
 export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) => ({
     commits: {},

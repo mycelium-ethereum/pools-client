@@ -1,11 +1,11 @@
 import { SetState, GetState } from 'zustand';
-import { ITransactionSlice } from './TransactionSlice/types';
-import { IThemeSlice } from './ThemeSlice/types';
-import { IPoolsSlice } from './PoolsSlice/types';
-import { IWeb3Slice } from './Web3Slice/types';
 import { IGasSlice } from './GasSlice/types';
-import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { IPoolsSlice } from './PoolsSlice/types';
+import { IThemeSlice } from './ThemeSlice/types';
+import { ITransactionSlice } from './TransactionSlice/types';
+import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
+import { IWeb3Slice } from './Web3Slice/types';
 
 // global store state
 export type StoreState = {

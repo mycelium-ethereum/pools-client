@@ -1,7 +1,7 @@
 import React from 'react';
+import { useReducer } from 'react';
 import { TWModal } from '@components/General/TWModal';
 import { toApproxCurrency } from '~/utils/converters';
-import { useReducer } from 'react';
 import { bridgeReducer, DefaultBridgeState, BridgeStepEnum } from './state';
 
 interface ArbitrumBridgeModalProps {

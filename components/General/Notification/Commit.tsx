@@ -2,10 +2,10 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import TimeLeft from '@components/TimeLeft';
-import { watchAsset } from '~/utils/rpcMethods';
 import { CommitProps } from '@store/TransactionSlice/types';
-import { Notification } from '.';
+import { watchAsset } from '~/utils/rpcMethods';
 import { Logo, tokenSymbolToLogoTicker } from '..';
+import { Notification } from '.';
 
 export const CommitPendingNotification = ({
     tokenSymbol,

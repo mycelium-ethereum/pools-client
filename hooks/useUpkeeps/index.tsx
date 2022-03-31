@@ -1,6 +1,6 @@
-import BigNumber from 'bignumber.js';
-import { ethers } from 'ethers';
 import { useEffect, useState } from 'react';
+import { ethers } from 'ethers';
+import BigNumber from 'bignumber.js';
 import { KnownNetwork, poolList, StaticPoolInfo } from '@tracer-protocol/pools-js';
 
 const ONE_HOUR = 60 * 60;

@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import MintBurnModal from '@archetypes/Pools/MintBurnModal';
+import { browseReducer, BrowseState } from '@archetypes/Pools/state';
+import Button from '@components/General/Button';
+import { noDispatch, useSwapContext } from '@context/SwapContext';
+import usePendingCommits from '~/hooks/useQueuedCommits';
 import History from './History';
 import Overview from './Overview';
 import Queued from './Queued';
-import Link from 'next/link';
-import Button from '@components/General/Button';
-import { useRouter } from 'next/router';
-import { noDispatch, useSwapContext } from '@context/SwapContext';
-import { browseReducer, BrowseState } from '@archetypes/Pools/state';
-import MintBurnModal from '@archetypes/Pools/MintBurnModal';
-import usePendingCommits from '~/hooks/useQueuedCommits';
 
 export enum PortfolioPage {
     TradePortfolio = 0,

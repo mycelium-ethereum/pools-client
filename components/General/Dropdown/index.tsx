@@ -1,11 +1,11 @@
 import React, { Fragment, useEffect, useRef } from 'react';
-import { Children } from '~/types/general';
-import { useResizeDetector } from 'react-resize-detector';
-import { Menu, Transition } from '@headlessui/react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
-import { classNames } from '~/utils/helpers';
-import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
+import { Menu, Transition } from '@headlessui/react';
+import { useResizeDetector } from 'react-resize-detector';
 import TooltipSelector, { TooltipSelectorProps } from '@components/Tooltips/TooltipSelector';
+import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
+import { Children } from '~/types/general';
+import { classNames } from '~/utils/helpers';
 
 /**
  * Similar component to dropdown only there is no content to begin with

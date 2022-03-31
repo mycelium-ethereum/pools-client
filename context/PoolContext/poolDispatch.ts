@@ -1,8 +1,8 @@
+import { BigNumber } from 'bignumber.js';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { AggregateBalances, PoolLists } from '~/types/pools';
-import { BigNumber } from 'bignumber.js';
-import Pool from '@tracer-protocol/pools-js/entities/pool';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 const MAX_RETRY_COUNT = 5;
 

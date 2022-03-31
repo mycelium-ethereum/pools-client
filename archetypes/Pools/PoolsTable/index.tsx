@@ -1,32 +1,32 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
-import Button from '@components/General/Button';
-import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
-import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
-import { BrowseTableRowData, DeltaEnum } from '../state';
-import { TWModal } from '@components/General/TWModal';
-import TimeLeft from '@components/TimeLeft';
-import Actions from '@components/TokenActions';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
 import { ethers } from 'ethers';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
-import useIntervalCheck from '~/hooks/useIntervalCheck';
 import { LinkOutlined } from '@ant-design/icons';
-import PoolDetailsModal from '../PoolDetailsModal';
+import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 import styled from 'styled-components';
-import { Theme } from '@store/ThemeSlice/themes';
 
 import Close from '/public/img/general/close.svg';
-import { classNames } from '~/utils/helpers';
 import { constructBalancerLink } from '@archetypes/BalancerBuySell';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '@components/General';
+import Button from '@components/General/Button';
+import { TWModal } from '@components/General/TWModal';
+import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '@components/General/TWTable';
+import TimeLeft from '@components/TimeLeft';
+import Actions from '@components/TokenActions';
 import { StyledTooltip } from '@components/Tooltips';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import { default as UpOrDown } from '@components/UpOrDown';
 import Info from '/public/img/general/info.svg';
 import LinkIcon from '@public/img/general/link.svg';
-import { networkConfig } from '~/constants/networks';
 import { useStore } from '@store/main';
+import { Theme } from '@store/ThemeSlice/themes';
 import { selectWeb3Info } from '@store/Web3Slice';
+import { networkConfig } from '~/constants/networks';
+import useIntervalCheck from '~/hooks/useIntervalCheck';
+import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
+import { classNames } from '~/utils/helpers';
+import { ArbiscanEnum } from '~/utils/rpcMethods';
+import PoolDetailsModal from '../PoolDetailsModal';
+import { BrowseTableRowData, DeltaEnum } from '../state';
 
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;

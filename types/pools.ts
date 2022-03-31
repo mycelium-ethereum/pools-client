@@ -1,7 +1,7 @@
-import BigNumber from 'bignumber.js';
 import { ethers } from 'ethers';
-import { SideEnum, CommitEnum, StaticPoolInfo } from '@tracer-protocol/pools-js';
+import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
+import { SideEnum, CommitEnum, StaticPoolInfo } from '@tracer-protocol/pools-js';
 
 // name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {

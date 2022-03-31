@@ -1,13 +1,13 @@
 import React, { useMemo } from 'react';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import useEnsName from '~/hooks/useEnsName';
-import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import Button from '@components/General/Button';
 import TWPopup from '@components/General/TWPopup';
+import TooltipSelector from '@components/Tooltips/TooltipSelector';
 import { useStore } from '@store/main';
 import { selectOnboardActions } from '@store/Web3Slice';
-import { AccountDropdownButtonProps } from './types';
+import useEnsName from '~/hooks/useEnsName';
 import * as Styled from './styles';
+import { AccountDropdownButtonProps } from './types';
 import WalletIcon from '../WalletIcon';
 
 const ARBISCAN_URI = 'https://arbiscan.io';

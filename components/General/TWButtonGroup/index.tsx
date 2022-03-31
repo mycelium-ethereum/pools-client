@@ -1,7 +1,7 @@
-import { classNames } from '~/utils/helpers';
 import React from 'react';
-import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 import styled from 'styled-components';
+import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
+import { classNames } from '~/utils/helpers';
 
 // the difference here is the bg on unselected
 const SELECTED = {

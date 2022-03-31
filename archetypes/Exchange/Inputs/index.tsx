@@ -4,13 +4,13 @@ import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/po
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { PoolInfo } from '@context/PoolContext/poolDispatch';
 import { SwapState, useBigNumber, SwapAction } from '@context/SwapContext';
-import { toApproxCurrency } from '~/utils/converters';
-import usePoolTokens from '~/hooks/usePoolTokens';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
-import TokenSelect from '../TokenSelect';
+import usePoolTokens from '~/hooks/usePoolTokens';
+import { toApproxCurrency } from '~/utils/converters';
 import AmountInput from './AmountInput';
 import * as Styles from './styles';
 import { InvalidAmount, WALLET_OPTIONS } from './types';
+import TokenSelect from '../TokenSelect';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {

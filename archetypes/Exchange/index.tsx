@@ -1,23 +1,22 @@
 import React, { useContext, useState, useMemo, useEffect } from 'react';
 import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
-import { usePool, usePoolActions } from '@context/PoolContext';
-import { useStore } from '@store/main';
-import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
-import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
-import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
-import { useGasPrice } from '~/hooks/useGasPrice';
+import styled from 'styled-components';
+import ExchangeButton from '@components/General/Button/ExchangeButton';
 import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
-import ExchangeButton from '@components/General/Button/ExchangeButton';
+import { usePool, usePoolActions } from '@context/PoolContext';
+import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
+import CloseIcon from '@public/img/general/close.svg';
+import { useStore } from '@store/main';
+import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
+import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
+import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
+import { useGasPrice } from '~/hooks/useGasPrice';
 
-import Summary from './Summary';
 import Gas from './Gas';
 import Inputs from './Inputs';
-
-import CloseIcon from '@public/img/general/close.svg';
+import Summary from './Summary';
 
 const TRADE_OPTIONS = [
     {

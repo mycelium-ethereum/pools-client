@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Children } from '~/types/general';
 import styled from 'styled-components';
+import { Children } from '~/types/general';
 
 const BGSlider = styled.div<{ selected: number; width: number; numChildren: number }>`
     transition: 0.5s;

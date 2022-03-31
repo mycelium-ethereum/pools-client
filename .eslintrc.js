@@ -58,25 +58,29 @@ module.exports = {
                   "sibling", 
                   "parent", 
                   "index"
+                ],
+                "pathGroups": [
+                  {
+                    pattern: "bignumber.js",
+                    group: "external",
+                    position: "before",
+                  },
+                  {
+                    pattern: "ethers",
+                    group: "external",
+                    position: "before",
+                  },
+                  {
+                    pattern: "next/**",
+                    group: "external",
+                    position: "before",
+                  },
+                  {
+                    pattern: "react",
+                    group: "external",
+                    position: "before",
+                  },
                 ], 
-                // "pathGroups": [
-                    // { 
-                      // "pattern": 'types/**',
-                      // "group": "internal" 
-                    // }, 
-                    // { 
-                      // "pattern": "constants/**", 
-                      // "group": "internal" 
-                    // }, 
-                    // { 
-                      // "pattern": 'hooks/**',
-                      // "group": "internal" 
-                    // }, 
-                    // { 
-                      // "pattern": "store/**",
-                      // "group": "internal" 
-                    // }, 
-                 // ], 
                 "pathGroupsExcludedImportTypes": ["internal"], 
                 "alphabetize": { 
                     "order": "asc", 

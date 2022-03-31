@@ -1,14 +1,13 @@
 import React from 'react';
 import Icon from '@ant-design/icons';
 import { NETWORKS } from '@tracer-protocol/pools-js';
+import { Logo, LogoTicker } from '@components/General';
+import TWPopup from '@components/General/TWPopup';
+import Error from '@public/img/notifications/error.svg';
 import { useStore } from '@store/main';
 import { selectWeb3Info } from '@store/Web3Slice';
-import TWPopup from '@components/General/TWPopup';
-import { Logo, LogoTicker } from '@components/General';
 import { networkConfig } from '~/constants/networks';
 import { switchNetworks } from '~/utils/rpcMethods';
-
-import Error from '@public/img/notifications/error.svg';
 
 const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';

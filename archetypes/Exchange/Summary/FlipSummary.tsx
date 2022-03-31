@@ -1,12 +1,11 @@
 import React, { useMemo, useState } from 'react';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
 
-import * as Styles from './styles';
-import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } from './Sections';
-import { FlipSummaryProps } from './types';
-
 import ArrowDown from '@public/img/general/caret-down-white.svg';
 import { getBaseAsset } from '~/utils/converters';
+import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } from './Sections';
+import * as Styles from './styles';
+import { FlipSummaryProps } from './types';
 
 const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTokenPrice, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);

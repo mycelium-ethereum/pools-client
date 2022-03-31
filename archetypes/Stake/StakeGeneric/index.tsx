@@ -1,16 +1,20 @@
 import React, { useEffect, useReducer } from 'react';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import BigNumber from 'bignumber.js';
+import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { useStore } from '@store/main';
-import { TransactionType } from '@store/TransactionSlice/types';
-import { selectHandleTransaction } from '@store/TransactionSlice';
-import { selectAccount } from '@store/Web3Slice';
-import { Farm } from '~/types/staking';
-import { MAX_SOL_UINT } from '~/constants/general';
-import FarmNav from '@components/Nav/FarmNav';
 import { Logo, LogoTicker } from '@components/General/Logo';
+import FarmNav from '@components/Nav/FarmNav';
+import { useStore } from '@store/main';
+import { selectHandleTransaction } from '@store/TransactionSlice';
+import { TransactionType } from '@store/TransactionSlice/types';
+import { selectAccount } from '@store/Web3Slice';
+import { MAX_SOL_UINT } from '~/constants/general';
+import { Farm } from '~/types/staking';
 
+import FarmsTable from '../FarmsTable';
+import FilterBar from '../FilterSelects/Bar';
+import FilterModal from '../FilterSelects/Modal';
+import StakeModal from '../StakeModal';
 import {
     stakeReducer,
     StakeAction,
@@ -20,11 +24,6 @@ import {
     SortByEnum,
     FarmTableRowData,
 } from '../state';
-
-import FilterBar from '../FilterSelects/Bar';
-import FilterModal from '../FilterSelects/Modal';
-import FarmsTable from '../FarmsTable';
-import StakeModal from '../StakeModal';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];

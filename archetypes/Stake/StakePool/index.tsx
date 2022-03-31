@@ -1,7 +1,7 @@
 import React from 'react';
 
-import StakeGeneric from '../StakeGeneric';
 import { useFarms } from '@context/FarmContext';
+import StakeGeneric from '../StakeGeneric';
 
 export default (() => {
     const { farms, refreshFarm, fetchingFarms, rewardsTokenUSDPrices } = useFarms();

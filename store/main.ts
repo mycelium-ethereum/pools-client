@@ -1,22 +1,22 @@
-import create, { GetState, Mutate, SetState, StateCreator, StoreApi } from 'zustand';
-import produce, { Draft } from 'immer';
 import { withLenses, lens } from '@dhmk/zustand-lens';
-import { createTransactionSlice } from './TransactionSlice';
-import { createThemeSlice } from './ThemeSlice';
-import { StoreState } from './types';
-import { createPoolsSlice } from './PoolsSlice';
-import { createWeb3Slice } from './Web3Slice';
-import { ITransactionSlice } from './TransactionSlice/types';
-import { IThemeSlice } from './ThemeSlice/types';
-import { IPoolsSlice } from './PoolsSlice/types';
-import { IWeb3Slice } from './Web3Slice/types';
+import produce, { Draft } from 'immer';
+import create, { GetState, Mutate, SetState, StateCreator, StoreApi } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
-import { IGasSlice } from './GasSlice/types';
 import { createGasSlice } from './GasSlice';
-import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
-import { createUnsupportedNetwork } from './UnsupportedNetworkSlice';
-import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { IGasSlice } from './GasSlice/types';
 import { createPendingCommitSlice } from './PendingCommitSlice';
+import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { createPoolsSlice } from './PoolsSlice';
+import { IPoolsSlice } from './PoolsSlice/types';
+import { createThemeSlice } from './ThemeSlice';
+import { IThemeSlice } from './ThemeSlice/types';
+import { createTransactionSlice } from './TransactionSlice';
+import { ITransactionSlice } from './TransactionSlice/types';
+import { StoreState } from './types';
+import { createUnsupportedNetwork } from './UnsupportedNetworkSlice';
+import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
+import { createWeb3Slice } from './Web3Slice';
+import { IWeb3Slice } from './Web3Slice/types';
 
 // Turn the set method into an immer proxy
 const immer =

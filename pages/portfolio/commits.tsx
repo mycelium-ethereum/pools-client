@@ -1,9 +1,9 @@
 import React from 'react';
-import NavBar from '@components/Nav/Navbar';
-import Footer from '@components/Footer';
 import Portfolio, { TradePortfolioPage } from '@archetypes/Portfolio';
-import { PoolStore } from '@context/PoolContext';
+import Footer from '@components/Footer';
 import UnsupportedNetworkPopup from '@components/General/UnsupportedNetworkPopup';
+import NavBar from '@components/Nav/Navbar';
+import { PoolStore } from '@context/PoolContext';
 
 export default (() => {
     return (

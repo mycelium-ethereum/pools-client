@@ -1,11 +1,11 @@
 import React from 'react';
 import Link from 'next/link';
 
-import GitbookLogo from '@public/img/socials/gitbook.svg';
-import DiscourseLogo from '@public/img/socials/discourse.svg';
-import TwitterLogo from '@public/img/socials/twitter.svg';
-import GitHubLogo from '@public/img/socials/github.svg';
 import DiscordLogo from '@public/img/socials/discord.svg';
+import DiscourseLogo from '@public/img/socials/discourse.svg';
+import GitbookLogo from '@public/img/socials/gitbook.svg';
+import GitHubLogo from '@public/img/socials/github.svg';
+import TwitterLogo from '@public/img/socials/twitter.svg';
 
 const item = 'ml-0 mb-4 lg:mb-0 ml-0 lg:ml-4 last:mb-0';
 

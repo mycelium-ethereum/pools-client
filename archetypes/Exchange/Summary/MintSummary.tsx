@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import * as Styles from './styles';
-import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
-import { MintSummaryProps } from './types';
 import ArrowDown from '@public/img/general/caret-down-white.svg';
-import { calcExposure, calcNumTokens } from './utils';
 import { getBaseAsset } from '~/utils/converters';
+import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
+import * as Styles from './styles';
+import { MintSummaryProps } from './types';
+import { calcExposure, calcNumTokens } from './utils';
 
 const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);

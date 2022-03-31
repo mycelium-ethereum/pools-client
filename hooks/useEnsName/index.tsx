@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-// @ts-ignore
 import ENS, { getEnsAddress } from '@ensdomains/ensjs';
+// @ts-ignore
 import { useStore } from '@store/main';
 import { selectProvider } from '@store/Web3Slice';
 

@@ -1,9 +1,9 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
-import { useRouter } from 'next/router';
 import { usePools } from './PoolContext';
 
 interface ContextProps {
