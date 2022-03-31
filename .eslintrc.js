@@ -47,45 +47,45 @@ module.exports = {
         'react/jsx-closing-tag-location': 1,
         'no-multi-spaces': 1, 
         'react/self-closing-comp': 1,
-        "import/no-unresolved": "error"
-        // 'import/order': [
-            // 1, 
-            // {
-                // "groups": [
-                  // "external", 
-                  // "builtin", 
-                  // "internal", 
-                  // "sibling", 
-                  // "parent", 
-                  // "index"
-                // ], 
+        "import/no-unresolved": "error",
+        'import/order': [
+            1, 
+            {
+                "groups": [
+                  "external", 
+                  "builtin", 
+                  "internal", 
+                  "sibling", 
+                  "parent", 
+                  "index"
+                ], 
                 // "pathGroups": [
                     // { 
-                      // "pattern": 'types/ **',
+                      // "pattern": 'types/**',
                       // "group": "internal" 
                     // }, 
                     // { 
-                      // "pattern": "constants/ **", 
+                      // "pattern": "constants/**", 
                       // "group": "internal" 
                     // }, 
                     // { 
-                      // "pattern": 'hooks/ **',
+                      // "pattern": 'hooks/**',
                       // "group": "internal" 
                     // }, 
                     // { 
-                      // "pattern": "store/ **",
+                      // "pattern": "store/**",
                       // "group": "internal" 
                     // }, 
                  // ], 
-                // "pathGroupsExcludedImportTypes": ["internal"], 
-                // "alphabetize": { 
-                    // "order": "asc", 
-                    // "caseInsensitive": true 
-                // }
-            // } 
-        // ]
+                "pathGroupsExcludedImportTypes": ["internal"], 
+                "alphabetize": { 
+                    "order": "asc", 
+                    "caseInsensitive": true 
+                }
+            } 
+        ]
 
         // Place to specify ESLint rules. Can be used to overwrite rules specified from the extended configs
         // e.g. "@typescript-eslint/explicit-function-return-type": "off",
-    },
+    }
 };
