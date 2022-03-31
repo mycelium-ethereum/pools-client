@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Theme } from '@store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const GuideCard = styled.div`
     padding: 1.5rem 1rem;

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { TokenRowProps } from '@archetypes/Portfolio/Overview/state';
+import { TokenRowProps } from '~/archetypes/Portfolio/Overview/state';
 import { usePools } from '~/context/PoolContext';
 
 export default (() => {

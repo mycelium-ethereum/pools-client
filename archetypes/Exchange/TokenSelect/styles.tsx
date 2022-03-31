@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HiddenExpand, Logo } from '~/components/General';
 import { InnerSearchInput, InputWrapper } from '~/components/General/SearchInput';
 import { Table } from '~/components/General/TWTable';
-import { device } from '@store/ThemeSlice/themes';
+import { device } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;

@@ -80,8 +80,13 @@ module.exports = {
                     group: "external",
                     position: "before",
                   },
+                  {
+                    pattern: "@tracer-protocol/**",
+                    group: "external",
+                    position: "after",
+                  },
                 ], 
-                "pathGroupsExcludedImportTypes": ["internal"], 
+                "pathGroupsExcludedImportTypes": ["internal"],
                 "alphabetize": { 
                     "order": "asc", 
                     "caseInsensitive": true 

@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import { usePools } from '~/context/PoolContext';
-import { useStore } from '@store/main';
-import { selectCommits } from '@store/PendingCommitSlice';
-import { selectAccount } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectCommits } from '~/store/PendingCommitSlice';
+import { selectAccount } from '~/store/Web3Slice';
 
 export default (() => {
     const account = useStore(selectAccount);

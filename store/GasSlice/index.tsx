@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { StateSlice } from '@store/types';
+import { StateSlice } from '~/store/types';
 import { IGasSlice } from './types';
 import { StoreState } from '..';
 

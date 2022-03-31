@@ -1,5 +1,5 @@
 import React from 'react';
-import Exchange from '@archetypes/Exchange';
+import Exchange from '~/archetypes/Exchange';
 import { TWModal } from '~/components/General/TWModal';
 
 export default (({ open, onClose }) => {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArbitrumBridge } from '@archetypes/ArbitrumBridge';
+import { ArbitrumBridge } from '~/archetypes/ArbitrumBridge';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';

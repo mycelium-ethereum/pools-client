@@ -2,7 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import TimeLeft from '~/components/TimeLeft';
-import { CommitProps } from '@store/TransactionSlice/types';
+import { CommitProps } from '~/store/TransactionSlice/types';
 import { watchAsset } from '~/utils/rpcMethods';
 import { Logo, tokenSymbolToLogoTicker } from '..';
 import { Notification } from '.';

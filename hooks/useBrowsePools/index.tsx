@@ -1,10 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
-import { BrowseTableRowData } from '@archetypes/Pools/state';
+import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/context/PoolContext';
-import { useStore } from '@store/main';
-import { selectNetwork } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import { tickerToName } from '~/utils/converters';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useUpkeeps } from '../useUpkeeps';

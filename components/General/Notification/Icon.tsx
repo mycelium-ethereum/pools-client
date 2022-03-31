@@ -6,7 +6,7 @@ import Loading from '~/public/img/loading-large.svg';
 import Error from '~/public/img/notifications/error.svg';
 import Success from '~/public/img/notifications/success.svg';
 import Warning from '~/public/img/notifications/warning.svg';
-import { Theme } from '@store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 const StyledIcon = styled(Icon)`
     font-size: 1.5rem; /* 24px */

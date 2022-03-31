@@ -1,5 +1,5 @@
 import React from 'react';
-import Portfolio, { TradePortfolioPage } from '@archetypes/Portfolio';
+import Portfolio, { TradePortfolioPage } from '~/archetypes/Portfolio';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';

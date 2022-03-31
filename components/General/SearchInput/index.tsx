@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { device } from '@store/ThemeSlice/themes';
+import { device } from '~/store/ThemeSlice/themes';
 
 interface SearchInputProps {
     className?: string;

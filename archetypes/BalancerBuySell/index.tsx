@@ -8,12 +8,12 @@ import { Dropdown, HiddenExpand } from '~/components/General/Dropdown';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { StyledTooltip } from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '~/context/SwapContext';
-import { useStore } from '@store/main';
-import { selectOnboardActions, selectWeb3Info } from '@store/Web3Slice';
 
 import { balancerConfig } from '~/constants/balancer';
 import { networkConfig } from '~/constants/networks';
+import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '~/context/SwapContext';
+import { useStore } from '~/store/main';
+import { selectOnboardActions, selectWeb3Info } from '~/store/Web3Slice';
 import { classNames } from '~/utils/helpers';
 
 export default (() => {

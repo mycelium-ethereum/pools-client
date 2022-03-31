@@ -1,8 +1,8 @@
 import React from 'react';
 import { BigNumber } from 'bignumber.js';
+import styled from 'styled-components';
 import { CommitActionEnum, BalanceTypeEnum, CommitEnum } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
-import styled from 'styled-components';
 import Button from '~/components/General/Button';
 import { SwapAction, SwapState } from '~/context/SwapContext';
 import { AggregateBalances } from '~/types/pools';

@@ -9,11 +9,11 @@ import {
 import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
 import { poolMap } from '@tracer-protocol/pools-js/data';
 
-import { useStore } from '@store/main';
-import { selectWeb3Info } from '@store/Web3Slice';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
 import { Children } from '~/types/general';
 import { Network } from '~/types/networks';
 import { BalancerPoolAsset, Farm, FarmConfig } from '~/types/staking';

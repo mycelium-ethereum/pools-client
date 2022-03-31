@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { NETWORKS } from '@tracer-protocol/pools-js';
 import { toast } from 'react-toastify';
-import { useStore } from '@store/main';
-import { selectUnsupportedNetworkRef } from '@store/UnsupportedNetworkSlice';
-import { selectWeb3Info } from '@store/Web3Slice';
+import { NETWORKS } from '@tracer-protocol/pools-js';
+import { useStore } from '~/store/main';
+import { selectUnsupportedNetworkRef } from '~/store/UnsupportedNetworkSlice';
+import { selectWeb3Info } from '~/store/Web3Slice';
 import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
 import { Notification } from '../Notification';

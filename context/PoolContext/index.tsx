@@ -16,17 +16,16 @@ import {
     BalanceTypeEnum,
     calcNextValueTransfer,
 } from '@tracer-protocol/pools-js';
-import PoolListService from '@libs/services/poolList';
-import { useStore } from '@store/main';
-import { selectUserCommitActions } from '@store/PendingCommitSlice';
-import { selectHandleTransaction } from '@store/TransactionSlice';
-import { TransactionType } from '@store/TransactionSlice/types';
-import { selectWeb3Info } from '@store/Web3Slice';
 import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import { networkConfig } from '~/constants/networks';
+import PoolListService from '~/libs/services/poolList';
+import { useStore } from '~/store/main';
+import { selectUserCommitActions } from '~/store/PendingCommitSlice';
+import { selectHandleTransaction } from '~/store/TransactionSlice';
+import { TransactionType } from '~/store/TransactionSlice/types';
+import { selectWeb3Info } from '~/store/Web3Slice';
 import { Children } from '~/types/general';
 import { PoolList } from '~/types/pools';
-
 import {
     fetchAggregateBalance,
     fetchPoolBalances,

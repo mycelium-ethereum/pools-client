@@ -32,7 +32,7 @@
       "~/types/*": [
         "types/*"
       ],
-      "@store/*": [
+      "~/store/*": [
         "store/*"
       ],
       "~/context/*": [

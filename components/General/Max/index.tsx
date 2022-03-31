@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Theme } from '@store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 const Max = styled.div`
     cursor: pointer;

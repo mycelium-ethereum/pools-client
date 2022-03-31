@@ -4,11 +4,11 @@ import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General/Logo';
 import FarmNav from '~/components/Nav/FarmNav';
-import { useStore } from '@store/main';
-import { selectHandleTransaction } from '@store/TransactionSlice';
-import { TransactionType } from '@store/TransactionSlice/types';
-import { selectAccount } from '@store/Web3Slice';
 import { MAX_SOL_UINT } from '~/constants/general';
+import { useStore } from '~/store/main';
+import { selectHandleTransaction } from '~/store/TransactionSlice';
+import { TransactionType } from '~/store/TransactionSlice/types';
+import { selectAccount } from '~/store/Web3Slice';
 import { Farm } from '~/types/staking';
 
 import FarmsTable from '../FarmsTable';

@@ -2,9 +2,9 @@ import React, { useEffect, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import { useStore } from '@store/main';
-import { selectAccount } from '@store/Web3Slice';
 import useBrowsePools from '~/hooks/useBrowsePools';
+import { useStore } from '~/store/main';
+import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
 
 import AddAltPoolModal from './AddAltPoolModal';

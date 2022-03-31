@@ -1,12 +1,11 @@
 import React, { useReducer, useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
-import { useStore } from '@store/main';
-import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
-
 import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
+import { useStore } from '~/store/main';
+import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
 import { toApproxCurrency } from '~/utils/converters';
 import { marketFilter } from '~/utils/filters';
 

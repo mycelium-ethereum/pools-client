@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useStore } from '@store/main';
-import { selectIsDark } from '@store/ThemeSlice';
-import { selectOnboard, selectSetDefaultProvider } from '@store/Web3Slice';
+import { useStore } from '~/store/main';
+import { selectIsDark } from '~/store/ThemeSlice';
+import { selectOnboard, selectSetDefaultProvider } from '~/store/Web3Slice';
 
 // custom hook to handle any updates to the web3Store
 export const useUpdateWeb3Store: () => void = () => {

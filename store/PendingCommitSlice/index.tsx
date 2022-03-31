@@ -1,4 +1,4 @@
-import { StateSlice } from '@store/types';
+import { StateSlice } from '~/store/types';
 import { IPendingCommitSlice } from './types';
 import { StoreState } from '..';
 

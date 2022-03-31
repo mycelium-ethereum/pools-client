@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
-import { DeltaEnum } from '@archetypes/Pools/state';
+import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRowCell, TableRow } from '~/components/General/TWTable';
 import UpOrDown from '~/components/UpOrDown';
 import { toApproxCurrency } from '~/utils/converters';
