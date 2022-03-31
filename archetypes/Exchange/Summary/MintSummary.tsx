@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ArrowDown from '@public/img/general/caret-down-white.svg';
+import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import { getBaseAsset } from '~/utils/converters';
 import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
 import * as Styles from './styles';

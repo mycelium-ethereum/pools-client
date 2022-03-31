@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { usePools } from '@context/PoolContext';
-import TracerLoading from '@public/img/logos/tracer/tracer-loading-white.svg';
+import TracerLoading from '~/public/img/logos/tracer/tracer-loading-white.svg';
 import { useStore } from '@store/main';
 import { selectPendingCount } from '@store/TransactionSlice';
 import { toApproxCurrency } from '~/utils/converters';

@@ -9,7 +9,7 @@ import Pagination, { PageNumber } from '@components/General/Pagination';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import Actions from '@components/TokenActions';
-import NoQueued from '@public/img/no-queued.svg';
+import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '@store/main';
 import { selectWeb3Info } from '@store/Web3Slice';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';

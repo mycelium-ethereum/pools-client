@@ -5,8 +5,8 @@ import { SearchInput } from '@components/General/SearchInput';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import TooltipSelector, { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
-import ArrowDownIcon from '@public/img/general/arrow-circle-down.svg';
-import FilterToggleIcon from '@public/img/general/filters.svg';
+import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
+import FilterToggleIcon from '~/public/img/general/filters.svg';
 import {
     BrowseAction,
     BrowseState,

@@ -8,7 +8,7 @@ import TWButtonGroup from '@components/General/TWButtonGroup';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '@components/General/TWTable';
 import TimeLeft from '@components/TimeLeft';
 import Actions from '@components/TokenActions';
-import NoQueued from '@public/img/no-queued.svg';
+import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '@store/main';
 import { selectProvider } from '@store/Web3Slice';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';

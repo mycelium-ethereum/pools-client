@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ArrowDown from '@public/img/general/caret-down-white.svg';
+import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import { ExpectedFees, ExpectedTokenValue } from './Sections';
 import { ShowDetailsButton } from './styles';
 import { BurnSummaryProps } from './types';

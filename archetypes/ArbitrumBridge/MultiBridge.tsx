@@ -12,7 +12,7 @@ import { Input } from '@components/General/Input/Numeric';
 import Max from '@components/General/Max';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { StyledTooltip } from '@components/Tooltips';
-import Error from '@public/img/notifications/error.svg';
+import Error from '~/public/img/notifications/error.svg';
 import { bridgeableAssetWarnings } from '~/constants/bridge';
 import { BridgeableAsset, BridgeableBalances, BridgeableAssets } from '~/types/bridge';
 import { Network } from '~/types/networks';

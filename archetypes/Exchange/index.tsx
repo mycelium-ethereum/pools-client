@@ -7,7 +7,7 @@ import Divider from '@components/General/Divider';
 import TWButtonGroup from '@components/General/TWButtonGroup';
 import { usePool, usePoolActions } from '@context/PoolContext';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
-import CloseIcon from '@public/img/general/close.svg';
+import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '@store/main';
 import { selectAccount, selectOnboardActions } from '@store/Web3Slice';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';

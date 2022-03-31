@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import CTABackground from '@public/img/cta-bg.svg';
+import CTABackground from '~/public/img/cta-bg.svg';
 
 export const Container = styled.div`
     overflow: hidden;
