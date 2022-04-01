@@ -44,7 +44,7 @@ const warningInfo: Record<
                     volatility decay
                 </a>
                 , and are therefore not suitable for long-term holding. The tokens are designed for short-term
-                directional bets.
+                directional positions.
             </>
         ),
     },
