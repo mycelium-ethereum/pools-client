@@ -1,8 +1,11 @@
-export type Imported = {
-    address: string;
-};
+import { KnownNetwork } from "@tracer-protocol/pools-js";
+import { PoolLists } from "~/types/poolLists";
 
 export interface IPoolsSlice {
-    imported: Imported[];
-    handleImport: ((props: Imported) => void) | undefined;
+    poolLists: Partial<Record<KnownNetwork, PoolLists>>;
+    setPoolLists: (network: KnownNetwork, lists: PoolLists) => void;
+
+    importPool: (network: KnownNetwork, pool: string) => void;
+
+    fetchPoolLists: (network: KnownNetwork) => Promise<void>;
 }

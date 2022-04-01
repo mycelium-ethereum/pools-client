@@ -10,6 +10,7 @@ import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import { StyledThemeProvider } from '~/context/ThemeContext';
 import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
+import {useUpdatePoolLists} from '~/hooks/useUpdatePoolLists';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -17,6 +18,7 @@ const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
     // any store hooks
     useUpdateWeb3Store();
+    useUpdatePoolLists();
 
     // load usersnap
     useEffect(() => {
