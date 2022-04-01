@@ -21,6 +21,7 @@ import {
     RebalanceEnum,
     SortByEnum,
 } from './state';
+import { usePoolWatcher } from '~/hooks/usePoolWatcher';
 
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
@@ -37,6 +38,8 @@ export const Browse: React.FC = () => {
         addAltPoolModalOpen: false,
         deltaDenotation: DeltaEnum.Percentile,
     } as BrowseState);
+
+    usePoolWatcher()
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {

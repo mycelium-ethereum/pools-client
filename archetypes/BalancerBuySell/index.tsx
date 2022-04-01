@@ -15,6 +15,7 @@ import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContex
 import { useStore } from '~/store/main';
 import { selectOnboardActions, selectWeb3Info } from '~/store/Web3Slice';
 import { classNames } from '~/utils/helpers';
+import usePoolWatcher from '~/hooks/usePoolWatcher';
 
 export default (() => {
     const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info);
@@ -22,6 +23,8 @@ export default (() => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
     const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];
+
+    usePoolWatcher();
 
     const valid = !Number.isNaN(leverage) && !!market && !Number.isNaN(side);
 

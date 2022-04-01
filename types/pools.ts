@@ -66,6 +66,7 @@ export type PendingCommitInfo = {
     txnHash: string;
     from: string; // user who sent txn
     created: number; // created timestamp of the given commit
+    appropriateIntervalId: number; // updateInterval when commit will get executed
 };
 
 export type QueuedCommit = PendingCommitInfo & {

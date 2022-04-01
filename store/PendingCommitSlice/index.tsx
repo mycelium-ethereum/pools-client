@@ -7,18 +7,31 @@ export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) =
 
     addCommit: (commitInfo) => {
         const { txnHash, pool } = commitInfo;
-        const poolLower = pool.toLowerCase();
+        const [poolLower, txnHashLower] = [pool.toLowerCase(), txnHash.toLowerCase()];
         console.debug('Adding commit', commitInfo);
         // immer set
         set((state) => {
             if (!state.commits[poolLower]) {
                 state.commits[poolLower] = {};
             }
-            state.commits[poolLower][txnHash.toLowerCase()] = commitInfo;
+            state.commits[poolLower][txnHashLower] = commitInfo;
         });
     },
-    resetCommits: (pool) => {
-        set((state) => void (state.commits[pool.toLowerCase()] = {}));
+
+    removeCommits: (pool, updateIntervalId) => {
+        const poolLower = pool.toLowerCase();
+        console.debug(`Removing commit ${poolLower}-${updateIntervalId}`);
+        // immer delete
+        set((state) => {
+            let commits = state.commits[poolLower];
+            if (commits) {
+                Object.values(commits)?.map((commit) => { 
+                    if (commit.appropriateIntervalId === updateIntervalId) {
+                        delete state.commits[poolLower][commit.txnHash];
+                    }
+                })
+            }
+        });
     },
 });
 
@@ -27,8 +40,8 @@ export const selectCommits: (state: StoreState) => IPendingCommitSlice['commits'
 
 export const selectUserCommitActions: (state: StoreState) => {
     addCommit: IPendingCommitSlice['addCommit'];
-    resetCommits: IPendingCommitSlice['resetCommits'];
+    removeCommits: IPendingCommitSlice['removeCommits'];
 } = (state) => ({
     addCommit: state.pendingCommitSlice.addCommit,
-    resetCommits: state.pendingCommitSlice.resetCommits,
+    removeCommits: state.pendingCommitSlice.removeCommits,
 });

@@ -10,6 +10,7 @@ import usePendingCommits from '~/hooks/useQueuedCommits';
 import History from './History';
 import Overview from './Overview';
 import Queued from './Queued';
+import usePoolWatcher from '~/hooks/usePoolWatcher';
 
 export enum PortfolioPage {
     TradePortfolio = 0,
@@ -80,6 +81,7 @@ export default (({ page }) => {
     const [state, dispatch] = useReducer(browseReducer, {
         mintBurnModalOpen: false,
     } as BrowseState);
+    usePoolWatcher()
 
     const commits = usePendingCommits();
 

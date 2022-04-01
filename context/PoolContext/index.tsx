@@ -25,7 +25,7 @@ import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { Children } from '~/types/general';
-import { PoolList } from '~/types/pools';
+import { PoolList, PoolLists } from '~/types/pools';
 import {
     fetchAggregateBalance,
     fetchPoolBalances,
@@ -43,6 +43,7 @@ type Options = {
 
 interface ContextProps {
     pools: Record<string, PoolInfo>;
+    poolsLists: Partial<Record<KnownNetwork, PoolLists>>;
     poolsInitialised: boolean;
 }
 
@@ -79,7 +80,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useStore(selectWeb3Info);
 
     const handleTransaction = useStore(selectHandleTransaction);
-    const { addCommit, resetCommits } = useStore(selectUserCommitActions);
+    const { addCommit } = useStore(selectUserCommitActions);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
     // ref to assist in the ensuring that the pools are not getting set twice
@@ -179,6 +180,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         from: commit.from,
                                         txnHash: commit.txnHash,
                                         created: commit.timestamp,
+                                        appropriateIntervalId: commit.updateIntervalId
                                     });
                                 });
                             }
@@ -327,43 +329,43 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 networkConfig[provider?.network?.chainId.toString() as KnownNetwork]?.publicWebsocketRPC;
             const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
 
-            const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
+            // const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
 
             if (!subscriptions.current[committerInfo.address]) {
-                console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.on(
-                    committer.filters.CreateCommit(),
-                    (
-                        id,
-                        amount,
-                        type,
-                        _appropriateUpdateInterval,
-                        _fromAggregateBalances,
-                        _payForClaim,
-                        _mintingFee,
-                        log,
-                    ) => {
-                        console.debug('Commit created', {
-                            id,
-                            amount,
-                            type,
-                        });
+                // console.debug(`Subscribing committer: ${committerInfo.address}`);
+                // committer.on(
+                    // committer.filters.CreateCommit(),
+                    // (
+                        // id,
+                        // amount,
+                        // type,
+                        // _appropriateUpdateInterval,
+                        // _fromAggregateBalances,
+                        // _payForClaim,
+                        // _mintingFee,
+                        // log,
+                    // ) => {
+                        // console.debug('Commit created', {
+                            // id,
+                            // amount,
+                            // type,
+                        // });
 
-                        const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
+                        // const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
-                        log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
-                            addCommit({
-                                id: txn.hash,
-                                pool,
-                                from: txn?.from, // from address
-                                txnHash: txn.hash,
-                                type: type as CommitEnum,
-                                amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                created: txn.timestamp ?? Date.now() / 1000,
-                            });
-                        });
-                    },
-                );
+                        // log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
+                            // addCommit({
+                                // id: txn.hash,
+                                // pool,
+                                // from: txn?.from, // from address
+                                // txnHash: txn.hash,
+                                // type: type as CommitEnum,
+                                // amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
+                                // created: txn.timestamp ?? Date.now() / 1000,
+                            // });
+                        // });
+                    // },
+                // );
 
                 subscriptions.current = {
                     ...subscriptions.current,
@@ -404,7 +406,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
                         updateTokenBalances(poolInstance, subscriptionProvider);
                         updatePoolBalances(poolInstance, subscriptionProvider);
-                        resetCommits(pool);
+                        // resetCommits(pool);
                     }
                 });
                 subscriptions.current = {
@@ -634,6 +636,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         <PoolsContext.Provider
             value={{
                 pools: poolsState.pools,
+                poolsLists: poolsState.poolsLists,
                 poolsInitialised: poolsState.poolsInitialised,
             }}
         >
