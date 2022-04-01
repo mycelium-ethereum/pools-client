@@ -90,10 +90,10 @@ export const NavBarContent: React.FC<{
                     <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
-                    <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
+                    <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
 
                     {/* Hide if showing queued */}
-                    <AccountBalance className="my-auto mx-2" />
+                    {/* <AccountBalance className="my-auto mx-2" /> */}
 
                     <ThemeSwitcher />
                 </span>

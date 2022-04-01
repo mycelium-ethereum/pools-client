@@ -56,7 +56,7 @@ export const ExpectedTokensMinted: React.FC<
     <>
         <Section label="Expected Tokens Minted" className="header">
             <Styles.SumText>
-                {expectedTokensMinted > 0 ? expectedTokensMinted : ''} {tokenSymbol}
+                {expectedTokensMinted > 0 ? expectedTokensMinted.toFixed(0) : ''} {tokenSymbol}
             </Styles.SumText>
         </Section>
         {showTransactionDetails && (
