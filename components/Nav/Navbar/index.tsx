@@ -72,6 +72,11 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Portfolio</a>
                         </li>
                     </Link>
+                    <Link href="/trading-comp">
+                        <li className={classNames(linkStyles, route.startsWith('trading') ? selectedStyles : '')}>
+                            <a className="m-auto">Trading Comp</a>
+                        </li>
+                    </Link>
                 </ul>
 
                 {setShowOnboardModal ? (

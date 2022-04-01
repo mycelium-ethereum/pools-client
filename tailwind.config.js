@@ -32,6 +32,7 @@ module.exports = {
                     700: '#0d29ff',
                     800: '#0000B0',
                     900: '#00007A',
+                    midblue: '#3DA8F5',
                 },
                 'cool-gray': {
                     50: '#F9FAFB',
@@ -47,6 +48,11 @@ module.exports = {
                 },
                 'dark-green': '#032018',
                 'dark-red': '#230F0F',
+                purple: {
+                    50: '#E9C5F9',
+                    100: '#D96EF2',
+                    200: '#871FBB',
+                },
                 theme: {
                     background: 'var(--background)',
                     ['background-secondary']: 'var(--background-secondary)',
@@ -67,6 +73,9 @@ module.exports = {
                 'nav-bg': "url('/img/nav-bg.svg')",
                 'matrix-bg': "url('/img/matrix.gif')",
             },
+            // fontFamily: {
+            //     aileron: ["'Aileron'", 'sans-serif'],
+            // },
         },
     },
     variants: {
