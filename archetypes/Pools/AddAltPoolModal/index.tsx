@@ -12,13 +12,13 @@ import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
+    const importPool = useStore(selectImportPool);
+    const getImported = useStore(selectImportedPools);
+    const network = useStore(selectNetwork);
+
     const [userInput, setUserInput] = useState<string>('');
     const [importMsg, setImportMsg] = useState<string>('');
     const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
-
-    const network = useStore(selectNetwork);
-    const importPool = useStore(selectImportPool);
-    const getImported = useStore(selectImportedPools);
 
     const handleCloseModal = () => {
         onClose();
