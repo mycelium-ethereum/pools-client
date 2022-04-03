@@ -20,6 +20,7 @@ import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
+import { selectAllPools } from '~/store/PoolsSlice';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
@@ -34,7 +35,6 @@ import {
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
 import { initialPoolState, PoolInfo, reducer } from './poolDispatch';
-import {selectAllPools} from '~/store/PoolsSlice';
 
 type Options = {
     onSuccess?: (...args: any) => any;

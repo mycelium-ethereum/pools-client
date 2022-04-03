@@ -1,4 +1,4 @@
-import { StaticPoolInfo } from "@tracer-protocol/pools-js";
+import { StaticPoolInfo } from '@tracer-protocol/pools-js';
 
 /*
  * PoolList interface. Every poolsList must conform to this

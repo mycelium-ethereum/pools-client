@@ -1,5 +1,5 @@
-import { KnownNetwork } from "@tracer-protocol/pools-js";
-import { PoolLists } from "~/types/poolLists";
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { PoolLists } from '~/types/poolLists';
 
 export interface IPoolsSlice {
     poolLists: Partial<Record<KnownNetwork, PoolLists>>;

@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import { HiddenExpand } from '~/components/General/Dropdown';
 import { TWModal } from '~/components/General/TWModal';
 import { useStore } from '~/store/main';
 import { selectImportPool, selectImportedPools } from '~/store/PoolsSlice';
+import { selectNetwork } from '~/store/Web3Slice';
 import { isAddress } from '~/utils/rpcMethods';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
-import {selectNetwork} from '~/store/Web3Slice';
-import {KnownNetwork} from '@tracer-protocol/pools-js';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
     const [userInput, setUserInput] = useState<string>('');
@@ -38,7 +38,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);
         } else if (isValidAddress) {
-            importPool(network as KnownNetwork, userInput)
+            importPool(network as KnownNetwork, userInput);
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);
