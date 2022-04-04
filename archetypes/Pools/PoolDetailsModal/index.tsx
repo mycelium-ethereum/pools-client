@@ -1,12 +1,15 @@
 import React from 'react';
+import styled from 'styled-components';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableRow, TableRowCell } from '~/components/General/TWTable';
-import styled from 'styled-components';
-import { getPriceFeedUrl } from '~/utils/converters';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { constructExplorerLink } from '~/utils/blockExplorers';
+import { getPriceFeedUrl } from '~/utils/converters';
 
 type PoolProps = {
     name: string;
@@ -17,12 +20,10 @@ type PoolProps = {
     collateralAssetAddress: string;
 };
 
-export default (({ open, onClose, poolDetails, previewUrl }) => {
+export default (({ open, onClose, poolDetails, network }) => {
     const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails || {};
 
     const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
-
-    const getContractDetailsUrl = (v: string) => `${previewUrl}/address/${v}`
 
     const poolDetailsData = [
         { name: 'Pool Ticker', value: name },
@@ -38,17 +39,17 @@ export default (({ open, onClose, poolDetails, previewUrl }) => {
         {
             name: 'Collateral Asset',
             value: collateralAsset,
-            href: getContractDetailsUrl(collateralAssetAddress),
+            href: constructExplorerLink(BlockExplorerAddressType.token, collateralAssetAddress, network),
         },
         {
             name: 'Deployer',
             value: formatAddress(committer),
-            href: getContractDetailsUrl(committer),
+            href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
         },
         {
             name: 'Keeper Contract',
             value: formatAddress(keeper),
-            href: getContractDetailsUrl(keeper),
+            href: constructExplorerLink(BlockExplorerAddressType.address, keeper, network),
         },
     ];
 
@@ -89,7 +90,7 @@ export default (({ open, onClose, poolDetails, previewUrl }) => {
     open: boolean;
     onClose: () => void;
     poolDetails: PoolProps;
-    previewUrl: string;
+    network: KnownNetwork | undefined;
 }>;
 
 const ModalHeader = styled((props: any) => <div className={props.className}>{props.children}</div>)`

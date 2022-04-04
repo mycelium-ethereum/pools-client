@@ -4,7 +4,9 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { Popover, Transition } from '@headlessui/react';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
-import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { openBlockExplorer } from '~/utils/blockExplorers';
+import { watchAsset } from '~/utils/rpcMethods';
 
 // const Actions
 export default (({ provider, token, arbiscanTarget, otherActions }) => (
@@ -45,7 +47,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                     <div
                                         className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
                                         onClick={() =>
-                                            openArbiscan(
+                                            openBlockExplorer(
                                                 arbiscanTarget.type,
                                                 arbiscanTarget.target,
                                                 provider?.network?.chainId?.toString() as KnownNetwork,
@@ -62,7 +64,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                               key={action.text}
                                               className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
                                               onClick={() =>
-                                                  openArbiscan(
+                                                  openBlockExplorer(
                                                       action.type,
                                                       action.target,
                                                       provider?.network?.chainId?.toString() as KnownNetwork,
@@ -89,11 +91,11 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
         decimals: number;
     };
     arbiscanTarget?: {
-        type: ArbiscanEnum;
+        type: BlockExplorerAddressType;
         target: string;
     };
     otherActions?: {
-        type: ArbiscanEnum;
+        type: BlockExplorerAddressType;
         target: string;
         logo: LogoTicker;
         text: string;
