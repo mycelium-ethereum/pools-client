@@ -17,16 +17,17 @@ const knownTransactionErrors: (error: any) => UpdateOptions | undefined = (error
     if (error?.code === 4001) {
         // user denied txn
         return {
-            render: 'Transaction Dismissed',
+            render: <Notification title="Order Dismissed" />,
             type: 'warning',
             isLoading: false,
             autoClose: AUTO_DISMISS,
+            closeButton: true,
         };
     } else if (error?.data?.message === 'not enough funds for gas') {
         // this error uses error.code === -32603 and error.data.code === -32000
         // which are both broad error codes unfortunately so cant be used for the checks
         return {
-            render: 'Insufficient funds for gas',
+            render: <Notification title="Insufficient funds for gas" />,
             type: 'error',
             isLoading: false,
             autoClose: AUTO_DISMISS,
@@ -45,17 +46,18 @@ export const transactionMap: Record<
     DEFAULT: {
         pending: () => [
             <>
-                <Notification title="Transaction Pending" />
-            </>,
+                <Notification title="Order Pending" />
+            </>
         ],
         success: () => ({
             render: <Notification title="Order Submitted" />,
             type: 'success',
             isLoading: false,
+            closeButton: true,
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
-                render: <Notification title="Transaction Failed" />,
+                render: <Notification title="Order Failed" />,
                 type: 'error',
                 isLoading: false,
             },
@@ -64,13 +66,14 @@ export const transactionMap: Record<
         pending: (props: ApproveProps) => [
             <>
                 <Notification title={`Approving ${props.tokenSymbol}`} />
-            </>,
+            </>
         ],
         success: (props: ApproveProps) => ({
             render: <Notification title={`${props.tokenSymbol} Unlocked`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
+            closeButton: true,
         }),
         error: ({ props, error }: { props: ApproveProps; error: any }) =>
             knownTransactionErrors(error) ?? {
@@ -84,17 +87,18 @@ export const transactionMap: Record<
         pending: (props: CommitProps) => [
             <>
                 <CommitPendingNotification {...props} />
-            </>,
+            </>
         ],
         success: (props: CommitProps) => ({
             render: <CommitSuccessNotification {...props} />,
             type: 'success',
             isLoading: false,
             autoClose: props.nextRebalance * 1000 - Date.now(), // seconds till next rebalance
+            closeButton: true,
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
-                render: <Notification title={`Transaction Failed`} />,
+                render: <Notification title={`Order Failed`} />,
                 type: 'error',
                 isLoading: false,
                 autoClose: AUTO_DISMISS,
@@ -103,14 +107,15 @@ export const transactionMap: Record<
     CLAIM: {
         pending: (props: ClaimProps) => [
             <>
-                <Notification title={`Claiming ${props.poolName} Tokens`} />,
-            </>,
+                <Notification title={`Claiming ${props.poolName} Tokens`} />
+            </>
         ],
         success: (props: ClaimProps) => ({
             render: <Notification title={`${props.poolName} Claim Queued`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
+            closeButton: true,
         }),
         error: ({ props, error }: { props: ClaimProps; error: any }) =>
             knownTransactionErrors(error) ?? {
@@ -124,13 +129,14 @@ export const transactionMap: Record<
         pending: (props: ArbBridgeProps) => [
             <>
                 <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
-            </>,
+            </>
         ],
         success: (props: ArbBridgeProps) => ({
             render: <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
+            closeButton: true,
         }),
         error: ({ props, error }: { props: ArbBridgeProps; error: any }) =>
             knownTransactionErrors(error) ?? {
@@ -148,7 +154,7 @@ export const transactionMap: Record<
         pending: (props: ArbBridgeProps) => [
             <>
                 <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
-            </>,
+            </>
         ],
         success: (props: ArbBridgeProps) => ({
             render: (
@@ -161,6 +167,7 @@ export const transactionMap: Record<
             type: 'success',
             isLoading: false,
             autoClose: AUTO_DISMISS,
+            closeButton: true,
         }),
         error: ({ props, error }: { props: ArbBridgeProps; error: any }) =>
             knownTransactionErrors(error) ?? {
@@ -178,12 +185,13 @@ export const transactionMap: Record<
         pending: () => [
             <>
                 <Notification title="Claiming TCR" />
-            </>,
+            </>
         ],
         success: () => ({
             render: <Notification title="TCR Claimed" />,
             type: 'success',
             isLoading: false,
+            closeButton: true,
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
@@ -195,12 +203,13 @@ export const transactionMap: Record<
         pending: (props: FarmStakeWithdrawProps) => [
             <>
                 <Notification title={`${props.type === 'withdraw' ? 'Unstaking' : 'Staking'} ${props.farmName}`} />
-            </>,
+            </>
         ],
         success: (props: FarmStakeWithdrawProps) => ({
             render: <Notification title={`${props.farmName} ${props.type === 'withdraw' ? 'Unstaked' : 'Staked'}`} />,
             type: 'success',
             isLoading: false,
+            closeButton: true,
         }),
         error: ({ props, error }: { props: FarmStakeWithdrawProps; error: any }) =>
             knownTransactionErrors(error) ?? {

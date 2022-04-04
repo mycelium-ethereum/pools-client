@@ -87,30 +87,6 @@ export const switchNetworks: (
     return false;
 };
 
-export enum ArbiscanEnum {
-    txn = 0,
-    token = 1,
-}
-
-// Not really an RPC but thought it kind of belongs here
-export const openArbiscan: (type: ArbiscanEnum, taraget: string, network: KnownNetwork | undefined) => boolean = (
-    type,
-    target,
-    network,
-) => {
-    const base = !!network ? networkConfig[network]?.previewUrl : 'https://arbiscan.io';
-    switch (type) {
-        case ArbiscanEnum.txn:
-            window.open(`${base}/tx/${target}`, '', 'noreferrer=true,noopener=true');
-            break;
-        case ArbiscanEnum.token:
-            window.open(`${base}/token/${target}`, '', 'noreferrer=true,noopener=true');
-            break;
-        default: //nothing
-    }
-    return false;
-};
-
 export function isAddress(value: string): boolean {
     try {
         return !!ethers.utils.getAddress(value);

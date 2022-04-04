@@ -12,9 +12,9 @@ import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { QueuedCommit } from '~/types/pools';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 
 import { PageOptions } from '..';
 
@@ -277,7 +277,7 @@ const MintCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
@@ -356,7 +356,7 @@ const BurnCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
@@ -432,7 +432,7 @@ const FlipCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
