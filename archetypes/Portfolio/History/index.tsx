@@ -14,8 +14,8 @@ import usePagination, { PAGE_ENTRIES } from '~/hooks/usePagination';
 import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '~/utils/tracerAPI';
 
 import { PageOptions } from '..';
@@ -259,18 +259,18 @@ const CommitRow: React.FC<
                             symbol: tokenOutSymbol,
                         }}
                         arbiscanTarget={{
-                            type: ArbiscanEnum.token,
+                            type: BlockExplorerAddressType.token,
                             target: tokenOutAddress,
                         }}
                         otherActions={[
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashIn,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashOut,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',
@@ -331,18 +331,18 @@ const CommitRow: React.FC<
                             symbol: tokenInSymbol,
                         }}
                         arbiscanTarget={{
-                            type: ArbiscanEnum.token,
+                            type: BlockExplorerAddressType.token,
                             target: tokenInAddress,
                         }}
                         otherActions={[
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashIn,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashOut,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',
@@ -420,18 +420,18 @@ const CommitRow: React.FC<
                             symbol: tokenInSymbol,
                         }}
                         arbiscanTarget={{
-                            type: ArbiscanEnum.token,
+                            type: BlockExplorerAddressType.token,
                             target: tokenInAddress,
                         }}
                         otherActions={[
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashIn,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Commit on Arbiscan',
                             },
                             {
-                                type: ArbiscanEnum.txn,
+                                type: BlockExplorerAddressType.txn,
                                 target: transactionHashOut,
                                 logo: NETWORKS.ARBITRUM,
                                 text: 'View Upkeep on Arbiscan',

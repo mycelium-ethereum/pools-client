@@ -5,7 +5,7 @@ export default (({ hideOnDesktop, pushContentRight }) => (
     <VersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
         <V1 href="https://pools.tracer.finance">V1</V1>
         <V2>
-            V2 <New>NEW</New>
+            V2 <New>BETA</New>
         </V2>
     </VersionToggle>
 )) as React.FC<{
@@ -52,6 +52,7 @@ const V2 = styled.span`
     display: flex;
     align-items: center;
     padding: 0 10px;
+    white-space: nowrap;
 `;
 
 const New = styled.span`
