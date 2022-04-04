@@ -11,7 +11,7 @@ const ArticleBox: React.FC = () => {
                     Perpetual Pools V2
                     <br className="block sm:hidden" /> Trading Competition
                 </span>
-                <p className="text-sm text-cool-gray-700 dark:text-[#71717A]">
+                <p className="text-sm text-cool-gray-700 dark:text-cool-gray-500">
                     An overview of the V2 Perpetual Pools Trading Competition. Read about the $TCR prices, entry
                     requirements, and more!
                 </p>
