@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import UserDivs from '~/components/TradingComp/UserDivs';
 import UserTable from '~/components/TradingComp/UserTable';
-import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Leaderboard: React.FC<{
     data: {
