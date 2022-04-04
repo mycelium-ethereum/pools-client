@@ -9,6 +9,7 @@ import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import { StyledThemeProvider } from '~/context/ThemeContext';
+import usePoolWatcher from '~/hooks/usePoolWatcher';
 import { useUpdatePoolLists } from '~/hooks/useUpdatePoolLists';
 import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
@@ -19,6 +20,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
     // any store hooks
     useUpdateWeb3Store();
     useUpdatePoolLists();
+    usePoolWatcher();
 
     // load usersnap
     useEffect(() => {

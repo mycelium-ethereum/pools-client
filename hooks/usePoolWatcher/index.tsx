@@ -22,7 +22,6 @@ export const usePoolWatcher = (): void => {
             if (!currentSubscribed.current || currentSubscribed.current !== network) {
                 currentSubscribed.current = network;
                 console.count(`Setting pool watcher: ${network}`);
-                console.log(poolAddresses);
 
                 const watcher = new MultiplePoolWatcher({
                     nodeUrl: wssProvider,
