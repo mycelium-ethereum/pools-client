@@ -73,10 +73,8 @@ export type QueuedCommit = PendingCommitInfo & {
     tokenIn: PoolToken;
     tokenOut: PoolToken;
     tokenPrice: BigNumber;
-    nextRebalance: BigNumber;
-    frontRunningInterval: BigNumber;
-    updateInterval: BigNumber;
     settlementTokenSymbol: string;
+    expectedExecution: number;
 };
 
 export type HistoricCommit = PendingCommitInfo & {

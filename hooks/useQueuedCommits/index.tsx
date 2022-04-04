@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { CommitEnum } from '@tracer-protocol/pools-js';
+import { CommitEnum, getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { usePools } from '~/context/PoolContext';
 import { useStore } from '~/store/main';
 import { selectCommits } from '~/store/PendingCommitSlice';
@@ -69,6 +69,12 @@ export default (() => {
                         frontRunningInterval: frontRunningInterval,
                         updateInterval: updateInterval,
                         settlementTokenSymbol: settlementToken.symbol,
+                        expectedExecution: getExpectedExecutionTimestamp(
+                            frontRunningInterval.toNumber(),
+                            updateInterval.toNumber(),
+                            lastUpdate.toNumber(),
+                            commit.created,
+                        ),
                     });
                 }
             }
