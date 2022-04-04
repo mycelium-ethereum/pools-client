@@ -23,13 +23,13 @@ export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) =
         console.debug(`Removing commit ${poolLower}-${updateIntervalId}`);
         // immer delete
         set((state) => {
-            let commits = state.commits[poolLower];
+            const commits = state.commits[poolLower];
             if (commits) {
-                Object.values(commits)?.map((commit) => { 
+                Object.values(commits)?.map((commit) => {
                     if (commit.appropriateIntervalId === updateIntervalId) {
                         delete state.commits[poolLower][commit.txnHash];
                     }
-                })
+                });
             }
         });
     },

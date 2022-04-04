@@ -25,7 +25,6 @@ import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { Children } from '~/types/general';
-import { PoolLists } from '~/types/poolLists';
 import {
     fetchAggregateBalance,
     fetchPoolBalances,
@@ -43,7 +42,6 @@ type Options = {
 
 interface ContextProps {
     pools: Record<string, PoolInfo>;
-    poolsLists: Partial<Record<KnownNetwork, PoolLists>>;
     poolsInitialised: boolean;
 }
 
@@ -167,7 +165,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         from: commit.from,
                                         txnHash: commit.txnHash,
                                         created: commit.timestamp,
-                                        appropriateIntervalId: commit.updateIntervalId
+                                        appropriateIntervalId: commit.updateIntervalId,
                                     });
                                 });
                             }
@@ -321,37 +319,37 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             if (!subscriptions.current[committerInfo.address]) {
                 // console.debug(`Subscribing committer: ${committerInfo.address}`);
                 // committer.on(
-                    // committer.filters.CreateCommit(),
-                    // (
-                        // id,
-                        // amount,
-                        // type,
-                        // _appropriateUpdateInterval,
-                        // _fromAggregateBalances,
-                        // _payForClaim,
-                        // _mintingFee,
-                        // log,
-                    // ) => {
-                        // console.debug('Commit created', {
-                            // id,
-                            // amount,
-                            // type,
-                        // });
+                // committer.filters.CreateCommit(),
+                // (
+                // id,
+                // amount,
+                // type,
+                // _appropriateUpdateInterval,
+                // _fromAggregateBalances,
+                // _payForClaim,
+                // _mintingFee,
+                // log,
+                // ) => {
+                // console.debug('Commit created', {
+                // id,
+                // amount,
+                // type,
+                // });
 
-                        // const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
+                // const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
 
-                        // log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
-                            // addCommit({
-                                // id: txn.hash,
-                                // pool,
-                                // from: txn?.from, // from address
-                                // txnHash: txn.hash,
-                                // type: type as CommitEnum,
-                                // amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                // created: txn.timestamp ?? Date.now() / 1000,
-                            // });
-                        // });
-                    // },
+                // log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
+                // addCommit({
+                // id: txn.hash,
+                // pool,
+                // from: txn?.from, // from address
+                // txnHash: txn.hash,
+                // type: type as CommitEnum,
+                // amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
+                // created: txn.timestamp ?? Date.now() / 1000,
+                // });
+                // });
+                // },
                 // );
 
                 subscriptions.current = {
@@ -623,7 +621,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         <PoolsContext.Provider
             value={{
                 pools: poolsState.pools,
-                poolsLists: poolsState.poolsLists,
                 poolsInitialised: poolsState.poolsInitialised,
             }}
         >

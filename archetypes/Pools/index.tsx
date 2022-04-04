@@ -3,6 +3,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
+import { usePoolWatcher } from '~/hooks/usePoolWatcher';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
@@ -21,7 +22,6 @@ import {
     RebalanceEnum,
     SortByEnum,
 } from './state';
-import { usePoolWatcher } from '~/hooks/usePoolWatcher';
 
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
@@ -39,7 +39,7 @@ export const Browse: React.FC = () => {
         deltaDenotation: DeltaEnum.Percentile,
     } as BrowseState);
 
-    usePoolWatcher()
+    usePoolWatcher();
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {

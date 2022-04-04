@@ -31,7 +31,7 @@ export const fetchPendingCommits: (
                     timestamp: commit.timestamp,
                     pool: commit.pool,
                     commitID: commit.txnHash,
-                    updateIntervalId: commit.updateIntervalId
+                    updateIntervalId: commit.updateIntervalId,
                 });
             });
 

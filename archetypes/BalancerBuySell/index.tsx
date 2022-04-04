@@ -12,10 +12,10 @@ import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelec
 import { balancerConfig } from '~/constants/balancer';
 import { networkConfig } from '~/constants/networks';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '~/context/SwapContext';
+import usePoolWatcher from '~/hooks/usePoolWatcher';
 import { useStore } from '~/store/main';
 import { selectOnboardActions, selectWeb3Info } from '~/store/Web3Slice';
 import { classNames } from '~/utils/helpers';
-import usePoolWatcher from '~/hooks/usePoolWatcher';
 
 export default (() => {
     const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info);
