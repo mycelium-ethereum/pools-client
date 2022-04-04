@@ -15,16 +15,15 @@ import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { default as UpOrDown } from '~/components/UpOrDown';
-import Info from '/public/img/general/info.svg';
-import { networkConfig } from '~/constants/networks';
 import useIntervalCheck from '~/hooks/useIntervalCheck';
+import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
@@ -97,7 +96,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
     const [poolDetails, setPoolDetails] = useState<any>({});
     const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
 
-    const handlePoolDetailsClick = (data: any) => {
+    const handlePoolDetailsClick = (data: BrowseTableRowData) => {
         setShowModalPoolDetails(true);
         setPoolDetails(data);
     };
@@ -267,7 +266,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                 open={showModalPoolDetails}
                 onClose={() => setShowModalPoolDetails(false)}
                 poolDetails={poolDetails}
-                previewUrl={networkConfig[network]?.previewUrl || ''}
+                network={network}
             />
         </>
     );
@@ -661,7 +660,7 @@ const TokenRows: React.FC<
                                 symbol: tokenInfo.symbol,
                             }}
                             arbiscanTarget={{
-                                type: ArbiscanEnum.token,
+                                type: BlockExplorerAddressType.token,
                                 target: poolAddress,
                             }}
                         />
