@@ -53,7 +53,7 @@ export const usePoolWatcher = (): void => {
                     });
 
                     watcher.on(EVENT_NAMES.COMMITS_EXECUTED, (data) => {
-                        console.debug('Executed commit', data);
+                        console.debug('Executed commits', data);
                         removeCommits(data.poolAddress, data.updateIntervalId);
                     });
 
