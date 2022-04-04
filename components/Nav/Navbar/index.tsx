@@ -9,7 +9,6 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
 import NetworkDropdown from './NetworkDropdown';
-import AccountBalance from './AccountBalance';
 import { classNames } from '~/utils/helpers';
 import ThemeSwitcher from './ThemeSwitcher';
 import VersionToggle from './VersionToggle';
@@ -91,9 +90,6 @@ export const NavBarContent: React.FC<{
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
-
-                    {/* Hide if showing queued */}
-                    {/* <AccountBalance className="my-auto mx-2" /> */}
 
                     <ThemeSwitcher />
                 </span>
