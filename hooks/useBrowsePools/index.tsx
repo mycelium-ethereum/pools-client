@@ -30,7 +30,7 @@ const STATIC_DEFAULT_UPKEEP = {
 };
 
 // const useBrowsePools
-export default (() => {
+export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
     const network = useStore(selectNetwork);
     const { pools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
@@ -181,6 +181,6 @@ export default (() => {
     return {
         rows: finalRows,
     };
-}) as () => {
-    rows: BrowseTableRowData[];
 };
+
+export default useBrowsePools;
