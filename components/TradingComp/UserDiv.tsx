@@ -53,7 +53,7 @@ const UserRow: React.FC<{
                         {getOrdinal(rank)}
                     </span>
                     <span className={`font-bold text-cool-gray-900 dark:text-white ${isFirst ? 'text-2xl' : ''}`}>
-                        Raymogg#3230
+                        {name}
                     </span>
                 </div>
                 {avatar && <img src={avatar} className={`ml-5 ${isFirst ? 'h-10 w-10' : 'h-[26px] w-[26px]'}`} />}
