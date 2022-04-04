@@ -46,8 +46,8 @@ const UserRow: React.FC<{
             <div className="flex items-center justify-between md:hidden">
                 <div className="flex items-center">
                     <span
-                        className={`inline-flex items-center justify-center rounded-full bg-cool-gray-400 text-white dark:bg-cool-gray-700 ${
-                            isFirst ? 'mr-4 h-10 w-10 text-base' : 'mr-2 h-[26px] w-[26px] text-[10px]'
+                        className={`inline-flex items-center justify-center rounded-full bg-cool-gray-400 font-semibold text-white dark:bg-cool-gray-700 ${
+                            isFirst ? 'mr-4 h-10 w-10 text-base' : 'mr-2 h-[32px] w-[32px] text-[10px]'
                         }`}
                     >
                         {getOrdinal(rank)}

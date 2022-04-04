@@ -39,7 +39,7 @@ const Leaderboard: React.FC<{
         <div className="w-[calc(100%+32px)] -translate-x-4 transform overflow-auto bg-white py-5 dark:bg-cool-gray-900 sm:rounded-[10px] sm:px-7 sm:drop-shadow-md md:w-full md:translate-x-0">
             <div className="mb-4 flex flex-col-reverse items-start justify-between px-4 text-cool-gray-900 dark:text-white sm:flex-row sm:items-center md:px-0">
                 <span className="block text-lg font-bold">Leaderboard</span>
-                <div className="flex w-full max-w-[281px] items-center justify-between">
+                <div className="flex w-full items-center justify-between sm:max-w-[281px]">
                     <span className="mb-4 block font-semibold">Total Competitors</span>
                     <span className="mb-4 block font-bold">{data.length.toLocaleString('en-US')}</span>
                 </div>
@@ -49,7 +49,7 @@ const Leaderboard: React.FC<{
                     dataLength={items.length}
                     next={fetchMoreData}
                     hasMore={hasMore}
-                    loader={<span>Loading...</span>}
+                    loader={<span className="block w-full text-center">Loading...</span>}
                     height={550}
                 >
                     <UserTable data={items} />
