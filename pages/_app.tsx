@@ -15,7 +15,6 @@ const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
 const App = ({ Component, pageProps }: AppProps) => {
-    // eslint-disable-line
     // any store hooks
     useUpdateWeb3Store();
 
