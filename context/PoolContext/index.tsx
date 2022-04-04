@@ -18,14 +18,13 @@ import {
 } from '@tracer-protocol/pools-js';
 import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import { networkConfig } from '~/constants/networks';
-import PoolListService from '~/libs/services/poolList';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
+import { selectAllPools } from '~/store/PoolsSlice';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { Children } from '~/types/general';
-import { PoolList } from '~/types/pools';
 import {
     fetchAggregateBalance,
     fetchPoolBalances,
@@ -77,9 +76,9 @@ export const SelectedPoolContext = React.createContext<Partial<SelectedPoolConte
  */
 export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     const { provider, account, signer } = useStore(selectWeb3Info);
-
+    const pools = useStore(selectAllPools);
     const handleTransaction = useStore(selectHandleTransaction);
-    const { addCommit, resetCommits } = useStore(selectUserCommitActions);
+    const { addCommit } = useStore(selectUserCommitActions);
     const [poolsState, poolsDispatch] = useReducer(reducer, initialPoolState);
 
     // ref to assist in the ensuring that the pools are not getting set twice
@@ -91,29 +90,16 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     useMemo(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
-        if (provider?.network?.chainId) {
+        // this is not the greatest for the time being
+        if (!!pools.length && provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
-                    // for now just select the Tracer verfied pools (Tracer[0])
-                    // this can be changed to select all or a specific list
-                    let pools: PoolList | undefined = poolsState.poolsLists[network as KnownNetwork]?.Tracer[0];
-                    if (!pools) {
-                        const poolsLists = await new PoolListService(network)
-                            .getAll()
-                            .catch((err) => console.error(err));
-                        if (!poolsLists) {
-                            console.error('Failed to initialise pools: poolsList undefined');
-                            return;
-                        }
-                        pools = poolsLists.Tracer[0] ?? [];
-                        poolsDispatch({ type: 'setPoolLists', network: network as KnownNetwork, lists: poolsLists });
-                    }
                     console.debug(`Initialising pools ${network.slice()}`, pools);
                     poolsDispatch({ type: 'resetPools' });
                     hasSetPools.current = false;
                     Promise.all(
-                        pools.pools.map((pool) =>
+                        pools.map((pool) =>
                             Pool.Create({
                                 ...pool,
                                 address: pool.address,
@@ -153,7 +139,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         return () => {
             mounted = false;
         };
-    }, [provider?.network?.chainId, poolsState.retryCount]);
+    }, [pools.length]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -404,7 +390,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                         });
                         updateTokenBalances(poolInstance, subscriptionProvider);
                         updatePoolBalances(poolInstance, subscriptionProvider);
-                        resetCommits(pool);
+                        // resetCommits(pool);
                     }
                 });
                 subscriptions.current = {
