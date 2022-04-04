@@ -58,6 +58,9 @@ body,
 html {
     font-family: 'Source Sans Pro', ui-sans-serif, system-ui, -apple-system, serif !important;
 }
+#__next {
+    overflow-y: overlay;
+}
 
 html,
 body,

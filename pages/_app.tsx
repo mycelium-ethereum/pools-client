@@ -45,9 +45,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <meta name="robots" content="index, follow" />
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 <meta name="language" content="English" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
                 <link
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap"
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
                 />
 
                 {/** Color for Chrome tabs (Android only) */}

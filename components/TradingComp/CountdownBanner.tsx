@@ -8,10 +8,10 @@ const CountdownBanner: React.FC = () => {
         minutes,
         seconds,
     }: {
-        days: string;
-        hours: string;
-        minutes: string;
-        seconds: string;
+        days: number;
+        hours: number;
+        minutes: number;
+        seconds: number;
     }) => {
         // Render a countdown
         return (
@@ -28,39 +28,42 @@ const CountdownBanner: React.FC = () => {
         return endDate - Date.now();
     };
 
+    const moneyStyles = 'font-bold text-xl leading-[150%] sm:text-[32px] sm:leading-[48px]';
+    const statStyles = 'block font-semibold text-xs leading-[18px]';
+
     return (
-        <div className="relative w-full rounded-lg mr-4 overflow-hidden font-aileron">
-            <img src="/img/trading-comp/trading-comp-banner.png" className="absolute w-full h-full object-cover z-0" />
-            <div className="flex flex-col h-[382px] relative z-10 flex-grow">
-                <div className="flex-grow h-full flex flex-col justify-center px-5">
-                    <span className="block font-semibold text-base text-purple-100">Perpetual Pools V2</span>
+        <div className="transition-border relative mr-4 w-[calc(100%+32px)] -translate-x-4 transform overflow-hidden font-aileron duration-300 sm:w-full sm:translate-x-0 sm:rounded-lg">
+            <img src="/img/trading-comp/trading-comp-banner.png" className="absolute z-0 h-full w-full object-cover" />
+            <div className="relative z-10 flex h-[304px] flex-grow flex-col sm:h-[382px]">
+                <div className="flex h-full flex-grow flex-col justify-center px-5">
+                    <span className="block text-base font-semibold text-purple-100">Perpetual Pools V2</span>
                     <span className="block">
                         <span className="text-[32px] text-purple-50">Trading</span>{' '}
-                        <span className="font-bold text-[32px] text-white">Competition</span>
+                        <span className="text-[32px] font-bold text-white">Competition</span>
                     </span>
                 </div>
                 <div>
-                    <div className="px-5 mb-2">
+                    <div className="mb-2 px-5">
                         <span className="block text-sm font-semibold leading-[18px] text-purple-100">Prize Pool</span>
                         <div className="flex text-white">
                             <div className="mr-8">
-                                <span className="font-bold text-[32px] leading-[48px]">$20,000</span>
-                                <span className="block font-semibold text-xs leading-[18px]">Trading Compeition</span>
+                                <span className={moneyStyles}>$20,000</span>
+                                <span className={statStyles}>Trading Compeition</span>
                             </div>
                             <div className="mr-8">
-                                <span className="font-bold text-[32px] leading-[48px]">$5,000</span>
-                                <span className="block font-semibold text-xs leading-[18px]">UX Feedback</span>
+                                <span className={moneyStyles}>$5,000</span>
+                                <span className={statStyles}>UX Feedback</span>
                             </div>
                             <div className="mr-8">
-                                <span className="font-bold text-[32px] leading-[48px]">$500,000</span>
-                                <span className="block font-semibold text-xs leading-[18px]">Bug Bounty</span>
+                                <span className={moneyStyles}>$500,000</span>
+                                <span className={statStyles}>Bug Bounty</span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div className="w-full bg-purple-300 min-h-[36px] h-9 px-5 bg-opacity-40 text-xs flex items-center">
-                    <span className="inline-block text-purple-100 mr-4">Time Left</span>
-                    <Countdown date={Date.now() + calculateDateDifference()} renderer={renderer} />,
+                <div className="flex h-[62px] min-h-[62px] w-full flex-col items-start justify-center bg-purple-300 bg-opacity-40 px-5 text-xs sm:h-9 sm:min-h-[36px] sm:flex-row sm:items-center sm:justify-start">
+                    <span className="mr-4 inline-block text-purple-100">Time Left</span>
+                    <Countdown date={Date.now() + calculateDateDifference()} renderer={renderer} />
                 </div>
             </div>
         </div>

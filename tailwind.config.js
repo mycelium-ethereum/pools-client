@@ -78,6 +78,7 @@ module.exports = {
             },
             fontFamily: {
                 aileron: ["'aileron'", 'sans-serif'],
+                inter: ["'Inter'", 'sans-serif'],
             },
         },
     },

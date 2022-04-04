@@ -1,15 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Footer from '~/components/Footer';
 import NavBar from '~/components/Nav';
 import ArticleBox from '~/components/TradingComp/ArticleBox';
 import CountdownBanner from '~/components/TradingComp/CountdownBanner';
 import Leaderboard from '~/components/TradingComp/Leaderboard';
+import { tableData } from '~/components/TradingComp/presets';
 import StatisticsBox from '~/components/TradingComp/StatisticsBox';
-import UpdateProfileModal from './UpdateProfileModal';
+import UpdateProfileModal from '~/components/TradingComp/UpdateProfileModal';
 
 export default (() => {
-    const [isOpen, setIsOpen] = React.useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+
     const router = useRouter();
 
     const handleClose = () => {
@@ -20,10 +22,6 @@ export default (() => {
         setIsOpen(true);
     };
 
-    useEffect(() => {
-        router.prefetch('/trading-comp');
-    }, []);
-
     const statisticData = {
         name: 'Raymogg#3230',
         avatar: '/img/trading-comp/placeholder.png',
@@ -32,50 +30,18 @@ export default (() => {
         entryDate: '12 Apr',
     };
 
-    const tableData = [
-        { name: 'kit#4321', avatar: '/img/trading-comp/placeholder.png', value: '1300', entryDate: '6 April, 2022' },
-        { name: '0x3423..2343', avatar: '', value: '1200', entryDate: '6 April, 2022' },
-        { name: 'kit#4321', avatar: '/img/trading-comp/placeholder.png', value: '1200', entryDate: '12 April, 2022' },
-        {
-            name: 'raymogg#3230',
-            avatar: '/img/trading-comp/placeholder.png',
-            value: '1200',
-            entryDate: '12 April, 2022',
-        },
-        { name: '0x3423..2343', avatar: '', value: '1200', entryDate: '12 April, 2022' },
-        {
-            name: '0x3423..2343',
-            avatar: '/img/trading-comp/placeholder.png',
-            value: '1200',
-            entryDate: '12 April, 2022',
-        },
-        {
-            name: 'raymogg#3230',
-            avatar: '/img/trading-comp/placeholder.png',
-            value: '1200',
-            entryDate: '12 April, 2022',
-        },
-        { name: '0x3423..2343', avatar: '', value: '1200', entryDate: '6 April, 2022' },
-        { name: 'kit#4321', avatar: '/img/trading-comp/placeholder.png', value: '1200', entryDate: '12 April, 2022' },
-        {
-            name: 'raymogg#3230',
-            avatar: '/img/trading-comp/placeholder.png',
-            value: '1200',
-            entryDate: '12 April, 2022',
-        },
-        { name: '0x3423..2343', avatar: '', value: '1200', entryDate: '12 April, 2022' },
-        { name: '0x3423..2343', avatar: '', value: '1200', entryDate: '12 April, 2022' },
-        { name: 'raymogg#3230', avatar: '', value: '1200', entryDate: '12 April, 2022' },
-    ];
+    useEffect(() => {
+        router.prefetch('/trading-comp');
+    }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar />
-            <div className={`container w-full pt-10`}>
-                <div className="max-w-[1280px] mx-auto">
-                    <div className="flex mb-[18px]">
+            <div className={`container w-full bg-white px-4 dark:bg-[#1b2436] sm:px-0 sm:pt-10`}>
+                <div className="mx-auto max-w-[1280px]">
+                    <div className="mb-[18px] flex flex-col lg:flex-row">
                         <CountdownBanner />
-                        <div className="flex min-w-[465px] flex-col justify-between">
+                        <div className="mt-4 flex flex-col justify-between lg:mt-0 lg:min-w-[465px]">
                             <ArticleBox />
                             <StatisticsBox {...statisticData} handleOpen={handleOpen} />
                         </div>
