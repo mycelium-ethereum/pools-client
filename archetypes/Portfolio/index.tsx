@@ -6,7 +6,6 @@ import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import { browseReducer, BrowseState } from '~/archetypes/Pools/state';
 import Button from '~/components/General/Button';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import usePoolWatcher from '~/hooks/usePoolWatcher';
 import usePendingCommits from '~/hooks/useQueuedCommits';
 import History from './History';
 import Overview from './Overview';
@@ -81,7 +80,6 @@ export default (({ page }) => {
     const [state, dispatch] = useReducer(browseReducer, {
         mintBurnModalOpen: false,
     } as BrowseState);
-    usePoolWatcher();
 
     const commits = usePendingCommits();
 
