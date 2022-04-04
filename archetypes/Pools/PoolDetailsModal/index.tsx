@@ -22,10 +22,7 @@ export default (({ open, onClose, poolDetails, previewUrl }) => {
 
     const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
 
-    const getContractDetailsUrl = (v: string) => {
-        const BASE_URL = `${previewUrl}/address/${v}` || 'https://arbiscan.io/address/';
-        return v ? BASE_URL : 'https://arbiscan.io';
-    };
+    const getContractDetailsUrl = (v: string) => `${previewUrl}/address/${v}`
 
     const poolDetailsData = [
         { name: 'Pool Ticker', value: name },
