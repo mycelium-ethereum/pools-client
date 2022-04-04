@@ -22,7 +22,7 @@ const NavBar: React.FC<{
     return (
         <div
             className={classNames(
-                'relative bg-tracer-900 matrix:bg-transparent matrix:bg-none dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
+                'relative bg-tracer-900 matrix:bg-transparent matrix:bg-none dark:bg-theme-background bg-mobile-nav-bg bg-cover xl:bg-nav-bg bg-no-repeat',
             )}
         >
             <NavBarContent setShowOnboardModal={setShowOnboardModal} />
@@ -44,7 +44,7 @@ export const NavBarContent: React.FC<{
         <nav className={`container text-base h-[60px]`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
-                <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
+                <ul className="hidden lg:flex mr-auto ml-4 mb-0 text-white text-sm">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a className="m-auto">Tokens</a>
@@ -91,7 +91,7 @@ export const NavBarContent: React.FC<{
                 ) : null}
 
                 {/* DESKTOP */}
-                <span className="hidden xl:flex">
+                <span className="hidden 2xl:flex">
                     <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 

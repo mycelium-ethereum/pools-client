@@ -27,7 +27,7 @@ const VersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: b
     font-weight: 600;
     letter-spacing: 0.115em;
 
-    @media (min-width: 1280px) {
+    @media (min-width: 1536px) {
         display: ${({ hideOnDesktop }) => (hideOnDesktop ? 'none' : 'grid')};
         margin: 10px 0 10px 10px;
     }

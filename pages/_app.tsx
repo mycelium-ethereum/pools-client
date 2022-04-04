@@ -14,7 +14,8 @@ import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
-const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
+const App = ({ Component, pageProps }: AppProps) => {
+    // eslint-disable-line
     // any store hooks
     useUpdateWeb3Store();
 
@@ -57,6 +58,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
+                <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
             <StyledThemeProvider>
                 <Component {...pageProps} />

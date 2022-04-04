@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
@@ -33,11 +33,25 @@ export default (({ account, className }) => {
         setOpen(open);
     };
 
+    // Close nav after hitting desktop breakpoint
+    const handleResize = () => {
+        if (window.innerWidth > 1536) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const linkStyles = 'w-max text-white my-2 px-5 py-2 rounded-lg cursor-pointer';
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative ml-4 my-auto overflow-hidden xl:hidden`, className ?? '')}>
+        <div className={classNames(`relative ml-4 my-auto overflow-hidden 2xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -51,7 +65,7 @@ export default (({ account, className }) => {
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
-                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full xl:hidden">
+                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full">
                             <Transition.Child
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"
