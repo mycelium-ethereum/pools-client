@@ -1,6 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
+import {
+    calcEffectiveLongGain,
+    calcEffectiveShortGain,
+    calcSkew,
+    getExpectedExecutionTimestamp,
+} from '@tracer-protocol/pools-js';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/context/PoolContext';
 import { useStore } from '~/store/main';
@@ -112,9 +117,13 @@ export default (() => {
                         balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
                         userHoldings: userBalances.longToken.balance.toNumber(),
                     },
-                    nextRebalance: lastUpdate.plus(updateInterval).toNumber(),
+                    expectedExecution: getExpectedExecutionTimestamp(
+                        frontRunningInterval.toNumber(),
+                        updateInterval.toNumber(),
+                        lastUpdate.toNumber(),
+                        Date.now() / 1000,
+                    ),
                     myHoldings: userBalances.shortToken.balance.plus(userBalances.longToken.balance).toNumber(),
-                    frontRunning: frontRunningInterval.toNumber(),
                     pastUpkeep: defaultUpkeep,
                     antecedentUpkeep: defaultUpkeep,
 

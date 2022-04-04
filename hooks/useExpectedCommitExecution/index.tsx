@@ -5,7 +5,11 @@ import useIntervalCheck from '../useIntervalCheck';
 
 // returns the timestamp when a commit is expected to be executed
 // const useExpectedCommitExecution
-export default ((lastUpdate, updateInterval, frontRunningInterval) => {
+export const useExpectedCommitExecution = (
+    lastUpdate: BigNumber,
+    updateInterval: BigNumber,
+    frontRunningInterval: BigNumber,
+): number => {
     const [expectedRebalance, setExpectedRebalance] = useState(0);
 
     const beforeFrontRunning = useIntervalCheck(expectedRebalance, frontRunningInterval.toNumber());
@@ -22,4 +26,6 @@ export default ((lastUpdate, updateInterval, frontRunningInterval) => {
     }, [lastUpdate, updateInterval, beforeFrontRunning]);
 
     return expectedRebalance;
-}) as (lastUpdate: BigNumber, updateInterval: BigNumber, frontRunningInterval: BigNumber) => number;
+};
+
+export default useExpectedCommitExecution;
