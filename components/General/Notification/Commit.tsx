@@ -30,7 +30,7 @@ export const CommitPendingNotification = ({
     </Notification>
 );
 
-export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymbol }: CommitProps): JSX.Element => {
+export const CommitSuccessNotification = ({ expectedExecution, commitType, tokenSymbol }: CommitProps): JSX.Element => {
     const router = useRouter();
 
     const handleClick = (focus: 'mint' | 'burn' | 'flip') =>
@@ -50,7 +50,7 @@ export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymb
                         <div>{tokenSymbol} ready to claim in</div>
                         <TimeLeft
                             className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
-                            targetTime={nextRebalance ?? 0}
+                            targetTime={expectedExecution}
                         />
                     </div>
                 ) : (
@@ -58,7 +58,7 @@ export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymb
                         <div>USDC ready to claim in</div>
                         <TimeLeft
                             className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
-                            targetTime={nextRebalance ?? 0}
+                            targetTime={expectedExecution}
                         />
                     </div>
                 )}

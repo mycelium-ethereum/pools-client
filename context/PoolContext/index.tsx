@@ -15,6 +15,7 @@ import {
     encodeCommitParams,
     BalanceTypeEnum,
     calcNextValueTransfer,
+    getExpectedExecutionTimestamp,
 } from '@tracer-protocol/pools-js';
 import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
 import { networkConfig } from '~/constants/networks';
@@ -451,18 +452,19 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         const {
             lastUpdate,
             updateInterval,
+            frontRunningInterval,
             address: poolAddress,
-            frontRunningInterval: frontRunning,
             committer: { address: committerAddress },
             settlementToken: { decimals: settlementTokenDecimals },
             longToken: { symbol: longTokenSymbol },
             shortToken: { symbol: shortTokenSymbol },
         } = poolsState.pools[pool].poolInstance;
-        const nextRebalance = lastUpdate.plus(updateInterval).toNumber();
-        const targetTime =
-            nextRebalance - Date.now() / 1000 < frontRunning.toNumber()
-                ? nextRebalance + poolsState.pools[pool].poolInstance.updateInterval.toNumber()
-                : nextRebalance;
+        const expectedExecution = getExpectedExecutionTimestamp(
+            frontRunningInterval.toNumber(),
+            updateInterval.toNumber(),
+            lastUpdate.toNumber(),
+            Date.now() / 1000,
+        );
 
         if (!committerAddress) {
             console.error('Committer address undefined when trying to mint');
@@ -497,7 +499,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     tokenSymbol: commitType === CommitEnum.longMint ? longTokenSymbol : shortTokenSymbol,
                     commitType: CommitToQueryFocusMap[commitType],
                     settlementTokenDecimals,
-                    nextRebalance: targetTime,
+                    expectedExecution: expectedExecution,
                 },
                 callBacks: {
                     onSuccess: (receipt) => {
