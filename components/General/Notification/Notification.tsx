@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Theme } from '~/store/ThemeSlice/themes';
 import { NotificationIcon } from './Icon';
 
 type InjectedProps = {
@@ -32,10 +33,20 @@ const Content = styled.div`
     font-size: 1rem;
     margin-top: 0.5rem;
     margin-left: calc(15px + 24px); // Title margin + width of icon
+
+    color: ${({ theme: { theme } }) => {
+        switch (theme) {
+            case Theme.Light:
+                return '#3F3F46';
+            default:
+                return '#D1D5DB';
+        }
+    }};
 `;
 
 const Flex = styled.div`
     display: flex;
+    align-items: center;
 `;
 
 export const Notification = ({ title, toastProps, children }: NotificationProps & InjectedProps): JSX.Element => (
@@ -44,7 +55,7 @@ export const Notification = ({ title, toastProps, children }: NotificationProps 
             <NotificationIcon type={toastProps?.type} />
             <Title>{title}</Title>
         </Flex>
-        <Content>{children}</Content>
+        {children && <Content>{children}</Content>}
     </Container>
 );
 

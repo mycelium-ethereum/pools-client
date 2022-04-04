@@ -12,6 +12,11 @@ const ToastStyles = createGlobalStyle`
 
         }
         --toastify-toast-width: 430px; // -10 :)
+        .Toastify__close-button--light {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+        }
     }
 
 `;

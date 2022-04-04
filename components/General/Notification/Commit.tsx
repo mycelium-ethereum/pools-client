@@ -24,8 +24,10 @@ export const CommitPendingNotification = ({
                 })
             }
         >
-            <Logo className="mr-2" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
-            <div>Add to wallet</div>
+            <span className="flex">
+                Add <Logo className="mx-1" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
+                {tokenSymbol} to wallet
+            </span>
         </div>
     </Notification>
 );
