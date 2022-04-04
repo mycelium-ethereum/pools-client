@@ -46,24 +46,9 @@ export const NavBarContent: React.FC<{
                 <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
-                            <a className="m-auto">Tokens</a>
-                        </li>
-                    </Link>
-                    <Link href="/pools">
-                        <li className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}>
                             <a id="browse-pools" className="m-auto">
                                 Pools
                             </a>
-                        </li>
-                    </Link>
-                    <Link href="/stakepooltoken">
-                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
-                            <a className="m-auto">Stake</a>
-                        </li>
-                    </Link>
-                    <Link href="/bridge">
-                        <li className={classNames(linkStyles, route.startsWith('bridge') ? selectedStyles : '')}>
-                            <a className="m-auto">Bridge</a>
                         </li>
                     </Link>
                     <Link href="/portfolio">
