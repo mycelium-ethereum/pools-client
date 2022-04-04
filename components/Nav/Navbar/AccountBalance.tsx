@@ -30,7 +30,7 @@ export default (({ hide, className }) => {
         <div className={classNames('whitespace-nowrap text-white', hide ? 'hidden' : 'block', className ?? '')}>
             {pendingCount > 0 ? (
                 <div className="flex">
-                    <div className="w-8 mx-2">
+                    <div className="mx-2 w-8">
                         <TracerLoading />
                     </div>
                     <div>{`${pendingCount} Pending`}</div>

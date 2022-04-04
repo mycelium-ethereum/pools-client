@@ -15,7 +15,7 @@ export default (({ preview, className, buttonClasses, children }) => {
                     {/* Button */}
                     <Popover.Button className={buttonClasses ?? DEFAULT}>
                         {preview}
-                        <Arrow className="self-center ml-1" style={{ transform: open ? 'rotate(180deg)' : '' }} />
+                        <Arrow className="ml-1 self-center" style={{ transform: open ? 'rotate(180deg)' : '' }} />
                     </Popover.Button>
 
                     {/* Menu */}
@@ -28,7 +28,7 @@ export default (({ preview, className, buttonClasses, children }) => {
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="origin-top-right absolute z-20 right-0 mt-2 rounded-lg shadow-lg bg-theme-background ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Popover.Panel className="focus:outline-none absolute right-0 z-20 mt-2 origin-top-right rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
                             {children}
                         </Popover.Panel>
                     </Transition>

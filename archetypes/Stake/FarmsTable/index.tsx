@@ -45,11 +45,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     );
                 })}
             </Table>
-            {fetchingFarms ? <Loading className="w-10 mx-auto my-8" /> : null}
+            {fetchingFarms ? <Loading className="mx-auto my-8 w-10" /> : null}
             <TWModal open={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalance Rate</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModal(false)}>
+                    <div className="h-3 w-3 cursor-pointer" onClick={() => setShowModal(false)}>
                         <Close />
                     </div>
                 </div>
@@ -142,7 +142,7 @@ const PoolRow: React.FC<{
                         <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
                     ) : (
                         <Logo
-                            className="inline mr-2"
+                            className="mr-2 inline"
                             size="md"
                             // since there are no bptDetails, we assume this is a pool token farm
                             ticker={tokenSymbolToLogoTicker(farm.name)}
@@ -224,7 +224,7 @@ const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ toke
             <Logo
                 key={`balancer-asset-${token.symbol}`}
                 size="md"
-                className="inline mr-2"
+                className="mr-2 inline"
                 ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : (token.symbol as LogoTicker)}
             />
         ))}

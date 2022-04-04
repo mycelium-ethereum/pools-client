@@ -33,7 +33,7 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
         <div
             className={classNames(
                 className ?? '',
-                'overflow-visible transition-all duration-300 ease-in-out mb-4 mt-8 rounded-md',
+                'mb-4 mt-8 overflow-visible rounded-md transition-all duration-300 ease-in-out',
             )}
             ref={main}
         >
@@ -106,22 +106,22 @@ export const Dropdown: React.FC<DropdownProps> = ({
         <Menu as="div" className={`${className || ''} relative inline-block text-left`}>
             <Menu.Button
                 className={classNames(
-                    `inline-flex justify-between w-full rounded-md`,
+                    `inline-flex w-full justify-between rounded-md`,
                     SIZE[size],
-                    'focus:outline-none hover:ring-1 hover:ring-50',
+                    'focus:outline-none hover:ring-50 hover:ring-1',
                     VARIANTS[variant],
                 )}
             >
                 <span className="mr-2">
                     {placeHolderIcon && value !== '' && value !== 'All' ? (
-                        <Logo size={iconSize} ticker={placeHolderIcon} className="inline mr-2" />
+                        <Logo size={iconSize} ticker={placeHolderIcon} className="mr-2 inline" />
                     ) : null}
                     {value === '' ? placeHolder : value}
                 </span>
                 {options.length ? (
-                    <DownOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                    <DownOutlined className="my-auto ml-auto mr-0 flex h-4 w-4 items-center " aria-hidden="true" />
                 ) : (
-                    <LoadingOutlined className="flex items-center h-4 w-4 ml-auto mr-0 my-auto " aria-hidden="true" />
+                    <LoadingOutlined className="my-auto ml-auto mr-0 flex h-4 w-4 items-center " aria-hidden="true" />
                 )}
             </Menu.Button>
 
@@ -134,7 +134,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="origin-top-right z-20 absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-theme-button-bg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <Menu.Items className="focus:outline-none absolute right-0 z-20 mt-2 w-40 origin-top-right rounded-md bg-theme-button-bg shadow-lg ring-1 ring-black ring-opacity-5">
                     <div className="py-1">
                         {options.map((option) => (
                             <Menu.Item key={option.key} disabled={option.disabled}>
@@ -145,11 +145,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                                 onClick={() => onSelect(option.key)}
                                                 className={classNames(
                                                     active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
-                                                    'block px-4 py-2 text-sm w-full text-left',
+                                                    'block w-full px-4 py-2 text-left text-sm',
                                                 )}
                                             >
                                                 {option?.ticker ? (
-                                                    <Logo ticker={option.ticker} className="inline my-0 mr-3" />
+                                                    <Logo ticker={option.ticker} className="my-0 mr-3 inline" />
                                                 ) : (
                                                     ''
                                                 )}
@@ -161,11 +161,11 @@ export const Dropdown: React.FC<DropdownProps> = ({
                                             onClick={() => onSelect(option.key)}
                                             className={classNames(
                                                 active ? 'bg-theme-button-bg-hover' : 'text-theme-text opacity-80',
-                                                'block px-4 py-2 text-sm w-full text-left',
+                                                'block w-full px-4 py-2 text-left text-sm',
                                             )}
                                         >
                                             {option?.ticker ? (
-                                                <Logo size={iconSize} ticker={option.ticker} className="inline mr-3" />
+                                                <Logo size={iconSize} ticker={option.ticker} className="mr-3 inline" />
                                             ) : (
                                                 ''
                                             )}

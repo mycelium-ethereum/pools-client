@@ -106,7 +106,7 @@ export default (({ focus }) => {
     }, [focus, page, account, network]);
 
     return (
-        <div className="bg-theme-background rounded-xl shadow mt-5 p-5">
+        <div className="mt-5 rounded-xl bg-theme-background p-5 shadow">
             <div className="mb-5">
                 <TWButtonGroup
                     value={focus}
@@ -128,7 +128,7 @@ export default (({ focus }) => {
                     <tr>
                         <td colSpan={MAX_COLS}>
                             <div className="my-20 text-center">
-                                <Loading className="w-10 mx-auto my-8" />
+                                <Loading className="mx-auto my-8 w-10" />
                             </div>
                         </td>
                     </tr>
@@ -153,7 +153,7 @@ export default (({ focus }) => {
                     </tbody>
                 )}
             </Table>
-            <div className="ml-auto mt-auto px-4 sm:px-6 py-3">
+            <div className="ml-auto mt-auto px-4 py-3 sm:px-6">
                 <PageNumber page={page} numResults={totalRecords} resultsPerPage={PAGE_ENTRIES} />
                 <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Pagination
@@ -213,11 +213,11 @@ const CommitRow: React.FC<
                 </TableRowCell>
                 {/*Token*/}
                 <TableRowCell>
-                    <div className="flex my-auto">
+                    <div className="my-auto flex">
                         <Logo
                             size="lg"
                             ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
-                            className="inline my-auto mr-2"
+                            className="my-auto mr-2 inline"
                         />
                         <div>
                             <div className="flex">
@@ -288,11 +288,11 @@ const CommitRow: React.FC<
                     <div className="text-cool-gray-500">{dateString}</div>
                 </TableRowCell>
                 <TableRowCell>
-                    <div className="flex my-auto">
+                    <div className="my-auto flex">
                         <Logo
                             size="lg"
                             ticker={tokenSymbolToLogoTicker(tokenInSymbol)}
-                            className="inline my-auto mr-2"
+                            className="my-auto mr-2 inline"
                         />
                         <div>
                             <div className="flex">
@@ -360,11 +360,11 @@ const CommitRow: React.FC<
                     <div className="text-cool-gray-500">{dateString}</div>
                 </TableRowCell>
                 <TableRowCell>
-                    <div className="flex my-auto">
+                    <div className="my-auto flex">
                         <Logo
                             size="lg"
                             ticker={tokenSymbolToLogoTicker(tokenInSymbol)}
-                            className="inline my-auto mr-2"
+                            className="my-auto mr-2 inline"
                         />
                         <div>
                             <div>{tokenInSymbol}</div>
@@ -384,11 +384,11 @@ const CommitRow: React.FC<
                     </div>
                 </TableRowCell>
                 <TableRowCell>
-                    <div className="flex my-auto">
+                    <div className="my-auto flex">
                         <Logo
                             size="lg"
                             ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
-                            className="inline my-auto mr-2"
+                            className="my-auto mr-2 inline"
                         />
                         <div>
                             <div>{tokenOutSymbol}</div>

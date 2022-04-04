@@ -21,11 +21,11 @@ const Footer: React.FC = () => {
 
     return (
         <div className={'container mt-auto py-4'}>
-            <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
+            <div className="flex flex-col justify-between px-4 md:px-0 lg:flex-row">
                 <span className="whitespace-nowrap">
                     &copy; <span ref={yearRef} /> Tracer DAO
                 </span>
-                <div className="flex my-6 lg:my-0 ">
+                <div className="my-6 flex lg:my-0 ">
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
                         href="https://docs.tracer.finance"

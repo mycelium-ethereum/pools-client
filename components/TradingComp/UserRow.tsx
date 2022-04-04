@@ -34,7 +34,7 @@ const UserRow: React.FC<{
             <td className={`${tableStyles} font-bold`}>#{rank}</td>
             <td className={`${tableStyles} font-bold`}>
                 <div className="flex items-center">
-                    {avatar && <img src={avatar} className={`mr-2.5 ${isFirst ? 'h-[68px] w-[68px]' : 'w-9 h-9'}`} />}
+                    {avatar && <img src={avatar} className={`mr-2.5 ${isFirst ? 'h-[68px] w-[68px]' : 'h-9 w-9'}`} />}
                     {name}
                 </div>
             </td>

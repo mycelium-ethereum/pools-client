@@ -20,14 +20,14 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Wave />
                         </div>
-                        <div className="text-2xl text-center my-5">{`Welcome to Tracer's Perpetual Pools`}</div>
+                        <div className="my-5 text-center text-2xl">{`Welcome to Tracer's Perpetual Pools`}</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm text-center">
+                        <div className="text-center text-sm">
                             Fully fungible leveraged tokens. No margin, No liquidations. Up to 3p{' '}
                             <span className="green">long</span> or <span className="red">short</span> exposure to ETH or
                             BTC in your wallet.
                         </div>
-                        <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
+                        <div className="my-8 text-center text-sm font-bold">Want to learn more?</div>
                         <ProgressIndicator totalSteps={5} currentStep={1} />
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
@@ -49,9 +49,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Question />
                         </div>
-                        <div className="text-2xl text-center my-5">How it works</div>
+                        <div className="my-5 text-center text-2xl">How it works</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             1. Deposit collateral into a pool. <br />
                             2. Mint tokens that represent your ownership and entitle you to a fraction of the pools
                             funds. <br />
@@ -80,9 +80,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Question />
                         </div>
-                        <div className="text-2xl text-center my-5">Crossing the bridge from L1 to Arbitrum</div>
+                        <div className="my-5 text-center text-2xl">Crossing the bridge from L1 to Arbitrum</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             Perpetual Pools are native to Arbitrum. Move your funds from L1 to L2 with the{' '}
                             <a href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
                                 Arbitrum bridge
@@ -120,9 +120,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Question />
                         </div>
-                        <div className="text-2xl text-center my-5">Mint and burn Pool tokens</div>
+                        <div className="my-5 text-center text-2xl">Mint and burn Pool tokens</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             {`Once you've browsed the available markets, head to the exchange to mint tokens.`} <br />
                             <br />
                             Guide:{' '}
@@ -151,9 +151,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Question />
                         </div>
-                        <div className="text-2xl text-center my-5">Want to learn more?</div>
+                        <div className="my-5 text-center text-2xl">Want to learn more?</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             Read the{' '}
                             <a
                                 href="https://tracer.finance/static/Tracer Perpetual Pools-efc7c29f638cb788832aafe0f41c07bd.pdf"

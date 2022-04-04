@@ -15,7 +15,7 @@ export const CommitPendingNotification = ({
 }: CommitProps): JSX.Element => (
     <Notification title={'Submitting Order'}>
         <div
-            className="flex items-center cursor-pointer"
+            className="flex cursor-pointer items-center"
             onClick={() =>
                 watchAsset(provider as ethers.providers.JsonRpcProvider, {
                     address: poolAddress,
@@ -45,25 +45,25 @@ export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymb
         <Notification title="Order Submitted" toastProps={{ type: 'success' }}>
             <div className="whitespace-nowrap">
                 {commitType === 'mint' || commitType === 'flip' ? (
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <Logo className="mr-2" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
                         <div>{tokenSymbol} ready to claim in</div>
                         <TimeLeft
-                            className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
+                            className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
                             targetTime={nextRebalance ?? 0}
                         />
                     </div>
                 ) : (
-                    <div className="flex items-center mb-2">
+                    <div className="mb-2 flex items-center">
                         <div>USDC ready to claim in</div>
                         <TimeLeft
-                            className="ml-2 px-3 py-1 border rounded bg-gray-50 dark:bg-cool-gray-800"
+                            className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
                             targetTime={nextRebalance ?? 0}
                         />
                     </div>
                 )}
                 <div
-                    className="text-tracer-400 underline cursor-pointer"
+                    className="cursor-pointer text-tracer-400 underline"
                     onClick={() => handleClick(commitType ?? 'mint')}
                 >
                     View order

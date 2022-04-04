@@ -37,7 +37,7 @@ export const EscrowTable = (({ rows, onClickCommitAction }) => {
                     })}
                 </tbody>
             </Table>
-            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
+            {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
         </>
     );
 }) as React.FC<{

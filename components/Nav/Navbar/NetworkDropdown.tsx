@@ -55,12 +55,12 @@ const NetworkPreview: React.FC<{
     supported: boolean;
 }> = ({ networkID, networkName, supported }) => {
     return (
-        <div className={'flex items-center w-full my-auto'}>
+        <div className={'my-auto flex w-full items-center'}>
             {supported ? (
-                <Logo className={'inline my-auto ml-0 mr-2'} ticker={networkID as LogoTicker} />
+                <Logo className={'my-auto ml-0 mr-2 inline'} ticker={networkID as LogoTicker} />
             ) : (
                 <Icon
-                    className={'flex items-center h-[22px] text-lg text-transparent my-auto ml-0 mr-2'}
+                    className={'my-auto ml-0 mr-2 flex h-[22px] items-center text-lg text-transparent'}
                     component={Error}
                 />
             )}

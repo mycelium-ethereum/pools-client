@@ -6,7 +6,7 @@ import { classNames } from '~/utils/helpers';
 const MIN_SIDE = 3;
 
 const MorePages: React.FC = () => (
-    <span className="relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium text-theme-text">
+    <span className="relative inline-flex items-center border border-theme-border px-4 py-2 text-sm font-medium text-theme-text">
         ...
     </span>
 );
@@ -109,8 +109,8 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
     };
 
     return (
-        <div className="pt-2 flex items-center justify-between">
-            <div className="flex-1 flex justify-between sm:hidden">
+        <div className="flex items-center justify-between pt-2">
+            <div className="flex flex-1 justify-between sm:hidden">
                 <button
                     className={mobilePageOption}
                     disabled={isFirstPage}
@@ -136,9 +136,9 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
                     Next
                 </button>
             </div>
-            <div className="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+            <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
-                    <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
+                    <nav className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                         <button
                             className={classNames(pageOption, 'rounded-l')}
                             disabled={isFirstPage}

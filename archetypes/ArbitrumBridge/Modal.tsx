@@ -111,9 +111,9 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
     return (
         <TWModal open={props.isOpen} onClose={() => props.onClose()}>
             <div className="bg-white p-6">
-                <div className="flex justify-between items-center">
-                    <h2 className="text-lg leading-6 font-medium text-gray-900">Bridge Funds to Arbitrum</h2>
-                    <div className="text-xl cursor-pointer" onClick={() => props.onClose()}>
+                <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-medium leading-6 text-gray-900">Bridge Funds to Arbitrum</h2>
+                    <div className="cursor-pointer text-xl" onClick={() => props.onClose()}>
                         &times;
                     </div>
                 </div>
@@ -123,23 +123,23 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                     </p>
                 </div>
 
-                <div className="overflow-hidden w-full">
+                <div className="w-full overflow-hidden">
                     <div
-                        className={`transition duration-200 transform flex ${
+                        className={`flex transform transition duration-200 ${
                             state.step === BridgeStepEnum.Collateral ? 'translate-x-0' : '-translate-x-1/2'
                         }`}
                         style={{ width: '200%' }}
                     >
                         <div className="my-6 w-1/2">
-                            <label htmlFor="price" className="block text-base font-medium text-gray-700 pb-1">
+                            <label htmlFor="price" className="block pb-1 text-base font-medium text-gray-700">
                                 Collateral
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm bg-gray-100">
+                            <div className="relative mt-1 rounded-md bg-gray-100 shadow-sm">
                                 <input
                                     type="number"
                                     name="collateral"
                                     id="collateral"
-                                    className={`block w-full p-4 sm:text-sm rounded-md border-2 ${
+                                    className={`block w-full rounded-md border-2 p-4 sm:text-sm ${
                                         collateralErrorMsg ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     placeholder="$4,000"
@@ -162,22 +162,22 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                     </button>
                                 </div>
                             </div>
-                            <p className="text-base text-gray-500 my-3">
+                            <p className="my-3 text-base text-gray-500">
                                 Balance: {toApproxCurrency(props.USDCBalance)}
                             </p>
-                            <p className="text-red-500 text-center">{collateralErrorMsg}</p>
+                            <p className="text-center text-red-500">{collateralErrorMsg}</p>
                         </div>
 
                         <div className="my-6 w-1/2">
-                            <label htmlFor="price" className="block text-base font-medium text-gray-700 pb-1">
+                            <label htmlFor="price" className="block pb-1 text-base font-medium text-gray-700">
                                 Gas
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm bg-gray-100">
+                            <div className="relative mt-1 rounded-md bg-gray-100 shadow-sm">
                                 <input
                                     type="number"
                                     name="gas"
                                     id="gas"
-                                    className={`block w-full p-4 sm:text-sm rounded-md border-2 ${
+                                    className={`block w-full rounded-md border-2 p-4 sm:text-sm ${
                                         gasErrorMsg ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     placeholder={props.ETHBalance + ' ETH'}
@@ -198,20 +198,20 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                                     </button>
                                 </div>
                             </div>
-                            <p className="text-base text-gray-500 mt-3">Balance: {props.ETHBalance} ETH</p>
-                            <p className="text-red-500 text-center">{gasErrorMsg}</p>
+                            <p className="mt-3 text-base text-gray-500">Balance: {props.ETHBalance} ETH</p>
+                            <p className="text-center text-red-500">{gasErrorMsg}</p>
                         </div>
                     </div>
                 </div>
 
                 <div className="flex w-full justify-center">
                     <div
-                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
+                        className={`m-2 h-3 w-3 rounded-full bg-blue-800 ${
                             state.step === BridgeStepEnum.Collateral ? 'ring' : ''
                         }`}
                     />
                     <div
-                        className={`rounded-full bg-blue-800 w-3 h-3 m-2 ${
+                        className={`m-2 h-3 w-3 rounded-full bg-blue-800 ${
                             state.step === BridgeStepEnum.Gas ? 'ring' : ''
                         }`}
                     />
@@ -222,7 +222,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         type="button"
                         onClick={() => handleClickConnect()}
                         disabled={!isConnectBtnEnabled()}
-                        className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
+                        className="inline-flex w-full justify-center rounded-md border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
                         Ok, {`let's`} connect
                     </button>
@@ -230,18 +230,18 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         type="button"
                         onClick={() => handleApproveUSDC()}
                         disabled={false}
-                        className="w-full inline-flex justify-center rounded-md bg-blue-800 active:bg-blue-600 border shadow-sm px-4 py-2 text-base font-medium text-white disabled:cursor-not-allowed disabled:bg-indigo-400"
+                        className="inline-flex w-full justify-center rounded-md border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
                         Approve USDC
                     </button>
                 </div>
 
-                <div className="p-2 flex justify-center">
+                <div className="flex justify-center p-2">
                     {(() => {
                         if (state.step === BridgeStepEnum.Collateral) {
                             if (state.isBridging) {
                                 return (
-                                    <p className="text-gray-400 text-sm text-center">
+                                    <p className="text-center text-sm text-gray-400">
                                         Currently bridging USDC. If you are experiencing technical problems, please{' '}
                                         <a className="text-blue-300 underline" href="#">
                                             contact us
@@ -262,7 +262,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         } else if (state.step === BridgeStepEnum.Gas) {
                             if (state.isBridging) {
                                 return (
-                                    <p className="text-gray-400 text-sm text-center">
+                                    <p className="text-center text-sm text-gray-400">
                                         Currently bridging ETH. If you are experiencing technical problems, please{' '}
                                         <a className="text-blue-300 underline" href="#">
                                             contact us

@@ -20,7 +20,8 @@
     }
 })();
 
-function takePill(color) { // eslint-disable-line
+function takePill(color) {
+    // eslint-disable-line
     const html = document.getElementsByTagName('html')[0];
     if (color === 'red') {
         const storedTheme = localStorage.getItem('theme');

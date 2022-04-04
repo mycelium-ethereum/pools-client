@@ -9,11 +9,11 @@ import { ArbiscanEnum, openArbiscan, watchAsset } from '~/utils/rpcMethods';
 // const Actions
 export default (({ provider, token, arbiscanTarget, otherActions }) => (
     <>
-        <Popover as="div" className="inline relative ml-2 my-auto">
+        <Popover as="div" className="relative my-auto ml-2 inline">
             {({ open }) => (
                 <>
                     {/* Button */}
-                    <Popover.Button className={'focus:border-none focus:outline-none mb-3'}>
+                    <Popover.Button className={'focus:outline-none mb-3 focus:border-none'}>
                         <MoreOutlined
                             className="transition"
                             style={{
@@ -32,18 +32,18 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="origin-top-right absolute z-10 right-0 mt-2 w-56 rounded-lg shadow-lg bg-theme-background ring-1 ring-black ring-opacity-5 focus:outline-none divide-y divide-theme-border">
+                        <Popover.Panel className="focus:outline-none absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-theme-border rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
                             <div>
                                 <div
-                                    className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
+                                    className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
                                     onClick={() => watchAsset(provider, token)}
                                 >
-                                    <PlusOutlined className="relative inline mr-2 h-[12px]" />
+                                    <PlusOutlined className="relative mr-2 inline h-[12px]" />
                                     Add token to wallet
                                 </div>
                                 {arbiscanTarget ? (
                                     <div
-                                        className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
+                                        className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
                                         onClick={() =>
                                             openArbiscan(
                                                 arbiscanTarget.type,
@@ -52,7 +52,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                             )
                                         }
                                     >
-                                        <Logo className="relative inline mr-2" ticker={NETWORKS.ARBITRUM} />
+                                        <Logo className="relative mr-2 inline" ticker={NETWORKS.ARBITRUM} />
                                         View on Arbiscan
                                     </div>
                                 ) : null}
@@ -60,7 +60,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                     ? otherActions.map((action) => (
                                           <div
                                               key={action.text}
-                                              className="flex cursor-pointer text-sm items-center p-2 hover:bg-theme-button-bg-hover"
+                                              className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
                                               onClick={() =>
                                                   openArbiscan(
                                                       action.type,
@@ -69,7 +69,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                                                   )
                                               }
                                           >
-                                              <Logo className="relative inline mr-2" ticker={action.logo} />
+                                              <Logo className="relative mr-2 inline" ticker={action.logo} />
                                               {action.text}
                                           </div>
                                       ))

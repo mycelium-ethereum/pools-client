@@ -56,7 +56,7 @@ export const MarketDropdown = ({ state, dispatch }: TableProps): JSX.Element => 
         <Dropdown
             size="sm"
             value={state.escrowMarketFilter}
-            className="w-32 mt-auto"
+            className="mt-auto w-32"
             options={Object.keys(MarketFilterEnum).map((key) => ({
                 key: (MarketFilterEnum as any)[key],
                 ticker: (key !== 'All' ? key : '') as LogoTicker,

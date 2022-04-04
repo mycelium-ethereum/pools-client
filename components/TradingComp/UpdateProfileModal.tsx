@@ -26,20 +26,20 @@ const UpdateProfileModal: React.FC<{ isOpen: boolean; handleClose: () => void }>
         <TWModal
             open={isOpen}
             onClose={handleClose}
-            className="sm:max-w-[545px] sm:w-[545px] flex flex-col justify-start"
+            className="flex flex-col justify-start sm:w-[545px] sm:max-w-[545px]"
         >
             <button onClick={handleClose}>
-                <img src="/img/general/close.svg" className="w-4 h-4 absolute top-9 right-8 invert" />
+                <img src="/img/general/close.svg" className="absolute top-9 right-8 h-4 w-4 invert" />
             </button>
-            <div className="text-center w-full">
-                <span className="text-xl leading-[150%] font-bold w-full">Update your profile</span>
-                <hr className="border-cool-gray-700 w-full mt-4" />
-                <div className="max-w-[365px] mt-12 mx-auto">
+            <div className="w-full text-center">
+                <span className="w-full text-xl font-bold leading-[150%]">Update your profile</span>
+                <hr className="mt-4 w-full border-cool-gray-700" />
+                <div className="mx-auto mt-12 max-w-[365px]">
                     <p>Add your name and profile picture to your trading profile to show off your gains!</p>
                 </div>
                 {!verified ? (
                     <>
-                        <div className="max-w-[365px] mt-4 mx-auto">
+                        <div className="mx-auto mt-4 max-w-[365px]">
                             <p>Verify your address first. </p>
                         </div>
                         <Button variant="primary" size="lg" className="mt-8" onClick={handleVerify}>
@@ -48,15 +48,15 @@ const UpdateProfileModal: React.FC<{ isOpen: boolean; handleClose: () => void }>
                     </>
                 ) : (
                     <>
-                        <div className="mb-8 mt-4 text-tracer-green flex items-center w-max mx-auto">
-                            <img src="/img/trading-comp/check-circle.svg" className="w-5 h-5 mr-2.5" />
+                        <div className="mx-auto mb-8 mt-4 flex w-max items-center text-tracer-green">
+                            <img src="/img/trading-comp/check-circle.svg" className="mr-2.5 h-5 w-5" />
                             <span>Address Verified!</span>
                         </div>
                         <div className="mb-10">
                             <span className="w-full font-medium">Username</span>
                             <InputContainer className="mt-2.5">
                                 <input
-                                    className="w-full h-full font-normal text-base text-center relative outline-none border-none flex-auto overflow-hidden overflow-ellipsis placeholder-low-emphesis focus:placeholder-primary focus:border"
+                                    className="outline-none placeholder-low-emphesis focus:placeholder-primary relative h-full w-full flex-auto overflow-hidden overflow-ellipsis border-none text-center text-base font-normal focus:border"
                                     value={username}
                                     onChange={handleChange}
                                     placeholder="Input username"
@@ -67,11 +67,11 @@ const UpdateProfileModal: React.FC<{ isOpen: boolean; handleClose: () => void }>
                             <span className="w-full font-medium">Display Picture</span>
                             <img
                                 src="/img/trading-comp/file-upload-circle.svg"
-                                className="w-[200px] h-[200px] mt-2 mx-auto dark:block hidden"
+                                className="mx-auto mt-2 hidden h-[200px] w-[200px] dark:block"
                             />
                             <img
                                 src="/img/trading-comp/file-upload-circle-light.svg"
-                                className="w-[200px] h-[200px] mt-2 mx-auto dark:hidden block"
+                                className="mx-auto mt-2 block h-[200px] w-[200px] dark:hidden"
                             />
                         </div>
                         <Button variant="primary" size="lg" className="mt-8" onClick={handleClose}>

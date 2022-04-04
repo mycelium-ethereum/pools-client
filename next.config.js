@@ -23,7 +23,7 @@ module.exports = {
             https: false,
             path: false,
             process: false,
-            ws: false
+            ws: false,
         };
 
         config.module.rules.push(
