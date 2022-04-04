@@ -5,7 +5,7 @@ export default (({ hideOnDesktop, pushContentRight }) => (
     <VersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
         <V1 href="https://pools.tracer.finance">V1</V1>
         <V2>
-            V2 Beta <New>NEW</New>
+            V2 <New>BETA</New>
         </V2>
     </VersionToggle>
 )) as React.FC<{
