@@ -19,7 +19,7 @@ const UserTable: React.FC<{
     }[];
 }) => {
     const tableHeadStyles =
-        'text-left text-cool-gray-900 font-bold bg-cool-gray-100 p-4 border-b border-cool-gray-200 dark:bg-cool-gray-700 dark:text-white';
+        'text-left text-cool-gray-900 font-semibold bg-cool-gray-100 p-4 border-b border-cool-gray-200 dark:bg-cool-gray-700 dark:text-white';
 
     return (
         <table className="hidden w-full md:table">

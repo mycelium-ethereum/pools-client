@@ -53,7 +53,7 @@ const StatisticsBox: React.FC<{
                             <div className="flex items-end font-bold">
                                 <span className="text-[32px] leading-[1]">{entryDate}</span>
                             </div>
-                            <span className="block text-sm font-semibold">Portfolio Value</span>
+                            <span className="block text-sm font-semibold">Entry Date</span>
                         </div>
                     </div>
                     <TwitterShareButton

@@ -27,18 +27,22 @@ const UserRow: React.FC<{
 }) => {
     const tableStyles = `text-left text-cool-gray-900 leading-[24px] dark:text-white leading-[150%] ${
         shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-800' : 'bg-white dark:bg-cool-gray-900'
-    }
-    ${isFirst ? 'text-2xl px-4 py-[30px]' : 'p-4'}`;
+    } ${isFirst ? 'text-2xl px-4 py-[30px] font-bold' : 'p-4'}`;
+
+    const convertCurrency = (value: string) => {
+        return '$' + parseInt(value).toLocaleString('en-US');
+    };
+
     return (
         <tr>
-            <td className={`${tableStyles} font-bold`}>#{rank}</td>
-            <td className={`${tableStyles} font-bold`}>
+            <td className={`${tableStyles}`}>#{rank}</td>
+            <td className={`${tableStyles}`}>
                 <div className="flex items-center">
                     {avatar && <img src={avatar} className={`mr-2.5 ${isFirst ? 'h-[68px] w-[68px]' : 'h-9 w-9'}`} />}
                     {name}
                 </div>
             </td>
-            <td className={`${tableStyles}`}>{value}</td>
+            <td className={`${tableStyles}`}>{convertCurrency(value)}</td>
             <td className={`${tableStyles}`}>{entryDate}</td>
         </tr>
     );

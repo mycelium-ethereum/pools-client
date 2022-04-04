@@ -41,7 +41,7 @@ const Leaderboard: React.FC<{
                 <span className="block text-lg font-bold">Leaderboard</span>
                 <div className="flex w-full max-w-[281px] items-center justify-between">
                     <span className="mb-4 block font-semibold">Total Competitors</span>
-                    <span className="mb-4 block font-bold">{data.length}</span>
+                    <span className="mb-4 block font-bold">{data.length.toLocaleString('en-US')}</span>
                 </div>
             </div>
             <div className="max-h-[550px]">
