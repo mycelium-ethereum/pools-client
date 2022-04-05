@@ -21,15 +21,22 @@ const UserTable: React.FC<{
             <tbody>
                 {data
                     .sort((a, b) => parseInt(b.accountValue) - parseInt(a.accountValue))
-                    .map((item: any, index: number) => (
-                        <UserRow
-                            {...item}
-                            key={index}
-                            rank={index + 1}
-                            shaded={index % 2 !== 0}
-                            isFirst={index === 0}
-                        />
-                    ))}
+                    .map((item: any, index: number) => {
+                        if (!item.disqualified) {
+                            return (
+                                <UserRow
+                                    {...item}
+                                    key={index}
+                                    rank={index + 1}
+                                    shaded={index % 2 !== 0}
+                                    isFirst={index === 0}
+                                />
+                            );
+                        } else {
+                            return null;
+                        }
+                    })
+                    .filter((item) => item)}
             </tbody>
         </table>
     );
