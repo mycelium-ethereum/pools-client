@@ -69,7 +69,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
             return;
         }
         if (!signer) {
-            console.error('Signer undefined when trying to mint');
+            console.error('Signer undefined when trying to claim');
             return;
         }
         const committer = PoolCommitter__factory.connect(committerAddress, signer);
@@ -102,11 +102,11 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
         const committerAddress = pools[pool]?.poolInstance?.committer?.address;
 
         if (!committerAddress) {
-            throw 'Committer address undefined when trying to mint';
+            throw 'Committer address undefined when trying to commit';
         }
 
         if (!signer) {
-            throw 'Signer undefined when trying to mint';
+            throw 'Signer undefined when trying to commit';
         }
         const committer = PoolCommitter__factory?.connect(committerAddress, signer);
 
@@ -152,11 +152,11 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
         );
 
         if (!committerAddress) {
-            console.error('Committer address undefined when trying to mint');
+            console.error('Committer address undefined when trying to commit');
             // TODO handle error
         }
         if (!signer) {
-            console.error('Signer undefined when trying to mint');
+            console.error('Signer undefined when trying to commit');
             return;
         }
         const committer = PoolCommitter__factory.connect(committerAddress, signer);
