@@ -35,18 +35,31 @@ export const PriceByDropDown = (): JSX.Element => {
     );
 };
 
-export const DenoteInDropDown = ({ state, dispatch }: TableProps): JSX.Element => {
+export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
     return (
         <Dropdown
             size="sm"
             iconSize="xs"
             placeHolderIcon={state.positionsDenotedIn as LogoTicker}
             value={state.positionsDenotedIn}
-            options={Object.keys(DenotedInEnum).map((key) => ({
-                key: key,
-                ticker: key as LogoTicker,
-            }))}
-            onSelect={(val) => dispatch({ type: 'setDenotation', denotedIn: val as DenotedInEnum })}
+            // TODO: Switch out options when denote in BASE is available
+            // options={Object.keys(DenotedInEnum).map((key) => ({
+            //     key: key,
+            //     ticker: key as LogoTicker,
+            // }))}
+            options={[
+                { key: DenotedInEnum.USD, ticker: DenotedInEnum.USD },
+                {
+                    key: DenotedInEnum.BASE,
+                    ticker: DenotedInEnum.BASE,
+                    disabled: true,
+                    tooltip: { key: TooltipKeys.ComingSoon },
+                },
+            ]}
+            onSelect={(val) => {
+                console.debug(val);
+                // dispatch({ type: 'setDenotation', denotedIn: val as DenotedInEnum });
+            }}
         />
     );
 };

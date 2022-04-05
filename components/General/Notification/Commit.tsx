@@ -24,13 +24,15 @@ export const CommitPendingNotification = ({
                 })
             }
         >
-            <Logo className="mr-2" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
-            <div>Add to wallet</div>
+            <span className="flex">
+                Add <Logo className="mx-1" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
+                {tokenSymbol} to wallet
+            </span>
         </div>
     </Notification>
 );
 
-export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymbol }: CommitProps): JSX.Element => {
+export const CommitSuccessNotification = ({ expectedExecution, commitType, tokenSymbol }: CommitProps): JSX.Element => {
     const router = useRouter();
 
     const handleClick = (focus: 'mint' | 'burn' | 'flip') =>
@@ -50,7 +52,7 @@ export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymb
                         <div>{tokenSymbol} ready to claim in</div>
                         <TimeLeft
                             className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
-                            targetTime={nextRebalance ?? 0}
+                            targetTime={expectedExecution}
                         />
                     </div>
                 ) : (
@@ -58,7 +60,7 @@ export const CommitSuccessNotification = ({ nextRebalance, commitType, tokenSymb
                         <div>USDC ready to claim in</div>
                         <TimeLeft
                             className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
-                            targetTime={nextRebalance ?? 0}
+                            targetTime={expectedExecution}
                         />
                     </div>
                 )}

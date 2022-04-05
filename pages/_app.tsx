@@ -9,6 +9,8 @@ import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import { StyledThemeProvider } from '~/context/ThemeContext';
+import usePoolWatcher from '~/hooks/usePoolWatcher';
+import { useUpdatePoolLists } from '~/hooks/useUpdatePoolLists';
 import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
@@ -17,6 +19,8 @@ const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     // any store hooks
     useUpdateWeb3Store();
+    useUpdatePoolLists();
+    usePoolWatcher();
 
     // load usersnap
     useEffect(() => {

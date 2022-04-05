@@ -70,7 +70,7 @@ export interface PortfolioState {
 export const initialPortfolioState = {
     escrowSearch: '',
     escrowMarketFilter: MarketFilterEnum.All,
-    positionsDenotedIn: DenotedInEnum.BASE,
+    positionsDenotedIn: DenotedInEnum.USD,
 };
 
 export type PortfolioAction =

@@ -51,7 +51,7 @@ export type CommitProps = {
     tokenSymbol: string;
     settlementTokenDecimals: number;
     commitType: QueryFocus;
-    nextRebalance: number;
+    expectedExecution: number;
 };
 
 export type ClaimProps = {

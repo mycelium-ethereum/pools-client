@@ -20,6 +20,7 @@
     }
 })();
 
+// eslint-disable-next-line
 function takePill(color) {
     const html = document.getElementsByTagName('html')[0];
     if (color === 'red') {

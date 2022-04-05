@@ -1,26 +1,31 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
+import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import useIntervalCheck from '../useIntervalCheck';
 
 // returns the timestamp when a commit is expected to be executed
 // const useExpectedCommitExecution
-export default ((lastUpdate, updateInterval, frontRunningInterval) => {
+export const useExpectedCommitExecution = (
+    lastUpdate: BigNumber,
+    updateInterval: BigNumber,
+    frontRunningInterval: BigNumber,
+): number => {
     const [expectedRebalance, setExpectedRebalance] = useState(0);
 
     const beforeFrontRunning = useIntervalCheck(expectedRebalance, frontRunningInterval.toNumber());
 
-    useEffect(() => {
-        setExpectedRebalance(lastUpdate.plus(updateInterval).toNumber());
-    }, [lastUpdate, updateInterval]);
-
-    useEffect(() => {
-        if (!beforeFrontRunning) {
-            if (!lastUpdate.eq(0)) {
-                const nextUpdate = lastUpdate.plus(updateInterval.times(2)).toNumber();
-                setExpectedRebalance(Math.floor(nextUpdate));
-            }
-        }
-    }, [beforeFrontRunning]);
+    useMemo(() => {
+        setExpectedRebalance(
+            getExpectedExecutionTimestamp(
+                frontRunningInterval.toNumber(),
+                updateInterval.toNumber(),
+                lastUpdate.toNumber(),
+                Date.now() / 1000,
+            ),
+        );
+    }, [lastUpdate, updateInterval, beforeFrontRunning]);
 
     return expectedRebalance;
-}) as (lastUpdate: BigNumber, updateInterval: BigNumber, frontRunningInterval: BigNumber) => number;
+};
+
+export default useExpectedCommitExecution;

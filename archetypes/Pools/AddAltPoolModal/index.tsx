@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import { HiddenExpand } from '~/components/General/Dropdown';
 import { TWModal } from '~/components/General/TWModal';
 import { useStore } from '~/store/main';
-import { selectHandleImport, selectImported } from '~/store/PoolsSlice';
-import { Imported } from '~/store/PoolsSlice/types';
+import { selectImportPool, selectImportedPools } from '~/store/PoolsSlice';
+import { selectNetwork } from '~/store/Web3Slice';
 import { isAddress } from '~/utils/rpcMethods';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
+    const importPool = useStore(selectImportPool);
+    const getImported = useStore(selectImportedPools);
+    const network = useStore(selectNetwork);
+
     const [userInput, setUserInput] = useState<string>('');
     const [importMsg, setImportMsg] = useState<string>('');
     const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
-
-    const handleImported = useStore(selectHandleImport);
-    const getImported = useStore(selectImported);
 
     const handleCloseModal = () => {
         onClose();
@@ -31,12 +33,12 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
 
     const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
-        const isDuplicateImport = getImported.some((v: Imported) => v.address === userInput);
+        const isDuplicateImport = getImported.some((v) => v.address === userInput);
 
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);
-        } else if (isValidAddress && handleImported) {
-            handleImported({ address: userInput });
+        } else if (isValidAddress) {
+            importPool(network as KnownNetwork, userInput);
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);

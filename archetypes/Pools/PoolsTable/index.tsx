@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { ethers } from 'ethers';
 import { LinkOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -13,18 +13,15 @@ import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/c
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
-import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { default as UpOrDown } from '~/components/UpOrDown';
-import Info from '/public/img/general/info.svg';
-import { networkConfig } from '~/constants/networks';
-import useIntervalCheck from '~/hooks/useIntervalCheck';
+import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
@@ -97,7 +94,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
     const [poolDetails, setPoolDetails] = useState<any>({});
     const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
 
-    const handlePoolDetailsClick = (data: any) => {
+    const handlePoolDetailsClick = (data: BrowseTableRowData) => {
         setShowModalPoolDetails(true);
         setPoolDetails(data);
     };
@@ -172,7 +169,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         {showNextRebalance ? (
                             <TableHeaderCell className="w-2/12">
                                 <CommittmentTip>
-                                    <div>{'Commitment Window'}</div>
+                                    <div>{'Tokens in'}</div>
                                 </CommittmentTip>
                             </TableHeaderCell>
                         ) : null}
@@ -200,12 +197,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={4} />
-                        {showNextRebalance ? (
-                            <TableHeaderCell size="default-x" className="text-cool-gray-400">
-                                <div className="capitalize text-cool-gray-400">{'Ends in'}</div>
-                            </TableHeaderCell>
-                        ) : null}
+                        <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
 
                         {/* Token Cols */}
                         <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
@@ -267,7 +259,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                 open={showModalPoolDetails}
                 onClose={() => setShowModalPoolDetails(false)}
                 poolDetails={poolDetails}
-                previewUrl={networkConfig[network]?.previewUrl || ''}
+                network={network}
             />
         </>
     );
@@ -286,16 +278,6 @@ const PoolRow: React.FC<
         onClickShowPoolDetailsModal: () => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
-    const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    const isBeforeFrontRunning = useIntervalCheck(pool.nextRebalance, pool.frontRunning);
-
-    useEffect(() => {
-        if (isBeforeFrontRunning) {
-            setPendingUpkeep(false);
-        }
-    }, [isBeforeFrontRunning]);
-
     return (
         <>
             <TableRow lined>
@@ -409,26 +391,7 @@ const PoolRow: React.FC<
                 </TableRowCell>
                 {showNextRebalance ? (
                     <TableRowCell rowSpan={2}>
-                        {!isBeforeFrontRunning ? (
-                            <TooltipSelector tooltip={{ key: TooltipKeys.Lock }}>
-                                <div>Front-running interval reached</div>
-                                <div className="opacity-80">
-                                    {'Mint and burn in '}
-                                    {!pendingUpkeep ? (
-                                        <TimeLeft
-                                            targetTime={pool.nextRebalance}
-                                            countdownEnded={() => {
-                                                setPendingUpkeep(true);
-                                            }}
-                                        />
-                                    ) : (
-                                        'progress'
-                                    )}
-                                </div>
-                            </TooltipSelector>
-                        ) : (
-                            <TimeLeft targetTime={pool.nextRebalance - pool.frontRunning} />
-                        )}
+                        <TimeLeft targetTime={pool.expectedExecution} />
                     </TableRowCell>
                 ) : null}
 
@@ -661,7 +624,7 @@ const TokenRows: React.FC<
                                 symbol: tokenInfo.symbol,
                             }}
                             arbiscanTarget={{
-                                type: ArbiscanEnum.token,
+                                type: BlockExplorerAddressType.token,
                                 target: poolAddress,
                             }}
                         />

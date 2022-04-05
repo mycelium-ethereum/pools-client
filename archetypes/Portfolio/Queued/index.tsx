@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
@@ -12,9 +11,9 @@ import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { QueuedCommit } from '~/types/pools';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 
 import { PageOptions } from '..';
 
@@ -211,18 +210,7 @@ const MintCommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
     }
-> = ({
-    tokenOut,
-    txnHash,
-    tokenPrice,
-    amount,
-    nextRebalance,
-    provider,
-    frontRunningInterval,
-    updateInterval,
-    created,
-    settlementTokenSymbol,
-}) => {
+> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -266,10 +254,7 @@ const MintCommitRow: React.FC<
                     pendingUpkeep={pendingUpkeep}
                     setPendingUpkeep={setPendingUpkeep}
                     actionType={CommitActionEnum.mint}
-                    nextRebalance={nextRebalance}
-                    created={created}
-                    frontRunningInterval={frontRunningInterval}
-                    updateInterval={updateInterval}
+                    expectedExecution={expectedExecution}
                 />
             </TableRowCell>
             <TableRowCell className="flex text-right">
@@ -277,7 +262,7 @@ const MintCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
@@ -290,18 +275,7 @@ const BurnCommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
     }
-> = ({
-    tokenOut,
-    txnHash,
-    tokenPrice,
-    amount,
-    nextRebalance,
-    provider,
-    frontRunningInterval,
-    updateInterval,
-    created,
-    settlementTokenSymbol,
-}) => {
+> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -345,10 +319,7 @@ const BurnCommitRow: React.FC<
                     pendingUpkeep={pendingUpkeep}
                     setPendingUpkeep={setPendingUpkeep}
                     actionType={CommitActionEnum.mint}
-                    nextRebalance={nextRebalance}
-                    created={created}
-                    frontRunningInterval={frontRunningInterval}
-                    updateInterval={updateInterval}
+                    expectedExecution={expectedExecution}
                 />
             </TableRowCell>
             <TableRowCell className="flex text-right">
@@ -356,7 +327,7 @@ const BurnCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
@@ -369,19 +340,7 @@ const FlipCommitRow: React.FC<
     QueuedCommit & {
         provider: ethers.providers.JsonRpcProvider | null;
     }
-> = ({
-    tokenIn,
-    tokenOut,
-    txnHash,
-    tokenPrice,
-    amount,
-    nextRebalance,
-    provider,
-    frontRunningInterval,
-    updateInterval,
-    created,
-    settlementTokenSymbol,
-}) => {
+> = ({ tokenIn, tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -421,10 +380,7 @@ const FlipCommitRow: React.FC<
                     pendingUpkeep={pendingUpkeep}
                     setPendingUpkeep={setPendingUpkeep}
                     actionType={CommitActionEnum.mint}
-                    nextRebalance={nextRebalance}
-                    created={created}
-                    frontRunningInterval={frontRunningInterval}
-                    updateInterval={updateInterval}
+                    expectedExecution={expectedExecution}
                 />
             </TableRowCell>
             <TableRowCell className="flex text-right">
@@ -432,7 +388,7 @@ const FlipCommitRow: React.FC<
                     token={tokenOut}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.txn,
+                        type: BlockExplorerAddressType.txn,
                         target: txnHash,
                     }}
                 />
@@ -445,41 +401,24 @@ interface ReceiveInProps {
     pendingUpkeep: boolean;
     setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
     actionType: CommitActionEnum;
-    nextRebalance: BigNumber;
-    created: number;
-    frontRunningInterval: BigNumber;
-    updateInterval: BigNumber;
+    expectedExecution: number;
 }
 const ReceiveIn: React.FC<ReceiveInProps> = ({
     pendingUpkeep,
     setPendingUpkeep,
     actionType,
-    nextRebalance,
-    created,
-    frontRunningInterval,
-    updateInterval,
+    expectedExecution,
 }: ReceiveInProps) => {
     if (pendingUpkeep) {
         return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
     } else {
-        if (nextRebalance.toNumber() - created < frontRunningInterval.toNumber()) {
-            return (
-                <TimeLeft
-                    targetTime={nextRebalance.toNumber() + updateInterval.toNumber()}
-                    countdownEnded={() => {
-                        setPendingUpkeep(true);
-                    }}
-                />
-            );
-        } else {
-            return (
-                <TimeLeft
-                    targetTime={nextRebalance.toNumber()}
-                    countdownEnded={() => {
-                        setPendingUpkeep(true);
-                    }}
-                />
-            );
-        }
+        return (
+            <TimeLeft
+                targetTime={expectedExecution}
+                countdownEnded={() => {
+                    setPendingUpkeep(true);
+                }}
+            />
+        );
     }
 };

@@ -9,7 +9,7 @@ import Warning from '~/public/img/notifications/warning.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 const StyledIcon = styled(Icon)`
-    font-size: 1.5rem; /* 24px */
+    font-size: 2rem; /* 32px */
 
     &.loading {
         color: ${({ theme: { theme } }) => {

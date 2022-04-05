@@ -10,8 +10,8 @@ import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/c
 import Actions from '~/components/TokenActions';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { toApproxCurrency } from '~/utils/converters';
-import { ArbiscanEnum } from '~/utils/rpcMethods';
 import { DenotedInEnum, TokenRowProps } from '../state';
 
 export default (({ rows, onClickCommitAction, denotedIn }) => {
@@ -197,7 +197,7 @@ export const TokenRow: React.FC<
                     }}
                     provider={provider}
                     arbiscanTarget={{
-                        type: ArbiscanEnum.token,
+                        type: BlockExplorerAddressType.token,
                         target: address,
                     }}
                 />

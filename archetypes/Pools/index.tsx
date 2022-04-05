@@ -6,7 +6,6 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
-
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterBar from './FilterSelects/Bar';
 import MintBurnModal from './MintBurnModal';
@@ -120,7 +119,15 @@ export const Browse: React.FC = () => {
                     <h1 className="mt-8 mb-2 px-4 text-3xl font-semibold text-theme-text sm:px-0">Pools</h1>
                     <div className="mb-6 px-4 text-sm font-light sm:px-0">
                         The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
-                        via Tracer’s SMA Wrapper. <a className="text-tracer-400 underline">Learn More</a>
+                        via Tracer’s SMA Wrapper.{' '}
+                        <a
+                            href="https://pools-docs.tracer.finance/"
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            className="text-tracer-400 underline"
+                        >
+                            Learn More
+                        </a>
                     </div>
                     <FilterBar state={state} dispatch={dispatch} />
                 </section>
