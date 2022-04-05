@@ -79,3 +79,16 @@ export type TradeHistory = {
     priceTokenName: string;
     priceTokenSymbol: string;
 };
+
+type GraphCommitType = 'ShortMint' | 'ShortBurn' | 'LongMint' | 'LongBurn' | 'LongBurnShortMint' | 'ShortBurnLongMint';
+
+export type GraphCommit = {
+    id: string;
+    type: GraphCommitType;
+    amount: string;
+    pool: string;
+    trader: string;
+    created: string;
+    txnHash: string;
+    updateIntervalId: string;
+};
