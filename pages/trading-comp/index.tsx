@@ -21,7 +21,7 @@ export default (() => {
             method: 'GET',
         })
             .then((response) => response.json())
-            .then((data) => setData(data))
+            .then((data: TradingCompParticipant[]) => setData(data))
             .catch((error) => {
                 console.log('API request failed', error);
             });
@@ -31,16 +31,21 @@ export default (() => {
         // Hardcode account for testing
         const hardcodedAccount = '0xAEF2A30FE1b2dC3d51b4e9Bf22b0698Ec8e6Ce1f';
         // const currentUser: any = data.filter((item) => item.address === account);
-        const currentUser: any = data.filter((item) => item.address === hardcodedAccount);
-        currentUser[0].rank = data.indexOf(currentUser[0]) + 1;
+        const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === hardcodedAccount);
+        currentUser[0].rank = (data.indexOf(currentUser[0]) + 1).toString();
         setUser(currentUser);
     };
 
     useEffect(() => {
         getStats();
-        getCurrentUser();
         router.prefetch('/trading-comp');
     }, []);
+
+    useEffect(() => {
+        if (data && data.length > 0) {
+            getCurrentUser();
+        }
+    }, [data]);
 
     // useEffect(() => {
     //     if (account) {
