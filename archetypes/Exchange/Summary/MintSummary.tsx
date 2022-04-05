@@ -6,7 +6,7 @@ import * as Styles from './styles';
 import { MintSummaryProps } from './types';
 import { calcExposure, calcNumTokens } from './utils';
 
-const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee }) => {
+const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee, isLong }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const poolPowerLeverage = pool.leverage;
@@ -32,6 +32,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token
                 poolLeverage={poolPowerLeverage}
                 expectedExposure={equivalentExposure}
                 showTransactionDetails={showTransactionDetails}
+                isLong={isLong}
             />
             <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />

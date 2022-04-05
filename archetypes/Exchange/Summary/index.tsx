@@ -37,6 +37,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                                 leverage: pool.leverage,
                             }}
                             gasFee={gasFee}
+                            isLong={isLong}
                         />
                     )}
 
