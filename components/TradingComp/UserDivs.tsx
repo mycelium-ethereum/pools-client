@@ -32,6 +32,7 @@ const UserDivs: React.FC<{
                 <>
                     {placeholderArr.map((item, index) => (
                         <UserDiv
+                            {...item}
                             username={''}
                             accountValue={''}
                             entryDate={0}
