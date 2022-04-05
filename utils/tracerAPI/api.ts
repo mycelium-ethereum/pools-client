@@ -33,7 +33,7 @@ export const fetchPendingCommits: (
         .then((allCommits) => {
             const parsedCommits: PendingCommits[] = [];
             // allCommits.forEach((commit: PendingCommitsResult) => {
-            allCommits.commits.forEach((commit: GraphCommit) => {
+            allCommits.data.commits.forEach((commit: GraphCommit) => {
                 parsedCommits.push({
                     amount: commit.amount,
                     commitType: CommitTypeMap[commit.type],
