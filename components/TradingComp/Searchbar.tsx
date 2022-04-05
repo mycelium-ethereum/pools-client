@@ -28,7 +28,7 @@ const Searchbar: React.FC<{
     }, [searchInput]);
 
     return (
-        <div className="relative ml-[75px] hidden overflow-hidden rounded-xl border border-cool-gray-900 text-sm text-cool-gray-900 dark:border-white dark:text-white md:block">
+        <div className="absolute bottom-0 right-4 ml-[75px] w-[calc(50%-30px)] overflow-hidden rounded-xl border border-cool-gray-900 text-sm text-cool-gray-900 dark:border-white dark:text-white sm:right-0 sm:w-auto md:relative">
             <img
                 src="/img/trading-comp/search-icon.svg"
                 alt="search"
@@ -36,7 +36,7 @@ const Searchbar: React.FC<{
             />
             <input
                 type="text"
-                className="h-[39px] min-h-[39px] w-[281px] min-w-[281px] pl-11"
+                className="h-[39px] min-h-[39px] w-full pl-11 sm:w-[180px] md:w-[281px] md:min-w-[281px]"
                 value={searchInput}
                 onChange={handleChange}
                 placeholder="Search"

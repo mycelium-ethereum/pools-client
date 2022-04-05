@@ -35,6 +35,7 @@ module.exports = {
                     midblue: '#3DA8F5',
                     darkblue: '#03065E',
                     green: '#61DA56',
+                    red: '#EC5050',
                 },
                 'cool-gray': {
                     50: '#F9FAFB',

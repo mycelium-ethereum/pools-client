@@ -39,8 +39,10 @@ export default (() => {
 
     const getCurrentUser = () => {
         // Hardcode account for testing
+        // const accountAddress = '0xAEF2A30FE1b2dC3d51b4e9Bf22b0698Ec8e6Ce1f';
+        // const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === accountAddress);
         const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === account);
-        if (currentUser) {
+        if (currentUser[0] && !!currentUser[0].username) {
             currentUser[0].rank = (data.indexOf(currentUser[0]) + 1).toString();
             setUser(currentUser);
             setParticipating(true);

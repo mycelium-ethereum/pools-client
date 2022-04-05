@@ -30,7 +30,7 @@ const Leaderboard: React.FC<{
 }) => {
     return (
         <div className="w-[calc(100%+32px)] -translate-x-4 transform overflow-auto bg-white py-5 dark:bg-cool-gray-900 sm:w-full sm:translate-x-0 sm:rounded-[10px] sm:px-7 sm:drop-shadow-md">
-            <div className="mb-4 flex flex-col-reverse items-start justify-between px-4 text-cool-gray-900 dark:text-white sm:flex-row sm:items-center md:px-0">
+            <div className="relative mb-4 flex flex-col-reverse items-start justify-between px-4 text-cool-gray-900 dark:text-white md:flex-row md:items-center md:px-0">
                 <span className="block text-lg font-bold">Leaderboard</span>
                 <div className="flex items-center">
                     <div className="flex items-center">
