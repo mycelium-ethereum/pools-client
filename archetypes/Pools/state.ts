@@ -73,8 +73,7 @@ export interface BrowseTableRowData {
     longToken: BrowseTableTokenData;
 
     myHoldings: number;
-    nextRebalance: number;
-    frontRunning: number;
+    expectedExecution: number;
 
     pastUpkeep: Upkeep;
     antecedentUpkeep: Upkeep;
