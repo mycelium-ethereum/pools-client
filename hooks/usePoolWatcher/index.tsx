@@ -57,13 +57,7 @@ export const usePoolWatcher = (): void => {
                     });
 
                     watcher.on(EVENT_NAMES.UPKEEP, (data) => {
-                        console.debug('Executed upkeep', data);
-                        setPoolIsWaiting(data.poolAddress, false);
-                        console.debug(`
-                            Completed upkeep on pool: ${data.poolAddress}
-                            Old price: ${data.startPrice.toString()}
-                            New price: ${data.endPrice.toString()}
-                        `);
+                        console.debug(`Completed upkeep on pool: ${data.poolAddress}`, data)
                         handlePoolUpkeep(
                             data.poolAddress,
                             new ethers.providers.WebSocketProvider(wssProvider),

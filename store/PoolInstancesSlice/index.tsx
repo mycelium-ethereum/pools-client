@@ -118,6 +118,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     },
 
     handlePoolUpkeep: (pool, provider, account) => {
+        get().setPoolIsWaiting(pool, false);
         get().updateTokenBalances(pool, provider, account);
         get().updatePoolBalances(pool, provider);
     },

@@ -60,7 +60,7 @@ export default (() => {
                     side: SideEnum.long,
                     leverage: leverage,
                     balance: userBalances.longToken.balance,
-                    escrowBalance: userBalances.aggregateBalances.shortTokens,
+                    escrowBalance: userBalances.aggregateBalances.longTokens,
                     pool: {
                         address,
                         settlementTokenSymbol,
