@@ -244,13 +244,16 @@ html.theme-matrix {
     outline: none;
 }
 
+* {
+    outline: none;
+}
 
-@keyframes placeHolderShimmer{
-    0%{
-        background-position: -468px 0
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
     }
-    100%{
-        background-position: 468px 0
+    100% {
+        background-position: 468px 0;
     }
 }
 
@@ -263,7 +266,12 @@ html.theme-matrix {
     animation-name: placeHolderShimmer;
     animation-timing-function: linear;
     background: darkgray;
-    background: linear-gradient(90deg, rgba(218, 218, 218, 0.6) -24.18%, rgba(218, 218, 218, 0.3) 50.26%, rgba(218, 218, 218, 0) 114.84%);
+    background: linear-gradient(
+        90deg,
+        rgba(218, 218, 218, 0.6) -24.18%,
+        rgba(218, 218, 218, 0.3) 50.26%,
+        rgba(218, 218, 218, 0) 114.84%
+    );
     background-size: 800px 104px;
 }
 
@@ -276,6 +284,11 @@ html.theme-matrix {
     animation-name: placeHolderShimmer;
     animation-timing-function: linear;
     background: darkgray;
-    background: linear-gradient(90deg, rgba(17, 25, 40, 0.6) -24.18%, rgba(17, 25, 40, 0.3) 50.26%, rgba(17, 25, 40, 0) 114.84%);
+    background: linear-gradient(
+        90deg,
+        rgba(17, 25, 40, 0.6) -24.18%,
+        rgba(17, 25, 40, 0.3) 50.26%,
+        rgba(17, 25, 40, 0) 114.84%
+    );
     background-size: 800px 104px;
 }

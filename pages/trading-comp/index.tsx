@@ -13,6 +13,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 export default (() => {
     const [data, setData] = useState<TradingCompParticipant[]>([]);
+    const [filteredData, setFilteredData] = useState<TradingCompParticipant[]>([]);
     const [user, setUser] = useState<TradingCompParticipant[]>([]);
     const [participating, setParticipating] = useState<boolean>(false);
     const router = useRouter();
@@ -23,10 +24,17 @@ export default (() => {
             method: 'GET',
         })
             .then((response) => response.json())
-            .then((data: TradingCompParticipant[]) => (data && data.length > 0 ? setData(data) : setData(tableData)))
+            .then((data: TradingCompParticipant[]) =>
+                data && data.length > 0 ? storeData(data) : storeData(tableData),
+            )
             .catch((error) => {
                 console.log('API request failed', error);
             });
+    };
+
+    const storeData = (data: TradingCompParticipant[]) => {
+        setData(data);
+        setFilteredData(data);
     };
 
     const getCurrentUser = () => {
@@ -62,7 +70,7 @@ export default (() => {
                             <StatisticsBox {...user[0]} account={account} participating={participating} />
                         </div>
                     </div>
-                    <Leaderboard data={data} />
+                    <Leaderboard filteredData={filteredData} data={data} setFilteredData={setFilteredData} />
                 </div>
             </div>
             <Footer />
