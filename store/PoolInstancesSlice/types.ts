@@ -1,3 +1,4 @@
+import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Pool } from '@tracer-protocol/pools-js';
 import { AggregateBalances, PoolInfo } from '~/types/pools';
@@ -33,5 +34,21 @@ export interface IPoolsInstancesSlice {
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
-}
 
+    handlePoolUpkeep: (
+        pool: string,
+        provider: ethers.providers.JsonRpcProvider | undefined,
+        account: string | undefined,
+    ) => void;
+    updateTokenBalances: (
+        pool: string,
+        provider: ethers.providers.JsonRpcProvider | undefined,
+        account: string | undefined,
+    ) => void;
+    updateTokenApprovals: (
+        pool: string,
+        provider: ethers.providers.JsonRpcProvider | undefined,
+        account: string | undefined,
+    ) => void;
+    updatePoolBalances: (pool: string, provider: ethers.providers.JsonRpcProvider | undefined) => void;
+}

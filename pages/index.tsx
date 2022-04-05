@@ -6,7 +6,6 @@ import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopu
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
 import { WarningBanners } from '~/components/WarningBanner';
-import { PoolStore } from '~/context/PoolContext';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -20,14 +19,12 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <PoolStore>
-                <NavBar setShowOnboardModal={setShowOnboardModal} />
-                <WarningBanners banners={['auditWarning', 'decayWarning']} />
-                <SwapStore>
-                    <Browse />
-                </SwapStore>
-                <UnsupportedNetworkPopup />
-            </PoolStore>
+            <NavBar setShowOnboardModal={setShowOnboardModal} />
+            <WarningBanners banners={['auditWarning', 'decayWarning']} />
+            <SwapStore>
+                <Browse />
+            </SwapStore>
+            <UnsupportedNetworkPopup />
             <OnboardTradeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}

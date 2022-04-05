@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { CommitEnum, getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
-import { usePools } from '~/context/PoolContext';
+import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectCommits } from '~/store/PendingCommitSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';

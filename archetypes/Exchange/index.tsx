@@ -5,11 +5,12 @@ import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-j
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { usePool, usePoolActions } from '~/context/PoolContext';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { useGasPrice } from '~/hooks/useGasPrice';
+import { usePool } from '~/hooks/usePool';
+import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
@@ -43,7 +44,7 @@ export default styled((({ onClose, className }) => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
-    const { commit, approve, commitGasFee } = usePoolActions();
+    const { commit, approve, commitGasFee } = usePoolInstanceActions();
 
     const ethPrice = useBalancerETHPrice();
 

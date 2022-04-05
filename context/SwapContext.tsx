@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
-import { usePools } from './PoolContext';
+import { usePools } from '../hooks/usePools';
 
 interface ContextProps {
     swapState: SwapState;

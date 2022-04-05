@@ -6,7 +6,7 @@ import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
-import { selectPoolInstanceActions } from '~/store/PoolInstancesSlice';
+import { selectPoolInstanceActions, selectPoolInstanceUpdateActions } from '~/store/PoolInstancesSlice';
 import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
@@ -17,6 +17,7 @@ export const usePoolWatcher = (): void => {
     const { network, account } = useStore(selectWeb3Info);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions);
     const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions);
+    const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions);
 
     useMemo(() => {
         const wssProvider = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;
@@ -58,6 +59,16 @@ export const usePoolWatcher = (): void => {
                     watcher.on(EVENT_NAMES.UPKEEP, (data) => {
                         console.debug('Executed upkeep', data);
                         setPoolIsWaiting(data.poolAddress, false);
+                        console.debug(`
+                            Completed upkeep on pool: ${data.poolAddress}
+                            Old price: ${data.startPrice.toString()}
+                            New price: ${data.endPrice.toString()}
+                        `);
+                        handlePoolUpkeep(
+                            data.poolAddress,
+                            new ethers.providers.WebSocketProvider(wssProvider),
+                            account,
+                        );
                     });
                     watcher.on(EVENT_NAMES.COMMITMENT_WINDOW_ENDING, (data) => {
                         console.debug('Commitment window ending', data);
