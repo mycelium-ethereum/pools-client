@@ -26,6 +26,7 @@ export type FlipSummaryProps = {
 } & SharedProps;
 
 export type MintSummaryProps = {
+    isLong: SummaryProps['isLong'];
     pool: {
         name: string;
         oraclePrice: BigNumber;

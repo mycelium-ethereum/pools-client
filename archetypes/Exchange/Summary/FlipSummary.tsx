@@ -49,6 +49,7 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
                 oraclePrice={pool.oraclePrice}
                 poolLeverage={pool.leverage}
                 showTransactionDetails={showTransactionDetails}
+                isLong={!isLong}
             />
             <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />

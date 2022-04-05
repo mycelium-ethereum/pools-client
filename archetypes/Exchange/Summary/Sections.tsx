@@ -110,12 +110,13 @@ export const ExpectedExposure: React.FC<
         baseAsset: string;
         oraclePrice: BigNumber;
         poolLeverage: number;
+        isLong: boolean;
     } & BaseSection
-> = ({ label, showTransactionDetails, expectedExposure, commitAmount, baseAsset, oraclePrice, poolLeverage }) => {
+> = ({ label, showTransactionDetails, expectedExposure, commitAmount, baseAsset, oraclePrice, poolLeverage, isLong }) => {
     return (
         <>
             <Section label={label} className="header">
-                <Styles.SumText setColor="green">
+                <Styles.SumText setColor={`${isLong ? "green" : "red"}`}>
                     {expectedExposure.toFixed(3)} {baseAsset}
                 </Styles.SumText>
             </Section>
