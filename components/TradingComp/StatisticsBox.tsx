@@ -110,7 +110,7 @@ const StatisticsBox: React.FC<{
                                                 COMP’ for step-by-step instructions on how to claim testnet tokens
                                                 (PPUSD) and testnet ETH
                                             </p>
-                                            <TracerDiscordButton url="https://discord.gg/nNEj4ueX" />
+                                            <TracerDiscordButton url="https://discord.gg/Ye7z5pesyh" />
                                         </div>
                                     </>
                                 )}
