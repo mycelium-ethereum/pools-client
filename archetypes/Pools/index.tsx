@@ -50,12 +50,8 @@ export const Browse: React.FC = () => {
         switch (state.leverageFilter) {
             case LeverageEnum.All:
                 return true;
-            case LeverageEnum.One:
-                return pool.name.split('-')[0] === '1';
-            case LeverageEnum.Three:
-                return pool.name.split('-')[0] === '3';
             default:
-                return false;
+                return !!pool.name && pool.name.split('-')?.[0] === state.leverageFilter;
         }
     };
     const searchFilter = (pool: BrowseTableRowData): boolean => {
