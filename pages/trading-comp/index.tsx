@@ -7,14 +7,14 @@ import CountdownBanner from '~/components/TradingComp/CountdownBanner';
 import Leaderboard from '~/components/TradingComp/Leaderboard';
 import { TradingCompParticipant } from '~/components/TradingComp/Leaderboard';
 import StatisticsBox from '~/components/TradingComp/StatisticsBox';
-import { useStore } from '~/store/main';
-import { selectWeb3Info } from '~/store/Web3Slice';
+// import { useStore } from '~/store/main';
+// import { selectWeb3Info } from '~/store/Web3Slice';
 
 export default (() => {
     const [data, setData] = useState<TradingCompParticipant[]>([]);
     const [user, setUser] = useState<TradingCompParticipant[]>([]);
     const router = useRouter();
-    const { account } = useStore(selectWeb3Info);
+    // const { account } = useStore(selectWeb3Info);
 
     const getStats = () => {
         fetch('https://dev.api.tracer.finance/poolsv2/tradingcomp?network=421611', {
@@ -38,14 +38,15 @@ export default (() => {
 
     useEffect(() => {
         getStats();
+        getCurrentUser();
         router.prefetch('/trading-comp');
     }, []);
 
-    useEffect(() => {
-        if (account) {
-            getCurrentUser();
-        }
-    }, [account]);
+    // useEffect(() => {
+    //     if (account) {
+    //         getCurrentUser();
+    //     }
+    // }, [account]);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
