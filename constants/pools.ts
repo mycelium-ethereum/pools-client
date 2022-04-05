@@ -27,7 +27,7 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
     },
     upkeepInfo: {
         isWaitingForUpkeep: false,
-        expectedExecution: Date.now() / 1000,
+        expectedExecution: Math.floor(Date.now() / 1000),
     },
 };
 

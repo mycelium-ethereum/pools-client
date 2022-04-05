@@ -12,7 +12,7 @@ export default (({ targetTime, className, hideHours, hideMinutes, hideSeconds, c
     const [seconds, setSeconds] = useState(0);
 
     useMemo(() => {
-        if (targetTime - Date.now() / 1000 < 0) {
+        if (targetTime - Math.floor(Date.now() / 1000) < 0) {
             return;
         }
         const timeTill_ = timeTill(targetTime);

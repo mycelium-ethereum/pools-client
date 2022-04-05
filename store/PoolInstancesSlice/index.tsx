@@ -106,7 +106,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 frontRunningInterval.toNumber(),
                 updateInterval.toNumber(),
                 lastUpdate.toNumber(),
-                Date.now() / 1000,
+                Math.floor(Date.now() / 1000),
             );
         });
     },
