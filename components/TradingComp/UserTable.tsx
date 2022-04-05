@@ -28,15 +28,7 @@ const UserTable: React.FC<{
                             .map((item: any, index: number) => {
                                 if (!item.disqualified) {
                                     rank += 1;
-                                    return (
-                                        <UserRow
-                                            {...item}
-                                            key={index}
-                                            rank={index}
-                                            shaded={index % 2 !== 0}
-                                            isFirst={rank === 1}
-                                        />
-                                    );
+                                    return <UserRow {...item} key={index} shaded={index % 2 !== 0} />;
                                 } else {
                                     return null;
                                 }
@@ -54,9 +46,8 @@ const UserTable: React.FC<{
                                     accountValue={''}
                                     entryDate={0}
                                     key={index}
-                                    rank={rank}
+                                    ranking={rank}
                                     shaded={index % 2 !== 0}
-                                    isFirst={rank === 1}
                                     placeholder
                                 />
                             );

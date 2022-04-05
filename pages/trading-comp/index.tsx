@@ -33,8 +33,14 @@ export default (() => {
     };
 
     const storeData = (data: TradingCompParticipant[]) => {
-        setData(data);
-        setFilteredData(data);
+        const nonDisqualifiedEntrants = data.filter((item) => item.disqualified === false);
+        const rankedEntrants: TradingCompParticipant[] = [];
+        nonDisqualifiedEntrants.forEach((item, index) => {
+            item.ranking = index + 1;
+            rankedEntrants.push(item);
+        });
+        setData(rankedEntrants);
+        setFilteredData(rankedEntrants);
     };
 
     const getCurrentUser = () => {
@@ -43,7 +49,6 @@ export default (() => {
         // const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === accountAddress);
         const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === account);
         if (currentUser[0] && !!currentUser[0].username) {
-            currentUser[0].rank = (data.indexOf(currentUser[0]) + 1).toString();
             setUser(currentUser);
             setParticipating(true);
         }

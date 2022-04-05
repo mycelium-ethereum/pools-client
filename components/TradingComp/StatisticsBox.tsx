@@ -10,7 +10,7 @@ import TracerDiscordButton from './TracerDiscordButton';
 const StatisticsBox: React.FC<{
     account: string | undefined;
     username: string;
-    rank?: string;
+    ranking: number;
     accountValue: string;
     entryDate: number;
     disqualified: boolean;
@@ -18,7 +18,7 @@ const StatisticsBox: React.FC<{
 }> = ({
     account,
     username,
-    rank,
+    ranking,
     accountValue,
     entryDate,
     disqualified,
@@ -26,7 +26,7 @@ const StatisticsBox: React.FC<{
 }: {
     account: string | undefined;
     username: string;
-    rank?: string;
+    ranking: number;
     accountValue: string;
     entryDate: number;
     disqualified: boolean;
@@ -74,7 +74,7 @@ const StatisticsBox: React.FC<{
                                             <div className="mr-6 mb-2 sm:mb-0">
                                                 <div className="flex items-end font-bold">
                                                     <span className="mr-0.5 inline-block text-base">#</span>
-                                                    <span className="text-[32px] leading-[1]">{rank}</span>
+                                                    <span className="text-[32px] leading-[1]">{ranking}</span>
                                                 </div>
                                                 <span className="ml-2 block text-sm font-semibold">Rank</span>
                                             </div>

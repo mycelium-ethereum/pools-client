@@ -6,6 +6,7 @@ const UserDivs: React.FC<{
     data: TradingCompParticipant[];
 }> = ({ data }: { data: TradingCompParticipant[] }) => {
     const placeholderArr = Array.from({ length: 7 });
+    let rank = 0;
     return (
         <div className="block md:hidden">
             {data && data.length > 0 ? (
@@ -13,15 +14,7 @@ const UserDivs: React.FC<{
                     {data
                         .map((item: any, index: number) => {
                             if (!item.disqualified) {
-                                return (
-                                    <UserDiv
-                                        {...item}
-                                        key={index}
-                                        rank={index + 1}
-                                        shaded={index % 2 !== 0}
-                                        isFirst={index === 0}
-                                    />
-                                );
+                                return <UserDiv {...item} key={index} shaded={index % 2 !== 0} />;
                             } else {
                                 return null;
                             }
@@ -30,19 +23,21 @@ const UserDivs: React.FC<{
                 </>
             ) : (
                 <>
-                    {placeholderArr.map((item, index) => (
-                        <UserDiv
-                            {...item}
-                            username={''}
-                            accountValue={''}
-                            entryDate={0}
-                            key={index}
-                            rank={index + 1}
-                            shaded={index % 2 !== 0}
-                            isFirst={index === 0}
-                            placeholder
-                        />
-                    ))}
+                    {placeholderArr.map((item, index) => {
+                        rank += 1;
+                        return (
+                            <UserDiv
+                                {...item}
+                                username={''}
+                                accountValue={''}
+                                entryDate={0}
+                                key={index}
+                                ranking={rank}
+                                shaded={index % 2 !== 0}
+                                placeholder
+                            />
+                        );
+                    })}
                 </>
             )}
         </div>

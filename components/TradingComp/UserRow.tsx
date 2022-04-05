@@ -6,27 +6,25 @@ const UserRow: React.FC<{
     username: string;
     accountValue: string;
     entryDate: number;
-    rank: number;
+    ranking: number;
     shaded: boolean;
-    isFirst: boolean;
     placeholder?: boolean;
 }> = ({
     username,
     accountValue,
     entryDate,
-    rank,
+    ranking,
     shaded,
-    isFirst,
     placeholder,
 }: {
     username: string;
     accountValue: string;
     entryDate: number;
-    rank: number;
+    ranking: number;
     shaded: boolean;
-    isFirst: boolean;
     placeholder?: boolean;
 }) => {
+    const isFirst = ranking === 1;
     const tableStyles = `text-left text-cool-gray-900 leading-[24px] dark:text-white leading-[150%] ${
         shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-800' : 'bg-white dark:bg-cool-gray-900'
     } ${isFirst ? 'text-2xl px-4 py-[30px] font-bold' : 'p-4'}`;
@@ -35,7 +33,7 @@ const UserRow: React.FC<{
         <>
             {placeholder ? (
                 <tr>
-                    <td className={`${tableStyles} font-bold`}>#{rank}</td>
+                    <td className={`${tableStyles} font-bold`}>#{ranking}</td>
                     <td className={`${tableStyles} font-bold`}>
                         {isFirst ? (
                             <Placeholder className="max-h-[67px] max-w-[245px]" />
@@ -60,7 +58,7 @@ const UserRow: React.FC<{
                 </tr>
             ) : (
                 <tr>
-                    <td className={`${tableStyles} font-bold`}>#{rank}</td>
+                    <td className={`${tableStyles} font-bold`}>#{ranking}</td>
                     <td className={`${tableStyles} font-bold`}>
                         <div className="flex items-center">{username}</div>
                     </td>

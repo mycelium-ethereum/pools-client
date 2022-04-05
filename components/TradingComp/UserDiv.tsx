@@ -1,32 +1,30 @@
 import React from 'react';
-import { convertCurrency, convertDate } from '~/utils/converters';
 import Placeholder from '~/components/TradingComp/Placeholder';
+import { convertCurrency, convertDate } from '~/utils/converters';
 
 const UserRow: React.FC<{
     username: string;
     accountValue: string;
     entryDate: number;
-    rank: number;
+    ranking: number;
     shaded: boolean;
-    isFirst: boolean;
     placeholder?: boolean;
 }> = ({
     username,
     accountValue,
     entryDate,
-    rank,
+    ranking,
     shaded,
-    isFirst,
     placeholder,
 }: {
     username: string;
     accountValue: string;
     entryDate: number;
-    rank: number;
+    ranking: number;
     shaded: boolean;
-    isFirst: boolean;
     placeholder?: boolean;
 }) => {
+    const isFirst = ranking === 1;
     const getOrdinal = (number: number) => {
         const ordinalRules = new Intl.PluralRules('en', {
             type: 'ordinal',
@@ -54,7 +52,7 @@ const UserRow: React.FC<{
                                 : 'mr-2 h-8 min-h-[32px] w-8 min-w-[32px] text-[10px]'
                         }`}
                     >
-                        {getOrdinal(rank)}
+                        {getOrdinal(ranking)}
                     </span>
                     {placeholder ? (
                         <Placeholder className="max-h-[30px] min-w-[100px] max-w-[100px]" />
