@@ -46,7 +46,7 @@ export default (({ rows, onClickCommitAction, denotedIn }) => {
                     })}
                 </tbody>
             </Table>
-            {!rows.length ? <Loading className="w-10 mx-auto my-8" /> : null}
+            {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
         </>
     );
 }) as React.FC<{
@@ -108,8 +108,8 @@ export const TokenRow: React.FC<
                 {/*        <div className="text-xs">{name.split('-')[1]}</div>*/}
                 {/*    </div>*/}
                 {/*</div>*/}
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(symbol)} className="inline my-auto mr-2" />
+                <div className="my-auto flex">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div className="flex">
                             <div>
@@ -160,7 +160,7 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex">
                 <Button
-                    className="mx-1 w-[70px] my-auto ml-auto uppercase border-0 py-2"
+                    className="mx-1 my-auto ml-auto w-[70px] border-0 py-2 uppercase"
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
@@ -172,7 +172,7 @@ export const TokenRow: React.FC<
                     Stake
                 </Button>
                 <Button
-                    className="mx-1 w-[70px] my-auto uppercase border-0 py-2"
+                    className="mx-1 my-auto w-[70px] border-0 py-2 uppercase"
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}
@@ -181,7 +181,7 @@ export const TokenRow: React.FC<
                     Burn
                 </Button>
                 <Button
-                    className="mx-1 w-[70px] my-auto uppercase border-0 py-2"
+                    className="mx-1 my-auto w-[70px] border-0 py-2 uppercase"
                     size="xs"
                     variant="primary-light"
                     disabled={!netValue.toNumber()}

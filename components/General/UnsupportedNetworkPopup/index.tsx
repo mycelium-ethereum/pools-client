@@ -28,7 +28,7 @@ const UnsupportedNetwork: React.FC = () => {
                     <Notification title="Unsupported Network">
                         <span key="unsupported-network-content" className="text-sm">
                             <a
-                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 cursor-pointer text-tracer-400 underline hover:opacity-80"
                                 onClick={() => {
                                     switchNetworks(provider, NETWORKS.ARBITRUM);
                                 }}
@@ -41,7 +41,7 @@ const UnsupportedNetwork: React.FC = () => {
                                 href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
                                 target="_blank"
                                 rel="noreferrer noopner"
-                                className="mt-3 underline cursor-pointer hover:opacity-80 text-tracer-400"
+                                className="mt-3 cursor-pointer text-tracer-400 underline hover:opacity-80"
                             >
                                 Get started
                             </a>

@@ -105,28 +105,28 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                 <TableHeader className="align-baseline">
                     <tr>
                         <TableHeaderCell
-                            className="bg-cool-gray-50 dark:bg-theme-background-secondary rounded-xl"
+                            className="rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary"
                             colSpan={13}
                         >
-                            <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 dark:divide-cool-gray-900 text-base">
+                            <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
                                     <Logo
-                                        className="inline mr-3 my-auto"
+                                        className="my-auto mr-3 inline"
                                         size="lg"
                                         ticker={rows[0].name.split('-')[1].split('/')[0] as LogoTicker}
                                     />
                                     <div className="my-auto">
-                                        <div className="font-bold text-lg">{rows[0].name.split('-')[1]}</div>
+                                        <div className="text-lg font-bold">{rows[0].name.split('-')[1]}</div>
                                     </div>
                                 </div>
                                 <div className="px-10">
-                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                         SPOT PRICE
                                     </div>
                                     <div className="font-bold">{toApproxCurrency(rows[0].oraclePrice)}</div>
                                 </div>
                                 <div className="px-10">
-                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                         ORACLE
                                     </div>
                                     <a
@@ -140,11 +140,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                                         <LinkIcon alt="Link" />
                                     </a>
                                 </div>
-                                <div className="px-10 text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                <div className="px-10 font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                     24H VOLUME
                                 </div>
                                 <div className="px-10">
-                                    <div className="text-cool-gray-500 dark:text-cool-gray-400 font-semibold">
+                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                         NUMBER OF POOLS
                                     </div>
                                     <div className="font-bold">{rows.length}</div>
@@ -156,11 +156,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                     <tr>
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap w-1/12">
+                        <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap w-1/12">{'TVL (USD)'}</TableHeaderCell>
+                        <TableHeaderCell className="w-1/12 whitespace-nowrap">{'TVL (USD)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
                                 <div>{'Skew'}</div>
@@ -174,13 +174,13 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
-                        <TableHeaderCell className="border-l-2 border-theme-background w-16" size="sm">
+                        <TableHeaderCell className="w-16 border-l-2 border-theme-background" size="sm">
                             {'Side'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" className={'whitespace-nowrap w-2/12'}>
+                        <TableHeaderCell size="sm" className={'w-2/12 whitespace-nowrap'}>
                             {'TVL (USD)'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" colSpan={2} className={'whitespace-nowrap w-[12%]'}>
+                        <TableHeaderCell size="sm" colSpan={2} className={'w-[12%] whitespace-nowrap'}>
                             <EffectiveLeverageTip>
                                 <div>{'Effective Leverage'}</div>
                             </EffectiveLeverageTip>
@@ -202,17 +202,17 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         {/* Token Cols */}
                         <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
                         <TableHeaderCell size="sm-x">
-                            <div className="text-cool-gray-400 capitalize">{'Gains'}</div>
+                            <div className="capitalize text-cool-gray-400">{'Gains'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                            <div className="text-cool-gray-400 capitalize">{'Losses'}</div>
+                            <div className="capitalize text-cool-gray-400">{'Losses'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                            <div className="text-cool-gray-400 capitalize">{'Tracer'}</div>
+                            <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
                         </TableHeaderCell>
                         {showNextRebalance ? (
                             <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                                <div className="text-cool-gray-400 capitalize">{'Balancer'}</div>
+                                <div className="capitalize text-cool-gray-400">{'Balancer'}</div>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
@@ -244,7 +244,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
             <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Leverage on Gains</div>
-                    <div className="w-3 h-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
+                    <div className="h-3 w-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
                         <Close />
                     </div>
                 </div>
@@ -353,7 +353,7 @@ const PoolRow: React.FC<
                 </TableRowCell>
                 <TableRowCell
                     rowSpan={2}
-                    className={classNames('relative bg-opacity-0 z-[1]', !showNextRebalance ? 'w-1/6' : '')}
+                    className={classNames('relative z-[1] bg-opacity-0', !showNextRebalance ? 'w-1/6' : '')}
                 >
                     <LongBalance width={calcPercentage(pool.longToken.tvl, pool.tvl)} />
                     <ShortBalance />
@@ -450,11 +450,11 @@ const PoolRow: React.FC<
 const LongBalance: React.FC<{ width: number }> = ({ width }) => (
     <div
         style={{ width: `${width}%` }}
-        className={`absolute left-0 top-0 h-full z-[-1] bg-green-50 dark:bg-dark-green matrix:bg-dark-green`}
+        className={`absolute left-0 top-0 z-[-1] h-full bg-green-50 matrix:bg-dark-green dark:bg-dark-green`}
     />
 );
 const ShortBalance = () => (
-    <div className={`absolute left-0 top-0 w-full h-full z-[-2] bg-red-50 dark:bg-dark-red matrix:bg-dark-red`} />
+    <div className={`absolute left-0 top-0 z-[-2] h-full w-full bg-red-50 matrix:bg-dark-red dark:bg-dark-red`} />
 );
 
 const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
@@ -578,7 +578,7 @@ const TokenRows: React.FC<
                         <>
                             {toApproxCurrency(tokenInfo.balancerPrice, 3)}
                             <LinkOutlined
-                                className="align-middle ml-1"
+                                className="ml-1 align-middle"
                                 onClick={() => {
                                     open(constructBalancerLink(tokenInfo.address, NETWORKS.ARBITRUM, true), 'blank');
                                 }}
@@ -594,11 +594,11 @@ const TokenRows: React.FC<
             {showNextRebalance && !!account ? (
                 <TableRowCell size={'sm'} className={styles}>
                     <div className="flex">
-                        <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="mr-1 my-auto" />
+                        <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="my-auto mr-1" />
                         {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
                     </div>
                     <div className="flex">
-                        <Logo size="xs" ticker={settlementTokenSymbol as LogoTicker} className="mr-1 my-auto" />
+                        <Logo size="xs" ticker={settlementTokenSymbol as LogoTicker} className="my-auto mr-1" />
                         {tokenInfo.userHoldings === 0
                             ? '-'
                             : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}
@@ -609,7 +609,7 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            className="mx-1 w-[70px] my-auto ml-auto uppercase"
+                            className="mx-1 my-auto ml-auto w-[70px] uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}

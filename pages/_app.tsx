@@ -16,7 +16,7 @@ import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
-const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
+const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     // any store hooks
     useUpdateWeb3Store();
     useUpdatePoolLists();
@@ -48,9 +48,11 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                 <meta name="robots" content="index, follow" />
                 <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
                 <meta name="language" content="English" />
+                <link rel="preconnect" href="https://fonts.googleapis.com" />
+                <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
                 <link
+                    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Sans+Pro:wght@400;600;700&display=swap"
                     rel="stylesheet"
-                    href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
                 />
 
                 {/** Color for Chrome tabs (Android only) */}
@@ -61,6 +63,7 @@ const App = ({ Component, pageProps }: AppProps) => { // eslint-disable-line
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
+                <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
             <StyledThemeProvider>
                 <Component {...pageProps} />

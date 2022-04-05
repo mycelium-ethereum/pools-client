@@ -331,11 +331,11 @@ export default (({
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-7">
-                <div className="p-0 md:py-20 md:px-16 shadow-xl bg-theme-background border-3xl rounded-3xl">
+                <div className="border-3xl rounded-3xl bg-theme-background p-0 shadow-xl md:py-20 md:px-16">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
-                            {!!logo ? <Logo ticker={logo} className="pb-0 my-2 pr-1 text-theme-text" /> : null}
-                            <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-theme-text sm:none flex-wrap: wrap;">
+                            {!!logo ? <Logo ticker={logo} className="my-2 pb-0 pr-1 text-theme-text" /> : null}
+                            <h1 className="pl-1s sm:none flex-wrap: wrap; mx-0 pb-0 text-3xl font-bold text-theme-text">
                                 {title}
                             </h1>
                         </span>

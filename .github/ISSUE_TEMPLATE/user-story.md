@@ -1,10 +1,9 @@
 ---
 name: User Story
 about: Template for creating user stories
-title: "[USER-STORY]"
+title: '[USER-STORY]'
 labels: ''
 assignees: ''
-
 ---
 
 # User Story Template
@@ -13,9 +12,9 @@ User stories are short descriptions of a feature told from the perspective of th
 
 As a [user], I want [goal] so that [some reason]
 
-----
+---
 
-### Why 
+### Why
 
 **As a personaName** <br />
 **I want** <br />
@@ -23,7 +22,7 @@ As a [user], I want [goal] so that [some reason]
 
 ### Acceptance Criteria
 
-#### Scenario 
+#### Scenario
 
 **Given** <br />
 **When** <br />

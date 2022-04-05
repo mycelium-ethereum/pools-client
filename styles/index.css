@@ -58,6 +58,9 @@ body,
 html {
     font-family: 'Source Sans Pro', ui-sans-serif, system-ui, -apple-system, serif !important;
 }
+#__next {
+    overflow-y: overlay;
+}
 
 html,
 body,
@@ -71,19 +74,20 @@ body > div:first-child {
     overflow: auto;
 }
 
-
 .tracer-loading {
     font-size: 32px;
     color: var(--text);
 }
 
 /** GLOBAL TABLE STYLES */
-.bid, .green {
-    color: #05CB3A;
+.bid,
+.green {
+    color: #05cb3a;
 }
 
-.ask, .red {
-    color: #F15025;
+.ask,
+.red {
+    color: #f15025;
 }
 
 /* Scroll bar stuff */
@@ -114,7 +118,7 @@ body > div:first-child {
     background: var(--background);
 } */
 
-.bn-onboard-custom.bn-onboard-modal { 
+.bn-onboard-custom.bn-onboard-modal {
     z-index: 99;
 }
 
@@ -146,13 +150,14 @@ body > div:first-child {
 @tailwind utilities;
 
 .page {
-    @apply min-h-screen flex flex-col;
+    @apply flex min-h-screen flex-col;
     background: var(--background-secondary);
 }
 
-html, body {
+html,
+body {
     color: var(--text);
-    font-size:16px;
+    font-size: 16px;
 }
 
 /* Colour themes */
@@ -162,53 +167,53 @@ html {
     /* gray-50 */
     --background-secondary: #f9fafb;
 
-    --background-nav-secondary: #EEEEF6;
+    --background-nav-secondary: #eeeef6;
 
     /* cool-gray-700 */
     --text: #374151;
 
     /* cool-gray-300*/
-    --border: #D1D5DB;
+    --border: #d1d5db;
 
     /* tracer-800*/
-    --primary: #0000B0;
+    --primary: #0000b0;
 
     /* cool-gray-50 */
-    --button-bg: #F9FAFB;
+    --button-bg: #f9fafb;
 
     /* cool-gray-100 */
-    --button-bg-hover: #F3F4F6;
+    --button-bg-hover: #f3f4f6;
 }
 
-@media (max-height: 800px) {
+@media (max-height: 800px) and (min-width: 1024px) {
     html {
         font-size: 12px;
     }
 }
 
-html.theme-dark{
+html.theme-dark {
     /* cool-gray-900 */
     --background: #111928;
 
-    --background-secondary: #1B2436;
+    --background-secondary: #1b2436;
 
     /* cool-gray-900 */
     --background-nav-secondary: #111928;
 
     /* gray-50 */
-    --text: #FAFAFA;
+    --text: #fafafa;
 
     /* cool-gray-200 */
-    --text-secondary: #E5E7EB;
+    --text-secondary: #e5e7eb;
 
     /* cool-gray-500*/
-    --border: #6B7280;
+    --border: #6b7280;
 
     /* tracer-100*/
-    --primary: #DEDEFF;
+    --primary: #dedeff;
 
     /* cool-gray-800 */
-    --button-bg: #1F2A37;
+    --button-bg: #1f2a37;
 
     /* cool-gray-700 */
     --button-bg-hover: #374151;
@@ -237,4 +242,53 @@ html.theme-matrix {
 
 .no-focus-outline:focus {
     outline: none;
+}
+
+* {
+    outline: none;
+}
+
+@keyframes placeHolderShimmer {
+    0% {
+        background-position: -468px 0;
+    }
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+.animated-background {
+    position: relative;
+    height: 100px;
+    animation-duration: 1.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: darkgray;
+    background: linear-gradient(
+        90deg,
+        rgba(218, 218, 218, 0.6) -24.18%,
+        rgba(218, 218, 218, 0.3) 50.26%,
+        rgba(218, 218, 218, 0) 114.84%
+    );
+    background-size: 800px 104px;
+}
+
+.theme-dark .animated-background {
+    position: relative;
+    height: 100px;
+    animation-duration: 1.25s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: darkgray;
+    background: linear-gradient(
+        90deg,
+        rgba(17, 25, 40, 0.6) -24.18%,
+        rgba(17, 25, 40, 0.3) 50.26%,
+        rgba(17, 25, 40, 0) 114.84%
+    );
+    background-size: 800px 104px;
 }

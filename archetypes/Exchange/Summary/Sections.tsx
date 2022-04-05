@@ -220,7 +220,7 @@ export const ReceiveToken: React.FC<{
 }> = ({ tokenSymbol }) => (
     <Section label="Receive" className="header">
         <Styles.SumText>
-            <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
+            <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
             {tokenSymbol}
         </Styles.SumText>
     </Section>

@@ -57,8 +57,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Relative</div>
-                <ArrowDownIcon className="text-red-600 w-4" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-4" />
+                <ArrowDownIcon className="w-4 text-red-600" />
+                <ArrowDownIcon className="w-4 rotate-180 text-green-600" />
             </>
         ),
     },
@@ -67,8 +67,8 @@ const DENOTATION_OPTIONS = [
         text: (
             <>
                 <div className="mr-2">Absolute</div>
-                <ArrowDownIcon className="text-red-600 w-4" />
-                <ArrowDownIcon className="rotate-180 text-green-600 w-4" />
+                <ArrowDownIcon className="w-4 text-red-600" />
+                <ArrowDownIcon className="w-4 rotate-180 text-green-600" />
             </>
         ),
     },
@@ -77,9 +77,9 @@ const DENOTATION_OPTIONS = [
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     return (
         <section className="container px-4 sm:px-0">
-            <div className="w-full mb-2">
+            <div className="mb-2 w-full">
                 <div className="lg:flex">
-                    <div className="hidden lg:flex mr-4 flex-col">
+                    <div className="mr-4 hidden flex-col lg:flex">
                         <h3 className="mb-1 text-theme-text">Market</h3>
                         <Dropdown
                             variant="tracer"
@@ -90,7 +90,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 )?.[0] as LogoTicker
                             }
                             value={state.marketFilter}
-                            className="w-48 mt-auto"
+                            className="mt-auto w-48"
                             options={Object.keys(MarketFilterEnum).map((key) => ({
                                 key: (MarketFilterEnum as any)[key],
                                 ticker: (key !== 'All' ? key : '') as LogoTicker,
@@ -98,11 +98,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                         />
                     </div>
-                    <div className="hidden lg:flex mr-4 flex-col">
+                    <div className="mr-4 hidden flex-col lg:flex">
                         <h3 className="mb-1 text-theme-text">Collateral</h3>
                         <Dropdown
                             value={state.collateralFilter ?? 'All'}
-                            className="w-32 mt-auto"
+                            className="mt-auto w-32"
                             options={Object.keys(CollateralEnum).map((key) => ({
                                 key: (CollateralEnum as any)[key],
                             }))}
@@ -111,18 +111,18 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             }
                         />
                     </div>
-                    <div className="hidden lg:flex mr-4 flex-col">
+                    <div className="mr-4 hidden flex-col lg:flex">
                         <h3 className="mb-1 text-theme-text">Power Leverage</h3>
                         <Dropdown
                             value={state.leverageFilter}
-                            className="w-32 mt-auto"
+                            className="mt-auto w-32"
                             options={Object.keys(LeverageEnum).map((key) => ({
                                 key: (LeverageEnum as any)[key],
                             }))}
                             onSelect={(val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })}
                         />
                     </div>
-                    <div className="hidden lg:flex mr-4 flex-grow items-end">
+                    <div className="mr-4 hidden flex-grow items-end lg:flex">
                         <SearchInput
                             className="w-60"
                             placeholder="Search"
@@ -131,7 +131,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         />
                     </div>
                     <div className="lg:hidden">Market</div>
-                    <div className="flex lg:hidden w-full mt-2 justify-between items-center">
+                    <div className="mt-2 flex w-full items-center justify-between lg:hidden">
                         <Dropdown
                             variant="tracer"
                             iconSize="xs"
@@ -149,14 +149,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
                         />
                         <FilterToggleIcon
-                            className={`${state.filtersOpen ? 'text-cool-gray-300' : ''} lg:hidden w-8`}
+                            className={`${state.filtersOpen ? 'text-cool-gray-300' : ''} w-8 lg:hidden`}
                             onClick={() => dispatch({ type: 'setFiltersOpen', open: !state.filtersOpen })}
                         />
                     </div>
                 </div>
 
                 <HiddenExpand className="lg:hidden" defaultHeight={0} open={state.filtersOpen}>
-                    <div className="flex flex-col sm:flex-row mb-5">
+                    <div className="mb-5 flex flex-col sm:flex-row">
                         <div className="flex sm:mr-5">
                             <div className="mr-5">
                                 <h3 className="mb-1 text-theme-text">Collateral</h3>
@@ -186,7 +186,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             </div>
                         </div>
                         <SearchInput
-                            className="w-full mt-5 sm:mt-auto"
+                            className="mt-5 w-full sm:mt-auto"
                             placeholder="Search"
                             value={state.search}
                             onChange={(search) => dispatch({ type: 'setSearch', search })}
@@ -203,7 +203,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                     />
                 </HiddenExpand>
 
-                <div className="mt-5 flex flex-col lg:flex-row lg:justify-between lg:items-center">
+                <div className="mt-5 flex flex-col lg:flex-row lg:items-center lg:justify-between">
                     <div className="flex">
                         <div className="xl:hidden">
                             <TWButtonGroup
@@ -215,7 +215,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 options={REBALANCE_OPTIONS_MOBILE}
                             />
                         </div>
-                        <div className="hidden xl:block mr-2">
+                        <div className="mr-2 hidden xl:block">
                             <TWButtonGroup
                                 value={state.rebalanceFocus}
                                 onClick={(option) =>
@@ -225,7 +225,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 options={REBALANCE_OPTIONS_DESKTOP}
                             />
                         </div>
-                        <div className="hidden lg:flex mx-4 flex-col">
+                        <div className="mx-4 hidden flex-col lg:flex">
                             <TWButtonGroup
                                 className="p-0.5"
                                 size="sm"
@@ -240,7 +240,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             />
                         </div>
                     </div>
-                    <div className="mt-12 lg:mt-0 relative">
+                    <div className="relative mt-12 lg:mt-0">
                         <div className="absolute -top-2/3 left-1/2 -translate-x-1/2 whitespace-nowrap">
                             Don’t see the pool you’re after?
                         </div>
