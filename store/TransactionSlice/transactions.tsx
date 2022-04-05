@@ -47,7 +47,7 @@ export const transactionMap: Record<
         pending: () => [
             <>
                 <Notification title="Order Pending" />
-            </>
+            </>,
         ],
         success: () => ({
             render: <Notification title="Order Submitted" />,
@@ -66,7 +66,7 @@ export const transactionMap: Record<
         pending: (props: ApproveProps) => [
             <>
                 <Notification title={`Approving ${props.tokenSymbol}`} />
-            </>
+            </>,
         ],
         success: (props: ApproveProps) => ({
             render: <Notification title={`${props.tokenSymbol} Unlocked`} />,
@@ -87,7 +87,7 @@ export const transactionMap: Record<
         pending: (props: CommitProps) => [
             <>
                 <CommitPendingNotification {...props} />
-            </>
+            </>,
         ],
         success: (props: CommitProps) => ({
             render: <CommitSuccessNotification {...props} />,
@@ -108,7 +108,7 @@ export const transactionMap: Record<
         pending: (props: ClaimProps) => [
             <>
                 <Notification title={`Claiming ${props.poolName} Tokens`} />
-            </>
+            </>,
         ],
         success: (props: ClaimProps) => ({
             render: <Notification title={`${props.poolName} Claim Queued`} />,
@@ -129,7 +129,7 @@ export const transactionMap: Record<
         pending: (props: ArbBridgeProps) => [
             <>
                 <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
-            </>
+            </>,
         ],
         success: (props: ArbBridgeProps) => ({
             render: <Notification title={`Submitted ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />,
@@ -154,7 +154,7 @@ export const transactionMap: Record<
         pending: (props: ArbBridgeProps) => [
             <>
                 <Notification title={`Submitting ${props.tokenSymbol} ${props.type} from ${props.networkName}`} />
-            </>
+            </>,
         ],
         success: (props: ArbBridgeProps) => ({
             render: (
@@ -185,7 +185,7 @@ export const transactionMap: Record<
         pending: () => [
             <>
                 <Notification title="Claiming TCR" />
-            </>
+            </>,
         ],
         success: () => ({
             render: <Notification title="TCR Claimed" />,
@@ -203,7 +203,7 @@ export const transactionMap: Record<
         pending: (props: FarmStakeWithdrawProps) => [
             <>
                 <Notification title={`${props.type === 'withdraw' ? 'Unstaking' : 'Staking'} ${props.farmName}`} />
-            </>
+            </>,
         ],
         success: (props: FarmStakeWithdrawProps) => ({
             render: <Notification title={`${props.farmName} ${props.type === 'withdraw' ? 'Unstaked' : 'Staked'}`} />,

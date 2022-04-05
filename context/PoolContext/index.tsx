@@ -165,6 +165,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                                         from: commit.from,
                                         txnHash: commit.txnHash,
                                         created: commit.timestamp,
+                                        appropriateIntervalId: commit.updateIntervalId,
                                     });
                                 });
                             }
@@ -307,57 +308,11 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
         if (provider && poolsState.pools[pool]) {
             console.debug('Subscribing to pool', pool);
 
-            const { committer: committerInfo, keeper } = poolsState.pools[pool].poolInstance;
+            const { keeper } = poolsState.pools[pool].poolInstance;
 
             const wssProvider =
                 networkConfig[provider?.network?.chainId.toString() as KnownNetwork]?.publicWebsocketRPC;
             const subscriptionProvider = wssProvider ? new ethers.providers.WebSocketProvider(wssProvider) : provider;
-
-            const committer = PoolCommitter__factory.connect(committerInfo.address, subscriptionProvider);
-
-            if (!subscriptions.current[committerInfo.address]) {
-                console.debug(`Subscribing committer: ${committerInfo.address}`);
-                committer.on(
-                    committer.filters.CreateCommit(),
-                    (
-                        id,
-                        amount,
-                        type,
-                        _appropriateUpdateInterval,
-                        _fromAggregateBalances,
-                        _payForClaim,
-                        _mintingFee,
-                        log,
-                    ) => {
-                        console.debug('Commit created', {
-                            id,
-                            amount,
-                            type,
-                        });
-
-                        const decimals = poolsState.pools[pool].poolInstance.settlementToken.decimals;
-
-                        log.getTransaction().then((txn: ethers.providers.TransactionResponse) => {
-                            addCommit({
-                                id: txn.hash,
-                                pool,
-                                from: txn?.from, // from address
-                                txnHash: txn.hash,
-                                type: type as CommitEnum,
-                                amount: new BigNumber(ethers.utils.formatUnits(amount, decimals)),
-                                created: txn.timestamp ?? Date.now() / 1000,
-                            });
-                        });
-                    },
-                );
-
-                subscriptions.current = {
-                    ...subscriptions.current,
-                    [committerInfo.address]: true,
-                };
-            } else {
-                console.debug(`Committer ${committerInfo.address.slice()} already subscribed`);
-            }
 
             const keeperInstance = PoolKeeper__factory.connect(keeper, subscriptionProvider);
 

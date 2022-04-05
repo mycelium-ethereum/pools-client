@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { NotificationIcon } from './Icon';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { NotificationIcon } from './Icon';
 
 type InjectedProps = {
     closeToast?: any; // injected

@@ -56,6 +56,7 @@ export type PendingCommits = {
     from: string;
     commitID: string;
     pool: string; // pool address
+    updateIntervalId: number;
 };
 
 export type TradeHistory = {

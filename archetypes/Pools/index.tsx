@@ -6,7 +6,6 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
-
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterBar from './FilterSelects/Bar';
 import MintBurnModal from './MintBurnModal';
