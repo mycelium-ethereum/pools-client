@@ -24,7 +24,7 @@ const CountdownBanner: React.FC = () => {
     };
 
     const calculateDateDifference = () => {
-        const endDate = Date.parse('30 Apr 2022 00:00:00 GMT');
+        const endDate = Date.parse('16 Apr 2022 15:00:00 EST');
         return endDate - Date.now();
     };
 

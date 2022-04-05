@@ -1,26 +1,24 @@
 import React from 'react';
+import { convertCurrency, convertDate } from '~/utils/converters';
 
 const UserRow: React.FC<{
-    name: string;
-    avatar: string;
-    value: string;
-    entryDate: string;
+    username: string;
+    accountValue: string;
+    entryDate: number;
     rank: number;
     shaded: boolean;
     isFirst: boolean;
 }> = ({
-    name,
-    avatar,
-    value,
+    username,
+    accountValue,
     entryDate,
     rank,
     shaded,
     isFirst,
 }: {
-    name: string;
-    avatar: string;
-    value: string;
-    entryDate: string;
+    username: string;
+    accountValue: string;
+    entryDate: number;
     rank: number;
     shaded: boolean;
     isFirst: boolean;
@@ -53,22 +51,21 @@ const UserRow: React.FC<{
                         {getOrdinal(rank)}
                     </span>
                     <span className={`font-bold text-cool-gray-900 dark:text-white ${isFirst ? 'text-2xl' : ''}`}>
-                        {name}
+                        {username}
                     </span>
                 </div>
-                {avatar && <img src={avatar} className={`ml-5 ${isFirst ? 'h-10 w-10' : 'h-[26px] w-[26px]'}`} />}
             </div>
             <div className="mt-2 flex">
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Portfolio Value</span>
                     <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
-                        {value}
+                        {convertCurrency(accountValue)}
                     </span>
                 </div>
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Entry Date</span>
                     <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
-                        {entryDate}
+                        {convertDate(entryDate)}
                     </span>
                 </div>
             </div>

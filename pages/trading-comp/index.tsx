@@ -5,34 +5,47 @@ import NavBar from '~/components/Nav';
 import ArticleBox from '~/components/TradingComp/ArticleBox';
 import CountdownBanner from '~/components/TradingComp/CountdownBanner';
 import Leaderboard from '~/components/TradingComp/Leaderboard';
-import { tableData } from '~/components/TradingComp/presets';
+import { TradingCompParticipant } from '~/components/TradingComp/Leaderboard';
 import StatisticsBox from '~/components/TradingComp/StatisticsBox';
-import UpdateProfileModal from '~/components/TradingComp/UpdateProfileModal';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
 
 export default (() => {
-    const [isOpen, setIsOpen] = useState(false);
-
+    const [data, setData] = useState<TradingCompParticipant[]>([]);
+    const [user, setUser] = useState<TradingCompParticipant[]>([]);
     const router = useRouter();
+    const { account } = useStore(selectWeb3Info);
 
-    const handleClose = () => {
-        setIsOpen(false);
+    const getStats = () => {
+        fetch('https://dev.api.tracer.finance/poolsv2/tradingcomp?network=421611', {
+            method: 'GET',
+        })
+            .then((response) => response.json())
+            .then((data) => setData(data))
+            .catch((error) => {
+                console.log('API request failed', error);
+            });
     };
 
-    const handleOpen = () => {
-        setIsOpen(true);
-    };
-
-    const statisticData = {
-        name: 'Raymogg#3230',
-        avatar: '/img/trading-comp/placeholder.png',
-        rank: '452',
-        value: '12,200',
-        entryDate: '12 Apr',
+    const getCurrentUser = () => {
+        // Hardcode account for testing
+        const hardcodedAccount = '0xAEF2A30FE1b2dC3d51b4e9Bf22b0698Ec8e6Ce1f';
+        // const currentUser: any = data.filter((item) => item.address === account);
+        const currentUser: any = data.filter((item) => item.address === hardcodedAccount);
+        currentUser[0].rank = data.indexOf(currentUser[0]) + 1;
+        setUser(currentUser);
     };
 
     useEffect(() => {
+        getStats();
         router.prefetch('/trading-comp');
     }, []);
+
+    useEffect(() => {
+        if (account) {
+            getCurrentUser();
+        }
+    }, [account]);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
@@ -43,13 +56,12 @@ export default (() => {
                         <CountdownBanner />
                         <div className="mt-4 flex flex-col justify-between lg:mt-0 lg:min-w-[465px]">
                             <ArticleBox />
-                            <StatisticsBox {...statisticData} handleOpen={handleOpen} />
+                            {user && <StatisticsBox {...user[0]} />}
                         </div>
                     </div>
-                    <Leaderboard data={tableData} />
+                    {data && <Leaderboard data={data} />}
                 </div>
             </div>
-            <UpdateProfileModal isOpen={isOpen} handleClose={handleClose} />
             <Footer />
         </div>
     );

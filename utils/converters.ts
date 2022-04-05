@@ -262,3 +262,34 @@ export const getPriceFeedUrl: (v: string) => string = (v) => {
 };
 
 export const getBaseAsset: (poolName: string) => string = (poolName) => poolName?.split('-')[1]?.split('/')[0];
+
+export const convertCurrency: (value: string) => string = (value) => {
+    return parseInt(value).toLocaleString('en-US');
+};
+
+export const convertDate: (entryDate: number) => string = (entryDate) => {
+    const months = [
+        'January',
+        'February',
+        'March',
+        'April',
+        'May',
+        'June',
+        'July',
+        'August',
+        'September',
+        'October',
+        'November',
+        'December',
+    ];
+    const date = new Date(entryDate).toUTCString();
+    const utcDate = new Date(date);
+    return months[utcDate.getMonth()] + ' ' + utcDate.getDate() + ', ' + utcDate.getFullYear();
+};
+
+export const convertShortDate: (entryDate: number) => string = (entryDate) => {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const date = new Date(entryDate).toUTCString();
+    const utcDate = new Date(date);
+    return months[utcDate.getMonth()] + ' ' + utcDate.getDate();
+};

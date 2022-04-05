@@ -1,23 +1,10 @@
 import React from 'react';
+import { TradingCompParticipant } from '~/components/TradingComp/Leaderboard';
 import UserRow from '~/components/TradingComp/UserRow';
 
 const UserTable: React.FC<{
-    data: {
-        name: string;
-        value: string;
-        entryDate: string;
-        avatar?: string;
-    }[];
-}> = ({
-    data,
-}: {
-    data: {
-        name: string;
-        value: string;
-        entryDate: string;
-        avatar?: string;
-    }[];
-}) => {
+    data: TradingCompParticipant[];
+}> = ({ data }: { data: TradingCompParticipant[] }) => {
     const tableHeadStyles =
         'text-left text-cool-gray-900 font-semibold bg-cool-gray-100 p-4 border-b border-cool-gray-200 dark:bg-cool-gray-700 dark:text-white';
 
@@ -33,7 +20,7 @@ const UserTable: React.FC<{
             </thead>
             <tbody>
                 {data
-                    .sort((a, b) => parseInt(b.value) - parseInt(a.value))
+                    .sort((a, b) => parseInt(b.accountValue) - parseInt(a.accountValue))
                     .map((item: any, index: number) => (
                         <UserRow
                             {...item}
