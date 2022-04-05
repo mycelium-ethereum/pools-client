@@ -174,7 +174,7 @@ export default (({ focus, commits }) => {
     };
 
     return (
-        <div className="bg-theme-background rounded-xl shadow my-5 p-5">
+        <div className="my-5 rounded-xl bg-theme-background p-5 shadow">
             <div className="mb-5">
                 <TWButtonGroup
                     value={focus}
@@ -216,8 +216,8 @@ const MintCommitRow: React.FC<
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
+                <div className="my-auto flex">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div className="flex">
                             <div>
@@ -281,8 +281,8 @@ const BurnCommitRow: React.FC<
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
+                <div className="my-auto flex">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div className="flex">
                             <div>
@@ -346,8 +346,8 @@ const FlipCommitRow: React.FC<
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="inline my-auto mr-2" />
+                <div className="my-auto flex">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div>{tokenOut.symbol}</div>
                         <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
@@ -361,8 +361,8 @@ const FlipCommitRow: React.FC<
                 </div>
             </TableRowCell>
             <TableRowCell>
-                <div className="flex my-auto">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenIn.symbol)} className="inline my-auto mr-2" />
+                <div className="my-auto flex">
+                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenIn.symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div>{tokenIn.symbol}</div>
                         <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>

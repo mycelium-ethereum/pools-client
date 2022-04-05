@@ -9,9 +9,9 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
     children,
 }) => {
     return (
-        <div className={classNames('flex flex-col overflow-hidden h-full', className ?? '')}>
-            <div className="overflow-x-auto h-full">
-                <div className="align-middle inline-block min-w-full">
+        <div className={classNames('flex h-full flex-col overflow-hidden', className ?? '')}>
+            <div className="h-full overflow-x-auto">
+                <div className="inline-block min-w-full align-middle">
                     <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
                         <table className={`min-w-full ${showDivider ? 'divide-y divide-theme-border' : ''}`}>
                             {children}
@@ -26,7 +26,7 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
 export const TableHeader: React.FC<JSX.IntrinsicElements['thead']> = ({ children, className }) => {
     return (
         <thead
-            className={classNames('bg-cool-gray-100 dark:bg-cool-gray-700 matrix:bg-theme-button-bg', className ?? '')}
+            className={classNames('bg-cool-gray-100 matrix:bg-theme-button-bg dark:bg-cool-gray-700', className ?? '')}
         >
             {children}
         </thead>

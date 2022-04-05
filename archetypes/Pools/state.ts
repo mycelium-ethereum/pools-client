@@ -17,8 +17,9 @@ export enum CollateralEnum {
 
 export enum LeverageEnum {
     All = 'All',
-    One = '1',
     Three = '3',
+    Five = '5',
+    Seven = '7',
 }
 
 export enum DeltaEnum {

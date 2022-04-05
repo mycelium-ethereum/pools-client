@@ -38,7 +38,7 @@ const Button: React.FC<ButtonProps> = React.forwardRef(
                     VARIANT[variant],
                     SIZE[size],
                     className,
-                    'rounded whitespace-nowrap disabled:cursor-not-allowed focus:outline-none',
+                    'focus:outline-none whitespace-nowrap rounded disabled:cursor-not-allowed',
                 )}
                 ref={ref}
                 {...rest}

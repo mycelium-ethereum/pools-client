@@ -1,10 +1,9 @@
 ---
 name: Task
 about: Template for creating tasks
-title: "[TASK]"
+title: '[TASK]'
 labels: ''
 assignees: ''
-
 ---
 
 # Task Template
@@ -12,7 +11,7 @@ assignees: ''
 A workitem that needs to be done while developing a story or feature and does not span more than 2 days.
 Where a single actor takes a single action with a single output.
 
-----
+---
 
 Provide a general summary of the issue in the Title above.
 
@@ -20,13 +19,13 @@ Provide a general summary of the issue in the Title above.
 
 Tell us what should happen. It should be measurable so that we know when we're done and that it can be tested.
 
-### Requirement Documents 
+### Requirement Documents
 
-Add sketch / API documents. 
+Add sketch / API documents.
 
-### Environment 
+### Environment
 
-Provide test accounts if possible. 
+Provide test accounts if possible.
 
 ### Possible Solution
 

@@ -1,9 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { TradeHistoryResult, PendingCommitsResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS } from './types';
+import { CommitTypeMap } from '~/constants/commits';
+import { query } from './subgraph';
+import { TradeHistoryResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS, GraphCommit } from './types';
 
 // Base API URL
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
+const V2_GRAPH_URI_TESTNET = 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby';
 
 export const fetchPendingCommits: (
     network: V2_SUPPORTED_NETWORKS,
@@ -13,25 +16,33 @@ export const fetchPendingCommits: (
         to?: number;
         account?: string;
     },
-) => Promise<PendingCommits[]> = async (network, { pool, account }) => {
-    const pendingCommits =
-        `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
-        `${pool ? `&poolAddress=${pool}` : ''}` +
-        `${account ? `&userAddress=${account}` : ''}`;
-    const tracerCommits = await fetch(pendingCommits)
+) => Promise<PendingCommits[]> = async (_network, { pool, account }) => {
+    // TODO uncomment when swapping back to api
+    // const pendingCommits =
+    // `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
+    // `${pool ? `&poolAddress=${pool}` : ''}` +
+    // `${account ? `&userAddress=${account}` : ''}`;
+    // const tracerCommits = await fetch(pendingCommits)
+    const tracerCommits = await fetch(V2_GRAPH_URI_TESTNET, {
+        method: 'POST',
+        body: JSON.stringify({
+            query: query({ pool, account }),
+        }),
+    })
         .then((res) => res.json())
         .then((allCommits) => {
             const parsedCommits: PendingCommits[] = [];
-            allCommits.forEach((commit: PendingCommitsResult) => {
+            // allCommits.forEach((commit: PendingCommitsResult) => {
+            allCommits.data.commits.forEach((commit: GraphCommit) => {
                 parsedCommits.push({
                     amount: commit.amount,
-                    commitType: commit.commitType,
-                    from: commit.from,
+                    commitType: CommitTypeMap[commit.type],
+                    from: commit.trader,
                     txnHash: commit.txnHash,
-                    timestamp: commit.timestamp,
+                    timestamp: parseInt(commit.created),
                     pool: commit.pool,
                     commitID: commit.txnHash,
-                    updateIntervalId: commit.updateIntervalId,
+                    updateIntervalId: parseInt(commit.updateIntervalId),
                 });
             });
 

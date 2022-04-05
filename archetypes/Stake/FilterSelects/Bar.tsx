@@ -13,8 +13,8 @@ interface FilterSelectsProps {
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch, hideLeverageFilter, hideSideFilter }) => {
     return (
         <section className="container px-0">
-            <div className="flex w-full mb-2">
-                <div className="mr-4 flex-grow flex items-end" style={{ maxWidth: '20rem' }}>
+            <div className="mb-2 flex w-full">
+                <div className="mr-4 flex flex-grow items-end" style={{ maxWidth: '20rem' }}>
                     <SearchInput
                         placeholder="Search"
                         value={state.search}

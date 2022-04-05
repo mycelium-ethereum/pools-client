@@ -20,9 +20,9 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Wave />
                         </div>
-                        <div className="text-2xl text-center my-5">Stake Pool tokens</div>
+                        <div className="my-5 text-center text-2xl">Stake Pool tokens</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             When you receive pool tokens, stake them to earn TCR. <br />
                             <br />
                             Guide:{' '}
@@ -30,7 +30,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                                 Staking
                             </a>
                         </div>
-                        <div className="my-8 text-sm text-center font-bold">Want to learn more?</div>
+                        <div className="my-8 text-center text-sm font-bold">Want to learn more?</div>
                         <ProgressIndicator totalSteps={2} currentStep={1} />
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
@@ -52,9 +52,9 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                         <div className="flex justify-center">
                             <Styled.Question />
                         </div>
-                        <div className="text-2xl text-center my-5">Explore the wider landscape</div>
+                        <div className="my-5 text-center text-2xl">Explore the wider landscape</div>
                         <Divider className="mb-8" />
-                        <div className="text-sm mb-8">
+                        <div className="mb-8 text-sm">
                             Staking for Balancer Pool Tokens (BPT) is now available. Provide token liquidity on Balancer
                             to earn more TCR.
                             {` We're excited by what's possible with Perpetual Pool tokens. If you are too, join the `}

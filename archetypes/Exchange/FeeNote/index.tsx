@@ -10,7 +10,7 @@ interface FeeNoteProps {
 
 const FeeNote: React.FC<FeeNoteProps> = ({ poolName, isMint, receiveIn }) => {
     return (
-        <HiddenExpand defaultHeight={0} open={!!poolName} className="my-5 text-sm text-center">
+        <HiddenExpand defaultHeight={0} open={!!poolName} className="my-5 text-center text-sm">
             <b>Note</b>: A small keeper fee will be taken when you {isMint ? 'receive' : 'burn'} the token in{' '}
             <TimeLeft targetTime={receiveIn} />. To learn more, visit{' '}
             <a

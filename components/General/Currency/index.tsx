@@ -10,10 +10,10 @@ export const Currency: React.FC<{
     <div
         className={classNames(
             className ?? '',
-            'flex items-center h-auto p-2 mr-2 rounded-xl bg-white text-gray-500 dark:bg-theme-button-bg-hover dark:text-theme-text shadow',
+            'mr-2 flex h-auto items-center rounded-xl bg-white p-2 text-gray-500 shadow dark:bg-theme-button-bg-hover dark:text-theme-text',
         )}
     >
-        <Logo className="inline mr-2 m-0" ticker={ticker} />
+        <Logo className="m-0 mr-2 inline" ticker={ticker} />
         {label ?? ticker}
     </div>
 );
