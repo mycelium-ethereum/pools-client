@@ -65,10 +65,10 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
             onClose={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
         >
             <div className="flex justify-between pb-6">
-                <div className="font-bold text-2xl">{title || 'Stake Tracer Pool Tokens'}</div>
+                <div className="text-2xl font-bold">{title || 'Stake Tracer Pool Tokens'}</div>
                 {/* <Gas /> */}
                 <div
-                    className="w-3 h-3 ml-4 cursor-pointer"
+                    className="ml-4 h-3 w-3 cursor-pointer"
                     onClick={() => dispatch({ type: 'setStakeModalState', state: 'closed' })}
                 >
                     <Close />
@@ -82,7 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                     <InputContainer>
                         <NumericInput
                             disabled={!isApproved}
-                            className="w-full h-full text-base font-normal "
+                            className="h-full w-full text-base font-normal "
                             value={amount.eq(0) ? '' : amount.toFixed()}
                             onUserInput={(val) => dispatch({ type: 'setAmount', amount: new BigNumber(val || 0) })}
                         />
@@ -95,7 +95,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             <div
                                 className={
                                     !isApproved
-                                        ? 'm-auto cursor-disabled text-gray-800'
+                                        ? 'cursor-disabled m-auto text-gray-800'
                                         : 'm-auto cursor-pointer hover:underline'
                                 }
                                 onClick={(_e) =>

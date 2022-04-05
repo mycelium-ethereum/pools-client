@@ -4,7 +4,7 @@ import { TWModal } from '~/components/General/TWModal';
 
 export default (({ open, onClose }) => {
     return (
-        <TWModal open={open} onClose={onClose} className="md:max-w-[611px] pt-4 pb-5 px-4 sm:pb-20 sm:px-16 sm:pt-7">
+        <TWModal open={open} onClose={onClose} className="px-4 pt-4 pb-5 sm:px-16 sm:pb-20 sm:pt-7 md:max-w-[611px]">
             <Exchange onClose={onClose} />
         </TWModal>
     );

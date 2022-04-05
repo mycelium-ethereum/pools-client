@@ -32,6 +32,10 @@ module.exports = {
                     700: '#0d29ff',
                     800: '#0000B0',
                     900: '#00007A',
+                    midblue: '#3DA8F5',
+                    darkblue: '#03065E',
+                    green: '#61DA56',
+                    red: '#EC5050',
                 },
                 'cool-gray': {
                     50: '#F9FAFB',
@@ -47,6 +51,12 @@ module.exports = {
                 },
                 'dark-green': '#032018',
                 'dark-red': '#230F0F',
+                purple: {
+                    50: '#E9C5F9',
+                    100: '#D96EF2',
+                    200: '#871FBB',
+                    300: '#7223FF',
+                },
                 theme: {
                     background: 'var(--background)',
                     ['background-secondary']: 'var(--background-secondary)',
@@ -66,6 +76,10 @@ module.exports = {
                 'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
                 'nav-bg': "url('/img/nav-bg.svg')",
                 'matrix-bg': "url('/img/matrix.gif')",
+            },
+            fontFamily: {
+                aileron: ["'aileron'", 'sans-serif'],
+                inter: ["'Inter'", 'sans-serif'],
             },
         },
     },

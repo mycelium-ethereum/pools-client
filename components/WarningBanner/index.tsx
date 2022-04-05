@@ -22,7 +22,7 @@ const warningInfo: Record<
                     href="https://tracer.finance/radar/sigma-prime-audit-response/"
                     target="_blank"
                     rel="noreferrer"
-                    className="underline text-tracer-400"
+                    className="text-tracer-400 underline"
                 >
                     audited
                 </a>
@@ -39,7 +39,7 @@ const warningInfo: Record<
                     href="https://tracer.finance/radar/volatility-decay/"
                     target="_blank"
                     rel="noreferrer"
-                    className="underline text-tracer-400"
+                    className="text-tracer-400 underline"
                 >
                     volatility decay
                 </a>
@@ -65,7 +65,7 @@ const WarningBanner: React.FC<{
         <div className={`${showWarning ? 'relative' : 'hidden'}`}>
             <div
                 className={classNames(
-                    'flex items-center rounded-lg text-sm lg:text-base px-5 py-3 dark:bg-cool-gray-700 text-theme-text bg-cool-gray-200',
+                    'flex items-center rounded-lg bg-cool-gray-200 px-5 py-3 text-sm text-theme-text dark:bg-cool-gray-700 lg:text-base',
                     'mt-3 sm:mx-4 md:mx-0',
                 )}
             >
@@ -80,7 +80,7 @@ const WarningBanner: React.FC<{
                         sessionStorage.setItem(`onboard.${warning}`, 'true');
                     }}
                 >
-                    <Close className="text-theme-text w-3" />
+                    <Close className="w-3 text-theme-text" />
                 </div>
             </div>
         </div>
@@ -97,7 +97,7 @@ export const WarningBanners: React.FC<{
 }> = ({ banners }) => {
     return (
         <div className="container relative">
-            <div className="absolute top-0 left-5 right-5 sm:left-0 sm:right-0 3xl:left-20 3xl:right-20 z-10">
+            <div className="absolute top-0 left-5 right-5 z-10 sm:left-0 sm:right-0 3xl:left-20 3xl:right-20">
                 {banners.map((banner) => (
                     <WarningBanner key={banner} warning={banner} />
                 ))}

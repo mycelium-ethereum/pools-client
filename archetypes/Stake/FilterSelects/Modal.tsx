@@ -13,8 +13,8 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
     return (
         <TWModal open={state.filterModalOpen} onClose={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
             <div className="p-6">
-                <div className="flex justify-between items-center">
-                    <h3 className="text-theme-text text-xl">Filter Data</h3>
+                <div className="flex items-center justify-between">
+                    <h3 className="text-xl text-theme-text">Filter Data</h3>
                     <button className="text-xl" onClick={() => dispatch({ type: 'setFilterModalOpen', open: false })}>
                         &times;
                     </button>
@@ -27,7 +27,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Power Leverage</h4>
+                    <h4 className="mb-1 font-bold text-theme-text opacity-80">Power Leverage</h4>
                     <Select
                         className="w-1/2"
                         value={state.leverage}
@@ -36,7 +36,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Side</h4>
+                    <h4 className="mb-1 font-bold text-theme-text opacity-80">Side</h4>
                     <Select
                         className="w-1/2"
                         value={state.side}
@@ -45,7 +45,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                     />
                 </div>
                 <div className="my-2">
-                    <h4 className="text-theme-text opacity-80 font-bold mb-1">Sort</h4>
+                    <h4 className="mb-1 font-bold text-theme-text opacity-80">Sort</h4>
                     <Select
                         className="w-1/2"
                         value={state.sortBy}
@@ -55,7 +55,7 @@ const FilterModal: React.FC<FilterModalProps> = ({ state, dispatch }) => {
                 </div>
                 <div className="mt-5">
                     <button
-                        className="w-full px-4 py-3 bg-indigo-800 rounded text-white"
+                        className="w-full rounded bg-indigo-800 px-4 py-3 text-white"
                         onClick={() => dispatch({ type: 'setFilterModalOpen', open: false })}
                     >
                         Okay

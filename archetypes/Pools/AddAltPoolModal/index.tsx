@@ -57,7 +57,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         <TWModal
             open={open}
             onClose={onClose}
-            className="md:max-w-[500px] pt-9 pb-9 px-7 mx-5 sm:pb-20 sm:px-16 sm:pt-7"
+            className="mx-5 px-7 pt-9 pb-9 sm:px-16 sm:pb-20 sm:pt-7 md:max-w-[500px]"
         >
             <Styles.Close onClick={handleCloseModal} className="close" />
             <Styles.Title>

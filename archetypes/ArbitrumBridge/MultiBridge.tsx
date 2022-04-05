@@ -220,25 +220,25 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
     return (
         <div className="sm:mt-20">
-            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl sm:rounded-3xl py-12 px-4 md:py-16 md:px-20 mx-auto">
-                <div className="flex justify-between items-center mb-6">
-                    <div className="font-bold text-2xl">Bridge Funds</div>
+            <div className="mx-auto w-full max-w-screen-sm bg-theme-background py-12 px-4 sm:rounded-3xl md:py-16 md:px-20 md:shadow-xl">
+                <div className="mb-6 flex items-center justify-between">
+                    <div className="text-2xl font-bold">Bridge Funds</div>
                 </div>
                 <div className="flex flex-col">
                     <div className="flex flex-row">
                         <div className="my-2 mb-2 w-full font-bold">
-                            <label htmlFor="from" className="block mb-2">
+                            <label htmlFor="from" className="mb-2 block">
                                 From
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                            <div className="relative mt-1 rounded-md shadow-sm">
+                                <div className="block w-full rounded-md border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
                                     {fromNetwork?.logoTicker ? (
                                         <Logo
-                                            className="inline mr-2 my-0"
+                                            className="my-0 mr-2 inline"
                                             ticker={fromNetwork?.logoTicker ?? 'DEFAULT'}
                                         />
                                     ) : (
-                                        <Error className="inline h-5 mr-1" />
+                                        <Error className="mr-1 inline h-5" />
                                     )}
                                     {fromNetwork?.name || 'Unsupported Network'}
                                 </div>
@@ -246,7 +246,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </div>
 
                         <button
-                            className="cursor-pointer mx-6 mb-6 mt-auto text-xl focus:outline-none"
+                            className="focus:outline-none mx-6 mb-6 mt-auto cursor-pointer text-xl"
                             onClick={() => {
                                 if (toNetwork) {
                                     onSwitchNetwork(toNetwork.id);
@@ -257,18 +257,18 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                         </button>
 
                         <div className="my-2 mb-2 w-full font-bold">
-                            <label htmlFor="to" className="block mb-2">
+                            <label htmlFor="to" className="mb-2 block">
                                 To
                             </label>
-                            <div className="mt-1 relative rounded-md shadow-sm">
-                                <div className="block w-full p-4 sm:text-sm rounded-md border-2 border-theme-border bg-theme-button-bg text-theme-text">
+                            <div className="relative mt-1 rounded-md shadow-sm">
+                                <div className="block w-full rounded-md border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
                                     {toNetwork?.logoTicker ? (
                                         <Logo
-                                            className="inline mr-2 my-0"
+                                            className="my-0 mr-2 inline"
                                             ticker={toNetwork?.logoTicker ?? 'DEFAULT'}
                                         />
                                     ) : (
-                                        <Error className="inline h-5 mr-1" />
+                                        <Error className="mr-1 inline h-5" />
                                     )}
                                     {toNetwork?.name || 'Unsupported Network'}
                                 </div>
@@ -278,7 +278,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     <div className="flex flex-row">
                         <div className="my-2 mb-2 flex-grow">
-                            <label htmlFor="asset" className="font-bold block mb-2">
+                            <label htmlFor="asset" className="mb-2 block font-bold">
                                 Asset
                             </label>
                             <TWButtonGroup
@@ -296,7 +296,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     <div className="flex flex-row">
                         <div className="my-2 mb-2 flex-grow">
-                            <label htmlFor="amount" className="font-bold block mb-2">
+                            <label htmlFor="amount" className="mb-2 block font-bold">
                                 Amount
                             </label>
                             <InputContainer
@@ -304,14 +304,14 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 variation={amountIsInvalid ? 'error' : !!warningText ? 'warning' : undefined}
                             >
                                 <Input
-                                    className="w-full h-full font-normal text-base"
+                                    className="h-full w-full text-base font-normal"
                                     value={amount}
                                     onUserInput={(val) => setAmount(val)}
                                     disabled={approvalRequired}
                                 />
                                 <InnerInputText>
                                     {!approvalRequired && warningText ? (
-                                        <ExclamationCircleFilled className="flex items-center h-auto mr-2 rounded-xl text-yellow-600" />
+                                        <ExclamationCircleFilled className="mr-2 flex h-auto items-center rounded-xl text-yellow-600" />
                                     ) : null}
                                     {selectedAsset?.symbol ? (
                                         <Currency ticker={selectedAsset.symbol} label={selectedAsset.symbol} />
@@ -360,7 +360,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
 
                     {displayButton()}
 
-                    <p className="text-center w-full mt-4 text-sm">
+                    <p className="mt-4 w-full text-center text-sm">
                         {approvalRequired ? (
                             <span>
                                 Unlock {selectedAsset?.symbol} to bridge funds. This is a one-time transaction per

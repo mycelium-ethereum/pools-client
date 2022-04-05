@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
@@ -33,16 +33,30 @@ export default (({ account, className }) => {
         setOpen(open);
     };
 
+    // Close nav after hitting desktop breakpoint
+    const handleResize = () => {
+        if (window.innerWidth > 1536) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
     const linkStyles = 'w-max text-white my-2 px-5 py-2 rounded-lg cursor-pointer';
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative ml-4 my-auto overflow-hidden xl:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden 2xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
                     as="div"
-                    className="fixed inset-0 overflow-hidden top-full z-10"
+                    className="fixed inset-0 top-full z-10 overflow-hidden"
                     onClose={() => {
                         // do nothing here since its fired before the hamburger
                         console.debug('Closing mobile nav');
@@ -51,7 +65,7 @@ export default (({ account, className }) => {
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
-                        <div className="fixed flex bottom-0 top-[60px] right-0 max-w-full xl:hidden">
+                        <div className="fixed bottom-0 top-[60px] right-0 flex max-w-full">
                             <Transition.Child
                                 as={Fragment}
                                 enter="transform transition ease-in-out duration-500 sm:duration-700"
@@ -64,24 +78,24 @@ export default (({ account, className }) => {
                                 <div className="w-screen">
                                     <div
                                         className={classNames(
-                                            'h-full flex flex-col p-6 bg-tracer-900 dark:bg-theme-background matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur bg-mobile-nav-bg bg-no-repeat overflow-y-scroll',
+                                            'flex h-full flex-col overflow-y-scroll bg-tracer-900 bg-mobile-nav-bg bg-no-repeat p-6 matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur dark:bg-theme-background',
                                             'aligned-background',
                                         )}
                                     >
                                         <AccountDropdown account={account} className="my-4" />
-                                        <NetworkDropdown className="w-full my-4 relative text-center" />
+                                        <NetworkDropdown className="relative my-4 w-full text-center" />
                                         <div
                                             className={classNames(linkStyles, route === '' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/invest.svg'} alt="Trade" />
+                                            <img className="mr-2 inline" src={'/img/general/invest.svg'} alt="Trade" />
                                             Tokens
                                         </div>
                                         <div
                                             className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/pools')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/browse.svg'} alt="Pools" />
+                                            <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
                                         </div>
                                         <div
@@ -91,7 +105,7 @@ export default (({ account, className }) => {
                                             )}
                                             onClick={() => handleRoute('/stakepooltoken')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/stake.svg'} alt="Stake" />
+                                            <img className="mr-2 inline" src={'/img/general/stake.svg'} alt="Stake" />
                                             Stake
                                         </div>
                                         <div
@@ -101,7 +115,7 @@ export default (({ account, className }) => {
                                             )}
                                             onClick={() => handleRoute('/bridge')}
                                         >
-                                            <img className="inline mr-2" src={'/img/general/bridge.svg'} alt="Bridge" />
+                                            <img className="mr-2 inline" src={'/img/general/bridge.svg'} alt="Bridge" />
                                             Bridge
                                         </div>
                                         <div
@@ -112,7 +126,7 @@ export default (({ account, className }) => {
                                             onClick={() => handleRoute('/portfolio')}
                                         >
                                             <img
-                                                className="inline mr-2"
+                                                className="mr-2 inline"
                                                 src={'/img/general/portfolio.svg'}
                                                 alt="Portfolio"
                                             />

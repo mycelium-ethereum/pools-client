@@ -116,8 +116,8 @@ export const Browse: React.FC = () => {
         <>
             <div className="container mb-10">
                 <section className="mb-8">
-                    <h1 className="mt-8 mb-2 px-4 sm:px-0 font-semibold text-3xl text-theme-text">Pools</h1>
-                    <div className="mb-6 px-4 sm:px-0 text-sm font-light">
+                    <h1 className="mt-8 mb-2 px-4 text-3xl font-semibold text-theme-text sm:px-0">Pools</h1>
+                    <div className="mb-6 px-4 text-sm font-light sm:px-0">
                         The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
                         via Tracer’s SMA Wrapper.{' '}
                         <a
@@ -131,13 +131,13 @@ export const Browse: React.FC = () => {
                     </div>
                     <FilterBar state={state} dispatch={dispatch} />
                 </section>
-                {!sortedFilteredTokens.length ? <Loading className="w-10 mx-auto mt-10" /> : null}
+                {!sortedFilteredTokens.length ? <Loading className="mx-auto mt-10 w-10" /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     return (
                         <div
                             key={index}
-                            className="p-4 md:p-8 mb-10 shadow-xl rounded sm:rounded-2xl md:rounded-3xl bg-theme-background"
+                            className="mb-10 rounded bg-theme-background p-4 shadow-xl sm:rounded-2xl md:rounded-3xl md:p-8"
                         >
                             <PoolsTable
                                 rows={dataRows}

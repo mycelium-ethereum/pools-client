@@ -9,11 +9,11 @@ export default (() => {
     const { isDark, toggleTheme } = useStore(selectThemeSlice);
 
     return (
-        <div onClick={toggleTheme} className={'relative inline-block w-12 h-6 my-auto mx-0'}>
+        <div onClick={toggleTheme} className={'relative my-auto mx-0 inline-block h-6 w-12'}>
             <span
                 className={classNames(
-                    'absolute inset-0 rounded-3xl transition-all bg-tracer-600 dark:bg-cool-gray-700 cursor-pointer',
-                    "before:absolute before:content-[''] before:h-6 before:w-6 before:right-0 before:bg-white before:transition-all before:rounded-[50%]",
+                    'absolute inset-0 cursor-pointer rounded-3xl bg-tracer-600 transition-all dark:bg-cool-gray-700',
+                    "before:absolute before:right-0 before:h-6 before:w-6 before:rounded-[50%] before:bg-white before:transition-all before:content-['']",
                     isDark ? 'before:-translate-x-6' : 'before:translate-x-0',
                 )}
             />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 import DiscordLogo from '~/public/img/socials/discord.svg';
@@ -10,11 +10,22 @@ import TwitterLogo from '~/public/img/socials/twitter.svg';
 const item = 'ml-0 mb-4 lg:mb-0 ml-0 lg:ml-4 last:mb-0';
 
 const Footer: React.FC = () => {
+    const yearRef = useRef<HTMLSpanElement>(null);
+    const setCopyrightYear = () => {
+        (yearRef.current as HTMLSpanElement).innerText = new Date().getFullYear().toString();
+    };
+
+    useEffect(() => {
+        setCopyrightYear();
+    }, []);
+
     return (
         <div className={'container mt-auto py-4'}>
-            <div className="flex flex-col lg:flex-row justify-between px-4 md:px-0">
-                <span className="whitespace-nowrap">&copy; 2021 Tracer DAO</span>
-                <div className="flex my-6 lg:my-0 ">
+            <div className="flex flex-col justify-between px-4 md:px-0 lg:flex-row">
+                <span className="whitespace-nowrap">
+                    &copy; <span ref={yearRef} /> Tracer DAO
+                </span>
+                <div className="my-6 flex lg:my-0 ">
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
                         href="https://docs.tracer.finance"

@@ -21,7 +21,7 @@ const NavBar: React.FC<{
     return (
         <div
             className={classNames(
-                'relative bg-tracer-900 matrix:bg-transparent matrix:bg-none dark:bg-theme-background bg-mobile-nav-bg bg-cover lg:bg-nav-bg bg-no-repeat',
+                'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
             )}
         >
             <NavBarContent setShowOnboardModal={setShowOnboardModal} />
@@ -40,10 +40,10 @@ export const NavBarContent: React.FC<{
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
-        <nav className={`container text-base h-[60px]`}>
+        <nav className={`container h-[60px] text-base`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
-                <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
+                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white lg:flex">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a id="browse-pools" className="m-auto">
@@ -56,11 +56,16 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Portfolio</a>
                         </li>
                     </Link>
+                    <Link href="/trading-comp">
+                        <li className={classNames(linkStyles, route.startsWith('trading') ? selectedStyles : '')}>
+                            <a className="m-auto">Trading Comp</a>
+                        </li>
+                    </Link>
                 </ul>
 
                 {setShowOnboardModal ? (
                     <div
-                        className="ml-auto my-auto cursor-pointer"
+                        className="my-auto ml-auto cursor-pointer"
                         onClick={() => {
                             setShowOnboardModal(true);
                         }}
@@ -70,7 +75,7 @@ export const NavBarContent: React.FC<{
                 ) : null}
 
                 {/* DESKTOP */}
-                <span className="hidden xl:flex">
+                <span className="hidden 2xl:flex">
                     <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 

@@ -30,16 +30,16 @@ export default class MyDocument extends Document {
     }
     render() {
         return (
-        <Html>
-            <Head>
-                <script src="/scripts/matomo.js" />
-                <script src="/scripts/theme.js" />
-            </Head>
-            <body>
-            <Main />
-            <NextScript />
-            </body>
-        </Html>
-        )
+            <Html>
+                <Head>
+                    <script src="/scripts/matomo.js" />
+                    <script src="/scripts/theme.js" />
+                </Head>
+                <body>
+                    <Main />
+                    <NextScript />
+                </body>
+            </Html>
+        );
     }
 }

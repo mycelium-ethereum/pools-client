@@ -93,15 +93,15 @@ export default (() => {
 
     return (
         <div className="w-full justify-center sm:mt-20">
-            <div className="bg-theme-background w-full max-w-screen-sm md:shadow-xl sm:rounded-3xl py-12 px-4 md:py-16 md:px-20 mx-auto">
-                <div className="text-xl font-bold mb-6">Trade Pool Tokens on Balancer</div>
-                <div className="text-base text-cool-gray-400 mt-2">
+            <div className="mx-auto w-full max-w-screen-sm bg-theme-background py-12 px-4 sm:rounded-3xl md:py-16 md:px-20 md:shadow-xl">
+                <div className="mb-6 text-xl font-bold">Trade Pool Tokens on Balancer</div>
+                <div className="mt-2 text-base text-cool-gray-400">
                     Looking for leveraged exposure? There is no need to mint and burn. There are already pool tokens on
                     Balancer.
                 </div>
                 <Divider className="my-8" />
-                <div className={`relative flex justify-between my-4 md:my-8`}>
-                    <span className="w-full mr-8">
+                <div className={`relative my-4 flex justify-between md:my-8`}>
+                    <span className="mr-8 w-full">
                         <p className="mb-2 text-base font-bold">Market</p>
                         <Dropdown
                             className="w-full "
@@ -132,7 +132,7 @@ export default (() => {
                 </div>
                 <div className={`relative my-4 md:my-8`}>
                     <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
-                        <div className="mb-2 text-base font-bold w-min whitespace-nowrap">Power Leverage</div>
+                        <div className="mb-2 w-min whitespace-nowrap text-base font-bold">Power Leverage</div>
                     </TooltipSelector>
                     <TWButtonGroup
                         value={leverage}
@@ -156,16 +156,16 @@ export default (() => {
                     defaultHeight={0}
                     open={!!pool?.name}
                     className={classNames(
-                        'border-2xl border text-base bg-theme-background',
+                        'border-2xl border bg-theme-background text-base',
                         !!pool?.name ? 'border-theme-border' : 'border-transparent',
                     )}
                 >
-                    <div className="relative border-box px-4 pt-4 pb-2">
+                    <div className="border-box relative px-4 pt-4 pb-2">
                         <h2 className="text-theme-text">
-                            <Logo className="inline mr-2" size="md" ticker={tokenSymbolToLogoTicker(token?.symbol)} />
+                            <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(token?.symbol)} />
                             {token?.name}
                         </h2>
-                        <div className={'absolute left-6 -top-4 text-sm z-[2] p-1.5 rounded bg-theme-background'}>
+                        <div className={'absolute left-6 -top-4 z-[2] rounded bg-theme-background p-1.5 text-sm'}>
                             {'I want to trade'}
                         </div>
                     </div>
