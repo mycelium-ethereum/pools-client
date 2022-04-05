@@ -108,7 +108,7 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
  */
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const router = useRouter();
-    const { pools = {}, poolsInitialised } = usePools();
+    const { pools, poolsInitialized } = usePools();
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
@@ -202,7 +202,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     // sets the markets after the pools have been initialised
     useMemo(() => {
-        if (poolsInitialised && Object.keys(pools)?.length) {
+        if (poolsInitialized && Object.keys(pools)?.length) {
             const markets: Record<string, Market> = {};
             Object.values(pools).forEach((pool) => {
                 const [leverage, marketName] = pool.poolInstance.name.split('-');
@@ -219,11 +219,11 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 markets,
             });
         }
-    }, [poolsInitialised]);
+    }, [poolsInitialized]);
 
     // sets the market after pools have been initialised and the route set
     useEffect(() => {
-        if (poolsInitialised && router.query.pool) {
+        if (poolsInitialized && router.query.pool) {
             // the selectedPool will already be set from the above useEffect
             if (pools[router.query.pool as string]) {
                 const { leverage, name } = pools[router.query.pool as string].poolInstance;
@@ -238,7 +238,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 });
             }
         }
-    }, [poolsInitialised, router]);
+    }, [poolsInitialized, router]);
 
     return (
         <SwapContext.Provider

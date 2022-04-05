@@ -40,7 +40,7 @@ type Options = {
 
 interface ContextProps {
     pools: Record<string, PoolInfo>;
-    poolsInitialised: boolean;
+    poolsInitialized: boolean;
 }
 
 interface ActionContextProps {
@@ -559,32 +559,26 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
     };
 
     return (
-        <PoolsContext.Provider
+        <PoolsActionsContext.Provider
             value={{
-                pools: pools,
-                poolsInitialised: poolsInitialized,
+                commit,
+                approve,
+                claim,
+                commitGasFee,
             }}
         >
-            <PoolsActionsContext.Provider
-                value={{
-                    commit,
-                    approve,
-                    claim,
-                    commitGasFee,
-                }}
-            >
-                {children}
-            </PoolsActionsContext.Provider>
-        </PoolsContext.Provider>
+            {children}
+        </PoolsActionsContext.Provider>
     );
 };
 
-export const usePools: () => Partial<ContextProps> = () => {
-    const context = useContext(PoolsContext);
-    if (context === undefined) {
-        throw new Error(`usePools must be called within PoolsContext`);
-    }
-    return context;
+export const usePools: () => ContextProps = () => {
+    const pools = useStore(selectPoolInstances, shallow);
+    const poolsInitialized = useStore(selectPoolsInitialized);
+    return {
+        pools,
+        poolsInitialized,
+    };
 };
 
 export const usePoolActions: () => Partial<ActionContextProps> = () => {
@@ -596,30 +590,13 @@ export const usePoolActions: () => Partial<ActionContextProps> = () => {
 };
 
 export const usePool: (pool: string | undefined) => PoolInfo = (pool) => {
-    const { pools } = usePools();
+    const pools = useStore(selectPoolInstances, shallow);
     const [pool_, setPool] = useState<PoolInfo>(DEFAULT_POOLSTATE);
     useMemo(() => {
-        if (pool && pools?.[pool]) {
-            setPool(pools?.[pool]);
+        if (pool && pools[pool]) {
+            setPool(pools[pool]);
         }
     }, [pool, pools]);
 
     return pool_;
-};
-
-type TargetType = 'lastUpdate';
-export const useSpecific: (poolAddress: string | undefined, target: TargetType, defaultValue: any) => any = (
-    poolAddress,
-    target,
-    defaultValue,
-) => {
-    const pool = usePool(poolAddress);
-    const [value, setValue] = useState<any | undefined>(defaultValue);
-    useMemo(() => {
-        if (pool) {
-            setValue(pool.poolInstance[target]);
-        }
-    }, [pool?.poolInstance[target]]);
-
-    return value;
 };
