@@ -6,6 +6,8 @@ import { createGasSlice } from './GasSlice';
 import { IGasSlice } from './GasSlice/types';
 import { createPendingCommitSlice } from './PendingCommitSlice';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { createPoolsInstancesSlice } from './PoolInstancesSlice';
+import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { createPoolsSlice } from './PoolsSlice';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { createThemeSlice } from './ThemeSlice';
@@ -57,6 +59,7 @@ export const useStore = create<
                 transactionSlice: lens<ITransactionSlice>(createTransactionSlice),
                 themeSlice: lens<IThemeSlice>(createThemeSlice),
                 poolsSlice: lens<IPoolsSlice>(createPoolsSlice),
+                poolsInstancesSlice: lens<IPoolsInstancesSlice>(createPoolsInstancesSlice),
                 web3Slice: lens<IWeb3Slice>(createWeb3Slice),
                 gasSlice: lens<IGasSlice>(createGasSlice),
                 unsupportedNetworkSlice: lens<IUnsupportedNetworkSlice>(createUnsupportedNetwork),

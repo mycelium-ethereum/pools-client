@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
-import { SideEnum, CommitEnum, StaticPoolInfo } from '@tracer-protocol/pools-js';
+import { SideEnum, CommitEnum, StaticPoolInfo, Pool } from '@tracer-protocol/pools-js';
 
 // name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {
@@ -107,3 +107,26 @@ export interface PoolListUris {
     Tracer: string[];
     External: string[];
 }
+
+/**
+ *
+ * Pools store types
+ */
+type TokenBalance = {
+    approvedAmount: BigNumber;
+    balance: BigNumber;
+};
+
+export type PoolInfo = {
+    poolInstance: Pool;
+    userBalances: {
+        shortToken: TokenBalance;
+        longToken: TokenBalance;
+        settlementToken: TokenBalance;
+        aggregateBalances: AggregateBalances;
+    };
+    upkeepInfo: {
+        expectedExecution: number;
+        isWaitingForUpkeep: boolean;
+    };
+};

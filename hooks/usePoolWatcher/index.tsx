@@ -6,15 +6,17 @@ import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
-import { selectAllPools } from '~/store/PoolsSlice';
+import { selectPoolInstanceActions } from '~/store/PoolInstancesSlice';
+import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 export const usePoolWatcher = (): void => {
     const currentSubscribed = useRef<string | undefined>();
-    const pools = useStore(selectAllPools);
+    const pools = useStore(selectAllPoolLists);
     const poolAddresses = useMemo(() => pools.map((pool) => pool.address), [pools.length]);
     const { network, account } = useStore(selectWeb3Info);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions);
+    const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions);
 
     useMemo(() => {
         const wssProvider = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;
@@ -28,10 +30,6 @@ export const usePoolWatcher = (): void => {
                     commitmentWindowBuffer: 20, // calculate and emit expected state 20 seconds before expected end of commitment window
                     chainId: network,
                     poolAddresses: poolAddresses,
-                    ignoreEvents: {
-                        [EVENT_NAMES.COMMITMENT_WINDOW_ENDED]: true,
-                        [EVENT_NAMES.COMMITMENT_WINDOW_ENDING]: true,
-                    },
                 });
 
                 watcher.initializePoolWatchers().then(() => {
@@ -59,6 +57,15 @@ export const usePoolWatcher = (): void => {
 
                     watcher.on(EVENT_NAMES.UPKEEP, (data) => {
                         console.debug('Executed upkeep', data);
+                        setPoolIsWaiting(data.poolAddress, false);
+                    });
+                    watcher.on(EVENT_NAMES.COMMITMENT_WINDOW_ENDING, (data) => {
+                        console.debug('Commitment window ending', data);
+                    });
+                    watcher.on(EVENT_NAMES.COMMITMENT_WINDOW_ENDED, (data) => {
+                        console.debug('Commitment window ended', data);
+                        setPoolIsWaiting(data.poolAddress, true);
+                        setPoolExpectedExecution(data.poolAddress);
                     });
                 });
             }

@@ -1,11 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
-import {
-    calcEffectiveLongGain,
-    calcEffectiveShortGain,
-    calcSkew,
-    getExpectedExecutionTimestamp,
-} from '@tracer-protocol/pools-js';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/context/PoolContext';
 import { useStore } from '~/store/main';
@@ -42,7 +37,7 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool_) => {
-                const { poolInstance: pool, userBalances } = pool_;
+                const { poolInstance: pool, userBalances, upkeepInfo } = pool_;
                 const {
                     address,
                     lastUpdate,
@@ -53,8 +48,6 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
                     leverage,
                     name,
                     settlementToken,
-                    updateInterval,
-                    frontRunningInterval,
                     keeper,
                     committer,
                 } = pool;
@@ -117,12 +110,8 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
                         balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
                         userHoldings: userBalances.longToken.balance.toNumber(),
                     },
-                    expectedExecution: getExpectedExecutionTimestamp(
-                        frontRunningInterval.toNumber(),
-                        updateInterval.toNumber(),
-                        lastUpdate.toNumber(),
-                        Date.now() / 1000,
-                    ),
+                    isWaitingForUpkeep: upkeepInfo.isWaitingForUpkeep,
+                    expectedExecution: upkeepInfo.expectedExecution,
                     myHoldings: userBalances.shortToken.balance.plus(userBalances.longToken.balance).toNumber(),
                     pastUpkeep: defaultUpkeep,
                     antecedentUpkeep: defaultUpkeep,
