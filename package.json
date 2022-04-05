@@ -12,6 +12,7 @@
         "@reputation.link/vyps-kit": "^0.5.7",
         "@tracer-protocol/onboard": "^2.2.4",
         "@tracer-protocol/perpetual-pools-contracts": "^1.1.1",
+        "@tracer-protocol/perpetual-pools-v2-pool-watcher": "^0.0.7",
         "@tracer-protocol/pools-js": "^3.1.0",
         "@visx/visx": "^2.2.2",
         "antd": "^4.16.13",
