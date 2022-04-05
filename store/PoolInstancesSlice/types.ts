@@ -34,3 +34,4 @@ export interface IPoolsInstancesSlice {
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
 }
+

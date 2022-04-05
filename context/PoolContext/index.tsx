@@ -3,8 +3,6 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
 import {
-    LeveragedPool,
-    LeveragedPool__factory,
     PoolCommitter__factory,
     PoolKeeper__factory,
     PoolToken__factory,
@@ -15,7 +13,6 @@ import {
     CommitEnum,
     encodeCommitParams,
     BalanceTypeEnum,
-    calcNextValueTransfer,
     getExpectedExecutionTimestamp,
 } from '@tracer-protocol/pools-js';
 import { CommitToQueryFocusMap, DEFAULT_POOLSTATE } from '~/constants/index';
@@ -161,7 +158,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                     })
                         .then((pendingCommits) => {
                             if (mounted) {
-                                setExpectedPrice(pool.poolInstance);
                                 pendingCommits.map((commit) => {
                                     addCommit({
                                         pool: pool.poolInstance.address,
@@ -425,6 +421,7 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
             throw `Failed to estimate gas cost: ${err}`;
         }
     };
+
     /**
      * Commit to a pool
      * @param pool pool address to commit to
@@ -530,32 +527,6 @@ export const PoolStore: React.FC<Children> = ({ children }: Children) => {
                 },
             });
         }
-    };
-
-    /**
-     * Sets the expected price after value transfer
-     * @param pool address of pool
-     */
-    const setExpectedPrice = (pool: Pool) => {
-        const { lastPrice, leverage, longBalance, shortBalance } = pool;
-        const leveragedPool = new ethers.Contract(pool.address, LeveragedPool__factory.abi, provider) as LeveragedPool;
-
-        leveragedPool.getOraclePrice().then((price) => {
-            const oraclePrice = new BigNumber(ethers.utils.formatEther(price));
-            const { shortValueTransfer, longValueTransfer } = calcNextValueTransfer(
-                lastPrice,
-                oraclePrice,
-                new BigNumber(leverage),
-                longBalance,
-                shortBalance,
-            );
-            console.debug('Calculated value transfer', {
-                shortValueTransfer: shortValueTransfer.toFixed(),
-                longValueTransfer: longValueTransfer.toFixed(),
-                lastPrice: lastPrice.toFixed(),
-                newPrice: oraclePrice.toFixed(),
-            });
-        });
     };
 
     return (
