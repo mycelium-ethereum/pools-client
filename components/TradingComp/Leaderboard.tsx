@@ -10,7 +10,7 @@ export type TradingCompParticipant = {
     settlementTokenBalance: string; // realised position
     accountValue: string; // unrealised position
     ranking: number;
-    rank: string;
+    rank?: string;
     disqualified: boolean;
 };
 

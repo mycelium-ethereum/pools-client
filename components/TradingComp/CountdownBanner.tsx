@@ -34,7 +34,7 @@ const CountdownBanner: React.FC = () => {
     return (
         <div className="transition-border relative mr-4 w-[calc(100%+32px)] -translate-x-4 transform overflow-hidden font-aileron duration-300 sm:w-full sm:translate-x-0 sm:rounded-lg">
             <img src="/img/trading-comp/trading-comp-banner.png" className="absolute z-0 h-full w-full object-cover" />
-            <div className="relative z-10 flex h-[304px] flex-grow flex-col sm:h-[382px]">
+            <div className="relative z-10 flex h-[304px] flex-grow flex-col sm:h-full sm:min-h-[382px]">
                 <div className="flex h-full flex-grow flex-col justify-center px-5">
                     <span className="block text-base font-semibold text-purple-100">Perpetual Pools V2</span>
                     <span className="block">

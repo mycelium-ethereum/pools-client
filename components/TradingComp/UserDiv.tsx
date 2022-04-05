@@ -1,5 +1,6 @@
 import React from 'react';
 import { convertCurrency, convertDate } from '~/utils/converters';
+import Placeholder from '~/components/TradingComp/Placeholder';
 
 const UserRow: React.FC<{
     username: string;
@@ -8,6 +9,7 @@ const UserRow: React.FC<{
     rank: number;
     shaded: boolean;
     isFirst: boolean;
+    placeholder?: boolean;
 }> = ({
     username,
     accountValue,
@@ -15,6 +17,7 @@ const UserRow: React.FC<{
     rank,
     shaded,
     isFirst,
+    placeholder,
 }: {
     username: string;
     accountValue: string;
@@ -22,6 +25,7 @@ const UserRow: React.FC<{
     rank: number;
     shaded: boolean;
     isFirst: boolean;
+    placeholder?: boolean;
 }) => {
     const getOrdinal = (number: number) => {
         const ordinalRules = new Intl.PluralRules('en', {
@@ -42,30 +46,40 @@ const UserRow: React.FC<{
     return (
         <div className={`p-3 ${shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-900' : 'bg-white dark:bg-cool-gray-800'}`}>
             <div className="flex items-center justify-between md:hidden">
-                <div className="flex items-center">
+                <div className="flex min-w-[100px] items-center">
                     <span
                         className={`inline-flex items-center justify-center rounded-full bg-cool-gray-400 font-semibold text-white dark:bg-cool-gray-700 ${
-                            isFirst ? 'mr-4 h-10 w-10 text-base' : 'mr-2 h-[32px] w-[32px] text-[10px]'
+                            isFirst
+                                ? 'mr-4 h-10 min-h-[40px] w-10 min-w-[40px] text-base'
+                                : 'mr-2 h-8 min-h-[32px] w-8 min-w-[32px] text-[10px]'
                         }`}
                     >
                         {getOrdinal(rank)}
                     </span>
-                    <span className={`font-bold text-cool-gray-900 dark:text-white ${isFirst ? 'text-2xl' : ''}`}>
-                        {username}
-                    </span>
+                    {placeholder ? (
+                        <Placeholder className="max-h-[30px] min-w-[100px] max-w-[100px]" />
+                    ) : (
+                        <span className={`font-bold text-cool-gray-900 dark:text-white ${isFirst ? 'text-2xl' : ''}`}>
+                            {username}
+                        </span>
+                    )}
                 </div>
             </div>
             <div className="mt-2 flex">
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Portfolio Value</span>
                     <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
-                        {convertCurrency(accountValue)}
+                        {placeholder ? (
+                            <Placeholder className="max-h-[30px] max-w-[100px]" />
+                        ) : (
+                            convertCurrency(accountValue)
+                        )}
                     </span>
                 </div>
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Entry Date</span>
                     <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
-                        {convertDate(entryDate)}
+                        {placeholder ? <Placeholder className="max-h-[30px] max-w-[100px]" /> : convertDate(entryDate)}
                     </span>
                 </div>
             </div>
