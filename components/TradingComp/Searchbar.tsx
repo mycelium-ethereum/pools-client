@@ -28,17 +28,18 @@ const Searchbar: React.FC<{
     }, [searchInput]);
 
     return (
-        <div className="relative ml-[75px] hidden overflow-hidden rounded-xl border border-cool-gray-900 text-sm text-cool-gray-900 md:block">
+        <div className="relative ml-[75px] hidden overflow-hidden rounded-xl border border-cool-gray-900 text-sm text-cool-gray-900 dark:border-white dark:text-white md:block">
             <img
                 src="/img/trading-comp/search-icon.svg"
                 alt="search"
-                className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform"
+                className="absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 transform dark:invert"
             />
             <input
                 type="text"
                 className="h-[39px] min-h-[39px] w-[281px] min-w-[281px] pl-11"
                 value={searchInput}
                 onChange={handleChange}
+                placeholder="Search"
             />
         </div>
     );
