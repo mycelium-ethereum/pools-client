@@ -41,6 +41,7 @@ export default (() => {
     };
 
     const getCurrentUser = () => {
+        // Hardcode account for testing
         const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === account);
         if (currentUser[0] && !!currentUser[0].username) {
             setUser(currentUser);

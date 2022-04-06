@@ -32,13 +32,9 @@ const StatisticsBox: React.FC<{
     disqualified: boolean;
     participating: boolean;
 }) => {
-    const [url, setUrl] = React.useState('');
     const { handleConnect } = useStore(selectOnboardActions);
 
-    useEffect(() => {
-        setUrl(window.location.href);
-        console.log(account);
-    }, []);
+    const text = `I%27m%20currently%20ranked%20%23${ranking}%20in%20the%20%23TracerTradingComp%0A%0AYou%20can%20join%20too%20👉%20`;
 
     return (
         <div
@@ -98,7 +94,11 @@ const StatisticsBox: React.FC<{
                                                 <span className="block text-sm font-semibold">Entry Date</span>
                                             </div>
                                         </div>
-                                        <TwitterShareButton className="mt-2.5 ml-6 sm:ml-0" url={url} />
+                                        <TwitterShareButton
+                                            className="mt-2.5 ml-6 sm:ml-0"
+                                            url="https://v2beta.tracer.finance/trading-comp"
+                                            text={text}
+                                        />
                                     </div>
                                 ) : (
                                     <>
