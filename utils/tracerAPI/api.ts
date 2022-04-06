@@ -6,7 +6,7 @@ import { TradeHistoryResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS
 
 // Base API URL
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
-const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611']
+const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611'];
 
 export const fetchPendingCommits: (
     network: V2_SUPPORTED_NETWORKS,

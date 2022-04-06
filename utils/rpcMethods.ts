@@ -3,7 +3,7 @@ import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
 
-const tokenImagesRootUrl = 'http://ipfs.io/ipfs/QmaKrQSyTSdcmikLHdtKHp6tn3pT3Gcnu2BWziN97Fscrd';
+const tokenImagesRootUrl = 'https://raw.githubusercontent.com/dospore/tracer-balancer-token-list/master/assets';
 /**
  * Adds a token asset to the users wallet watch
  * @param provider ethereum provider

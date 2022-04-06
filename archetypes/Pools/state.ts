@@ -13,7 +13,7 @@ export enum MarketFilterEnum {
 export enum CollateralEnum {
     All = 'All',
     // USDC = 'USDC',
-    PPUSD = 'PPUSD'
+    PPUSD = 'PPUSD',
 }
 
 export enum LeverageEnum {

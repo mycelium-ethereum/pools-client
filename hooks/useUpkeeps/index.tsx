@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import {
-    KnownNetwork,
-    calcSkew,
-    calcTokenPrice,
-} from '@tracer-protocol/pools-js';
-import { last2UpkeepsQuery, subgraphUrlByNetwork } from '~/utils/tracerAPI/subgraph';
-import { V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
-import { selectAllPoolLists } from '~/store/PoolsSlice';
+import { KnownNetwork, calcSkew, calcTokenPrice } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
+import { selectAllPoolLists } from '~/store/PoolsSlice';
+import { V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { last2UpkeepsQuery, subgraphUrlByNetwork } from '~/utils/tracerAPI/subgraph';
 
 export type Upkeep = {
     pool: string;
@@ -37,8 +33,8 @@ type RawUpkeep = {
     network: string;
     timestamp: string;
     pool: {
-        settlementTokenDecimals: string
-    }
+        settlementTokenDecimals: string;
+    };
 };
 
 // const useUpkeeps
@@ -50,9 +46,9 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
         let mounted = true;
 
         const fetchUpkeeps = async () => {
-            const graphUrl = subgraphUrlByNetwork[network as V2_SUPPORTED_NETWORKS]
+            const graphUrl = subgraphUrlByNetwork[network as V2_SUPPORTED_NETWORKS];
 
-            if(!graphUrl) {
+            if (!graphUrl) {
                 return;
             }
 
@@ -64,10 +60,10 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
                         method: 'POST',
                         body: JSON.stringify({
                             query: last2UpkeepsQuery({ poolAddress: pool.address }),
-                        })
+                        }),
                     }).then((res) => res.json());
 
-                    for(const upkeep of last2Upkeeps.data.upkeeps) {
+                    for (const upkeep of last2Upkeeps.data.upkeeps) {
                         const decimals = Number(upkeep.pool?.settlementTokenDecimals ?? 18);
                         if (upkeepMapping[pool.address]) {
                             upkeepMapping[pool.address].push(parseUpkeep(upkeep, decimals));
@@ -76,13 +72,13 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
                         }
                     }
                 } catch (error: any) {
-                    console.error(`Error getting last 2 upkeeps for pool ${pool.address}: ${error.message}`)
+                    console.error(`Error getting last 2 upkeeps for pool ${pool.address}: ${error.message}`);
                 }
-            })
+            });
 
-            await Promise.all(promises)
+            await Promise.all(promises);
 
-            if(mounted) {
+            if (mounted) {
                 setUpkeeps(upkeepMapping);
             }
         };
