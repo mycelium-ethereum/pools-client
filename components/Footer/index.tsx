@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Link from 'next/link';
 
 import DiscordLogo from '~/public/img/socials/discord.svg';
 import DiscourseLogo from '~/public/img/socials/discourse.svg';
