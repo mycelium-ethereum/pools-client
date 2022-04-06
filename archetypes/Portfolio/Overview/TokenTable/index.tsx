@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
