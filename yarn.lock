@@ -2579,10 +2579,10 @@
     bignumber.js "^9.0.1"
     ethers "^5.5.1"
 
-"@tracer-protocol/pools-js@^3.1.0":
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-3.1.1.tgz#a500717caff24d8513928d280fa67e1a91374e13"
-  integrity sha512-Mvdc61jbm1uLl9Dw0Q8meQSnU6fnFq6TzT8AIhoJo4wDeLqB44okdft8r+wc6Hmx42mQF6Sas3DBrWSfQB+VHw==
+"@tracer-protocol/pools-js@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/pools-js/-/pools-js-3.1.2.tgz#d1ffc70b3d4ff84275abe086311f4b49369f2f49"
+  integrity sha512-/d57UZNmujZMLnEjv0Ea+nR0Yba6SYKgRm+tH7D6MWI3bgtVNMyqx6EDXjJMhEwme6q38OiyExSG8lUeb0tTQw==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "^1.1.1"
     bignumber.js "^9.0.1"
