@@ -61,7 +61,12 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Trading Comp</a>
                         </li>
                     </Link>
-                    <a href="https://tracer-1.gitbook.io/ppv2-beta-testnet/" target="_blank" rel="noreferrer">
+                    <a
+                        href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="my-auto"
+                    >
                         <li className={classNames(linkStyles)}>
                             <a className="m-auto">Documentation</a>
                         </li>
