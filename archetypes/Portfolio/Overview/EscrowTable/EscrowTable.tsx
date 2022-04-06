@@ -3,7 +3,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { HiddenExpand, Logo } from '~/components/General';
 import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
-import { usePoolActions } from '~/context/PoolContext';
+import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import { toApproxCurrency } from '~/utils/converters';
 
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
@@ -56,7 +56,7 @@ const PoolRow: React.FC<EscrowRowProps> = ({
     claimableSum,
     onClickCommitAction,
 }) => {
-    const { claim = () => console.error('Failed to claim: claim function not defined in context') } = usePoolActions();
+    const { claim } = usePoolInstanceActions();
     const [expanded, setExpanded] = useState<boolean>(false);
     return (
         <>

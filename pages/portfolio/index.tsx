@@ -5,7 +5,6 @@ import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import { WarningBanners } from '~/components/WarningBanner';
-import { PoolStore } from '~/context/PoolContext';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -17,14 +16,12 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <PoolStore>
-                <NavBar />
-                <WarningBanners banners={['auditWarning', 'decayWarning']} />
-                <SwapStore>
-                    <Portfolio page={TradePortfolioPage.Overview} />
-                </SwapStore>
-                <UnsupportedNetworkPopup />
-            </PoolStore>
+            <NavBar />
+            <WarningBanners banners={['auditWarning', 'decayWarning']} />
+            <SwapStore>
+                <Portfolio page={TradePortfolioPage.Overview} />
+            </SwapStore>
+            <UnsupportedNetworkPopup />
             <Footer />
         </div>
     );

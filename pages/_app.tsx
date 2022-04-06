@@ -10,6 +10,7 @@ import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import { StyledThemeProvider } from '~/context/ThemeContext';
 import usePoolWatcher from '~/hooks/usePoolWatcher';
+import { useUpdatePoolInstances } from '~/hooks/useUpdatePoolInstances';
 import { useUpdatePoolLists } from '~/hooks/useUpdatePoolLists';
 import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
@@ -21,6 +22,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     useUpdateWeb3Store();
     useUpdatePoolLists();
     usePoolWatcher();
+    useUpdatePoolInstances();
 
     // load usersnap
     useEffect(() => {

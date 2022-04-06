@@ -3,7 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/Overview/state';
 import { LogoTicker } from '~/components/General';
-import { usePools } from '~/context/PoolContext';
+import { usePools } from '~/hooks/usePools';
 import useSubgraphAggregateBalances from '../useSubgraphAggregateBalances';
 
 const DEFAULT_ENTRY_PRICES = {

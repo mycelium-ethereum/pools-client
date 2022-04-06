@@ -93,7 +93,7 @@ export const transactionMap: Record<
             render: <CommitSuccessNotification {...props} />,
             type: 'success',
             isLoading: false,
-            autoClose: props.expectedExecution - Date.now() / 1000, // seconds till expectedExecution
+            autoClose: props.expectedExecution - Math.floor(Date.now() / 1000), // seconds till expectedExecution
             closeButton: true,
         }),
         error: ({ error }) =>

@@ -28,7 +28,7 @@ export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
     },
 });
 
-export const selectAllPools: (state: StoreState) => StaticPoolInfo[] = (state) =>
+export const selectAllPoolLists: (state: StoreState) => StaticPoolInfo[] = (state) =>
     state.web3Slice.network ? flattenAllPoolLists(state.poolsSlice.poolLists[state.web3Slice.network]) : [];
 
 export const selectImportedPools: (state: StoreState) => StaticPoolInfo[] = (state) =>
