@@ -37,22 +37,6 @@ const SkewTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-const IndexPriceTip: React.FC = ({ children }) => (
-    <StyledTooltip
-        title={
-            <>
-                The index price of the asset tracked by the pool, supplied by an oracle.{' '}
-                <a href="https://docs.tracer.finance/tracer/markets" target="_blank" rel="noreferrer noopener">
-                    Learn more
-                </a>
-                .
-            </>
-        }
-    >
-        {children}
-    </StyledTooltip>
-);
-
 const EffectiveLeverageTip: React.FC = ({ children }) => (
     <StyledTooltip title="The leverage you will receive at the next rebalance depending on if the price of the underlying asset increases or decreases since the last rebalance.">
         {children}
@@ -158,7 +142,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
-                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
+                            {'INDEX PRICE (USD)'}
                         </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">{'TVL (USD)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
