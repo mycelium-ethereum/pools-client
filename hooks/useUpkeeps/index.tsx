@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { KnownNetwork, poolList, StaticPoolInfo } from '@tracer-protocol/pools-js';
-
-const ONE_HOUR = 60 * 60;
-
-import { calcSkew, calcTokenPrice, NETWORKS } from '@tracer-protocol/pools-js';
+import {
+    KnownNetwork,
+    calcSkew,
+    calcTokenPrice,
+} from '@tracer-protocol/pools-js';
+import { last2UpkeepsQuery, subgraphUrlByNetwork } from '~/utils/tracerAPI/subgraph';
+import { V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { selectAllPoolLists } from '~/store/PoolsSlice';
+import { useStore } from '~/store/main';
 
 export type Upkeep = {
     pool: string;
@@ -23,72 +27,63 @@ export type Upkeep = {
 };
 
 type RawUpkeep = {
-    pool_address: string;
-    long_token_supply: string;
-    short_token_supply: string;
-    long_balance: string;
-    short_balance: string;
-    old_price: string;
-    new_price: string;
+    id: string;
+    longTokenSupply: string;
+    shortTokenSupply: string;
+    longBalance: string;
+    shortBalance: string;
+    startPrice: string;
+    endPrice: string;
     network: string;
-    block_timestamp: string;
+    timestamp: string;
+    pool: {
+        settlementTokenDecimals: string
+    }
 };
-
-const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 
 // const useUpkeeps
 export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
     const [upkeeps, setUpkeeps] = useState<Record<string, Upkeep[]>>({});
+    const poolList = useStore(selectAllPoolLists);
 
     useEffect(() => {
         let mounted = true;
-        const poolInfo: StaticPoolInfo = poolList[network ?? NETWORKS.ARBITRUM][0];
-        const USDC_DECIMALS = poolInfo?.settlementToken?.decimals ?? 18;
+
         const fetchUpkeeps = async () => {
-            const now = Math.floor(Date.now() / 1000);
-            const from = now - (poolInfo?.updateInterval || ONE_HOUR) * 2;
+            const graphUrl = subgraphUrlByNetwork[network as V2_SUPPORTED_NETWORKS]
 
-            const rawUpkeeps = await fetch(`${TRACER_API}/pools/upkeeps?network=${network}&from=${from}`)
-                .then(async (res) => {
-                    const response = await res.json();
-                    if (res.ok) {
-                        return response;
-                    } else {
-                        return {
-                            message: response?.message ?? 'Unknown error',
-                            data: null,
-                        };
-                    }
-                })
-                .catch((error) => {
-                    console.error('Failed to fetch upkeeps', error);
-                    return {
-                        message: error,
-                        data: null,
-                    };
-                });
-
-            if (rawUpkeeps.message) {
-                console.info('Fetched upkeeps', rawUpkeeps.message);
+            if(!graphUrl) {
+                return;
             }
-            if (rawUpkeeps.data) {
-                if (mounted) {
-                    const upkeepMapping: Record<string, Upkeep[]> = {};
 
-                    for (const upkeep of rawUpkeeps.data) {
-                        if (upkeepMapping[upkeep.pool_address]) {
-                            upkeepMapping[upkeep.pool_address].push(parseUpkeep(upkeep, USDC_DECIMALS));
+            const upkeepMapping: Record<string, Upkeep[]> = {};
+
+            const promises = poolList.map(async (pool) => {
+                try {
+                    const last2Upkeeps = await fetch(graphUrl, {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            query: last2UpkeepsQuery({ poolAddress: pool.address }),
+                        })
+                    }).then((res) => res.json());
+
+                    for(const upkeep of last2Upkeeps.data.upkeeps) {
+                        const decimals = Number(upkeep.pool?.settlementTokenDecimals ?? 18);
+                        if (upkeepMapping[pool.address]) {
+                            upkeepMapping[pool.address].push(parseUpkeep(upkeep, decimals));
                         } else {
-                            upkeepMapping[upkeep.pool_address] = [parseUpkeep(upkeep, USDC_DECIMALS)];
+                            upkeepMapping[pool.address] = [parseUpkeep(upkeep, decimals)];
                         }
                     }
-
-                    for (const pool of Object.keys(upkeepMapping)) {
-                        // array is sorted by newest to oldest such that we can trim the last 2 upkeeps
-                        upkeepMapping[pool] = upkeepMapping[pool].sort((a, b) => b.timestamp - a.timestamp);
-                    }
-                    setUpkeeps(upkeepMapping);
+                } catch (error: any) {
+                    console.error(`Error getting last 2 upkeeps for pool ${pool.address}: ${error.message}`)
                 }
+            })
+
+            await Promise.all(promises)
+
+            if(mounted) {
+                setUpkeeps(upkeepMapping);
             }
         };
 
@@ -99,29 +94,28 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
         return () => {
             mounted = false;
         };
-    }, [network]);
+    }, [network, poolList.length]);
 
     return upkeeps;
 };
 
 const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, decimals) => {
-    const longTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.long_balance, decimals));
+    const longTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.longBalance, decimals));
 
-    const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.short_balance, decimals));
+    const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(upkeep.shortBalance, decimals));
 
-    const shortTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.short_token_supply, decimals));
+    const shortTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.shortTokenSupply, decimals));
 
-    const longTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.long_token_supply, decimals));
+    const longTokenSupply = new BigNumber(ethers.utils.formatUnits(upkeep.longTokenSupply, decimals));
 
     const longTokenPrice = calcTokenPrice(longTokenBalance, longTokenSupply);
     const shortTokenPrice = calcTokenPrice(shortTokenBalance, shortTokenSupply);
 
-    // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
     return {
-        pool: upkeep.pool_address,
-        timestamp: parseInt(upkeep.block_timestamp),
-        oldPrice: new BigNumber(ethers.utils.formatEther(upkeep.old_price)).toNumber(),
-        newPrice: new BigNumber(ethers.utils.formatEther(upkeep.new_price)).toNumber(),
+        pool: upkeep.id,
+        timestamp: parseInt(upkeep.timestamp),
+        oldPrice: new BigNumber(ethers.utils.formatEther(upkeep.startPrice)).toNumber(),
+        newPrice: new BigNumber(ethers.utils.formatEther(upkeep.endPrice)).toNumber(),
         tvl: longTokenBalance.plus(shortTokenBalance).toNumber(),
         longTokenBalance: longTokenBalance.toNumber(),
         longTokenSupply: longTokenSupply.toNumber(),
