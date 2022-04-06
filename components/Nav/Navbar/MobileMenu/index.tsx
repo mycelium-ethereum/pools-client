@@ -35,7 +35,7 @@ export default (({ account, className }) => {
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
-        if (window.innerWidth > 1536) {
+        if (window.innerWidth > 1280) {
             setOpen(false);
         }
     };

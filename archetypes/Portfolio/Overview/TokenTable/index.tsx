@@ -76,7 +76,6 @@ export const TokenRow: React.FC<
     oraclePrice,
     denotedIn,
 }) => {
-    const router = useRouter();
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 

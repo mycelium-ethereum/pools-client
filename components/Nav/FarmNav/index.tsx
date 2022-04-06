@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { classNames } from '~/utils/helpers';
 
-const POOLTOKEN = 0;
 const BPT = 1;
 
 const item =
