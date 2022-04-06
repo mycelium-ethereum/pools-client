@@ -28,7 +28,6 @@
             "~/context/*": ["context/*"],
             "~/hooks/*": ["hooks/*"],
             "~/utils/*": ["utils/*"],
-            "~/libs/*": ["libs/*"],
             "~/archetypes/*": ["archetypes/*"],
             "~/constants/*": ["constants/*"],
             "~/public/*": ["public/*"]
