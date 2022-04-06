@@ -68,19 +68,33 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="flex flex-col lg:flex-row">
                     <div className={item}>
-                        <a href="https://tracer.finance/privacy-policy">Privacy Policy</a>
+                        <a href="https://tracer.finance/privacy-policy" target="_blank" rel="noopener noreferrer">
+                            Privacy Policy
+                        </a>
                     </div>
                     <div className={item}>
-                        <a href="https://tracer.finance/privacy-policy#terms-of-use">Terms of Use</a>
+                        <a
+                            href="https://tracer.finance/privacy-policy#terms-of-use"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Terms of Use
+                        </a>
                     </div>
                     <div className={item}>
-                        <a href="https://tracer.finance/privacy-policy#interfaces-disclaimer">Disclaimer</a>
+                        <a
+                            href="https://tracer.finance/privacy-policy#interfaces-disclaimer"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Disclaimer
+                        </a>
                     </div>
                     <div className={item}>
                         <a
                             href="https://gateway.pinata.cloud/ipfs/QmS161WXV2bEAWUtdecfS5FYPmHQZdhNnjVFAwQ5FTX3og"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                         >
                             Participation Agreement
                         </a>
@@ -89,7 +103,7 @@ const Footer: React.FC = () => {
                         <a
                             href="https://tracer.finance/radar/sigma-prime-audit-response/"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                         >
                             Security Audit
                         </a>
