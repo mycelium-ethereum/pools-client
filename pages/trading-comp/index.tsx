@@ -67,7 +67,7 @@ export default (() => {
                 <div className="mx-auto max-w-[1280px]">
                     <div className="mb-[18px] flex flex-col lg:flex-row">
                         <CountdownBanner />
-                        <div className="mt-4 flex flex-col justify-between lg:mt-0 lg:min-w-[465px]">
+                        <div className="mt-4 flex h-auto flex-col justify-between lg:mt-0 lg:min-w-[465px]">
                             <ArticleBox />
                             <StatisticsBox {...user[0]} account={account} participating={participating} />
                         </div>
