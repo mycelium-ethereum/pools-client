@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import TwitterShareButton from '~/components/General/Button/TwitterShareButton';
 import { useStore } from '~/store/main';
 import { selectOnboardActions } from '~/store/Web3Slice';
