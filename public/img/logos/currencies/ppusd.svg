@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 26.2.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 150 150" style="enable-background:new 0 0 150 150;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#7C1AFF;}
+	.st1{fill:none;stroke:#935FF9;stroke-width:0.5;stroke-miterlimit:10;}
+	.st2{fill:#FFFFFF;}
+	.st3{filter:url(#Adobe_OpacityMaskFilter);}
+	.st4{fill:url(#SVGID_1_);}
+	.st5{mask:url(#SVGID_00000149352417513088126400000014744900610742772893_);fill:#7C1AFF;}
+	.st6{fill:none;stroke:#935FF9;stroke-width:0.4447;stroke-miterlimit:10;}
+</style>
+<g>
+	<path class="st0" d="M-334.9,628.2l73.8,73.8c2.7,2.7,2.7,7,0,9.6l0,0l-73.8,73.9c-4.7,4.7-12.3,4.7-17,0l0,0l-73.8-73.9
+		c-2.7-2.7-2.7-7,0-9.6l0,0l73.8-73.8C-347.2,623.5-339.6,623.5-334.9,628.2L-334.9,628.2z"/>
+	<path class="st1" d="M-334.9,628.2l73.8,73.8c2.7,2.7,2.7,7,0,9.6l0,0l-73.8,73.9c-4.7,4.7-12.3,4.7-17,0l0,0l-73.8-73.9
+		c-2.7-2.7-2.7-7,0-9.6l0,0l73.8-73.8C-347.2,623.5-339.6,623.5-334.9,628.2L-334.9,628.2z"/>
+	<g>
+		<polygon class="st2" points="-301.7,684.3 -340.9,706.9 -301.7,729.5 -301.7,723.6 -330.6,706.9 -301.7,690.2 		"/>
+		<rect x="-345.9" y="684.3" class="st2" width="5.1" height="45.2"/>
+		<polygon class="st2" points="-385.1,684.3 -385.1,690.2 -356.2,706.9 -385.1,723.6 -385.1,729.5 -345.9,706.9 		"/>
+	</g>
+</g>
+<defs>
+	<filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="-0.5" y="1.4" width="150.1" height="146.2">
+		<feColorMatrix  type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"/>
+	</filter>
+</defs>
+<mask maskUnits="userSpaceOnUse" x="-0.5" y="1.4" width="150.1" height="146.2" id="SVGID_00000149352417513088126400000014744900610742772893_">
+	<g class="st3">
+		
+			<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="51.1443" y1="71.7943" x2="127.1143" y2="221.6042" gradientTransform="matrix(1 0 0 -1 0 152)">
+			<stop  offset="0" style="stop-color:#FFFFFF"/>
+			<stop  offset="1" style="stop-color:#000000"/>
+		</linearGradient>
+		<polygon class="st4" points="-112,70.9 -31.1,226.1 214.7,88.7 133.8,-66.6 		"/>
+	</g>
+</mask>
+<path class="st5" d="M82.1,4.5l65.7,65.7c2.4,2.4,2.4,6.2,0,8.6l0,0l-65.7,65.7c-4.2,4.2-10.9,4.2-15.1,0l0,0L1.3,78.8
+	c-2.4-2.4-2.4-6.2,0-8.6l0,0L66.9,4.5C71.1,0.4,77.9,0.4,82.1,4.5C82,4.5,82,4.5,82.1,4.5z"/>
+<path class="st6" d="M82.1,4.5l65.7,65.7c2.4,2.4,2.4,6.2,0,8.6l0,0l-65.7,65.7c-4.2,4.2-10.9,4.2-15.1,0l0,0L1.3,78.8
+	c-2.4-2.4-2.4-6.2,0-8.6l0,0L66.9,4.5C71.1,0.4,77.9,0.4,82.1,4.5C82,4.5,82,4.5,82.1,4.5z"/>
+<g>
+	<path class="st2" d="M78.2,104.9v7.2h-5.4V105c-11.8-0.7-19.4-7.7-19.8-18.4h8.5c0.8,6.6,4.7,11,11.3,12V74.9
+		c-10.7-3-17.5-7.8-17.5-18.4c0-10.5,7.3-16.7,17.5-17.7v-7.2h5.4v7.1c11,0.9,16.9,8.6,18,18h-8.5C87,50.4,84.2,46,78.2,45.1v22
+		C91.9,71.5,96.9,77.5,96.9,87C96.9,97.4,88.7,103.9,78.2,104.9z M72.9,66.3V45.1c-5.6,0.9-9,4.4-9,10.2
+		C63.9,61.5,66.7,64.4,72.9,66.3z M78.2,98.7c6-0.7,10.1-4.1,10.1-10.7c0-5.4-2.5-9.5-10.1-12V98.7z"/>
+</g>
+</svg>
