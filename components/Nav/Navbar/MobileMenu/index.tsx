@@ -35,7 +35,7 @@ export default (({ account, className }) => {
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
-        if (window.innerWidth > 1536) {
+        if (window.innerWidth > 1280) {
             setOpen(false);
         }
     };
@@ -101,16 +101,6 @@ export default (({ account, className }) => {
                                         <div
                                             className={classNames(
                                                 linkStyles,
-                                                route.startsWith('stake') ? selectedStyles : '',
-                                            )}
-                                            onClick={() => handleRoute('/stakepooltoken')}
-                                        >
-                                            <img className="mr-2 inline" src={'/img/general/stake.svg'} alt="Stake" />
-                                            Stake
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
                                                 route.startsWith('bridge') ? selectedStyles : '',
                                             )}
                                             onClick={() => handleRoute('/bridge')}
@@ -131,6 +121,20 @@ export default (({ account, className }) => {
                                                 alt="Portfolio"
                                             />
                                             Portfolio
+                                        </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('trading') ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/trading-comp')}
+                                        >
+                                            <img
+                                                className="mr-2 inline"
+                                                src={'/img/general/trading-comp.svg'}
+                                                alt="Trading Comp"
+                                            />
+                                            Trading Comp
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />

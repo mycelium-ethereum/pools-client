@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
@@ -76,7 +75,6 @@ export const TokenRow: React.FC<
     oraclePrice,
     denotedIn,
 }) => {
-    const router = useRouter();
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
     // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
@@ -159,18 +157,6 @@ export const TokenRow: React.FC<
                 )}
             </TableRowCell>
             <TableRowCell className="flex">
-                <Button
-                    className="mx-1 my-auto ml-auto w-[70px] border-0 py-2 uppercase"
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!netValue.toNumber()}
-                    onClick={() => {
-                        router.push('/stakepooltoken');
-                        sessionStorage.setItem('portfolio.selectedToken', address);
-                    }}
-                >
-                    Stake
-                </Button>
                 <Button
                     className="mx-1 my-auto w-[70px] border-0 py-2 uppercase"
                     size="xs"

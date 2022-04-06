@@ -25,9 +25,10 @@ const UserRow: React.FC<{
     placeholder?: boolean;
 }) => {
     const isFirst = ranking === 1;
+    const isFifth = ranking === 5;
     const tableStyles = `text-left text-cool-gray-900 leading-[24px] dark:text-white leading-[150%] ${
         shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-800' : 'bg-white dark:bg-cool-gray-900'
-    } ${isFirst ? 'text-2xl px-4 py-[30px] font-bold' : 'p-4'}`;
+    } ${isFirst ? 'text-2xl px-4 py-[30px] font-bold' : 'p-4'}  ${isFifth ? 'border-black border-b-2' : ''}`;
 
     return (
         <>

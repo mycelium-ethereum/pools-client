@@ -40,8 +40,8 @@ const Leaderboard: React.FC<{
                 </div>
             </div>
             <div className="max-h-[560px] overflow-auto">
-                <UserTable data={filteredData} />
-                <UserDivs data={filteredData} />
+                <UserTable data={data} filteredData={filteredData} />
+                <UserDivs data={data} filteredData={filteredData} />
             </div>
         </div>
     );

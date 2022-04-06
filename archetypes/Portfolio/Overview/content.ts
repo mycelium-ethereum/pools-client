@@ -1,12 +1,5 @@
 export const emptyStateHelpCardContent = [
     {
-        badge: 'Tip',
-        title: 'Earn TCR Now!',
-        content: 'Do you hold pool tokens? Stake them now to earn APY in TCR!',
-        href: 'https://pools.tracer.finance/stakepooltoken/',
-        linkText: 'View staking pools',
-    },
-    {
         badge: 'Guide',
         title: 'Leveraged Token Designs: Compare the Market',
         content:
