@@ -28,15 +28,15 @@ export const TotalMintCosts: React.FC<
     const totalCost = amount.plus(gasFee);
     return (
         <>
-            <Section label="Total Costs" className="header">
+            <Section label="Total costs" className="header">
                 <Styles.SumText>{toApproxCurrency(totalCost)}</Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
-                    <Section label="Commit Amount" showSectionDetails>
+                    <Section label="Commit amount" showSectionDetails>
                         <Styles.Transparent>{toApproxCurrency(amount)}</Styles.Transparent>
                     </Section>
-                    <Section label="Gas Fee" showSectionDetails>
+                    <Section label="Gas fee" showSectionDetails>
                         <ApproxCommitGasFee amount={amount} gasFee={gasFee} />
                     </Section>
                 </Styles.SectionDetails>
@@ -54,19 +54,19 @@ export const ExpectedTokensMinted: React.FC<
     } & BaseSection
 > = ({ expectedTokensMinted, nextTokenPrice, tokenSymbol, showTransactionDetails }) => (
     <>
-        <Section label="Expected Tokens Minted" className="header">
+        <Section label="Expected tokens minted" className="header">
             <Styles.SumText>
                 {expectedTokensMinted > 0 ? expectedTokensMinted.toFixed(3) : ''} {tokenSymbol}
             </Styles.SumText>
         </Section>
         {showTransactionDetails && (
             <Styles.SectionDetails>
-                <Section label="Expected Amount" showSectionDetails>
+                <Section label="Expected amount" showSectionDetails>
                     <Styles.Transparent>
                         <span>{`${expectedTokensMinted.toFixed(3)}`} tokens</span>
                     </Styles.Transparent>
                 </Section>
-                <Section label="Expected Price" showSectionDetails>
+                <Section label="Expected price" showSectionDetails>
                     <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
                 </Section>
             </Styles.SectionDetails>
@@ -83,7 +83,7 @@ export const ExpectedTokenValue: React.FC<
     } & BaseSection
 > = ({ amount, nextTokenPrice, settlementTokenSymbol, showTransactionDetails }) => (
     <>
-        <Section label="Expected Token Value" className="header">
+        <Section label="Expected token value" className="header">
             <Styles.SumText>
                 {`${toApproxCurrency(calcNotionalValue(nextTokenPrice, amount), 2)} ${settlementTokenSymbol}`}
             </Styles.SumText>
@@ -93,7 +93,7 @@ export const ExpectedTokenValue: React.FC<
                 <Section label="Tokens" showSectionDetails>
                     <Styles.Transparent>{`${amount}`} tokens</Styles.Transparent>
                 </Section>
-                <Section label="Expected Price" showSectionDetails>
+                <Section label="Expected price" showSectionDetails>
                     <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
                 </Section>
             </Styles.SectionDetails>
@@ -132,14 +132,14 @@ export const ExpectedExposure: React.FC<
             {showTransactionDetails && (
                 <Styles.SectionDetails>
                     <Section
-                        label={`Commit Amount (${baseAsset}) at ${toApproxCurrency(oraclePrice)} USD/${baseAsset}`}
+                        label={`Commit amount (${baseAsset}) at ${toApproxCurrency(oraclePrice)} USD/${baseAsset}`}
                         showSectionDetails
                     >
                         <Styles.Transparent>
                             {commitAmount.toFixed(3)} {baseAsset}
                         </Styles.Transparent>
                     </Section>
-                    <Section label="Pool Power Leverage" showSectionDetails>
+                    <Section label="Pool power leverage" showSectionDetails>
                         <Styles.Transparent>{poolLeverage}</Styles.Transparent>
                     </Section>
                 </Styles.SectionDetails>
@@ -159,7 +159,7 @@ export const ExpectedFees: React.FC<
     const totalFee = gasFee.toNumber();
     return (
         <>
-            <Section label="Expected Fees" className="header">
+            <Section label="Expected fees" className="header">
                 <Styles.SumText>{`${toApproxCurrency(totalFee, 3)} USD`}</Styles.SumText>
             </Section>
             {showTransactionDetails && (
@@ -169,7 +169,7 @@ export const ExpectedFees: React.FC<
                             {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
                         </Styles.Transparent>
                         </Section>*/}
-                    <Section label="Gas Fee" showSectionDetails>
+                    <Section label="Gas fee" showSectionDetails>
                         <div>
                             <ApproxCommitGasFee amount={amount} gasFee={gasFee} />
                         </div>
@@ -200,20 +200,20 @@ export const ExpectedFlipAmounts: React.FC<
     const expectedFlippedTokens: string = calcNumTokens(expectedNotionalReturn, nextFlipTokenPrice).toFixed(2);
     return (
         <>
-            <Section label="Expected Amount" className="header">
+            <Section label="Expected amount" className="header">
                 <Styles.SumText>{`${expectedFlippedTokens} ${flippedTokenSymbol}`}</Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
-                    <Section label={`Expected ${isLong ? 'Long' : 'Short'} Token Value`} showSectionDetails>
+                    <Section label={`Expected ${isLong ? 'long' : 'short'} token value`} showSectionDetails>
                         <Styles.Transparent>
                             {`${toApproxCurrency(expectedNotionalReturn, 2)} ${settlementTokenSymbol}`}
                         </Styles.Transparent>
                     </Section>
-                    <Section label={`Expected ${isLong ? 'Short' : 'Long'} Token Price`} showSectionDetails>
+                    <Section label={`Expected ${isLong ? 'short' : 'long'} token price`} showSectionDetails>
                         <ExpectedTokenPrice tokenPrice={nextFlipTokenPrice} />
                     </Section>
-                    <Section label={`Expected Amount of ${isLong ? 'Short' : 'Long'} Tokens`} showSectionDetails>
+                    <Section label={`Expected amount of ${isLong ? 'short' : 'long'} tokens`} showSectionDetails>
                         <Styles.Transparent>
                             {expectedFlippedTokens} ${flippedTokenSymbol}
                         </Styles.Transparent>
