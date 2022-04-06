@@ -69,7 +69,7 @@ export const Input = React.memo(
                 maxLength={80}
                 spellCheck="false"
                 className={classNames(
-                    'outline-none placeholder-low-emphesis focus:placeholder-primary relative flex-auto overflow-hidden overflow-ellipsis border-none focus:border',
+                    'placeholder-low-emphesis focus:placeholder-primary relative flex-auto overflow-hidden overflow-ellipsis border-none outline-none focus:border',
                     className,
                 )}
             />

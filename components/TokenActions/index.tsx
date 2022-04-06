@@ -15,7 +15,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
             {({ open }) => (
                 <>
                     {/* Button */}
-                    <Popover.Button className={'focus:outline-none mb-3 focus:border-none'}>
+                    <Popover.Button className={'mb-3 focus:border-none focus:outline-none'}>
                         <MoreOutlined
                             className="transition"
                             style={{
@@ -34,7 +34,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => (
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="focus:outline-none absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-theme-border rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
+                        <Popover.Panel className="absolute right-0 z-10 mt-2 w-56 origin-top-right divide-y divide-theme-border rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div>
                                 <div
                                     className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"

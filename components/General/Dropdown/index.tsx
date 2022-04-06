@@ -108,7 +108,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 className={classNames(
                     `inline-flex w-full justify-between rounded-md`,
                     SIZE[size],
-                    'focus:outline-none hover:ring-50 hover:ring-1',
+                    'hover:ring-50 hover:ring-1 focus:outline-none',
                     VARIANTS[variant],
                 )}
             >
@@ -134,7 +134,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 leaveFrom="transform opacity-100 scale-100"
                 leaveTo="transform opacity-0 scale-95"
             >
-                <Menu.Items className="focus:outline-none absolute right-0 z-20 mt-2 w-40 origin-top-right rounded-md bg-theme-button-bg shadow-lg ring-1 ring-black ring-opacity-5">
+                <Menu.Items className="absolute right-0 z-20 mt-2 w-40 origin-top-right rounded-md bg-theme-button-bg shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                     <div className="py-1">
                         {options.map((option) => (
                             <Menu.Item key={option.key} disabled={option.disabled}>

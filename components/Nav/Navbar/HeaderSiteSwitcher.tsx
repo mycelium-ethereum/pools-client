@@ -85,7 +85,7 @@ const DropdownMenu: React.FC = () => {
             </Link>
             <button
                 id="toggle"
-                className="w-22 h-22 outline-none left-0 top-0 z-0 flex cursor-pointer items-center justify-center border-none pl-3"
+                className="w-22 h-22 left-0 top-0 z-0 flex cursor-pointer items-center justify-center border-none pl-3 outline-none"
                 onClick={(e) => {
                     e.stopPropagation();
                     setOpen(!open);
@@ -132,7 +132,7 @@ const DropdownMenu: React.FC = () => {
                     <div className="mt-12">
                         {Icons.map((icon, i) => (
                             <a
-                                className="w-fit mt-5 flex items-center rounded-lg transition-all duration-300 hover:opacity-50 sm:px-2"
+                                className="mt-5 flex w-fit items-center rounded-lg transition-all duration-300 hover:opacity-50 sm:px-2"
                                 href={icon.href}
                                 rel="noreferrer"
                                 target="_blank"
@@ -162,7 +162,7 @@ const DropdownOption: React.FC<{
     boxColor: string;
 }> = ({ href, label, boxColor }) => (
     <a
-        className={'w-fit mb-6 flex rounded-lg bg-opacity-50 pr-2 transition-all duration-300 hover:bg-tracer-900'}
+        className={'mb-6 flex w-fit rounded-lg bg-opacity-50 pr-2 transition-all duration-300 hover:bg-tracer-900'}
         href={href}
         rel="noreferrer"
         target="_blank"
