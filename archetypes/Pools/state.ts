@@ -4,15 +4,16 @@ export enum MarketFilterEnum {
     All = 'All',
     ETH = 'Ethereum',
     BTC = 'Bitcoin',
-    TOKE = 'Tokemak',
+    // TOKE = 'Tokemak',
     LINK = 'Chainlink',
-    EUR = 'Euro',
-    AAVE = 'Aave',
+    // EUR = 'Euro',
+    // AAVE = 'Aave',
 }
 
 export enum CollateralEnum {
     All = 'All',
-    USDC = 'USDC',
+    // USDC = 'USDC',
+    PPUSD = 'PPUSD'
 }
 
 export enum LeverageEnum {
