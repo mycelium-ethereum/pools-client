@@ -17,7 +17,7 @@ const PortfolioValueInfoBox: React.FC = () => {
         <button onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className="relative hidden md:inline">
             <img
                 src="/img/trading-comp/info-dark.svg"
-                className="mb-1 h-[12px] w-[12px] [transform:_translateZ(0)_perspective(999px)]"
+                className="mb-1 h-[12px] w-[12px] [transform:_translateZ(0)_perspective(999px)] dark:invert"
             />
             <div
                 className={`absolute top-[calc(100%-2px)] left-1/2 z-10 flex h-[60px] w-[200px] -translate-x-1/2 transform items-center rounded-lg px-3.5 pb-2 pt-4 transition-opacity duration-300 ${
