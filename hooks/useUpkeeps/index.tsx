@@ -36,6 +36,9 @@ type RawUpkeep = {
     endPrice: string;
     network: string;
     timestamp: string;
+    pool: {
+        settlementTokenDecimals: string
+    }
 };
 
 // const useUpkeeps
@@ -57,7 +60,6 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
 
             const promises = poolList.map(async (pool) => {
                 try {
-                    const decimals = pool.settlementToken?.decimals ?? 18
                     const last2Upkeeps = await fetch(graphUrl, {
                         method: 'POST',
                         body: JSON.stringify({
@@ -66,6 +68,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
                     }).then((res) => res.json());
 
                     for(const upkeep of last2Upkeeps.data.upkeeps) {
+                        const decimals = Number(upkeep.pool?.settlementTokenDecimals ?? 18);
                         if (upkeepMapping[pool.address]) {
                             upkeepMapping[pool.address].push(parseUpkeep(upkeep, decimals));
                         } else {

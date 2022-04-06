@@ -38,5 +38,8 @@ export const last2UpkeepsQuery: ({ poolAddress }: { poolAddress: string }) => st
         startPrice
         endPrice
         timestamp
+        pool {
+            settlementTokenDecimals
+        }
     }
 }`;
