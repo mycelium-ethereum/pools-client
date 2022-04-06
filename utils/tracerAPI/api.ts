@@ -1,12 +1,12 @@
 import BigNumber from 'bignumber.js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeMap } from '~/constants/commits';
-import { query } from './subgraph';
+import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
 import { TradeHistoryResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS, GraphCommit } from './types';
 
 // Base API URL
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
-const V2_GRAPH_URI_TESTNET = 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby';
+const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611']
 
 export const fetchPendingCommits: (
     network: V2_SUPPORTED_NETWORKS,
@@ -26,7 +26,7 @@ export const fetchPendingCommits: (
     const tracerCommits = await fetch(V2_GRAPH_URI_TESTNET, {
         method: 'POST',
         body: JSON.stringify({
-            query: query({ pool, account }),
+            query: pendingCommitsQuery({ pool, account }),
         }),
     })
         .then((res) => res.json())
