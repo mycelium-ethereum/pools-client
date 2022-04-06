@@ -190,7 +190,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                         </TableHeaderCell>
                         {showNextRebalance && !!account ? (
                             <TableHeaderCell size="sm">
-                                <div className="capitalize">{'MY HOLDINGS'}</div>
+                                <div className="whitespace-nowrap capitalize">{'MY HOLDINGS'}</div>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
