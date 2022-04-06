@@ -17,7 +17,7 @@ const CountdownBar: React.FC = () => {
         return (
             <span>
                 <span className="font-bold text-white">
-                    {days} days, {hours} hours, {minutes} Minutes, {seconds} Seconds
+                    {days} days, {hours} hours, {minutes} minutes, {seconds} seconds
                 </span>
             </span>
         );
