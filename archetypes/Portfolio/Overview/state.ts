@@ -25,6 +25,7 @@ export type TokenRowProps = {
     price: BigNumber;
     deposits: BigNumber; // amount of USDC deposited
     oraclePrice: BigNumber;
+    effectiveGain: number;
 };
 
 export interface EscrowRowProps {

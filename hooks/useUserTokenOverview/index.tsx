@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
+import { calcEffectiveLongGain, calcEffectiveShortGain } from '@tracer-protocol/pools-js';
 import { TokenRowProps } from '~/archetypes/Portfolio/Overview/state';
 import { usePools } from '~/hooks/usePools';
 
@@ -16,7 +17,9 @@ export default (() => {
             poolValues.forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 
-                const { address, oraclePrice, longToken, shortToken } = poolInstance;
+                const { address, oraclePrice, longToken, shortToken, longBalance, shortBalance, leverage } =
+                    poolInstance;
+                const leverageBN = new BigNumber(leverage);
 
                 rows.push(
                     {
@@ -30,6 +33,7 @@ export default (() => {
                         holdings: userBalances.shortToken.balance,
                         deposits: new BigNumber(0),
                         oraclePrice: oraclePrice,
+                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                     },
                     {
                         name: longToken.name,
@@ -42,6 +46,7 @@ export default (() => {
                         holdings: userBalances.longToken.balance,
                         deposits: new BigNumber(0),
                         oraclePrice: oraclePrice,
+                        effectiveGain: calcEffectiveLongGain(longBalance, longBalance, leverageBN).toNumber(),
                     },
                 );
             });
