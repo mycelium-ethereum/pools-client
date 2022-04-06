@@ -69,13 +69,13 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="flex flex-col lg:flex-row">
                     <div className={item}>
-                        <Link href="/privacy-policy">Privacy Policy</Link>
+                        <a href="https://tracer.finance/privacy-policy">Privacy Policy</a>
                     </div>
                     <div className={item}>
-                        <Link href="/terms-of-use">Terms of Use</Link>
+                        <a href="https://tracer.finance/privacy-policy#terms-of-use">Terms of Use</a>
                     </div>
                     <div className={item}>
-                        <Link href="/disclaimer">Disclaimer</Link>
+                        <a href="https://tracer.finance/privacy-policy#interfaces-disclaimer">Disclaimer</a>
                     </div>
                     <div className={item}>
                         <a
