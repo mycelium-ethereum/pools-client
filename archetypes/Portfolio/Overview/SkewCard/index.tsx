@@ -2,13 +2,19 @@ import React from 'react';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import BVector from '~/public/img/b-vector.svg';
 import * as Styles from './styles';
-import { BrowseTableRowData } from '../../../Pools/state';
 
 type Props = {
-    maxSkew: BrowseTableRowData;
+    longToken: {
+        symbol: string;
+        effectiveGain: number;
+    };
+    shortToken: {
+        symbol: string;
+        effectiveGain: number;
+    };
 };
 
-export const SkewCard: React.FC<Props> = ({ maxSkew }) => (
+export const SkewCard: React.FC<Props> = ({ longToken, shortToken }) => (
     <Styles.Container>
         <Styles.Background />
         <Styles.Card>
@@ -17,17 +23,17 @@ export const SkewCard: React.FC<Props> = ({ maxSkew }) => (
             </Styles.Vector>
             <Styles.Wrapper>
                 <Styles.Content>
-                    <Styles.Logo size="lg" ticker={tokenSymbolToLogoTicker(maxSkew?.longToken?.symbol)} />
+                    <Styles.Logo size="lg" ticker={tokenSymbolToLogoTicker(longToken.symbol)} />
                     <Styles.Text>
-                        <div>{maxSkew?.longToken?.symbol}</div>
-                        <div>Leverage on gains: {maxSkew?.longToken?.effectiveGain.toFixed(3)}</div>
+                        <div>{longToken.symbol}</div>
+                        <div>Leverage on gains: {longToken.effectiveGain.toFixed(3)}</div>
                     </Styles.Text>
                 </Styles.Content>
                 <Styles.Content>
-                    <Styles.Logo size="lg" ticker={tokenSymbolToLogoTicker(maxSkew?.shortToken?.symbol)} />
+                    <Styles.Logo size="lg" ticker={tokenSymbolToLogoTicker(shortToken.symbol)} />
                     <Styles.Text>
-                        <div>{maxSkew?.shortToken?.symbol}</div>
-                        <div>Leverage on gains: {maxSkew?.shortToken?.effectiveGain.toFixed(3)}</div>
+                        <div>{shortToken.symbol}</div>
+                        <div>Leverage on gains: {shortToken.effectiveGain.toFixed(3)}</div>
                     </Styles.Text>
                 </Styles.Content>
             </Styles.Wrapper>

@@ -51,6 +51,16 @@ export default (({ onClickCommitAction }) => {
         for (let i = 0; i < rows.length; i++) {
             total = total + rows[i].holdings.times(rows[i].price).toNumber();
         }
+        rows.forEach((row) => {
+            total += row.holdings.times(row.price).toNumber();
+        });
+        escrowRows.forEach((pool) => {
+            const valueInEscrow = pool.claimableLongTokens.notionalValue
+                .plus(pool.claimableShortTokens.notionalValue)
+                .plus(pool.claimableSettlementTokens.notionalValue);
+            total += valueInEscrow.toNumber();
+        });
+
         return total;
     };
 
@@ -75,8 +85,8 @@ export default (({ onClickCommitAction }) => {
     //TODO: calculate PnP and Net Acquisition Costs
     const portfolioOverview = [
         { title: 'Portfolio Valuation', value: toApproxCurrency(totalValuation()) },
-        { title: 'Unrealised Profit and Loss', value: toApproxCurrency(totalValuation()) },
-        { title: 'Net Acquisition Costs', value: toApproxCurrency(totalValuation()) },
+        // { title: 'Unrealised Profit and Loss', value: toApproxCurrency(totalValuation()) },
+        // { title: 'Net Acquisition Costs', value: toApproxCurrency(totalValuation()) },
     ];
 
     const emptyState = () => {
@@ -101,7 +111,7 @@ export default (({ onClickCommitAction }) => {
                     </Styles.Banner>
                     {maxSkew !== undefined && (
                         <div>
-                            <SkewCard maxSkew={maxSkew} />
+                            <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
 
                             <HelpCard
                                 title={`Skew Farming Opportunity: ${maxSkew?.name}`}
