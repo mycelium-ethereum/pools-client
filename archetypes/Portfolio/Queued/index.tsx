@@ -240,11 +240,9 @@ const MintCommitRow: React.FC<
                     </div>
                 </div>
             </TableRowCell>
-            <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
+            <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>
-                <div>
-                    {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
-                </div>
+                <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
                 <div className="text-cool-gray-500">
                     at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
                 </div>
