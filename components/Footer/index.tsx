@@ -108,6 +108,15 @@ const Footer: React.FC = () => {
                             Security Audit
                         </a>
                     </div>
+                    <div className={item}>
+                        <a
+                            href="/terms_and_conditions_tracer_competitions.pdf"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {'Competition T&Cs'}
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
