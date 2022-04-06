@@ -38,7 +38,7 @@ const CountdownBanner: React.FC = () => {
                                 <span className={statStyles}>UX Feedback</span>
                             </div>
                             <div className="mr-8">
-                                <span className={moneyStyles}>$500,000</span>
+                                <span className={moneyStyles}>$1,000,000</span>
                                 <span className={statStyles}>Bug Bounty</span>
                             </div>
                         </div>
