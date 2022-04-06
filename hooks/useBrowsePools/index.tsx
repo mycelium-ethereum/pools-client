@@ -1,10 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
-import {
-    calcEffectiveLongGain,
-    calcEffectiveShortGain,
-    calcSkew,
-} from '@tracer-protocol/pools-js';
+import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';

@@ -51,7 +51,7 @@ export default (({ account, className }) => {
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative my-auto ml-4 overflow-hidden 2xl:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog

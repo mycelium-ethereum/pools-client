@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default (({ hideOnDesktop, pushContentRight }) => (
-    <VersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
+export default (({ hideOnDesktop }) => (
+    <VersionToggle hideOnDesktop={hideOnDesktop}>
         <V1 href="https://pools.tracer.finance">V1</V1>
         <V2>
             V2 <New>BETA</New>
@@ -10,10 +10,9 @@ export default (({ hideOnDesktop, pushContentRight }) => (
     </VersionToggle>
 )) as React.FC<{
     hideOnDesktop?: boolean;
-    pushContentRight: boolean;
 }>;
 
-const VersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: boolean }>`
+const VersionToggle = styled.span<{ hideOnDesktop?: boolean }>`
     border: 1px solid #fff;
     border-radius: 7px;
     background-color: rgba(255, 255, 255, 0.25);
@@ -21,13 +20,13 @@ const VersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: b
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
-    margin: ${({ pushContentRight }) => `10px 0 10px ${pushContentRight ? '10px' : 'auto'}`};
+    margin: 10px 0 10px 10px;
     width: 149px;
     justify-content: space-between;
     font-weight: 600;
     letter-spacing: 0.115em;
 
-    @media (min-width: 1536px) {
+    @media (min-width: 1024px) {
         display: ${({ hideOnDesktop }) => (hideOnDesktop ? 'none' : 'grid')};
         margin: 10px 0 10px 10px;
     }

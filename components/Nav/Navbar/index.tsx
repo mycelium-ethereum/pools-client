@@ -43,7 +43,7 @@ export const NavBarContent: React.FC<{
         <nav className={`container h-[60px] text-base`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
-                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white lg:flex">
+                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a id="browse-pools" className="m-auto">
@@ -67,30 +67,31 @@ export const NavBarContent: React.FC<{
                         </li>
                     </Link>
                 </ul>
+                <div className="ml-auto flex">
+                    {setShowOnboardModal ? (
+                        <div
+                            className="my-auto cursor-pointer"
+                            onClick={() => {
+                                setShowOnboardModal(true);
+                            }}
+                        >
+                            <RevisitOnboard />
+                        </div>
+                    ) : null}
 
-                {setShowOnboardModal ? (
-                    <div
-                        className="my-auto ml-auto cursor-pointer"
-                        onClick={() => {
-                            setShowOnboardModal(true);
-                        }}
-                    >
-                        <RevisitOnboard />
-                    </div>
-                ) : null}
+                    <VersionToggle />
 
-                {/* DESKTOP */}
-                <span className="hidden 2xl:flex">
-                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
-                    {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
+                    {/* DESKTOP */}
+                    <span className="hidden xl:flex">
+                        {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
-                    <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
+                        <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
 
-                    <ThemeSwitcher />
-                </span>
+                        <ThemeSwitcher />
+                    </span>
 
-                <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
-                <MobileMenu account={account ?? ''} />
+                    <MobileMenu account={account ?? ''} />
+                </div>
             </div>
         </nav>
     );
