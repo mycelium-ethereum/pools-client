@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import Link from 'next/link';
 
 import DiscordLogo from '~/public/img/socials/discord.svg';
 import DiscourseLogo from '~/public/img/socials/discourse.svg';
@@ -69,19 +68,33 @@ const Footer: React.FC = () => {
                 </div>
                 <div className="flex flex-col lg:flex-row">
                     <div className={item}>
-                        <Link href="/privacy-policy">Privacy Policy</Link>
+                        <a href="https://tracer.finance/privacy-policy" target="_blank" rel="noopener noreferrer">
+                            Privacy Policy
+                        </a>
                     </div>
                     <div className={item}>
-                        <Link href="/terms-of-use">Terms of Use</Link>
+                        <a
+                            href="https://tracer.finance/privacy-policy#terms-of-use"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Terms of Use
+                        </a>
                     </div>
                     <div className={item}>
-                        <Link href="/disclaimer">Disclaimer</Link>
+                        <a
+                            href="https://tracer.finance/privacy-policy#interfaces-disclaimer"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Disclaimer
+                        </a>
                     </div>
                     <div className={item}>
                         <a
                             href="https://gateway.pinata.cloud/ipfs/QmS161WXV2bEAWUtdecfS5FYPmHQZdhNnjVFAwQ5FTX3og"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                         >
                             Participation Agreement
                         </a>
@@ -90,7 +103,7 @@ const Footer: React.FC = () => {
                         <a
                             href="https://tracer.finance/radar/sigma-prime-audit-response/"
                             target="_blank"
-                            rel="noreferrer"
+                            rel="noopener noreferrer"
                         >
                             Security Audit
                         </a>
