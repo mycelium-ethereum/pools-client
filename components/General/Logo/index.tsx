@@ -21,6 +21,7 @@ import FRAX from '~/public/img/logos/currencies/frax.svg';
 import LINK from '~/public/img/logos/currencies/link.svg';
 import LINK_L from '~/public/img/logos/currencies/link_long.svg';
 import LINK_S from '~/public/img/logos/currencies/link_short.svg';
+import PPUSD from '~/public/img/logos/currencies/ppusd.svg';
 import SUSHI from '~/public/img/logos/currencies/sushi.svg';
 import TOKE from '~/public/img/logos/currencies/toke.svg';
 import TOKE_L from '~/public/img/logos/currencies/toke_long.svg';
@@ -86,7 +87,7 @@ const logos: Record<LogoTicker, any> = {
     USD: USD,
     FRAX: FRAX,
     AAVE: AAVE,
-    DEFAULT: ETH,
+    DEFAULT: PPUSD,
     AAVE_L: AAVE_L,
     AAVE_S: AAVE_S,
     ETH_L: ETH_L,
@@ -127,6 +128,6 @@ const SIZES: Record<LogoSize, string> = {
 };
 
 export const Logo: React.FC<LProps> = ({ className, ticker, size = 'sm' }: LProps) => {
-    const LogoImage = logos[ticker] ?? logos['ETH'];
+    const LogoImage = logos[ticker] ?? logos['DEFAULT'];
     return <LogoImage className={classNames(SIZES[size], className ?? '')} />;
 };

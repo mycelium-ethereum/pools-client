@@ -43,7 +43,7 @@ export const NavBarContent: React.FC<{
         <nav className={`container h-[60px] text-base`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
-                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white lg:flex">
+                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a id="browse-pools" className="m-auto">
@@ -61,31 +61,42 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Trading Comp</a>
                         </li>
                     </Link>
-                </ul>
-
-                {setShowOnboardModal ? (
-                    <div
-                        className="my-auto ml-auto cursor-pointer"
-                        onClick={() => {
-                            setShowOnboardModal(true);
-                        }}
+                    <a
+                        href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="my-auto"
                     >
-                        <RevisitOnboard />
-                    </div>
-                ) : null}
+                        <li className={classNames(linkStyles)}>
+                            <a className="m-auto">Documentation</a>
+                        </li>
+                    </a>
+                </ul>
+                <div className="ml-auto flex">
+                    {setShowOnboardModal ? (
+                        <div
+                            className="my-auto cursor-pointer"
+                            onClick={() => {
+                                setShowOnboardModal(true);
+                            }}
+                        >
+                            <RevisitOnboard />
+                        </div>
+                    ) : null}
 
-                {/* DESKTOP */}
-                <span className="hidden 2xl:flex">
-                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
-                    {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
+                    <VersionToggle />
 
-                    <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
+                    {/* DESKTOP */}
+                    <span className="hidden xl:flex">
+                        {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
-                    <ThemeSwitcher />
-                </span>
+                        <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
 
-                <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
-                <MobileMenu account={account ?? ''} />
+                        <ThemeSwitcher />
+                    </span>
+
+                    <MobileMenu account={account ?? ''} />
+                </div>
             </div>
         </nav>
     );

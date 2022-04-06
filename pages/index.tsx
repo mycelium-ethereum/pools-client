@@ -5,7 +5,6 @@ import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
-import { WarningBanners } from '~/components/WarningBanner';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -20,7 +19,6 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar setShowOnboardModal={setShowOnboardModal} />
-            <WarningBanners banners={['auditWarning', 'decayWarning']} />
             <SwapStore>
                 <Browse />
             </SwapStore>

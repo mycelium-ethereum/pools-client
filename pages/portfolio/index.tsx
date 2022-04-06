@@ -4,7 +4,6 @@ import Portfolio, { TradePortfolioPage } from '~/archetypes/Portfolio';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
-import { WarningBanners } from '~/components/WarningBanner';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -17,7 +16,6 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar />
-            <WarningBanners banners={['auditWarning', 'decayWarning']} />
             <SwapStore>
                 <Portfolio page={TradePortfolioPage.Overview} />
             </SwapStore>
