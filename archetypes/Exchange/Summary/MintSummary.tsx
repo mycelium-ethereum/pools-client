@@ -25,7 +25,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token
                 tokenSymbol={token.symbol}
             />
             <ExpectedExposure
-                label={'Expected Equivalent Exposure'}
+                label={'Expected equivalent exposure'}
                 baseAsset={baseAsset}
                 oraclePrice={pool.oraclePrice}
                 commitAmount={commitAmount}
