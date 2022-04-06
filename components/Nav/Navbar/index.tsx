@@ -61,11 +61,11 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Trading Comp</a>
                         </li>
                     </Link>
-                    <Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet/">
+                    <a href="https://tracer-1.gitbook.io/ppv2-beta-testnet/" target="_blank" rel="noreferrer">
                         <li className={classNames(linkStyles)}>
                             <a className="m-auto">Documentation</a>
                         </li>
-                    </Link>
+                    </a>
                 </ul>
                 <div className="ml-auto flex">
                     {setShowOnboardModal ? (
