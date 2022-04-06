@@ -111,7 +111,6 @@ const parseUpkeep: (upkeep: RawUpkeep, decimals: number) => Upkeep = (upkeep, de
     const longTokenPrice = calcTokenPrice(longTokenBalance, longTokenSupply);
     const shortTokenPrice = calcTokenPrice(shortTokenBalance, shortTokenSupply);
 
-    // TODO need to check if decimals effect oldPrice and newPrice or if they come from the oracle in WAD
     return {
         pool: upkeep.id,
         timestamp: parseInt(upkeep.timestamp),
