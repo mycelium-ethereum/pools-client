@@ -15,7 +15,12 @@ const ArticleBox: React.FC = () => {
                     An overview of the V2 Perpetual Pools Trading Competition. Read about the $TCR prices, entry
                     requirements, and more!
                 </p>
-                <a href="#" className="text-sm text-tracer-midblue underline">
+                <a
+                    href="https://tracer.finance/radar/trading-competition/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-tracer-midblue underline"
+                >
                     Read article
                 </a>
             </div>
