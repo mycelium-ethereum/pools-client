@@ -132,6 +132,20 @@ export default (({ account, className }) => {
                                             />
                                             Portfolio
                                         </div>
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('trading') ? selectedStyles : '',
+                                            )}
+                                            onClick={() => handleRoute('/trading-comp')}
+                                        >
+                                            <img
+                                                className="mr-2 inline"
+                                                src={'/img/general/trading-comp.svg'}
+                                                alt="Trading Comp"
+                                            />
+                                            Trading Comp
+                                        </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
                                         </div>

@@ -25,6 +25,7 @@ const UserRow: React.FC<{
     placeholder?: boolean;
 }) => {
     const isFirst = ranking === 1;
+    const isFifth = ranking === 5;
     const getOrdinal = (number: number) => {
         const ordinalRules = new Intl.PluralRules('en', {
             type: 'ordinal',
@@ -42,7 +43,11 @@ const UserRow: React.FC<{
     };
 
     return (
-        <div className={`p-3 ${shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-900' : 'bg-white dark:bg-cool-gray-800'}`}>
+        <div
+            className={`p-3 ${shaded ? 'bg-cool-gray-50 dark:bg-cool-gray-900' : 'bg-white dark:bg-cool-gray-800'} ${
+                isFifth ? 'border-b-2 border-black' : ''
+            }`}
+        >
             <div className="flex items-center justify-between md:hidden">
                 <div className="flex min-w-[100px] items-center">
                     <span

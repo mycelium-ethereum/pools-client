@@ -6,7 +6,6 @@ import ArticleBox from '~/components/TradingComp/ArticleBox';
 import CountdownBanner from '~/components/TradingComp/CountdownBanner';
 import Leaderboard from '~/components/TradingComp/Leaderboard';
 import { TradingCompParticipant } from '~/components/TradingComp/Leaderboard';
-import { tableData } from '~/components/TradingComp/presets';
 import StatisticsBox from '~/components/TradingComp/StatisticsBox';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
@@ -24,9 +23,7 @@ export default (() => {
             method: 'GET',
         })
             .then((response) => response.json())
-            .then((data: TradingCompParticipant[]) =>
-                data && data.length > 0 ? storeData(data) : storeData(tableData),
-            )
+            .then((data: TradingCompParticipant[]) => storeData(data))
             .catch((error) => {
                 console.log('API request failed', error);
             });
@@ -44,9 +41,6 @@ export default (() => {
     };
 
     const getCurrentUser = () => {
-        // Hardcode account for testing
-        // const accountAddress = '0xAEF2A30FE1b2dC3d51b4e9Bf22b0698Ec8e6Ce1f';
-        // const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === accountAddress);
         const currentUser: TradingCompParticipant[] = data.filter((item) => item.address === account);
         if (currentUser[0] && !!currentUser[0].username) {
             setUser(currentUser);

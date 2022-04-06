@@ -4,14 +4,15 @@ import UserDiv from '~/components/TradingComp/UserDiv';
 
 const UserDivs: React.FC<{
     data: TradingCompParticipant[];
-}> = ({ data }: { data: TradingCompParticipant[] }) => {
+    filteredData: TradingCompParticipant[];
+}> = ({ data, filteredData }: { data: TradingCompParticipant[]; filteredData: TradingCompParticipant[] }) => {
     const placeholderArr = Array.from({ length: 7 });
     let rank = 0;
     return (
         <div className="block md:hidden">
-            {data && data.length > 0 ? (
+            {filteredData && filteredData.length > 0 ? (
                 <>
-                    {data
+                    {filteredData
                         .map((item: any, index: number) => {
                             if (!item.disqualified) {
                                 return <UserDiv {...item} key={index} shaded={index % 2 !== 0} />;
@@ -23,21 +24,27 @@ const UserDivs: React.FC<{
                 </>
             ) : (
                 <>
-                    {placeholderArr.map((item, index) => {
-                        rank += 1;
-                        return (
-                            <UserDiv
-                                {...item}
-                                username={''}
-                                accountValue={''}
-                                entryDate={0}
-                                key={index}
-                                ranking={rank}
-                                shaded={index % 2 !== 0}
-                                placeholder
-                            />
-                        );
-                    })}
+                    {!data || data.length == 0 ? (
+                        <>
+                            {placeholderArr.map((item, index) => {
+                                rank += 1;
+                                return (
+                                    <UserDiv
+                                        {...item}
+                                        username={''}
+                                        accountValue={''}
+                                        entryDate={0}
+                                        key={index}
+                                        ranking={rank}
+                                        shaded={index % 2 !== 0}
+                                        placeholder
+                                    />
+                                );
+                            })}
+                        </>
+                    ) : (
+                        <h1 className="mt-4 w-full text-center font-bold text-cool-gray-900">No results found</h1>
+                    )}
                 </>
             )}
         </div>
