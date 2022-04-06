@@ -64,7 +64,7 @@ export default (({ onClickCommitAction }) => {
         return total;
     };
 
-    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.shortToken.effectiveGain)[0];
+    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
     const searchFilter = (pool: EscrowRowProps): boolean => {
         const searchString = state.escrowSearch.toLowerCase();
