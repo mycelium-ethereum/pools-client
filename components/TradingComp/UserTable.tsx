@@ -41,7 +41,7 @@ const UserTable: React.FC<{
                     </>
                 ) : (
                     <>
-                        {!data || data.length == 0 ? (
+                        {!data || data.length === 0 ? (
                             <>
                                 {placeholderArr.map((item, index) => {
                                     rank += 1;
