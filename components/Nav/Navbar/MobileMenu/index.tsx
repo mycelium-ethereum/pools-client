@@ -101,16 +101,6 @@ export default (({ account, className }) => {
                                         <div
                                             className={classNames(
                                                 linkStyles,
-                                                route.startsWith('stake') ? selectedStyles : '',
-                                            )}
-                                            onClick={() => handleRoute('/stakepooltoken')}
-                                        >
-                                            <img className="mr-2 inline" src={'/img/general/stake.svg'} alt="Stake" />
-                                            Stake
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
                                                 route.startsWith('bridge') ? selectedStyles : '',
                                             )}
                                             onClick={() => handleRoute('/bridge')}

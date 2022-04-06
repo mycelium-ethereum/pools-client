@@ -160,18 +160,6 @@ export const TokenRow: React.FC<
             </TableRowCell>
             <TableRowCell className="flex">
                 <Button
-                    className="mx-1 my-auto ml-auto w-[70px] border-0 py-2 uppercase"
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!netValue.toNumber()}
-                    onClick={() => {
-                        router.push('/stakepooltoken');
-                        sessionStorage.setItem('portfolio.selectedToken', address);
-                    }}
-                >
-                    Stake
-                </Button>
-                <Button
                     className="mx-1 my-auto w-[70px] border-0 py-2 uppercase"
                     size="xs"
                     variant="primary-light"
