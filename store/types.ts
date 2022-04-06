@@ -1,6 +1,7 @@
 import { SetState, GetState } from 'zustand';
 import { IGasSlice } from './GasSlice/types';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
+import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
 import { IThemeSlice } from './ThemeSlice/types';
 import { ITransactionSlice } from './TransactionSlice/types';
@@ -12,6 +13,7 @@ export type StoreState = {
     transactionSlice: ITransactionSlice;
     themeSlice: IThemeSlice;
     poolsSlice: IPoolsSlice;
+    poolsInstancesSlice: IPoolsInstancesSlice;
     web3Slice: IWeb3Slice;
     gasSlice: IGasSlice;
     unsupportedNetworkSlice: IUnsupportedNetworkSlice;

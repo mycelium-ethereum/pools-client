@@ -74,6 +74,8 @@ export interface BrowseTableRowData {
     longToken: BrowseTableTokenData;
 
     myHoldings: number;
+
+    isWaitingForUpkeep: boolean;
     expectedExecution: number;
 
     pastUpkeep: Upkeep;
