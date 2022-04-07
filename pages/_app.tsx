@@ -9,23 +9,10 @@ import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import { StyledThemeProvider } from '~/context/ThemeContext';
-import usePoolWatcher from '~/hooks/usePoolWatcher';
-import { useUpdatePoolInstances } from '~/hooks/useUpdatePoolInstances';
-import { useUpdatePoolLists } from '~/hooks/useUpdatePoolLists';
-import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
+import StoreUpdater from '~/components/StoreUpdater';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
-
-const Updater = () => {
-    // any store hooks
-    // using seperate component avoids app level re-renders
-    useUpdateWeb3Store();
-    useUpdatePoolLists();
-    usePoolWatcher();
-    useUpdatePoolInstances();
-    return <></>;
-};
 
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     // load usersnap
@@ -36,7 +23,6 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
             api.show(USERSNAP_API_KEY);
         };
     }, []);
-    console.count('re render');
 
     return (
         <div>
@@ -75,7 +61,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                 <Component {...pageProps} />
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
-            <Updater />
+            <StoreUpdater />
         </div>
     );
 };
