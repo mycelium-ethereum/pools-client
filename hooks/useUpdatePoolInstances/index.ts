@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -60,9 +60,9 @@ export const useUpdatePoolInstances = (): void => {
                             if (!hasSetPools.current && mounted) {
                                 if (pools_.length) {
                                     // if pools exist
+                                    setMultiplePools(pools_);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
-                                    setMultiplePools(pools_);
                                 }
                             }
                         })
@@ -87,7 +87,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [poolAddresses.length]);
 
     // fetch all pending commits
-    useEffect(() => {
+    useMemo(() => {
         let mounted = true;
         if (provider && poolsInitialized) {
             Object.values(pools).map((pool) => {
@@ -99,6 +99,7 @@ export const useUpdatePoolInstances = (): void => {
                         pool: pool.poolInstance.address,
                     })
                         .then((pendingCommits) => {
+                            console.log('pendingCommits', pendingCommits);
                             if (mounted) {
                                 pendingCommits.map((commit) => {
                                     addCommit({
