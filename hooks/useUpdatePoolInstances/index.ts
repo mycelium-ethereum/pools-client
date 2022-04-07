@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -28,7 +28,7 @@ export const useUpdatePoolInstances = (): void => {
     const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
     const { addCommit } = useStore(selectUserCommitActions, shallow);
     const { provider, account } = useStore(selectWeb3Info, shallow);
-    const poolAddresses = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
+    const poolAddresses = useStore(selectAllPoolLists);
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
 
@@ -87,7 +87,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [poolAddresses.length]);
 
     // fetch all pending commits
-    useMemo(() => {
+    useEffect(() => {
         let mounted = true;
         if (provider && poolsInitialized) {
             Object.values(pools).map((pool) => {
@@ -127,7 +127,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [provider, poolsInitialized]);
 
     // update token balances and approvals when address changes
-    useMemo(() => {
+    useEffect(() => {
         if (account && poolsInitialized) {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool

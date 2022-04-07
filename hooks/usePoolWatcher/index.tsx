@@ -13,7 +13,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 export const usePoolWatcher = (): void => {
     const currentSubscribed = useRef<string | undefined>();
-    const pools = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
+    const pools = useStore(selectAllPoolLists);
     const poolAddresses = useMemo(() => pools.map((pool) => pool.address), [pools.length]);
     const { network, account } = useStore(selectWeb3Info, shallow);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);

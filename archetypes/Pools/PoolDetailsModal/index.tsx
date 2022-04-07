@@ -43,7 +43,7 @@ export default (({ open, onClose, poolDetails, network }) => {
                 href: constructExplorerLink(BlockExplorerAddressType.token, collateralAssetAddress, network),
             },
             {
-                name: 'Deployer',
+                name: 'Committer',
                 value: formatAddress(committer),
                 href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
             },
