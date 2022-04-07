@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUnsupportedNetworkRef } from '~/store/UnsupportedNetworkSlice';
@@ -11,8 +12,11 @@ import { Notification } from '../Notification';
 
 const UnsupportedNetwork: React.FC = () => {
     const router = useRouter();
-    const { account, network, provider } = useStore(selectWeb3Info);
-    const { unsupportedNetworkPopupRef, setUnsupportedNetworkPopupRef } = useStore(selectUnsupportedNetworkRef);
+    const { account, network, provider } = useStore(selectWeb3Info, shallow);
+    const { unsupportedNetworkPopupRef, setUnsupportedNetworkPopupRef } = useStore(
+        selectUnsupportedNetworkRef,
+        shallow,
+    );
 
     // unsupported network popup
     useEffect(() => {

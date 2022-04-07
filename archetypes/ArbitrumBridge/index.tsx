@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import type { BigNumber } from 'bignumber.js';
 
+import shallow from 'zustand/shallow';
 import { bridgeableTickers } from '~/constants/bridge';
 import { useArbitrumBridge } from '~/context/ArbitrumBridgeContext';
 import { useStore } from '~/store/main';
@@ -13,7 +14,7 @@ import { MultiBridge } from './MultiBridge';
 
 // ArbitrumBridge
 export const ArbitrumBridge: React.FC = (() => {
-    const { provider, account } = useStore(selectWeb3Info);
+    const { provider, account } = useStore(selectWeb3Info, shallow);
     const {
         bridgeToken,
         bridgeEth,

@@ -13,7 +13,7 @@ import { usePool } from '~/hooks/usePool';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
-import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
+import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 import Gas from './Gas';
 import Inputs from './Inputs';
@@ -38,7 +38,7 @@ const DEFAULT_GAS_FEE = new BigNumber(0);
 
 export default styled((({ onClose, className }) => {
     const account = useStore(selectAccount);
-    const { handleConnect } = useStore(selectOnboardActions);
+    const handleConnect = useStore(selectHandleConnect);
     const gasPrice = useGasPrice();
 
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);

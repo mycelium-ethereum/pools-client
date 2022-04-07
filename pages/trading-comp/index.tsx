@@ -8,7 +8,7 @@ import Leaderboard from '~/components/TradingComp/Leaderboard';
 import { TradingCompParticipant } from '~/components/TradingComp/Leaderboard';
 import StatisticsBox from '~/components/TradingComp/StatisticsBox';
 import { useStore } from '~/store/main';
-import { selectWeb3Info } from '~/store/Web3Slice';
+import { selectAccount } from '~/store/Web3Slice';
 
 export default (() => {
     const [data, setData] = useState<TradingCompParticipant[]>([]);
@@ -16,7 +16,7 @@ export default (() => {
     const [user, setUser] = useState<TradingCompParticipant[]>([]);
     const [participating, setParticipating] = useState<boolean>(false);
     const router = useRouter();
-    const { account } = useStore(selectWeb3Info);
+    const account = useStore(selectAccount);
 
     const getStats = () => {
         fetch('https://dev.api.tracer.finance/poolsv2/tradingcomp?network=421611', {

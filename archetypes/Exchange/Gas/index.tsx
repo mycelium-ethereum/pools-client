@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import shallow from 'zustand/shallow';
 import { GasPriceTooltip } from '~/components/Tooltips';
 import { networkConfig } from '~/constants/networks';
 import { useGasPrice } from '~/hooks/useGasPrice';
@@ -8,7 +9,7 @@ import { useStore } from '~/store/main';
 import { selectWalletInfo } from '~/store/Web3Slice';
 
 export default (() => {
-    const { wallet, network } = useStore(selectWalletInfo);
+    const { wallet, network } = useStore(selectWalletInfo, shallow);
     const gasPrice = useGasPrice();
     return (
         <Container>

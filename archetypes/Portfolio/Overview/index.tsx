@@ -5,7 +5,7 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { useStore } from '~/store/main';
-import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
+import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { toApproxCurrency } from '~/utils/converters';
 import { marketFilter } from '~/utils/filters';
 
@@ -39,7 +39,7 @@ export enum CurrencyEnum {
 // const Overview
 export default (({ onClickCommitAction }) => {
     const account = useStore(selectAccount);
-    const { handleConnect } = useStore(selectOnboardActions);
+    const handleConnect = useStore(selectHandleConnect);
 
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();

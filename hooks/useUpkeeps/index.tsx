@@ -40,7 +40,7 @@ type RawUpkeep = {
 // const useUpkeeps
 export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
     const [upkeeps, setUpkeeps] = useState<Record<string, Upkeep[]>>({});
-    const poolList = useStore(selectAllPoolLists);
+    const poolList = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
 
     useEffect(() => {
         let mounted = true;

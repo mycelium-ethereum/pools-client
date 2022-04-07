@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import shallow from 'zustand/shallow';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { knownNetworkToSubgraphUrl, networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
@@ -80,7 +81,7 @@ const fetchSubgraphAggregateBalance: (
 };
 
 export default (() => {
-    const { account, network } = useStore(selectWeb3Info);
+    const { account, network } = useStore(selectWeb3Info, shallow);
     const [aggregateBalances, setAggregateBalances] = useState({});
     useMemo(() => {
         if (!!account && !!network) {

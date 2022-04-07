@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import shallow from 'zustand/shallow';
 import { CommitEnum, getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
@@ -7,7 +8,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/pools';
 
 export default (() => {
-    const { account = '', provider } = useStore(selectWeb3Info);
+    const { account = '', provider } = useStore(selectWeb3Info, shallow);
     const commits = useStore(selectCommits);
     const { pools } = usePools();
     const [allQueuedCommits, setAllQueuedCommits] = useState<QueuedCommit[]>([]);

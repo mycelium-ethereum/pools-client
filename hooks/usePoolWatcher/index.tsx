@@ -1,6 +1,7 @@
 import { useMemo, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import shallow from 'zustand/shallow';
 import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
@@ -12,12 +13,12 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 export const usePoolWatcher = (): void => {
     const currentSubscribed = useRef<string | undefined>();
-    const pools = useStore(selectAllPoolLists);
+    const pools = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
     const poolAddresses = useMemo(() => pools.map((pool) => pool.address), [pools.length]);
-    const { network, account } = useStore(selectWeb3Info);
-    const { addCommit, removeCommits } = useStore(selectUserCommitActions);
-    const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions);
-    const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions);
+    const { network, account } = useStore(selectWeb3Info, shallow);
+    const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);
+    const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions, shallow);
+    const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions, shallow);
 
     useMemo(() => {
         const wssProvider = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;

@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
@@ -24,6 +24,7 @@ import {
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
     const { swapDispatch = noDispatch } = useSwapContext();
+    const { rows: tokens } = useBrowsePools();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
@@ -43,54 +44,69 @@ export const Browse: React.FC = () => {
         }
     }, [account]);
 
-    // parse the pools rows
-    const { rows: tokens } = useBrowsePools();
+    const leverageFilter = useCallback(
+        (pool: BrowseTableRowData): boolean => {
+            switch (state.leverageFilter) {
+                case LeverageEnum.All:
+                    return true;
+                default:
+                    return !!pool.name && pool.name.split('-')?.[0] === state.leverageFilter;
+            }
+        },
+        [state.leverageFilter],
+    );
 
-    const leverageFilter = (pool: BrowseTableRowData): boolean => {
-        switch (state.leverageFilter) {
-            case LeverageEnum.All:
-                return true;
-            default:
-                return !!pool.name && pool.name.split('-')?.[0] === state.leverageFilter;
-        }
-    };
-    const searchFilter = (pool: BrowseTableRowData): boolean => {
-        const searchString = state.search.toLowerCase();
-        return Boolean(
-            pool.name.toLowerCase().match(searchString) ||
-                pool.shortToken.symbol.toLowerCase().match(searchString) ||
-                pool.longToken.symbol.toLowerCase().match(searchString) ||
-                pool.market.toLowerCase().match(searchString),
-        );
-    };
+    const searchFilter = useCallback(
+        (pool: BrowseTableRowData): boolean => {
+            const searchString = state.search.toLowerCase();
+            return Boolean(
+                pool.name.toLowerCase().match(searchString) ||
+                    pool.shortToken.symbol.toLowerCase().match(searchString) ||
+                    pool.longToken.symbol.toLowerCase().match(searchString) ||
+                    pool.market.toLowerCase().match(searchString),
+            );
+        },
+        [state.search],
+    );
 
-    const sorter = (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {
-        switch (state.sortBy) {
-            case SortByEnum.TotalValueLocked:
-                return poolB.tvl - poolA.tvl;
-            case SortByEnum.MyHoldings:
-                return poolB.myHoldings - poolA.myHoldings;
-            default:
-                return 0;
-        }
-    };
+    const sorter = useCallback(
+        (poolA: BrowseTableRowData, poolB: BrowseTableRowData): number => {
+            switch (state.sortBy) {
+                case SortByEnum.TotalValueLocked:
+                    return poolB.tvl - poolA.tvl;
+                case SortByEnum.MyHoldings:
+                    return poolB.myHoldings - poolA.myHoldings;
+                default:
+                    return 0;
+            }
+        },
+        [state.sortBy],
+    );
 
-    const filteredTokens = tokens
-        .filter((pool) => marketFilter(pool.name, state.marketFilter))
-        .filter(leverageFilter)
-        .filter(searchFilter);
-    const sortedFilteredTokens = filteredTokens.sort(sorter);
+    const filteredTokens = useMemo(
+        () =>
+            tokens
+                .filter((pool) => marketFilter(pool.name, state.marketFilter))
+                .filter(leverageFilter)
+                .filter(searchFilter)
+                .sort(sorter),
+        [state.marketFilter, state.leverageFilter, state.search, state.sortBy, tokens],
+    );
 
-    const groupedSortedFilteredTokens = sortedFilteredTokens.reduce((groups, item) => {
-        // @ts-ignore
-        const group = groups[item.name.split('-')[1]] || [];
-        group.push(item);
-        // @ts-ignore
-        groups[item.name.split('-')[1]] = group;
-        return groups;
-    }, []);
+    const groupedSortedFilteredTokens = useMemo(
+        () =>
+            filteredTokens.reduce((groups, item) => {
+                // @ts-ignore
+                const group = groups[item.name.split('-')[1]] || [];
+                group.push(item);
+                // @ts-ignore
+                groups[item.name.split('-')[1]] = group;
+                return groups;
+            }, []),
+        [filteredTokens],
+    );
 
-    const handleMintBurn = (pool: string, side: SideEnum, commitAction: CommitActionEnum) => {
+    const handleMintBurn = useCallback((pool: string, side: SideEnum, commitAction: CommitActionEnum) => {
         console.debug(`
             ${commitAction === CommitActionEnum.mint ? 'Buying/minting ' : 'Burning/selling '}
             ${side === SideEnum.long ? 'long' : 'short'} token from pool ${pool}
@@ -99,14 +115,12 @@ export const Browse: React.FC = () => {
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: commitAction });
         dispatch({ type: 'setMintBurnModalOpen', open: true });
-    };
+    }, []);
 
-    const handleModalClose = (val: 'setAddAltPoolModalOpen' | 'setMintBurnModalOpen') => {
-        dispatch({
-            type: val,
-            open: false,
-        });
-    };
+    const handleAltModalClose = useCallback(() => dispatch({ type: 'setAddAltPoolModalOpen', open: false }), []);
+    const handleMintBurnModalClose = useCallback(() => dispatch({ type: 'setMintBurnModalOpen', open: false }), []);
+
+    const showNextRebalance = useMemo(() => state.rebalanceFocus === RebalanceEnum.next, [state.rebalanceFocus]);
 
     return (
         <>
@@ -127,7 +141,7 @@ export const Browse: React.FC = () => {
                     </div>
                     <FilterBar state={state} dispatch={dispatch} />
                 </section>
-                {!sortedFilteredTokens.length ? <Loading className="mx-auto mt-10 w-10" /> : null}
+                {!filteredTokens.length ? <Loading className="mx-auto mt-10 w-10" /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     return (
@@ -139,17 +153,17 @@ export const Browse: React.FC = () => {
                                 rows={dataRows}
                                 deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
-                                showNextRebalance={state.rebalanceFocus === RebalanceEnum.next}
+                                showNextRebalance={showNextRebalance}
                             />
                         </div>
                     );
                 })}
             </div>
-            <MintBurnModal open={state.mintBurnModalOpen} onClose={() => handleModalClose('setMintBurnModalOpen')} />
+            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
             <AddAltPoolModal
                 open={state.addAltPoolModalOpen}
-                onClose={() => handleModalClose('setAddAltPoolModalOpen')}
-                sortedFilteredTokens={sortedFilteredTokens}
+                onClose={handleAltModalClose}
+                sortedFilteredTokens={filteredTokens}
             />
         </>
     );
