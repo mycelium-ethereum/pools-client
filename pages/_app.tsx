@@ -1,7 +1,7 @@
 // prevent creating full trace
 process.traceDeprecation = true;
 
-import React, { useEffect } from 'react';
+import React, { useEffect }from 'react';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
@@ -17,23 +17,27 @@ import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
-const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
+const Updater = () => {
     // any store hooks
+    // using seperate component avoids app level re-renders
     useUpdateWeb3Store();
     useUpdatePoolLists();
     usePoolWatcher();
     useUpdatePoolInstances();
+    return <></>
+}
+
+const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
 
     // load usersnap
     useEffect(() => {
-        // @ts-ignore
-        window.onUsersnapCXLoad = function (api) {
-            // @ts-ignore
-            window.Usersnap = api;
+        (window as any).onUsersnapCXLoad = function (api: any) {
+            (window as any).Usersnap = api;
             api.init();
             api.show(USERSNAP_API_KEY);
         };
     }, []);
+    console.count("re render")
 
     return (
         <div>
@@ -64,6 +68,8 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                     async
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
+                <script>
+                </script>
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
                 <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
@@ -71,6 +77,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                 <Component {...pageProps} />
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
+            <Updater />
         </div>
     );
 };
