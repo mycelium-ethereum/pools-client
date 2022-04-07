@@ -34,7 +34,7 @@ const Leaderboard: React.FC<{
                 <div className="flex items-center">
                     <div className="flex items-center">
                         <span className="block font-semibold">Total Competitors</span>
-                        <span className="ml-6 block font-bold">{data.length.toLocaleString('en-US')}</span>
+                        <span className="ml-3 block font-bold sm:ml-6">{data.length.toLocaleString('en-US')}</span>
                     </div>
                     <Searchbar data={data} setFilteredData={setFilteredData} />
                 </div>

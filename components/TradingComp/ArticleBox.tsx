@@ -2,7 +2,7 @@ import React from 'react';
 
 const ArticleBox: React.FC = () => {
     return (
-        <div className="mb-4 grid h-full grid-cols-2 gap-x-4">
+        <div className="mb-4 grid h-full grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-2 sm:gap-y-0">
             <div className="w-full rounded-lg bg-[#F0F0FF] p-6 dark:bg-tracer-800 dark:bg-opacity-[15%]">
                 <span className="mb-2.5 flex h-5 w-[67px] items-center justify-center rounded-[3px] bg-tracer-900 text-xs text-white">
                     ARTICLE
