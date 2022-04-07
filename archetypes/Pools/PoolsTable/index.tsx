@@ -208,7 +208,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             <PoolRow
                                 pool={pool}
                                 onClickMintBurn={onClickMintBurn}
-                                onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
+                                onClickShowPoolDetailsModal={handlePoolDetailsClick}
                                 showNextRebalance={showNextRebalance}
                                 key={pool.address}
                                 account={account}
@@ -239,7 +239,7 @@ const PoolRow: React.FC<
         pool: BrowseTableRowData;
         account: string | undefined;
         provider: ethers.providers.JsonRpcProvider | undefined;
-        onClickShowPoolDetailsModal: () => void;
+        onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
@@ -250,7 +250,7 @@ const PoolRow: React.FC<
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
                         USDC
-                        <InfoIcon onClick={onClickShowPoolDetailsModal} />
+                        <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
