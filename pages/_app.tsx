@@ -57,11 +57,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
                 <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
+            <StoreUpdater />
             <StyledThemeProvider>
                 <Component {...pageProps} />
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
-            <StoreUpdater />
         </div>
     );
 };
