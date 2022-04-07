@@ -47,6 +47,7 @@ export const useUpdatePoolInstances = (): void => {
                     console.debug(`Initialising pools ${network.slice()}`, pools);
                     resetPools();
                     hasSetPools.current = false;
+                    setPoolsInitialized(false);
                     Promise.all(
                         poolAddresses.map((pool) =>
                             Pool.Create({
@@ -127,7 +128,7 @@ export const useUpdatePoolInstances = (): void => {
 
     // update token balances and approvals when address changes
     useEffect(() => {
-        if (account && poolsInitialized) {
+        if (!!account && poolsInitialized) {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool.poolInstance.address, provider, account);
