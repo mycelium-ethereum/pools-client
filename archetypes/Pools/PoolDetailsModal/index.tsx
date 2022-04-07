@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { TWModal } from '~/components/General/TWModal';
@@ -21,37 +21,40 @@ type PoolProps = {
 };
 
 export default (({ open, onClose, poolDetails, network }) => {
-    const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails || {};
+    const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails;
 
     const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
 
-    const poolDetailsData = [
-        { name: 'Pool Ticker', value: name },
-        {
-            name: 'Price Feed',
-            value: name?.split('-')[1],
-            href: getPriceFeedUrl(name),
-        },
-        {
-            name: 'Power Leverage',
-            value: leverage,
-        },
-        {
-            name: 'Collateral Asset',
-            value: collateralAsset,
-            href: constructExplorerLink(BlockExplorerAddressType.token, collateralAssetAddress, network),
-        },
-        {
-            name: 'Deployer',
-            value: formatAddress(committer),
-            href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
-        },
-        {
-            name: 'Keeper Contract',
-            value: formatAddress(keeper),
-            href: constructExplorerLink(BlockExplorerAddressType.address, keeper, network),
-        },
-    ];
+    const poolDetailsData = useMemo(
+        () => [
+            { name: 'Pool Ticker', value: name },
+            {
+                name: 'Price Feed',
+                value: name?.split('-')[1],
+                href: getPriceFeedUrl(name),
+            },
+            {
+                name: 'Power Leverage',
+                value: leverage,
+            },
+            {
+                name: 'Collateral Asset',
+                value: collateralAsset,
+                href: constructExplorerLink(BlockExplorerAddressType.token, collateralAssetAddress, network),
+            },
+            {
+                name: 'Committer',
+                value: formatAddress(committer),
+                href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
+            },
+            {
+                name: 'Keeper Contract',
+                value: formatAddress(keeper),
+                href: constructExplorerLink(BlockExplorerAddressType.address, keeper, network),
+            },
+        ],
+        [network, keeper, committer, leverage, name, collateralAsset],
+    );
 
     return (
         <TWModal open={open} onClose={onClose} className="py-10 px-5 sm:p-10">

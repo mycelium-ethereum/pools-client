@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -21,19 +21,22 @@ import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
  * Wrapper to update all pools information
  */
 export const useUpdatePoolInstances = (): void => {
-    const { provider, account } = useStore(selectWeb3Info);
+    const { setMultiplePools, resetPools, setPoolsInitialized, setTokenBalances } = useStore(
+        selectPoolInstanceActions,
+        shallow,
+    );
+    const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { addCommit } = useStore(selectUserCommitActions, shallow);
+    const { provider, account } = useStore(selectWeb3Info, shallow);
     const poolAddresses = useStore(selectAllPoolLists);
-    const pools = useStore(selectPoolInstances, shallow);
+    const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
-    const { setPool, resetPools, setPoolsInitialized, setTokenBalances } = useStore(selectPoolInstanceActions);
-    const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions);
-    const { addCommit } = useStore(selectUserCommitActions);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
 
     // if the pools from the factory change, re-init them
-    useMemo(() => {
+    useEffect(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
@@ -54,13 +57,11 @@ export const useUpdatePoolInstances = (): void => {
                             }),
                         ),
                     )
-                        .then((res) => {
+                        .then((pools_) => {
                             if (!hasSetPools.current && mounted) {
-                                res.forEach((pool) => {
-                                    setPool(pool);
-                                });
-                                if (res.length) {
+                                if (pools_.length) {
                                     // if pools exist
+                                    setMultiplePools(pools_);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
                                 }
@@ -126,7 +127,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [provider, poolsInitialized]);
 
     // update token balances and approvals when address changes
-    useMemo(() => {
+    useEffect(() => {
         if (!!account && poolsInitialized) {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool

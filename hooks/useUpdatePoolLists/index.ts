@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect } from 'react';
 import { useStore } from '~/store/main';
 import { selectFetchPools } from '~/store/PoolsSlice';
 import { selectNetwork } from '~/store/Web3Slice';
@@ -11,7 +11,7 @@ export const useUpdatePoolLists: () => void = () => {
     const fetchPools = useStore(selectFetchPools);
 
     // getPoolsList
-    useMemo(() => {
+    useEffect(() => {
         if (network) {
             console.count(`Fetching pools: ${network}`);
             fetchPools(network);

@@ -2,6 +2,7 @@ import React, { useContext, useCallback, useState, useMemo } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Bridge, L1TokenData, L2TokenData, Inbox__factory } from 'arb-ts';
+import shallow from 'zustand/shallow';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { destinationNetworkLookup, bridgeableAssets, bridgeableTickers } from '~/constants/bridge';
@@ -57,7 +58,7 @@ const BRIDGEABLE_ASSET_ETH = {
 };
 
 export const ArbitrumBridgeStore: React.FC = ({ children }: Children) => {
-    const { account, signer, provider, network = NETWORKS.MAINNET } = useStore(selectWeb3Info);
+    const { account, signer, provider, network = NETWORKS.MAINNET } = useStore(selectWeb3Info, shallow);
 
     const handleTransaction = useStore(selectHandleTransaction);
 

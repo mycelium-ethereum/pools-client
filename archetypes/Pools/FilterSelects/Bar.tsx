@@ -74,7 +74,31 @@ const DENOTATION_OPTIONS = [
     },
 ];
 
+const MARKET_FILTER_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
+    key: (MarketFilterEnum as any)[key],
+    ticker: (key !== 'All' ? key : '') as LogoTicker,
+}));
+
+const COLLATERAL_FILTER_OPTIONS = Object.keys(CollateralEnum).map((key) => ({
+    key: (CollateralEnum as any)[key],
+}));
+
+const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageEnum).map((key) => ({
+    key: (LeverageEnum as any)[key],
+}));
+
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
+    const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
+    const onCollateralFilterSelect = (val: string) =>
+        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum });
+    const onLeverageFilterSelect = (val: string) =>
+        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum });
+    const onSearchInputChange = (search: string) => dispatch({ type: 'setSearch', search });
+    const onSetDenotation = (option: number) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum });
+    const onFiltersOpen = () => dispatch({ type: 'setFiltersOpen', open: !state.filtersOpen });
+    const onRebalanceFocus = (option: number) =>
+        dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
+
     return (
         <section className="container px-4 sm:px-0">
             <div className="mb-2 w-full">
@@ -91,11 +115,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             }
                             value={state.marketFilter}
                             className="mt-auto w-48"
-                            options={Object.keys(MarketFilterEnum).map((key) => ({
-                                key: (MarketFilterEnum as any)[key],
-                                ticker: (key !== 'All' ? key : '') as LogoTicker,
-                            }))}
-                            onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
+                            options={MARKET_FILTER_OPTIONS}
+                            onSelect={onMarketSelect}
                         />
                     </div>
                     <div className="mr-4 hidden flex-col lg:flex">
@@ -103,12 +124,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         <Dropdown
                             value={state.collateralFilter ?? 'All'}
                             className="mt-auto w-32"
-                            options={Object.keys(CollateralEnum).map((key) => ({
-                                key: (CollateralEnum as any)[key],
-                            }))}
-                            onSelect={(val) =>
-                                dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum })
-                            }
+                            options={COLLATERAL_FILTER_OPTIONS}
+                            onSelect={onCollateralFilterSelect}
                         />
                     </div>
                     <div className="mr-4 hidden flex-col lg:flex">
@@ -116,10 +133,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         <Dropdown
                             value={state.leverageFilter}
                             className="mt-auto w-32"
-                            options={Object.keys(LeverageEnum).map((key) => ({
-                                key: (LeverageEnum as any)[key],
-                            }))}
-                            onSelect={(val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })}
+                            options={LEVERAGE_FILTER_OPTIONS}
+                            onSelect={onLeverageFilterSelect}
                         />
                     </div>
                     <div className="mr-4 hidden flex-grow items-end lg:flex">
@@ -127,7 +142,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             className="w-60"
                             placeholder="Search"
                             value={state.search}
-                            onChange={(search) => dispatch({ type: 'setSearch', search })}
+                            onChange={onSearchInputChange}
                         />
                     </div>
                     <div className="lg:hidden">Market</div>
@@ -142,15 +157,12 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             }
                             value={state.marketFilter}
                             className="w-4/5"
-                            options={Object.keys(MarketFilterEnum).map((key) => ({
-                                key: (MarketFilterEnum as any)[key],
-                                ticker: (key !== 'All' ? key : '') as LogoTicker,
-                            }))}
-                            onSelect={(val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum })}
+                            options={MARKET_FILTER_OPTIONS}
+                            onSelect={onMarketSelect}
                         />
                         <FilterToggleIcon
                             className={`${state.filtersOpen ? 'text-cool-gray-300' : ''} w-8 lg:hidden`}
-                            onClick={() => dispatch({ type: 'setFiltersOpen', open: !state.filtersOpen })}
+                            onClick={onFiltersOpen}
                         />
                     </div>
                 </div>
@@ -163,12 +175,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 <Dropdown
                                     value={state.collateralFilter ?? 'All'}
                                     className="w-40 sm:w-32"
-                                    options={Object.keys(CollateralEnum).map((key) => ({
-                                        key: (CollateralEnum as any)[key],
-                                    }))}
-                                    onSelect={(val) =>
-                                        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum })
-                                    }
+                                    options={COLLATERAL_FILTER_OPTIONS}
+                                    onSelect={onCollateralFilterSelect}
                                 />
                             </div>
                             <div>
@@ -176,12 +184,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 <Dropdown
                                     value={state.leverageFilter}
                                     className="w-40 sm:w-32"
-                                    options={Object.keys(LeverageEnum).map((key) => ({
-                                        key: (LeverageEnum as any)[key],
-                                    }))}
-                                    onSelect={(val) =>
-                                        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum })
-                                    }
+                                    options={LEVERAGE_FILTER_OPTIONS}
+                                    onSelect={onLeverageFilterSelect}
                                 />
                             </div>
                         </div>
@@ -189,13 +193,13 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             className="mt-5 w-full sm:mt-auto"
                             placeholder="Search"
                             value={state.search}
-                            onChange={(search) => dispatch({ type: 'setSearch', search })}
+                            onChange={onSearchInputChange}
                         />
                     </div>
                     <TWButtonGroup
                         className="p-1"
                         value={state.deltaDenotation}
-                        onClick={(option) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum })}
+                        onClick={onSetDenotation}
                         color="greyed"
                         border="rounded"
                         borderColor="greyed"
@@ -208,9 +212,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         <div className="xl:hidden">
                             <TWButtonGroup
                                 value={state.rebalanceFocus}
-                                onClick={(option) =>
-                                    dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                                }
+                                onClick={onRebalanceFocus}
                                 color="tracer"
                                 options={REBALANCE_OPTIONS_MOBILE}
                             />
@@ -218,9 +220,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                         <div className="mr-2 hidden xl:block">
                             <TWButtonGroup
                                 value={state.rebalanceFocus}
-                                onClick={(option) =>
-                                    dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum })
-                                }
+                                onClick={onRebalanceFocus}
                                 color="tracer"
                                 options={REBALANCE_OPTIONS_DESKTOP}
                             />
@@ -230,9 +230,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                                 className="p-0.5"
                                 size="sm"
                                 value={state.deltaDenotation}
-                                onClick={(option) =>
-                                    dispatch({ type: 'setDenotation', denotation: option as DeltaEnum })
-                                }
+                                onClick={onSetDenotation}
                                 color="greyed"
                                 border="rounded"
                                 borderColor="greyed"

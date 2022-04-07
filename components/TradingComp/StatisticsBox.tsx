@@ -1,7 +1,7 @@
 import React from 'react';
 import TwitterShareButton from '~/components/General/Button/TwitterShareButton';
 import { useStore } from '~/store/main';
-import { selectOnboardActions } from '~/store/Web3Slice';
+import { selectHandleConnect } from '~/store/Web3Slice';
 import { convertCurrency, convertShortDate } from '~/utils/converters';
 import ConnectWalletButton from './ConnectWalletButton';
 import LearnMoreButton from './LearnMoreButton';
@@ -32,7 +32,7 @@ const StatisticsBox: React.FC<{
     disqualified: boolean;
     participating: boolean;
 }) => {
-    const { handleConnect } = useStore(selectOnboardActions);
+    const handleConnect = useStore(selectHandleConnect);
 
     const text = `I%27m%20currently%20ranked%20%23${ranking}%20in%20the%20%23TracerTradingComp%0A%0AYou%20can%20join%20too%20👉%20`;
 

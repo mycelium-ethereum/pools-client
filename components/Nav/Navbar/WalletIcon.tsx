@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import shallow from 'zustand/shallow';
 import { useStore } from '~/store/main';
 import { selectWalletInfo } from '~/store/Web3Slice';
 import Identicon from './Identicon';
@@ -13,7 +14,7 @@ const WalletIconImage = styled.img`
 `;
 
 const WalletIcon: React.FC = () => {
-    const { wallet, account } = useStore(selectWalletInfo);
+    const { wallet, account } = useStore(selectWalletInfo, shallow);
 
     if (wallet?.icons?.iconSrc) {
         return <WalletIconImage src={wallet?.icons.iconSrc} alt={wallet?.name ?? ''} />;

@@ -1,6 +1,7 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import shallow from 'zustand/shallow';
 import {
     AggregatorV3Interface,
     AggregatorV3Interface__factory,
@@ -48,7 +49,7 @@ export const FarmStore: React.FC<
         farmContext: FarmContexts;
     } & Children
 > = ({ farmContext, children }) => {
-    const { signer, account, provider, network } = useStore(selectWeb3Info);
+    const { signer, account, provider, network } = useStore(selectWeb3Info, shallow);
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
     const [rewardsTokenUSDPrices, setRewardsTokenUSDPrices] = useState<Record<string, BigNumber>>({});

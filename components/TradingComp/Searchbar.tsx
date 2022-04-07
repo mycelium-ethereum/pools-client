@@ -19,7 +19,6 @@ const Searchbar: React.FC<{
     const updateResults = () => {
         let searchData = data;
         searchData = searchData.filter((item) => item.username.toLowerCase().includes(searchInput.toLowerCase()));
-        console.log(data);
         setFilteredData(searchData ? searchData : data);
     };
 

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import TWPopup from '~/components/General/TWPopup';
@@ -13,7 +14,7 @@ import WalletIcon from '../WalletIcon';
 const ARBISCAN_URI = 'https://arbiscan.io';
 
 export default (({ account, className }) => {
-    const { resetOnboard, handleConnect } = useStore(selectOnboardActions);
+    const { resetOnboard, handleConnect } = useStore(selectOnboardActions, shallow);
     const ensName = useEnsName(account ?? '');
 
     return (

@@ -1,14 +1,13 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { LinkOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
+import shallow from 'zustand/shallow';
 import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 
-import Close from '/public/img/general/close.svg';
 import { constructBalancerLink } from '~/archetypes/BalancerBuySell';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
-import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
@@ -73,17 +72,16 @@ const InfoIcon = styled(Info)`
 `;
 
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) => {
-    const [showModalEffectiveGain, setShowModalEffectiveGain] = useState(false);
+    const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
-    const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info);
 
-    const handlePoolDetailsClick = (data: BrowseTableRowData) => {
+    const handlePoolDetailsClick = useCallback((data: BrowseTableRowData) => {
         setShowModalPoolDetails(true);
         setPoolDetails(data);
-    };
+    }, []);
 
-    // console.count('render pools page')
+    const onClosePoolDetails = useCallback(() => setShowModalPoolDetails(false), []);
 
     return (
         <>
@@ -210,7 +208,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             <PoolRow
                                 pool={pool}
                                 onClickMintBurn={onClickMintBurn}
-                                onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
+                                onClickShowPoolDetailsModal={handlePoolDetailsClick}
                                 showNextRebalance={showNextRebalance}
                                 key={pool.address}
                                 account={account}
@@ -221,29 +219,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                     })}
                 </tbody>
             </Table>
-            {/*{showNextRebalance ? (*/}
-            {/*    <p className="mt-3 text-sm text-theme-text opacity-80 text-left">*/}
-            {/*        Values are indicative only. They are estimates given the committed mints and burns, and change in*/}
-            {/*        price of the underlying market. All values are subject to change at the next rebalance of each pool.*/}
-            {/*    </p>*/}
-            {/*) : null}*/}
-            <TWModal open={showModalEffectiveGain} onClose={() => setShowModalEffectiveGain(false)}>
-                <div className="flex justify-between">
-                    <div className="text-2xl">Leverage on Gains</div>
-                    <div className="h-3 w-3 cursor-pointer" onClick={() => setShowModalEffectiveGain(false)}>
-                        <Close />
-                    </div>
-                </div>
-                <br />
-                <div>
-                    This metric is the the effective leverage by which your gains will be determined at the next
-                    rebalancing event. While the leverage on losses is always fixed, the leverage on gains varies
-                    depending on the capital in the other side of the pool.
-                </div>
-            </TWModal>
             <PoolDetailsModal
                 open={showModalPoolDetails}
-                onClose={() => setShowModalPoolDetails(false)}
+                onClose={onClosePoolDetails}
                 poolDetails={poolDetails}
                 network={network}
             />
@@ -261,7 +239,7 @@ const PoolRow: React.FC<
         pool: BrowseTableRowData;
         account: string | undefined;
         provider: ethers.providers.JsonRpcProvider | undefined;
-        onClickShowPoolDetailsModal: () => void;
+        onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
@@ -272,7 +250,7 @@ const PoolRow: React.FC<
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
                         USDC
-                        <InfoIcon onClick={onClickShowPoolDetailsModal} />
+                        <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>

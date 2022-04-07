@@ -1,4 +1,5 @@
 import React from 'react';
+import shallow from 'zustand/shallow';
 import { useStore } from '~/store/main';
 import { selectThemeSlice } from '~/store/ThemeSlice';
 import { classNames } from '~/utils/helpers';
@@ -6,7 +7,7 @@ import { classNames } from '~/utils/helpers';
 const img = 'absolute w-3 h-3 transition-all top-0 bottom-0 m-auto';
 
 export default (() => {
-    const { isDark, toggleTheme } = useStore(selectThemeSlice);
+    const { isDark, toggleTheme } = useStore(selectThemeSlice, shallow);
 
     return (
         <div onClick={toggleTheme} className={'relative my-auto mx-0 inline-block h-6 w-12'}>

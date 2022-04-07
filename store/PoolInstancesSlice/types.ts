@@ -9,6 +9,7 @@ export interface IPoolsInstancesSlice {
     poolsInitialized: boolean;
 
     setPool: (pool: Pool) => void;
+    setMultiplePools: (pool: Pool[]) => void;
     resetPools: () => void;
     setPoolsInitialized: (initialized: boolean) => void;
 

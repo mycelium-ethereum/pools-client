@@ -8,8 +8,8 @@ import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
-import { StyledThemeProvider } from '~/context/ThemeContext';
 import StoreUpdater from '~/components/StoreUpdater';
+import { StyledThemeProvider } from '~/context/ThemeContext';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -57,11 +57,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
                 <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
+            <StoreUpdater />
             <StyledThemeProvider>
                 <Component {...pageProps} />
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
-            <StoreUpdater />
         </div>
     );
 };
