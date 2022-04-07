@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import { HiddenExpand } from '~/components/General/Dropdown';
@@ -20,18 +20,18 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
     const [importMsg, setImportMsg] = useState<string>('');
     const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
 
-    const handleCloseModal = useCallback(() => {
+    const handleCloseModal = () => {
         onClose();
         setUserInput('');
         setImportMsg('');
-    }, [onClose]);
+    };
 
-    const handleOnChange = useCallback((v: string) => {
+    const handleOnChange = (v: string) => {
         setUserInput(v);
         setIsValidAddress(isAddress(v));
-    }, []);
+    };
 
-    const handleImport = useCallback(() => {
+    const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
         const isDuplicateImport = getImported.some((v) => v.address === userInput);
 
@@ -43,7 +43,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         } else {
             setImportMsg(pool.notValid);
         }
-    }, [userInput, isValidAddress]);
+    };
 
     useEffect(() => {
         if (isValidAddress) {

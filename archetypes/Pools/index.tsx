@@ -117,10 +117,9 @@ export const Browse: React.FC = () => {
         dispatch({ type: 'setMintBurnModalOpen', open: true });
     }, []);
 
-    const handleAltModalClose = useCallback(() => dispatch({ type: 'setAddAltPoolModalOpen', open: false }), []);
-    const handleMintBurnModalClose = useCallback(() => dispatch({ type: 'setMintBurnModalOpen', open: false }), []);
-
-    const showNextRebalance = useMemo(() => state.rebalanceFocus === RebalanceEnum.next, [state.rebalanceFocus]);
+    const handleAltModalClose = () => dispatch({ type: 'setAddAltPoolModalOpen', open: false });
+    const handleMintBurnModalClose = () => dispatch({ type: 'setMintBurnModalOpen', open: false });
+    const showNextRebalance = state.rebalanceFocus === RebalanceEnum.next;
 
     return (
         <>
