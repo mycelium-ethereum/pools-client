@@ -49,7 +49,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
                 </InnerText>
             </TableRowCell>
             <TableRowCell>
-                <InnerText>{`${notionalValue.toFixed(3)} ${currency}`}</InnerText>
+                <InnerText>{`${toApproxCurrency(notionalValue)} ${currency}`}</InnerText>
             </TableRowCell>
             {type !== TokenType.Settlement ? (
                 <Buttons>

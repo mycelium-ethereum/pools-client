@@ -99,7 +99,6 @@ export const useUpdatePoolInstances = (): void => {
                         pool: pool.poolInstance.address,
                     })
                         .then((pendingCommits) => {
-                            console.log('pendingCommits', pendingCommits);
                             if (mounted) {
                                 pendingCommits.map((commit) => {
                                     addCommit({
