@@ -5,11 +5,11 @@ import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import { useWeb3 } from '@context/Web3Context/Web3Context';
 import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenu';
-// import CommitDropdown from './CommitDropdown';
 import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
 import ThemeSwitcher from './ThemeSwitcher';
+import VersionToggle from './VersionToggle';
 
 import RevisitOnboard from '/public/img/general/onboard-revisit.svg';
 
@@ -47,7 +47,7 @@ export const NavBarContent: React.FC<{
         <nav className={`container text-base h-[60px]`}>
             <div className={'flex h-full px-4 md:px-0'}>
                 <HeaderSiteSwitcher />
-                <ul className="hidden md:flex mr-auto ml-4 mb-0 text-white text-sm ">
+                <ul className="hidden xl:flex mr-auto ml-4 mb-0 text-white text-sm ">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a className="m-auto">Tokens</a>
@@ -91,6 +91,7 @@ export const NavBarContent: React.FC<{
 
                 {/* DESKTOP */}
                 <span className="hidden xl:flex">
+                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
@@ -101,7 +102,10 @@ export const NavBarContent: React.FC<{
                     {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
-                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
+                <div className="flex ml-auto">
+                    <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
+                    <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
+                </div>
             </div>
         </nav>
     );
