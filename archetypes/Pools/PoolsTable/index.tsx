@@ -83,6 +83,8 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
         setPoolDetails(data);
     };
 
+    // console.count('render pools page')
+
     return (
         <>
             <Table>
