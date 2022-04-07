@@ -48,12 +48,10 @@ export default (({ onClickCommitAction }) => {
 
     const totalValuation = function () {
         let total = 0;
-        for (let i = 0; i < rows.length; i++) {
-            total = total + rows[i].holdings.times(rows[i].price).toNumber();
-        }
         rows.forEach((row) => {
             total += row.holdings.times(row.price).toNumber();
         });
+
         escrowRows.forEach((pool) => {
             const valueInEscrow = pool.claimableLongTokens.notionalValue
                 .plus(pool.claimableShortTokens.notionalValue)

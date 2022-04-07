@@ -204,7 +204,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             pool.fetchOraclePrice(),
             pool.fetchPoolBalances(),
         ]).then((res) => {
-            console.log('Pool updated', res);
+            console.debug('Pool updated', res);
         });
     },
     updateTokenApprovals: (pool_, provider, account) => {
