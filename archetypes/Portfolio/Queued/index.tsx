@@ -8,13 +8,13 @@ import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/c
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
-import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { QueuedCommit } from '~/types/pools';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 
+import { NoQueuedCommits } from './NoQueuedCommits.index';
 import { PageOptions } from '..';
 
 const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (
@@ -58,118 +58,100 @@ export default (({ focus, commits }) => {
         [commits],
     );
 
-    const MintRows = (mintCommits: QueuedCommit[]) => {
-        if (mintCommits.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={4}>
-                        <div className="my-20 text-center">
-                            <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no pending mints.</div>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return mintCommits.map((commit) => (
-                <MintCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
-            ));
-        }
-    };
-
-    const BurnRows = (burnCommits: QueuedCommit[]) => {
-        if (burnCommits.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={4}>
-                        <div className="my-20 text-center">
-                            <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no pending burns.</div>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return burnCommits.map((commit) => (
-                <BurnCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
-            ));
-        }
-    };
-
-    const FlipRows = (flipCommits: QueuedCommit[]) => {
-        if (burnCommits.length === 0) {
-            return (
-                <tr>
-                    <td colSpan={5}>
-                        <div className="my-20 text-center">
-                            <NoQueued className="mx-auto mb-5" />
-                            <div className="text-cool-gray-500">You have no pending flips.</div>
-                        </div>
-                    </td>
-                </tr>
-            );
-        } else {
-            return flipCommits.map((commit) => (
-                <FlipCommitRow key={`${commit.pool}-${commit.id}`} provider={provider ?? null} {...commit} />
-            ));
-        }
-    };
-
-    const TableContent = (focus: CommitActionEnum) => {
-        if (focus === CommitActionEnum.mint) {
-            return (
-                <>
-                    <TableHeader>
-                        <tr>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Tokens / Price *</TableHeaderCell>
-                            <TableHeaderCell>Mint In</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </tr>
-                    </TableHeader>
-                    <tbody>{MintRows(mintCommits)}</tbody>
-                </>
-            );
-        } else if (focus === CommitActionEnum.burn) {
-            return (
-                <>
-                    <TableHeader>
-                        <tr>
-                            <TableHeaderCell>Token</TableHeaderCell>
-                            <TableHeaderCell>Amount</TableHeaderCell>
-                            <TableHeaderCell>Return / Price *</TableHeaderCell>
-                            <TableHeaderCell>Burn In</TableHeaderCell>
-                            <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                        </tr>
-                    </TableHeader>
-                    <tbody>{BurnRows(burnCommits)}</tbody>
-                </>
-            );
-        } else if (focus === CommitActionEnum.flip) {
-            return (
-                <>
-                    <TableHeader>
-                        <tr>
-                            <TableHeaderCell>From</TableHeaderCell>
-                            <TableHeaderCell />
-                            <TableHeaderCell>To</TableHeaderCell>
-                            <TableHeaderCell />
-                            <TableHeaderCell>Flip In</TableHeaderCell>
-                            <TableHeaderCell />
-                        </tr>
-                        <tr>
-                            <TableHeaderCell>Token / Price *</TableHeaderCell>
-                            <TableHeaderCell>Amount *</TableHeaderCell>
-                            <TableHeaderCell>Token / Price *</TableHeaderCell>
-                            <TableHeaderCell>Amount *</TableHeaderCell>
-                            <TableHeaderCell />
-                            <TableHeaderCell />
-                        </tr>
-                    </TableHeader>
-                    <tbody>{FlipRows(flipCommits)}</tbody>
-                </>
-            );
+    const tableContent = (focus: CommitActionEnum) => {
+        switch (focus) {
+            case CommitActionEnum.mint:
+                return (
+                    <>
+                        <TableHeader>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Amount</TableHeaderCell>
+                                <TableHeaderCell>Tokens / Price *</TableHeaderCell>
+                                <TableHeaderCell>Mint In</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
+                        </TableHeader>
+                        <tbody>
+                            {mintCommits.length === 0 ? (
+                                <NoQueuedCommits focus={CommitActionEnum.mint} />
+                            ) : (
+                                mintCommits.map((commit) => (
+                                    <MintCommitRow
+                                        key={`${commit.pool}-${commit.id}`}
+                                        provider={provider ?? null}
+                                        {...commit}
+                                    />
+                                ))
+                            )}
+                        </tbody>
+                    </>
+                );
+            case CommitActionEnum.burn:
+                return (
+                    <>
+                        <TableHeader>
+                            <tr>
+                                <TableHeaderCell>Token</TableHeaderCell>
+                                <TableHeaderCell>Amount</TableHeaderCell>
+                                <TableHeaderCell>Return / Price *</TableHeaderCell>
+                                <TableHeaderCell>Burn In</TableHeaderCell>
+                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                            </tr>
+                        </TableHeader>
+                        <tbody>
+                            {burnCommits.length === 0 ? (
+                                <NoQueuedCommits focus={CommitActionEnum.burn} />
+                            ) : (
+                                burnCommits.map((commit) => (
+                                    <BurnCommitRow
+                                        key={`${commit.pool}-${commit.id}`}
+                                        provider={provider ?? null}
+                                        {...commit}
+                                    />
+                                ))
+                            )}
+                        </tbody>
+                    </>
+                );
+            case CommitActionEnum.flip:
+                return (
+                    <>
+                        <TableHeader>
+                            <tr>
+                                <TableHeaderCell>From</TableHeaderCell>
+                                <TableHeaderCell />
+                                <TableHeaderCell>To</TableHeaderCell>
+                                <TableHeaderCell />
+                                <TableHeaderCell>Flip In</TableHeaderCell>
+                                <TableHeaderCell />
+                            </tr>
+                            <tr>
+                                <TableHeaderCell>Token / Price *</TableHeaderCell>
+                                <TableHeaderCell>Amount *</TableHeaderCell>
+                                <TableHeaderCell>Token / Price *</TableHeaderCell>
+                                <TableHeaderCell>Amount *</TableHeaderCell>
+                                <TableHeaderCell />
+                                <TableHeaderCell />
+                            </tr>
+                        </TableHeader>
+                        <tbody>
+                            {flipCommits.length === 0 ? (
+                                <NoQueuedCommits focus={CommitActionEnum.flip} />
+                            ) : (
+                                flipCommits.map((commit) => (
+                                    <FlipCommitRow
+                                        key={`${commit.pool}-${commit.id}`}
+                                        provider={provider ?? null}
+                                        {...commit}
+                                    />
+                                ))
+                            )}
+                        </tbody>
+                    </>
+                );
+            default: // impossible unless more types are added to enum
+                return <></>;
         }
     };
 
@@ -190,7 +172,7 @@ export default (({ focus, commits }) => {
                     options={queuedOptions(mintCommits.length, burnCommits.length, flipCommits.length)}
                 />
             </div>
-            <Table>{TableContent(focus)}</Table>
+            <Table>{tableContent(focus)}</Table>
             <div className="flex">
                 <div className="mt-8 max-w-2xl text-sm text-theme-text opacity-80">
                     * <strong>Token Price</strong> and{' '}
