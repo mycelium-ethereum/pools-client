@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -36,7 +36,7 @@ export const useUpdatePoolInstances = (): void => {
     const hasSetPools = useRef(false);
 
     // if the pools from the factory change, re-init them
-    useMemo(() => {
+    useEffect(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
@@ -88,7 +88,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [poolAddresses.length]);
 
     // fetch all pending commits
-    useMemo(() => {
+    useEffect(() => {
         let mounted = true;
         if (provider && poolsInitialized) {
             Object.values(pools).map((pool) => {
@@ -127,7 +127,7 @@ export const useUpdatePoolInstances = (): void => {
     }, [provider, poolsInitialized]);
 
     // update token balances and approvals when address changes
-    useMemo(() => {
+    useEffect(() => {
         if (account && poolsInitialized) {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
