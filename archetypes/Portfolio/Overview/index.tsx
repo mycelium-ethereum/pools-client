@@ -1,6 +1,5 @@
 import React, { useReducer, useMemo } from 'react';
 import { calcNotionalValue, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-
 import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
@@ -82,9 +81,8 @@ export default (({ onClickCommitAction }) => {
         .filter(searchFilter);
 
     const showFilledState = useMemo(() => {
-        const isClaimable = filteredEscrowRows.some((v) => v.numClaimable === 1);
+        const isClaimable = filteredEscrowRows.some((v) => v.numClaimable >= 1);
         const isHoldings = rows.some((v) => !v.holdings.eq(0));
-
         return isClaimable || isHoldings;
     }, [filteredEscrowRows, rows]);
 
