@@ -235,21 +235,27 @@ const CommitRow: React.FC<
                     </div>
                 </TableRowCell>
                 {/*Amount*/}
-                <TableRowCell>
-                    {toApproxCurrency(
-                        (price.toNumber() / 10 ** tokenDecimals) * (tokenInAmount.toNumber() / 10 ** tokenDecimals),
-                    )}
-                </TableRowCell>
+                <TableRowCell>{toApproxCurrency(tokenInAmount.toNumber() / 10 ** tokenDecimals)}</TableRowCell>
                 {/*Tokens / Price*/}
                 <TableRowCell>
-                    <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
+                    <div>
+                        {tokenInAmount
+                            .div(10 ** tokenDecimals)
+                            .div(price.div(10 ** tokenDecimals))
+                            .toFixed(2)}{' '}
+                        tokens
+                    </div>
                     <div className="text-cool-gray-500">
                         at {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}/token
                     </div>
                 </TableRowCell>
                 {/*Protocol Fee*/}
                 <TableRowCell>
-                    {toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}
+                    {fee
+                        .div(10 ** tokenDecimals)
+                        .times(100)
+                        .toNumber()}
+                    %
                 </TableRowCell>
                 <TableRowCell>
                     <Actions
@@ -310,15 +316,13 @@ const CommitRow: React.FC<
                     </div>
                 </TableRowCell>
                 <TableRowCell>
-                    <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
+                    <div>{tokenInAmount.div(10 ** tokenDecimals).toFixed(2)} tokens</div>
                     <div className="text-cool-gray-500">
                         at {toApproxCurrency(price.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}/token
                     </div>
                 </TableRowCell>
                 <TableRowCell>
-                    {toApproxCurrency(
-                        (price.toNumber() / 10 ** tokenDecimals) * (tokenInAmount.toNumber() / 10 ** tokenDecimals),
-                    )}
+                    {toApproxCurrency(price.div(10 ** tokenDecimals).times(tokenInAmount.div(10 ** tokenDecimals)))}
                 </TableRowCell>
                 <TableRowCell>
                     {toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}
@@ -401,6 +405,7 @@ const CommitRow: React.FC<
                 </TableRowCell>
                 <TableRowCell>
                     <div>{(tokenOutAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
+                    {/*
                     <div className="text-cool-gray-500">
                         {toApproxCurrency(
                             (price.toNumber() / 10 ** tokenDecimals) *
@@ -408,6 +413,7 @@ const CommitRow: React.FC<
                         )}{' '}
                         {priceTokenSymbol}
                     </div>
+                      */}
                 </TableRowCell>
                 <TableRowCell>
                     {toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}
