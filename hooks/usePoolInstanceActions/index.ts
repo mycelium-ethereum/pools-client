@@ -43,11 +43,11 @@ interface PoolInstanceActions {
 import { fromAggregateBalances } from '~/utils/pools';
 
 export const usePoolInstanceActions = (): PoolInstanceActions => {
-    const { provider, account, signer } = useStore(selectWeb3Info);
-    const pools = useStore(selectPoolInstances, shallow);
-    const { setTokenApproved } = useStore(selectPoolInstanceActions);
-    const { updateTokenBalances } = useStore(selectPoolInstanceUpdateActions);
+    const { setTokenApproved } = useStore(selectPoolInstanceActions, shallow);
+    const { updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
     const handleTransaction = useStore(selectHandleTransaction);
+    const { provider, account, signer } = useStore(selectWeb3Info, shallow);
+    const pools = useStore(selectPoolInstances);
 
     /**
      * Claim all pending commits

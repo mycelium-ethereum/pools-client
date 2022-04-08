@@ -5,7 +5,7 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { useStore } from '~/store/main';
-import { selectAccount, selectOnboardActions } from '~/store/Web3Slice';
+import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { toApproxCurrency } from '~/utils/converters';
 import { marketFilter } from '~/utils/filters';
 
@@ -39,7 +39,7 @@ export enum CurrencyEnum {
 // const Overview
 export default (({ onClickCommitAction }) => {
     const account = useStore(selectAccount);
-    const { handleConnect } = useStore(selectOnboardActions);
+    const handleConnect = useStore(selectHandleConnect);
 
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const { rows } = useUserTokenOverview();
@@ -48,16 +48,22 @@ export default (({ onClickCommitAction }) => {
 
     const totalValuation = function () {
         let total = 0;
-        for (let i = 0; i < rows.length; i++) {
-            total = total + rows[i].holdings.times(rows[i].price).toNumber();
-        }
         rows.forEach((row) => {
             total += row.holdings.times(row.price).toNumber();
         });
+
         escrowRows.forEach((pool) => {
-            const valueInEscrow = calcNotionalValue(pool.claimableLongTokens.currentTokenPrice, pool.claimableLongTokens.balance)
+            const valueInEscrow = calcNotionalValue(
+                pool.claimableLongTokens.currentTokenPrice,
+                pool.claimableLongTokens.balance,
+            )
                 .plus(calcNotionalValue(pool.claimableShortTokens.currentTokenPrice, pool.claimableShortTokens.balance))
-                .plus(calcNotionalValue(pool.claimableSettlementTokens.currentTokenPrice, pool.claimableSettlementTokens.balance));
+                .plus(
+                    calcNotionalValue(
+                        pool.claimableSettlementTokens.currentTokenPrice,
+                        pool.claimableSettlementTokens.balance,
+                    ),
+                );
             total += valueInEscrow.toNumber();
         });
 

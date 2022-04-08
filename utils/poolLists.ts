@@ -37,7 +37,6 @@ const uris = (network: KnownNetwork): PoolListUris => {
 const get = async (uri: string): Promise<PoolList | undefined> => {
     try {
         const [protocol] = uri.split('://');
-
         if (protocol === 'https') {
             const data = await fetch(uri).then((res) => res.json());
             return data;
@@ -51,6 +50,23 @@ const get = async (uri: string): Promise<PoolList | undefined> => {
     }
 };
 
+const isPoolList = (list: any): list is PoolList => {
+    return (
+        list &&
+        list.name &&
+        typeof list.name === 'string' &&
+        list.pools &&
+        typeof list.pools === 'object' &&
+        Array.isArray(list.pools) &&
+        // will block if any pool in the array of pools does not conform to staticPoolInfo
+        !list.pools.map((pool: any) => isStaticPoolInfo(pool)).includes(false)
+    );
+};
+
+const isStaticPoolInfo = (pool: any): pool is StaticPoolInfo => {
+    return pool && pool.address && typeof pool.address === 'string';
+};
+
 /**
  * Fetch all pool list json and return mapped to URI
  */
@@ -60,14 +76,14 @@ export const getAllPoolLists = async (network: KnownNetwork): Promise<PoolLists>
     const externalLists: PoolList[] = await Promise.all(uris_.External.map((uri) => get(uri).catch((e) => e)));
 
     const validTracerList: PoolList =
-        !(tracerList instanceof Error) || !tracerList
+        (!(tracerList instanceof Error) || !tracerList) && isPoolList(tracerList)
             ? tracerList
             : {
                   name: 'Tracer',
                   pools: [],
               };
 
-    const validExternalLists = externalLists.filter((list) => !(list instanceof Error) || !list);
+    const validExternalLists = externalLists.filter((list) => (!(list instanceof Error) || !list) && isPoolList(list));
     const importedList = {
         name: 'Imported',
         pools: [],

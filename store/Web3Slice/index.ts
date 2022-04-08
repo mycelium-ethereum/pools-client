@@ -100,8 +100,11 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
 export const selectWeb3Slice: (state: StoreState) => IWeb3Slice = (state) => state.web3Slice;
 export const selectProvider: (state: StoreState) => IWeb3Slice['provider'] = (state) =>
     state.web3Slice.provider ?? state.web3Slice.defaultProvider;
-export const selectNetwork: (state: StoreState) => IWeb3Slice['network'] = (state) => state.web3Slice.network;
+export const selectNetwork: (state: StoreState) => IWeb3Slice['network'] = (state) =>
+    state.web3Slice.network ?? DEFAULT_NETWORK;
 export const selectAccount: (state: StoreState) => IWeb3Slice['account'] = (state) => state.web3Slice.account;
+export const selectHandleConnect: (state: StoreState) => IWeb3Slice['handleConnect'] = (state) =>
+    state.web3Slice.handleConnect;
 export const selectOnboard: (state: StoreState) => IWeb3Slice['onboard'] = (state) => state.web3Slice.onboard;
 export const selectSetDefaultProvider: (state: StoreState) => IWeb3Slice['setDefaultProvider'] = (state) =>
     state.web3Slice.setDefaultProvider;

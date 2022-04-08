@@ -8,28 +8,17 @@ import Head from 'next/head';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
+import StoreUpdater from '~/components/StoreUpdater';
 import { StyledThemeProvider } from '~/context/ThemeContext';
-import usePoolWatcher from '~/hooks/usePoolWatcher';
-import { useUpdatePoolInstances } from '~/hooks/useUpdatePoolInstances';
-import { useUpdatePoolLists } from '~/hooks/useUpdatePoolLists';
-import { useUpdateWeb3Store } from '~/hooks/useUpdateWeb3Store';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
-    // any store hooks
-    useUpdateWeb3Store();
-    useUpdatePoolLists();
-    usePoolWatcher();
-    useUpdatePoolInstances();
-
     // load usersnap
     useEffect(() => {
-        // @ts-ignore
-        window.onUsersnapCXLoad = function (api) {
-            // @ts-ignore
-            window.Usersnap = api;
+        (window as any).onUsersnapCXLoad = function (api: any) {
+            (window as any).Usersnap = api;
             api.init();
             api.show(USERSNAP_API_KEY);
         };
@@ -64,9 +53,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                     async
                     src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
                 />
+                <script />
                 <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
                 <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
             </Head>
+            <StoreUpdater />
             <StyledThemeProvider>
                 <Component {...pageProps} />
                 <ToastContainerWithStyles />

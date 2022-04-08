@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@ant-design/icons';
+import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import TWPopup from '~/components/General/TWPopup';
@@ -13,7 +14,7 @@ const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
 
 export default (({ className }) => {
-    const { provider, network } = useStore(selectWeb3Info);
+    const { provider, network } = useStore(selectWeb3Info, shallow);
 
     return (
         <TWPopup

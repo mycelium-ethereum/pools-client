@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -11,41 +11,45 @@ import {
     selectPoolInstanceUpdateActions,
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
-import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { useAllPoolLists } from '../useAllPoolLists';
 
 /**
  * Wrapper to update all pools information
  */
 export const useUpdatePoolInstances = (): void => {
-    const { provider, account } = useStore(selectWeb3Info);
-    const poolAddresses = useStore(selectAllPoolLists);
-    const pools = useStore(selectPoolInstances, shallow);
+    const { setMultiplePools, resetPools, setPoolsInitialized, setTokenBalances } = useStore(
+        selectPoolInstanceActions,
+        shallow,
+    );
+    const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { addCommit } = useStore(selectUserCommitActions, shallow);
+    const { provider, account } = useStore(selectWeb3Info, shallow);
+    const poolLists = useAllPoolLists();
+    const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
-    const { setPool, resetPools, setPoolsInitialized, setTokenBalances } = useStore(selectPoolInstanceActions);
-    const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions);
-    const { addCommit } = useStore(selectUserCommitActions);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
 
     // if the pools from the factory change, re-init them
-    useMemo(() => {
+    useEffect(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
-        if (!!poolAddresses.length && provider?.network?.chainId) {
+        if (!!poolLists.length && provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
                     console.debug(`Initialising pools ${network.slice()}`, pools);
                     resetPools();
                     hasSetPools.current = false;
+                    setPoolsInitialized(false);
                     Promise.all(
-                        poolAddresses.map((pool) =>
+                        poolLists.map((pool) =>
                             Pool.Create({
                                 ...pool,
                                 address: pool.address,
@@ -53,13 +57,11 @@ export const useUpdatePoolInstances = (): void => {
                             }),
                         ),
                     )
-                        .then((res) => {
+                        .then((pools_) => {
                             if (!hasSetPools.current && mounted) {
-                                res.forEach((pool) => {
-                                    setPool(pool);
-                                });
-                                if (res.length) {
+                                if (pools_.length) {
                                     // if pools exist
+                                    setMultiplePools(pools_);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
                                 }
@@ -83,7 +85,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [poolAddresses.length]);
+    }, [provider, poolLists]);
 
     // fetch all pending commits
     useEffect(() => {
@@ -126,7 +128,7 @@ export const useUpdatePoolInstances = (): void => {
 
     // update token balances and approvals when address changes
     useEffect(() => {
-        if (provider && account && poolsInitialized) {
+        if (!!account && poolsInitialized) {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool.poolInstance.address, provider, account);
@@ -142,5 +144,5 @@ export const useUpdatePoolInstances = (): void => {
                 });
             });
         }
-    }, [provider, account, poolsInitialized]);
+    }, [account, poolsInitialized]);
 };

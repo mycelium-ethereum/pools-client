@@ -1,10 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
-import AmountInput from './AmountInput';
-import * as Styles from './styles';
-import { InvalidAmount } from './types';
-import TokenSelect from '../TokenSelect';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { SwapState, useBigNumber, SwapAction } from '~/context/SwapContext';
@@ -12,6 +8,10 @@ import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import usePoolTokens from '~/hooks/usePoolTokens';
 import { PoolInfo } from '~/types/pools';
 import { toApproxCurrency } from '~/utils/converters';
+import AmountInput from './AmountInput';
+import * as Styles from './styles';
+import { InvalidAmount } from './types';
+import TokenSelect from '../TokenSelect';
 
 /* HELPER FUNCTIONS */
 const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {

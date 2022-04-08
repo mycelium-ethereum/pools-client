@@ -31,6 +31,31 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             };
         });
     },
+    setMultiplePools: (pools) => {
+        const now = Date.now() / 1000;
+        const poolsObj = pools.reduce((obj, pool) => {
+            const expectedExecution = getExpectedExecutionTimestamp(
+                pool.frontRunningInterval.toNumber(),
+                pool.updateInterval.toNumber(),
+                pool.lastUpdate.toNumber(),
+                now,
+            );
+            return {
+                ...obj,
+                [pool.address]: {
+                    poolInstance: pool,
+                    userBalances: DEFAULT_POOLSTATE.userBalances,
+                    upkeepInfo: {
+                        expectedExecution: expectedExecution,
+                        isWaitingForUpkeep: expectedExecution < now,
+                    },
+                },
+            };
+        }, {});
+        set((state) => {
+            state.pools = poolsObj;
+        });
+    },
     resetPools: () => {
         set((state) => void (state.pools = {}));
     },
@@ -179,7 +204,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             pool.fetchOraclePrice(),
             pool.fetchPoolBalances(),
         ]).then((res) => {
-            console.log('Pool updated', res);
+            console.debug('Pool updated', res);
         });
     },
     updateTokenApprovals: (pool_, provider, account) => {
@@ -213,6 +238,7 @@ export const selectPoolsInitialized: (state: StoreState) => IPoolsInstancesSlice
 
 export const selectPoolInstanceActions: (state: StoreState) => {
     setPool: IPoolsInstancesSlice['setPool'];
+    setMultiplePools: IPoolsInstancesSlice['setMultiplePools'];
     resetPools: IPoolsInstancesSlice['resetPools'];
     setPoolsInitialized: IPoolsInstancesSlice['setPoolsInitialized'];
     setTokenBalances: IPoolsInstancesSlice['setTokenBalances'];
@@ -223,6 +249,7 @@ export const selectPoolInstanceActions: (state: StoreState) => {
     setTokenApproved: IPoolsInstancesSlice['setTokenApproved'];
 } = (state) => ({
     setPool: state.poolsInstancesSlice.setPool,
+    setMultiplePools: state.poolsInstancesSlice.setMultiplePools,
     resetPools: state.poolsInstancesSlice.resetPools,
     setPoolsInitialized: state.poolsInstancesSlice.setPoolsInitialized,
     setTokenBalances: state.poolsInstancesSlice.setTokenBalances,

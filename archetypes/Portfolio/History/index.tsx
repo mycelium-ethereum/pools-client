@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
+import shallow from 'zustand/shallow';
 import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
 
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
@@ -85,7 +86,7 @@ export default (({ focus }) => {
     const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const router = useRouter();
-    const { provider, account, network } = useStore(selectWeb3Info);
+    const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const { setPage, page } = usePagination(tradeHistory);
 
     useEffect(() => {

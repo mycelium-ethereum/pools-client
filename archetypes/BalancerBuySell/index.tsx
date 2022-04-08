@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import shallow from 'zustand/shallow';
 import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
@@ -13,12 +14,12 @@ import { balancerConfig } from '~/constants/balancer';
 import { networkConfig } from '~/constants/networks';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '~/context/SwapContext';
 import { useStore } from '~/store/main';
-import { selectOnboardActions, selectWeb3Info } from '~/store/Web3Slice';
+import { selectHandleConnect, selectWeb3Info } from '~/store/Web3Slice';
 import { classNames } from '~/utils/helpers';
 
 export default (() => {
-    const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info);
-    const { handleConnect } = useStore(selectOnboardActions);
+    const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info, shallow);
+    const handleConnect = useStore(selectHandleConnect);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useSwapContext();
     const { leverage, selectedPool, side, market, markets } = swapState;
     const pool: StaticPoolInfo | undefined = poolMap[network]?.[selectedPool ?? ''];
