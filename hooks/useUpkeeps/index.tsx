@@ -70,7 +70,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
                         }
                     }
                 } catch (error: any) {
-                    console.error(`Error getting last 2 upkeeps for pool ${pool}: ${error.message}`);
+                    console.error(`Error getting last 2 upkeeps for pool ${pool.address}: ${error.message}`);
                 }
             });
 
