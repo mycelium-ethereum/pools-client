@@ -47,6 +47,7 @@ export const useUpdatePoolInstances = (): void => {
                     console.debug(`Initialising pools ${network.slice()}`, pools);
                     resetPools();
                     hasSetPools.current = false;
+                    setPoolsInitialized(false);
                     Promise.all(
                         poolAddresses.map((pool) =>
                             Pool.Create({
