@@ -55,9 +55,17 @@ export default (({ onClickCommitAction }) => {
             total += row.holdings.times(row.price).toNumber();
         });
         escrowRows.forEach((pool) => {
-            const valueInEscrow = calcNotionalValue(pool.claimableLongTokens.currentTokenPrice, pool.claimableLongTokens.balance)
+            const valueInEscrow = calcNotionalValue(
+                pool.claimableLongTokens.currentTokenPrice,
+                pool.claimableLongTokens.balance,
+            )
                 .plus(calcNotionalValue(pool.claimableShortTokens.currentTokenPrice, pool.claimableShortTokens.balance))
-                .plus(calcNotionalValue(pool.claimableSettlementTokens.currentTokenPrice, pool.claimableSettlementTokens.balance));
+                .plus(
+                    calcNotionalValue(
+                        pool.claimableSettlementTokens.currentTokenPrice,
+                        pool.claimableSettlementTokens.balance,
+                    ),
+                );
             total += valueInEscrow.toNumber();
         });
 
