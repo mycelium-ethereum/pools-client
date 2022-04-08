@@ -12,7 +12,7 @@ const CountdownBanner: React.FC = () => {
                 src="/img/trading-comp/trading-comp-banner.png"
                 className="absolute z-0 h-full w-full object-cover sm:rounded-lg"
             />
-            <div className="relative z-10 flex h-[304px] flex-grow flex-col sm:h-full sm:min-h-[382px]">
+            <div className="relative z-10 flex min-h-[334px] flex-grow flex-col sm:h-full sm:min-h-[382px]">
                 <div className="flex h-full flex-grow flex-col justify-center px-5">
                     <span className="block text-base font-semibold text-purple-100">Perpetual Pools V2</span>
                     <span className="block">
@@ -28,16 +28,16 @@ const CountdownBanner: React.FC = () => {
                             </span>
                             <PrizePoolInfoBox />
                         </div>
-                        <div className="flex text-white">
-                            <div className="mr-8">
+                        <div className="flex flex-wrap text-white">
+                            <div className="mr-8 mb-2">
                                 <span className={moneyStyles}>$20,000</span>
                                 <span className={statStyles}>Trading Compeition</span>
                             </div>
-                            <div className="mr-8">
+                            <div className="mr-8 mb-2">
                                 <span className={moneyStyles}>$5,000</span>
                                 <span className={statStyles}>UX Feedback</span>
                             </div>
-                            <div className="mr-8">
+                            <div className="mr-8 mb-2">
                                 <span className={moneyStyles}>$1,000,000</span>
                                 <span className={statStyles}>Bug Bounty</span>
                             </div>

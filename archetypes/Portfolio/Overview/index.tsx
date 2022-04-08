@@ -1,5 +1,5 @@
 import React, { useReducer, useMemo } from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { calcNotionalValue, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
@@ -53,9 +53,17 @@ export default (({ onClickCommitAction }) => {
         });
 
         escrowRows.forEach((pool) => {
-            const valueInEscrow = pool.claimableLongTokens.notionalValue
-                .plus(pool.claimableShortTokens.notionalValue)
-                .plus(pool.claimableSettlementTokens.notionalValue);
+            const valueInEscrow = calcNotionalValue(
+                pool.claimableLongTokens.currentTokenPrice,
+                pool.claimableLongTokens.balance,
+            )
+                .plus(calcNotionalValue(pool.claimableShortTokens.currentTokenPrice, pool.claimableShortTokens.balance))
+                .plus(
+                    calcNotionalValue(
+                        pool.claimableSettlementTokens.currentTokenPrice,
+                        pool.claimableSettlementTokens.balance,
+                    ),
+                );
             total += valueInEscrow.toNumber();
         });
 

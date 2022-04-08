@@ -10,7 +10,7 @@ const UserTable: React.FC<{
     let rank = 0;
     const placeholderArr = Array.from({ length: 7 });
     const tableHeadStyles =
-        'text-left text-cool-gray-900 font-semibold bg-cool-gray-100 p-4 border-b border-cool-gray-200 dark:bg-cool-gray-700 dark:text-white sticky top-0';
+        'text-left text-cool-gray-900 font-semibold bg-cool-gray-100 p-4 border-b border-cool-gray-200 z-10 dark:bg-cool-gray-700 dark:text-white sticky top-0';
 
     return (
         <table className="hidden w-full md:table">
@@ -18,7 +18,7 @@ const UserTable: React.FC<{
                 <tr>
                     <th className={`${tableHeadStyles} max-w-[105px]`}>Rank</th>
                     <th className={`${tableHeadStyles} `}>User</th>
-                    <th className={`${tableHeadStyles} relative z-10 max-w-[300px]`}>
+                    <th className={`${tableHeadStyles} relative max-w-[300px]`}>
                         Portfolio Value <PortfolioValueInfoBox />
                     </th>
                     <th className={`${tableHeadStyles} max-w-[300px]`}>Entry Date</th>
