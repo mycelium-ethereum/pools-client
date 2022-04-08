@@ -47,8 +47,7 @@ type TokenListMapByNetwork = Partial<Record<KnownNetwork, PoolListMap>>;
 export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
-            verified:
-                'https://raw.githubusercontent.com/tracer-protocol/pools-js/release/v2/src/data/static/arbitrum.json',
+            verified: 'https://api.tracer.finance/poolsv2/poolList?network=42161',
         },
         External: [],
     },
