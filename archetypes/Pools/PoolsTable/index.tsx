@@ -219,7 +219,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
             </Table>
             <PoolDetailsModal
                 open={showModalPoolDetails}
-                onClose={() => void (setShowModalPoolDetails(false)) }
+                onClose={() => void setShowModalPoolDetails(false)}
                 poolDetails={poolDetails}
                 network={network}
             />

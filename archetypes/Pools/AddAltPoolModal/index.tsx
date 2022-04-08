@@ -24,12 +24,12 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         onClose();
         setUserInput('');
         setImportMsg('');
-    }
+    };
 
     const handleOnChange = (v: string) => {
         setUserInput(v);
         setIsValidAddress(isAddress(v));
-    }
+    };
 
     const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
@@ -43,7 +43,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         } else {
             setImportMsg(pool.notValid);
         }
-    }
+    };
 
     useEffect(() => {
         if (isValidAddress) {

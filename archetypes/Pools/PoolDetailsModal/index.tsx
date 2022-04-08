@@ -23,7 +23,7 @@ type PoolProps = {
 export default (({ open, onClose, poolDetails, network }) => {
     const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails;
 
-    const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`
+    const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
 
     const poolDetailsData = useMemo(
         () => [
