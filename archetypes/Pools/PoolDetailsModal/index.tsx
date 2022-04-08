@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { TWModal } from '~/components/General/TWModal';
@@ -23,7 +23,7 @@ type PoolProps = {
 export default (({ open, onClose, poolDetails, network }) => {
     const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails;
 
-    const formatAddress = useCallback((addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`, []);
+    const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`
 
     const poolDetailsData = useMemo(
         () => [
