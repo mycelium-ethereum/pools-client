@@ -85,7 +85,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [poolLists]);
+    }, [provider, poolLists]);
 
     // fetch all pending commits
     useEffect(() => {
