@@ -122,7 +122,7 @@ export default (({ page }) => {
         <div className="container">
             <PortfolioNav page={page} numCommits={commits.length} />
             {renderPage(page)}
-            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
+            {state.mintBurnModalOpen && <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />}
         </div>
     );
 }) as React.FC<{
