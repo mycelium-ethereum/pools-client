@@ -250,7 +250,11 @@ const CommitRow: React.FC<
                 </TableRowCell>
                 {/*Protocol Fee*/}
                 <TableRowCell>
-                    {toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}
+                    {fee
+                        .div(10 ** tokenDecimals)
+                        .times(100)
+                        .toNumber()}
+                    %
                 </TableRowCell>
                 <TableRowCell>
                     <Actions
@@ -400,6 +404,7 @@ const CommitRow: React.FC<
                 </TableRowCell>
                 <TableRowCell>
                     <div>{(tokenOutAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
+                    {/*
                     <div className="text-cool-gray-500">
                         {toApproxCurrency(
                             (price.toNumber() / 10 ** tokenDecimals) *
@@ -407,6 +412,7 @@ const CommitRow: React.FC<
                         )}{' '}
                         {priceTokenSymbol}
                     </div>
+                      */}
                 </TableRowCell>
                 <TableRowCell>
                     {toApproxCurrency(fee.toNumber() / 10 ** tokenDecimals)} {priceTokenSymbol}
