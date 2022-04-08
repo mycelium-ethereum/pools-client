@@ -1,6 +1,5 @@
 import { useMemo, useRef } from 'react';
 import { ethers } from 'ethers';
-import BigNumber from 'bignumber.js';
 import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
@@ -43,7 +42,7 @@ export const usePoolWatcher = (): void => {
                                 type: commitInfo.commitType,
                                 txnHash: commitInfo.txHash,
                                 // TODO parse in Decimals
-                                amount: new BigNumber(ethers.utils.formatUnits(commitInfo.amount.toString(), 18)),
+                                amount: commitInfo.amount.times(10 ** -18),
                                 from: commitInfo.user,
                                 created: commitInfo.timestamp,
                                 appropriateIntervalId: commitInfo.appropriateIntervalId,
