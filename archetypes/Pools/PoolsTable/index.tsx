@@ -81,8 +81,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
         setPoolDetails(data);
     }, []);
 
-    const onClosePoolDetails = useCallback(() => setShowModalPoolDetails(false), []);
-
     return (
         <>
             <Table>
@@ -208,7 +206,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                             <PoolRow
                                 pool={pool}
                                 onClickMintBurn={onClickMintBurn}
-                                onClickShowPoolDetailsModal={() => handlePoolDetailsClick(pool)}
+                                onClickShowPoolDetailsModal={handlePoolDetailsClick}
                                 showNextRebalance={showNextRebalance}
                                 key={pool.address}
                                 account={account}
@@ -221,7 +219,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
             </Table>
             <PoolDetailsModal
                 open={showModalPoolDetails}
-                onClose={onClosePoolDetails}
+                onClose={() => void (setShowModalPoolDetails(false)) }
                 poolDetails={poolDetails}
                 network={network}
             />
@@ -239,7 +237,7 @@ const PoolRow: React.FC<
         pool: BrowseTableRowData;
         account: string | undefined;
         provider: ethers.providers.JsonRpcProvider | undefined;
-        onClickShowPoolDetailsModal: () => void;
+        onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
@@ -250,7 +248,7 @@ const PoolRow: React.FC<
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
                         USDC
-                        <InfoIcon onClick={onClickShowPoolDetailsModal} />
+                        <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
