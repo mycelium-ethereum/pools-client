@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Dropdown, HiddenExpand, LogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { SearchInput } from '~/components/General/SearchInput';
@@ -88,28 +88,13 @@ const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageEnum).map((key) => ({
 }));
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
-    const onMarketSelect = useCallback(
-        (val) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum }),
-        [],
-    );
-    const onCollateralFilterSelect = useCallback(
-        (val) => dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum }),
-        [],
-    );
-    const onLeverageFilterSelect = useCallback(
-        (val) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum }),
-        [],
-    );
-    const onSearchInputChange = useCallback((search) => dispatch({ type: 'setSearch', search }), []);
-    const onSetDenotation = useCallback(
-        (option) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum }),
-        [],
-    );
-    const onFiltersOpen = useCallback(() => dispatch({ type: 'setFiltersOpen', open: !state.filtersOpen }), []);
-    const onRebalanceFocus = useCallback(
-        (option) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum }),
-        [],
-    );
+    const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
+    const onCollateralFilterSelect = (val: string) => dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum });
+    const onLeverageFilterSelect = (val: string) => dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum });
+    const onSearchInputChange = (search: string) => dispatch({ type: 'setSearch', search });
+    const onSetDenotation = (option: number) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum });
+    const onFiltersOpen = () => dispatch({ type: 'setFiltersOpen', open: !state.filtersOpen });
+    const onRebalanceFocus = (option: number) => dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
 
     return (
         <section className="container px-4 sm:px-0">
