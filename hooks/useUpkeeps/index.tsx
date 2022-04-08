@@ -2,10 +2,9 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { KnownNetwork, calcSkew, calcTokenPrice } from '@tracer-protocol/pools-js';
-import { useStore } from '~/store/main';
-import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
 import { last2UpkeepsQuery, subgraphUrlByNetwork } from '~/utils/tracerAPI/subgraph';
+import { useAllPoolLists } from '../useAllPoolLists';
 
 export type Upkeep = {
     pool: string;
@@ -40,11 +39,10 @@ type RawUpkeep = {
 // const useUpkeeps
 export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, Upkeep[]> = (network) => {
     const [upkeeps, setUpkeeps] = useState<Record<string, Upkeep[]>>({});
-    const poolList = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
+    const poolLists = useAllPoolLists();
 
     useEffect(() => {
         let mounted = true;
-
         const fetchUpkeeps = async () => {
             const graphUrl = subgraphUrlByNetwork[network as V2_SUPPORTED_NETWORKS];
 
@@ -54,7 +52,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
 
             const upkeepMapping: Record<string, Upkeep[]> = {};
 
-            const promises = poolList.map(async (pool) => {
+            const promises = poolLists.map(async (pool) => {
                 try {
                     const last2Upkeeps = await fetch(graphUrl, {
                         method: 'POST',
@@ -90,7 +88,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
         return () => {
             mounted = false;
         };
-    }, [network, poolList.length]);
+    }, [network, poolLists]);
 
     return upkeeps;
 };

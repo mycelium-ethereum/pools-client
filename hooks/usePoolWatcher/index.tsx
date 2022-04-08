@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -8,21 +8,20 @@ import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import { selectPoolInstanceActions, selectPoolInstanceUpdateActions } from '~/store/PoolInstancesSlice';
-import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { useAllPoolLists } from '../useAllPoolLists';
 
 export const usePoolWatcher = (): void => {
     const currentSubscribed = useRef<string | undefined>();
-    const pools = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
-    const poolAddresses = useMemo(() => pools.map((pool) => pool.address), [pools.length]);
     const { network, account } = useStore(selectWeb3Info, shallow);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);
     const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions, shallow);
     const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const poolLists = useAllPoolLists();
 
-    useMemo(() => {
+    useEffect(() => {
         const wssProvider = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;
-        if (!!poolAddresses?.length && !!wssProvider && !!network) {
+        if (!!poolLists?.length && !!wssProvider && !!network) {
             if (!currentSubscribed.current || currentSubscribed.current !== network) {
                 currentSubscribed.current = network;
                 console.count(`Setting pool watcher: ${network}`);
@@ -31,7 +30,7 @@ export const usePoolWatcher = (): void => {
                     nodeUrl: wssProvider,
                     commitmentWindowBuffer: 20, // calculate and emit expected state 20 seconds before expected end of commitment window
                     chainId: network,
-                    poolAddresses: poolAddresses,
+                    poolAddresses: poolLists.map((pool) => pool.address),
                 });
 
                 watcher.initializePoolWatchers().then(() => {
@@ -76,7 +75,7 @@ export const usePoolWatcher = (): void => {
                 });
             }
         }
-    }, [poolAddresses, network]);
+    }, [poolLists, network]);
 };
 
 export default usePoolWatcher;

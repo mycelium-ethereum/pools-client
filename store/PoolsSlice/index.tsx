@@ -1,6 +1,6 @@
 import { StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { StateSlice } from '~/store/types';
-import { getAllPoolLists, flattenAllPoolLists } from '~/utils/poolLists';
+import { getAllPoolLists } from '~/utils/poolLists';
 import { IPoolsSlice } from './types';
 import { StoreState } from '..';
 
@@ -12,7 +12,6 @@ export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
     importPool: (network, pool) => {
         if (get().poolLists[network]) {
             set((state) => void state.poolLists[network]?.Imported.pools.push({ address: pool }));
-            // set(state => void (state.poolLists[network]?.All.push({ address: pool })))
         }
     },
     fetchPoolLists: async (network) => {
@@ -27,9 +26,6 @@ export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
         }
     },
 });
-
-export const selectAllPoolLists: (state: StoreState) => StaticPoolInfo[] = (state) =>
-    state.web3Slice.network ? flattenAllPoolLists(state.poolsSlice.poolLists[state.web3Slice.network]) : [];
 
 export const selectImportedPools: (state: StoreState) => StaticPoolInfo[] = (state) =>
     state.web3Slice.network ? state.poolsSlice.poolLists[state.web3Slice.network]?.Imported?.pools ?? [] : [];

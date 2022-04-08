@@ -11,11 +11,11 @@ import {
     selectPoolInstanceUpdateActions,
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
-import { selectAllPoolLists } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { useAllPoolLists } from '../useAllPoolLists';
 
 /**
  * Wrapper to update all pools information
@@ -28,7 +28,7 @@ export const useUpdatePoolInstances = (): void => {
     const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
     const { addCommit } = useStore(selectUserCommitActions, shallow);
     const { provider, account } = useStore(selectWeb3Info, shallow);
-    const poolAddresses = useStore(selectAllPoolLists, (oldState, newState) => oldState.length === newState.length);
+    const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
 
@@ -40,7 +40,7 @@ export const useUpdatePoolInstances = (): void => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
-        if (!!poolAddresses.length && provider?.network?.chainId) {
+        if (!!poolLists.length && provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
@@ -49,7 +49,7 @@ export const useUpdatePoolInstances = (): void => {
                     hasSetPools.current = false;
                     setPoolsInitialized(false);
                     Promise.all(
-                        poolAddresses.map((pool) =>
+                        poolLists.map((pool) =>
                             Pool.Create({
                                 ...pool,
                                 address: pool.address,
@@ -85,7 +85,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [poolAddresses.length]);
+    }, [provider, poolLists]);
 
     // fetch all pending commits
     useEffect(() => {
