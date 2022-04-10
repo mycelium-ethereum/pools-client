@@ -16,6 +16,7 @@ import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 
 import { NoQueuedCommits } from './NoQueuedCommits.index';
 import { PageOptions } from '..';
+import { Market } from '../Market';
 
 const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (
     numMints,
@@ -198,29 +199,7 @@ const MintCommitRow: React.FC<
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div className="flex">
-                            <div>
-                                {}
-                                {tokenOut.symbol.split('-')[0][0]}-
-                                {
-                                    marketSymbolToAssetName[
-                                        `${tokenOut.symbol.split('-')[1].split('/')[0]}/${
-                                            tokenOut.symbol.split('-')[1].split('/')[1]
-                                        }`
-                                    ]
-                                }
-                            </div>
-                            &nbsp;
-                            <div className={`${tokenOut.side === SideEnum.long ? 'green' : 'red'}`}>
-                                {tokenOut.side === SideEnum.long ? 'Long' : 'Short'}
-                            </div>
-                        </div>
-                        <div className="text-cool-gray-500">{tokenOut.symbol} </div>
-                    </div>
-                </div>
+                <Market tokenSymbol={tokenOut.symbol} isLong={tokenOut.side === SideEnum.long} />
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>

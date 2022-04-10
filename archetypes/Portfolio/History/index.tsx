@@ -20,6 +20,7 @@ import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 import { fetchCommitHistory, V2_SUPPORTED_NETWORKS, V2_API_COMMIT_TYPES, TradeHistory } from '~/utils/tracerAPI';
 
 import { PageOptions } from '..';
+import { Market } from '../Market';
 
 const historyOptions: PageOptions = [
     {
@@ -214,25 +215,10 @@ const CommitRow: React.FC<
                 </TableRowCell>
                 {/*Token*/}
                 <TableRowCell>
-                    <div className="my-auto flex">
-                        <Logo
-                            size="lg"
-                            ticker={tokenSymbolToLogoTicker(tokenOutSymbol)}
-                            className="my-auto mr-2 inline"
-                        />
-                        <div>
-                            <div className="flex">
-                                <div>
-                                    {tokenOutSymbol.split('-')[0][0]}-{marketSymbolToAssetName[tokenOutSymbol.slice(3)]}
-                                </div>
-                                &nbsp;
-                                <div className={type === V2_API_COMMIT_TYPES.LONG_MINT ? 'green' : 'red'}>
-                                    {type === V2_API_COMMIT_TYPES.LONG_MINT ? 'Long' : 'Short'}
-                                </div>
-                            </div>
-                            {tokenOutSymbol}
-                        </div>
-                    </div>
+                    <Market
+                        tokenSymbol={tokenOutSymbol}
+                        isLong={type === V2_API_COMMIT_TYPES.LONG_MINT || type === V2_API_COMMIT_TYPES.SHORT_MINT}
+                    />
                 </TableRowCell>
                 {/*Amount*/}
                 <TableRowCell>{toApproxCurrency(tokenInAmount.toNumber() / 10 ** tokenDecimals)}</TableRowCell>
