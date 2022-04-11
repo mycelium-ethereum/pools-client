@@ -102,7 +102,7 @@ export const fetchCommitHistory: (params: {
                     fee: formatBN(new BigNumber(row.fee), decimals),
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
-                    isLong: commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint,
+                    isLong: commitType === CommitEnum.longMint || commitType === CommitEnum.longBurn,
                     settlementToken: {
                         address: row.priceTokenAddress,
                         name: row.priceTokenName,

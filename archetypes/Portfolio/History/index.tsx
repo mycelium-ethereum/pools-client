@@ -4,14 +4,15 @@ import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import Pagination, { PageNumber } from '~/components/General/Pagination';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
 import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
-import { CommitRow } from './HisoricCommitRows';
+import { HistoricCommitRow } from './HisoricCommitRows';
+import HistoricCommitHeader from './HistoricCommitHeader';
 import { PageOptions } from '..';
 
 const historyOptions: PageOptions = [
@@ -32,49 +33,7 @@ const historyOptions: PageOptions = [
 /* Cheat to span the rest of the columns */
 const MAX_COLS = 100;
 
-const historyTableHeader: Record<CommitActionEnum, React.ReactNode> = {
-    [CommitActionEnum.mint]: (
-        <TableHeader>
-            <tr>
-                <TableHeaderCell>Time / Date</TableHeaderCell>
-                <TableHeaderCell>Token</TableHeaderCell>
-                <TableHeaderCell>Amount</TableHeaderCell>
-                <TableHeaderCell>Tokens / Price</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>Protocol Fee</TableHeaderCell>
-            </tr>
-        </TableHeader>
-    ),
-    [CommitActionEnum.burn]: (
-        <TableHeader>
-            <tr>
-                <TableHeaderCell>Time / Date</TableHeaderCell>
-                <TableHeaderCell>Token</TableHeaderCell>
-                <TableHeaderCell>Amount / Price</TableHeaderCell>
-                <TableHeaderCell>Return</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
-            </tr>
-        </TableHeader>
-    ),
-    [CommitActionEnum.flip]: (
-        <TableHeader>
-            <tr>
-                <TableHeaderCell>Time / Date</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>From</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>To</TableHeaderCell>
-                <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
-            </tr>
-            <tr>
-                <TableHeaderCell />
-                <TableHeaderCell>Token / Price</TableHeaderCell>
-                <TableHeaderCell>Amount</TableHeaderCell>
-                <TableHeaderCell>Token / Price</TableHeaderCell>
-                <TableHeaderCell colSpan={3}>Amount</TableHeaderCell>
-            </tr>
-        </TableHeader>
-    ),
-};
-
-export default (({ focus }) => {
+export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Element => {
     const router = useRouter();
     const provider = useStore(selectProvider);
     const { loading, tradeHistory, totalRecords, page, setPage } = useHistoricCommits(focus);
@@ -97,7 +56,7 @@ export default (({ focus }) => {
                 />
             </div>
             <Table>
-                {historyTableHeader[focus]}
+                <HistoricCommitHeader focus={focus} />
                 {loading ? (
                     <tr>
                         <td colSpan={MAX_COLS}>
@@ -120,8 +79,13 @@ export default (({ focus }) => {
                                 </td>
                             </tr>
                         ) : (
-                            tradeHistory.map((commit, index) => (
-                                <CommitRow key={`pcr-${index}`} {...commit} provider={provider} />
+                            tradeHistory.map((commit) => (
+                                <HistoricCommitRow
+                                    key={commit.txnHashIn}
+                                    focus={focus}
+                                    provider={provider}
+                                    {...commit}
+                                />
                             ))
                         )}
                     </tbody>
@@ -147,6 +111,6 @@ export default (({ focus }) => {
             </div>
         </div>
     );
-}) as React.FC<{
-    focus: CommitActionEnum;
-}>;
+};
+
+export default HistoricCommits;

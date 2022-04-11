@@ -9,11 +9,19 @@ import { toApproxCurrency } from '~/utils/converters';
 import { ReceiveIn } from './ReceiveIn';
 import { Market, MarketPrice } from '../Market';
 
-export const MintCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
+type QueuedCommitRowProps = QueuedCommit & {
+    provider: ethers.providers.JsonRpcProvider | null;
+};
+
+export const MintCommitRow = ({
+    tokenOut,
+    txnHash,
+    tokenPrice,
+    amount,
+    provider,
+    settlementTokenSymbol,
+    expectedExecution,
+}: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -50,11 +58,15 @@ export const MintCommitRow: React.FC<
     );
 };
 
-export const BurnCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
+export const BurnCommitRow = ({
+    tokenOut,
+    txnHash,
+    tokenPrice,
+    amount,
+    provider,
+    settlementTokenSymbol,
+    expectedExecution,
+}: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -93,11 +105,16 @@ export const BurnCommitRow: React.FC<
     );
 };
 
-export const FlipCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenIn, tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
+export const FlipCommitRow = ({
+    tokenIn,
+    tokenOut,
+    txnHash,
+    tokenPrice,
+    amount,
+    provider,
+    settlementTokenSymbol,
+    expectedExecution,
+}: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
 
     return (
@@ -140,4 +157,16 @@ export const FlipCommitRow: React.FC<
             </TableRowCell>
         </TableRow>
     );
+};
+
+export const QueuedCommitRow = ({ focus, ...props }: QueuedCommitRowProps & { focus: CommitActionEnum }) => {
+    if (focus === CommitActionEnum.mint) {
+        return <MintCommitRow {...props} />;
+    } else if (focus === CommitActionEnum.burn) {
+        return <BurnCommitRow {...props} />;
+    } else if (focus === CommitActionEnum.flip) {
+        return <FlipCommitRow {...props} />;
+    } else {
+        return <></>;
+    }
 };

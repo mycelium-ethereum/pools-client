@@ -1,26 +1,20 @@
 import React from 'react';
 import { ethers } from 'ethers';
-import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { TradeHistory } from '~/types/commits';
-import { formatBN, toApproxCurrency } from '~/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
 import { Fee } from './Fee';
 import { Market } from '../Market';
 
-type HistoricCommitProps = TradeHistory & {
+type HistoricCommitRowProps = TradeHistory & {
     provider?: ethers.providers.JsonRpcProvider;
 };
 
-type RowProps = HistoricCommitProps & {
-    timeString: string;
-    dateString: string;
-};
-
-const HistoricMintCommitRow = ({
-    transactionHashIn,
+export const HistoricMintCommitRow = ({
     tokenOut: { address: tokenOutAddress, symbol: tokenOutSymbol },
     tokenIn: { amount: tokenInAmount },
     settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
@@ -30,10 +24,11 @@ const HistoricMintCommitRow = ({
     dateString,
     fee,
     provider,
-    transactionHashOut,
-}: RowProps) => {
+    txnHashIn,
+    txnHashOut,
+}: HistoricCommitRowProps): JSX.Element => {
     return (
-        <TableRow key={`${transactionHashIn}`} lined>
+        <TableRow key={`${txnHashIn}`} lined>
             {/*Time / Date*/}
             <TableRowCell>
                 <div>{timeString}</div>
@@ -71,13 +66,13 @@ const HistoricMintCommitRow = ({
                     otherActions={[
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashIn,
+                            target: txnHashIn,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Commit on Arbiscan',
                         },
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashOut,
+                            target: txnHashOut,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Upkeep on Arbiscan',
                         },
@@ -88,8 +83,8 @@ const HistoricMintCommitRow = ({
     );
 };
 
-const HistoricBurnCommitRow = ({
-    transactionHashIn,
+export const HistoricBurnCommitRow = ({
+    txnHashIn,
     tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
     settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
     isLong,
@@ -98,10 +93,10 @@ const HistoricBurnCommitRow = ({
     dateString,
     fee,
     provider,
-    transactionHashOut,
-}: RowProps) => {
+    txnHashOut,
+}: HistoricCommitRowProps): JSX.Element => {
     return (
-        <TableRow key={`${transactionHashIn}`} lined>
+        <TableRow key={`${txnHashIn}`} lined>
             <TableRowCell>
                 <div>{timeString}</div>
                 <div className="text-cool-gray-500">{dateString}</div>
@@ -110,14 +105,12 @@ const HistoricBurnCommitRow = ({
                 <Market tokenSymbol={tokenInSymbol} isLong={isLong} />
             </TableRowCell>
             <TableRowCell>
-                <div>{formatBN(tokenInAmount, tokenDecimals).toFixed(2)} tokens</div>
+                <div>{tokenInAmount.toFixed(2)} tokens</div>
                 <div className="text-cool-gray-500">
-                    at {toApproxCurrency(formatBN(price, tokenDecimals))} {priceTokenSymbol}/token
+                    at {toApproxCurrency(price)} {priceTokenSymbol}/token
                 </div>
             </TableRowCell>
-            <TableRowCell>
-                {toApproxCurrency(formatBN(price, tokenDecimals).times(formatBN(tokenInAmount, tokenDecimals)))}
-            </TableRowCell>
+            <TableRowCell>{toApproxCurrency(price.times(tokenInAmount))}</TableRowCell>
             <TableRowCell>
                 <Fee fee={fee} />
             </TableRowCell>
@@ -136,13 +129,13 @@ const HistoricBurnCommitRow = ({
                     otherActions={[
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashIn,
+                            target: txnHashIn,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Commit on Arbiscan',
                         },
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashOut,
+                            target: txnHashOut,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Upkeep on Arbiscan',
                         },
@@ -153,8 +146,8 @@ const HistoricBurnCommitRow = ({
     );
 };
 
-const HistoricFlipCommitRow = ({
-    transactionHashIn,
+export const HistoricFlipCommitRow = ({
+    txnHashIn,
     tokenOut: { amount: tokenOutAmount, symbol: tokenOutSymbol },
     tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
     settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
@@ -163,11 +156,10 @@ const HistoricFlipCommitRow = ({
     dateString,
     fee,
     provider,
-    transactionHashOut,
-}: RowProps) => {
-    const formattedPrice = formatBN(price, tokenDecimals);
+    txnHashOut,
+}: HistoricCommitRowProps): JSX.Element => {
     return (
-        <TableRow key={`${transactionHashIn}`} lined>
+        <TableRow key={`${txnHashIn}`} lined>
             <TableRowCell>
                 <div>{timeString}</div>
                 <div className="text-cool-gray-500">{dateString}</div>
@@ -177,14 +169,14 @@ const HistoricFlipCommitRow = ({
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenInSymbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div>{tokenInSymbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(formattedPrice)}</div>
+                        <div className="text-cool-gray-500">{toApproxCurrency(price)}</div>
                     </div>
                 </div>
             </TableRowCell>
             <TableRowCell>
-                <div>{(tokenInAmount.toNumber() / 10 ** tokenDecimals).toFixed(2)} tokens</div>
+                <div>{tokenInAmount.toFixed(2)} tokens</div>
                 <div className="text-cool-gray-500">
-                    {toApproxCurrency(formattedPrice.times(formatBN(tokenInAmount, tokenDecimals)))} {priceTokenSymbol}
+                    {toApproxCurrency(price.times(tokenInAmount))} {priceTokenSymbol}
                 </div>
             </TableRowCell>
             <TableRowCell>
@@ -192,12 +184,12 @@ const HistoricFlipCommitRow = ({
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOutSymbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div>{tokenOutSymbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(formattedPrice)}</div>
+                        <div className="text-cool-gray-500">{toApproxCurrency(price)}</div>
                     </div>
                 </div>
             </TableRowCell>
             <TableRowCell>
-                <div>{formatBN(tokenOutAmount, tokenDecimals).toFixed(2)} tokens</div>
+                <div>{tokenOutAmount.toFixed(2)} tokens</div>
             </TableRowCell>
             <TableRowCell>
                 <Fee fee={fee} />
@@ -217,13 +209,13 @@ const HistoricFlipCommitRow = ({
                     otherActions={[
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashIn,
+                            target: txnHashIn,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Commit on Arbiscan',
                         },
                         {
                             type: BlockExplorerAddressType.txn,
-                            target: transactionHashOut,
+                            target: txnHashOut,
                             logo: NETWORKS.ARBITRUM,
                             text: 'View Upkeep on Arbiscan',
                         },
@@ -234,15 +226,17 @@ const HistoricFlipCommitRow = ({
     );
 };
 
-export const CommitRow = (props: HistoricCommitProps): JSX.Element => {
-    const { commitType } = props;
-    if (commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint) {
+export const HistoricCommitRow = ({
+    focus,
+    ...props
+}: HistoricCommitRowProps & { focus: CommitActionEnum }): JSX.Element => {
+    if (focus === CommitActionEnum.mint) {
         return <HistoricMintCommitRow {...props} />;
-    } else if (commitType === CommitEnum.longBurn || commitType === CommitEnum.shortBurn) {
+    } else if (focus === CommitActionEnum.burn) {
         return <HistoricBurnCommitRow {...props} />;
-    } else if (commitType === CommitEnum.longBurnShortMint || commitType === CommitEnum.shortBurnLongMint) {
+    } else if (focus === CommitActionEnum.flip) {
         return <HistoricFlipCommitRow {...props} />;
+    } else {
+        return <></>;
     }
-    // default return nothing
-    return <></>;
 };

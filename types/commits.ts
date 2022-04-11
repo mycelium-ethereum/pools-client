@@ -75,8 +75,8 @@ export type TradeHistory = {
     isLong: boolean;
     price: BigNumber;
     fee: BigNumber;
-    transactionHashIn: string;
-    transactionHashOut: string;
+    txnHashIn: string;
+    txnHashOut: string;
     settlementToken: StaticTokenInfo;
     tokenIn: Omit<StaticTokenInfo, 'decimals'> & {
         amount: BigNumber;
