@@ -191,7 +191,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                     expectedExecution: expectedExecution,
                 },
                 callBacks: {
-                    onSuccess: async (receipt) => {
+                    onSuccess: (receipt) => {
                         console.debug('Successfully submitted commit txn: ', receipt);
                         // get and set token balances
                         updateTokenBalances(pool, provider, account);
