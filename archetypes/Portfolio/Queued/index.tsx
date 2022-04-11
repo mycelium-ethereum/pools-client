@@ -11,7 +11,7 @@ import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { QueuedCommit } from '~/types/pools';
+import { QueuedCommit } from '~/types/commits';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 
 import { NoQueuedCommits } from './NoQueuedCommits.index';

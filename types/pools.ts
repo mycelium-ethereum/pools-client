@@ -1,7 +1,5 @@
-import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { TypedEvent } from '@tracer-protocol/perpetual-pools-contracts/types/commons';
-import { SideEnum, CommitEnum, StaticPoolInfo, Pool } from '@tracer-protocol/pools-js';
+import { SideEnum, StaticPoolInfo, Pool } from '@tracer-protocol/pools-js';
 
 // name is in the form {leverage}-${asset}/${collateral}
 export type PoolType = {
@@ -20,67 +18,20 @@ export type Token = StaticTokenInfo & {
     approvedAmount: BigNumber;
 };
 
-export type TokenBreakdown = PoolToken & {
-    tokenPrice: BigNumber;
-    pool: string;
-};
-
-export type PoolToken = Omit<Token, 'symbol'> & {
+export type PoolToken = Token & {
     side: SideEnum;
     supply: BigNumber;
-    symbol: string;
 };
 
 export type PendingAmounts = {
     mint: BigNumber; // amount of USDC pending in commit
     burn: BigNumber; // amount of tokens burned in commits
 };
-export type Committer = {
-    address: string;
-    pendingLong: PendingAmounts;
-    pendingShort: PendingAmounts;
-    allUnexecutedCommits: CreatedCommitType[];
-};
-
-export type CreatedCommitType = TypedEvent<
-    [ethers.BigNumber, ethers.BigNumber, number] & {
-        commitID: ethers.BigNumber;
-        amount: ethers.BigNumber;
-        commitType: number;
-    }
->;
 
 export type AggregateBalances = {
     longTokens: BigNumber;
     shortTokens: BigNumber;
     settlementTokens: BigNumber;
-};
-
-// for mint the amount is the amount of collateral spent
-// for burn the amount is the amount of tokens
-export type PendingCommitInfo = {
-    pool: string;
-    id: string;
-    type: CommitEnum;
-    amount: BigNumber;
-    txnHash: string;
-    from: string; // user who sent txn
-    created: number; // created timestamp of the given commit
-    appropriateIntervalId: number; // updateInterval when commit will get executed
-};
-
-export type QueuedCommit = PendingCommitInfo & {
-    tokenIn: PoolToken;
-    tokenOut: PoolToken;
-    tokenPrice: BigNumber;
-    settlementTokenSymbol: string;
-    expectedExecution: number;
-};
-
-export type HistoricCommit = PendingCommitInfo & {
-    token: PoolToken;
-    tokenPrice: BigNumber;
-    fee: BigNumber;
 };
 
 /*

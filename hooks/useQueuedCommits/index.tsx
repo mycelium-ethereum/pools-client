@@ -5,7 +5,7 @@ import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectCommits } from '~/store/PendingCommitSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
-import { QueuedCommit } from '~/types/pools';
+import { QueuedCommit } from '~/types/commits';
 
 export default (() => {
     const { account = '', provider } = useStore(selectWeb3Info, shallow);

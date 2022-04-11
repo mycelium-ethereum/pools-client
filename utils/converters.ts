@@ -293,3 +293,5 @@ export const convertShortDate: (entryDate: number) => string = (entryDate) => {
     const utcDate = new Date(date);
     return months[utcDate.getMonth()] + ' ' + utcDate.getDate();
 };
+
+export const formatBN = (n: BigNumber, decimals: number): BigNumber => n.div(10 ** decimals);

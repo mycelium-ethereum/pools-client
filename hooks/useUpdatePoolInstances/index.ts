@@ -13,8 +13,9 @@ import {
 } from '~/store/PoolInstancesSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
+import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
-import { fetchPendingCommits, V2_SUPPORTED_NETWORKS } from '~/utils/tracerAPI';
+import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 /**

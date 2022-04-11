@@ -1,8 +1,10 @@
 import BigNumber from 'bignumber.js';
-import { NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeMap } from '~/constants/commits';
+import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
+import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
-import { TradeHistoryResult, PendingCommits, TradeHistory, V2_SUPPORTED_NETWORKS, GraphCommit } from './types';
+import { formatBN } from '../converters';
 
 // Base API URL
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
@@ -83,27 +85,42 @@ export const fetchCommitHistory: (params: {
         .then((results) => {
             const parsedResults: TradeHistory[] = [];
             results.rows.forEach((row: TradeHistoryResult) => {
-                // Parse the raw results to the types you want,
-                // which you can adjust in the TradeHistory type
+                const date = new Date(row.date * 1000);
+                const timeString = new Intl.DateTimeFormat('en-AU', {
+                    hour: 'numeric',
+                    minute: 'numeric',
+                }).format(date);
+                const dateString = new Intl.DateTimeFormat('en-AU').format(date);
+                const decimals = row.tokenDecimals;
+                const commitType = CommitTypeMap[row.type];
                 parsedResults.push({
-                    date: row.date,
-                    type: row.type,
-                    tokenDecimals: row.tokenDecimals,
-                    tokenInAddress: row.tokenInAddress,
-                    tokenInSymbol: row.tokenInSymbol,
-                    tokenInName: row.tokenInName,
-                    tokenInAmount: new BigNumber(row.tokenInAmount),
-                    price: new BigNumber(row.price),
-                    fee: new BigNumber(row.fee),
-                    tokenOutAddress: row.tokenOutAddress,
-                    tokenOutSymbol: row.tokenOutSymbol,
-                    tokenOutName: row.tokenOutName,
-                    tokenOutAmount: new BigNumber(row.tokenOutAmount),
+                    timestamp: row.date,
+                    dateString,
+                    timeString,
+                    commitType,
+                    price: formatBN(new BigNumber(row.price), decimals),
+                    fee: formatBN(new BigNumber(row.fee), decimals),
                     transactionHashIn: row.transactionHashIn,
                     transactionHashOut: row.transactionHashOut,
-                    priceTokenAddress: row.priceTokenAddress,
-                    priceTokenName: row.priceTokenName,
-                    priceTokenSymbol: row.priceTokenSymbol,
+                    isLong: commitType === CommitEnum.longMint || commitType === CommitEnum.shortMint,
+                    settlementToken: {
+                        address: row.priceTokenAddress,
+                        name: row.priceTokenName,
+                        symbol: row.priceTokenSymbol,
+                        decimals: row.tokenDecimals,
+                    },
+                    tokenIn: {
+                        address: row.tokenInAddress,
+                        name: row.tokenInName,
+                        symbol: row.tokenInSymbol,
+                        amount: formatBN(new BigNumber(row.tokenInAmount), decimals),
+                    },
+                    tokenOut: {
+                        address: row.tokenOutAddress,
+                        name: row.tokenOutName,
+                        symbol: row.tokenOutSymbol,
+                        amount: formatBN(new BigNumber(row.tokenOutAmount), decimals),
+                    },
                 });
             });
             return {

@@ -1,7 +1,8 @@
 import React from 'react';
+import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
-import { marketSymbolToAssetName } from '~/utils/converters';
+import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
 
 const MarketContainer = styled.div`
     margin: auto 0;
@@ -33,3 +34,19 @@ export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: b
         </MarketContainer>
     );
 };
+
+export const MarketPrice = ({
+    tokenSymbol,
+    tokenPrice,
+}: {
+    tokenSymbol: string;
+    tokenPrice: BigNumber | number;
+}): JSX.Element => (
+    <div className="my-auto flex">
+        <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} className="my-auto mr-2 inline" />
+        <div>
+            <div>{tokenSymbol}</div>
+            <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
+        </div>
+    </div>
+);
