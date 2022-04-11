@@ -33,27 +33,23 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     },
     setMultiplePools: (pools) => {
         const now = Date.now() / 1000;
-        const poolsObj = pools.reduce((obj, pool) => {
-            const expectedExecution = getExpectedExecutionTimestamp(
-                pool.frontRunningInterval.toNumber(),
-                pool.updateInterval.toNumber(),
-                pool.lastUpdate.toNumber(),
-                now,
-            );
-            return {
-                ...obj,
-                [pool.address]: {
+        set((state) => {
+            pools.forEach((pool) => {
+                const expectedExecution = getExpectedExecutionTimestamp(
+                    pool.frontRunningInterval.toNumber(),
+                    pool.updateInterval.toNumber(),
+                    pool.lastUpdate.toNumber(),
+                    now,
+                );
+                state.pools[pool.address] = {
                     poolInstance: pool,
                     userBalances: DEFAULT_POOLSTATE.userBalances,
                     upkeepInfo: {
                         expectedExecution: expectedExecution,
                         isWaitingForUpkeep: expectedExecution < now,
                     },
-                },
-            };
-        }, {});
-        set((state) => {
-            state.pools = poolsObj;
+                };
+            });
         });
     },
     resetPools: () => {
