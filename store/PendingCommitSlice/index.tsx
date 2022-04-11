@@ -38,6 +38,8 @@ export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) =
 export const selectCommits: (state: StoreState) => IPendingCommitSlice['commits'] = (state) =>
     state.pendingCommitSlice.commits;
 
+export const selectAddCommit: (state: StoreState) => IPendingCommitSlice['addCommit'] = (state) =>
+    state.pendingCommitSlice.addCommit;
 export const selectUserCommitActions: (state: StoreState) => {
     addCommit: IPendingCommitSlice['addCommit'];
     removeCommits: IPendingCommitSlice['removeCommits'];

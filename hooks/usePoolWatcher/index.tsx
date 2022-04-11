@@ -36,6 +36,7 @@ export const usePoolWatcher = (): void => {
                     watcher.on(EVENT_NAMES.COMMIT, (commitInfo) => {
                         console.debug('Received commit', commitInfo);
                         if (commitInfo.user.toLowerCase() === account?.toLowerCase()) {
+                            console.log('Adding event commit');
                             addCommit({
                                 pool: commitInfo.poolAddress,
                                 id: commitInfo.txHash,

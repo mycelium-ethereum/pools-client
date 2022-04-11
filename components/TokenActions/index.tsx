@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { Popover } from 'react-tiny-popover';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { openBlockExplorer } from '~/utils/blockExplorers';
 import { watchAsset } from '~/utils/rpcMethods';
-
-import { Popover } from 'react-tiny-popover';
 
 export default (({ provider, token, arbiscanTarget, otherActions }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
