@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useReducer, useRef } from 'react';
 import { StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { StoreState } from '~/store/types';
@@ -8,7 +8,7 @@ import { flattenAllPoolLists } from '~/utils/poolLists';
 // wrapper hook to memoize fetching of poolLists
 export const useAllPoolLists = (): StaticPoolInfo[] => {
     // can be used to trigger a state udpate
-    const [trigger, setTrigger] = useState<boolean>(false);
+    const [, forceUpdate] = useReducer((x) => x + 1, 0)
     const ref = useRef<StaticPoolInfo[]>([]);
     const network = useStore(selectNetwork);
     const poolLists = useStore(
@@ -19,7 +19,7 @@ export const useAllPoolLists = (): StaticPoolInfo[] => {
         if (!!poolLists) {
             console.count('Flattening pools list');
             ref.current = flattenAllPoolLists(poolLists);
-            setTrigger(!trigger);
+            forceUpdate();
         }
     }, [poolLists]);
 
