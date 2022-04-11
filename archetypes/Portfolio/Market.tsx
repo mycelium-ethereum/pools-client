@@ -53,5 +53,5 @@ export const MarketPrice = ({
 
 export default {
     MarketPrice,
-    Market
-}
+    Market,
+};

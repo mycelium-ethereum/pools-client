@@ -6,9 +6,8 @@ import Actions from '~/components/TokenActions';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { TradeHistory } from '~/types/commits';
 import { toApproxCurrency } from '~/utils/converters';
-import { Fee } from './Fee';
 import { Market, MarketPrice } from '../Market';
-import {TokensAt, TokensNotional} from '../Tokens';
+import { TokensAt, TokensNotional } from '../Tokens';
 
 type HistoricCommitRowProps = TradeHistory & {
     provider?: ethers.providers.JsonRpcProvider;
@@ -45,9 +44,7 @@ export const HistoricMintCommitRow = ({
                 <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             {/*Protocol Fee*/}
-            <TableRowCell>
-                <Fee fee={fee} />
-            </TableRowCell>
+            <TableRowCell>{`${fee.times(100).toNumber()}%`}</TableRowCell>
             <TableRowCell>
                 <Actions
                     provider={provider as ethers.providers.JsonRpcProvider}
@@ -88,7 +85,6 @@ export const HistoricBurnCommitRow = ({
     inTokenPrice,
     timeString,
     dateString,
-    fee,
     provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
@@ -105,9 +101,6 @@ export const HistoricBurnCommitRow = ({
                 <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(inTokenPrice.times(tokenInAmount))}</TableRowCell>
-            <TableRowCell>
-                <Fee fee={fee} />
-            </TableRowCell>
             <TableRowCell>
                 <Actions
                     provider={provider as ethers.providers.JsonRpcProvider}
@@ -148,11 +141,10 @@ export const HistoricFlipCommitRow = ({
     inTokenPrice,
     timeString,
     dateString,
-    fee,
     provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
-    const outTokenPrice = (inTokenPrice.times(tokenInAmount)).div(tokenOutAmount);
+    const outTokenPrice = inTokenPrice.times(tokenInAmount).div(tokenOutAmount);
     return (
         <TableRow key={`${txnHashIn}`} lined>
             <TableRowCell>
@@ -170,9 +162,6 @@ export const HistoricFlipCommitRow = ({
             </TableRowCell>
             <TableRowCell>
                 <TokensNotional amount={tokenOutAmount} price={outTokenPrice} tokenSymbol={settlementTokenSymbol} />
-            </TableRowCell>
-            <TableRowCell>
-                <Fee fee={fee} />
             </TableRowCell>
             <TableRowCell>
                 <Actions

@@ -8,7 +8,7 @@ import { QueuedCommit } from '~/types/commits';
 import { toApproxCurrency } from '~/utils/converters';
 import { ReceiveIn } from './ReceiveIn';
 import { Market, MarketPrice } from '../Market';
-import {TokensAt, TokensNotional } from '../Tokens';
+import { TokensAt, TokensNotional } from '../Tokens';
 
 type QueuedCommitRowProps = QueuedCommit & {
     provider: ethers.providers.JsonRpcProvider | null;
@@ -146,7 +146,10 @@ export const FlipCommitRow = ({
     );
 };
 
-export const QueuedCommitRow = ({ focus, ...props }: QueuedCommitRowProps & { focus: CommitActionEnum }) => {
+export const QueuedCommitRow = ({
+    focus,
+    ...props
+}: QueuedCommitRowProps & { focus: CommitActionEnum }): JSX.Element => {
     if (focus === CommitActionEnum.mint) {
         return <MintCommitRow {...props} />;
     } else if (focus === CommitActionEnum.burn) {

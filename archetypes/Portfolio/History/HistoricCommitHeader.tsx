@@ -24,7 +24,7 @@ export const HistoryTableHeader = ({ focus }: { focus: CommitActionEnum }): JSX.
                         <TableHeaderCell>Token</TableHeaderCell>
                         <TableHeaderCell>Amount / Price</TableHeaderCell>
                         <TableHeaderCell>Return</TableHeaderCell>
-                        <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
+                        <TableHeaderCell colSpan={2} />
                     </tr>
                 </TableHeader>
             );
@@ -35,7 +35,7 @@ export const HistoryTableHeader = ({ focus }: { focus: CommitActionEnum }): JSX.
                         <TableHeaderCell>Time / Date</TableHeaderCell>
                         <TableHeaderCell colSpan={2}>From</TableHeaderCell>
                         <TableHeaderCell colSpan={2}>To</TableHeaderCell>
-                        <TableHeaderCell colSpan={2}>Fee</TableHeaderCell>
+                        <TableHeaderCell colSpan={2} />
                     </tr>
                     <tr>
                         <TableHeaderCell />
