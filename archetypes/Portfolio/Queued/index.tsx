@@ -8,10 +8,10 @@ import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
 
-import { NoQueuedCommits } from './NoQueuedCommits.index';
 import QueuedCommitHeader from './QueuedCommitHeader';
 import { QueuedCommitRow } from './QueuedCommitRows';
 import { PageOptions } from '..';
+import { NoEntries } from '../NoEntries';
 
 const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (
     numMints,
@@ -91,7 +91,7 @@ export const QueuedCommits = ({
                 <QueuedCommitHeader focus={focus} />
                 <tbody>
                     {focusedCommits.length === 0 ? (
-                        <NoQueuedCommits focus={focus} />
+                        <NoEntries focus={focus} isQueued />
                     ) : (
                         focusedCommits.map((commit) => (
                             <QueuedCommitRow

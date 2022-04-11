@@ -8,12 +8,12 @@ import { Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
-import NoQueued from '~/public/img/no-queued.svg';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { HistoricCommitRow } from './HisoricCommitRows';
 import HistoricCommitHeader from './HistoricCommitHeader';
 import { PageOptions } from '..';
+import { NoEntries } from '../NoEntries';
 
 const historyOptions: PageOptions = [
     {
@@ -68,16 +68,7 @@ export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Ele
                 ) : (
                     <tbody>
                         {tradeHistory.length === 0 ? (
-                            <tr>
-                                <td colSpan={MAX_COLS}>
-                                    <div className="my-20 text-center">
-                                        <NoQueued className="mx-auto mb-5" />
-                                        <div className="text-cool-gray-500">
-                                            You have no {router.query.focus} history.
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
+                            <NoEntries focus={focus} />
                         ) : (
                             tradeHistory.map((commit) => (
                                 <HistoricCommitRow
