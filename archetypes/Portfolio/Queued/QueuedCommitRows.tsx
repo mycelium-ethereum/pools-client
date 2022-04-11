@@ -8,6 +8,7 @@ import { QueuedCommit } from '~/types/commits';
 import { toApproxCurrency } from '~/utils/converters';
 import { ReceiveIn } from './ReceiveIn';
 import { Market, MarketPrice } from '../Market';
+import {TokensAt, TokensNotional } from '../Tokens';
 
 type QueuedCommitRowProps = QueuedCommit & {
     provider: ethers.providers.JsonRpcProvider | null;
@@ -31,10 +32,7 @@ export const MintCommitRow = ({
             </TableRowCell>
             <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
             <TableRowCell>
-                <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
-                </div>
+                <TokensAt amount={amount.div(tokenPrice)} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn
@@ -76,12 +74,7 @@ export const BurnCommitRow = ({
             </TableRowCell>
             <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
             <TableRowCell>
-                <div>
-                    {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
-                </div>
-                <div>
-                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
-                </div>
+                <TokensAt amount={amount.times(tokenPrice)} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn
@@ -123,19 +116,13 @@ export const FlipCommitRow = ({
                 <MarketPrice tokenSymbol={tokenIn.symbol} tokenPrice={tokenPrice} />
             </TableRowCell>
             <TableRowCell>
-                <div>{amount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
-                </div>
+                <TokensNotional amount={amount} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <MarketPrice tokenSymbol={tokenIn.symbol} tokenPrice={tokenPrice} />
             </TableRowCell>
             <TableRowCell>
-                <div>{amount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
-                </div>
+                <TokensNotional amount={amount} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn

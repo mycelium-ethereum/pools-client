@@ -1,14 +1,14 @@
 import React from 'react';
 import { ethers } from 'ethers';
 import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
-import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { TradeHistory } from '~/types/commits';
 import { toApproxCurrency } from '~/utils/converters';
 import { Fee } from './Fee';
-import { Market } from '../Market';
+import { Market, MarketPrice } from '../Market';
+import {TokensAt, TokensNotional} from '../Tokens';
 
 type HistoricCommitRowProps = TradeHistory & {
     provider?: ethers.providers.JsonRpcProvider;
@@ -17,9 +17,9 @@ type HistoricCommitRowProps = TradeHistory & {
 export const HistoricMintCommitRow = ({
     tokenOut: { address: tokenOutAddress, symbol: tokenOutSymbol },
     tokenIn: { amount: tokenInAmount },
-    settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
+    settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
     isLong,
-    price,
+    inTokenPrice,
     timeString,
     dateString,
     fee,
@@ -42,10 +42,7 @@ export const HistoricMintCommitRow = ({
             <TableRowCell>{toApproxCurrency(tokenInAmount)}</TableRowCell>
             {/*Tokens / Price*/}
             <TableRowCell>
-                <div>{tokenInAmount.div(price).toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    at {toApproxCurrency(price)} {priceTokenSymbol}/token
-                </div>
+                <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             {/*Protocol Fee*/}
             <TableRowCell>
@@ -86,9 +83,9 @@ export const HistoricMintCommitRow = ({
 export const HistoricBurnCommitRow = ({
     txnHashIn,
     tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
-    settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
+    settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
     isLong,
-    price,
+    inTokenPrice,
     timeString,
     dateString,
     fee,
@@ -105,12 +102,9 @@ export const HistoricBurnCommitRow = ({
                 <Market tokenSymbol={tokenInSymbol} isLong={isLong} />
             </TableRowCell>
             <TableRowCell>
-                <div>{tokenInAmount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    at {toApproxCurrency(price)} {priceTokenSymbol}/token
-                </div>
+                <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
-            <TableRowCell>{toApproxCurrency(price.times(tokenInAmount))}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(inTokenPrice.times(tokenInAmount))}</TableRowCell>
             <TableRowCell>
                 <Fee fee={fee} />
             </TableRowCell>
@@ -150,14 +144,15 @@ export const HistoricFlipCommitRow = ({
     txnHashIn,
     tokenOut: { amount: tokenOutAmount, symbol: tokenOutSymbol },
     tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
-    settlementToken: { symbol: priceTokenSymbol, decimals: tokenDecimals },
-    price,
+    settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
+    inTokenPrice,
     timeString,
     dateString,
     fee,
     provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
+    const outTokenPrice = (inTokenPrice.times(tokenInAmount)).div(tokenOutAmount);
     return (
         <TableRow key={`${txnHashIn}`} lined>
             <TableRowCell>
@@ -165,31 +160,16 @@ export const HistoricFlipCommitRow = ({
                 <div className="text-cool-gray-500">{dateString}</div>
             </TableRowCell>
             <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenInSymbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div>{tokenInSymbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(price)}</div>
-                    </div>
-                </div>
+                <MarketPrice tokenSymbol={tokenInSymbol} tokenPrice={inTokenPrice} />
             </TableRowCell>
             <TableRowCell>
-                <div>{tokenInAmount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    {toApproxCurrency(price.times(tokenInAmount))} {priceTokenSymbol}
-                </div>
+                <TokensNotional amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOutSymbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div>{tokenOutSymbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(price)}</div>
-                    </div>
-                </div>
+                <MarketPrice tokenSymbol={tokenOutSymbol} tokenPrice={outTokenPrice} />
             </TableRowCell>
             <TableRowCell>
-                <div>{tokenOutAmount.toFixed(2)} tokens</div>
+                <TokensNotional amount={tokenOutAmount} price={outTokenPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <Fee fee={fee} />

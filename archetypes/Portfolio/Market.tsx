@@ -50,3 +50,8 @@ export const MarketPrice = ({
         </div>
     </div>
 );
+
+export default {
+    MarketPrice,
+    Market
+}

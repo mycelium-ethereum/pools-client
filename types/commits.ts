@@ -73,7 +73,7 @@ export type TradeHistory = {
     timeString: string;
     commitType: CommitEnum;
     isLong: boolean;
-    price: BigNumber;
+    inTokenPrice: BigNumber;
     fee: BigNumber;
     txnHashIn: string;
     txnHashOut: string;
