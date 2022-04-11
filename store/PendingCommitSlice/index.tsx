@@ -17,6 +17,19 @@ export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) =
             state.commits[poolLower][txnHashLower] = commitInfo;
         });
     },
+    addMutlipleCommits: (commits) => {
+        console.debug('Adding multiple commits', commits);
+        // immer set
+        set((state) => {
+            commits.forEach((commitInfo) => {
+                const [poolLower, txnHashLower] = [commitInfo.pool.toLowerCase(), commitInfo.txnHash.toLowerCase()];
+                if (!state.commits[poolLower]) {
+                    state.commits[poolLower] = {};
+                }
+                state.commits[poolLower][txnHashLower] = commitInfo;
+            });
+        });
+    },
 
     removeCommits: (pool, updateIntervalId) => {
         const poolLower = pool.toLowerCase();
@@ -40,8 +53,10 @@ export const selectCommits: (state: StoreState) => IPendingCommitSlice['commits'
 
 export const selectUserCommitActions: (state: StoreState) => {
     addCommit: IPendingCommitSlice['addCommit'];
+    addMutlipleCommits: IPendingCommitSlice['addMutlipleCommits'];
     removeCommits: IPendingCommitSlice['removeCommits'];
 } = (state) => ({
     addCommit: state.pendingCommitSlice.addCommit,
+    addMutlipleCommits: state.pendingCommitSlice.addMutlipleCommits,
     removeCommits: state.pendingCommitSlice.removeCommits,
 });
