@@ -98,7 +98,6 @@ export const fetchCommitHistory: (params: {
                     dateString,
                     timeString,
                     commitType,
-                    inTokenPrice: formatBN(new BigNumber(row.price), decimals),
                     fee: formatBN(new BigNumber(row.fee), decimals),
                     txnHashIn: row.transactionHashIn,
                     txnHashOut: row.transactionHashOut,
@@ -114,12 +113,14 @@ export const fetchCommitHistory: (params: {
                         name: row.tokenInName,
                         symbol: row.tokenInSymbol,
                         amount: formatBN(new BigNumber(row.tokenInAmount), decimals),
+                        price: formatBN(new BigNumber(row.priceIn), decimals),
                     },
                     tokenOut: {
                         address: row.tokenOutAddress,
                         name: row.tokenOutName,
                         symbol: row.tokenOutSymbol,
                         amount: formatBN(new BigNumber(row.tokenOutAmount), decimals),
+                        price: formatBN(new BigNumber(row.priceOut), decimals),
                     },
                 });
             });

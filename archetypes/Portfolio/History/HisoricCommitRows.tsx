@@ -14,11 +14,10 @@ type HistoricCommitRowProps = TradeHistory & {
 };
 
 export const HistoricMintCommitRow = ({
-    tokenOut: { address: tokenOutAddress, symbol: tokenOutSymbol },
+    tokenOut: { address: tokenOutAddress, symbol: tokenOutSymbol, amount: tokenOutAmount, price: tokenOutPrice },
     tokenIn: { amount: tokenInAmount },
     settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
     isLong,
-    inTokenPrice,
     timeString,
     dateString,
     fee,
@@ -41,7 +40,7 @@ export const HistoricMintCommitRow = ({
             <TableRowCell>{toApproxCurrency(tokenInAmount)}</TableRowCell>
             {/*Tokens / Price*/}
             <TableRowCell>
-                <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensAt amount={tokenOutAmount} price={tokenOutPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             {/*Protocol Fee*/}
             <TableRowCell>{`${fee.times(100).toNumber()}%`}</TableRowCell>
@@ -79,10 +78,9 @@ export const HistoricMintCommitRow = ({
 
 export const HistoricBurnCommitRow = ({
     txnHashIn,
-    tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
+    tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice },
     settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
     isLong,
-    inTokenPrice,
     timeString,
     dateString,
     provider,
@@ -98,9 +96,9 @@ export const HistoricBurnCommitRow = ({
                 <Market tokenSymbol={tokenInSymbol} isLong={isLong} />
             </TableRowCell>
             <TableRowCell>
-                <TokensAt amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensAt amount={tokenInAmount} price={tokenInPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
-            <TableRowCell>{toApproxCurrency(inTokenPrice.times(tokenInAmount))}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(tokenInPrice.times(tokenInAmount))}</TableRowCell>
             <TableRowCell>
                 <Actions
                     provider={provider as ethers.providers.JsonRpcProvider}
@@ -135,16 +133,14 @@ export const HistoricBurnCommitRow = ({
 
 export const HistoricFlipCommitRow = ({
     txnHashIn,
-    tokenOut: { amount: tokenOutAmount, symbol: tokenOutSymbol },
-    tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol },
+    tokenOut: { amount: tokenOutAmount, symbol: tokenOutSymbol, price: tokenOutPrice },
+    tokenIn: { address: tokenInAddress, amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice },
     settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
-    inTokenPrice,
     timeString,
     dateString,
     provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
-    const outTokenPrice = inTokenPrice.times(tokenInAmount).div(tokenOutAmount);
     return (
         <TableRow key={`${txnHashIn}`} lined>
             <TableRowCell>
@@ -152,16 +148,16 @@ export const HistoricFlipCommitRow = ({
                 <div className="text-cool-gray-500">{dateString}</div>
             </TableRowCell>
             <TableRowCell>
-                <MarketPrice tokenSymbol={tokenInSymbol} tokenPrice={inTokenPrice} />
+                <MarketPrice tokenSymbol={tokenInSymbol} tokenPrice={tokenInPrice} />
             </TableRowCell>
             <TableRowCell>
-                <TokensNotional amount={tokenInAmount} price={inTokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensNotional amount={tokenInAmount} price={tokenInPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
-                <MarketPrice tokenSymbol={tokenOutSymbol} tokenPrice={outTokenPrice} />
+                <MarketPrice tokenSymbol={tokenOutSymbol} tokenPrice={tokenOutPrice} />
             </TableRowCell>
             <TableRowCell>
-                <TokensNotional amount={tokenOutAmount} price={outTokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensNotional amount={tokenOutAmount} price={tokenOutPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <Actions

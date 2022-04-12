@@ -54,7 +54,8 @@ export type TradeHistoryResult = {
     tokenInSymbol: string;
     tokenInName: string;
     tokenInAmount: string;
-    price: string;
+    priceIn: string;
+    priceOut: string;
     fee: string;
     tokenOutAddress: string;
     tokenOutSymbol: string;
@@ -73,16 +74,17 @@ export type TradeHistory = {
     timeString: string;
     commitType: CommitEnum;
     isLong: boolean;
-    inTokenPrice: BigNumber;
     fee: BigNumber;
     txnHashIn: string;
     txnHashOut: string;
     settlementToken: StaticTokenInfo;
     tokenIn: Omit<StaticTokenInfo, 'decimals'> & {
         amount: BigNumber;
+        price: BigNumber;
     };
     tokenOut: Omit<StaticTokenInfo, 'decimals'> & {
         amount: BigNumber;
+        price: BigNumber;
     };
 };
 
