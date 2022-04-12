@@ -160,12 +160,16 @@ export const Browse: React.FC = () => {
                     );
                 })}
             </Container>
-            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
-            <AddAltPoolModal
-                open={state.addAltPoolModalOpen}
-                onClose={handleAltModalClose}
-                sortedFilteredTokens={filteredTokens}
-            />
+            {state.mintBurnModalOpen && (
+                <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
+            )}
+            {state.addAltPoolModalOpen && (
+                <AddAltPoolModal
+                    open={state.addAltPoolModalOpen}
+                    onClose={handleAltModalClose}
+                    sortedFilteredTokens={filteredTokens}
+                />
+            )}
         </>
     );
 };

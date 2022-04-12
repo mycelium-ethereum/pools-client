@@ -1,4 +1,4 @@
-import { PendingCommitInfo } from '~/types/pools';
+import { PendingCommitInfo } from '~/types/commits';
 
 export interface IPendingCommitSlice {
     commits: Record<string, Record<string, PendingCommitInfo>>;

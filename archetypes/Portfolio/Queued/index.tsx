@@ -1,21 +1,17 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
-import { ethers } from 'ethers';
-import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import { CommitEnum, CommitActionEnum } from '@tracer-protocol/pools-js';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
-import TimeLeft from '~/components/TimeLeft';
-import Actions from '~/components/TokenActions';
+import { Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
-import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { QueuedCommit } from '~/types/pools';
-import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { QueuedCommit } from '~/types/commits';
 
-import { NoQueuedCommits } from './NoQueuedCommits.index';
+import QueuedCommitHeader from './QueuedCommitHeader';
+import { QueuedCommitRow } from './QueuedCommitRows';
 import { PageOptions } from '..';
+import { NoEntries } from '../NoEntries';
 
 const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => PageOptions = (
     numMints,
@@ -38,7 +34,13 @@ const queuedOptions: (numMints: number, numBurns: number, numFlips: number) => P
     ];
 };
 
-export default (({ focus, commits }) => {
+export const QueuedCommits = ({
+    focus,
+    commits,
+}: {
+    focus: CommitActionEnum;
+    commits: QueuedCommit[];
+}): JSX.Element => {
     const router = useRouter();
     const provider = useStore(selectProvider);
 
@@ -58,102 +60,15 @@ export default (({ focus, commits }) => {
         [commits],
     );
 
-    const tableContent = (focus: CommitActionEnum) => {
-        switch (focus) {
-            case CommitActionEnum.mint:
-                return (
-                    <>
-                        <TableHeader>
-                            <tr>
-                                <TableHeaderCell>Token</TableHeaderCell>
-                                <TableHeaderCell>Amount</TableHeaderCell>
-                                <TableHeaderCell>Tokens / Price *</TableHeaderCell>
-                                <TableHeaderCell>Mint In</TableHeaderCell>
-                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                            </tr>
-                        </TableHeader>
-                        <tbody>
-                            {mintCommits.length === 0 ? (
-                                <NoQueuedCommits focus={CommitActionEnum.mint} />
-                            ) : (
-                                mintCommits.map((commit) => (
-                                    <MintCommitRow
-                                        key={`${commit.pool}-${commit.id}`}
-                                        provider={provider ?? null}
-                                        {...commit}
-                                    />
-                                ))
-                            )}
-                        </tbody>
-                    </>
-                );
-            case CommitActionEnum.burn:
-                return (
-                    <>
-                        <TableHeader>
-                            <tr>
-                                <TableHeaderCell>Token</TableHeaderCell>
-                                <TableHeaderCell>Amount</TableHeaderCell>
-                                <TableHeaderCell>Return / Price *</TableHeaderCell>
-                                <TableHeaderCell>Burn In</TableHeaderCell>
-                                <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                            </tr>
-                        </TableHeader>
-                        <tbody>
-                            {burnCommits.length === 0 ? (
-                                <NoQueuedCommits focus={CommitActionEnum.burn} />
-                            ) : (
-                                burnCommits.map((commit) => (
-                                    <BurnCommitRow
-                                        key={`${commit.pool}-${commit.id}`}
-                                        provider={provider ?? null}
-                                        {...commit}
-                                    />
-                                ))
-                            )}
-                        </tbody>
-                    </>
-                );
-            case CommitActionEnum.flip:
-                return (
-                    <>
-                        <TableHeader>
-                            <tr>
-                                <TableHeaderCell>From</TableHeaderCell>
-                                <TableHeaderCell />
-                                <TableHeaderCell>To</TableHeaderCell>
-                                <TableHeaderCell />
-                                <TableHeaderCell>Flip In</TableHeaderCell>
-                                <TableHeaderCell />
-                            </tr>
-                            <tr>
-                                <TableHeaderCell>Token / Price *</TableHeaderCell>
-                                <TableHeaderCell>Amount *</TableHeaderCell>
-                                <TableHeaderCell>Token / Price *</TableHeaderCell>
-                                <TableHeaderCell>Amount *</TableHeaderCell>
-                                <TableHeaderCell />
-                                <TableHeaderCell />
-                            </tr>
-                        </TableHeader>
-                        <tbody>
-                            {flipCommits.length === 0 ? (
-                                <NoQueuedCommits focus={CommitActionEnum.flip} />
-                            ) : (
-                                flipCommits.map((commit) => (
-                                    <FlipCommitRow
-                                        key={`${commit.pool}-${commit.id}`}
-                                        provider={provider ?? null}
-                                        {...commit}
-                                    />
-                                ))
-                            )}
-                        </tbody>
-                    </>
-                );
-            default: // impossible unless more types are added to enum
-                return <></>;
+    const focusedCommits = useMemo(() => {
+        if (focus === CommitActionEnum.mint) {
+            return mintCommits;
+        } else if (focus === CommitActionEnum.burn) {
+            return burnCommits;
+        } else {
+            return flipCommits;
         }
-    };
+    }, [focus, mintCommits, burnCommits, flipCommits]);
 
     return (
         <div className="my-5 rounded-xl bg-theme-background p-5 shadow">
@@ -172,7 +87,23 @@ export default (({ focus, commits }) => {
                     options={queuedOptions(mintCommits.length, burnCommits.length, flipCommits.length)}
                 />
             </div>
-            <Table>{tableContent(focus)}</Table>
+            <Table>
+                <QueuedCommitHeader focus={focus} />
+                <tbody>
+                    {focusedCommits.length === 0 ? (
+                        <NoEntries focus={focus} isQueued />
+                    ) : (
+                        focusedCommits.map((commit) => (
+                            <QueuedCommitRow
+                                key={commit.txnHash}
+                                focus={focus}
+                                provider={provider ?? null}
+                                {...commit}
+                            />
+                        ))
+                    )}
+                </tbody>
+            </Table>
             <div className="flex">
                 <div className="mt-8 max-w-2xl text-sm text-theme-text opacity-80">
                     * <strong>Token Price</strong> and{' '}
@@ -183,222 +114,6 @@ export default (({ focus, commits }) => {
             </div>
         </div>
     );
-}) as React.FC<{
-    focus: CommitActionEnum;
-    commits: QueuedCommit[];
-}>;
-
-const MintCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
-    const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    return (
-        <TableRow key={txnHash} lined>
-            <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div className="flex">
-                            <div>
-                                {}
-                                {tokenOut.symbol.split('-')[0][0]}-
-                                {
-                                    marketSymbolToAssetName[
-                                        `${tokenOut.symbol.split('-')[1].split('/')[0]}/${
-                                            tokenOut.symbol.split('-')[1].split('/')[1]
-                                        }`
-                                    ]
-                                }
-                            </div>
-                            &nbsp;
-                            <div className={`${tokenOut.side === SideEnum.long ? 'green' : 'red'}`}>
-                                {tokenOut.side === SideEnum.long ? 'Long' : 'Short'}
-                            </div>
-                        </div>
-                        <div className="text-cool-gray-500">{tokenOut.symbol} </div>
-                    </div>
-                </div>
-            </TableRowCell>
-            <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
-            <TableRowCell>
-                <div>{amount.div(tokenPrice).toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <ReceiveIn
-                    pendingUpkeep={pendingUpkeep}
-                    setPendingUpkeep={setPendingUpkeep}
-                    actionType={CommitActionEnum.mint}
-                    expectedExecution={expectedExecution}
-                />
-            </TableRowCell>
-            <TableRowCell className="flex text-right">
-                <Actions
-                    token={tokenOut}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: BlockExplorerAddressType.txn,
-                        target: txnHash,
-                    }}
-                />
-            </TableRowCell>
-        </TableRow>
-    );
 };
 
-const BurnCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
-    const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    return (
-        <TableRow key={txnHash} lined>
-            <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div className="flex">
-                            <div>
-                                {}
-                                {tokenOut.symbol.split('-')[0][0]}-
-                                {
-                                    marketSymbolToAssetName[
-                                        `${tokenOut.symbol.split('-')[1].split('/')[0]}/${
-                                            tokenOut.symbol.split('-')[1].split('/')[1]
-                                        }`
-                                    ]
-                                }
-                            </div>
-                            &nbsp;
-                            <div className={`${tokenOut.side === SideEnum.long ? 'green' : 'red'}`}>
-                                {tokenOut.side === SideEnum.long ? 'Long' : 'Short'}
-                            </div>
-                        </div>
-                        <div className="text-cool-gray-500">{tokenOut.symbol} </div>
-                    </div>
-                </div>
-            </TableRowCell>
-            <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
-            <TableRowCell>
-                <div>
-                    {toApproxCurrency(tokenPrice.times(amount))} {tokenOut.symbol.split('-')[1].split('/')[1]}
-                </div>
-                <div>
-                    at {toApproxCurrency(tokenPrice)} {settlementTokenSymbol}/token
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <ReceiveIn
-                    pendingUpkeep={pendingUpkeep}
-                    setPendingUpkeep={setPendingUpkeep}
-                    actionType={CommitActionEnum.mint}
-                    expectedExecution={expectedExecution}
-                />
-            </TableRowCell>
-            <TableRowCell className="flex text-right">
-                <Actions
-                    token={tokenOut}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: BlockExplorerAddressType.txn,
-                        target: txnHash,
-                    }}
-                />
-            </TableRowCell>
-        </TableRow>
-    );
-};
-
-const FlipCommitRow: React.FC<
-    QueuedCommit & {
-        provider: ethers.providers.JsonRpcProvider | null;
-    }
-> = ({ tokenIn, tokenOut, txnHash, tokenPrice, amount, provider, settlementTokenSymbol, expectedExecution }) => {
-    const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
-    return (
-        <TableRow key={txnHash} lined>
-            <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenOut.symbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div>{tokenOut.symbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
-                    </div>
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <div>{amount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <div className="my-auto flex">
-                    <Logo size="lg" ticker={tokenSymbolToLogoTicker(tokenIn.symbol)} className="my-auto mr-2 inline" />
-                    <div>
-                        <div>{tokenIn.symbol}</div>
-                        <div className="text-cool-gray-500">{toApproxCurrency(tokenPrice)}</div>
-                    </div>
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <div>{amount.toFixed(2)} tokens</div>
-                <div className="text-cool-gray-500">
-                    {toApproxCurrency(tokenPrice.times(amount))} {settlementTokenSymbol}
-                </div>
-            </TableRowCell>
-            <TableRowCell>
-                <ReceiveIn
-                    pendingUpkeep={pendingUpkeep}
-                    setPendingUpkeep={setPendingUpkeep}
-                    actionType={CommitActionEnum.mint}
-                    expectedExecution={expectedExecution}
-                />
-            </TableRowCell>
-            <TableRowCell className="flex text-right">
-                <Actions
-                    token={tokenOut}
-                    provider={provider}
-                    arbiscanTarget={{
-                        type: BlockExplorerAddressType.txn,
-                        target: txnHash,
-                    }}
-                />
-            </TableRowCell>
-        </TableRow>
-    );
-};
-
-interface ReceiveInProps {
-    pendingUpkeep: boolean;
-    setPendingUpkeep: React.Dispatch<React.SetStateAction<boolean>>;
-    actionType: CommitActionEnum;
-    expectedExecution: number;
-}
-const ReceiveIn: React.FC<ReceiveInProps> = ({
-    pendingUpkeep,
-    setPendingUpkeep,
-    actionType,
-    expectedExecution,
-}: ReceiveInProps) => {
-    if (pendingUpkeep) {
-        return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
-    } else {
-        return (
-            <TimeLeft
-                targetTime={expectedExecution}
-                countdownEnded={() => {
-                    setPendingUpkeep(true);
-                }}
-            />
-        );
-    }
-};
+export default QueuedCommits;
