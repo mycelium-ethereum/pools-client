@@ -6,4 +6,5 @@ export const Container = styled(({ className, children }) => (
     <div className={classNames('container', className)}>{children}</div>
 ))`
     padding: 0 1rem;
+    transition: 0.3s;
 `;
