@@ -5,6 +5,7 @@ import DiscourseLogo from '~/public/img/socials/discourse.svg';
 import GitbookLogo from '~/public/img/socials/gitbook.svg';
 import GitHubLogo from '~/public/img/socials/github.svg';
 import TwitterLogo from '~/public/img/socials/twitter.svg';
+import { Container } from '../General/Container';
 
 const item = 'ml-0 mb-4 lg:mb-0 ml-0 lg:ml-4 last:mb-0';
 
@@ -19,7 +20,7 @@ const Footer: React.FC = () => {
     }, []);
 
     return (
-        <div className={'container mt-auto py-4'}>
+        <Container className={'mt-auto py-4'}>
             <div className="flex flex-col justify-between px-4 md:px-0 lg:flex-row">
                 <span className="whitespace-nowrap">
                     &copy; <span ref={yearRef} /> Tracer DAO
@@ -119,7 +120,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </Container>
     );
 };
 

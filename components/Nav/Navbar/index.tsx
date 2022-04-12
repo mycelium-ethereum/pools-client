@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { Container } from '~/components/General/Container';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 
@@ -40,8 +41,8 @@ export const NavBarContent: React.FC<{
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
-        <nav className={`container h-[60px] text-base`}>
-            <div className={'flex h-full px-4 md:px-0'}>
+        <nav className={`h-[60px] text-base`}>
+            <Container className={'flex h-full'}>
                 <HeaderSiteSwitcher />
                 <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white lg:flex">
                     <Link href="/">
@@ -97,7 +98,7 @@ export const NavBarContent: React.FC<{
 
                     <MobileMenu account={account ?? ''} />
                 </div>
-            </div>
+            </Container>
         </nav>
     );
 };
