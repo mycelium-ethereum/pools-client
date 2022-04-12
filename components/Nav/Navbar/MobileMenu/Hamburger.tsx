@@ -18,7 +18,7 @@ export default styled(({ className, setOpen, open }) => {
     );
 })`
     width: 25px;
-    height: 20px;
+    height: 22px;
     position: relative;
 
     & span {
