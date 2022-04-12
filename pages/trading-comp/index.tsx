@@ -64,7 +64,7 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar />
             <div
-                className={`container w-full overflow-hidden bg-cool-gray-50 px-4 dark:bg-[#1b2436] sm:overflow-visible sm:px-0 sm:pt-10`}
+                className={`w-full overflow-hidden bg-cool-gray-50 p-4 dark:bg-[#1b2436] sm:overflow-visible md:px-6 lg:px-10 xl:container`}
             >
                 <div className="mx-auto max-w-[1280px]">
                     <div className="mb-[18px] flex flex-col lg:flex-row">

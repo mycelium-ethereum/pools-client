@@ -124,10 +124,10 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <div className="container mb-10">
+            <div className="mb-10 px-4 md:px-6 lg:px-10 xl:container">
                 <section className="mb-8">
-                    <h1 className="mt-8 mb-2 px-4 text-3xl font-semibold text-theme-text sm:px-0">Pools</h1>
-                    <div className="mb-6 px-4 text-sm font-light sm:px-0">
+                    <h1 className="mt-4 mb-2 text-3xl font-semibold text-theme-text sm:px-0 md:mt-8">Pools</h1>
+                    <div className="mb-6 text-sm font-light sm:px-0">
                         The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
                         via Tracer’s SMA Wrapper.{' '}
                         <a

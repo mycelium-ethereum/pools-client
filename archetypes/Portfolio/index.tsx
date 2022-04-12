@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import { browseReducer, BrowseState } from '~/archetypes/Pools/state';
 import Button from '~/components/General/Button';
@@ -38,13 +39,13 @@ export const PortfolioNav: React.FC<{
     const historyPage = page === TradePortfolioPage.History;
 
     return (
-        <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
-            <div className="mr-5">
+        <div className="mt-3 flex overflow-x-auto whitespace-nowrap pb-2 sm:mt-5 sm:pb-0">
+            <div className="mr-2 md:mr-5">
                 <Link href="/portfolio/">
                     <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
                 </Link>
             </div>
-            <div className="mr-5">
+            <div className="mr-2 md:mr-5">
                 <Button
                     variant={queuedPage ? 'primary' : 'unselected'}
                     onClick={() =>
@@ -119,7 +120,7 @@ export default (({ page }) => {
     };
 
     return (
-        <div className="container">
+        <div className="px-4 md:px-6 lg:px-10 xl:container">
             <PortfolioNav page={page} numCommits={commits.length} />
             {renderPage(page)}
             <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />

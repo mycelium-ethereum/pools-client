@@ -1,6 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import { HistoricCommitRow } from './HisoricCommitRows';
+import HistoricCommitHeader from './HistoricCommitHeader';
+import { PageOptions } from '..';
+import { NoEntries } from '../NoEntries';
 import Loading from '~/components/General/Loading';
 import Pagination, { PageNumber } from '~/components/General/Pagination';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
@@ -10,10 +14,6 @@ import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
-import { HistoricCommitRow } from './HisoricCommitRows';
-import HistoricCommitHeader from './HistoricCommitHeader';
-import { PageOptions } from '..';
-import { NoEntries } from '../NoEntries';
 
 const historyOptions: PageOptions = [
     {
@@ -36,7 +36,7 @@ export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Ele
     const { loading, tradeHistory, totalRecords, page, setPage } = useHistoricCommits(focus);
 
     return (
-        <div className="mt-5 rounded-xl bg-theme-background p-5 shadow">
+        <div className="mt-3 rounded-xl bg-theme-background p-5 shadow sm:mt-5">
             <div className="mb-5">
                 <TWButtonGroup
                     value={focus}

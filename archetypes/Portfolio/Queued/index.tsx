@@ -71,7 +71,7 @@ export const QueuedCommits = ({
     }, [focus, mintCommits, burnCommits, flipCommits]);
 
     return (
-        <div className="my-5 rounded-xl bg-theme-background p-5 shadow">
+        <div className="my-3 rounded-xl bg-theme-background p-5 shadow sm:my-5">
             <div className="mb-5">
                 <TWButtonGroup
                     value={focus}

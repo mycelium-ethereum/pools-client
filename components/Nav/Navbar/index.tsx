@@ -40,8 +40,8 @@ export const NavBarContent: React.FC<{
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
-        <nav className={`container h-[60px] text-base`}>
-            <div className={'flex h-full px-4 md:px-0'}>
+        <nav className="h-[60px] px-4 text-base md:px-6 lg:px-10 xl:container">
+            <div className={'flex h-full md:px-0'}>
                 <HeaderSiteSwitcher />
                 <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <Link href="/">

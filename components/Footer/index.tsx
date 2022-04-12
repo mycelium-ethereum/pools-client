@@ -19,8 +19,8 @@ const Footer: React.FC = () => {
     }, []);
 
     return (
-        <div className={'container mt-auto py-4'}>
-            <div className="flex flex-col justify-between px-4 md:px-0 lg:flex-row">
+        <div className="mt-auto p-4 md:px-6 lg:px-10 xl:container">
+            <div className="flex flex-col justify-between md:px-0 lg:flex-row">
                 <span className="whitespace-nowrap">
                     &copy; <span ref={yearRef} /> Tracer DAO
                 </span>
