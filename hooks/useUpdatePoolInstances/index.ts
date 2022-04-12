@@ -27,7 +27,7 @@ export const useUpdatePoolInstances = (): void => {
         shallow,
     );
     const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
-    const { addCommit } = useStore(selectUserCommitActions, shallow);
+    const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
@@ -102,8 +102,8 @@ export const useUpdatePoolInstances = (): void => {
                     })
                         .then((pendingCommits) => {
                             if (mounted) {
-                                pendingCommits.map((commit) => {
-                                    addCommit({
+                                addMutlipleCommits(
+                                    pendingCommits.map((commit) => ({
                                         pool: pool.poolInstance.address,
                                         id: commit.commitID,
                                         amount: new BigNumber(ethers.utils.formatUnits(commit.amount, decimals)),
@@ -112,8 +112,8 @@ export const useUpdatePoolInstances = (): void => {
                                         txnHash: commit.txnHash,
                                         created: commit.timestamp,
                                         appropriateIntervalId: commit.updateIntervalId,
-                                    });
-                                });
+                                    })),
+                                );
                             }
                         })
                         .catch((err) => {

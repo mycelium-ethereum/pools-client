@@ -10,6 +10,7 @@ import {
 } from '@tracer-protocol/pools-js';
 import { CommitToQueryFocusMap } from '~/constants/index';
 import { useStore } from '~/store/main';
+import { selectAddCommit } from '~/store/PendingCommitSlice';
 import {
     selectPoolInstanceActions,
     selectPoolInstances,
@@ -18,6 +19,7 @@ import {
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { fromAggregateBalances } from '~/utils/pools';
 
 type Options = {
     onSuccess?: (...args: any) => any;
@@ -40,11 +42,13 @@ interface PoolInstanceActions {
         amount: BigNumber,
     ) => Promise<BigNumber>;
 }
-import { fromAggregateBalances } from '~/utils/pools';
+
+const committerInterface = new ethers.utils.Interface(PoolCommitter__factory.abi);
 
 export const usePoolInstanceActions = (): PoolInstanceActions => {
     const { setTokenApproved } = useStore(selectPoolInstanceActions, shallow);
     const { updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const addCommit = useStore(selectAddCommit);
     const handleTransaction = useStore(selectHandleTransaction);
     const { provider, account, signer } = useStore(selectWeb3Info, shallow);
     const pools = useStore(selectPoolInstances);
@@ -192,6 +196,29 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                         // get and set token balances
                         updateTokenBalances(pool, provider, account);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
+                        // @ts-ignore receipt type is a bitch
+                        const txnHash = (receipt as any)?.transactionHash ?? '';
+                        const parsedLogs = (receipt as any)?.logs?.map((log: any) => {
+                            try {
+                                return committerInterface.parseLog(log);
+                            } catch (_err) {
+                                return undefined;
+                            }
+                        });
+                        const createdCommit = parsedLogs?.find((log: any) => log?.name === 'CreateCommit');
+                        if (!!createdCommit) {
+                            const commitInfo = createdCommit.args;
+                            addCommit({
+                                pool: pool.slice(),
+                                txnHash: txnHash as string,
+                                id: txnHash,
+                                type: commitType,
+                                amount: new BigNumber(ethers.utils.formatUnits(commitInfo.amount)),
+                                from: commitInfo.user,
+                                created: Math.floor(Date.now() / 1000),
+                                appropriateIntervalId: commitInfo.appropriateUpdateIntervalId.toNumber(),
+                            });
+                        }
                     },
                 },
             });

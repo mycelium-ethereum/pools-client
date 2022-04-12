@@ -88,25 +88,8 @@ export default (({ account, className }) => {
                                             className={classNames(linkStyles, route === '' ? selectedStyles : '')}
                                             onClick={() => handleRoute('/')}
                                         >
-                                            <img className="mr-2 inline" src={'/img/general/invest.svg'} alt="Trade" />
-                                            Tokens
-                                        </div>
-                                        <div
-                                            className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
-                                            onClick={() => handleRoute('/pools')}
-                                        >
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route.startsWith('bridge') ? selectedStyles : '',
-                                            )}
-                                            onClick={() => handleRoute('/bridge')}
-                                        >
-                                            <img className="mr-2 inline" src={'/img/general/bridge.svg'} alt="Bridge" />
-                                            Bridge
                                         </div>
                                         <div
                                             className={classNames(
@@ -135,6 +118,27 @@ export default (({ account, className }) => {
                                                 alt="Trading Comp"
                                             />
                                             Trading Comp
+                                        </div>
+
+                                        <div
+                                            className={classNames(
+                                                linkStyles,
+                                                route.startsWith('documentation') ? selectedStyles : '',
+                                            )}
+                                        >
+                                            <a
+                                                href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="my-auto"
+                                            >
+                                                <img
+                                                    className="mr-2 inline"
+                                                    src={'/img/general/browse.svg'}
+                                                    alt="Trading Comp"
+                                                />
+                                                Documentation
+                                            </a>
                                         </div>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
