@@ -70,7 +70,7 @@ export const NavBarContent: React.FC<{
                         className="my-auto"
                     >
                         <li className={classNames(linkStyles)}>
-                            <a className="m-auto">Documentation</a>
+                            <span className="m-auto">Documentation</span>
                         </li>
                     </a>
                 </ul>

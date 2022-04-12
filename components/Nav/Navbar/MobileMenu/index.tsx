@@ -77,23 +77,12 @@ export default (({ account, className }) => {
                                     <Styled.MenuContent>
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="relative my-4 w-full text-center" />
-                                        <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
-                                            <img className="mr-2 inline" src={'/img/general/invest.svg'} alt="Trade" />
-                                            Tokens
-                                        </Styled.MobileLink>
                                         <Styled.MobileLink
-                                            selected={route === 'pools'}
-                                            onClick={() => handleRoute('/pools')}
+                                            selected={route===''}
+                                            onClick={() => handleRoute('/')}
                                         >
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
-                                        </Styled.MobileLink>
-                                        <Styled.MobileLink
-                                            selected={route.startsWith('bridge')}
-                                            onClick={() => handleRoute('/bridge')}
-                                        >
-                                            <img className="mr-2 inline" src={'/img/general/bridge.svg'} alt="Bridge" />
-                                            Bridge
                                         </Styled.MobileLink>
                                         <Styled.MobileLink
                                             selected={route.startsWith('portfolio')}
@@ -116,6 +105,23 @@ export default (({ account, className }) => {
                                                 alt="Trading Comp"
                                             />
                                             Trading Comp
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route.startsWith('documentation')}
+                                        >
+                                            <a
+                                                href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="my-auto"
+                                            >
+                                                <img
+                                                    className="mr-2 inline"
+                                                    src={'/img/general/browse.svg'}
+                                                    alt="Trading Comp"
+                                                />
+                                                Documentation
+                                            </a>
                                         </Styled.MobileLink>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
