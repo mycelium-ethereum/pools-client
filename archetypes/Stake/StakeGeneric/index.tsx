@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { SideEnum } from '@tracer-protocol/pools-js';
+import { Container } from '~/components/General/Container';
 import { Logo, LogoTicker } from '~/components/General/Logo';
 import FarmNav from '~/components/Nav/FarmNav';
 import { MAX_SOL_UINT } from '~/constants/general';
@@ -330,7 +331,7 @@ export default (({
     return (
         <>
             <FarmNav left={SearchButton} right={FilterButton} />
-            <div className="container mt-0 md:mt-7">
+            <Container className="mt-0 md:mt-7">
                 <div className="border-3xl rounded-3xl bg-theme-background p-0 shadow-xl md:py-20 md:px-16">
                     <section className="hidden md:block">
                         <span className="align-items: inline-flex ">
@@ -356,7 +357,7 @@ export default (({
                         onClickStake={handleStake}
                     />
                 </div>
-            </div>
+            </Container>
             <FilterModal state={state} dispatch={dispatch} />
             <StakeModalWithState
                 state={state}
