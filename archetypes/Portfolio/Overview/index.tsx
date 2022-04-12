@@ -137,11 +137,11 @@ export default (({ onClickCommitAction }) => {
                 <Styles.Wrapper>
                     <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
                     <HelpCard
-                        badge="Guide"
-                        title="Minting and Burning Pool Tokens Guide"
-                        content="A step-by-step on minting and burning tokens using the Perpetual Pools interface."
-                        href="https://tracer.finance/radar/minting-burning/"
-                        linkText="Read guide"
+                        badge="Roadmap"
+                        title="Perpetual Pools V2 Roadmap"
+                        content="Want to learn what is coming with the launch of V2?"
+                        href="https://tracer.finance/radar/perpetual-pools-v2-roadmap/"
+                        linkText="View V2 roadmap"
                     />
                 </Styles.Wrapper>
                 <HoldingsTable
