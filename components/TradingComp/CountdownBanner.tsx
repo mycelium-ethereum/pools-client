@@ -7,7 +7,7 @@ const CountdownBanner: React.FC = () => {
     const statStyles = 'block font-semibold text-xs leading-[18px]';
 
     return (
-        <div className="transition-border relative mr-4 w-[calc(100%+32px)] -translate-x-4 transform font-aileron duration-300 sm:w-full sm:translate-x-0 sm:rounded-lg">
+        <div className="transition-border relative mr-4 w-[calc(100%+32px)] -translate-x-4 transform duration-300 sm:w-full sm:translate-x-0 sm:rounded-lg">
             <img
                 src="/img/trading-comp/trading-comp-banner.png"
                 className="absolute z-0 h-full w-full object-cover sm:rounded-lg"

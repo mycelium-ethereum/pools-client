@@ -56,7 +56,7 @@ input {
 
 body,
 html {
-    font-family: 'Source Sans Pro', ui-sans-serif, system-ui, -apple-system, serif !important;
+    font-family: 'aileron', ui-sans-serif, system-ui, -apple-system, serif !important;
 }
 #__next {
     overflow-y: overlay;
