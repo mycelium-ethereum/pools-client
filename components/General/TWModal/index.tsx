@@ -75,4 +75,6 @@ const DialogStyled = styled(Dialog)<{ onClose: () => void }>`
     top: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
+    max-height: 100vh;
+    overflow-y: auto;
 `;
