@@ -100,7 +100,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
         dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
 
     return (
-        <section className="container px-4 sm:px-0">
+        <section>
             <div className="mb-2 w-full">
                 <div className="lg:flex">
                     <div className="mr-4 hidden flex-col lg:flex">

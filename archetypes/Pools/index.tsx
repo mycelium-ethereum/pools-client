@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { Container } from '~/components/General/Container';
 import Loading from '~/components/General/Loading';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
@@ -124,10 +125,10 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <div className="container mb-10">
+            <Container className="mb-10">
                 <section className="mb-8">
-                    <h1 className="mt-8 mb-2 px-4 text-3xl font-semibold text-theme-text sm:px-0">Pools</h1>
-                    <div className="mb-6 px-4 text-sm font-light sm:px-0">
+                    <h1 className="mt-8 mb-2 text-3xl font-semibold text-theme-text">Pools</h1>
+                    <div className="mb-6 text-sm font-light">
                         The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
                         via Tracer’s SMA Wrapper.{' '}
                         <a
@@ -158,7 +159,7 @@ export const Browse: React.FC = () => {
                         </div>
                     );
                 })}
-            </div>
+            </Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
             )}

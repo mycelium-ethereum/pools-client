@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Footer from '~/components/Footer';
+import { Container } from '~/components/General/Container';
 import NavBar from '~/components/Nav';
 import ArticleBox from '~/components/TradingComp/ArticleBox';
 import CountdownBanner from '~/components/TradingComp/CountdownBanner';
@@ -63,9 +64,7 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar />
-            <div
-                className={`container w-full overflow-hidden bg-cool-gray-50 px-4 dark:bg-[#1b2436] sm:overflow-visible sm:px-0 sm:pt-10`}
-            >
+            <Container className={`overflow-hidden bg-cool-gray-50 dark:bg-[#1b2436] sm:overflow-visible sm:pt-10`}>
                 <div className="mx-auto max-w-[1280px]">
                     <div className="mb-[18px] flex flex-col lg:flex-row">
                         <CountdownBanner />
@@ -76,7 +75,7 @@ export default (() => {
                     </div>
                     <Leaderboard filteredData={filteredData} data={data} setFilteredData={setFilteredData} />
                 </div>
-            </div>
+            </Container>
             <Footer />
         </div>
     );

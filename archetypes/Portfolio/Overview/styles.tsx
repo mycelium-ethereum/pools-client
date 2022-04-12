@@ -1,6 +1,7 @@
 import styled from 'styled-components';
+import { Container as GeneralContainer } from '~/components/General/Container';
 
-export const Container = styled.div`
+export const Container = styled(GeneralContainer)`
     margin-top: 20px;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
