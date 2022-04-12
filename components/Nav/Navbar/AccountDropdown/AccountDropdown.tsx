@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { ethers } from 'ethers';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
@@ -52,7 +53,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                         onClick={() => {
                             /* This requires a secure origin, either HTTPS or localhost. */
                             try {
-                                navigator.clipboard.writeText(account);
+                                navigator.clipboard.writeText(ethers.utils.getAddress(account));
                             } catch (err) {
                                 console.error('Failed to copy', err);
                             }
