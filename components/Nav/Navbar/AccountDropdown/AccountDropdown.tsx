@@ -60,8 +60,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     />
                 </TooltipSelector>
             </Styled.CopyAccount>
-
-            <Styled.Options>
+            <div>
                 <Styled.ViewOnArbiscanOption
                     href={`${ARBISCAN_URI}/address/${account}`}
                     target="_blank"
@@ -70,8 +69,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     <Styled.ArbitrumLogo ticker={NETWORKS.ARBITRUM} />
                     <div>View on Arbiscan</div>
                 </Styled.ViewOnArbiscanOption>
-            </Styled.Options>
-
+            </div>
             <Styled.Logout>
                 {/* Disconnect Button */}
                 <Styled.LogoutButton onClick={logout}>Disconnect</Styled.LogoutButton>

@@ -77,10 +77,7 @@ export default (({ account, className }) => {
                                     <Styled.MenuContent>
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="relative my-4 w-full text-center" />
-                                        <Styled.MobileLink
-                                            selected={route===''}
-                                            onClick={() => handleRoute('/')}
-                                        >
+                                        <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
                                         </Styled.MobileLink>
@@ -106,9 +103,7 @@ export default (({ account, className }) => {
                                             />
                                             Trading Comp
                                         </Styled.MobileLink>
-                                        <Styled.MobileLink
-                                            selected={route.startsWith('documentation')}
-                                        >
+                                        <Styled.MobileLink selected={route.startsWith('documentation')}>
                                             <a
                                                 href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
                                                 target="_blank"

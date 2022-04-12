@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from '@ant-design/icons';
+import styled from 'styled-components';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
@@ -11,8 +12,31 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 
-const option =
-    'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
+const Option = styled.option`
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+
+    &:first-child {
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+    }
+    &:last-child {
+        border-bottom-left-radius: 0.5rem;
+        border-bottom-right-radius: 0.5rem;
+    }
+    &:disabled {
+        cursor: not-allowed;
+    }
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+
+    &:hover {
+        background: ${({ theme }) => theme['button-bg-hover']};
+    }
+`;
 
 export default (({ className }) => {
     const { provider, network } = useStore(selectWeb3Info, shallow);
@@ -30,20 +54,15 @@ export default (({ className }) => {
                 />
             }
         >
-            <option
-                className={option}
-                value={NETWORKS.ARBITRUM}
-                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}
-            >
+            <Option value={NETWORKS.ARBITRUM} onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}>
                 Arbitrum
-            </option>
-            <option
-                className={option}
+            </Option>
+            <Option
                 value={NETWORKS.ARBITRUM_RINKEBY}
                 onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
             >
                 Arbitrum Rinkeby
-            </option>
+            </Option>
         </TWPopup>
     );
 }) as React.FC<{
