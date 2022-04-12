@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
 import { classNames } from '~/utils/helpers';
 import Hamburger from './Hamburger';
+import * as Styled from './styles';
 import AccountDropdown from '../AccountDropdown';
 import NetworkDropdown from '../NetworkDropdown';
 
@@ -51,7 +52,7 @@ export default (({ account, className }) => {
     const selectedStyles = 'bg-black bg-opacity-50';
 
     return (
-        <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden lg:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -75,13 +76,8 @@ export default (({ account, className }) => {
                                 leaveFrom="translate-x-0"
                                 leaveTo="translate-x-full"
                             >
-                                <div className="w-screen">
-                                    <div
-                                        className={classNames(
-                                            'flex h-full flex-col overflow-y-scroll bg-tracer-900 bg-mobile-nav-bg bg-no-repeat p-6 matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur dark:bg-theme-background',
-                                            'aligned-background',
-                                        )}
-                                    >
+                                <Styled.Menu>
+                                    <Styled.MenuContent className="container">
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="relative my-4 w-full text-center" />
                                         <div
@@ -139,16 +135,9 @@ export default (({ account, className }) => {
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
                                         </div>
-                                    </div>
-                                    <style>
-                                        {`
-                                            .aligned-background {
-                                                background-position-y: -60px; 
-                                                background-size: 100%;
-                                            }
-                                        `}
-                                    </style>
-                                </div>
+                                    </Styled.MenuContent>
+                                    <Styled.MenuBackground className="bg-tracer-900 bg-mobile-nav-bg bg-no-repeat matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur dark:bg-theme-background" />
+                                </Styled.Menu>
                             </Transition.Child>
                         </div>
                     </div>

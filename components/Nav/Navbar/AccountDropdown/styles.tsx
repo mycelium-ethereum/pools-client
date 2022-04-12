@@ -1,6 +1,7 @@
 import { CopyOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Logo } from '~/components/General';
+import { device } from '~/store/ThemeSlice/themes';
 
 export const ArbitrumLogo = styled(Logo)`
     display: inline;
@@ -67,4 +68,12 @@ export const CopyIcon = styled(CopyOutlined)`
 export const Account = styled.div`
     padding: 0 0.5rem;
     align-self: center;
+
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    @media ${device.lg} {
+        max-width: 100px;
+    }
 `;
