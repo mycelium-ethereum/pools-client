@@ -44,7 +44,7 @@ export const NavBarContent: React.FC<{
         <nav className={`h-[60px] text-base`}>
             <Container className={'flex h-full'}>
                 <HeaderSiteSwitcher />
-                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white lg:flex">
+                <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <Link href="/">
                         <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                             <a id="browse-pools" className="m-auto">
@@ -88,7 +88,7 @@ export const NavBarContent: React.FC<{
                     <VersionToggle />
 
                     {/* DESKTOP */}
-                    <span className="hidden lg:flex">
+                    <span className="hidden xl:flex">
                         {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                         <AccountDropdown account={account ?? ''} className="my-auto mx-4" />

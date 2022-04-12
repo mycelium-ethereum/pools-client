@@ -48,11 +48,8 @@ export default (({ account, className }) => {
         };
     }, []);
 
-    const linkStyles = 'w-max text-white my-2 px-5 py-2 rounded-lg cursor-pointer';
-    const selectedStyles = 'bg-black bg-opacity-50';
-
     return (
-        <div className={classNames(`relative my-auto ml-4 overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -77,38 +74,29 @@ export default (({ account, className }) => {
                                 leaveTo="translate-x-full"
                             >
                                 <Styled.Menu>
-                                    <Styled.MenuContent className="container">
+                                    <Styled.MenuContent>
                                         <AccountDropdown account={account} className="my-4" />
                                         <NetworkDropdown className="relative my-4 w-full text-center" />
-                                        <div
-                                            className={classNames(linkStyles, route === '' ? selectedStyles : '')}
-                                            onClick={() => handleRoute('/')}
-                                        >
+                                        <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
                                             <img className="mr-2 inline" src={'/img/general/invest.svg'} alt="Trade" />
                                             Tokens
-                                        </div>
-                                        <div
-                                            className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route === 'pools'}
                                             onClick={() => handleRoute('/pools')}
                                         >
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route.startsWith('bridge') ? selectedStyles : '',
-                                            )}
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route.startsWith('bridge')}
                                             onClick={() => handleRoute('/bridge')}
                                         >
                                             <img className="mr-2 inline" src={'/img/general/bridge.svg'} alt="Bridge" />
                                             Bridge
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route.startsWith('portfolio') ? selectedStyles : '',
-                                            )}
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route.startsWith('portfolio')}
                                             onClick={() => handleRoute('/portfolio')}
                                         >
                                             <img
@@ -117,12 +105,9 @@ export default (({ account, className }) => {
                                                 alt="Portfolio"
                                             />
                                             Portfolio
-                                        </div>
-                                        <div
-                                            className={classNames(
-                                                linkStyles,
-                                                route.startsWith('trading') ? selectedStyles : '',
-                                            )}
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route.startsWith('trading')}
                                             onClick={() => handleRoute('/trading-comp')}
                                         >
                                             <img
@@ -131,7 +116,7 @@ export default (({ account, className }) => {
                                                 alt="Trading Comp"
                                             />
                                             Trading Comp
-                                        </div>
+                                        </Styled.MobileLink>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
                                             <ThemeSwitcher />
                                         </div>
