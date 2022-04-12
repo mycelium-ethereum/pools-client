@@ -64,9 +64,7 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar />
-            <Container
-                className={`w-full overflow-hidden bg-cool-gray-50 px-4 dark:bg-[#1b2436] sm:overflow-visible sm:px-0 sm:pt-10`}
-            >
+            <Container className={`overflow-hidden bg-cool-gray-50 dark:bg-[#1b2436] sm:overflow-visible sm:pt-10`}>
                 <div className="mx-auto max-w-[1280px]">
                     <div className="mb-[18px] flex flex-col lg:flex-row">
                         <CountdownBanner />

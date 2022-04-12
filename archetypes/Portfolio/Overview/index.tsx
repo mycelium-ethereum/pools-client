@@ -95,7 +95,7 @@ export default (({ onClickCommitAction }) => {
 
     const emptyState = () => {
         return (
-            <Styles.Container>
+            <>
                 <Styles.Wrapper isFullWidth={!!account}>
                     <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
                     {!account && <ConnectWalletBanner handleConnect={handleConnect} />}
@@ -127,13 +127,13 @@ export default (({ onClickCommitAction }) => {
                         </div>
                     )}
                 </Styles.Wrapper>
-            </Styles.Container>
+            </>
         );
     };
 
     const filledState = () => {
         return (
-            <Styles.Container>
+            <>
                 <Styles.Wrapper>
                     <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
                     <HelpCard
@@ -165,7 +165,7 @@ export default (({ onClickCommitAction }) => {
                 >
                     <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
                 </HoldingsTable>
-            </Styles.Container>
+            </>
         );
     };
 
