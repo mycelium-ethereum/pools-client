@@ -8,7 +8,7 @@ import { flattenAllPoolLists } from '~/utils/poolLists';
 // wrapper hook to memoize fetching of poolLists
 export const useAllPoolLists = (): StaticPoolInfo[] => {
     // can be used to trigger a state udpate
-    const [, forceUpdate] = useReducer((x) => x + 1, 0)
+    const [, forceUpdate] = useReducer((x) => x + 1, 0);
     const ref = useRef<StaticPoolInfo[]>([]);
     const network = useStore(selectNetwork);
     const poolLists = useStore(
