@@ -1,4 +1,4 @@
-import { V2_SUPPORTED_NETWORKS } from './types';
+import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 
 export const subgraphUrlByNetwork: Record<V2_SUPPORTED_NETWORKS, string> = {
     '42161': '',

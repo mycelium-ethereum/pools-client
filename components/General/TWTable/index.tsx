@@ -109,3 +109,12 @@ export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size 
         {children}
     </td>
 );
+
+/* Cheat to span all cols https://stackoverflow.com/questions/398734/colspan-all-columns */
+const MAX_COLS = 100;
+
+export const FullSpanCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className, ...props }) => (
+    <td {...props} className={classNames(className ?? '')} colSpan={MAX_COLS}>
+        <div className="my-20 text-center">{children}</div>
+    </td>
+);
