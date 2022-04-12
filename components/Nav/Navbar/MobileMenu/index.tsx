@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { classNames } from '~/utils/helpers';
 import Hamburger from './Hamburger';
 import * as Styled from './styles';
@@ -10,7 +11,15 @@ import NetworkDropdown from '../NetworkDropdown';
 
 import ThemeSwitcher from '../ThemeSwitcher';
 
-export default (({ account, className }) => {
+export const MobileMenu = ({
+    account,
+    network,
+    className,
+}: {
+    account: string;
+    network: KnownNetwork | undefined;
+    className?: string;
+}): JSX.Element => {
     const [open, setOpen] = useState(false);
     const router = useRouter();
     const route = router.asPath.split('/')[1];
@@ -76,7 +85,7 @@ export default (({ account, className }) => {
                                 <Styled.Menu>
                                     <Styled.MenuContent>
                                         <AccountDropdown account={account} className="my-4" />
-                                        <NetworkDropdown className="relative my-4 w-full text-center" />
+                                        {!!network && <NetworkDropdown className="relative my-4 w-full text-center" />}
                                         <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
@@ -131,7 +140,6 @@ export default (({ account, className }) => {
             </Transition.Root>
         </div>
     );
-}) as React.FC<{
-    account: string;
-    className?: string;
-}>;
+};
+
+export default MobileMenu;
