@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -15,10 +15,10 @@ type QueuedCommitRowProps = QueuedCommit & {
 };
 
 export const MintCommitRow = ({
+    tokenIn: { amount: tokenInAmount },
     tokenOut,
     txnHash,
-    tokenPrice,
-    amount,
+    isLong,
     provider,
     settlementTokenSymbol,
     expectedExecution,
@@ -28,11 +28,15 @@ export const MintCommitRow = ({
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <Market tokenSymbol={tokenOut.symbol} isLong={tokenOut.side === SideEnum.long} />
+                <Market tokenSymbol={tokenOut.symbol} isLong={isLong} />
             </TableRowCell>
-            <TableRowCell>{toApproxCurrency(amount)}</TableRowCell>
+            <TableRowCell>{toApproxCurrency(tokenInAmount)}</TableRowCell>
             <TableRowCell>
-                <TokensAt amount={amount.div(tokenPrice)} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensAt
+                    amount={tokenInAmount.div(tokenOut.price)}
+                    price={tokenOut.price}
+                    tokenSymbol={settlementTokenSymbol}
+                />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn
@@ -57,24 +61,27 @@ export const MintCommitRow = ({
 };
 
 export const BurnCommitRow = ({
-    tokenOut,
+    tokenIn,
     txnHash,
-    tokenPrice,
-    amount,
+    isLong,
     provider,
     settlementTokenSymbol,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
-
+    const { amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice } = tokenIn;
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <Market tokenSymbol={tokenOut.symbol} isLong={tokenOut.side === SideEnum.long} />
+                <Market tokenSymbol={tokenInSymbol} isLong={isLong} />
             </TableRowCell>
-            <TableRowCell>{amount.toFixed(2)} tokens</TableRowCell>
+            <TableRowCell>{tokenInAmount.toFixed(2)} tokens</TableRowCell>
             <TableRowCell>
-                <TokensAt amount={amount.times(tokenPrice)} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensAt
+                    amount={tokenInAmount.times(tokenInPrice)}
+                    price={tokenInPrice}
+                    tokenSymbol={settlementTokenSymbol}
+                />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn
@@ -86,7 +93,7 @@ export const BurnCommitRow = ({
             </TableRowCell>
             <TableRowCell className="flex text-right">
                 <Actions
-                    token={tokenOut}
+                    token={tokenIn}
                     provider={provider}
                     arbiscanTarget={{
                         type: BlockExplorerAddressType.txn,
@@ -99,30 +106,29 @@ export const BurnCommitRow = ({
 };
 
 export const FlipCommitRow = ({
-    tokenIn,
+    tokenIn: { amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice },
     tokenOut,
     txnHash,
-    tokenPrice,
-    amount,
     provider,
     settlementTokenSymbol,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
+    const { amount: tokenOutAmount, symbol: tokenOutSymbol, price: tokenOutPrice } = tokenOut;
 
     return (
         <TableRow key={txnHash} lined>
             <TableRowCell>
-                <MarketPrice tokenSymbol={tokenIn.symbol} tokenPrice={tokenPrice} />
+                <MarketPrice tokenSymbol={tokenInSymbol} tokenPrice={tokenInPrice} />
             </TableRowCell>
             <TableRowCell>
-                <TokensNotional amount={amount} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensNotional amount={tokenInAmount} price={tokenInPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
-                <MarketPrice tokenSymbol={tokenIn.symbol} tokenPrice={tokenPrice} />
+                <MarketPrice tokenSymbol={tokenOutSymbol} tokenPrice={tokenOutPrice} />
             </TableRowCell>
             <TableRowCell>
-                <TokensNotional amount={amount} price={tokenPrice} tokenSymbol={settlementTokenSymbol} />
+                <TokensNotional amount={tokenOutAmount} price={tokenOutPrice} tokenSymbol={settlementTokenSymbol} />
             </TableRowCell>
             <TableRowCell>
                 <ReceiveIn

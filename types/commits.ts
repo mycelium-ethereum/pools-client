@@ -1,6 +1,5 @@
 import BigNumber from 'bignumber.js';
 import { CommitEnum, StaticTokenInfo } from '@tracer-protocol/pools-js';
-import { PoolToken } from './pools';
 
 // for mint the amount is the amount of collateral spent
 // for burn the amount is the amount of tokens
@@ -16,9 +15,16 @@ export type PendingCommitInfo = {
 };
 
 export type QueuedCommit = PendingCommitInfo & {
-    tokenIn: PoolToken;
-    tokenOut: PoolToken;
-    tokenPrice: BigNumber;
+    tokenIn: StaticTokenInfo & {
+        amount: BigNumber;
+        price: BigNumber;
+    };
+    tokenOut: StaticTokenInfo & {
+        amount: BigNumber;
+        price: BigNumber;
+    };
+    isLong: boolean;
+    // tokenPrice: BigNumber;
     settlementTokenSymbol: string;
     expectedExecution: number;
 };
