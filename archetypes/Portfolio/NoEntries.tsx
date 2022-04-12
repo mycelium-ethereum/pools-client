@@ -1,5 +1,6 @@
 import React from 'react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import { FullSpanCell } from '~/components/General/TWTable';
 import NoItems from '~/public/img/no-queued.svg';
 
 const QUEUED_TYPE_MAP: Record<CommitActionEnum, string> = {
@@ -14,19 +15,15 @@ const HISTORY_TYPE_MAP: Record<CommitActionEnum, string> = {
     [CommitActionEnum.flip]: 'flip',
 };
 
-const MAX_COLS = 100;
-
 export const NoEntries = ({ focus, isQueued }: { focus: CommitActionEnum; isQueued?: boolean }): JSX.Element => (
     <tr>
-        <td colSpan={MAX_COLS}>
-            <div className="my-20 text-center">
-                <NoItems className="mx-auto mb-5" />
-                <div className="text-cool-gray-500">
-                    {isQueued
-                        ? `You have no pending ${QUEUED_TYPE_MAP[focus]}.`
-                        : `You have no ${HISTORY_TYPE_MAP[focus]} history.`}
-                </div>
+        <FullSpanCell>
+            <NoItems className="mx-auto mb-5" />
+            <div className="text-cool-gray-500">
+                {isQueued
+                    ? `You have no pending ${QUEUED_TYPE_MAP[focus]}.`
+                    : `You have no ${HISTORY_TYPE_MAP[focus]} history.`}
             </div>
-        </td>
+        </FullSpanCell>
     </tr>
 );

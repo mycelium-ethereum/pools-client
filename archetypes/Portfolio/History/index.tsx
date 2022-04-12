@@ -4,7 +4,7 @@ import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import Pagination, { PageNumber } from '~/components/General/Pagination';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { Table } from '~/components/General/TWTable';
+import { FullSpanCell, Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
@@ -29,9 +29,6 @@ const historyOptions: PageOptions = [
         text: 'Flip History',
     },
 ];
-
-/* Cheat to span the rest of the columns */
-const MAX_COLS = 100;
 
 export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Element => {
     const router = useRouter();
@@ -59,11 +56,9 @@ export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Ele
                 <HistoricCommitHeader focus={focus} />
                 {loading ? (
                     <tr>
-                        <td colSpan={MAX_COLS}>
-                            <div className="my-20 text-center">
-                                <Loading className="mx-auto my-8 w-10" />
-                            </div>
-                        </td>
+                        <FullSpanCell>
+                            <Loading className="mx-auto my-8 w-10" />
+                        </FullSpanCell>
                     </tr>
                 ) : (
                     <tbody>
