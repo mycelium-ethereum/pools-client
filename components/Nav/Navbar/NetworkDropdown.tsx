@@ -9,6 +9,7 @@ import Error from '~/public/img/notifications/error.svg';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { switchNetworks } from '~/utils/rpcMethods';
+import { isSupportedNetwork } from '~/utils/supportedNetworks';
 
 const option =
     'py-2 px-4 text-sm first:rounded-t-lg last:rounded-b-lg disabled:cursor-not-allowed cursor-pointer transition-all hover:bg-theme-button-bg-hover';
@@ -25,7 +26,7 @@ export default (({ className }) => {
                     networkName={
                         network ? networkConfig[network]?.name ?? 'Unsupported Network' : 'Unsupported Network'
                     }
-                    supported={!!network && !!networkConfig[network]}
+                    supported={isSupportedNetwork(network)}
                 />
             }
         >
@@ -55,6 +56,7 @@ const NetworkPreview: React.FC<{
     networkName: string;
     supported: boolean;
 }> = ({ networkID, networkName, supported }) => {
+    console.log('network', networkID, supported);
     return (
         <div className={'my-auto flex w-full items-center'}>
             {supported ? (

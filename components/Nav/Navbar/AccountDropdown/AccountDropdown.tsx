@@ -38,10 +38,10 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
     return (
         <TWPopup
             preview={
-                <>
+                <div className={'my-auto flex w-full items-center'}>
                     <WalletIcon />
                     <Styled.Account>{accountParsed}</Styled.Account>
-                </>
+                </div>
             }
         >
             <Styled.CopyAccount>
