@@ -18,8 +18,9 @@ export default styled(({ className, setOpen, open }) => {
     );
 })`
     width: 25px;
-    height: 20px;
+    height: 21px;
     position: relative;
+    cursor: pointer;
 
     & span {
         display: block;
