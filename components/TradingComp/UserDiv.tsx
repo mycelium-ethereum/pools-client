@@ -71,7 +71,7 @@ const UserRow: React.FC<{
             <div className="mt-2 flex">
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Portfolio Value</span>
-                    <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
+                    <span className="font-bold leading-[150%] text-cool-gray-900 dark:text-white">
                         {placeholder ? (
                             <Placeholder className="max-h-[30px] max-w-[100px]" />
                         ) : (
@@ -81,7 +81,7 @@ const UserRow: React.FC<{
                 </div>
                 <div className="flex w-1/2 flex-col">
                     <span className="font-semibold leading-[150%] text-cool-gray-500">Entry Date</span>
-                    <span className="font-inter font-bold leading-[150%] text-cool-gray-900 dark:text-white">
+                    <span className="font-bold leading-[150%] text-cool-gray-900 dark:text-white">
                         {placeholder ? <Placeholder className="max-h-[30px] max-w-[100px]" /> : convertDate(entryDate)}
                     </span>
                 </div>

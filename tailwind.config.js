@@ -77,10 +77,6 @@ module.exports = {
                 'nav-bg': "url('/img/nav-bg.svg')",
                 'matrix-bg': "url('/img/matrix.gif')",
             },
-            fontFamily: {
-                aileron: ["'aileron'", 'sans-serif'],
-                inter: ["'Inter'", 'sans-serif'],
-            },
         },
     },
     variants: {

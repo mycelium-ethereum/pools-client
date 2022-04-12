@@ -66,7 +66,7 @@ const StatisticsBox: React.FC<{
                                 {/* If logged in and participating */}
                                 {participating ? (
                                     <div className="flex items-end sm:flex-col sm:items-start">
-                                        <div className="flex flex-wrap font-inter text-cool-gray-800 dark:text-white">
+                                        <div className="flex flex-wrap text-cool-gray-800 dark:text-white">
                                             <div className="mr-6 mb-2 sm:mb-0">
                                                 <div className="flex items-end font-bold">
                                                     <span className="mr-0.5 inline-block text-base">#</span>
