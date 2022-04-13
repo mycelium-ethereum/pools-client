@@ -15,7 +15,7 @@ export interface IPoolsInstancesSlice {
 
     setTokenBalances: (
         pool: string,
-        balances: { shortTokenBalance: BigNumber; longTokenBalance: BigNumber; settlementTokenBalance: BigNumber },
+        balances: { shortTokenBalance?: BigNumber; longTokenBalance?: BigNumber; settlementTokenBalance?: BigNumber },
     ) => void;
     setTokenApprovals: (
         pool: string,

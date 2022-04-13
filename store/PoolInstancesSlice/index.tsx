@@ -63,9 +63,15 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             return;
         }
         set((state) => {
-            state.pools[pool].userBalances.shortToken.balance = balances.shortTokenBalance;
-            state.pools[pool].userBalances.longToken.balance = balances.longTokenBalance;
-            state.pools[pool].userBalances.settlementToken.balance = balances.settlementTokenBalance;
+            if (balances.shortTokenBalance) {
+                state.pools[pool].userBalances.shortToken.balance = balances.shortTokenBalance;
+            }
+            if (balances.longTokenBalance) {
+                state.pools[pool].userBalances.longToken.balance = balances.longTokenBalance;
+            }
+            if (balances.settlementTokenBalance) {
+                state.pools[pool].userBalances.settlementToken.balance = balances.settlementTokenBalance;
+            }
         });
     },
     setTokenApprovals: (pool, approvals) => {
@@ -151,6 +157,11 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         const pool = get().pools[pool_].poolInstance;
         const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
         const decimals = pool.settlementToken.decimals;
+        const settlementToken = pool.settlementToken.address;
+        const poolsWithSharedSettlementToken: string[] = Object.values(get().pools)
+            .filter((pool) => settlementToken === pool.poolInstance.settlementToken.address)
+            .map((pool) => pool.poolInstance.address);
+
         fetchTokenBalances(tokens, provider, account, pool.address)
             .then((balances) => {
                 const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
@@ -163,10 +174,14 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     settlementTokenBalance,
                 });
 
+                poolsWithSharedSettlementToken.map((pool) => {
+                    get().setTokenBalances(pool, {
+                        settlementTokenBalance,
+                    });
+                });
                 get().setTokenBalances(pool.address, {
                     shortTokenBalance,
                     longTokenBalance,
-                    settlementTokenBalance,
                 });
             })
             .catch((err) => {
