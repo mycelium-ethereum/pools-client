@@ -2,6 +2,8 @@ import { withLenses, lens } from '@dhmk/zustand-lens';
 import produce, { Draft } from 'immer';
 import create, { GetState, Mutate, SetState, StateCreator, StoreApi } from 'zustand';
 import { subscribeWithSelector } from 'zustand/middleware';
+import { createENSSlice } from './ENSSlice';
+import { IENSSlice } from './ENSSlice/types';
 import { createGasSlice } from './GasSlice';
 import { IGasSlice } from './GasSlice/types';
 import { createPendingCommitSlice } from './PendingCommitSlice';
@@ -64,6 +66,7 @@ export const useStore = create<
                 gasSlice: lens<IGasSlice>(createGasSlice),
                 unsupportedNetworkSlice: lens<IUnsupportedNetworkSlice>(createUnsupportedNetwork),
                 pendingCommitSlice: lens<IPendingCommitSlice>(createPendingCommitSlice),
+                ensSlice: lens<IENSSlice>(createENSSlice),
             })),
         ),
     ),
