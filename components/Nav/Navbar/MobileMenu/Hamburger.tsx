@@ -2,24 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 
 // const Hamburger
-export const Hamburger: ({
-    handleOpen,
-    open,
-}: {
-    handleOpen: (() => any) | undefined;
-    open: boolean;
-}) => JSX.Element = styled(({ className, handleOpen, open }) => {
-    return (
-        <div onClick={handleOpen} className={`${className} ${open ? 'open' : ''}`}>
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </div>
-    );
-})`
+export const Hamburger: ({ handleOpen, open }: { handleOpen: () => void; open: boolean }) => JSX.Element = styled(
+    ({ className, handleOpen, open }) => {
+        return (
+            <div onClick={handleOpen} className={`${className} ${open ? 'open' : ''}`}>
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+            </div>
+        );
+    },
+)`
     width: 25px;
     height: 21px;
     position: relative;
@@ -65,6 +61,9 @@ export const Hamburger: ({
         top: 18px;
     }
 
+    &.open {
+        pointer-events: none;
+    }
     &.open span:nth-child(1),
     &.open span:nth-child(6) {
         -webkit-transform: rotate(45deg);

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
@@ -21,7 +21,6 @@ export const MobileMenu = ({
     className?: string;
 }): JSX.Element => {
     const [open, setOpen] = useState(false);
-    const closedByDialog = useRef<boolean>(false);
     const router = useRouter();
     const route = router.asPath.split('/')[1];
 
@@ -35,25 +34,15 @@ export const MobileMenu = ({
     };
 
     const handleOpen = useCallback(() => {
-        if (!closedByDialog.current) {
-            const root = document.getElementById('__next');
-            root?.classList.add('overflow-hidden');
-            setOpen(true);
-        }
+        const root = document.getElementById('__next');
+        root?.classList.add('overflow-hidden');
+        setOpen(true);
     }, []);
 
     const handleClose = useCallback(() => {
         const root = document.getElementById('__next');
         root?.classList.remove('overflow-hidden');
         setOpen(false);
-        // if user clicks hamburger to close
-        //  prevent hamburger from re-opening
-        //  since hamburger click fires after dialog handleClose
-        closedByDialog.current = true;
-        // bit of a hack but this allows you to reopen with hamburger
-        setTimeout(() => {
-            closedByDialog.current = false;
-        }, 5);
     }, []);
 
     // Close nav after hitting desktop breakpoint
