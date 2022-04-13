@@ -1,18 +1,23 @@
 export const emptyStateHelpCardContent = [
     {
-        badge: 'Guide',
-        title: 'Leveraged Token Designs: Compare the Market',
-        content:
-            "Find out how Tracer's Pool tokens stack up to similar products and how you can benefit from the novel design.",
-        href: 'https://tracer.finance/radar/leveraged-tokens/',
+        badge: 'Article',
+        title: 'The Tracer Vision',
+        content: 'Learn more about how Tracer is building the future of derivatives and see why Bankless are bullish.',
+        href: 'https://tracer.finance/radar/future-of-derivatives/',
         linkText: 'Read article',
     },
     {
         badge: 'Guide',
-        title: 'Skew Farming: How To',
-        content:
-            'Know this strategy to recognise opportunities for excess risk-adjusted returns. Take advantage of the skew in Perpetual Pools',
-        href: 'https://tracer.finance/radar/skew-farming-explained/',
+        title: 'Minting and Burning Pool Tokens Guide',
+        content: 'A step-by-step guide on minting, burning and flipping tokens using the Perpetual Pools interface.',
+        href: 'https://tracer.finance/radar/minting-burning/',
         linkText: 'Read guide',
+    },
+    {
+        badge: 'Roadmap',
+        title: 'Perpetual Pools V2 Roadmap',
+        content: 'Want to learn what is coming with the launch of V2?',
+        href: 'https://tracer.finance/radar/perpetual-pools-v2-roadmap/',
+        linkText: 'View V2 roadmap',
     },
 ];
