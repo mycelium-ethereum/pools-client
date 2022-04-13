@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import shallow from 'zustand/shallow';
 import { Container } from '~/components/General/Container';
+import Show from '~/components/General/Show';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
@@ -89,16 +90,16 @@ export const NavBarContent: React.FC<{
 
                     <VersionToggle />
 
-                    <span className="hidden lg:flex">
+                    <Show.LG display="flex">
                         {!!network ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
-                    </span>
-                    <span className="hidden md:flex">
+                    </Show.LG>
+                    <Show.MD display="flex">
                         <AccountDropdown account={account ?? ''} className="my-auto mx-4" />
-                    </span>
+                    </Show.MD>
 
-                    <span className="hidden lg:flex">
+                    <Show.LG display="flex">
                         <ThemeSwitcher />
-                    </span>
+                    </Show.LG>
 
                     <MobileMenu account={account ?? ''} network={network} />
                 </div>

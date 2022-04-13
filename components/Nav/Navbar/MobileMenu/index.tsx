@@ -3,6 +3,7 @@ import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import Hide from '~/components/General/Hide';
 import { classNames } from '~/utils/helpers';
 import Hamburger from './Hamburger';
 import * as Styled from './styles';
@@ -84,14 +85,14 @@ export const MobileMenu = ({
                             >
                                 <Styled.Menu>
                                     <Styled.MenuContent>
-                                        <span className="md:hidden">
+                                        <Hide.MD>
                                             <AccountDropdown account={account} className="my-4 w-full" />
-                                        </span>
-                                        <span className="lg:hidden">
+                                        </Hide.MD>
+                                        <Hide.LG>
                                             {!!network && (
                                                 <NetworkDropdown className="relative my-4 w-full text-center" />
                                             )}
-                                        </span>
+                                        </Hide.LG>
                                         <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
