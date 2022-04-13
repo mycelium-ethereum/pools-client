@@ -137,7 +137,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                     <tr className="h-5" />
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12">Leverage/Collateral</TableHeaderCell>
+                        <TableHeaderCell className="w-1/12">Details</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             {'INDEX PRICE (USD)'}
@@ -247,7 +247,7 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
-                        USDC
+                        {pool.settlementTokenSymbol}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>
