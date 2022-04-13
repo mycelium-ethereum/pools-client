@@ -9,6 +9,7 @@ import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import usePendingCommits from '~/hooks/useQueuedCommits';
 import History from './History';
 import Overview from './Overview';
+import { Container } from './Overview/styles';
 import Queued from './Queued';
 
 export enum PortfolioPage {
@@ -119,11 +120,11 @@ export default (({ page }) => {
     };
 
     return (
-        <div className="container">
+        <Container>
             <PortfolioNav page={page} numCommits={commits.length} />
             {renderPage(page)}
-            <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />
-        </div>
+            {state.mintBurnModalOpen && <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />}
+        </Container>
     );
 }) as React.FC<{
     page: TradePortfolioPage;

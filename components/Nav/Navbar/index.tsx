@@ -2,8 +2,10 @@ import React from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import shallow from 'zustand/shallow';
+import { Container } from '~/components/General/Container';
 import { useStore } from '~/store/main';
-import { selectAccount } from '~/store/Web3Slice';
+import { selectWeb3Info } from '~/store/Web3Slice';
 
 import HeaderSiteSwitcher from './HeaderSiteSwitcher';
 import AccountDropdown from './AccountDropdown';
@@ -34,14 +36,15 @@ export const NavBarContent: React.FC<{
 }> = ({ setShowOnboardModal }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
-    const account = useStore(selectAccount);
+    const { account, network } = useStore(selectWeb3Info, shallow);
 
-    const linkStyles = 'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer';
+    const linkStyles =
+        'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer whitespace-nowrap';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
-        <nav className={`container h-[60px] text-base`}>
-            <div className={'flex h-full px-4 md:px-0'}>
+        <nav className={`h-[60px] text-base`}>
+            <Container className={'flex h-full'}>
                 <HeaderSiteSwitcher />
                 <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <Link href="/">
@@ -95,9 +98,9 @@ export const NavBarContent: React.FC<{
                         <ThemeSwitcher />
                     </span>
 
-                    <MobileMenu account={account ?? ''} />
+                    <MobileMenu account={account ?? ''} network={network} />
                 </div>
-            </div>
+            </Container>
         </nav>
     );
 };

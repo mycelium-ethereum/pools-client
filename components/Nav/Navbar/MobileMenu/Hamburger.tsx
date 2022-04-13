@@ -2,24 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 
 // const Hamburger
-export default styled(({ className, setOpen, open }) => {
-    const handleClick = () => {
-        setOpen(!open);
-    };
-    return (
-        <div onClick={handleClick} className={`${className} ${open ? 'open' : ''}`}>
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-            <span />
-        </div>
-    );
-})`
+export const Hamburger: ({ handleOpen, open }: { handleOpen: () => void; open: boolean }) => JSX.Element = styled(
+    ({ className, handleOpen, open }) => {
+        return (
+            <div onClick={handleOpen} className={`${className} ${open ? 'open' : ''}`}>
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+                <span />
+            </div>
+        );
+    },
+)`
     width: 25px;
-    height: 20px;
+    height: 21px;
     position: relative;
+    cursor: pointer;
 
     & span {
         display: block;
@@ -61,6 +61,9 @@ export default styled(({ className, setOpen, open }) => {
         top: 18px;
     }
 
+    &.open {
+        pointer-events: none;
+    }
     &.open span:nth-child(1),
     &.open span:nth-child(6) {
         -webkit-transform: rotate(45deg);
@@ -106,7 +109,6 @@ export default styled(({ className, setOpen, open }) => {
         left: calc(50% - 1px);
         top: 12px;
     }
-` as React.FC<{
-    setOpen: (bool: boolean) => any;
-    open: boolean;
-}>;
+`;
+
+export default Hamburger;

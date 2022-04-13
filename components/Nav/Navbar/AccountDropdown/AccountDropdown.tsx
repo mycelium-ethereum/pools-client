@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { ethers } from 'ethers';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
@@ -34,26 +35,25 @@ export default (({ account, className }) => {
 }>;
 
 const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButtonProps) => {
-    const accountLong = useMemo(() => accountDescriptionLong(account, ensName), [account, ensName]);
-    const accountShort = useMemo(() => accountDescriptionShort(account, ensName), [account, ensName]);
+    const accountParsed = useMemo(() => ensName || account || 'Account', [account, ensName]);
     return (
         <TWPopup
             preview={
-                <>
+                <div className={'my-auto flex w-full items-center'}>
                     <WalletIcon />
-                    <Styled.Account>{accountShort}</Styled.Account>
-                </>
+                    <Styled.Account>{accountParsed}</Styled.Account>
+                </div>
             }
         >
             <Styled.CopyAccount>
                 <WalletIcon />
-                <Styled.Account>{accountLong}</Styled.Account>
+                <Styled.Account>{accountParsed}</Styled.Account>
                 <TooltipSelector tooltip={{ content: <>Copy</> }}>
                     <Styled.CopyIcon
                         onClick={() => {
                             /* This requires a secure origin, either HTTPS or localhost. */
                             try {
-                                navigator.clipboard.writeText(account);
+                                navigator.clipboard.writeText(ethers.utils.getAddress(account));
                             } catch (err) {
                                 console.error('Failed to copy', err);
                             }
@@ -61,8 +61,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     />
                 </TooltipSelector>
             </Styled.CopyAccount>
-
-            <Styled.Options>
+            <div>
                 <Styled.ViewOnArbiscanOption
                     href={`${ARBISCAN_URI}/address/${account}`}
                     target="_blank"
@@ -71,41 +70,11 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     <Styled.ArbitrumLogo ticker={NETWORKS.ARBITRUM} />
                     <div>View on Arbiscan</div>
                 </Styled.ViewOnArbiscanOption>
-            </Styled.Options>
-
+            </div>
             <Styled.Logout>
                 {/* Disconnect Button */}
                 <Styled.LogoutButton onClick={logout}>Disconnect</Styled.LogoutButton>
             </Styled.Logout>
         </TWPopup>
     );
-};
-
-const accountDescriptionLong: (account: string, ensName: string) => string = (account, ensName) => {
-    if (ensName) {
-        const len = ensName.length;
-        if (len > 14) {
-            return `${ensName.slice(0, 7)}...${ensName.slice(len - 4, len)}`;
-        } else {
-            return ensName;
-        }
-    } else if (account) {
-        return `${account.slice(0, 7)}...${account.slice(36, 40)}`;
-    }
-    return 'Account';
-};
-
-const accountDescriptionShort: (account: string, ensName: string) => string = (account, ensName) => {
-    console.debug(`Found ens name: ${ensName}`);
-    if (ensName) {
-        const len = ensName.length;
-        if (len > 14) {
-            return `${ensName.slice(0, 5)}..`;
-        } else {
-            return ensName;
-        }
-    } else if (account) {
-        return `${account.slice(0, 5)}..`;
-    }
-    return 'Account';
 };
