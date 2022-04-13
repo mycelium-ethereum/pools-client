@@ -5,26 +5,26 @@ import { StoreState } from '..';
 
 const TTL = 86400 * 1000; // 1 day in milliseconds
 
+type CachedName = {
+    name: string;
+    expiry: number;
+};
+
 const storeENSName = (account: string, name: string): void => {
-    const ensName = {
+    const ensName: CachedName = {
         name,
         expiry: Date.now() + TTL,
     };
     localStorage.setItem(ethers.utils.getAddress(account), JSON.stringify(ensName));
 };
 
-const getCachedENS = (account: string): string | null => {
+const getCachedENS = (account: string): CachedName | null => {
     const nameStr = localStorage.getItem(ethers.utils.getAddress(account));
     if (!nameStr) {
         return null;
     }
     const ensName = JSON.parse(nameStr);
-    const now = Date.now();
-    if (now > ensName.expiry) {
-        localStorage.removeItem(ethers.utils.getAddress(account));
-        return null;
-    }
-    return ensName.name;
+    return ensName;
 };
 
 export const createENSSlice: StateSlice<IENSSlice> = (set, get) => ({
@@ -36,15 +36,22 @@ export const createENSSlice: StateSlice<IENSSlice> = (set, get) => ({
             return;
         }
         try {
-            let name: string | null = getCachedENS(account);
-            if (!name) {
-                console.count('Fetching ENS name');
+            const cachedName: CachedName | null = getCachedENS(account);
+            const now = Date.now();
+            if (!cachedName || now > cachedName.expiry) {
+                // set so we display address straight away
                 set({ ensName: undefined });
-                name = await get().mainnetProvider.lookupAddress(account);
-                name && storeENSName(account, name);
-            }
-            if (name) {
-                set({ ensName: name });
+                console.count('Fetching ENS name');
+                const ensName = await get().mainnetProvider.lookupAddress(account);
+                if (!ensName) {
+                    set({ ensName: undefined });
+                    localStorage.removeItem(ethers.utils.getAddress(account));
+                } else {
+                    storeENSName(account, ensName);
+                    set({ ensName: ensName });
+                }
+            } else {
+                set({ ensName: cachedName.name });
             }
         } catch (err) {
             console.error('Failed to fetch ens name', err);
