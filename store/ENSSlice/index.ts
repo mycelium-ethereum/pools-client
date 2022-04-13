@@ -3,7 +3,7 @@ import { StateSlice } from '~/store/types';
 import { IENSSlice } from './types';
 import { StoreState } from '..';
 
-const TTL = 86400 * 1000; // 1 day in milliseconds
+const TTL = 259200 * 1000; // 3 days in milliseconds
 
 type CachedName = {
     name: string;
@@ -44,8 +44,8 @@ export const createENSSlice: StateSlice<IENSSlice> = (set, get) => ({
                 console.count('Fetching ENS name');
                 const ensName = await get().mainnetProvider.lookupAddress(account);
                 if (!ensName) {
-                    set({ ensName: undefined });
-                    localStorage.removeItem(ethers.utils.getAddress(account));
+                    // can fall through without setting
+                    storeENSName(account, account);
                 } else {
                     storeENSName(account, ensName);
                     set({ ensName: ensName });
