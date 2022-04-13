@@ -102,7 +102,7 @@ const Footer: React.FC = () => {
                     </div>
                     <div className={item}>
                         <a
-                            href="https://app.gitbook.com/o/-MbdsGfc3PEsikGQpmCo/s/bQ0NkgDTHoDTt0kxcfIw/security/audits-and-security"
+                            href="https://docs.tracer.finance/audits-and-security/perpetual-pools"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
