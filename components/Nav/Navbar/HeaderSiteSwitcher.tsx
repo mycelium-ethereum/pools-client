@@ -33,7 +33,7 @@ const Icons = [
     },
     {
         text: 'Github',
-        href: 'https://github.com/tracer-protocol/',
+        href: 'https://github.com/tracer-protocol/perpetual-pools-contracts',
         logo: <GitHubLogo className={icon} />,
     },
     {
