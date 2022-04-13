@@ -102,11 +102,11 @@ const Footer: React.FC = () => {
                     </div>
                     <div className={item}>
                         <a
-                            href="https://tracer.finance/radar/sigma-prime-audit-response/"
+                            href="https://app.gitbook.com/o/-MbdsGfc3PEsikGQpmCo/s/bQ0NkgDTHoDTt0kxcfIw/security/audits-and-security"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            Security Audit
+                            Security Audits
                         </a>
                     </div>
                     <div className={item}>
