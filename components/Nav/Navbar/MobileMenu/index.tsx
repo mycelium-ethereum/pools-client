@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
@@ -33,15 +33,17 @@ export const MobileMenu = ({
         setOpen(false);
     };
 
-    const handleClick = (open: boolean) => {
+    const handleOpen = useCallback(() => {
         const root = document.getElementById('__next');
-        if (open) {
-            root?.classList.add('overflow-hidden');
-        } else {
-            root?.classList.remove('overflow-hidden');
-        }
-        setOpen(open);
-    };
+        root?.classList.add('overflow-hidden');
+        setOpen(true);
+    }, []);
+
+    const handleClose = useCallback(() => {
+        const root = document.getElementById('__next');
+        root?.classList.remove('overflow-hidden');
+        setOpen(false);
+    }, []);
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
@@ -59,16 +61,9 @@ export const MobileMenu = ({
 
     return (
         <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
-            <Hamburger open={open} setOpen={handleClick} />
+            <Hamburger open={open} handleOpen={handleOpen} />
             <Transition.Root show={open} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="fixed inset-0 top-full z-10 overflow-hidden"
-                    onClose={() => {
-                        // do nothing here since its fired before the hamburger
-                        console.debug('Closing mobile nav');
-                    }}
-                >
+                <Dialog as="div" className="fixed inset-0 top-full z-10 overflow-hidden" onClose={handleClose}>
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
