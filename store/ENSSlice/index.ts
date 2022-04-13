@@ -29,7 +29,7 @@ const getCachedENS = (account: string): string | null => {
 
 export const createENSSlice: StateSlice<IENSSlice> = (set, get) => ({
     ensName: undefined,
-    mainnetProvider: new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_ETHEREUM_RPC),
+    mainnetProvider: new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_MAINNET_L1_RPC),
     checkENSName: async (account) => {
         if (!account) {
             set({ ensName: undefined });
