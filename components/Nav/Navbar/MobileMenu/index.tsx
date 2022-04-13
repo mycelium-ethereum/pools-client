@@ -58,7 +58,7 @@ export const MobileMenu = ({
     }, []);
 
     return (
-        <div className={classNames(`relative my-auto ml-4 overflow-hidden lg:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
             <Hamburger open={open} setOpen={handleClick} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog
@@ -84,8 +84,14 @@ export const MobileMenu = ({
                             >
                                 <Styled.Menu>
                                     <Styled.MenuContent>
-                                        <AccountDropdown account={account} className="my-4" />
-                                        {!!network && <NetworkDropdown className="relative my-4 w-full text-center" />}
+                                        <span className="md:hidden">
+                                            <AccountDropdown account={account} className="my-4 w-full" />
+                                        </span>
+                                        <span className="lg:hidden">
+                                            {!!network && (
+                                                <NetworkDropdown className="relative my-4 w-full text-center" />
+                                            )}
+                                        </span>
                                         <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
