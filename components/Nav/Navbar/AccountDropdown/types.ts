@@ -1,5 +1,5 @@
 export interface AccountDropdownButtonProps {
     account: string;
-    ensName: string;
+    ensName: string | undefined;
     logout: () => void;
 }

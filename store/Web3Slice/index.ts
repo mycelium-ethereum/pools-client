@@ -11,6 +11,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     account: undefined,
     network: undefined,
     provider: undefined,
+    mainnetProvider: new ethers.providers.JsonRpcProvider(process.env.NEXT_PUBLIC_ETHEREUM_RPC),
     wallet: undefined,
     isReady: false,
 
@@ -108,6 +109,8 @@ export const selectHandleConnect: (state: StoreState) => IWeb3Slice['handleConne
 export const selectOnboard: (state: StoreState) => IWeb3Slice['onboard'] = (state) => state.web3Slice.onboard;
 export const selectSetDefaultProvider: (state: StoreState) => IWeb3Slice['setDefaultProvider'] = (state) =>
     state.web3Slice.setDefaultProvider;
+export const selectMainnetProvider: (state: StoreState) => IWeb3Slice['mainnetProvider'] = (state) =>
+    state.web3Slice.mainnetProvider;
 
 export const selectWalletInfo: (state: StoreState) => {
     wallet: IWeb3Slice['wallet'];

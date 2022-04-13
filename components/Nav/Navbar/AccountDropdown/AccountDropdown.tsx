@@ -4,7 +4,7 @@ import { NETWORKS } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import TWPopup from '~/components/General/TWPopup';
 import TooltipSelector from '~/components/Tooltips/TooltipSelector';
-import useEnsName from '~/hooks/useEnsName';
+import { selectENSName } from '~/store/ENSSlice';
 import { useStore } from '~/store/main';
 import { selectOnboardActions } from '~/store/Web3Slice';
 import * as Styled from './styles';
@@ -15,7 +15,7 @@ const ARBISCAN_URI = 'https://arbiscan.io';
 
 export default (({ account, className }) => {
     const { resetOnboard, handleConnect } = useStore(selectOnboardActions, shallow);
-    const ensName = useEnsName(account ?? '');
+    const ensName = useStore(selectENSName);
 
     return (
         <div className={`${className} relative inline-block text-left`}>
