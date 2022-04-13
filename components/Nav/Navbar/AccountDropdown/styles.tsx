@@ -68,7 +68,7 @@ export const Account = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    @media ${device.xl} {
+    @media ${device.lg} {
         max-width: 100px;
     }
 `;
