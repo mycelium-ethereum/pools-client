@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Fragment } from 'react';
 import { useRouter } from 'next/router';
 import { Dialog, Transition } from '@headlessui/react';
@@ -21,6 +21,7 @@ export const MobileMenu = ({
     className?: string;
 }): JSX.Element => {
     const [open, setOpen] = useState(false);
+    const closedByDialog = useRef<boolean>(false);
     const router = useRouter();
     const route = router.asPath.split('/')[1];
 
@@ -33,15 +34,27 @@ export const MobileMenu = ({
         setOpen(false);
     };
 
-    const handleClick = (open: boolean) => {
-        const root = document.getElementById('__next');
-        if (open) {
+    const handleOpen = useCallback(() => {
+        if (!closedByDialog.current) {
+            const root = document.getElementById('__next');
             root?.classList.add('overflow-hidden');
-        } else {
-            root?.classList.remove('overflow-hidden');
+            setOpen(true);
         }
-        setOpen(open);
-    };
+    }, []);
+
+    const handleClose = useCallback(() => {
+        const root = document.getElementById('__next');
+        root?.classList.remove('overflow-hidden');
+        setOpen(false);
+        // if user clicks hamburger to close
+        //  prevent hamburger from re-opening
+        //  since hamburger click fires after dialog handleClose
+        closedByDialog.current = true;
+        // bit of a hack but this allows you to reopen with hamburger
+        setTimeout(() => {
+            closedByDialog.current = false;
+        }, 5);
+    }, []);
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
@@ -59,16 +72,9 @@ export const MobileMenu = ({
 
     return (
         <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
-            <Hamburger open={open} setOpen={handleClick} />
+            <Hamburger open={open} handleOpen={handleOpen} />
             <Transition.Root show={open} as={Fragment}>
-                <Dialog
-                    as="div"
-                    className="fixed inset-0 top-full z-10 overflow-hidden"
-                    onClose={() => {
-                        // do nothing here since its fired before the hamburger
-                        console.debug('Closing mobile nav');
-                    }}
-                >
+                <Dialog as="div" className="fixed inset-0 top-full z-10 overflow-hidden" onClose={handleClose}>
                     <div className="absolute inset-0 overflow-hidden">
                         <Dialog.Overlay className="absolute inset-0" />
 
