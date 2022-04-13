@@ -8,7 +8,6 @@ export interface IWeb3Slice {
     account: string | undefined;
     network: KnownNetwork | undefined;
     provider: ethers.providers.JsonRpcProvider | undefined;
-    mainnetProvider: ethers.providers.JsonRpcProvider; // always used for ENS
     wallet: Wallet | undefined;
 
     defaultProvider: ethers.providers.WebSocketProvider | undefined;
