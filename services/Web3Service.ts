@@ -1,3 +1,4 @@
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
 import { Web3Aware } from './BaseClasses';
@@ -13,7 +14,7 @@ export class Web3Service extends Web3Aware {
      */
     async watchAsset(token: { address: string; symbol: string; decimals: number }): Promise<boolean> {
         if (!this.provider) {
-            return new Promise(() => false);
+            return false;
         }
 
         return this.provider
@@ -42,11 +43,8 @@ export class Web3Service extends Web3Aware {
             });
     }
 
-    async switchNetworks(): Promise<boolean> {
-        if (!this.network) {
-            return false;
-        }
-        const config = networkConfig[this.network];
+    async switchNetworks(network: KnownNetwork): Promise<boolean> {
+        const config = networkConfig[network];
         try {
             await this.provider?.send('wallet_switchEthereumChain', [
                 {

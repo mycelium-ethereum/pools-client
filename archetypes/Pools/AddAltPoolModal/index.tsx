@@ -6,7 +6,7 @@ import { TWModal } from '~/components/General/TWModal';
 import { useStore } from '~/store/main';
 import { selectImportPool, selectImportedPools } from '~/store/PoolsSlice';
 import { selectNetwork } from '~/store/Web3Slice';
-import { isAddress } from '~/utils/rpcMethods';
+import { isAddress } from '~/utils/web3';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';

@@ -1,15 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { ethers } from 'ethers';
 import TimeLeft from '~/components/TimeLeft';
+import { web3Service } from '~/services/Web3Service';
 import { CommitProps } from '~/store/TransactionSlice/types';
-import { watchAsset } from '~/utils/rpcMethods';
 import { Logo, tokenSymbolToLogoTicker } from '..';
 import { Notification } from '.';
 
 export const CommitPendingNotification = ({
     tokenSymbol,
-    provider,
     poolAddress,
     settlementTokenDecimals,
 }: CommitProps): JSX.Element => (
@@ -17,7 +15,7 @@ export const CommitPendingNotification = ({
         <div
             className="flex cursor-pointer items-center"
             onClick={() =>
-                watchAsset(provider as ethers.providers.JsonRpcProvider, {
+                web3Service.watchAsset({
                     address: poolAddress,
                     decimals: settlementTokenDecimals,
                     symbol: tokenSymbol,

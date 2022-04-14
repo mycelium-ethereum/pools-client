@@ -4,17 +4,16 @@ import type { BigNumber } from 'bignumber.js';
 import shallow from 'zustand/shallow';
 import { bridgeableTickers } from '~/constants/bridge';
 import { useArbitrumBridge } from '~/context/ArbitrumBridgeContext';
+import { web3Service } from '~/services/Web3Service';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BridgeableAsset } from '~/types/bridge';
 import { Network } from '~/types/networks';
-import { switchNetworks } from '~/utils/rpcMethods';
-
 import { MultiBridge } from './MultiBridge';
 
 // ArbitrumBridge
 export const ArbitrumBridge: React.FC = (() => {
-    const { provider, account } = useStore(selectWeb3Info, shallow);
+    const { account, provider } = useStore(selectWeb3Info, shallow);
     const {
         bridgeToken,
         bridgeEth,
@@ -39,7 +38,7 @@ export const ArbitrumBridge: React.FC = (() => {
 
     const onSwitchNetwork = useCallback(
         (networkId: Network['id'], callback?: () => void) => {
-            switchNetworks(provider, networkId).finally(() => callback?.());
+            web3Service.switchNetworks(networkId).finally(() => callback?.());
         },
         [provider],
     );

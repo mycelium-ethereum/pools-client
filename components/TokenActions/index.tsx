@@ -4,9 +4,9 @@ import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { Popover } from 'react-tiny-popover';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
+import { web3Service } from '~/services/Web3Service';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { openBlockExplorer } from '~/utils/blockExplorers';
-import { watchAsset } from '~/utils/rpcMethods';
 
 export default (({ provider, token, arbiscanTarget, otherActions }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -22,7 +22,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
                     <div className="focus:outline-none z-10 mt-2 w-56 origin-top-right divide-y divide-theme-border rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
                         <div
                             className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
-                            onClick={() => watchAsset(provider, token)}
+                            onClick={() => web3Service.watchAsset(token)}
                         >
                             <PlusOutlined className="relative mr-2 inline h-[12px]" />
                             Add token to wallet

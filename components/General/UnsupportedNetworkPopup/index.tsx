@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
+import { web3Service } from '~/services/Web3Service';
 import { useStore } from '~/store/main';
 import { selectUnsupportedNetworkRef } from '~/store/UnsupportedNetworkSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
-import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork, isSupportedBridgeNetwork } from '~/utils/supportedNetworks';
 import { Notification } from '../Notification';
 
@@ -34,7 +34,7 @@ const UnsupportedNetwork: React.FC = () => {
                             <a
                                 className="mt-3 cursor-pointer text-tracer-400 underline hover:opacity-80"
                                 onClick={() => {
-                                    switchNetworks(provider, NETWORKS.ARBITRUM);
+                                    web3Service.switchNetworks(NETWORKS.ARBITRUM);
                                 }}
                             >
                                 Switch to Arbitrum Mainnet

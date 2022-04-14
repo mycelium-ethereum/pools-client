@@ -7,9 +7,9 @@ import { Logo, LogoTicker } from '~/components/General';
 import TWPopup from '~/components/General/TWPopup';
 import { networkConfig } from '~/constants/networks';
 import Error from '~/public/img/notifications/error.svg';
+import { web3Service } from '~/services/Web3Service';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
-import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 
 const Option = styled.option`
@@ -39,7 +39,7 @@ const Option = styled.option`
 `;
 
 export default (({ className }) => {
-    const { provider, network } = useStore(selectWeb3Info, shallow);
+    const { network } = useStore(selectWeb3Info, shallow);
 
     return (
         <TWPopup
@@ -54,12 +54,12 @@ export default (({ className }) => {
                 />
             }
         >
-            <Option value={NETWORKS.ARBITRUM} onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}>
+            <Option value={NETWORKS.ARBITRUM} onClick={() => web3Service.switchNetworks(NETWORKS.ARBITRUM)}>
                 Arbitrum
             </Option>
             <Option
                 value={NETWORKS.ARBITRUM_RINKEBY}
-                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
+                onClick={() => web3Service.switchNetworks(NETWORKS.ARBITRUM_RINKEBY)}
             >
                 Arbitrum Rinkeby
             </Option>

@@ -1,4 +1,4 @@
-import { ContractReceipt, ethers } from 'ethers';
+import { ContractReceipt } from 'ethers';
 import { ArbSys, L1GatewayRouter, L2GatewayRouter } from 'arb-ts/dist/lib/abi';
 import { Inbox } from 'arb-ts/dist/lib/abi/Inbox';
 import { PoolCommitter, PoolToken } from '@tracer-protocol/perpetual-pools-contracts/types';
@@ -46,7 +46,6 @@ export type ApproveProps = {
 };
 
 export type CommitProps = {
-    provider: ethers.providers.Provider;
     poolAddress: string;
     tokenSymbol: string;
     settlementTokenDecimals: number;

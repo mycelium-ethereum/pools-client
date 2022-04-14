@@ -184,7 +184,6 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                 type: TransactionType.COMMIT,
                 injectedProps: {
                     poolAddress,
-                    provider: provider as ethers.providers.JsonRpcProvider,
                     tokenSymbol: commitType === CommitEnum.longMint ? longTokenSymbol : shortTokenSymbol,
                     commitType: CommitToQueryFocusMap[commitType],
                     settlementTokenDecimals,
