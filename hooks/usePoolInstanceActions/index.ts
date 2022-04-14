@@ -93,6 +93,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                         console.debug('Successfully submitted claim txn: ', receipt);
                         // get and set token balances
                         updatePoolTokenBalances([pool], provider, account);
+                        updateSettlementTokenBalances([pool], provider, account);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                     },
                 },
