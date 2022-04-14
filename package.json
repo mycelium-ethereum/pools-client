@@ -33,6 +33,7 @@
         "stream": "^0.0.2",
         "styled-components": "^5.2.1",
         "tailwindcss-multi-theme": "^1.0.4",
+        "tiny-typed-emitter": "^2.1.0",
         "zustand": "^3.7.1"
     },
     "scripts": {

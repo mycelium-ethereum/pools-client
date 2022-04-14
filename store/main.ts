@@ -21,6 +21,7 @@ import { createUnsupportedNetwork } from './UnsupportedNetworkSlice';
 import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
 import { createWeb3Slice } from './Web3Slice';
 import { IWeb3Slice } from './Web3Slice/types';
+import { web3Emitter } from '../services';
 
 // Turn the set method into an immer proxy
 const immer =
@@ -70,4 +71,14 @@ export const useStore = create<
             })),
         ),
     ),
+);
+
+/** SUBSCRIPTIONS */
+useStore.subscribe(
+    (state) => state.web3Slice.provider,
+    (provider) => web3Emitter.emit('PROVIDER_CHANGED', provider),
+);
+useStore.subscribe(
+    (state) => state.web3Slice.network,
+    (network) => web3Emitter.emit('NETWORK_CHANGED', network),
 );

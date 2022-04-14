@@ -1,11 +1,19 @@
+import { ethers } from 'ethers';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
-import { Web3Aware } from './BaseClasses';
+import { web3Emitter, Web3Emitter } from './emit';
 
 const tokenImagesRootUrl = 'https://raw.githubusercontent.com/dospore/tracer-balancer-token-list/master/assets';
 
-export class Web3Service extends Web3Aware {
+export class Web3Service {
+    provider: ethers.providers.JsonRpcProvider | undefined;
+
+    constructor(web3Emitter: Web3Emitter) {
+        web3Emitter.on('PROVIDER_CHANGED', (provider) => {
+            this.provider = provider;
+        });
+    }
     /**
      * Adds a token asset to the users wallet watch
      * @param provider ethereum provider
@@ -79,4 +87,4 @@ export class Web3Service extends Web3Aware {
         return false;
     }
 }
-export const web3Service = new Web3Service();
+export const web3Service = new Web3Service(web3Emitter);

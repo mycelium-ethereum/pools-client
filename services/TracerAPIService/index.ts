@@ -1,7 +1,8 @@
+import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
-import { Web3Aware } from 'services/BaseClasses';
+import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeMap } from '~/constants/commits';
+import { web3Emitter, Web3Emitter } from '~/services/emit';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { AverageEntryPricesAPIResponse } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
@@ -11,7 +12,19 @@ import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611'];
 
-class TracerAPIService extends Web3Aware {
+class TracerAPIService {
+    provider: ethers.providers.JsonRpcProvider | undefined;
+    network: KnownNetwork | undefined;
+
+    constructor(web3Emitter: Web3Emitter) {
+        web3Emitter.on('PROVIDER_CHANGED', (provider) => {
+            this.provider = provider;
+        });
+        web3Emitter.on('NETWORK_CHANGED', (network) => {
+            this.network = network;
+        });
+    }
+
     async fetchPendingCommits({
         pool,
         account,
@@ -162,4 +175,4 @@ class TracerAPIService extends Web3Aware {
     }
 }
 
-export const tracerAPIService = new TracerAPIService();
+export const tracerAPIService = new TracerAPIService(web3Emitter);
