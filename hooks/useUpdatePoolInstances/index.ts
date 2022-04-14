@@ -26,12 +26,12 @@ export const useUpdatePoolInstances = (): void => {
         selectPoolInstanceActions,
         shallow,
     );
-    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances } = useStore(
+    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances, updateAverageEntryPrices } = useStore(
         selectPoolInstanceUpdateActions,
         shallow,
     );
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
-    const { provider, account } = useStore(selectWeb3Info, shallow);
+    const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
@@ -137,6 +137,7 @@ export const useUpdatePoolInstances = (): void => {
             // get and set token balances and approvals for each pool
             updateSettlementTokenBalances(pools_, provider, account);
             updatePoolTokenBalances(pools_, provider, account);
+            updateAverageEntryPrices(network, pools_, account);
             updateTokenApprovals(pools_, provider, account);
         } else if (!account && poolsInitialized) {
             // account disconnect
@@ -148,5 +149,5 @@ export const useUpdatePoolInstances = (): void => {
                 });
             });
         }
-    }, [account, poolsInitialized]);
+    }, [account, network, poolsInitialized]);
 };

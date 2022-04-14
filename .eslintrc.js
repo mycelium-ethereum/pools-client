@@ -42,7 +42,7 @@ module.exports = {
         'no-unreachable': 1,
         'react/prefer-es6-class': 1,
         'react/prefer-stateless-function': 1,
-        'react/jsx-pascal-case': 1,
+        'react/jsx-pascal-case': [1, { allowAllCaps: true }],
         'react/jsx-closing-bracket-location': 1,
         'react/jsx-closing-tag-location': 1,
         'no-multi-spaces': 1,

@@ -1,8 +1,9 @@
 import BigNumber from 'bignumber.js';
-import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeMap } from '~/constants/commits';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
+import { AverageEntryPricesAPIResponse } from '~/types/pools';
 import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
 import { formatBN } from '../converters';
 
@@ -137,4 +138,30 @@ export const fetchCommitHistory: (params: {
             };
         });
     return fetchedTradeHistory;
+};
+
+export const fetchAverageEntryPrices: (params: {
+    network: KnownNetwork;
+    pool: string;
+    account: string;
+}) => Promise<AverageEntryPricesAPIResponse> = async ({ network, pool, account }) => {
+    const route = `${TRACER_API}/poolsv2/averageEntryPrices?network=${
+        network ?? NETWORKS.ARBITRUM
+    }&userAddress=${account}&poolAddress=${pool}`;
+
+    const fetchedAverageEntryPrices: AverageEntryPricesAPIResponse = await fetch(route)
+        .then((res) => res.json())
+        .then((averageEntryPrices) => {
+            return averageEntryPrices;
+        })
+        .catch((err) => {
+            console.error('Failed to fetch average entry prices', err);
+            return {
+                longPriceWallet: '0',
+                shortPriceWallet: '0',
+                longPriceAggregate: '0',
+                shortPriceAggregate: '0',
+            };
+        });
+    return fetchedAverageEntryPrices;
 };

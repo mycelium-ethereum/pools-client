@@ -1,8 +1,9 @@
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
-import { AggregateBalances } from '~/types/pools';
+import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
+import { AggregateBalances, AverageEntryPrices } from '~/types/pools';
+import { fetchAverageEntryPrices as _fetchAverageEntryPrices } from './tracerAPI';
 
 export const fetchTokenBalances: (
     tokens: string[],
@@ -33,6 +34,27 @@ export const fetchAggregateBalance: (
         longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens, settlementTokenDecimals)),
         shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens, settlementTokenDecimals)),
         settlementTokens: new BigNumber(ethers.utils.formatUnits(balances.settlementTokens, settlementTokenDecimals)),
+    };
+};
+
+export const fetchAverageEntryPrices: (
+    network: KnownNetwork,
+    pool: string,
+    account: string,
+    settlementTokenDecimals: number,
+) => Promise<AverageEntryPrices> = async (network, pool, account, settlementTokenDecimals) => {
+    const { longPriceWallet, shortPriceWallet, longPriceAggregate, shortPriceAggregate } =
+        await _fetchAverageEntryPrices({
+            network,
+            pool,
+            account,
+        });
+
+    return {
+        longPriceWallet: new BigNumber(ethers.utils.formatUnits(longPriceWallet, settlementTokenDecimals)),
+        shortPriceWallet: new BigNumber(ethers.utils.formatUnits(shortPriceWallet, settlementTokenDecimals)),
+        longPriceAggregate: new BigNumber(ethers.utils.formatUnits(longPriceAggregate, settlementTokenDecimals)),
+        shortPriceAggregate: new BigNumber(ethers.utils.formatUnits(shortPriceAggregate, settlementTokenDecimals)),
     };
 };
 

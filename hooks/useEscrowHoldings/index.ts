@@ -4,26 +4,12 @@ import { SideEnum } from '@tracer-protocol/pools-js';
 import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/Overview/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
-import useSubgraphAggregateBalances from '../useSubgraphAggregateBalances';
-
-const DEFAULT_ENTRY_PRICES = {
-    shortToken: {
-        tokenPrice: new BigNumber(1),
-        basePrice: new BigNumber(100),
-    },
-    longToken: {
-        tokenPrice: new BigNumber(1),
-        basePrice: new BigNumber(100),
-    },
-};
 
 type EscrowRowInfo = Omit<EscrowRowProps, 'onClickCommitAction'>;
 
 export default (() => {
     const { pools } = usePools();
-    const subgraphAggregateBalances = useSubgraphAggregateBalances();
     const [rows, setRows] = useState<EscrowRowInfo[]>([]);
-    const [rowsWithSubgraph, setRowsWithSubgraph] = useState<EscrowRowInfo[]>([]);
 
     useEffect(() => {
         if (pools) {
@@ -51,7 +37,7 @@ export default (() => {
                     currentTokenPrice: nextLongTokenPrice,
                     type: TokenType.Long,
                     side: SideEnum.long,
-                    entryPrice: DEFAULT_ENTRY_PRICES.longToken,
+                    entryPrice: userBalances.averageEntryPrices.longPriceAggregate,
                     notionalValue: longTokenValue.times(leverage),
                 };
                 const claimableShortTokens = {
@@ -60,7 +46,7 @@ export default (() => {
                     currentTokenPrice: nextShortTokenPrice,
                     type: TokenType.Short,
                     side: SideEnum.short,
-                    entryPrice: DEFAULT_ENTRY_PRICES.shortToken,
+                    entryPrice: userBalances.averageEntryPrices.shortPriceAggregate,
                     notionalValue: shortTokenValue.times(leverage),
                 };
                 const claimableSettlementTokens = {
@@ -98,39 +84,5 @@ export default (() => {
         }
     }, [pools]);
 
-    useEffect(() => {
-        if (Object.keys(subgraphAggregateBalances).length) {
-            setRowsWithSubgraph(
-                rows.map((row) => {
-                    if (subgraphAggregateBalances[row.poolAddress.toLowerCase()]) {
-                        const subgraphInfo = subgraphAggregateBalances[row.poolAddress.toLowerCase()];
-                        // adds any subgraph info to the existing row
-                        return {
-                            ...row,
-                            claimableLongTokens: {
-                                ...row.claimableLongTokens,
-                                balance: subgraphInfo.longTokenHolding,
-                                entryPrice: {
-                                    ...row.claimableLongTokens.entryPrice,
-                                    tokenPrice: subgraphInfo.longTokenAvgBuyIn,
-                                },
-                            },
-                            claimableShortTokens: {
-                                ...row.claimableShortTokens,
-                                balance: subgraphInfo.shortTokenHolding,
-                                entryPrice: {
-                                    ...row.claimableShortTokens.entryPrice,
-                                    tokenPrice: subgraphInfo.shortTokenAvgBuyIn,
-                                },
-                            },
-                        };
-                    } else {
-                        return row;
-                    }
-                }),
-            );
-        }
-    }, [rows, subgraphAggregateBalances]);
-
-    return rowsWithSubgraph;
+    return rows;
 }) as () => EscrowRowProps[];
