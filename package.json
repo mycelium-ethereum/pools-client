@@ -31,7 +31,7 @@
         "react-tiny-popover": "^7.0.1",
         "react-toastify": "^8.2.0",
         "stream": "^0.0.2",
-        "styled-components": "^5.2.1",
+        "styled-components": "^5.3.5",
         "tailwindcss-multi-theme": "^1.0.4",
         "zustand": "^3.7.1"
     },
