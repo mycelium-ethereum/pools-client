@@ -1,8 +1,7 @@
-import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeMap } from '~/constants/commits';
-import { web3Emitter, Web3Emitter } from '~/services/emit';
+import { useStore } from '~/store/main';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { AverageEntryPricesAPIResponse } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
@@ -13,18 +12,6 @@ const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611'];
 
 class TracerAPIService {
-    provider: ethers.providers.JsonRpcProvider | undefined;
-    network: KnownNetwork | undefined;
-
-    constructor(web3Emitter: Web3Emitter) {
-        web3Emitter.on('PROVIDER_CHANGED', (provider) => {
-            this.provider = provider;
-        });
-        web3Emitter.on('NETWORK_CHANGED', (network) => {
-            this.network = network;
-        });
-    }
-
     async fetchPendingCommits({
         pool,
         account,
@@ -83,8 +70,9 @@ class TracerAPIService {
         page: number;
         pageSize: number;
     }): Promise<{ results: TradeHistory[]; totalRecords: number }> {
+        const network = useStore.getState().web3Slice.network;
         let route = `${TRACER_API}/poolsv2/tradeHistory?page=${page}&pageSize=${pageSize}&network=${
-            this.network ?? NETWORKS.ARBITRUM
+            network ?? NETWORKS.ARBITRUM
         }&userAddress=${account}`;
         if (type === 'mint') {
             route += '&types=LongMint&types=ShortMint';
@@ -153,8 +141,9 @@ class TracerAPIService {
     }
 
     async fetchAverageEntryPrices(pool: string, account: string): Promise<AverageEntryPricesAPIResponse> {
+        const network = useStore.getState().web3Slice.network;
         const route = `${TRACER_API}/poolsv2/averageEntryPrices?network=${
-            this.network ?? NETWORKS.ARBITRUM
+            network ?? NETWORKS.ARBITRUM
         }&userAddress=${account}&poolAddress=${pool}`;
 
         const fetchedAverageEntryPrices: AverageEntryPricesAPIResponse = await fetch(route)
@@ -175,4 +164,4 @@ class TracerAPIService {
     }
 }
 
-export const tracerAPIService = new TracerAPIService(web3Emitter);
+export const tracerAPIService = new TracerAPIService();
