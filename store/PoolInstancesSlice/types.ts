@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
-import { Pool } from '@tracer-protocol/pools-js';
-import { AggregateBalances, PoolInfo } from '~/types/pools';
+import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
+import { AggregateBalances, AverageEntryPrices, PoolInfo } from '~/types/pools';
 
 export interface IPoolsInstancesSlice {
     pools: Record<string, PoolInfo>;
@@ -22,6 +22,7 @@ export interface IPoolsInstancesSlice {
         approvals: { shortTokenAmount: BigNumber; longTokenAmount: BigNumber; settlementTokenAmount: BigNumber },
     ) => void;
     setAggregateBalances: (pool: string, aggregateBalances: AggregateBalances) => void;
+    setAverageEntryPrices: (pool: string, aggregateBalances: AverageEntryPrices) => void;
     setUpdatedPoolBalances: (
         pool: string,
         updatedbalances: {
@@ -40,10 +41,16 @@ export interface IPoolsInstancesSlice {
         pool: string,
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
+        network: KnownNetwork | undefined,
     ) => void;
     updateTokenBalances: (
         pool: string,
         provider: ethers.providers.JsonRpcProvider | undefined,
+        account: string | undefined,
+    ) => void;
+    updateAverageEntryPrices: (
+        network: KnownNetwork | undefined,
+        pool: string | undefined,
         account: string | undefined,
     ) => void;
     updateTokenApprovals: (

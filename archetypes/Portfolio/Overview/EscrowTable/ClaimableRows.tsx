@@ -32,15 +32,15 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
                 </InnerText>
             </TableRowCell>
             <TableRowCell>
-                <InnerText>{toApproxCurrency(entryPrice.tokenPrice.times(balance), 3)}</InnerText>
+                <InnerText>{toApproxCurrency(entryPrice.times(balance), 3)}</InnerText>
                 <InnerText className="sub-text">
-                    {`${balance.toFixed(3)} tokens at ${entryPrice.tokenPrice.toFixed(3)} ${currency}`}
+                    {`${balance.toFixed(3)} tokens at ${entryPrice.toFixed(3)} ${currency}`}
                 </InnerText>
             </TableRowCell>
             <TableRowCell>
                 <InnerText>
                     <UpOrDown
-                        oldValue={entryPrice ? balance.times(entryPrice.tokenPrice) : balance.times(currentTokenPrice)}
+                        oldValue={entryPrice ? balance.times(entryPrice) : balance.times(currentTokenPrice)}
                         newValue={balance.times(currentTokenPrice)}
                         deltaDenotation={DeltaEnum.Numeric}
                         currency={currency}
