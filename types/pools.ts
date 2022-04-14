@@ -68,6 +68,13 @@ type TokenBalance = {
     balance: BigNumber;
 };
 
+export type AverageEntryPrices = {
+    longPriceWallet: BigNumber;
+    shortPriceWallet: BigNumber;
+    longPriceAggregate: BigNumber;
+    shortPriceAggregate: BigNumber;
+};
+
 export type PoolInfo = {
     poolInstance: Pool;
     userBalances: {
@@ -75,9 +82,17 @@ export type PoolInfo = {
         longToken: TokenBalance;
         settlementToken: TokenBalance;
         aggregateBalances: AggregateBalances;
+        averageEntryPrices: AverageEntryPrices;
     };
     upkeepInfo: {
         expectedExecution: number;
         isWaitingForUpkeep: boolean;
     };
+};
+
+export type AverageEntryPricesAPIResponse = {
+    longPriceWallet: string;
+    shortPriceWallet: string;
+    longPriceAggregate: string;
+    shortPriceAggregate: string;
 };

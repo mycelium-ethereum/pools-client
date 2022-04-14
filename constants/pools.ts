@@ -24,6 +24,12 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
             shortTokens: new BigNumber(0),
             settlementTokens: new BigNumber(0),
         },
+        averageEntryPrices: {
+            longPriceWallet: new BigNumber(0),
+            shortPriceWallet: new BigNumber(0),
+            longPriceAggregate: new BigNumber(0),
+            shortPriceAggregate: new BigNumber(0),
+        },
     },
     upkeepInfo: {
         isWaitingForUpkeep: false,

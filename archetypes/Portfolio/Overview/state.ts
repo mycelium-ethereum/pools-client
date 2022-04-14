@@ -40,11 +40,6 @@ export interface EscrowRowProps {
     onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
 }
 
-export type EntryPrice = {
-    tokenPrice: BigNumber;
-    basePrice: BigNumber;
-};
-
 export type ClaimableAsset = {
     symbol: string;
     balance: BigNumber;
@@ -53,7 +48,7 @@ export type ClaimableAsset = {
     notionalValue: BigNumber;
 };
 export type ClaimablePoolToken = {
-    entryPrice: EntryPrice;
+    entryPrice: BigNumber;
     side: SideEnum;
 } & ClaimableAsset;
 
