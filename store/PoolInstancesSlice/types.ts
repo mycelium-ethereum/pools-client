@@ -15,7 +15,7 @@ export interface IPoolsInstancesSlice {
 
     setTokenBalances: (
         pool: string,
-        balances: { shortTokenBalance?: BigNumber; longTokenBalance?: BigNumber; settlementTokenBalance?: BigNumber },
+        balances: { shortTokenBalance: BigNumber; longTokenBalance: BigNumber; settlementTokenBalance?: BigNumber },
     ) => void;
     setTokenApprovals: (
         pool: string,
@@ -41,13 +41,18 @@ export interface IPoolsInstancesSlice {
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
-    updateTokenBalances: (
-        pool: string,
+    updatePoolTokenBalances: (
+        pool: string[],
+        provider: ethers.providers.JsonRpcProvider | undefined,
+        account: string | undefined,
+    ) => void;
+    updateSettlementTokenBalances: (
+        pool: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
     updateTokenApprovals: (
-        pool: string,
+        pool: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;

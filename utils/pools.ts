@@ -8,7 +8,6 @@ export const fetchTokenBalances: (
     tokens: string[],
     provider: ethers.providers.JsonRpcProvider,
     account: string,
-    pool: string,
 ) => Promise<EthersBigNumber[]> = (tokens, provider, account) => {
     return Promise.all(
         tokens.map((token) => {

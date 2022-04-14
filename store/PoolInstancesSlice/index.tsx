@@ -146,59 +146,103 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
 
     handlePoolUpkeep: (pool, provider, account) => {
         get().setPoolIsWaiting(pool, false);
-        get().updateTokenBalances(pool, provider, account);
+        get().updatePoolTokenBalances([pool], provider, account);
+        get().updateSettlementTokenBalances([pool], provider, account);
         get().updatePoolBalances(pool, provider);
     },
 
-    updateTokenBalances: (pool_, provider, account) => {
-        if (!provider || !account || !get().pools[pool_]) {
+    updateSettlementTokenBalances: (pools_, provider, account) => {
+        if (!provider || !account) {
             return false;
         }
-        const pool = get().pools[pool_].poolInstance;
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
-        const decimals = pool.settlementToken.decimals;
-        const settlementToken = pool.settlementToken.address;
-        const poolsWithSharedSettlementToken: string[] = Object.values(get().pools)
-            .filter((pool) => settlementToken === pool.poolInstance.settlementToken.address)
-            .map((pool) => pool.poolInstance.address);
-
-        fetchTokenBalances(tokens, provider, account, pool.address)
+        const uniqueSettlementTokensMap: Record<string, string[]> = Object.values(get().pools).reduce(
+            (
+                o,
+                {
+                    poolInstance: {
+                        address,
+                        settlementToken: { address: tokenAddress },
+                    },
+                },
+            ) => {
+                o[tokenAddress] = o[tokenAddress] || [];
+                o[tokenAddress].push(address);
+                return o;
+            },
+            {} as Record<string, string[]>,
+        );
+        const relevantSettlementTokens = Object.keys(
+            pools_.reduce((o, pool) => {
+                const settlementToken = get().pools[pool]?.poolInstance?.settlementToken?.address;
+                if (settlementToken) {
+                    o[settlementToken] = true;
+                }
+                return o;
+            }, {} as Record<string, boolean>),
+        );
+        fetchTokenBalances(relevantSettlementTokens, provider, account)
             .then((balances) => {
-                const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
-                const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
-                const settlementTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[2], decimals));
-
-                console.debug('Balances', {
-                    shortTokenBalance,
-                    longTokenBalance,
-                    settlementTokenBalance,
-                });
-
-                poolsWithSharedSettlementToken.map((pool) => {
-                    get().setTokenBalances(pool, {
-                        settlementTokenBalance,
+                console.count('Fetched settlement token balances');
+                set((state) => {
+                    balances.map((settlementTokenBalance_, index) => {
+                        const pools = uniqueSettlementTokensMap[relevantSettlementTokens[index]];
+                        // pool[0] must exist otherwise the entry would not exist in uniqueSettlementTokens
+                        const decimals = state.pools[pools[0]].poolInstance.settlementToken.decimals;
+                        const settlementTokenBalance = new BigNumber(
+                            ethers.utils.formatUnits(settlementTokenBalance_, decimals),
+                        );
+                        uniqueSettlementTokensMap[relevantSettlementTokens[index]].map((pool) => {
+                            state.pools[pool].userBalances.settlementToken.balance = settlementTokenBalance;
+                        });
                     });
                 });
-                get().setTokenBalances(pool.address, {
-                    shortTokenBalance,
-                    longTokenBalance,
-                });
             })
             .catch((err) => {
-                console.error('Failed to fetch token balances', err);
+                console.error('Failed to fetch settlementToken balances', err);
             });
-        fetchAggregateBalance(provider, account, pool.committer.address, decimals)
-            .then((balances) => {
-                console.debug('Pending balances', {
-                    longTokens: balances.longTokens.toNumber(),
-                    shortTokens: balances.shortTokens.toNumber(),
-                    settlementTokens: balances.settlementTokens.toNumber(),
+    },
+
+    updatePoolTokenBalances: (pools_, provider, account) => {
+        if (!provider || !account) {
+            return false;
+        }
+        pools_.forEach((pool_) => {
+            if (!get().pools[pool_]) {
+                return;
+            }
+            const pool = get().pools[pool_].poolInstance;
+            const tokens = [pool.shortToken.address, pool.longToken.address];
+            const decimals = pool.settlementToken.decimals;
+            fetchTokenBalances(tokens, provider, account)
+                .then((balances) => {
+                    const shortTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[0], decimals));
+                    const longTokenBalance = new BigNumber(ethers.utils.formatUnits(balances[1], decimals));
+
+                    console.debug('Balances', {
+                        shortTokenBalance,
+                        longTokenBalance,
+                    });
+                    get().setTokenBalances(pool.address, {
+                        shortTokenBalance,
+                        longTokenBalance,
+                    });
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch token balances', err);
                 });
-                get().setAggregateBalances(pool.address, balances);
-            })
-            .catch((err) => {
-                console.error('Failed to fetch aggregate balance', err);
-            });
+            fetchAggregateBalance(provider, account, pool.committer.address, decimals)
+                .then((balances) => {
+                    console.debug('Pending balances', {
+                        longTokens: balances.longTokens.toNumber(),
+                        shortTokens: balances.shortTokens.toNumber(),
+                        settlementTokens: balances.settlementTokens.toNumber(),
+                    });
+                    get().setAggregateBalances(pool.address, balances);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch aggregate balance', err);
+                });
+        });
     },
     updatePoolBalances: (pool_, provider) => {
         if (!provider || !get().pools[pool_]) {
@@ -218,25 +262,30 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             console.debug('Pool updated', res);
         });
     },
-    updateTokenApprovals: (pool_, provider, account) => {
+    updateTokenApprovals: (pools_, provider, account) => {
         // get and set approvals
-        if (!provider || !account || !get().pools[pool_]) {
+        if (!provider || !account) {
             return;
         }
-        const pool = get().pools[pool_].poolInstance;
-        const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
-        const decimals = pool.settlementToken.decimals;
-        fetchTokenApprovals(tokens, provider, account, pool_)
-            .then((approvals) => {
-                get().setTokenApprovals(pool.address, {
-                    shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
-                    longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
-                    settlementTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+        pools_.forEach((pool_) => {
+            if (!get().pools[pool_]) {
+                return;
+            }
+            const pool = get().pools[pool_].poolInstance;
+            const tokens = [pool.shortToken.address, pool.longToken.address, pool.settlementToken.address];
+            const decimals = pool.settlementToken.decimals;
+            fetchTokenApprovals(tokens, provider, account, pool_)
+                .then((approvals) => {
+                    get().setTokenApprovals(pool.address, {
+                        shortTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[0], decimals)),
+                        longTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[1], decimals)),
+                        settlementTokenAmount: new BigNumber(ethers.utils.formatUnits(approvals[2], decimals)),
+                    });
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch token allowances', err);
                 });
-            })
-            .catch((err) => {
-                console.error('Failed to fetch token allowances', err);
-            });
+        });
     },
 });
 
@@ -274,11 +323,13 @@ export const selectPoolInstanceActions: (state: StoreState) => {
 export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     handlePoolUpkeep: IPoolsInstancesSlice['handlePoolUpkeep'];
     updatePoolBalances: IPoolsInstancesSlice['updatePoolBalances'];
-    updateTokenBalances: IPoolsInstancesSlice['updateTokenBalances'];
+    updatePoolTokenBalances: IPoolsInstancesSlice['updatePoolTokenBalances'];
+    updateSettlementTokenBalances: IPoolsInstancesSlice['updateSettlementTokenBalances'];
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
 } = (state) => ({
     handlePoolUpkeep: state.poolsInstancesSlice.handlePoolUpkeep,
     updatePoolBalances: state.poolsInstancesSlice.updatePoolBalances,
-    updateTokenBalances: state.poolsInstancesSlice.updateTokenBalances,
+    updatePoolTokenBalances: state.poolsInstancesSlice.updatePoolTokenBalances,
+    updateSettlementTokenBalances: state.poolsInstancesSlice.updateSettlementTokenBalances,
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
 });

@@ -26,7 +26,10 @@ export const useUpdatePoolInstances = (): void => {
         selectPoolInstanceActions,
         shallow,
     );
-    const { updateTokenApprovals, updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances } = useStore(
+        selectPoolInstanceUpdateActions,
+        shallow,
+    );
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
@@ -130,11 +133,11 @@ export const useUpdatePoolInstances = (): void => {
     // update token balances and approvals when address changes
     useEffect(() => {
         if (!!account && poolsInitialized) {
-            Object.values(pools).map((pool) => {
-                // get and set token balances and approvals for each pool
-                updateTokenBalances(pool.poolInstance.address, provider, account);
-                updateTokenApprovals(pool.poolInstance.address, provider, account);
-            });
+            const pools_ = Object.values(pools).map((pool) => pool.poolInstance.address);
+            // get and set token balances and approvals for each pool
+            updateSettlementTokenBalances(pools_, provider, account);
+            updatePoolTokenBalances(pools_, provider, account);
+            updateTokenApprovals(pools_, provider, account);
         } else if (!account && poolsInitialized) {
             // account disconnect
             Object.keys(pools).map((pool) => {

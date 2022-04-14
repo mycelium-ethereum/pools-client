@@ -47,7 +47,10 @@ const committerInterface = new ethers.utils.Interface(PoolCommitter__factory.abi
 
 export const usePoolInstanceActions = (): PoolInstanceActions => {
     const { setTokenApproved } = useStore(selectPoolInstanceActions, shallow);
-    const { updateTokenBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { updatePoolTokenBalances, updateSettlementTokenBalances } = useStore(
+        selectPoolInstanceUpdateActions,
+        shallow,
+    );
     const addCommit = useStore(selectAddCommit);
     const handleTransaction = useStore(selectHandleTransaction);
     const { provider, account, signer } = useStore(selectWeb3Info, shallow);
@@ -89,7 +92,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                     onSuccess: (receipt) => {
                         console.debug('Successfully submitted claim txn: ', receipt);
                         // get and set token balances
-                        updateTokenBalances(pool, provider, account);
+                        updatePoolTokenBalances([pool], provider, account);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                     },
                 },
@@ -193,8 +196,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                 callBacks: {
                     onSuccess: (receipt) => {
                         console.debug('Successfully submitted commit txn: ', receipt);
-                        // get and set token balances
-                        updateTokenBalances(pool, provider, account);
+                        updateSettlementTokenBalances([pool], provider, account);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                         // @ts-ignore receipt type is a bitch
                         const txnHash = (receipt as any)?.transactionHash ?? '';
