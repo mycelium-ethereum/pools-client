@@ -1,44 +1,69 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "isolatedModules": true,
-        "lib": ["dom", "dom.iterable", "esnext"],
-        "allowJs": false,
-        "skipLibCheck": true,
-        "strictNullChecks": true,
-        "strict": true,
-        "forceConsistentCasingInFileNames": true,
-        "noEmit": true,
-        "noEmitOnError": true,
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "esModuleInterop": true,
-        "importHelpers": true,
-        "removeComments": true,
-        "jsx": "preserve",
-        "baseUrl": ".",
-        "paths": {
-            "~/components/*": ["components/*"],
-            "~/types/*": ["types/*"],
-            "~/store/*": ["store/*"],
-            "~/context/*": ["context/*"],
-            "~/hooks/*": ["hooks/*"],
-            "~/utils/*": ["utils/*"],
-            "~/archetypes/*": ["archetypes/*"],
-            "~/constants/*": ["constants/*"],
-            "~/public/*": ["public/*"]
-        }
-    },
-    "include": [
-        "**/*.ts",
-        "**/*.tsx",
-        "next-env.d.ts",
-        "next.config.js",
-        "node_modules/@tracer-protocol/perpetual-pools-contracts"
+  "compilerOptions": {
+    "target": "es5",
+    "isolatedModules": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": ["public/static/*"]
+    "allowJs": false,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "noEmitOnError": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "removeComments": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "~/components/*": [
+        "components/*"
+      ],
+      "~/types/*": [
+        "types/*"
+      ],
+      "~/store/*": [
+        "store/*"
+      ],
+      "~/context/*": [
+        "context/*"
+      ],
+      "~/hooks/*": [
+        "hooks/*"
+      ],
+      "~/utils/*": [
+        "utils/*"
+      ],
+      "~/archetypes/*": [
+        "archetypes/*"
+      ],
+      "~/constants/*": [
+        "constants/*"
+      ],
+      "~/public/*": [
+        "public/*"
+      ]
+    },
+    "incremental": true
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "next-env.d.ts",
+    "next.config.js",
+    "node_modules/@tracer-protocol/perpetual-pools-contracts"
+  ],
+  "exclude": [
+    "public/static/*"
+  ]
 }
