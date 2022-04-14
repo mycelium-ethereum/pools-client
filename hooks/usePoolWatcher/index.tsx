@@ -61,7 +61,6 @@ export const usePoolWatcher = (): void => {
                             data.poolAddress,
                             new ethers.providers.WebSocketProvider(wssProvider),
                             account,
-                            network,
                         );
                     });
                     watcher.on(EVENT_NAMES.COMMITMENT_WINDOW_ENDING, (data) => {

@@ -146,14 +146,10 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         set((state) => void (state.pools[pool].userBalances[token].approvedAmount = approvedAmount));
     },
 
-    handlePoolUpkeep: (pool, provider, account, network) => {
+    handlePoolUpkeep: (pool, provider, account) => {
         get().setPoolIsWaiting(pool, false);
         get().updateTokenBalances(pool, provider, account);
-<<<<<<< HEAD
         get().updateAverageEntryPrices(pool, account);
-=======
-        get().updateAverageEntryPrices(network, pool, account);
->>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
         get().updatePoolBalances(pool, provider);
     },
 
@@ -198,13 +194,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 console.error('Failed to fetch aggregate balance', err);
             });
     },
-<<<<<<< HEAD
     updateAverageEntryPrices: (pool, account) => {
         if (!pool || !account) {
-=======
-    updateAverageEntryPrices: (network, pool, account) => {
-        if (!network || !pool || !account) {
->>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
             return {
                 longPriceWallet: new BigNumber(0),
                 shortPriceWallet: new BigNumber(0),
@@ -213,7 +204,6 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             };
         }
 
-<<<<<<< HEAD
         const poolState = get().pools[pool]?.poolInstance;
         if (!poolState) {
             return;
@@ -221,12 +211,6 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
 
         const decimals = poolState.settlementToken.decimals;
         fetchAverageEntryPrices(pool, account, decimals)
-=======
-        const poolState = get().pools[pool].poolInstance;
-
-        const decimals = poolState.settlementToken.decimals;
-        fetchAverageEntryPrices(network, pool, account, decimals)
->>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
             .then((averageEntryPrices) => {
                 console.debug('Average Entry Prices', {
                     longPriceWallet: averageEntryPrices.longPriceWallet.toFixed(),
