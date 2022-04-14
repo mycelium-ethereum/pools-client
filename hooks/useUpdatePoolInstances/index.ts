@@ -3,6 +3,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
 import { Pool } from '@tracer-protocol/pools-js';
+import { tracerAPIService } from '~/services/TracerAPIService';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -13,9 +14,7 @@ import {
 } from '~/store/PoolInstancesSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
-import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
-import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 /**
@@ -31,7 +30,7 @@ export const useUpdatePoolInstances = (): void => {
         shallow,
     );
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
-    const { provider, account, network } = useStore(selectWeb3Info, shallow);
+    const { provider, account } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
@@ -100,9 +99,8 @@ export const useUpdatePoolInstances = (): void => {
                 const network = provider.network.chainId;
                 if (isSupportedNetwork(network)) {
                     // fetch commits
-                    fetchPendingCommits(network.toString() as V2_SUPPORTED_NETWORKS, {
-                        pool: pool.poolInstance.address,
-                    })
+                    tracerAPIService
+                        .fetchPendingCommits({ pool: pool.poolInstance.address })
                         .then((pendingCommits) => {
                             if (mounted) {
                                 addMutlipleCommits(
@@ -136,7 +134,7 @@ export const useUpdatePoolInstances = (): void => {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool.poolInstance.address, provider, account);
-                updateAverageEntryPrices(network, pool.poolInstance.address, account);
+                updateAverageEntryPrices(pool.poolInstance.address, account);
                 updateTokenApprovals(pool.poolInstance.address, provider, account);
             });
         } else if (!account && poolsInitialized) {
@@ -149,5 +147,5 @@ export const useUpdatePoolInstances = (): void => {
                 });
             });
         }
-    }, [account, network, poolsInitialized]);
+    }, [account, poolsInitialized]);
 };

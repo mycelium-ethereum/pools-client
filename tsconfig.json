@@ -25,6 +25,7 @@
             "~/components/*": ["components/*"],
             "~/types/*": ["types/*"],
             "~/store/*": ["store/*"],
+            "~/services/*": ["services/*"],
             "~/context/*": ["context/*"],
             "~/hooks/*": ["hooks/*"],
             "~/utils/*": ["utils/*"],

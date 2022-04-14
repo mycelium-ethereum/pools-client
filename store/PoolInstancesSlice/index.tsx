@@ -146,10 +146,10 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         set((state) => void (state.pools[pool].userBalances[token].approvedAmount = approvedAmount));
     },
 
-    handlePoolUpkeep: (pool, provider, account, network) => {
+    handlePoolUpkeep: (pool, provider, account) => {
         get().setPoolIsWaiting(pool, false);
         get().updateTokenBalances(pool, provider, account);
-        get().updateAverageEntryPrices(network, pool, account);
+        get().updateAverageEntryPrices(pool, account);
         get().updatePoolBalances(pool, provider);
     },
 
@@ -194,8 +194,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 console.error('Failed to fetch aggregate balance', err);
             });
     },
-    updateAverageEntryPrices: (network, pool, account) => {
-        if (!network || !pool || !account) {
+    updateAverageEntryPrices: (pool, account) => {
+        if (!pool || !account) {
             return {
                 longPriceWallet: new BigNumber(0),
                 shortPriceWallet: new BigNumber(0),
@@ -204,10 +204,13 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             };
         }
 
-        const poolState = get().pools[pool].poolInstance;
+        const poolState = get().pools[pool]?.poolInstance;
+        if (!poolState) {
+            return;
+        }
 
         const decimals = poolState.settlementToken.decimals;
-        fetchAverageEntryPrices(network, pool, account, decimals)
+        fetchAverageEntryPrices(pool, account, decimals)
             .then((averageEntryPrices) => {
                 console.debug('Average Entry Prices', {
                     longPriceWallet: averageEntryPrices.longPriceWallet.toFixed(),
