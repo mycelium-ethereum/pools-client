@@ -19,12 +19,3 @@ export const constructExplorerLink = (
             return base;
     }
 };
-
-export const openBlockExplorer = (
-    type: BlockExplorerAddressType,
-    target: string,
-    network: KnownNetwork | undefined,
-): void => {
-    const link = constructExplorerLink(type, target, network);
-    window.open(link, '', 'noreferrer=true,noopener=true');
-};

@@ -1,14 +1,32 @@
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
 import { Popover } from 'react-tiny-popover';
-import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
+import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import { web3Service } from '~/services/Web3Service';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { openBlockExplorer } from '~/utils/blockExplorers';
 
-export default (({ provider, token, arbiscanTarget, otherActions }) => {
+export const TokenActions = ({
+    token,
+    arbiscanTarget,
+    otherActions,
+}: {
+    token: {
+        address: string;
+        symbol: string;
+        decimals: number;
+    };
+    arbiscanTarget?: {
+        type: BlockExplorerAddressType;
+        target: string;
+    };
+    otherActions?: {
+        type: BlockExplorerAddressType;
+        target: string;
+        logo: LogoTicker;
+        text: string;
+    }[];
+}): JSX.Element => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
@@ -31,11 +49,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
                             <div
                                 className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
                                 onClick={() =>
-                                    openBlockExplorer(
-                                        arbiscanTarget.type,
-                                        arbiscanTarget.target,
-                                        provider?.network?.chainId?.toString() as KnownNetwork,
-                                    )
+                                    web3Service.openBlockExplorer(arbiscanTarget.type, arbiscanTarget.target)
                                 }
                             >
                                 <Logo className="relative mr-2 inline" ticker={NETWORKS.ARBITRUM} />
@@ -47,13 +61,7 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
                                   <div
                                       key={action.text}
                                       className="flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover"
-                                      onClick={() =>
-                                          openBlockExplorer(
-                                              action.type,
-                                              action.target,
-                                              provider?.network?.chainId?.toString() as KnownNetwork,
-                                          )
-                                      }
+                                      onClick={() => web3Service.openBlockExplorer(action.type, action.target)}
                                   >
                                       <Logo className="relative mr-2 inline" ticker={action.logo} />
                                       {action.text}
@@ -74,21 +82,6 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
             </div>
         </Popover>
     );
-}) as React.FC<{
-    provider: ethers.providers.JsonRpcProvider | null;
-    token: {
-        address: string;
-        symbol: string;
-        decimals: number;
-    };
-    arbiscanTarget?: {
-        type: BlockExplorerAddressType;
-        target: string;
-    };
-    otherActions?: {
-        type: BlockExplorerAddressType;
-        target: string;
-        logo: LogoTicker;
-        text: string;
-    }[];
-}>;
+};
+
+export default TokenActions;

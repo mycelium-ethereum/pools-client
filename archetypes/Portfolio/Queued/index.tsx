@@ -4,8 +4,6 @@ import { CommitEnum, CommitActionEnum } from '@tracer-protocol/pools-js';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
 
 import QueuedCommitHeader from './QueuedCommitHeader';
@@ -42,7 +40,6 @@ export const QueuedCommits = ({
     commits: QueuedCommit[];
 }): JSX.Element => {
     const router = useRouter();
-    const provider = useStore(selectProvider);
 
     const { mintCommits, burnCommits, flipCommits } = useMemo(
         () => ({
@@ -94,12 +91,7 @@ export const QueuedCommits = ({
                         <NoEntries focus={focus} isQueued />
                     ) : (
                         focusedCommits.map((commit) => (
-                            <QueuedCommitRow
-                                key={commit.txnHash}
-                                focus={focus}
-                                provider={provider ?? null}
-                                {...commit}
-                            />
+                            <QueuedCommitRow key={commit.txnHash} focus={focus} {...commit} />
                         ))
                     )}
                 </tbody>

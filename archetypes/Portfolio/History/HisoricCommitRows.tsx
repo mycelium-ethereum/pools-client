@@ -1,5 +1,4 @@
 import React from 'react';
-import { ethers } from 'ethers';
 import { CommitActionEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
@@ -9,9 +8,7 @@ import { toApproxCurrency } from '~/utils/converters';
 import { Market, MarketPrice } from '../Market';
 import { TokensAt, TokensNotional } from '../Tokens';
 
-type HistoricCommitRowProps = TradeHistory & {
-    provider?: ethers.providers.JsonRpcProvider;
-};
+type HistoricCommitRowProps = TradeHistory;
 
 export const HistoricMintCommitRow = ({
     tokenOut: { address: tokenOutAddress, symbol: tokenOutSymbol, amount: tokenOutAmount, price: tokenOutPrice },
@@ -21,7 +18,6 @@ export const HistoricMintCommitRow = ({
     timeString,
     dateString,
     fee,
-    provider,
     txnHashIn,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
@@ -46,7 +42,6 @@ export const HistoricMintCommitRow = ({
             <TableRowCell>{`${fee.times(100).toNumber()}%`}</TableRowCell>
             <TableRowCell>
                 <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
                     token={{
                         address: tokenOutAddress,
                         decimals: tokenDecimals,
@@ -83,7 +78,6 @@ export const HistoricBurnCommitRow = ({
     isLong,
     timeString,
     dateString,
-    provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
     return (
@@ -101,7 +95,6 @@ export const HistoricBurnCommitRow = ({
             <TableRowCell>{toApproxCurrency(tokenInPrice.times(tokenInAmount))}</TableRowCell>
             <TableRowCell>
                 <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
                     token={{
                         address: tokenInAddress,
                         decimals: tokenDecimals,
@@ -138,7 +131,6 @@ export const HistoricFlipCommitRow = ({
     settlementToken: { symbol: settlementTokenSymbol, decimals: tokenDecimals },
     timeString,
     dateString,
-    provider,
     txnHashOut,
 }: HistoricCommitRowProps): JSX.Element => {
     return (
@@ -161,7 +153,6 @@ export const HistoricFlipCommitRow = ({
             </TableRowCell>
             <TableRowCell>
                 <Actions
-                    provider={provider as ethers.providers.JsonRpcProvider}
                     token={{
                         address: tokenInAddress,
                         decimals: tokenDecimals,

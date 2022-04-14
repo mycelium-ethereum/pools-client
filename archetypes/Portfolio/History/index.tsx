@@ -8,8 +8,6 @@ import { FullSpanCell, Table } from '~/components/General/TWTable';
 import { CommitActionToQueryFocusMap } from '~/constants/commits';
 import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { HistoricCommitRow } from './HisoricCommitRows';
 import HistoricCommitHeader from './HistoricCommitHeader';
 import { PageOptions } from '..';
@@ -32,7 +30,6 @@ const historyOptions: PageOptions = [
 
 export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Element => {
     const router = useRouter();
-    const provider = useStore(selectProvider);
     const { loading, tradeHistory, totalRecords, page, setPage } = useHistoricCommits(focus);
 
     return (
@@ -66,12 +63,7 @@ export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Ele
                             <NoEntries focus={focus} />
                         ) : (
                             tradeHistory.map((commit) => (
-                                <HistoricCommitRow
-                                    key={commit.txnHashIn}
-                                    focus={focus}
-                                    provider={provider}
-                                    {...commit}
-                                />
+                                <HistoricCommitRow key={commit.txnHashIn} focus={focus} {...commit} />
                             ))
                         )}
                     </tbody>

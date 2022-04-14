@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
@@ -10,16 +9,13 @@ import { ReceiveIn } from './ReceiveIn';
 import { Market, MarketPrice } from '../Market';
 import { TokensAt, TokensNotional } from '../Tokens';
 
-type QueuedCommitRowProps = QueuedCommit & {
-    provider: ethers.providers.JsonRpcProvider | null;
-};
+type QueuedCommitRowProps = QueuedCommit;
 
 export const MintCommitRow = ({
     tokenIn: { amount: tokenInAmount },
     tokenOut,
     txnHash,
     isLong,
-    provider,
     settlementTokenSymbol,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
@@ -49,7 +45,6 @@ export const MintCommitRow = ({
             <TableRowCell className="flex text-right">
                 <Actions
                     token={tokenOut}
-                    provider={provider}
                     arbiscanTarget={{
                         type: BlockExplorerAddressType.txn,
                         target: txnHash,
@@ -64,7 +59,6 @@ export const BurnCommitRow = ({
     tokenIn,
     txnHash,
     isLong,
-    provider,
     settlementTokenSymbol,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
@@ -94,7 +88,6 @@ export const BurnCommitRow = ({
             <TableRowCell className="flex text-right">
                 <Actions
                     token={tokenIn}
-                    provider={provider}
                     arbiscanTarget={{
                         type: BlockExplorerAddressType.txn,
                         target: txnHash,
@@ -109,7 +102,6 @@ export const FlipCommitRow = ({
     tokenIn: { amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice },
     tokenOut,
     txnHash,
-    provider,
     settlementTokenSymbol,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
@@ -141,7 +133,6 @@ export const FlipCommitRow = ({
             <TableRowCell className="flex text-right">
                 <Actions
                     token={tokenOut}
-                    provider={provider}
                     arbiscanTarget={{
                         type: BlockExplorerAddressType.txn,
                         target: txnHash,
