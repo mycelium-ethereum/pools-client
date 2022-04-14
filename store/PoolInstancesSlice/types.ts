@@ -1,6 +1,10 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+<<<<<<< HEAD
 import { Pool } from '@tracer-protocol/pools-js';
+=======
+import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
+>>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
 import { AggregateBalances, AverageEntryPrices, PoolInfo } from '~/types/pools';
 
 export interface IPoolsInstancesSlice {
@@ -41,13 +45,22 @@ export interface IPoolsInstancesSlice {
         pool: string,
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
+        network: KnownNetwork | undefined,
     ) => void;
     updateTokenBalances: (
         pool: string,
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
+<<<<<<< HEAD
     updateAverageEntryPrices: (pool: string | undefined, account: string | undefined) => void;
+=======
+    updateAverageEntryPrices: (
+        network: KnownNetwork | undefined,
+        pool: string | undefined,
+        account: string | undefined,
+    ) => void;
+>>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
     updateTokenApprovals: (
         pool: string,
         provider: ethers.providers.JsonRpcProvider | undefined,

@@ -30,7 +30,7 @@ export const useUpdatePoolInstances = (): void => {
         shallow,
     );
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
-    const { provider, account } = useStore(selectWeb3Info, shallow);
+    const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
@@ -134,7 +134,11 @@ export const useUpdatePoolInstances = (): void => {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool.poolInstance.address, provider, account);
+<<<<<<< HEAD
                 updateAverageEntryPrices(pool.poolInstance.address, account);
+=======
+                updateAverageEntryPrices(network, pool.poolInstance.address, account);
+>>>>>>> 8969e78d0bbc9bc11c128c40b9b5e4fa2d48e03a
                 updateTokenApprovals(pool.poolInstance.address, provider, account);
             });
         } else if (!account && poolsInitialized) {
@@ -147,5 +151,5 @@ export const useUpdatePoolInstances = (): void => {
                 });
             });
         }
-    }, [account, poolsInitialized]);
+    }, [account, network, poolsInitialized]);
 };
