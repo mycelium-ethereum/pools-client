@@ -63,12 +63,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             return;
         }
         set((state) => {
-            if (balances.shortTokenBalance) {
-                state.pools[pool].userBalances.shortToken.balance = balances.shortTokenBalance;
-            }
-            if (balances.longTokenBalance) {
-                state.pools[pool].userBalances.longToken.balance = balances.longTokenBalance;
-            }
+            state.pools[pool].userBalances.shortToken.balance = balances.shortTokenBalance;
+            state.pools[pool].userBalances.longToken.balance = balances.longTokenBalance;
             if (balances.settlementTokenBalance) {
                 state.pools[pool].userBalances.settlementToken.balance = balances.settlementTokenBalance;
             }
