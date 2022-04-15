@@ -107,7 +107,7 @@ export type BrowseAction =
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
     | { type: 'setCollateralFilter'; collateral: CollateralEnum }
     | { type: 'setLeverageFilter'; leverage: LeverageEnum }
-    | { type: 'setFiltersOpen'; open: boolean }
+    // | { type: 'setFiltersOpen'; open: boolean }
     | { type: 'setMintBurnModalOpen'; open: boolean }
     | { type: 'setAddAltPoolModalOpen'; open: boolean }
     | { type: 'setDenotation'; denotation: DeltaEnum }
@@ -150,11 +150,11 @@ export const browseReducer: (state: BrowseState, action: BrowseAction) => Browse
                 ...state,
                 sortBy: action.sortBy,
             };
-        case 'setFiltersOpen':
-            return {
-                ...state,
-                filtersOpen: action.open,
-            };
+        // case 'setFiltersOpen':
+        //     return {
+        //         ...state,
+        //         filtersOpen: action.open,
+        //     };
         case 'setMintBurnModalOpen':
             return {
                 ...state,

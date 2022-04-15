@@ -33,6 +33,7 @@ const SIZE = {
     default: 'px-8 py-3 text-sm font-medium',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
     xl: 'py-3 px-10 sm:px-16 md:px-18 text-base font-normal',
+    responsive: 'py-3 text-base font-normal',
 };
 
 const OVERALL_BACKGROUND = {
@@ -56,7 +57,7 @@ type Option = {
 
 type Color = 'tracer' | 'greyed' | 'default';
 type Borders = 'rounded' | 'default';
-type ButtonSize = 'sm' | 'lg' | 'xl' | 'default';
+type ButtonSize = 'sm' | 'lg' | 'xl' | 'default' | 'responsive';
 
 export default (({
     options,
@@ -72,7 +73,7 @@ export default (({
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
 
     return (
-        <Container className={classNames(className, OVERALL_BACKGROUND[color])}>
+        <Container className={classNames(className, OVERALL_BACKGROUND[color])} fullWidthButtons={fullWidthButtons}>
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
@@ -126,10 +127,11 @@ export default (({
     className?: string;
 }>;
 
-const Container = styled.span`
+const Container = styled.span<{ fullWidthButtons?: boolean }>`
     position: relative;
     display: inline-flex;
     white-space: nowrap;
+    width: ${({ fullWidthButtons }) => (fullWidthButtons ? '100%' : 'auto')};
 `;
 
 const NewCallOut = styled.span`

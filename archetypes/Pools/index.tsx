@@ -21,6 +21,7 @@ import {
     RebalanceEnum,
     SortByEnum,
 } from './state';
+import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
@@ -126,22 +127,24 @@ export const Browse: React.FC = () => {
     return (
         <>
             <Container className="mb-10">
-                <section className="mb-8">
-                    <h1 className="mt-8 mb-2 text-3xl font-semibold text-theme-text">Pools</h1>
-                    <div className="mb-6 text-sm font-light">
-                        The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
-                        via Tracer’s SMA Wrapper.{' '}
-                        <a
-                            href="https://tracer-1.gitbook.io/ppv2-beta-testnet"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            className="text-tracer-400 underline"
-                        >
-                            Learn More
-                        </a>
+                <Styles.Header>
+                    <div>
+                        <h1 className="mt-8 mb-2 text-3xl font-semibold text-theme-text">Pools</h1>
+                        <div className="mb-6 text-sm font-light lg:mb-0">
+                            The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink
+                            Oracles, via Tracer’s SMA Wrapper.{' '}
+                            <a
+                                href="https://tracer-1.gitbook.io/ppv2-beta-testnet"
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="text-tracer-400 underline"
+                            >
+                                Learn More
+                            </a>
+                        </div>
                     </div>
                     <FilterBar state={state} dispatch={dispatch} />
-                </section>
+                </Styles.Header>
                 {!filteredTokens.length ? <Loading className="mx-auto mt-10 w-10" /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
