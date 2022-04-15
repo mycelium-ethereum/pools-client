@@ -3,6 +3,7 @@ import { Dropdown as UnstyledDropdown } from '~/components/General';
 import { Container as UnstyledContainer } from '~/components/General/Container';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 import TWPopup from '~/components/General/TWPopup';
+import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { device } from '~/store/ThemeSlice/themes';
@@ -10,7 +11,7 @@ import { device } from '~/store/ThemeSlice/themes';
 export const Container = styled(UnstyledContainer)`
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
     justify-content: center;
     align-items: center;
     padding: 0;
@@ -105,8 +106,25 @@ export const Heading = styled.h3`
     color: ${({ theme }) => theme.text};
 `;
 
+export const Text = styled.div`
+    margin-bottom: 0.7rem;
+    font-weight: 500;
+    color: ${({ theme }) => theme.text};
+    font-size: 12px;
+`;
+
+export const DenotationOptions = styled.div`
+    margin-right: 0.5rem;
+`;
+
 export const Preview = styled.div`
     display: flex;
     align-items: center;
     width: 100%;
+`;
+
+export const ArrowIcon = styled(ArrowDownIcon)<{ isGreen?: boolean }>`
+    color: ${({ isGreen }) => (isGreen ? '#059669' : '#dc2626')};
+    width: 1rem;
+    transform: ${({ isGreen }) => (isGreen ? 'rotateX(180deg)' : '0')};
 `;

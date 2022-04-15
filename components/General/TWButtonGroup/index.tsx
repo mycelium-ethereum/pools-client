@@ -33,7 +33,7 @@ const SIZE = {
     default: 'px-8 py-3 text-sm font-medium',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
     xl: 'py-3 px-10 sm:px-16 md:px-18 text-base font-normal',
-    responsive: 'py-3 text-base font-normal',
+    responsive: 'py-3 text-sm font-normal',
 };
 
 const OVERALL_BACKGROUND = {
