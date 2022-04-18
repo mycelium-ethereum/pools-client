@@ -52,10 +52,10 @@ const GasIconStyled = styled(GasIcon)`
 `;
 
 const Text = styled.span`
-    font-size: 14px;
+    font-size: ${({ theme }) => theme.font.sm};
     font-weight: 600;
 
     @media (min-width: 640px) {
-        font-size: 18px;
+        font-size: ${({ theme: { font } }) => font.lg};
     }
 `;
