@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const Banner = styled.div<{ showFullWidth?: boolean }>`
     padding: 1.25rem;
@@ -8,7 +9,7 @@ export const Banner = styled.div<{ showFullWidth?: boolean }>`
 `;
 
 export const Text = styled.div<{ isBold?: boolean; showOpacity?: boolean }>`
-    font-size: 1.5rem;
+    font-size: ${fontSize.xxl};
     line-height: 2rem;
     margin: 0;
     font-weight: ${({ isBold }) => (isBold ? '700' : '600')};
@@ -16,7 +17,7 @@ export const Text = styled.div<{ isBold?: boolean; showOpacity?: boolean }>`
 `;
 
 export const BannerContent = styled.div`
-    @media (min-width: 768px) {
+    @media ${device.md} {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 0.75rem;
@@ -33,6 +34,6 @@ export const Card = styled.div`
 export const CardTitle = styled.div`
     font-weight: 700;
     opacity: 0.5;
-    font-size: 16px;
+    font-size: ${fontSize.md};
     color: #6b7280;
 `;

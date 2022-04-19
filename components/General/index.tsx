@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 import { Children } from '~/types/general';
 import { classNames } from '~/utils/helpers';
 
@@ -22,7 +23,7 @@ export const Section: React.FC<SProps> = styled(
     display: grid;
     grid-template-columns: 3fr 1fr;
     width: 100%;
-    font-size: 14px;
+    font-size: ${fontSize.xs};
     line-height: 18px;
     box-sizing: border-box;
     color: ${({ theme }) => theme['text-secondary']};
@@ -39,7 +40,7 @@ export const Section: React.FC<SProps> = styled(
         padding-bottom: 3px;
     }
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-bottom: 3px;
     }
 `;
@@ -55,21 +56,21 @@ const Label = styled.div<{ showSectionDetails: boolean }>`
                 margin-left: 0.75rem;
                 margin-bottom: 0;
                 max-width: 140px;
-                font-size: 12px;
+                font-size: ${fontSize.xxs};
                 line-height: 18px;
                 font-weight: 400;
             `;
         }
     }}
 
-    @media (min-width: 640px) {
-        font-size: 15px;
+    @media ${device.sm} {
+        font-size: ${fontSize.sm};
 
         ${({ showSectionDetails }) => {
             if (showSectionDetails) {
                 return `
                     max-width: 100%;
-                    font-size: 14px;
+                    font-size: ${fontSize.xs};
                 `;
             }
         }}
@@ -80,11 +81,11 @@ const Content = styled.span`
     width: 100%;
     text-align: right;
     padding-left: 0.25rem;
-    font-size: 12px;
+    font-size: ${fontSize.xxs};
     white-space: nowrap;
 
-    @media (min-width: 640px) {
-        font-size: 14px;
+    @media ${device.sm} {
+        font-size: ${fontSize.xs};
     }
 `;
 

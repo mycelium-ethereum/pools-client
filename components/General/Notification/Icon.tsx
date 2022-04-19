@@ -7,9 +7,10 @@ import Error from '~/public/img/notifications/error.svg';
 import Success from '~/public/img/notifications/success.svg';
 import Warning from '~/public/img/notifications/warning.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { fontSize } from '~/store/ThemeSlice/themes';
 
 const StyledIcon = styled(Icon)`
-    font-size: 2rem; /* 32px */
+    font-size: ${fontSize.xxxl};
 
     &.loading {
         color: ${({ theme: { theme } }) => {
@@ -24,7 +25,7 @@ const StyledIcon = styled(Icon)`
 `;
 
 const StyledInfo = styled(InfoCircleFilled)`
-    font-size: 1.5rem; /* 24px */
+    font-size: ${fontSize.xxl};
 `;
 
 export const NotificationIcon = ({ type }: { type: ToastOptions['type'] }): JSX.Element => {

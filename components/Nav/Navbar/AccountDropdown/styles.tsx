@@ -1,11 +1,11 @@
 import { CopyOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Logo } from '~/components/General';
-import { device } from '~/store/ThemeSlice/themes';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const ArbitrumLogo = styled(Logo)`
     display: inline;
-    font-size: 1.125rem; /* 18px */
+    font-size: ${fontSize.lg};
     line-height: 1.75rem; /* 28px */
     margin-top: auto;
     margin-bottom: auto;
@@ -19,7 +19,7 @@ export const ViewOnArbiscanOption = styled.a`
         background: ${({ theme }) => theme['button-bg-hover']};
     }
 
-    font-size: 0.875rem; /* 14px */
+    font-size: ${fontSize.xs};
     line-height: 1.25rem; /* 20px */
 `;
 
@@ -35,7 +35,7 @@ export const LogoutButton = styled.button`
     padding: 0.5rem 1rem;
     margin: 0.25rem;
     font-weight: 500;
-    font-size: 0.875rem; /* 14px */
+    font-size: ${fontSize.xs};
     line-height: 1.25rem; /* 20px */
     background-color: #2563eb;
     color: #fff;
@@ -49,7 +49,7 @@ export const LogoutButton = styled.button`
 export const CopyAccount = styled.div`
     display: flex;
     padding: 0.75rem 1rem 0.5rem 1rem;
-    font-size: 0.875rem; /* 14px */
+    font-size: ${fontSize.xs};
     line-height: 1.25rem; /* 20px */
 `;
 

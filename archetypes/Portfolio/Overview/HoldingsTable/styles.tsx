@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     border-radius: 0.75rem;
@@ -9,7 +10,7 @@ export const Container = styled.div`
 `;
 
 export const Title = styled.div`
-    font-size: 1.5rem;
+    font-size: ${fontSize.xxl};
     line-height: 2rem;
     font-weight: 600;
     margin: 1rem 0;
@@ -23,7 +24,7 @@ export const Text = styled.div`
 export const Wrapper = styled.div`
     white-space: nowrap;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         display: flex;
         justify-content: space-between;
     }
@@ -39,7 +40,7 @@ export const Actions = styled.div`
     &:first-child {
         margin-right: 0.5rem;
 
-        @media (min-width: 640px) {
+        @media ${device.sm} {
             margin-right: 1.25rem;
         }
     }

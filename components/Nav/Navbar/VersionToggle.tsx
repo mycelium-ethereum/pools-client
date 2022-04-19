@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export default (({ hideOnDesktop }) => (
     <VersionToggle hideOnDesktop={hideOnDesktop}>
@@ -26,7 +27,7 @@ const VersionToggle = styled.span<{ hideOnDesktop?: boolean }>`
     font-weight: 600;
     letter-spacing: 0.115em;
 
-    @media (min-width: 1024px) {
+    @media ${device.lg} {
         display: ${({ hideOnDesktop }) => (hideOnDesktop ? 'none' : 'grid')};
         margin: 10px 0 10px 10px;
     }
@@ -57,7 +58,7 @@ const V2 = styled.span`
 const New = styled.span`
     background-color: #3535dc;
     color: #fff;
-    font-size: 10px;
+    font-size: ${fontSize.xxxs};
     font-weight: 700;
     border-radius: 3px;
     padding: 0 4px;

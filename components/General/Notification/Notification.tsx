@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { NotificationIcon } from './Icon';
 
 type InjectedProps = {
@@ -30,7 +31,7 @@ const Content = styled.div`
     line-height: 1.4;
     width: 100%;
     word-break: break-word;
-    font-size: 1rem;
+    font-size: ${fontSize.md};
     margin-top: 0.5rem;
     margin-left: calc(15px + 24px); // Title margin + width of icon
 

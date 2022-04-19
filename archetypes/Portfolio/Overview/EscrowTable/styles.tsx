@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Button from '~/components/General/Button';
 import { TableRowCell } from '~/components/General/TWTable';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.tr`
@@ -15,7 +16,7 @@ export const Pool = styled.tr`
 export const PoolName = styled.span`
     font-style: normal;
     font-weight: bold;
-    font-size: 18px;
+    font-size: ${fontSize.lg};
     line-height: 150%;
     margin-left: 1rem;
     white-space: nowrap;
@@ -24,7 +25,7 @@ export const PoolName = styled.span`
 export const InfoLabel = styled.div`
     font-style: normal;
     font-weight: 600;
-    font-size: 16px;
+    font-size: ${fontSize.md};
     line-height: 150%;
     white-space: nowrap;
 
@@ -34,7 +35,7 @@ export const InfoLabel = styled.div`
 export const Value = styled.div`
     font-style: normal;
     font-weight: bold;
-    font-size: 16px;
+    font-size: ${fontSize.md};
     line-height: 150%;
 `;
 
@@ -94,11 +95,10 @@ export const DropdownArrow = styled.img`
 
 // ROWS
 export const InnerText = styled.div`
-    /* text-base/font-normal */
     font-family: Source Sans Pro, sans-serif;
     font-style: normal;
     font-weight: normal;
-    font-size: 16px;
+    font-size: ${fontSize.md};
     line-height: 150%;
 
     &.sub-text {

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { classNames } from '~/utils/helpers';
 
 export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
@@ -50,7 +51,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     size?: Size;
     twAlign?: Align;
 }>`
-    font-size: 0.75rem; /* 12px */
+    font-size: ${fontSize.xxs};
     line-height: 1rem; /* 16px */
     text-align: left;
     font-weight: 500;

@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { fontSize } from '~/store/ThemeSlice/themes';
 
 export const GuideCard = styled.div`
     padding: 1.5rem 1rem;
@@ -17,7 +18,7 @@ export const GuideCard = styled.div`
 `;
 
 export const GuideCardTitle = styled.div`
-    font-size: 1.5rem;
+    font-size: ${fontSize.xxl};
     line-height: 2rem;
     font-weight: 600;
     margin-bottom: 0.75rem;
@@ -28,7 +29,7 @@ export const Badge = styled.div`
     padding: 0.25rem 0.75rem;
     margin-bottom: 0.75rem;
     color: #ffffff;
-    font-size: 0.875rem;
+    font-size: ${fontSize.xs};
     line-height: 1.25rem;
     width: min-content;
     border-radius: 0.25rem;

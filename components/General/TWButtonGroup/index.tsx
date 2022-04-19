@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { classNames } from '~/utils/helpers';
 
 // the difference here is the bg on unselected
@@ -140,7 +141,7 @@ const NewCallOut = styled.span`
     z-index: 11;
     color: #fff;
     font-weight: 700;
-    font-size: 10px;
+    font-size: ${fontSize.xxxs};
     border-radius: 4px;
     width: 41px;
     height: 17px;

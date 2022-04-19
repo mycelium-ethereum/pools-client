@@ -1,9 +1,10 @@
 import styled from 'styled-components';
 import { InputContainer } from '~/components/General/Input';
 import { Input } from '~/components/General/Input/Numeric';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         display: grid;
         grid-template-columns: 2fr 1fr;
         grid-gap: 15px;
@@ -23,7 +24,7 @@ export const InputContainerStyled = styled(InputContainer)`
 
 export const Label = styled.p`
     margin-bottom: 0.25rem;
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-bottom: 0.5rem;
     }
 `;
@@ -32,17 +33,17 @@ export const InputStyled = styled(Input)`
     width: 60%;
     height: 100%;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: ${fontSize.md};
     line-height: 1.5rem;
 `;
 
 export const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
     display: ${({ showContent }) => (showContent ? 'block' : 'none')};
     color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
-    font-size: 15px;
+    font-size: ${fontSize.sm};
     opacity: 0.7;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-top: 0.5rem;
     }
 `;

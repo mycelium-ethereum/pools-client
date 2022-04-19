@@ -3,10 +3,11 @@ import styled from 'styled-components';
 import { HiddenExpand as UnstyledHiddenExpand } from '~/components/General';
 import Button from '~/components/General/Button';
 import { default as UnstyledTimeLeft } from '~/components/TimeLeft';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const HiddenExpand = styled(UnstyledHiddenExpand)<{ showBorder: boolean }>`
     margin-bottom: 2rem !important;
-    font-size: 1rem;
+    font-size: ${fontSize.md};
     line-height: 1.5rem;
     border-width: 1px;
     background-color: ${({ theme }) => theme.background};
@@ -28,12 +29,11 @@ export const Countdown = styled.div`
     top: -1rem;
     left: 1.5rem;
     padding: 0.375rem;
-    font-size: 0.875rem;
     line-height: 1.25rem;
     border-radius: 0.25rem;
     background-color: ${({ theme }) => theme.background};
     z-index: 2;
-    font-size: 15px;
+    font-size: ${fontSize.sm};
     text-transform: capitalize;
 `;
 
@@ -48,7 +48,7 @@ export const TimeLeft = styled(UnstyledTimeLeft)`
 `;
 
 export const SumText = styled.span<{ setColor?: string }>`
-    font-size: 14px;
+    font-size: ${fontSize.xs};
     font-weight: 600;
 
     ${({ setColor }) => {
@@ -63,8 +63,8 @@ export const SumText = styled.span<{ setColor?: string }>`
         }
     }}
 
-    @media (min-width: 640px) {
-        font-size: 15px;
+    @media ${device.sm} {
+        font-size: ${fontSize.sm};
     }
 `;
 

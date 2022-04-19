@@ -5,6 +5,7 @@ import { CommitActionEnum, BalanceTypeEnum, CommitEnum } from '@tracer-protocol/
 import Pool from '@tracer-protocol/pools-js/entities/pool';
 import Button from '~/components/General/Button';
 import { SwapAction, SwapState } from '~/context/SwapContext';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { AggregateBalances } from '~/types/pools';
 
 type ExchangeButton = {
@@ -125,7 +126,7 @@ export default ExchangeButton;
 
 const Text = styled.p`
     margin-top: 0.5rem;
-    font-size: 0.875rem;
+    font-size: ${fontSize.xs};
     line-height: 1.25rem;
     text-align: center;
     opacity: 0.7;

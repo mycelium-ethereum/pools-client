@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import CTABackground from '~/public/img/cta-bg.svg';
+import { fontSize } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     overflow: hidden;
@@ -29,7 +30,7 @@ export const Wrapper = styled.div`
 export const Title = styled.div`
     margin-bottom: 1.25rem;
     color: #ffffff;
-    font-size: 1.5rem;
+    font-size: ${fontSize.xxl};
     line-height: 2rem;
     text-align: center;
 `;

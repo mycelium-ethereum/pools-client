@@ -13,6 +13,7 @@ import { usePool } from '~/hooks/usePool';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 import Gas from './Gas';
@@ -151,18 +152,18 @@ export default styled((({ onClose, className }) => {
     width: 100%;
     justify-content: center;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-top: 1.7rem;
     }
 `;
 
 const Title = styled.h2`
     font-weight: 600;
-    font-size: 20px;
+    font-size: ${fontSize.xl};
     color: ${({ theme }) => theme.text};
     margin-bottom: 15px;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-bottom: 20px;
     }
 `;
@@ -175,7 +176,7 @@ const Close = styled(CloseIcon)`
     height: 0.75rem;
     cursor: pointer;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         right: 4rem;
         top: 3.8rem;
         width: 1rem;
@@ -205,7 +206,7 @@ const DividerRow = styled(Divider)`
 // const CheckboxStyled = styled(Checkbox)`
 //     margin: 25px 0 50px;
 
-//     @media (min-width: 640px) {
+//     @media ${device.sm} {
 //         margin: 29px 0 60px;
 //     }
 // `;

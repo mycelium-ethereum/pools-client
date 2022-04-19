@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HiddenExpand, Logo } from '~/components/General';
 import { InnerSearchInput, InputWrapper } from '~/components/General/SearchInput';
 import { Table } from '~/components/General/TWTable';
-import { device } from '~/store/ThemeSlice/themes';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
@@ -86,7 +86,7 @@ export const TokenSelectTable = styled(Table)`
     width: 100%;
     box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
     font-weight: 600;
-    font-size: 14px;
+    font-size: ${fontSize.xs};
 `;
 
 export const TokenSelectRow = styled.tr<{
@@ -148,14 +148,14 @@ export const TokenSelectCell = styled.td<TokenSelectCell>`
     flex-direction: ${({ hasBalance }) => (hasBalance ? 'column' : 'row')};
     justify-content: ${({ hasLogo }) => (hasLogo ? 'flex-start' : 'center')};
     align-items: center;
-    font-size: 12px;
+    font-size: ${fontSize.xxs};
     svg {
         margin-right: 10px;
     }
     span {
         color: #6b7280;
     }
-    @media (${device.sm}) {
-        font-size: 14px;
+    @media ${device.sm} {
+        font-size: ${fontSize.xs};
     }
 `;

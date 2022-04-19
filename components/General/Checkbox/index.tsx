@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { fontSize } from '~/store/ThemeSlice/themes';
 
 export default (({ onClick, isChecked, className, label, subtext }) => {
     return (
@@ -99,7 +100,7 @@ const Checkmark = styled.span<{ isChecked: boolean }>`
 `;
 
 const Subtext = styled.p`
-    font-size: 12px;
+    font-size: ${fontSize.xxs};
     margin-left: 30px;
     color: ${({ theme }) => {
         switch (theme.theme) {

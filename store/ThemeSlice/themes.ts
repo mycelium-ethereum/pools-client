@@ -112,10 +112,11 @@ export const themes: Record<
     },
 };
 
-export const font = {
-    xxs: '0.625rem', // 10px
-    xs: '0.75rem', // 12px
-    sm: '0.875', // 14px
+export const fontSize = {
+    xxxs: '0.625rem', // 10px
+    xxs: '0.75rem', // 12px
+    xs: '0.875', // 14px
+    sm: '0.938', // 15px
     md: '1rem', // 16px
     lg: '1.125rem', // 18px
     xl: '1.25rem', // 20px

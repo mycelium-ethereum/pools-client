@@ -8,13 +8,14 @@ import TWPopup from '~/components/General/TWPopup';
 import { networkConfig } from '~/constants/networks';
 import Error from '~/public/img/notifications/error.svg';
 import { useStore } from '~/store/main';
+import { fontSize } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 
 const Option = styled.option`
     padding: 0.5rem 1rem;
-    font-size: 14px;
+    font-size: ${fontSize.xs};
     cursor: pointer;
     text-align: left;
 

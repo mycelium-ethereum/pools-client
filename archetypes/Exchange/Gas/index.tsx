@@ -6,6 +6,7 @@ import { networkConfig } from '~/constants/networks';
 import { useGasPrice } from '~/hooks/useGasPrice';
 import GasIcon from '~/public/img/general/gas_icon.svg';
 import { useStore } from '~/store/main';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 import { selectWalletInfo } from '~/store/Web3Slice';
 
 export default (() => {
@@ -45,17 +46,17 @@ const GasIconStyled = styled(GasIcon)`
     margin-right: 0.2rem;
     transform: scale(0.7);
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin-right: 0.5rem;
         transform: scale(0.9);
     }
 `;
 
 const Text = styled.span`
-    font-size: ${({ theme }) => theme.font.sm};
+    font-size: ${fontSize.xs};
     font-weight: 600;
 
-    @media (min-width: 640px) {
-        font-size: ${({ theme: { font } }) => font.lg};
+    @media ${device.sm} {
+        font-size: ${fontSize.lg};
     }
 `;

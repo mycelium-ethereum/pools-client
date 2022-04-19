@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import CloseIcon from '/public/img/general/close.svg';
 import { SearchInput, InnerSearchInput, SearchIconWrap } from '~/components/General/SearchInput';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 
 export const Close = styled(CloseIcon)`
     position: absolute;
@@ -10,7 +11,7 @@ export const Close = styled(CloseIcon)`
     height: 0.75rem;
     cursor: pointer;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         right: 4.1rem;
         top: 5rem;
         width: 1rem;
@@ -20,25 +21,25 @@ export const Close = styled(CloseIcon)`
 
 export const Title = styled.h2`
     font-weight: 500;
-    font-size: 20px;
+    font-size: ${fontSize.xl};
     color: ${({ theme }) => theme.text};
     margin: -5px 0 25px;
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         margin: 45px 0 37px;
     }
 `;
 
 export const Label = styled.div`
     font-weight: 600;
-    font-size: 16px;
+    font-size: ${fontSize.md};
     color: ${({ theme }) => theme.text};
     margin-bottom: 5px;
 `;
 
 export const Message = styled.div`
     font-weight: 400;
-    font-size: 14px;
+    font-size: ${fontSize.xs};
     color: ${({ theme }) => theme['text-secondary']};
     margin-bottom: 20px;
     text-align: center;

@@ -7,6 +7,7 @@ import { Theme } from '~/store/ThemeSlice/themes';
 
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
+import { device, fontSize } from '~/store/ThemeSlice/themes';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructExplorerLink } from '~/utils/blockExplorers';
 import { getPriceFeedUrl } from '~/utils/converters';
@@ -101,7 +102,7 @@ const ModalHeader = styled((props: any) => <div className={props.className}>{pro
     justify-content: space-between;
 
     .title {
-        font-size: 24px;
+        font-size: ${fontSize.xxl};
         margin-bottom: -17px;
     }
 
@@ -135,7 +136,7 @@ const CellContent = styled((props: any) => <div className={props.className}>{pro
 
     .name {
         width: 150px;
-        @media (min-width: 768px) {
+        @media ${device.md} {
             width: 195px;
         }
     }
