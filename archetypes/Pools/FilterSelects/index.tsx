@@ -130,7 +130,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             border="rounded"
                             borderColor="greyed"
                             options={DENOTATION_OPTIONS}
-                            fullWidthButtons
+                            fullWidth
                         />
                     </Styles.DropdownContainer>
                     <Styles.DropdownContainer>
@@ -140,7 +140,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             onClick={onRebalanceFocus}
                             color="tracer"
                             options={REBALANCE_OPTIONS}
-                            fullWidthButtons
+                            fullWidth
                         />
                     </Styles.DropdownContainer>
                 </Styles.Content>

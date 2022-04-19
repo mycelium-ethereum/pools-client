@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { default as UnstyledButton } from '~/components/General/Button';
 import { Container as UnstyledContainer } from '~/components/General/Container';
 import { default as UnstyledLoading } from '~/components/General/Loading';
 import { device } from '~/store/ThemeSlice/themes';
@@ -26,7 +27,7 @@ export const SubHeading = styled.div`
     line-height: 1.25rem;
     font-weight: 300;
 
-    @media (min-width: 1024px) {
+    @media ${device.lg} {
         margin-bottom: 0;
     }
 `;
@@ -55,11 +56,70 @@ export const DataRow = styled.div`
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     background-color: ${({ theme }) => theme.background};
 
-    @media (min-width: 640px) {
+    @media ${device.sm} {
         border-radius: 1rem;
     }
-    @media (min-width: 768px) {
+    @media ${device.md} {
         padding: 2rem;
         border-radius: 1.5rem;
     }
+`;
+
+export const AltPoolRow = styled.div`
+    position: relative;
+`;
+
+export const AltPoolTitle = styled.div`
+    display: flex;
+    flex-direction: row;
+    color: #9ca3af;
+    font-weight: 400;
+    font-size: 16px;
+    margin-bottom: 30px;
+
+    &:before,
+    &:after {
+        content: '';
+        flex: 1 1;
+        border-bottom: 1px solid #9ca3af;
+        margin: auto;
+    }
+    &:before {
+        margin-right: 10px;
+    }
+    &:after {
+        margin-left: 10px;
+    }
+`;
+
+export const AltPoolActions = styled.div`
+    display: block;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+
+    @media ${device.sm} {
+        gap: 0;
+        flex-direction: row;
+    }
+`;
+
+export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
+    @media ${device.sm} {
+        max-width: 220px;
+    }
+
+    ${({ disabled }) => {
+        if (disabled) {
+            return `
+                cursor: not-allowed; 
+                opacity: 0.5; 
+
+                @media ${device.sm} {
+                    margin-left: 1.25rem; 
+                }
+            `;
+        }
+    }};
 `;

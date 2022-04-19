@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
@@ -150,6 +151,23 @@ export const Browse: React.FC = () => {
                         </Styles.DataRow>
                     );
                 })}
+                <Styles.AltPoolRow>
+                    <Styles.AltPoolTitle>Don’t see the pool you’re after?</Styles.AltPoolTitle>
+                    <Styles.AltPoolActions>
+                        <Styles.Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
+                        >
+                            Display Alternative Pool
+                        </Styles.Button>
+                        <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
+                            <Styles.Button variant="primary" size="sm" disabled>
+                                Deploy New Pool
+                            </Styles.Button>
+                        </TooltipSelector>
+                    </Styles.AltPoolActions>
+                </Styles.AltPoolRow>
             </Styles.Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
