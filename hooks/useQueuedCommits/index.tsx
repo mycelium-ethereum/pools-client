@@ -88,7 +88,6 @@ export default (() => {
                         };
                     }
 
-
                     parsedCommits.push({
                         ...commit,
                         tokenIn,

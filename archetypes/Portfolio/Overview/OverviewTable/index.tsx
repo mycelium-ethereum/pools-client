@@ -3,6 +3,7 @@ import * as Styles from './styles';
 
 type Props = {
     title: string;
+    subTitle?: string;
     firstActionTitle: string;
     firstAction: any;
     secondActionTitle?: any;
@@ -10,8 +11,9 @@ type Props = {
     children: any;
 };
 
-export const HoldingsTable: React.FC<Props> = ({
+export const OverviewTable: React.FC<Props> = ({
     title,
+    subTitle,
     firstActionTitle,
     firstAction,
     secondActionTitle,
@@ -20,7 +22,10 @@ export const HoldingsTable: React.FC<Props> = ({
 }) => (
     <Styles.Container>
         <Styles.Wrapper>
-            <Styles.Title>{title}</Styles.Title>
+            <div>
+                <Styles.Title>{title}</Styles.Title>
+                <Styles.SubTitle>{subTitle}</Styles.SubTitle>
+            </div>
             <Styles.Content>
                 <Styles.Actions>
                     <Styles.Text>{firstActionTitle}</Styles.Text>

@@ -5,6 +5,7 @@ import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
+import { QueuedCommit } from '~/types/commits';
 import { toApproxCurrency } from '~/utils/converters';
 import { marketFilter } from '~/utils/filters';
 
@@ -12,14 +13,21 @@ import { ConnectWalletBanner } from './ConnectWalletBanner';
 import { emptyStateHelpCardContent } from './content';
 import EscrowTable from './EscrowTable';
 import { HelpCard } from './HelpCard';
-import { HoldingsTable } from './HoldingsTable';
-import { PriceByDropDown, DenoteInDropDown, MarketDropdown, EscrowSearch } from './HoldingsTable/Actions';
+import { OverviewTable } from './OverviewTable';
+import {
+    PriceByDropDown,
+    DenoteInDropDown,
+    MarketDropdown,
+    EscrowSearch,
+    CommitTypeDropdown,
+    QueuedCommitsSearch,
+} from './OverviewTable/Actions';
+import { QueuedCommitsTable } from './QueuedCommits';
 import { SkewCard } from './SkewCard';
-import { portfolioReducer, initialPortfolioState, EscrowRowProps } from './state';
+import { portfolioReducer, initialPortfolioState, EscrowRowProps, CommitTypeFilter } from './state';
 import * as Styles from './styles';
 import TokenTable from './TokenTable';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
-import QueuedCommits from '../Queued';
 
 export enum LoadingState {
     Idle = 0,
@@ -37,7 +45,13 @@ export enum CurrencyEnum {
 }
 
 // const Overview
-export default (({ onClickCommitAction }) => {
+export const Overview = ({
+    onClickCommitAction,
+    commits,
+}: {
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+    commits: QueuedCommit[];
+}): JSX.Element => {
     const account = useStore(selectAccount);
     const handleConnect = useStore(selectHandleConnect);
 
@@ -72,14 +86,14 @@ export default (({ onClickCommitAction }) => {
 
     const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
-    const searchFilter = (pool: EscrowRowProps): boolean => {
+    const escrowSearchFilter = (pool: EscrowRowProps): boolean => {
         const searchString = state.escrowSearch.toLowerCase();
         return Boolean(pool.poolName.toLowerCase().match(searchString));
     };
 
     const filteredEscrowRows = escrowRows
         .filter((pool: EscrowRowProps) => marketFilter(pool.poolName, state.escrowMarketFilter))
-        .filter(searchFilter);
+        .filter(escrowSearchFilter);
 
     const showFilledState = useMemo(() => {
         const isClaimable = filteredEscrowRows.some((v) => v.numClaimable >= 1);
@@ -145,7 +159,32 @@ export default (({ onClickCommitAction }) => {
                         linkText="View V2 roadmap"
                     />
                 </Styles.Wrapper>
-                <HoldingsTable
+                <OverviewTable
+                    title="Pending"
+                    subTitle="Your queued orders. Come back once they are processed to claim."
+                    firstActionTitle="Commit Type"
+                    firstAction={
+                        <CommitTypeDropdown
+                            selected={state.queuedCommitsFilter}
+                            setCommitTypeFilter={(v) =>
+                                void dispatch({ type: 'setQueuedCommitsFilter', filter: v as CommitTypeFilter })
+                            }
+                        />
+                    }
+                    secondAction={
+                        <QueuedCommitsSearch
+                            commitsSearch={state.queuedCommitsSearch}
+                            setCommitsSearch={(search) => void dispatch({ type: 'setQueuedCommitsSearch', search })}
+                        />
+                    }
+                >
+                    <QueuedCommitsTable
+                        commits={commits}
+                        typeFilter={state.queuedCommitsFilter}
+                        searchFilter={state.queuedCommitsSearch}
+                    />
+                </OverviewTable>
+                <OverviewTable
                     title="Wallet Holdings"
                     firstActionTitle="Price by"
                     firstAction={<PriceByDropDown />}
@@ -157,20 +196,20 @@ export default (({ onClickCommitAction }) => {
                         onClickCommitAction={onClickCommitAction}
                         denotedIn={state.positionsDenotedIn}
                     />
-                </HoldingsTable>
-                <HoldingsTable
+                </OverviewTable>
+                <OverviewTable
                     title="Escrow Holdings"
                     firstActionTitle="Market"
                     firstAction={<MarketDropdown state={state} dispatch={dispatch} />}
                     secondAction={<EscrowSearch state={state} dispatch={dispatch} />}
                 >
                     <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
-                </HoldingsTable>
+                </OverviewTable>
             </>
         );
     };
 
     return <>{showFilledState ? filledState() : emptyState()}</>;
-}) as React.FC<{
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-}>;
+};
+
+export default Overview;

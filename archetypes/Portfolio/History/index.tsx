@@ -63,7 +63,7 @@ export const HistoricCommits = ({ focus }: { focus: CommitActionEnum }): JSX.Ele
                 ) : (
                     <tbody>
                         {tradeHistory.length === 0 ? (
-                            <NoEntries focus={focus} />
+                            <NoEntries />
                         ) : (
                             tradeHistory.map((commit) => (
                                 <HistoricCommitRow

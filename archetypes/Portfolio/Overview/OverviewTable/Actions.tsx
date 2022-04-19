@@ -3,7 +3,7 @@ import { Dropdown, LogoTicker } from '~/components/General';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { MarketFilterEnum } from '~/types/filters';
 import { SearchInput } from './styles';
-import { DenotedInEnum, PortfolioAction, PortfolioState } from '../state';
+import { CommitTypeFilter, DenotedInEnum, PortfolioAction, PortfolioState } from '../state';
 
 enum PriceByEnum {
     Tracer = 'Tracer',
@@ -33,6 +33,20 @@ export const PriceByDropDown = (): JSX.Element => {
             }}
         />
     );
+};
+
+const COMMIT_TYPE_OPTIONS = Object.keys(CommitTypeFilter).map((key) => ({
+    key: (CommitTypeFilter as any)[key],
+}));
+
+export const CommitTypeDropdown = ({
+    selected,
+    setCommitTypeFilter,
+}: {
+    selected: CommitTypeFilter;
+    setCommitTypeFilter: (v: string) => void;
+}): JSX.Element => {
+    return <Dropdown size="sm" value={selected} options={COMMIT_TYPE_OPTIONS} onSelect={setCommitTypeFilter} />;
 };
 
 export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
@@ -87,4 +101,14 @@ export const EscrowSearch = ({ state, dispatch }: TableProps): JSX.Element => {
             onChange={(search: string) => dispatch({ type: 'setEscrowSearch', search })}
         />
     );
+};
+
+export const QueuedCommitsSearch = ({
+    commitsSearch,
+    setCommitsSearch,
+}: {
+    commitsSearch: string;
+    setCommitsSearch: (v: string) => void;
+}): JSX.Element => {
+    return <SearchInput placeholder="Search" value={commitsSearch} onChange={setCommitsSearch} />;
 };

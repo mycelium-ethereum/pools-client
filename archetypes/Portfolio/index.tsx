@@ -10,7 +10,6 @@ import usePendingCommits from '~/hooks/useQueuedCommits';
 import History from './History';
 import Overview from './Overview';
 import { Container } from './Overview/styles';
-import Queued from './Queued';
 
 export enum PortfolioPage {
     TradePortfolio = 0,
@@ -31,11 +30,10 @@ export type PageOptions = {
 export const PortfolioNav: React.FC<{
     page: TradePortfolioPage;
     numCommits: number;
-}> = ({ page, numCommits }) => {
+}> = ({ page }) => {
     const router = useRouter();
 
     const overviewPage = page === TradePortfolioPage.Overview;
-    const queuedPage = page === TradePortfolioPage.Queued;
     const historyPage = page === TradePortfolioPage.History;
 
     return (
@@ -44,18 +42,6 @@ export const PortfolioNav: React.FC<{
                 <Link href="/portfolio/">
                     <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
                 </Link>
-            </div>
-            <div className="mr-5">
-                <Button
-                    variant={queuedPage ? 'primary' : 'unselected'}
-                    onClick={() =>
-                        router.push({
-                            pathname: '/portfolio/commits',
-                        })
-                    }
-                >
-                    Pending Commits ({numCommits})
-                </Button>
             </div>
             <div>
                 <Button
@@ -112,10 +98,8 @@ export default (({ page }) => {
         switch (page) {
             case TradePortfolioPage.History:
                 return <History focus={focus} />;
-            case TradePortfolioPage.Queued:
-                return <Queued focus={focus} commits={commits} />;
             default:
-                return <Overview onClickCommitAction={handleCommitAction} />;
+                return <Overview onClickCommitAction={handleCommitAction} commits={commits} />;
         }
     };
 

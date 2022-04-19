@@ -8,6 +8,13 @@ export enum DenotedInEnum {
     USD = 'USD',
 }
 
+export enum CommitTypeFilter {
+    All = 'All',
+    Burn = 'Burn',
+    Mint = 'Mint',
+    Flip = 'Flip',
+}
+
 export enum TokenType {
     Short = 'Short',
     Long = 'Long',
@@ -58,20 +65,26 @@ export type ClaimablePoolTokenRowProps = ClaimablePoolToken & {
 };
 
 export interface PortfolioState {
-    positionsDenotedIn: DenotedInEnum;
-    escrowMarketFilter: MarketFilterEnum;
     escrowSearch: string;
+    escrowMarketFilter: MarketFilterEnum;
+    queuedCommitsSearch: string;
+    queuedCommitsFilter: CommitTypeFilter;
+    positionsDenotedIn: DenotedInEnum;
 }
 
 export const initialPortfolioState = {
     escrowSearch: '',
     escrowMarketFilter: MarketFilterEnum.All,
+    queuedCommitsSearch: '',
+    queuedCommitsFilter: CommitTypeFilter.All,
     positionsDenotedIn: DenotedInEnum.USD,
 };
 
 export type PortfolioAction =
     | { type: 'setEscrowSearch'; search: string }
     | { type: 'setEscrowMarketFilter'; market: MarketFilterEnum }
+    | { type: 'setQueuedCommitsSearch'; search: string }
+    | { type: 'setQueuedCommitsFilter'; filter: CommitTypeFilter }
     | { type: 'setDenotation'; denotedIn: DenotedInEnum };
 
 export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState = (state, action) => {
@@ -79,7 +92,17 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
         case 'setEscrowSearch':
             return {
                 ...state,
-                search: action.search,
+                escrowSearch: action.search,
+            };
+        case 'setQueuedCommitsSearch':
+            return {
+                ...state,
+                queuedCommitsSearch: action.search,
+            };
+        case 'setQueuedCommitsFilter':
+            return {
+                ...state,
+                queuedCommitsFilter: action.filter,
             };
         case 'setEscrowMarketFilter':
             return {
