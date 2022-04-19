@@ -14,17 +14,15 @@ export type PendingCommitInfo = {
     appropriateIntervalId: number; // updateInterval when commit will get executed
 };
 
+export type ExtraTokenInfo = {
+    amount: BigNumber;
+    price: BigNumber;
+    isLong?: boolean;
+};
+
 export type QueuedCommit = PendingCommitInfo & {
-    tokenIn: StaticTokenInfo & {
-        amount: BigNumber;
-        price: BigNumber;
-        isLong?: boolean;
-    };
-    tokenOut: StaticTokenInfo & {
-        amount: BigNumber;
-        price: BigNumber;
-        isLong?: boolean;
-    };
+    tokenIn: StaticTokenInfo & ExtraTokenInfo;
+    tokenOut: StaticTokenInfo & ExtraTokenInfo;
     settlementTokenSymbol: string;
     expectedExecution: number;
 };
@@ -79,19 +77,12 @@ export type TradeHistory = {
     dateString: string;
     timeString: string;
     commitType: CommitEnum;
-    isLong: boolean;
     fee: BigNumber;
     txnHashIn: string;
     txnHashOut: string;
     settlementToken: StaticTokenInfo;
-    tokenIn: Omit<StaticTokenInfo, 'decimals'> & {
-        amount: BigNumber;
-        price: BigNumber;
-    };
-    tokenOut: Omit<StaticTokenInfo, 'decimals'> & {
-        amount: BigNumber;
-        price: BigNumber;
-    };
+    tokenIn: Omit<StaticTokenInfo, 'decimals'> & ExtraTokenInfo;
+    tokenOut: Omit<StaticTokenInfo, 'decimals'> & ExtraTokenInfo;
 };
 
 // TRACER_API

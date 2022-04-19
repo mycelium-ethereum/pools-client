@@ -1,5 +1,6 @@
 import React, { useReducer, useMemo } from 'react';
 import { calcNotionalValue, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import Divider from '~/components/General/Divider';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
@@ -13,6 +14,7 @@ import { ConnectWalletBanner } from './ConnectWalletBanner';
 import { emptyStateHelpCardContent } from './content';
 import EscrowTable from './EscrowTable';
 import { HelpCard } from './HelpCard';
+import { HistoricCommitsTable } from './HistoricCommits';
 import { OverviewTable } from './OverviewTable';
 import {
     PriceByDropDown,
@@ -204,6 +206,31 @@ export const Overview = ({
                     secondAction={<EscrowSearch state={state} dispatch={dispatch} />}
                 >
                     <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
+                </OverviewTable>
+                <Divider text="Historical Data" />
+                <OverviewTable
+                    title="Commit History"
+                    subTitle="Your past orders."
+                    firstActionTitle="Commit Type"
+                    firstAction={
+                        <CommitTypeDropdown
+                            selected={state.historicCommitsFilter}
+                            setCommitTypeFilter={(v) =>
+                                void dispatch({ type: 'setHistoricCommitsFilter', filter: v as CommitTypeFilter })
+                            }
+                        />
+                    }
+                    secondAction={
+                        <QueuedCommitsSearch
+                            commitsSearch={state.historicCommitsSearch}
+                            setCommitsSearch={(search) => void dispatch({ type: 'setHistoricCommitsSearch', search })}
+                        />
+                    }
+                >
+                    <HistoricCommitsTable
+                        typeFilter={state.historicCommitsFilter}
+                        searchFilter={state.historicCommitsSearch}
+                    />
                 </OverviewTable>
             </>
         );

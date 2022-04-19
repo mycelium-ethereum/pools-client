@@ -69,6 +69,8 @@ export interface PortfolioState {
     escrowMarketFilter: MarketFilterEnum;
     queuedCommitsSearch: string;
     queuedCommitsFilter: CommitTypeFilter;
+    historicCommitsSearch: string;
+    historicCommitsFilter: CommitTypeFilter;
     positionsDenotedIn: DenotedInEnum;
 }
 
@@ -77,6 +79,8 @@ export const initialPortfolioState = {
     escrowMarketFilter: MarketFilterEnum.All,
     queuedCommitsSearch: '',
     queuedCommitsFilter: CommitTypeFilter.All,
+    historicCommitsSearch: '',
+    historicCommitsFilter: CommitTypeFilter.All,
     positionsDenotedIn: DenotedInEnum.USD,
 };
 
@@ -85,6 +89,8 @@ export type PortfolioAction =
     | { type: 'setEscrowMarketFilter'; market: MarketFilterEnum }
     | { type: 'setQueuedCommitsSearch'; search: string }
     | { type: 'setQueuedCommitsFilter'; filter: CommitTypeFilter }
+    | { type: 'setHistoricCommitsSearch'; search: string }
+    | { type: 'setHistoricCommitsFilter'; filter: CommitTypeFilter }
     | { type: 'setDenotation'; denotedIn: DenotedInEnum };
 
 export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState = (state, action) => {
@@ -93,6 +99,11 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
             return {
                 ...state,
                 escrowSearch: action.search,
+            };
+        case 'setEscrowMarketFilter':
+            return {
+                ...state,
+                escrowMarketFilter: action.market,
             };
         case 'setQueuedCommitsSearch':
             return {
@@ -104,10 +115,15 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
                 ...state,
                 queuedCommitsFilter: action.filter,
             };
-        case 'setEscrowMarketFilter':
+        case 'setHistoricCommitsSearch':
             return {
                 ...state,
-                escrowMarketFilter: action.market,
+                historicCommitsSearch: action.search,
+            };
+        case 'setHistoricCommitsFilter':
+            return {
+                ...state,
+                historicCommitsFilter: action.filter,
             };
         case 'setDenotation':
             return {

@@ -6,9 +6,9 @@ import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
 import { QueuedCommitRow } from './QueuedCommitRow';
-import * as Styles from './styles';
 
 import { NoEntries } from '../../NoEntries';
+import { OverviewHeaderRow } from '../OverviewTable/styles';
 import { CommitTypeFilter } from '../state';
 
 export const QueuedCommitsTable = ({
@@ -50,7 +50,7 @@ export const QueuedCommitsTable = ({
         [typeFilter],
     );
 
-    const filteredTokens = useMemo(
+    const filteredCommits = useMemo(
         () => commits.filter(typeFilterFunc).filter(searchFilterFunc),
         [commits, typeFilter, searchFilter],
     );
@@ -58,13 +58,13 @@ export const QueuedCommitsTable = ({
     return (
         <Table>
             <TableHeader>
-                <Styles.HeaderRow>
+                <OverviewHeaderRow>
                     <TableHeaderCell>From</TableHeaderCell>
                     <TableHeaderCell colSpan={3} />
                     <TableHeaderCell>To</TableHeaderCell>
                     <TableHeaderCell colSpan={4} />
-                </Styles.HeaderRow>
-                <Styles.HeaderRow>
+                </OverviewHeaderRow>
+                <OverviewHeaderRow>
                     <TableHeaderCell>Type</TableHeaderCell>
                     <TableHeaderCell>Amount</TableHeaderCell>
                     <TableHeaderCell>Token In</TableHeaderCell>
@@ -74,13 +74,13 @@ export const QueuedCommitsTable = ({
                     <TableHeaderCell>Token Out</TableHeaderCell>
                     <TableHeaderCell>Receive In</TableHeaderCell>
                     <TableHeaderCell>{/* Empty cell for actions */}</TableHeaderCell>
-                </Styles.HeaderRow>
+                </OverviewHeaderRow>
             </TableHeader>
             <tbody>
-                {filteredTokens.length === 0 ? (
+                {filteredCommits.length === 0 ? (
                     <NoEntries isQueued />
                 ) : (
-                    filteredTokens.map((commit) => (
+                    filteredCommits.map((commit) => (
                         <QueuedCommitRow key={commit.txnHash} provider={provider ?? null} {...commit} />
                     ))
                 )}

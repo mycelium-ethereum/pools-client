@@ -3,6 +3,7 @@ import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchI
 import { TableRowCell } from '~/components/General/TWTable';
 import ArrowRight_ from '~/public/img/general/arrow-right.svg';
 import { device } from '~/store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     border-radius: 0.75rem;
@@ -79,4 +80,17 @@ export const ArrowRight = styled(ArrowRight_)`
 
 export const OverviewTableRowCell = styled(TableRowCell)`
     font-size: 16px;
+`;
+
+export const OverviewHeaderRow = styled.tr`
+    &:first-child {
+        background: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#E5E7EB';
+                default:
+                    return theme.background;
+            }
+        }};
+    }
 `;

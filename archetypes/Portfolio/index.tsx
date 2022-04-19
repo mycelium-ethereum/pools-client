@@ -1,68 +1,18 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import { browseReducer, BrowseState } from '~/archetypes/Pools/state';
-import Button from '~/components/General/Button';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import usePendingCommits from '~/hooks/useQueuedCommits';
-import History from './History';
 import Overview from './Overview';
 import { Container } from './Overview/styles';
-
-export enum PortfolioPage {
-    TradePortfolio = 0,
-    StakePortfolio = 1,
-}
-
-export enum TradePortfolioPage {
-    Overview = 0,
-    History = 1,
-    Queued = 2,
-}
 
 export type PageOptions = {
     key: CommitActionEnum;
     text: React.ReactNode;
 }[];
 
-export const PortfolioNav: React.FC<{
-    page: TradePortfolioPage;
-    numCommits: number;
-}> = ({ page }) => {
-    const router = useRouter();
-
-    const overviewPage = page === TradePortfolioPage.Overview;
-    const historyPage = page === TradePortfolioPage.History;
-
-    return (
-        <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
-            <div className="mr-5">
-                <Link href="/portfolio/">
-                    <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
-                </Link>
-            </div>
-            <div>
-                <Button
-                    variant={historyPage ? 'primary' : 'unselected'}
-                    onClick={() =>
-                        router.push({
-                            pathname: '/portfolio/history',
-                        })
-                    }
-                >
-                    Commit History
-                </Button>
-            </div>
-        </div>
-    );
-};
-
-export default (({ page }) => {
-    const [focus, setFocus] = useState<CommitActionEnum>(CommitActionEnum.mint);
-    const router = useRouter();
-
+export default (() => {
     const { swapDispatch = noDispatch } = useSwapContext();
     const [state, dispatch] = useReducer(browseReducer, {
         mintBurnModalOpen: false,
@@ -84,32 +34,10 @@ export default (({ page }) => {
         });
     };
 
-    useEffect(() => {
-        if (router.query.focus === 'burn') {
-            setFocus(CommitActionEnum.burn);
-        } else if (router.query.focus === 'mint') {
-            setFocus(CommitActionEnum.mint);
-        } else if (router.query.focus === 'flip') {
-            setFocus(CommitActionEnum.flip);
-        }
-    }, [router]);
-
-    const renderPage = (page: TradePortfolioPage) => {
-        switch (page) {
-            case TradePortfolioPage.History:
-                return <History focus={focus} />;
-            default:
-                return <Overview onClickCommitAction={handleCommitAction} commits={commits} />;
-        }
-    };
-
     return (
         <Container>
-            <PortfolioNav page={page} numCommits={commits.length} />
-            {renderPage(page)}
+            <Overview onClickCommitAction={handleCommitAction} commits={commits} />
             {state.mintBurnModalOpen && <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />}
         </Container>
     );
-}) as React.FC<{
-    page: TradePortfolioPage;
-}>;
+});
