@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 import { TableRowCell } from '~/components/General/TWTable';
 import ArrowRight_ from '~/public/img/general/arrow-right.svg';
+import { device } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     border-radius: 0.75rem;
@@ -13,7 +14,7 @@ export const Wrapper = styled.div`
     white-space: nowrap;
     padding: 1rem;
 
-    @media (min-width: 640px) {
+    @media ${device.lg} {
         display: flex;
         justify-content: space-between;
     }
@@ -41,7 +42,17 @@ export const Text = styled.div`
 
 export const Content = styled.div`
     display: flex;
-    margin: auto 0;
+    margin: 0 0 auto 0;
+    flex-wrap: wrap;
+
+    & > * {
+        margin-top: 1rem;
+    }
+    @media ${device.lg} {
+        & > * {
+            margin-top: 0rem;
+        }
+    }
 `;
 
 export const Actions = styled.div`
@@ -49,13 +60,14 @@ export const Actions = styled.div`
     &:first-child {
         margin-right: 0.5rem;
 
-        @media (min-width: 640px) {
+        @media ${device.md} {
             margin-right: 1.25rem;
         }
     }
 `;
 
 export const SearchInput = styled(UnstyledSearchInput)`
+    min-width: 325px;
     input {
         padding: calc(0.5rem - 1px) 1rem calc(0.5rem - 1px) 2.5rem;
     }

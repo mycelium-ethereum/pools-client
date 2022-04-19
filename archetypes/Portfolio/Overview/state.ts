@@ -10,8 +10,8 @@ export enum DenotedInEnum {
 
 export enum CommitTypeFilter {
     All = 'All',
-    Burn = 'Burn',
     Mint = 'Mint',
+    Burn = 'Burn',
     Flip = 'Flip',
 }
 
