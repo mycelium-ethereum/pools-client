@@ -1,6 +1,7 @@
 import React from 'react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import TimeLeft from '~/components/TimeLeft';
+import { TimeLeftWrapper } from './styles';
 
 interface ReceiveInProps {
     pendingUpkeep: boolean;
@@ -14,17 +15,17 @@ export const ReceiveIn: React.FC<ReceiveInProps> = ({
     setPendingUpkeep,
     actionType,
     expectedExecution,
-}: ReceiveInProps) => {
-    if (pendingUpkeep) {
-        return <>{`${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`}</>;
-    } else {
-        return (
+}: ReceiveInProps) => (
+    <TimeLeftWrapper>
+        {pendingUpkeep ? (
+            `${actionType === CommitActionEnum.mint ? 'Mint' : 'Burn'} in progress`
+        ) : (
             <TimeLeft
                 targetTime={expectedExecution}
                 countdownEnded={() => {
                     setPendingUpkeep(true);
                 }}
             />
-        );
-    }
-};
+        )}
+    </TimeLeftWrapper>
+);

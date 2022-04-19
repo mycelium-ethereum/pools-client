@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
-import { TableRow, TableRowCell } from '~/components/General/TWTable';
+import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import { CommitTypeName } from '~/constants/commits';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { QueuedCommit } from '~/types/commits';
 import { ReceiveIn } from './ReceiveIn';
 import { Amount, TokenPrice, TokenSymbol } from '../../Market';
+import { ArrowRight, OverviewTableRowCell } from '../OverviewTable/styles';
 
 type QueuedCommitRowProps = QueuedCommit & {
     provider: ethers.providers.JsonRpcProvider | null;
@@ -26,35 +27,38 @@ export const QueuedCommitRow = ({
     const { amount: tokenOutAmount, symbol: tokenOutSymbol, price: tokenOutPrice, isLong: tokenOutIsLong } = tokenOut;
     return (
         <TableRow key={txnHash} lined>
-            <TableRowCell>{CommitTypeName[type]}</TableRowCell>
-            <TableRowCell>
+            <OverviewTableRowCell>{CommitTypeName[type]}</OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <Amount tokenSymbol={tokenInSymbol} amount={tokenInAmount} />
-            </TableRowCell>
-            <TableRowCell>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <TokenSymbol tokenSymbol={tokenInSymbol} isLong={tokenInIslong} />
-            </TableRowCell>
-            <TableRowCell>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <ArrowRight />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <TokenPrice
                     tokenInSymbol={tokenInSymbol}
                     tokenOutSymbol={tokenOutSymbol}
                     price={tokenOutPrice.div(tokenInPrice)}
                 />
-            </TableRowCell>
-            <TableRowCell>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <Amount tokenSymbol={tokenOutSymbol} amount={tokenOutAmount} />
-            </TableRowCell>
-            <TableRowCell>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <TokenSymbol tokenSymbol={tokenInSymbol} isLong={tokenOutIsLong} />
-            </TableRowCell>
-            <TableRowCell>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <ReceiveIn
                     pendingUpkeep={pendingUpkeep}
                     setPendingUpkeep={setPendingUpkeep}
                     actionType={CommitActionEnum.mint}
                     expectedExecution={expectedExecution}
                 />
-            </TableRowCell>
-            <TableRowCell className="flex text-right">
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
                 <Actions
                     token={tokenOut}
                     provider={provider}
@@ -63,7 +67,7 @@ export const QueuedCommitRow = ({
                         target: txnHash,
                     }}
                 />
-            </TableRowCell>
+            </OverviewTableRowCell>
         </TableRow>
     );
 };

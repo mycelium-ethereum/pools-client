@@ -60,7 +60,7 @@ export const QueuedCommitsTable = ({
             <TableHeader>
                 <Styles.HeaderRow>
                     <TableHeaderCell>From</TableHeaderCell>
-                    <TableHeaderCell colSpan={2} />
+                    <TableHeaderCell colSpan={3} />
                     <TableHeaderCell>To</TableHeaderCell>
                     <TableHeaderCell colSpan={4} />
                 </Styles.HeaderRow>
@@ -68,6 +68,7 @@ export const QueuedCommitsTable = ({
                     <TableHeaderCell>Type</TableHeaderCell>
                     <TableHeaderCell>Amount</TableHeaderCell>
                     <TableHeaderCell>Token In</TableHeaderCell>
+                    <TableHeaderCell>{/* Empty cell for arrow */}</TableHeaderCell>
                     <TableHeaderCell>Price</TableHeaderCell>
                     <TableHeaderCell>Amount</TableHeaderCell>
                     <TableHeaderCell>Token Out</TableHeaderCell>

@@ -13,3 +13,7 @@ export const HeaderRow = styled.tr`
         }};
     }
 `;
+
+export const TimeLeftWrapper = styled.div`
+    font-size: 24px;
+`;

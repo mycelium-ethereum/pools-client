@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { ethers } from 'ethers';
-import { MoreOutlined, PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined } from '@ant-design/icons';
 import { Popover } from 'react-tiny-popover';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
+import More from '~/public/img/general/more.svg';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { openBlockExplorer } from '~/utils/blockExplorers';
 import { watchAsset } from '~/utils/rpcMethods';
@@ -64,8 +65,8 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
                 </div>
             }
         >
-            <div className={'focus:outline-none mb-3 focus:border-none'} onClick={() => setIsOpen(!isOpen)}>
-                <MoreOutlined
+            <div className={'cursor-pointer p-2'} onClick={() => setIsOpen(!isOpen)}>
+                <More
                     className="transition"
                     style={{
                         transform: isOpen ? 'rotate(-90deg)' : '',

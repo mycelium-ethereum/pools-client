@@ -10,12 +10,12 @@ export const CommitTypeMap = {
 };
 
 export const CommitTypeName: Record<CommitEnum, string> = {
-    [CommitEnum.shortBurnLongMint]: 'Flip',
-    [CommitEnum.longBurnShortMint]: 'Flip',
-    [CommitEnum.shortMint]: 'Mint',
-    [CommitEnum.longMint]: 'Mint',
-    [CommitEnum.shortBurn]: 'Burn',
-    [CommitEnum.longBurn]: 'Burn',
+    [CommitEnum.shortBurnLongMint]: 'FLIP',
+    [CommitEnum.longBurnShortMint]: 'FLIP',
+    [CommitEnum.shortMint]: 'MINT',
+    [CommitEnum.longMint]: 'MINT',
+    [CommitEnum.shortBurn]: 'BURN',
+    [CommitEnum.longBurn]: 'BURN',
 };
 
 const mintQueryFocus = 'mint';

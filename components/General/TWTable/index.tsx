@@ -89,26 +89,22 @@ export const TableRow = styled.tr<{ lined?: boolean }>`
     }
 `;
 
-const CELL_SIZES = {
-    default: 'p-4',
+const CELL_SIZES: Record<Size, string> = {
+    default: '12px 1rem',
     ['default-x']: '0 1rem',
-    sm: 'px-2 py-1',
+    sm: '0.25rem 0.5rem',
     ['sm-x']: '0 0.5rem',
 };
 
-export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size }> = ({
-    children,
-    className,
-    size = 'default',
-    ...props
-}) => (
-    <td
-        {...props}
-        className={classNames(className ?? '', CELL_SIZES[size], 'whitespace-nowrap text-sm text-theme-text')}
-    >
-        {children}
-    </td>
-);
+export const TableRowCell = styled.td<{ size?: Size }>`
+    white-space: nowrap;
+    color: ${({ theme }) => theme.text};
+    ${({ size }) => size && `padding: ${CELL_SIZES[size]};`}
+    font-size: 0.875rem;
+`;
+TableRowCell.defaultProps = {
+    size: 'default',
+};
 
 /* Cheat to span all cols https://stackoverflow.com/questions/398734/colspan-all-columns */
 const MAX_COLS = 100;
