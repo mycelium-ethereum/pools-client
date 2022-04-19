@@ -18,13 +18,13 @@ export type QueuedCommit = PendingCommitInfo & {
     tokenIn: StaticTokenInfo & {
         amount: BigNumber;
         price: BigNumber;
+        isLong?: boolean;
     };
     tokenOut: StaticTokenInfo & {
         amount: BigNumber;
         price: BigNumber;
+        isLong?: boolean;
     };
-    isLong: boolean;
-    // tokenPrice: BigNumber;
     settlementTokenSymbol: string;
     expectedExecution: number;
 };

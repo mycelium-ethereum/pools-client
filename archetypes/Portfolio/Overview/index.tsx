@@ -19,6 +19,7 @@ import { portfolioReducer, initialPortfolioState, EscrowRowProps } from './state
 import * as Styles from './styles';
 import TokenTable from './TokenTable';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
+import QueuedCommits from '../Queued';
 
 export enum LoadingState {
     Idle = 0,
