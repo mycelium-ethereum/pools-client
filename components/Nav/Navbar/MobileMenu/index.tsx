@@ -103,17 +103,6 @@ export const MobileMenu = ({
                                             />
                                             Portfolio
                                         </Styled.MobileLink>
-                                        <Styled.MobileLink
-                                            selected={route.startsWith('trading')}
-                                            onClick={() => handleRoute('/trading-comp')}
-                                        >
-                                            <img
-                                                className="mr-2 inline"
-                                                src={'/img/general/trading-comp.svg'}
-                                                alt="Trading Comp"
-                                            />
-                                            Trading Comp
-                                        </Styled.MobileLink>
                                         <Styled.MobileLink selected={route.startsWith('documentation')}>
                                             <a
                                                 href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
@@ -124,7 +113,7 @@ export const MobileMenu = ({
                                                 <img
                                                     className="mr-2 inline"
                                                     src={'/img/general/browse.svg'}
-                                                    alt="Trading Comp"
+                                                    alt="Documentation"
                                                 />
                                                 Documentation
                                             </a>
