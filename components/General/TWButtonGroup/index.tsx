@@ -33,6 +33,7 @@ const SIZE = {
     default: 'px-8 py-3 text-sm font-medium',
     lg: 'py-3 px-8 md:px-10 text-base font-normal',
     xl: 'py-3 px-10 sm:px-16 md:px-18 text-base font-normal',
+    responsive: 'py-3 text-sm font-normal',
 };
 
 const OVERALL_BACKGROUND = {
@@ -43,7 +44,7 @@ const OVERALL_BACKGROUND = {
 
 const DISABLED = 'cursor-not-allowed bg-cool-gray-100 dark:bg-theme-background opacity-60';
 const DEFAULT_BUTTON = 'relative inline-flex items-center justify-center transition-all no-focus-outline';
-const FULL_WIDTH_BUTTONS = 'w-full justify-center';
+const FULL_WIDTH = 'w-full justify-center';
 
 type Option = {
     key: number;
@@ -56,7 +57,7 @@ type Option = {
 
 type Color = 'tracer' | 'greyed' | 'default';
 type Borders = 'rounded' | 'default';
-type ButtonSize = 'sm' | 'lg' | 'xl' | 'default';
+type ButtonSize = 'sm' | 'lg' | 'xl' | 'default' | 'responsive';
 
 export default (({
     options,
@@ -66,13 +67,13 @@ export default (({
     borderColor = 'default',
     border = 'default',
     onClick,
-    fullWidthButtons = false,
+    fullWidth = false,
     className = '',
 }) => {
     const buttonClass = classNames(SIZE[size], DEFAULT_BUTTON);
 
     return (
-        <Container className={classNames(className, OVERALL_BACKGROUND[color])}>
+        <Container className={classNames(className, OVERALL_BACKGROUND[color])} fullWidth={fullWidth}>
             {options.map((option, index) =>
                 option.disabled ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.disabled.optionKey }}>
@@ -87,7 +88,7 @@ export default (({
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
                                 index === options.length - 1 ? 'rounded-r-md' : '',
-                                fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
+                                fullWidth ? FULL_WIDTH : '',
                             )}
                         >
                             {option.text}
@@ -104,7 +105,7 @@ export default (({
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
                                 BORDERS[border],
-                                fullWidthButtons ? FULL_WIDTH_BUTTONS : '',
+                                fullWidth ? FULL_WIDTH : '',
                             )}
                         >
                             {option.text}
@@ -122,14 +123,15 @@ export default (({
     border?: Borders;
     options: Option[];
     value: number; // key
-    fullWidthButtons?: boolean;
+    fullWidth?: boolean;
     className?: string;
 }>;
 
-const Container = styled.span`
+const Container = styled.span<{ fullWidth?: boolean }>`
     position: relative;
     display: inline-flex;
     white-space: nowrap;
+    width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
 `;
 
 const NewCallOut = styled.span`
