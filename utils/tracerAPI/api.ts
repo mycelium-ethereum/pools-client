@@ -4,7 +4,7 @@ import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { CommitTypeMap } from '~/constants/commits';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
-import { AverageEntryPricesAPIResponse } from '~/types/pools';
+import { TradeStatsAPIResponse } from '~/types/pools';
 import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
 import { formatBN } from '../converters';
 
@@ -158,28 +158,44 @@ export const fetchCommitHistory: (params: {
     return fetchedTradeHistory;
 };
 
-export const fetchAverageEntryPrices: (params: {
+export const fetchTradeStats: (params: {
     network: KnownNetwork;
     pool: string;
     account: string;
-}) => Promise<AverageEntryPricesAPIResponse> = async ({ network, pool, account }) => {
-    const route = `${TRACER_API}/poolsv2/averageEntryPrices?network=${
+}) => Promise<TradeStatsAPIResponse> = async ({ network, pool, account }) => {
+    const route = `${TRACER_API}/poolsv2/tradeStats?network=${
         network ?? NETWORKS.ARBITRUM
     }&userAddress=${account}&poolAddress=${pool}`;
 
-    const fetchedAverageEntryPrices: AverageEntryPricesAPIResponse = await fetch(route)
+    const fetchedTradeStats: TradeStatsAPIResponse = await fetch(route)
         .then((res) => res.json())
-        .then((averageEntryPrices) => {
-            return averageEntryPrices;
+        .then((tradeStats) => {
+            return tradeStats;
         })
         .catch((err) => {
             console.error('Failed to fetch average entry prices', err);
             return {
-                longPriceWallet: '0',
-                shortPriceWallet: '0',
-                longPriceAggregate: '0',
-                shortPriceAggregate: '0',
+                avgLongEntryPriceWallet: '0',
+                avgShortEntryPriceWallet: '0',
+                avgLongEntryPriceAggregate: '0',
+                avgShortEntryPriceAggregate: '0',
+                avgLongExitPriceWallet: '0',
+                avgShortExitPriceWallet: '0',
+                avgLongExitPriceAggregate: '0',
+                avgShortExitPriceAggregate: '0',
+                totalLongTokensMinted: '0',
+                totalLongMintSpend: '0',
+                totalShortTokensMinted: '0',
+                totalShortMintSpend: '0',
+                totalLongTokensBurned: '0',
+                totalLongBurnReceived: '0',
+                totalShortTokensBurned: '0',
+                totalShortBurnReceived: '0',
+                totalLongBurns: 0,
+                totalLongMints: 0,
+                totalShortBurns: 0,
+                totalShortMints: 0,
             };
         });
-    return fetchedAverageEntryPrices;
+    return fetchedTradeStats;
 };

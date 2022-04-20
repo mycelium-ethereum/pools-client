@@ -68,11 +68,27 @@ type TokenBalance = {
     balance: BigNumber;
 };
 
-export type AverageEntryPrices = {
-    longPriceWallet: BigNumber;
-    shortPriceWallet: BigNumber;
-    longPriceAggregate: BigNumber;
-    shortPriceAggregate: BigNumber;
+export type TradeStats = {
+    avgLongEntryPriceWallet: BigNumber;
+    avgShortEntryPriceWallet: BigNumber;
+    avgLongEntryPriceAggregate: BigNumber;
+    avgShortEntryPriceAggregate: BigNumber;
+    avgLongExitPriceWallet: BigNumber;
+    avgShortExitPriceWallet: BigNumber;
+    avgLongExitPriceAggregate: BigNumber;
+    avgShortExitPriceAggregate: BigNumber;
+    totalLongTokensMinted: BigNumber;
+    totalLongMintSpend: BigNumber;
+    totalShortTokensMinted: BigNumber;
+    totalShortMintSpend: BigNumber;
+    totalLongTokensBurned: BigNumber;
+    totalLongBurnReceived: BigNumber;
+    totalShortTokensBurned: BigNumber;
+    totalShortBurnReceived: BigNumber;
+    totalLongBurns: number;
+    totalLongMints: number;
+    totalShortBurns: number;
+    totalShortMints: number;
 };
 
 export type PoolInfo = {
@@ -82,7 +98,7 @@ export type PoolInfo = {
         longToken: TokenBalance;
         settlementToken: TokenBalance;
         aggregateBalances: AggregateBalances;
-        averageEntryPrices: AverageEntryPrices;
+        tradeStats: TradeStats;
     };
     upkeepInfo: {
         expectedExecution: number;
@@ -90,9 +106,25 @@ export type PoolInfo = {
     };
 };
 
-export type AverageEntryPricesAPIResponse = {
-    longPriceWallet: string;
-    shortPriceWallet: string;
-    longPriceAggregate: string;
-    shortPriceAggregate: string;
+export type TradeStatsAPIResponse = {
+    avgLongEntryPriceWallet: string;
+    avgShortEntryPriceWallet: string;
+    avgLongEntryPriceAggregate: string;
+    avgShortEntryPriceAggregate: string;
+    avgLongExitPriceWallet: string;
+    avgShortExitPriceWallet: string;
+    avgLongExitPriceAggregate: string;
+    avgShortExitPriceAggregate: string;
+    totalLongTokensMinted: string;
+    totalLongMintSpend: string;
+    totalShortTokensMinted: string;
+    totalShortMintSpend: string;
+    totalLongTokensBurned: string;
+    totalLongBurnReceived: string;
+    totalShortTokensBurned: string;
+    totalShortBurnReceived: string;
+    totalLongBurns: number;
+    totalLongMints: number;
+    totalShortBurns: number;
+    totalShortMints: number;
 };

@@ -37,7 +37,7 @@ export default (() => {
                     currentTokenPrice: nextLongTokenPrice,
                     type: TokenType.Long,
                     side: SideEnum.long,
-                    entryPrice: userBalances.averageEntryPrices.longPriceAggregate,
+                    entryPrice: userBalances.tradeStats.avgLongEntryPriceAggregate,
                     notionalValue: longTokenValue.times(leverage),
                 };
                 const claimableShortTokens = {
@@ -46,7 +46,7 @@ export default (() => {
                     currentTokenPrice: nextShortTokenPrice,
                     type: TokenType.Short,
                     side: SideEnum.short,
-                    entryPrice: userBalances.averageEntryPrices.shortPriceAggregate,
+                    entryPrice: userBalances.tradeStats.avgShortEntryPriceAggregate,
                     notionalValue: shortTokenValue.times(leverage),
                 };
                 const claimableSettlementTokens = {
