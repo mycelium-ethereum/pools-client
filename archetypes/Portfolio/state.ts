@@ -30,9 +30,12 @@ export type TokenRowProps = {
     side: number;
     holdings: BigNumber;
     price: BigNumber;
+    notionalValue: BigNumber;
     deposits: BigNumber; // amount of USDC deposited
     oraclePrice: BigNumber;
     effectiveGain: number;
+    acquisitionCost: BigNumber;
+    pnl: BigNumber;
 };
 
 export interface EscrowRowProps {
@@ -54,6 +57,7 @@ export type ClaimableAsset = {
     type: TokenType;
     notionalValue: BigNumber;
 };
+
 export type ClaimablePoolToken = {
     entryPrice: BigNumber;
     side: SideEnum;
@@ -72,6 +76,8 @@ export interface PortfolioState {
     historicCommitsSearch: string;
     historicCommitsFilter: CommitTypeFilter;
     positionsDenotedIn: DenotedInEnum;
+    claimedTokensMarketFilter: MarketFilterEnum;
+    claimedTokensSearch: string;
 }
 
 export const initialPortfolioState = {
@@ -81,6 +87,8 @@ export const initialPortfolioState = {
     queuedCommitsFilter: CommitTypeFilter.All,
     historicCommitsSearch: '',
     historicCommitsFilter: CommitTypeFilter.All,
+    claimedTokensSearch: '',
+    claimedTokensMarketFilter: MarketFilterEnum.All,
     positionsDenotedIn: DenotedInEnum.USD,
 };
 
@@ -91,6 +99,8 @@ export type PortfolioAction =
     | { type: 'setQueuedCommitsFilter'; filter: CommitTypeFilter }
     | { type: 'setHistoricCommitsSearch'; search: string }
     | { type: 'setHistoricCommitsFilter'; filter: CommitTypeFilter }
+    | { type: 'setClaimedTokensSearch'; search: string }
+    | { type: 'setClaimedTokensMarketFilter'; market: MarketFilterEnum }
     | { type: 'setDenotation'; denotedIn: DenotedInEnum };
 
 export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) => PortfolioState = (state, action) => {
@@ -124,6 +134,16 @@ export const portfolioReducer: (state: PortfolioState, action: PortfolioAction) 
             return {
                 ...state,
                 historicCommitsFilter: action.filter,
+            };
+        case 'setClaimedTokensSearch':
+            return {
+                ...state,
+                claimedTokensSearch: action.search,
+            };
+        case 'setClaimedTokensMarketFilter':
+            return {
+                ...state,
+                claimedTokensMarketFilter: action.market,
             };
         case 'setDenotation':
             return {

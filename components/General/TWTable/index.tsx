@@ -121,6 +121,6 @@ const MAX_COLS = 100;
 
 export const FullSpanCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className, ...props }) => (
     <td {...props} className={classNames(className ?? '')} colSpan={MAX_COLS}>
-        <div className="my-20 text-center">{children}</div>
+        {children}
     </td>
 );

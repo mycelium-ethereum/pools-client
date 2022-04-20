@@ -2,10 +2,17 @@ import React, { Fragment, useEffect, useRef } from 'react';
 import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
 import { useResizeDetector } from 'react-resize-detector';
+import styled from 'styled-components';
 import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '~/components/Tooltips/TooltipSelector';
 import { Children } from '~/types/general';
 import { classNames } from '~/utils/helpers';
+
+const HiddenContainer = styled.div`
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    overflow: visible;
+`;
 
 /**
  * Similar component to dropdown only there is no content to begin with
@@ -30,11 +37,8 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
     }, [open, height]);
 
     return (
-        <div
-            className={classNames(
-                className ?? '',
-                'mb-4 mt-8 overflow-visible rounded-md transition-all duration-300 ease-in-out',
-            )}
+        <HiddenContainer
+            className={classNames(className ?? '', 'rounded-md transition-all duration-300 ease-in-out')}
             ref={main}
         >
             <div className="body" ref={ref}>
@@ -50,7 +54,7 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
                     {children}
                 </Transition>
             </div>
-        </div>
+        </HiddenContainer>
     );
 };
 

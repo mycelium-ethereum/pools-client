@@ -1,19 +1,19 @@
 import React, { useReducer, useState } from 'react';
 import { calcNotionalValue, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
+import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
+import usePendingCommits from '~/hooks/useQueuedCommits';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
+import { MarketFilterEnum } from '~/types/filters';
 import { toApproxCurrency } from '~/utils/converters';
 import { marketFilter } from '~/utils/filters';
 
-import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
-import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import usePendingCommits from '~/hooks/useQueuedCommits';
-import { Container } from './styles';
-
+import ClaimedTokensTable from './ClaimedTokensTable';
 import { ConnectWalletBanner } from './ConnectWalletBanner';
 import { emptyStateHelpCardContent } from './content';
 import EscrowTable from './EscrowTable';
@@ -30,8 +30,8 @@ import {
 import { QueuedCommitsTable } from './QueuedCommits';
 import { SkewCard } from './SkewCard';
 import { portfolioReducer, initialPortfolioState, EscrowRowProps, CommitTypeFilter } from './state';
+import { Container } from './styles';
 import * as Styles from './styles';
-import TokenTable from './TokenTable';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
 
 export enum LoadingState {
@@ -194,20 +194,35 @@ export const PortfolioPage = (): JSX.Element => {
                     title="Claimed Tokens"
                     subTitle="Pools tokens in your wallet."
                     firstActionTitle="Markets"
-                    firstAction={<MarketDropdown state={state} dispatch={dispatch} />}
+                    firstAction={
+                        <MarketDropdown
+                            market={state.claimedTokensMarketFilter}
+                            setMarket={(m) =>
+                                void dispatch({ type: 'setClaimedTokensMarketFilter', market: m as MarketFilterEnum })
+                            }
+                        />
+                    }
                     secondActionTitle="Denote in"
                     secondAction={<DenoteInDropDown state={state} dispatch={dispatch} />}
                 >
-                    <TokenTable
+                    <ClaimedTokensTable
                         rows={rows}
                         onClickCommitAction={onClickCommitAction}
                         denotedIn={state.positionsDenotedIn}
                     />
                 </OverviewTable>
                 <OverviewTable
-                    title="Escrow Holdings"
+                    title="Unclaimed Tokens"
+                    subTitle="Your tokens, held with the Pool. Available to claim to a wallet at any time."
                     firstActionTitle="Market"
-                    firstAction={<MarketDropdown state={state} dispatch={dispatch} />}
+                    firstAction={
+                        <MarketDropdown
+                            market={state.escrowMarketFilter}
+                            setMarket={(m) =>
+                                void dispatch({ type: 'setEscrowMarketFilter', market: m as MarketFilterEnum })
+                            }
+                        />
+                    }
                     secondAction={<EscrowSearch state={state} dispatch={dispatch} />}
                 >
                     <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
@@ -247,7 +262,7 @@ export const PortfolioPage = (): JSX.Element => {
             <>{!!account ? filledState() : emptyState()}</>
             {mintBurnModalOpen && <MintBurnModal open={mintBurnModalOpen} onClose={handleModalClose} />}
         </Container>
-    )
+    );
 };
 
 export default PortfolioPage;

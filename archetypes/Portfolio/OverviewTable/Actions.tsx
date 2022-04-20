@@ -78,17 +78,24 @@ export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
     );
 };
 
-export const MarketDropdown = ({ state, dispatch }: TableProps): JSX.Element => {
+const MARKET_DROPDOWN_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
+    key: (MarketFilterEnum as any)[key],
+    ticker: (key !== 'All' ? key : '') as LogoTicker,
+}));
+export const MarketDropdown = ({
+    market,
+    setMarket,
+}: {
+    market: MarketFilterEnum;
+    setMarket: (market: string) => void;
+}): JSX.Element => {
     return (
         <Dropdown
             size="sm"
-            value={state.escrowMarketFilter}
+            value={market}
             className="mt-auto w-32"
-            options={Object.keys(MarketFilterEnum).map((key) => ({
-                key: (MarketFilterEnum as any)[key],
-                ticker: (key !== 'All' ? key : '') as LogoTicker,
-            }))}
-            onSelect={(val) => dispatch({ type: 'setEscrowMarketFilter', market: val as MarketFilterEnum })}
+            options={MARKET_DROPDOWN_OPTIONS}
+            onSelect={setMarket}
         />
     );
 };

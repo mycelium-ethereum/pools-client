@@ -19,7 +19,7 @@ const IconBox = styled.div`
 const dollarTickers = ['USD', 'USDC'];
 const isDollar: (currency: LogoTicker) => boolean = (currency) => dollarTickers.includes(currency);
 
-export default styled(
+export const UpOrDown = styled(
     ({ deltaDenotation: deltaDenotation, oldValue, newValue, currency, showCurrencyTicker, className }) => {
         const value = useMemo(
             () =>
@@ -78,3 +78,5 @@ export default styled(
         color: rgb(220, 38, 38);
     }
 `;
+
+export default UpOrDown;

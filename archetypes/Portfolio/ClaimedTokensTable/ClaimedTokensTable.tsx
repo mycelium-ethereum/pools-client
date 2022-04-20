@@ -4,12 +4,19 @@ import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
+import { ClaimedTokenRow } from './ClaimedTokenRow';
 import { DenotedInEnum, TokenRowProps } from '../state';
-import {TokenRow} from './TokenRow';
 
-export default (({ rows, onClickCommitAction, denotedIn }) => {
+export const ClaimedTokensTable = ({
+    rows,
+    onClickCommitAction,
+    denotedIn,
+}: {
+    rows: TokenRowProps[];
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+    denotedIn: DenotedInEnum;
+}): JSX.Element => {
     const provider = useStore(selectProvider);
-
     return (
         <>
             <Table fullHeight={false}>
@@ -27,7 +34,7 @@ export default (({ rows, onClickCommitAction, denotedIn }) => {
                     {rows.map((token) => {
                         if (!token.holdings.eq(0)) {
                             return (
-                                <TokenRow
+                                <ClaimedTokenRow
                                     {...token}
                                     key={token.address}
                                     provider={provider ?? null}
@@ -42,8 +49,6 @@ export default (({ rows, onClickCommitAction, denotedIn }) => {
             {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
         </>
     );
-}) as React.FC<{
-    rows: TokenRowProps[];
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-    denotedIn: DenotedInEnum;
-}>;
+};
+
+export default ClaimedTokensTable;
