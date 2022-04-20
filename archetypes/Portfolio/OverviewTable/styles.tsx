@@ -95,3 +95,8 @@ export const OverviewHeaderRow = styled.tr`
         }};
     }
 `;
+
+export const ActionsCell = styled(TableRowCell)`
+    display: flex;
+    justify-content: end;
+`;

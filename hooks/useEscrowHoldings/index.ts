@@ -82,7 +82,7 @@ export default (() => {
             });
             setRows(_rows);
         }
-        console.log('rows',rows)
+        console.log('rows', rows);
     }, [pools]);
 
     return rows;
