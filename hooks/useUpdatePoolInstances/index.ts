@@ -48,7 +48,7 @@ export const useUpdatePoolInstances = (): void => {
             const network = provider.network?.chainId?.toString();
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
-                    console.debug(`Initialising pools ${network.slice()}`, pools);
+                    console.debug(`Initialising pools ${network.slice()}`, poolLists);
                     resetPools();
                     hasSetPools.current = false;
                     setPoolsInitialized(false);

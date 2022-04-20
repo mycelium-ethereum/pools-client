@@ -11,7 +11,7 @@ import { selectProvider } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';
 import { HistoricCommitRow } from './HisoricCommitRows';
 import * as Styles from './styles';
-import { NoEntries } from '../../NoEntries';
+import { NoEntries } from '../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
 import { CommitTypeFilter } from '../state';
 

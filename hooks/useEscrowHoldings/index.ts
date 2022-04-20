@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/Overview/state';
+import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
 
@@ -82,6 +82,7 @@ export default (() => {
             });
             setRows(_rows);
         }
+        console.log('rows',rows)
     }, [pools]);
 
     return rows;

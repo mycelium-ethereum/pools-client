@@ -4,55 +4,11 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
-import Loading from '~/components/General/Loading';
-import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { TableRow, TableRowCell } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { toApproxCurrency } from '~/utils/converters';
 import { DenotedInEnum, TokenRowProps } from '../state';
-
-export default (({ rows, onClickCommitAction, denotedIn }) => {
-    const provider = useStore(selectProvider);
-
-    return (
-        <>
-            <Table fullHeight={false}>
-                <TableHeader>
-                    <tr>
-                        <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
-                        {/*<TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>*/}
-                        {/*<TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>*/}
-                        <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
-                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                    </tr>
-                </TableHeader>
-                <tbody>
-                    {rows.map((token) => {
-                        if (!token.holdings.eq(0)) {
-                            return (
-                                <TokenRow
-                                    {...token}
-                                    key={token.address}
-                                    provider={provider ?? null}
-                                    onClickCommitAction={onClickCommitAction}
-                                    denotedIn={denotedIn}
-                                />
-                            );
-                        }
-                    })}
-                </tbody>
-            </Table>
-            {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
-        </>
-    );
-}) as React.FC<{
-    rows: TokenRowProps[];
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-    denotedIn: DenotedInEnum;
-}>;
 
 export const TokenRow: React.FC<
     TokenRowProps & {
@@ -76,7 +32,6 @@ export const TokenRow: React.FC<
     denotedIn,
 }) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
-    // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
     const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, name: string, leverage?: number) => {
         if (netValue.eq(0)) {
@@ -139,13 +94,12 @@ export const TokenRow: React.FC<
                 </div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
             </TableRowCell>
-            {/*<TableRowCell>*/}
-            {/*    <div>{toApproxCurrency(deposits)}</div>*/}
-            {/*    <div className="opacity-80">{holdings.toFixed(2)} tokens</div>*/}
-            {/*</TableRowCell>*/}
-            {/*<TableRowCell className={pnl.gt(0) ? 'text-green-500' : 'text-red-500'}>*/}
-            {/*    {toApproxCurrency(pnl)}*/}
-            {/*</TableRowCell>*/}
+            <TableRowCell>
+                AcquCosts
+            </TableRowCell>
+            <TableRowCell>
+                PNL
+            </TableRowCell>
             <TableRowCell>
                 {denotedIn === DenotedInEnum.BASE ? (
                     <>

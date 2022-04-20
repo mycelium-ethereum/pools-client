@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
-import { CommitTypeFilter } from '~/archetypes/Portfolio/Overview/state';
+import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { CommitTypeMap } from '~/constants/commits';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain } from '@tracer-protocol/pools-js';
-import { TokenRowProps } from '~/archetypes/Portfolio/Overview/state';
+import { TokenRowProps } from '~/archetypes/Portfolio//state';
 import { usePools } from '~/hooks/usePools';
 
 export default (() => {

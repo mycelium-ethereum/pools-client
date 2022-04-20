@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
-import { CommitTypeFilter } from '~/archetypes/Portfolio/Overview/state';
+import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';

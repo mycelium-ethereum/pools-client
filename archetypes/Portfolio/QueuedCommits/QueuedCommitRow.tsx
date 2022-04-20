@@ -7,7 +7,7 @@ import { CommitTypeName } from '~/constants/commits';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { QueuedCommit } from '~/types/commits';
 import { ReceiveIn } from './ReceiveIn';
-import { Amount, TokenPrice, TokenSymbol } from '../../Market';
+import { Amount, TokenPrice, TokenSymbol } from '../Market';
 import { ArrowRight, OverviewTableRowCell } from '../OverviewTable/styles';
 
 type QueuedCommitRowProps = QueuedCommit & {

@@ -6,7 +6,7 @@ import Actions from '~/components/TokenActions';
 import { CommitTypeName } from '~/constants/commits';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { TradeHistory } from '~/types/commits';
-import { Amount, TokenPrice, TokenSymbol } from '../../Market';
+import { Amount, TokenPrice, TokenSymbol } from '../Market';
 import { ArrowRight, OverviewTableRowCell } from '../OverviewTable/styles';
 
 type HistoricCommitRowProps = TradeHistory & {

@@ -7,7 +7,7 @@ import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
 import { QueuedCommitRow } from './QueuedCommitRow';
 
-import { NoEntries } from '../../NoEntries';
+import { NoEntries } from '../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
 import { CommitTypeFilter } from '../state';
 
