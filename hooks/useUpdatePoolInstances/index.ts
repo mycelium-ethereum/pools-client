@@ -26,7 +26,7 @@ export const useUpdatePoolInstances = (): void => {
         selectPoolInstanceActions,
         shallow,
     );
-    const { updateTokenApprovals, updateTokenBalances, updateAverageEntryPrices } = useStore(
+    const { updateTokenApprovals, updateTokenBalances, updateTradeStats } = useStore(
         selectPoolInstanceUpdateActions,
         shallow,
     );
@@ -136,7 +136,7 @@ export const useUpdatePoolInstances = (): void => {
             Object.values(pools).map((pool) => {
                 // get and set token balances and approvals for each pool
                 updateTokenBalances(pool.poolInstance.address, provider, account);
-                updateAverageEntryPrices(network, pool.poolInstance.address, account);
+                updateTradeStats(network, pool.poolInstance.address, account);
                 updateTokenApprovals(pool.poolInstance.address, provider, account);
             });
         } else if (!account && poolsInitialized) {
