@@ -2,8 +2,9 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, AverageEntryPrices } from '~/types/pools';
-import { fetchAverageEntryPrices as _fetchAverageEntryPrices } from './tracerAPI';
+import { AggregateBalances, TradeStats } from '~/types/pools';
+import { BNFromString } from './helpers';
+import { fetchTradeStats as _fetchTradeStats } from './tracerAPI';
 
 export const fetchTokenBalances: (
     tokens: string[],
@@ -38,24 +39,39 @@ export const fetchAggregateBalance: (
     };
 };
 
-export const fetchAverageEntryPrices: (
+export const fetchTradeStats: (
     network: KnownNetwork,
     pool: string,
     account: string,
     settlementTokenDecimals: number,
-) => Promise<AverageEntryPrices> = async (network, pool, account, settlementTokenDecimals) => {
-    const { longPriceWallet, shortPriceWallet, longPriceAggregate, shortPriceAggregate } =
-        await _fetchAverageEntryPrices({
-            network,
-            pool,
-            account,
-        });
+) => Promise<TradeStats> = async (network, pool, account, settlementTokenDecimals) => {
+    const tradeStats = await _fetchTradeStats({
+        network,
+        pool,
+        account,
+    });
 
     return {
-        longPriceWallet: new BigNumber(ethers.utils.formatUnits(longPriceWallet, settlementTokenDecimals)),
-        shortPriceWallet: new BigNumber(ethers.utils.formatUnits(shortPriceWallet, settlementTokenDecimals)),
-        longPriceAggregate: new BigNumber(ethers.utils.formatUnits(longPriceAggregate, settlementTokenDecimals)),
-        shortPriceAggregate: new BigNumber(ethers.utils.formatUnits(shortPriceAggregate, settlementTokenDecimals)),
+        avgLongEntryPriceWallet: BNFromString(tradeStats.avgLongEntryPriceWallet, settlementTokenDecimals),
+        avgShortEntryPriceWallet: BNFromString(tradeStats.avgShortEntryPriceWallet, settlementTokenDecimals),
+        avgLongEntryPriceAggregate: BNFromString(tradeStats.avgLongEntryPriceAggregate, settlementTokenDecimals),
+        avgShortEntryPriceAggregate: BNFromString(tradeStats.avgShortEntryPriceAggregate, settlementTokenDecimals),
+        avgLongExitPriceWallet: BNFromString(tradeStats.avgLongExitPriceWallet, settlementTokenDecimals),
+        avgShortExitPriceWallet: BNFromString(tradeStats.avgShortExitPriceWallet, settlementTokenDecimals),
+        avgLongExitPriceAggregate: BNFromString(tradeStats.avgLongExitPriceAggregate, settlementTokenDecimals),
+        avgShortExitPriceAggregate: BNFromString(tradeStats.avgShortExitPriceAggregate, settlementTokenDecimals),
+        totalLongTokensMinted: BNFromString(tradeStats.totalLongTokensMinted, settlementTokenDecimals),
+        totalLongMintSpend: BNFromString(tradeStats.totalLongMintSpend, settlementTokenDecimals),
+        totalShortTokensMinted: BNFromString(tradeStats.totalShortTokensMinted, settlementTokenDecimals),
+        totalShortMintSpend: BNFromString(tradeStats.totalShortMintSpend, settlementTokenDecimals),
+        totalLongTokensBurned: BNFromString(tradeStats.totalLongTokensBurned, settlementTokenDecimals),
+        totalLongBurnReceived: BNFromString(tradeStats.totalLongBurnReceived, settlementTokenDecimals),
+        totalShortTokensBurned: BNFromString(tradeStats.totalShortTokensBurned, settlementTokenDecimals),
+        totalShortBurnReceived: BNFromString(tradeStats.totalShortBurnReceived, settlementTokenDecimals),
+        totalLongBurns: tradeStats.totalLongBurns,
+        totalLongMints: tradeStats.totalLongMints,
+        totalShortBurns: tradeStats.totalShortBurns,
+        totalShortMints: tradeStats.totalShortMints,
     };
 };
 
