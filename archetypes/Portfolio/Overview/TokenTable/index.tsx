@@ -18,7 +18,7 @@ export default (({ rows, onClickCommitAction, denotedIn }) => {
 
     return (
         <>
-            <Table>
+            <Table fullHeight={false}>
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>

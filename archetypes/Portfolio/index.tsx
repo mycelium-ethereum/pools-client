@@ -12,7 +12,7 @@ export type PageOptions = {
     text: React.ReactNode;
 }[];
 
-export default (() => {
+export const PortfolioPage = (): JSX.Element => {
     const { swapDispatch = noDispatch } = useSwapContext();
     const [state, dispatch] = useReducer(browseReducer, {
         mintBurnModalOpen: false,
@@ -40,4 +40,6 @@ export default (() => {
             {state.mintBurnModalOpen && <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />}
         </Container>
     );
-});
+};
+
+export default PortfolioPage;

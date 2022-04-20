@@ -232,6 +232,7 @@ export const Overview = ({
                         searchFilter={state.historicCommitsSearch}
                     />
                 </OverviewTable>
+                <Styles.BackgroundFade />
             </>
         );
     };

@@ -56,7 +56,7 @@ export const QueuedCommitsTable = ({
     );
 
     return (
-        <Table>
+        <Table fullHeight={false}>
             <TableHeader>
                 <OverviewHeaderRow>
                     <TableHeaderCell>From</TableHeaderCell>

@@ -55,10 +55,7 @@ export const HistoricCommitRow = ({
         <OverviewTableRowCell>
             <TokenSymbol tokenSymbol={tokenOutSymbol} isLong={tokenOutIsLong} />
         </OverviewTableRowCell>
-        <OverviewTableRowCell>
-            {console.log(fee.toNumber())}
-            {!fee.eq(0) ? `${fee.times(100).toFixed(2)}%` : '-'}
-        </OverviewTableRowCell>
+        <OverviewTableRowCell>{!fee.eq(0) ? `${fee.times(100).toFixed(2)}%` : '-'}</OverviewTableRowCell>
         <OverviewTableRowCell>
             <div>{timeString}</div>
             <div className="text-cool-gray-500">{dateString}</div>

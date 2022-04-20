@@ -10,6 +10,7 @@ import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';
 import { HistoricCommitRow } from './HisoricCommitRows';
+import * as Styles from './styles';
 import { NoEntries } from '../../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
 import { CommitTypeFilter } from '../state';
@@ -62,13 +63,13 @@ export const HistoricCommitsTable = ({
 
     return (
         <div>
-            <Table>
+            <Table fullHeight={false}>
                 <TableHeader>
                     <OverviewHeaderRow>
                         <TableHeaderCell>From</TableHeaderCell>
                         <TableHeaderCell colSpan={3} />
                         <TableHeaderCell>To</TableHeaderCell>
-                        <TableHeaderCell colSpan={4} />
+                        <TableHeaderCell colSpan={5} />
                     </OverviewHeaderRow>
                     <OverviewHeaderRow>
                         <TableHeaderCell>Type</TableHeaderCell>
@@ -101,9 +102,9 @@ export const HistoricCommitsTable = ({
                     </tbody>
                 )}
             </Table>
-            <div className="ml-auto mt-auto px-4 py-3 sm:px-6">
+            <Styles.PaginationWrapper>
                 <PageNumber page={page} numResults={totalRecords} resultsPerPage={PAGE_ENTRIES} />
-                <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <div>
                     <Pagination
                         onLeft={({ nextPage }) => {
                             setPage(nextPage);
@@ -118,7 +119,7 @@ export const HistoricCommitsTable = ({
                         selectedPage={page}
                     />
                 </div>
-            </div>
+            </Styles.PaginationWrapper>
         </div>
     );
 };

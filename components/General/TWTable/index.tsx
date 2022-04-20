@@ -3,13 +3,23 @@ import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { classNames } from '~/utils/helpers';
 
-export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
+const TableWrapper = styled.div<{
+    fullHeight: boolean;
+}>`
+    display: flex;
+    height: ${({ fullHeight }) => (fullHeight ? '100%' : 'auto')};
+    flex-direction: column;
+    overflow: hidden;
+`;
+
+export const Table: React.FC<{ showDivider?: boolean; fullHeight?: boolean; className?: string }> = ({
     showDivider = false,
+    fullHeight = true,
     className,
     children,
 }) => {
     return (
-        <div className={classNames('flex h-full flex-col overflow-hidden', className ?? '')}>
+        <TableWrapper className={className} fullHeight={fullHeight}>
             <div className="h-full overflow-x-auto">
                 <div className="inline-block min-w-full align-middle">
                     <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
@@ -19,7 +29,7 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </TableWrapper>
     );
 };
 

@@ -7,7 +7,8 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { fetchCommitHistory } from '~/utils/tracerAPI';
-import { PAGE_ENTRIES } from '../usePagination';
+
+const PAGE_ENTRIES = 6;
 
 export const useHistoricCommits = (
     typeFilter: CommitTypeFilter,
