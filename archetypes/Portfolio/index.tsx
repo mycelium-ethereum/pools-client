@@ -212,7 +212,8 @@ export const PortfolioPage = (): JSX.Element => {
                     />
                 </OverviewTable>
                 <OverviewTable
-                    title="Escrow Holdings"
+                    title="Unclaimed Tokens"
+                    subTitle="Your tokens, held with the Pool. Available to claim to a wallet at any time."
                     firstActionTitle="Market"
                     firstAction={
                         <MarketDropdown

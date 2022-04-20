@@ -1,15 +1,13 @@
 import styled from 'styled-components';
+import { Logo } from '~/components/General';
 import Button from '~/components/General/Button';
-import { TableRowCell } from '~/components/General/TWTable';
+import { FullSpanCell } from '~/components/General/TWTable';
 import { TokenType as TokenTypeEnum } from '../state';
 
-export const Pool = styled.tr`
+export const Pool = styled.div`
     color: ${({ theme }) => theme.text};
     background: ${({ theme }) => theme['background-secondary']};
     display: flex;
-    border-radius: 10px;
-    overflow-x: auto;
-    margin-top: 1rem;
 `;
 
 export const PoolName = styled.span`
@@ -44,39 +42,79 @@ const titleStyles = `
     width: 100%;
 `;
 
-const buttonStyles = `
-    display: flex;
+const MARKET_COLORS: Record<
+    string,
+    {
+        backgroundColor: string;
+        buttonBorderColor: string;
+    }
+> = {
+    ETH: {
+        backgroundColor: 'rgba(95, 102, 139, 0.3)',
+        buttonBorderColor: 'rgb(95, 102, 139)',
+    },
+    BTC: {
+        backgroundColor: 'rgba(247, 147, 26, 0.3)',
+        buttonBorderColor: 'rgb(95, 102, 139)',
+    },
+    LINK: {
+        backgroundColor: 'rgba(55, 91, 210, 0.3)',
+        buttonBorderColor: 'rgb(55, 91, 210)',
+    },
+};
+
+export const PoolTableRow = styled.tr<{
+    marketTicker: string;
+}>`
+    background: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.backgroundColor ?? 'auto'};
 `;
 
-export const Section = styled.td<{
+export const PoolTableRowCell = styled.td<{
     variant?: 'title' | 'buttons';
 }>`
-    margin: 1rem 2rem;
-
+    padding: 1rem;
     ${({ variant }) => {
         switch (variant) {
             case 'title':
                 return titleStyles;
-            case 'buttons':
-                return buttonStyles;
             default:
                 return '';
         }
     }};
 `;
 
-export const ClaimButton = styled(Button)`
-    height: 44px;
-    width: 112px !important;
+export const ButtonCell = styled(FullSpanCell)`
+    padding: 1rem;
+`;
+
+export const Buttons = styled.div`
+    display: flex;
+    justify-content: end;
+`;
+
+export const ClaimButton = styled(Button)<{
+    marketTicker: string;
+}>`
+    height: 35px;
+    font-size: 12px
     margin-right: 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-width: 1px;
+    border-style: solid;
+    border-color: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.buttonBorderColor ?? 'auto'};
+    background: rgba(255, 255, 255, 0.5);
+`;
+
+export const ClaimButtonLogo = styled(Logo)`
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
 `;
 
 export const DropdownButton = styled(Button)`
     width: 44px !important;
-    height: 44px;
+    height: 35px;
     text-align: center;
 `;
 
@@ -114,10 +152,6 @@ export const EscrowButton = styled(Button)`
     &:first-child {
         margin-right: 0.5rem;
     }
-`;
-
-export const Buttons = styled(TableRowCell)`
-    text-align: right;
 `;
 
 export const TokenType = styled.div.attrs<{ type: TokenTypeEnum }>((props) => ({

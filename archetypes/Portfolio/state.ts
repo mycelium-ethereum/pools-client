@@ -57,6 +57,7 @@ export type ClaimableAsset = {
     type: TokenType;
     notionalValue: BigNumber;
 };
+
 export type ClaimablePoolToken = {
     entryPrice: BigNumber;
     side: SideEnum;

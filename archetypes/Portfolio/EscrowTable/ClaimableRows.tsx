@@ -52,22 +52,24 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
                 <InnerText>{`${toApproxCurrency(notionalValue)} ${currency}`}</InnerText>
             </TableRowCell>
             {type !== TokenType.Settlement ? (
-                <Buttons>
-                    <EscrowButton
-                        size="xs"
-                        variant="primary-light"
-                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                    >
-                        Burn
-                    </EscrowButton>
-                    <EscrowButton
-                        size="xs"
-                        variant="primary-light"
-                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
-                    >
-                        Flip
-                    </EscrowButton>
-                </Buttons>
+                <TableRowCell>
+                    <Buttons>
+                        <EscrowButton
+                            size="xs"
+                            variant="primary-light"
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                        >
+                            Burn
+                        </EscrowButton>
+                        <EscrowButton
+                            size="xs"
+                            variant="primary-light"
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                        >
+                            Flip
+                        </EscrowButton>
+                    </Buttons>
+                </TableRowCell>
             ) : null}
         </TableRow>
     );
