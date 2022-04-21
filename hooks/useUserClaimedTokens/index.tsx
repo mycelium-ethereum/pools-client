@@ -4,17 +4,13 @@ import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from
 import { TokenRowProps } from '~/archetypes/Portfolio//state';
 import { usePools } from '~/hooks/usePools';
 
-export const useUserTokenOverview = (): {
+export const useUserClaimedTokens = (): {
     tokens: TokenRowProps[];
     loading: boolean;
 } => {
     const { pools } = usePools();
     const [loading, setLoading] = useState<boolean>(true);
     const [tokens, setTokens] = useState<TokenRowProps[]>([]);
-    // const [tokensOverview, setTokensOverview] = useState<TokensOverview>({
-    // tokens: [],
-    // claimedCount: 0,
-    // });
 
     useEffect(() => {
         if (pools) {
@@ -79,4 +75,4 @@ export const useUserTokenOverview = (): {
     };
 };
 
-export default useUserTokenOverview;
+export default useUserClaimedTokens;

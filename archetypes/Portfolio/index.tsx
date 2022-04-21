@@ -4,9 +4,9 @@ import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
+import usePortfolioOverview from '~/hooks/usePortfolioOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
-import { toApproxCurrency } from '~/utils/converters';
 
 import { ClaimedTokens } from './ClaimedTokensTable';
 import { ConnectWalletBanner } from './ConnectWalletBanner';
@@ -43,6 +43,8 @@ export const PortfolioPage = (): JSX.Element => {
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
 
+    const portfolioOverview = usePortfolioOverview();
+
     const { rows: tokens } = useBrowsePools();
 
     const onClickCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
@@ -56,25 +58,17 @@ export const PortfolioPage = (): JSX.Element => {
         setMintBurnModalOpen(false);
     };
 
-    const totalValuation = function () {
-        const total = 0;
-        return total;
-    };
-
     const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
-
-    //TODO: calculate PnP and Net Acquisition Costs
-    const portfolioOverview = [
-        { title: 'Portfolio Valuation', value: toApproxCurrency(totalValuation()) },
-        // { title: 'Unrealised Profit and Loss', value: toApproxCurrency(totalValuation()) },
-        // { title: 'Net Acquisition Costs', value: toApproxCurrency(totalValuation()) },
-    ];
 
     const emptyState = () => {
         return (
             <>
                 <Styles.Wrapper isFullWidth={!!account}>
-                    <TradeOverviewBanner title="Portfolio Overview" content={portfolioOverview} account={!!account} />
+                    <TradeOverviewBanner
+                        title="Portfolio Overview"
+                        portfolioOverview={portfolioOverview}
+                        account={!!account}
+                    />
                     {!account && <ConnectWalletBanner handleConnect={handleConnect} />}
                 </Styles.Wrapper>
                 <Styles.Wrapper isFullWidth={maxSkew === undefined}>
@@ -114,7 +108,7 @@ export const PortfolioPage = (): JSX.Element => {
                 <Styles.Wrapper>
                     <TradeOverviewBanner
                         title="Trade Portfolio Overview"
-                        content={portfolioOverview}
+                        portfolioOverview={portfolioOverview}
                         account={!!account}
                     />
                     <HelpCard

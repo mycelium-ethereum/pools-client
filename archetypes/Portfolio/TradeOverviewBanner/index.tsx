@@ -1,14 +1,12 @@
 import React from 'react';
+import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
+import { PortfolioOverview } from '../state';
 
 type BannerTypes = {
     title: string;
     account: boolean;
-    content: Card[];
-};
-type Card = {
-    title: string;
-    value: string;
+    portfolioOverview: PortfolioOverview;
 };
 
 export const LEVERAGE_FILTER_OPTIONS = [
@@ -16,8 +14,10 @@ export const LEVERAGE_FILTER_OPTIONS = [
     { key: 'All Time', value: 'All Time' },
 ];
 
-export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, content }) => {
-    const hasBalance = false;
+export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, portfolioOverview }) => {
+    const { portfolioDelta, realisedProfit, totalPortfolioValue, unrealisedProfit } = portfolioOverview;
+
+    const deltaClassName = portfolioDelta > 0 ? 'up' : portfolioDelta < 0 ? 'down' : undefined;
 
     return (
         <>
@@ -42,24 +42,24 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, con
                     <Styles.BannerContent>
                         <Styles.Value>
                             <Styles.Currency>$</Styles.Currency>
-                            {content[0].value}
+                            {totalPortfolioValue.toFixed(2)}
                         </Styles.Value>
                         {account && (
-                            <Styles.Value variant="down">
-                                {hasBalance ? '1.78' : '0.00'}% <Styles.ArrowIcon variant="down" />
+                            <Styles.Value className={deltaClassName}>
+                                {portfolioDelta.toFixed(2)}% <Styles.ArrowIcon className={deltaClassName} />
                             </Styles.Value>
                         )}
                     </Styles.BannerContent>
                 </Styles.Banner>
 
                 <Styles.CardContainer>
-                    <Styles.Card variant="down">
-                        <Styles.CardTitle variant="down">Unrealised Profit and Loss</Styles.CardTitle>
-                        <Styles.CardValue variant="down">{hasBalance || account ? '1.78' : '0.00'}%</Styles.CardValue>
+                    <Styles.Card className={unrealisedProfit.gt(0) ? 'up' : unrealisedProfit.lt(0) ? 'down' : ''}>
+                        <Styles.CardTitle>Unrealised Profit and Loss</Styles.CardTitle>
+                        <Styles.CardValue>{toApproxCurrency(unrealisedProfit)}</Styles.CardValue>
                     </Styles.Card>
-                    <Styles.Card>
+                    <Styles.Card className={realisedProfit.gt(0) ? 'up' : realisedProfit.lt(0) ? 'down' : ''}>
                         <Styles.CardTitle>Realised Profit and Loss</Styles.CardTitle>
-                        <Styles.CardValue>${hasBalance || account ? '1,7822' : '0.00'}</Styles.CardValue>
+                        <Styles.CardValue>{toApproxCurrency(realisedProfit)}</Styles.CardValue>
                     </Styles.Card>
                 </Styles.CardContainer>
             </Styles.Container>

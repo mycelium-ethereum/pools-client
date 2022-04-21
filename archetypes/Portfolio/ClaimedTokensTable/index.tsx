@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import useUserTokenOverview from '~/hooks/useUserTokenOverview';
+import useUserClaimedTokens from '~/hooks/useUserClaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { generalMarketFilter } from '~/utils/filters';
 import { ClaimedTokensTable } from './ClaimedTokensTable';
@@ -19,7 +19,7 @@ export const ClaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
 }): JSX.Element => {
-    const { tokens } = useUserTokenOverview();
+    const { tokens } = useUserClaimedTokens();
 
     const claimedSearchFilter = (token: TokenRowProps): boolean => {
         const searchString = claimedTokensSearch.toLowerCase();

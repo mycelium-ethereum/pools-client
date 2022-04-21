@@ -21,6 +21,13 @@ export enum TokenType {
     Settlement = 'Settlement',
 }
 
+export type PortfolioOverview = {
+    totalPortfolioValue: BigNumber;
+    unrealisedProfit: BigNumber;
+    realisedProfit: BigNumber;
+    portfolioDelta: number; //percentage change
+};
+
 export type TokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     name: string;
     poolAddress: string;

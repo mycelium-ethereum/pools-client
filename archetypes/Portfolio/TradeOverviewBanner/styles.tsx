@@ -91,23 +91,22 @@ export const Currency = styled.div`
     }
 `;
 
-export const Value = styled.div<{ variant?: string }>`
+export const Value = styled.div`
     font-size: 40px;
     font-weight: 700;
     display: flex;
     align-items: center;
     font-family: 'Inter', 'sans-serif';
 
-    color: ${({ variant }) => {
-        switch (true) {
-            case variant === 'up':
-                return '#0e9f6e';
-            case variant === 'down':
-                return '#ef4444';
-            default:
-                return '#111928';
-        }
-    }};
+    color: #111928;
+
+    &.up {
+        color: #0e9f6e;
+    }
+
+    &.down {
+        color: #ef4444;
+    }
 
     @media ${device.md} {
         font-size: 60px;
@@ -118,22 +117,42 @@ export const Value = styled.div<{ variant?: string }>`
     }
 `;
 
-export const ArrowIcon = styled(Arrow)<{ variant?: string }>`
-    -webkit-transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg) ')} scale(0.5);
-    transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg)')} scale(0.5);
-
+export const ArrowIcon = styled(Arrow)`
+    // default is down
+    -webkit-transform: rotateX(180deg) scale(0.5);
+    transform: rotateX(180deg) scale(0.5);
     path {
-        fill: ${({ variant }) => (variant === 'up' ? '#0e9f6e' : '#ef4444')};
+        fill: #111928;
+    }
+    &.down {
+        path {
+            fill: #ef4444;
+        }
+    }
+
+    &.up {
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        path {
+            fill: #0e9f6e;
+        }
     }
 
     @media ${device.md} {
-        -webkit-transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg) ')} scale(0.75);
-        transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg)')} scale(0.75);
+        -webkit-transform: rotateX(180deg) scale(0.75);
+        transform: rotateX(180deg) scale(0.75);
+        &.up {
+            -webkit-transform: scale(0.75);
+            transform: scale(0.75);
+        }
     }
-
     @media ${device.lg} {
-        -webkit-transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg) ')} scale(1);
-        transform: ${({ variant }) => (variant === 'up' ? '' : 'rotateX(180deg)')} scale(1);
+        -webkit-transform: rotateX(180deg) scale(1);
+        transform: rotateX(180deg) scale(1);
+        &.up {
+            -webkit-transform: scale(1);
+            transform: scale(1);
+        }
     }
 `;
 
@@ -153,29 +172,47 @@ export const CardContainer = styled.div`
     }
 `;
 
-export const Card = styled.div<{ variant?: string }>`
+export const CardTitle = styled.div<{ variant?: string }>`
+    font-weight: 400;
+    font-size: 16px;
+    color: #9ca3af;
+`;
+
+export const CardValue = styled.div<{ variant?: string }>`
+    font-family: 'Inter', 'sans-serif';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    color: #111928;
+`;
+
+export const Card = styled.div`
     border-radius: 10px;
     padding: 15px 20px;
 
-    ${({ variant }) => {
-        switch (true) {
-            case variant === 'up':
-                return `
-                    background: linear-gradient(270deg, rgba(5, 122, 85, 0.2) -14.15%, rgba(5, 122, 85, 0) 22.33%), #f3faf7;
-                    border: 1px solid #0e9f6e;
-                    `;
-            case variant === 'down':
-                return `
-                    background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%), #faf3f3;
-                    border: 1px solid #ef4444;
-                `;
-            default:
-                return `
-                    background: #f3f4f6;
-                    border: 1px solid #6b7280;
-                `;
+    background: #f3f4f6;
+    border: 1px solid #6b7280;
+
+    &.down {
+        background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%), #faf3f3;
+        border: 1px solid #ef4444;
+        ${CardTitle} {
+            color: #ef4444;
         }
-    }};
+        ${CardValue} {
+            color: #ef4444;
+        }
+    }
+    &.up {
+        background: linear-gradient(270deg, rgba(5, 122, 85, 0.2) -14.15%, rgba(5, 122, 85, 0) 22.33%), #f3faf7;
+        border: 1px solid #0e9f6e;
+        ${CardTitle} {
+            color: #0e9f6e;
+        }
+        ${CardValue} {
+            color: #0e9f6e;
+        }
+    }
 
     @media ${device.sm} {
         width: 50%;
@@ -184,50 +221,4 @@ export const Card = styled.div<{ variant?: string }>`
     @media (min-width: 1024px) {
         width: 100%;
     }
-`;
-
-export const CardTitle = styled.div<{ variant?: string }>`
-    font-weight: 400;
-    font-size: 16px;
-
-    ${({ variant }) => {
-        switch (true) {
-            case variant === 'up':
-                return `
-                    color: #0e9f6e
-                `;
-            case variant === 'down':
-                return `
-                    color: #ef4444;
-                `;
-            default:
-                return `
-                    color: #9ca3af;
-                `;
-        }
-    }};
-`;
-
-export const CardValue = styled.div<{ variant?: string }>`
-    font-family: 'Inter', 'sans-serif';
-    font-style: normal;
-    font-weight: 700;
-    font-size: 24px;
-
-    ${({ variant }) => {
-        switch (true) {
-            case variant === 'up':
-                return `
-                    color: #0e9f6e;
-                `;
-            case variant === 'down':
-                return `
-                    color: #ef4444;
-                `;
-            default:
-                return `
-                    color: #111928;
-                `;
-        }
-    }};
 `;
