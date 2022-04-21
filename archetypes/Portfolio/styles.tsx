@@ -7,19 +7,13 @@ export const Container = styled(GeneralContainer)`
     margin-bottom: 2.5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-gap: 24px;
+    gap: 24px;
 `;
 
 export const Wrapper = styled.div<{ isFullWidth?: boolean }>`
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    grid-gap: 30px;
-
-    @media (min-width: 1280px) {
-        display: grid;
-        grid-template-columns: ${({ isFullWidth }) =>
-            isFullWidth ? 'minmax(0, 1fr)' : 'minmax(0, 2fr) minmax(0, 1fr)'};
-    }
+    gap: 20px;
 `;
 
 export const Banner = styled.div`

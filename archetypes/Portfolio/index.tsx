@@ -118,7 +118,7 @@ export const PortfolioPage = (): JSX.Element => {
         return (
             <>
                 <Styles.Wrapper isFullWidth={!!account}>
-                    <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
+                    <TradeOverviewBanner title="Portfolio Overview" content={portfolioOverview} account={!!account} />
                     {!account && <ConnectWalletBanner handleConnect={handleConnect} />}
                 </Styles.Wrapper>
                 <Styles.Wrapper isFullWidth={maxSkew === undefined}>
@@ -156,7 +156,11 @@ export const PortfolioPage = (): JSX.Element => {
         return (
             <>
                 <Styles.Wrapper>
-                    <TradeOverviewBanner title="Trade Portfolio Overview" content={portfolioOverview} />
+                    <TradeOverviewBanner
+                        title="Trade Portfolio Overview"
+                        content={portfolioOverview}
+                        account={!!account}
+                    />
                     <HelpCard
                         badge="Roadmap"
                         title="Perpetual Pools V2 Roadmap"
