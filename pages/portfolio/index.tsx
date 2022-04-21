@@ -11,9 +11,11 @@ export default (() => {
     const router = useRouter();
 
     const onResize = useCallback((_width, height) => {
-        if (height > window.innerHeight * 2) {
-            const page = document.getElementsByClassName('page')[0];
+        const page = document.getElementsByClassName('page')[0];
+        if (height >= window.innerHeight * 2) {
             page.classList.add('faded-background');
+        } else {
+            page.classList.remove('faded-background');
         }
     }, []);
 

@@ -9,8 +9,6 @@ import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
 import * as Styles from './styles';
 import { OverviewPoolToken, TokenType, EscrowRowProps } from '../state';
 
-// const ArrowDown = '/img/general/caret-down-white.svg';
-
 export const EscrowTable = (({ rows, onClickCommitAction }) => {
     return (
         <>

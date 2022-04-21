@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { HiddenExpand as UnstyledHiddenExpand } from '~/components/General';
 import Button from '~/components/General/Button';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 import { TableRowCell } from '~/components/General/TWTable';
@@ -22,12 +23,16 @@ export const Wrapper = styled.div`
     }
 `;
 
+export const TitleContent = styled.div`
+    display: flex;
+    gap: 0.75rem;
+`;
+
 export const Title = styled.div`
     line-height: 150%;
     font-weight: 600;
     font-size: 20px;
     margin-top: 0.5rem;
-    margin-bottom: 6px;
     opacity: 1;
 `;
 
@@ -109,4 +114,39 @@ export const ActionsButton = styled(Button)`
     margin-left: 0.25rem;
     margin-right: 0.25rem;
     text-transform: uppercase;
+`;
+
+export const RowCount = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 0.7rem;
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 150%;
+    text-align: center;
+    width: 46px;
+    height: 44px;
+    background: #e0f2ff;
+    color: #3da8f5;
+    border: 1px solid #3da8f5;
+    box-sizing: border-box;
+    border-radius: 7px;
+`;
+
+export const DropdownArrow = styled.div<{
+    open: boolean;
+}>`
+    align-self: center;
+    margin-left: 1.5rem;
+    width: 20px;
+    height: 10px;
+    cursor: pointer;
+
+    transform: ${({ open }) => (open ? 'rotate(180deg)' : '0deg')};
+    transform-origin: center;
+    transition: transform 0.1s linear;
+`;
+
+export const HiddenExpand = styled(UnstyledHiddenExpand)`
+    margin: 0;
 `;

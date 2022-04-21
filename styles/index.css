@@ -300,3 +300,7 @@ html.theme-matrix {
     );
     background-size: 800px 104px;
 }
+
+.height-delay {
+    transition-delay: height 0.3s;
+}

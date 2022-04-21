@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useEscrowHoldings from '~/hooks/useEscrowHoldings';
 import { MarketFilterEnum } from '~/types/filters';
@@ -20,6 +20,10 @@ export const UnclaimedTokens = ({
     onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
 }): JSX.Element => {
     const escrowRows = useEscrowHoldings();
+    const totalClaimable = useMemo(
+        () => escrowRows.reduce((count, pool) => count + pool.numClaimable, 0),
+        [escrowRows],
+    );
 
     const escrowSearchFilter = (pool: EscrowRowProps): boolean => {
         const searchString = escrowSearch.toLowerCase();
@@ -34,7 +38,7 @@ export const UnclaimedTokens = ({
         <OverviewTable
             title="Unclaimed Tokens"
             subTitle="Your tokens, held with the Pool. Available to claim to a wallet at any time."
-            firstActionTitle="Market"
+            firstActionTitle="Markets"
             firstAction={
                 <MarketDropdown
                     market={escrowMarketFilter}
@@ -47,6 +51,7 @@ export const UnclaimedTokens = ({
                     setSearch={(search) => void dispatch({ type: 'setEscrowSearch', search })}
                 />
             }
+            rowCount={totalClaimable}
         >
             <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
         </OverviewTable>

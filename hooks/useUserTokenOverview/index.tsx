@@ -4,15 +4,22 @@ import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from
 import { TokenRowProps } from '~/archetypes/Portfolio//state';
 import { usePools } from '~/hooks/usePools';
 
-export default (() => {
+export const useUserTokenOverview = (): {
+    tokens: TokenRowProps[];
+    loading: boolean;
+} => {
     const { pools } = usePools();
     const [loading, setLoading] = useState<boolean>(true);
-    const [rows, setRows] = useState<TokenRowProps[]>([]);
+    const [tokens, setTokens] = useState<TokenRowProps[]>([]);
+    // const [tokensOverview, setTokensOverview] = useState<TokensOverview>({
+    // tokens: [],
+    // claimedCount: 0,
+    // });
 
     useEffect(() => {
         if (pools) {
             const poolValues = Object.values(pools);
-            const rows: TokenRowProps[] = [];
+            const tokens: TokenRowProps[] = [];
 
             poolValues.forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
@@ -26,8 +33,8 @@ export default (() => {
                 const shortTokenPrice = poolInstance.getShortTokenPrice();
                 const shortNotionalValue = calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance);
 
-                rows.push(
-                    {
+                if (!userBalances.shortToken.balance.eq(0)) {
+                    tokens.push({
                         name: shortToken.name,
                         poolAddress: address,
                         address: shortToken.address,
@@ -41,8 +48,10 @@ export default (() => {
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         entryPrice: userBalances.tradeStats.avgShortEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
-                    },
-                    {
+                    });
+                }
+                if (!userBalances.longToken.balance.eq(0)) {
+                    tokens.push({
                         name: longToken.name,
                         poolAddress: address,
                         address: longToken.address,
@@ -56,19 +65,18 @@ export default (() => {
                         effectiveGain: calcEffectiveLongGain(longBalance, longBalance, leverageBN).toNumber(),
                         entryPrice: userBalances.tradeStats.avgLongEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
-                    },
-                );
+                    });
+                }
             });
 
-            setRows(rows);
+            setTokens(tokens);
             setLoading(false);
         }
     }, [pools]);
     return {
-        rows,
+        tokens,
         loading,
     };
-}) as () => {
-    rows: TokenRowProps[];
-    loading: boolean;
 };
+
+export default useUserTokenOverview;

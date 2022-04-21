@@ -38,7 +38,10 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
 
     return (
         <HiddenContainer
-            className={classNames(className ?? '', 'rounded-md transition-all duration-300 ease-in-out')}
+            className={classNames(
+                className ?? '',
+                `rounded-md transition-all duration-300 ease-in-out ${open ? '' : 'delay-150'}`,
+            )}
             ref={main}
         >
             <div className="body" ref={ref}>
@@ -47,7 +50,7 @@ export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHe
                     enter="transition-opacity duration-300 delay-100"
                     enterFrom="opacity-0"
                     enterTo="opacity-100"
-                    leave="transition-opacity duration-300"
+                    leave="transition-opacity duration-300 delay-400"
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >

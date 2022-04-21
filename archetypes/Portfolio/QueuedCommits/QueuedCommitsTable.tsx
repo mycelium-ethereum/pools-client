@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
-import { CommitEnum } from '@tracer-protocol/pools-js';
+import React from 'react';
 import { Table, TableHeaderCell } from '~/components/General/TWTable';
 import { TableHeader } from '~/components/General/TWTable';
 import { QueuedCommit } from '~/types/commits';
@@ -7,50 +6,8 @@ import { QueuedCommitRow } from './QueuedCommitRow';
 
 import { NoEntries } from '../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
-import { CommitTypeFilter } from '../state';
 
-export const QueuedCommitsTable = ({
-    commits,
-    typeFilter,
-    searchFilter,
-}: {
-    commits: QueuedCommit[];
-    typeFilter: CommitTypeFilter;
-    searchFilter: string;
-}): JSX.Element => {
-    const searchFilterFunc = useCallback(
-        (commit: QueuedCommit): boolean => {
-            const searchString = searchFilter.toLowerCase();
-            return Boolean(
-                commit.tokenIn.symbol.toLowerCase().match(searchString) ||
-                    commit.tokenOut.symbol.toLowerCase().match(searchString),
-            );
-        },
-        [searchFilter],
-    );
-
-    const typeFilterFunc = useCallback(
-        (commit): boolean => {
-            switch (typeFilter) {
-                case CommitTypeFilter.Burn:
-                    return commit.type === CommitEnum.longBurn || commit.type === CommitEnum.shortBurn;
-                case CommitTypeFilter.Mint:
-                    return commit.type === CommitEnum.longMint || commit.type === CommitEnum.shortMint;
-                case CommitTypeFilter.Burn:
-                    return commit.type === CommitEnum.longBurnShortMint || commit.type === CommitEnum.shortBurnLongMint;
-                case CommitTypeFilter.All:
-                default:
-                    return true;
-            }
-        },
-        [typeFilter],
-    );
-
-    const filteredCommits = useMemo(
-        () => commits.filter(typeFilterFunc).filter(searchFilterFunc),
-        [commits, typeFilter, searchFilter],
-    );
-
+export const QueuedCommitsTable = ({ commits }: { commits: QueuedCommit[] }): JSX.Element => {
     return (
         <Table fullHeight={false}>
             <TableHeader>
@@ -73,10 +30,10 @@ export const QueuedCommitsTable = ({
                 </OverviewHeaderRow>
             </TableHeader>
             <tbody>
-                {filteredCommits.length === 0 ? (
+                {commits.length === 0 ? (
                     <NoEntries isQueued />
                 ) : (
-                    filteredCommits.map((commit) => <QueuedCommitRow key={commit.txnHash} {...commit} />)
+                    commits.map((commit) => <QueuedCommitRow key={commit.txnHash} {...commit} />)
                 )}
             </tbody>
         </Table>

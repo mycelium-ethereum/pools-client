@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { MarketFilterEnum } from '~/types/filters';
+import { generalMarketFilter } from '~/utils/filters';
 import { ClaimedTokensTable } from './ClaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { PortfolioAction, PortfolioState } from '../state';
+import { PortfolioAction, PortfolioState, TokenRowProps } from '../state';
 
 export const ClaimedTokens = ({
     claimedTokensMarketFilter,
@@ -18,7 +19,21 @@ export const ClaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
 }): JSX.Element => {
-    const { rows } = useUserTokenOverview();
+    const { tokens } = useUserTokenOverview();
+
+    const claimedSearchFilter = (token: TokenRowProps): boolean => {
+        const searchString = claimedTokensSearch.toLowerCase();
+        return Boolean(token.name.toLowerCase().match(searchString));
+    };
+
+    const filteredTokens = useMemo(
+        () =>
+            tokens
+                .filter((token) => generalMarketFilter(token.name, claimedTokensMarketFilter))
+                .filter(claimedSearchFilter),
+        [tokens, claimedTokensMarketFilter, claimedTokensSearch],
+    );
+
     return (
         <OverviewTable
             title="Claimed Tokens"
@@ -32,15 +47,15 @@ export const ClaimedTokens = ({
                     }
                 />
             }
-            secondActionTitle="Denote in"
             secondAction={
                 <OverviewTableSearch
                     search={claimedTokensSearch}
                     setSearch={(search) => void dispatch({ type: 'setClaimedTokensSearch', search })}
                 />
             }
+            rowCount={tokens.length}
         >
-            <ClaimedTokensTable rows={rows} onClickCommitAction={onClickCommitAction} />
+            <ClaimedTokensTable rows={filteredTokens} onClickCommitAction={onClickCommitAction} />
         </OverviewTable>
     );
 };

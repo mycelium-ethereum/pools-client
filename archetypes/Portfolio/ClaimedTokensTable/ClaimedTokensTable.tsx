@@ -26,17 +26,9 @@ export const ClaimedTokensTable = ({
                     </tr>
                 </TableHeader>
                 <tbody>
-                    {rows.map((token) => {
-                        if (!token.balance.eq(0)) {
-                            return (
-                                <ClaimedTokenRow
-                                    {...token}
-                                    key={token.address}
-                                    onClickCommitAction={onClickCommitAction}
-                                />
-                            );
-                        }
-                    })}
+                    {rows.map((token) => (
+                        <ClaimedTokenRow {...token} key={token.address} onClickCommitAction={onClickCommitAction} />
+                    ))}
                 </tbody>
             </Table>
             {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
