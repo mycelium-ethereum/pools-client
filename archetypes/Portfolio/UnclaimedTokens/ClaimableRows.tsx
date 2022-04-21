@@ -12,7 +12,7 @@ import { TokensNotional } from '../Tokens';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { settlementTokenSymbol: string }> = ({
     balance,
-    notionalValue,
+    leveragedNotionalValue,
     entryPrice,
     currentTokenPrice,
     onClickCommitAction,
@@ -54,7 +54,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 </div>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
-                <div>{`${notionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
+                <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
                 <ActionsButton

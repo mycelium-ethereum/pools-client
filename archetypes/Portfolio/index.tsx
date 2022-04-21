@@ -1,38 +1,25 @@
 import React, { useReducer, useState } from 'react';
-import { calcNotionalValue, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
-import useEscrowHoldings from '~/hooks/useEscrowHoldings';
-import usePendingCommits from '~/hooks/useQueuedCommits';
-import useUserTokenOverview from '~/hooks/useUserTokenOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
-import { MarketFilterEnum } from '~/types/filters';
 import { toApproxCurrency } from '~/utils/converters';
-import { marketFilter } from '~/utils/filters';
 
-import ClaimedTokensTable from './ClaimedTokensTable';
+import { ClaimedTokens } from './ClaimedTokensTable';
 import { ConnectWalletBanner } from './ConnectWalletBanner';
 import { emptyStateHelpCardContent } from './content';
-import EscrowTable from './EscrowTable';
 import { HelpCard } from './HelpCard';
-import { HistoricCommitsTable } from './HistoricCommits';
-import { OverviewTable } from './OverviewTable';
-import {
-    DenoteInDropDown,
-    MarketDropdown,
-    EscrowSearch,
-    CommitTypeDropdown,
-    QueuedCommitsSearch,
-} from './OverviewTable/Actions';
-import { QueuedCommitsTable } from './QueuedCommits';
+import HistoricCommits from './HistoricCommits';
+import QueuedCommits from './QueuedCommits';
 import { SkewCard } from './SkewCard';
-import { portfolioReducer, initialPortfolioState, EscrowRowProps, CommitTypeFilter } from './state';
+import { portfolioReducer, initialPortfolioState } from './state';
 import { Container } from './styles';
 import * as Styles from './styles';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
+import UnclaimedTokens from './UnclaimedTokens';
 
 export enum LoadingState {
     Idle = 0,
@@ -56,10 +43,7 @@ export const PortfolioPage = (): JSX.Element => {
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
 
-    const { rows } = useUserTokenOverview();
     const { rows: tokens } = useBrowsePools();
-    const escrowRows = useEscrowHoldings();
-    const commits = usePendingCommits();
 
     const onClickCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
         swapDispatch({ type: 'setSelectedPool', value: pool });
@@ -73,39 +57,11 @@ export const PortfolioPage = (): JSX.Element => {
     };
 
     const totalValuation = function () {
-        let total = 0;
-        rows.forEach((row) => {
-            total += row.balance.times(row.currentTokenPrice).toNumber();
-        });
-
-        escrowRows.forEach((pool) => {
-            const valueInEscrow = calcNotionalValue(
-                pool.claimableLongTokens.currentTokenPrice,
-                pool.claimableLongTokens.balance,
-            )
-                .plus(calcNotionalValue(pool.claimableShortTokens.currentTokenPrice, pool.claimableShortTokens.balance))
-                .plus(
-                    calcNotionalValue(
-                        pool.claimableSettlementTokens.currentTokenPrice,
-                        pool.claimableSettlementTokens.balance,
-                    ),
-                );
-            total += valueInEscrow.toNumber();
-        });
-
+        const total = 0;
         return total;
     };
 
     const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
-
-    const escrowSearchFilter = (pool: EscrowRowProps): boolean => {
-        const searchString = state.escrowSearch.toLowerCase();
-        return Boolean(pool.poolName.toLowerCase().match(searchString));
-    };
-
-    const filteredEscrowRows = escrowRows
-        .filter((pool: EscrowRowProps) => marketFilter(pool.poolName, state.escrowMarketFilter))
-        .filter(escrowSearchFilter);
 
     //TODO: calculate PnP and Net Acquisition Costs
     const portfolioOverview = [
@@ -165,94 +121,29 @@ export const PortfolioPage = (): JSX.Element => {
                         linkText="View V2 roadmap"
                     />
                 </Styles.Wrapper>
-                <OverviewTable
-                    title="Pending"
-                    subTitle="Your queued orders. Come back once they are processed to claim."
-                    firstActionTitle="Commit Type"
-                    firstAction={
-                        <CommitTypeDropdown
-                            selected={state.queuedCommitsFilter}
-                            setCommitTypeFilter={(v) =>
-                                void dispatch({ type: 'setQueuedCommitsFilter', filter: v as CommitTypeFilter })
-                            }
-                        />
-                    }
-                    secondAction={
-                        <QueuedCommitsSearch
-                            commitsSearch={state.queuedCommitsSearch}
-                            setCommitsSearch={(search) => void dispatch({ type: 'setQueuedCommitsSearch', search })}
-                        />
-                    }
-                >
-                    <QueuedCommitsTable
-                        commits={commits}
-                        typeFilter={state.queuedCommitsFilter}
-                        searchFilter={state.queuedCommitsSearch}
-                    />
-                </OverviewTable>
-                <OverviewTable
-                    title="Claimed Tokens"
-                    subTitle="Pools tokens in your wallet."
-                    firstActionTitle="Markets"
-                    firstAction={
-                        <MarketDropdown
-                            market={state.claimedTokensMarketFilter}
-                            setMarket={(m) =>
-                                void dispatch({ type: 'setClaimedTokensMarketFilter', market: m as MarketFilterEnum })
-                            }
-                        />
-                    }
-                    secondActionTitle="Denote in"
-                    secondAction={<DenoteInDropDown state={state} dispatch={dispatch} />}
-                >
-                    <ClaimedTokensTable
-                        rows={rows}
-                        onClickCommitAction={onClickCommitAction}
-                        denotedIn={state.positionsDenotedIn}
-                    />
-                </OverviewTable>
-                <OverviewTable
-                    title="Unclaimed Tokens"
-                    subTitle="Your tokens, held with the Pool. Available to claim to a wallet at any time."
-                    firstActionTitle="Market"
-                    firstAction={
-                        <MarketDropdown
-                            market={state.escrowMarketFilter}
-                            setMarket={(m) =>
-                                void dispatch({ type: 'setEscrowMarketFilter', market: m as MarketFilterEnum })
-                            }
-                        />
-                    }
-                    secondAction={<EscrowSearch state={state} dispatch={dispatch} />}
-                >
-                    <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
-                </OverviewTable>
+                <QueuedCommits
+                    queuedCommitsFilter={state.queuedCommitsFilter}
+                    queuedCommitsSearch={state.queuedCommitsSearch}
+                    dispatch={dispatch}
+                />
+                <ClaimedTokens
+                    claimedTokensMarketFilter={state.claimedTokensMarketFilter}
+                    claimedTokensSearch={state.claimedTokensSearch}
+                    dispatch={dispatch}
+                    onClickCommitAction={onClickCommitAction}
+                />
+                <UnclaimedTokens
+                    escrowSearch={state.escrowSearch}
+                    escrowMarketFilter={state.escrowMarketFilter}
+                    dispatch={dispatch}
+                    onClickCommitAction={onClickCommitAction}
+                />
                 <Divider text="Historical Data" />
-                <OverviewTable
-                    title="Commit History"
-                    subTitle="Your past orders."
-                    firstActionTitle="Commit Type"
-                    firstAction={
-                        <CommitTypeDropdown
-                            selected={state.historicCommitsFilter}
-                            setCommitTypeFilter={(v) =>
-                                void dispatch({ type: 'setHistoricCommitsFilter', filter: v as CommitTypeFilter })
-                            }
-                        />
-                    }
-                    secondAction={
-                        <QueuedCommitsSearch
-                            commitsSearch={state.historicCommitsSearch}
-                            setCommitsSearch={(search) => void dispatch({ type: 'setHistoricCommitsSearch', search })}
-                        />
-                    }
-                >
-                    <HistoricCommitsTable
-                        typeFilter={state.historicCommitsFilter}
-                        searchFilter={state.historicCommitsSearch}
-                    />
-                </OverviewTable>
-                <Styles.BackgroundFade />
+                <HistoricCommits
+                    historicCommitsFilter={state.historicCommitsFilter}
+                    historicCommitsSearch={state.historicCommitsSearch}
+                    dispatch={dispatch}
+                />
             </>
         );
     };

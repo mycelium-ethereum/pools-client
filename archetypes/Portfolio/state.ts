@@ -48,7 +48,7 @@ export type OverviewAsset = {
     decimals: number;
     currentTokenPrice: BigNumber;
     type: TokenType;
-    notionalValue: BigNumber;
+    leveragedNotionalValue: BigNumber;
 };
 
 export type OverviewPoolToken = {

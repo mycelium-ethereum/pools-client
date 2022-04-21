@@ -100,22 +100,12 @@ export const MarketDropdown = ({
     );
 };
 
-export const EscrowSearch = ({ state, dispatch }: TableProps): JSX.Element => {
-    return (
-        <SearchInput
-            placeholder="Search"
-            value={state.escrowSearch}
-            onChange={(search: string) => dispatch({ type: 'setEscrowSearch', search })}
-        />
-    );
-};
-
-export const QueuedCommitsSearch = ({
-    commitsSearch,
-    setCommitsSearch,
+export const OverviewTableSearch = ({
+    search,
+    setSearch,
 }: {
-    commitsSearch: string;
-    setCommitsSearch: (v: string) => void;
+    search: string;
+    setSearch: (v: string) => void;
 }): JSX.Element => {
-    return <SearchInput placeholder="Search" value={commitsSearch} onChange={setCommitsSearch} />;
+    return <SearchInput placeholder="Search" value={search} onChange={setSearch} />;
 };

@@ -18,7 +18,6 @@ export const QueuedCommitsTable = ({
     typeFilter: CommitTypeFilter;
     searchFilter: string;
 }): JSX.Element => {
-
     const searchFilterFunc = useCallback(
         (commit: QueuedCommit): boolean => {
             const searchString = searchFilter.toLowerCase();
@@ -77,9 +76,7 @@ export const QueuedCommitsTable = ({
                 {filteredCommits.length === 0 ? (
                     <NoEntries isQueued />
                 ) : (
-                    filteredCommits.map((commit) => (
-                        <QueuedCommitRow key={commit.txnHash} {...commit} />
-                    ))
+                    filteredCommits.map((commit) => <QueuedCommitRow key={commit.txnHash} {...commit} />)
                 )}
             </tbody>
         </Table>

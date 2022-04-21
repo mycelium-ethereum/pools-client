@@ -3,16 +3,14 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
-import { DenotedInEnum, TokenRowProps } from '../state';
+import { TokenRowProps } from '../state';
 
 export const ClaimedTokensTable = ({
     rows,
     onClickCommitAction,
-    denotedIn,
 }: {
     rows: TokenRowProps[];
     onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-    denotedIn: DenotedInEnum;
 }): JSX.Element => {
     return (
         <>
@@ -35,7 +33,6 @@ export const ClaimedTokensTable = ({
                                     {...token}
                                     key={token.address}
                                     onClickCommitAction={onClickCommitAction}
-                                    denotedIn={denotedIn}
                                 />
                             );
                         }
