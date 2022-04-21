@@ -4,6 +4,7 @@ import Icon from '@ant-design/icons';
 import { Transition } from '@headlessui/react';
 import styled from 'styled-components';
 
+import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import Folder from '~/public/img/general/folder.svg';
 import TracerBox from '~/public/img/logos/tracer/tracer_icon_box.svg';
 import DiscordLogo from '~/public/img/socials/discord.svg';
@@ -42,8 +43,6 @@ const Icons = [
         logo: <DiscordLogo className={icon} />,
     },
 ];
-
-const ArrowDown = '/img/general/caret-down-white.svg';
 
 const DropdownMenu: React.FC = () => {
     const [open, setOpen] = useState(false);
@@ -91,9 +90,11 @@ const DropdownMenu: React.FC = () => {
                     setOpen(!open);
                 }}
             >
-                <img
-                    className={classNames('h-auto w-4 transform transition-all duration-500', open ? 'rotate-180' : '')}
-                    src={ArrowDown}
+                <ArrowDown
+                    className={classNames(
+                        'h-auto w-4 transform text-white transition-all duration-500',
+                        open ? 'rotate-180' : '',
+                    )}
                     alt="Dropdown toggle"
                 />
             </button>
