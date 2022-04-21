@@ -131,6 +131,7 @@ export const DropdownButton = styled(Button)`
     width: 44px !important;
     height: 35px;
     text-align: center;
+    margin: 0 auto;
 `;
 
 export const DropdownArrow = styled.img`

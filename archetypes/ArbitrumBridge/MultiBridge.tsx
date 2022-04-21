@@ -285,7 +285,7 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                                 value={selectedAssetIndex}
                                 size="xl"
                                 color="tracer"
-                                fullWidthButtons={true}
+                                fullWidth={true}
                                 onClick={(val) => {
                                     setSelectedAssetIndex(val);
                                 }}
