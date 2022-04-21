@@ -2,8 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import { Table, TableHeaderCell } from '~/components/General/TWTable';
 import { TableHeader } from '~/components/General/TWTable';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
 import { QueuedCommitRow } from './QueuedCommitRow';
 
@@ -20,7 +18,6 @@ export const QueuedCommitsTable = ({
     typeFilter: CommitTypeFilter;
     searchFilter: string;
 }): JSX.Element => {
-    const provider = useStore(selectProvider);
 
     const searchFilterFunc = useCallback(
         (commit: QueuedCommit): boolean => {
@@ -81,7 +78,7 @@ export const QueuedCommitsTable = ({
                     <NoEntries isQueued />
                 ) : (
                     filteredCommits.map((commit) => (
-                        <QueuedCommitRow key={commit.txnHash} provider={provider ?? null} {...commit} />
+                        <QueuedCommitRow key={commit.txnHash} {...commit} />
                     ))
                 )}
             </tbody>

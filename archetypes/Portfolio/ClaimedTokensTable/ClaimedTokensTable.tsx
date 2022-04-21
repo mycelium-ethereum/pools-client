@@ -2,8 +2,6 @@ import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
 import { DenotedInEnum, TokenRowProps } from '../state';
 
@@ -16,7 +14,6 @@ export const ClaimedTokensTable = ({
     onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
     denotedIn: DenotedInEnum;
 }): JSX.Element => {
-    const provider = useStore(selectProvider);
     return (
         <>
             <Table fullHeight={false}>
@@ -32,12 +29,11 @@ export const ClaimedTokensTable = ({
                 </TableHeader>
                 <tbody>
                     {rows.map((token) => {
-                        if (!token.holdings.eq(0)) {
+                        if (!token.balance.eq(0)) {
                             return (
                                 <ClaimedTokenRow
                                     {...token}
                                     key={token.address}
-                                    provider={provider ?? null}
                                     onClickCommitAction={onClickCommitAction}
                                     denotedIn={denotedIn}
                                 />

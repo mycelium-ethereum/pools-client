@@ -6,8 +6,6 @@ import { FullSpanCell, Table } from '~/components/General/TWTable';
 import { TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { useHistoricCommits } from '~/hooks/useHistoricCommits';
 import { PAGE_ENTRIES } from '~/hooks/usePagination';
-import { useStore } from '~/store/main';
-import { selectProvider } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';
 import { HistoricCommitRow } from './HisoricCommitRows';
 import * as Styles from './styles';
@@ -22,7 +20,6 @@ export const HistoricCommitsTable = ({
     typeFilter: CommitTypeFilter;
     searchFilter: string;
 }): JSX.Element => {
-    const provider = useStore(selectProvider);
     const { loading, tradeHistory, totalRecords, page, setPage } = useHistoricCommits(typeFilter);
 
     const searchFilterFunc = useCallback(
@@ -96,7 +93,7 @@ export const HistoricCommitsTable = ({
                             <NoEntries />
                         ) : (
                             filteredCommits.map((commit) => (
-                                <HistoricCommitRow key={commit.txnHashIn} provider={provider} {...commit} />
+                                <HistoricCommitRow key={commit.txnHashIn} {...commit} />
                             ))
                         )}
                     </tbody>

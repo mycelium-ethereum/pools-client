@@ -1,5 +1,4 @@
 import React from 'react';
-import { ethers } from 'ethers';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
@@ -9,9 +8,7 @@ import { TradeHistory } from '~/types/commits';
 import { Amount, TokenPrice, TokenSymbol } from '../Market';
 import { ArrowRight, OverviewTableRowCell } from '../OverviewTable/styles';
 
-type HistoricCommitRowProps = TradeHistory & {
-    provider?: ethers.providers.JsonRpcProvider;
-};
+type HistoricCommitRowProps = TradeHistory;
 
 export const HistoricCommitRow = ({
     txnHashIn,
@@ -27,7 +24,6 @@ export const HistoricCommitRow = ({
     commitType,
     timeString,
     dateString,
-    provider,
     txnHashOut,
     fee,
 }: HistoricCommitRowProps): JSX.Element => (
@@ -62,7 +58,6 @@ export const HistoricCommitRow = ({
         </OverviewTableRowCell>
         <OverviewTableRowCell>
             <Actions
-                provider={provider as ethers.providers.JsonRpcProvider}
                 token={{
                     address: tokenInAddress,
                     decimals: tokenDecimals,

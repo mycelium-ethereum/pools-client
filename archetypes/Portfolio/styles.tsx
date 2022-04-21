@@ -47,3 +47,8 @@ export const BackgroundFade = styled.div`
         }
     }};
 `;
+
+export const InnerCellSubText = styled.div`
+    font-size: 12px;
+    color: #71717a;
+`;

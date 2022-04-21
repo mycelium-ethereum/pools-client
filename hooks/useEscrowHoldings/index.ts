@@ -33,6 +33,8 @@ export default (() => {
 
                 const claimableLongTokens = {
                     symbol: longToken.symbol,
+                    address: longToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.longTokens,
                     currentTokenPrice: nextLongTokenPrice,
                     type: TokenType.Long,
@@ -42,6 +44,8 @@ export default (() => {
                 };
                 const claimableShortTokens = {
                     symbol: shortToken.symbol,
+                    address: shortToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.shortTokens,
                     currentTokenPrice: nextShortTokenPrice,
                     type: TokenType.Short,
@@ -51,6 +55,8 @@ export default (() => {
                 };
                 const claimableSettlementTokens = {
                     symbol: settlementToken.symbol,
+                    address: settlementToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.settlementTokens,
                     currentTokenPrice: settlementTokenPrice,
                     type: TokenType.Settlement,

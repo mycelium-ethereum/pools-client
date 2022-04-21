@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Logo } from '~/components/General';
 import Button from '~/components/General/Button';
 import { FullSpanCell } from '~/components/General/TWTable';
+import { Theme } from '~/store/ThemeSlice/themes';
 import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.div`
@@ -46,20 +47,20 @@ const MARKET_COLORS: Record<
     string,
     {
         backgroundColor: string;
-        buttonBorderColor: string;
+        borderColor: string;
     }
 > = {
     ETH: {
         backgroundColor: 'rgba(95, 102, 139, 0.3)',
-        buttonBorderColor: 'rgb(95, 102, 139)',
+        borderColor: 'rgb(95, 102, 139)',
     },
     BTC: {
         backgroundColor: 'rgba(247, 147, 26, 0.3)',
-        buttonBorderColor: 'rgb(95, 102, 139)',
+        borderColor: 'rgb(95, 102, 139)',
     },
     LINK: {
         backgroundColor: 'rgba(55, 91, 210, 0.3)',
-        buttonBorderColor: 'rgb(55, 91, 210)',
+        borderColor: 'rgb(55, 91, 210)',
     },
 };
 
@@ -67,12 +68,16 @@ export const PoolTableRow = styled.tr<{
     marketTicker: string;
 }>`
     background: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.backgroundColor ?? 'auto'};
+    border-bottom: 1px solid ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.borderColor ?? 'auto'};
+    td > {
+        padding: 0.5rem 1rem;
+    }
 `;
 
 export const PoolTableRowCell = styled.td<{
     variant?: 'title' | 'buttons';
 }>`
-    padding: 1rem;
+    padding: 0.5rem 1rem;
     ${({ variant }) => {
         switch (variant) {
             case 'title':
@@ -83,11 +88,11 @@ export const PoolTableRowCell = styled.td<{
     }};
 `;
 
-export const ButtonCell = styled(FullSpanCell)`
-    padding: 1rem;
+export const PoolRowButtonCell = styled(FullSpanCell)`
+    padding: 0 1rem;
 `;
 
-export const Buttons = styled.div`
+export const PoolRowButtons = styled.div`
     display: flex;
     justify-content: end;
 `;
@@ -96,14 +101,24 @@ export const ClaimButton = styled(Button)<{
     marketTicker: string;
 }>`
     height: 35px;
-    font-size: 12px
+    font-size: 12px;
+    font-weight: 600;
     margin-right: 0.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: ${({ theme }) => {
+        switch (theme.theme) {
+            case Theme.Light:
+                return '#374151';
+            default:
+                return '#fff';
+        }
+    }};
     border-width: 1px;
     border-style: solid;
-    border-color: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.buttonBorderColor ?? 'auto'};
+    border-color: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.borderColor ?? 'auto'};
+    border-radius: 7px !important;
     background: rgba(255, 255, 255, 0.5);
 `;
 
@@ -132,10 +147,6 @@ export const DropdownArrow = styled.img`
 
 // ROWS
 export const InnerText = styled.div`
-    /* text-base/font-normal */
-    font-family: Source Sans Pro, sans-serif;
-    font-style: normal;
-    font-weight: normal;
     font-size: 16px;
     line-height: 150%;
 
@@ -143,16 +154,7 @@ export const InnerText = styled.div`
         opacity: 0.8;
     }
 `;
-
-export const EscrowButton = styled(Button)`
-    border: 0;
-    width: 70px !important;
-    padding: 8px 0 !important;
-    text-transform: uppercase;
-    &:first-child {
-        margin-right: 0.5rem;
-    }
-`;
+export const SubText = styled.div``;
 
 export const TokenType = styled.div.attrs<{ type: TokenTypeEnum }>((props) => ({
     type: props.type,

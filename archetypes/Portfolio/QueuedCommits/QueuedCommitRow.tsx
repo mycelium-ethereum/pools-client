@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
@@ -10,16 +9,13 @@ import { ReceiveIn } from './ReceiveIn';
 import { Amount, TokenPrice, TokenSymbol } from '../Market';
 import { ArrowRight, OverviewTableRowCell } from '../OverviewTable/styles';
 
-type QueuedCommitRowProps = QueuedCommit & {
-    provider: ethers.providers.JsonRpcProvider | null;
-};
+type QueuedCommitRowProps = QueuedCommit;
 
 export const QueuedCommitRow = ({
     tokenIn,
     tokenOut,
     txnHash,
     type,
-    provider,
     expectedExecution,
 }: QueuedCommitRowProps): JSX.Element => {
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
@@ -61,7 +57,6 @@ export const QueuedCommitRow = ({
             <OverviewTableRowCell>
                 <Actions
                     token={tokenOut}
-                    provider={provider}
                     arbiscanTarget={{
                         type: BlockExplorerAddressType.txn,
                         target: txnHash,

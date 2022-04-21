@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Button from '~/components/General/Button';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 import { TableRowCell } from '~/components/General/TWTable';
 import ArrowRight_ from '~/public/img/general/arrow-right.svg';
@@ -99,4 +100,13 @@ export const OverviewHeaderRow = styled.tr`
 export const ActionsCell = styled(TableRowCell)`
     display: flex;
     justify-content: end;
+`;
+
+export const ActionsButton = styled(Button)`
+    border: 0;
+    width: 70px !important;
+    padding: 8px 0 !important;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+    text-transform: uppercase;
 `;

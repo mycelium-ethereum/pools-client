@@ -21,49 +21,42 @@ export enum TokenType {
     Settlement = 'Settlement',
 }
 
-export type TokenRowProps = {
-    poolAddress: string;
-    address: string;
+export type TokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     name: string;
-    decimals: number;
-    symbol: string;
-    side: number;
-    holdings: BigNumber;
-    price: BigNumber;
-    notionalValue: BigNumber;
-    deposits: BigNumber; // amount of USDC deposited
+    poolAddress: string;
+    settlementTokenSymbol: string;
     oraclePrice: BigNumber;
     effectiveGain: number;
-    acquisitionCost: BigNumber;
-    pnl: BigNumber;
 };
 
 export interface EscrowRowProps {
     poolName: string; // pool name
     poolAddress: string;
     marketTicker: LogoTicker;
-    claimableLongTokens: ClaimablePoolToken;
-    claimableShortTokens: ClaimablePoolToken;
-    claimableSettlementTokens: ClaimableAsset;
+    claimableLongTokens: OverviewPoolToken;
+    claimableShortTokens: OverviewPoolToken;
+    claimableSettlementTokens: OverviewAsset;
     claimableSum: BigNumber;
     numClaimable: number;
     onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
 }
 
-export type ClaimableAsset = {
+export type OverviewAsset = {
     symbol: string;
     balance: BigNumber;
+    address: string;
+    decimals: number;
     currentTokenPrice: BigNumber;
     type: TokenType;
     notionalValue: BigNumber;
 };
 
-export type ClaimablePoolToken = {
+export type OverviewPoolToken = {
     entryPrice: BigNumber;
     side: SideEnum;
-} & ClaimableAsset;
+} & OverviewAsset;
 
-export type ClaimablePoolTokenRowProps = ClaimablePoolToken & {
+export type ClaimablePoolTokenRowProps = OverviewPoolToken & {
     poolAddress: EscrowRowProps['poolAddress'];
     onClickCommitAction: EscrowRowProps['onClickCommitAction'];
 };

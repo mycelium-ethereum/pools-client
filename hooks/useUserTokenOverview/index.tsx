@@ -21,15 +21,8 @@ export default (() => {
                     poolInstance;
                 const leverageBN = new BigNumber(leverage);
 
-                const longAquisitionCost = userBalances.tradeStats.avgLongEntryPriceWallet.times(
-                    userBalances.longToken.balance,
-                );
                 const longTokenPrice = poolInstance.getLongTokenPrice();
                 const longNotionalValue = calcNotionalValue(longTokenPrice, userBalances.longToken.balance);
-
-                const shortAquisitionCost = userBalances.tradeStats.avgShortEntryPriceWallet.times(
-                    userBalances.shortToken.balance,
-                );
                 const shortTokenPrice = poolInstance.getShortTokenPrice();
                 const shortNotionalValue = calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance);
 
@@ -41,14 +34,13 @@ export default (() => {
                         decimals: shortToken.decimals,
                         symbol: shortToken.symbol,
                         side: shortToken.side,
-                        price: poolInstance.getShortTokenPrice(),
-                        holdings: userBalances.shortToken.balance,
+                        currentTokenPrice: poolInstance.getShortTokenPrice(),
+                        balance: userBalances.shortToken.balance,
                         notionalValue: shortNotionalValue,
-                        deposits: new BigNumber(0),
                         oraclePrice: oraclePrice,
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
-                        acquisitionCost: shortAquisitionCost,
-                        pnl: shortNotionalValue.minus(shortAquisitionCost),
+                        entryPrice: userBalances.tradeStats.avgShortEntryPriceWallet,
+                        settlementTokenSymbol: poolInstance.settlementToken.symbol,
                     },
                     {
                         name: longToken.name,
@@ -57,14 +49,13 @@ export default (() => {
                         decimals: longToken.decimals,
                         symbol: longToken.symbol,
                         side: longToken.side,
-                        price: poolInstance.getLongTokenPrice(),
-                        holdings: userBalances.longToken.balance,
+                        currentTokenPrice: poolInstance.getLongTokenPrice(),
+                        balance: userBalances.longToken.balance,
                         notionalValue: longNotionalValue,
-                        deposits: new BigNumber(0),
                         oraclePrice: oraclePrice,
                         effectiveGain: calcEffectiveLongGain(longBalance, longBalance, leverageBN).toNumber(),
-                        acquisitionCost: longAquisitionCost,
-                        pnl: longNotionalValue.minus(longAquisitionCost),
+                        entryPrice: userBalances.tradeStats.avgLongEntryPriceWallet,
+                        settlementTokenSymbol: poolInstance.settlementToken.symbol,
                     },
                 );
             });

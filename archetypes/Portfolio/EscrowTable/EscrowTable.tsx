@@ -7,7 +7,7 @@ import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
 import * as Styles from './styles';
-import { ClaimablePoolToken, TokenType, EscrowRowProps } from '../state';
+import { OverviewPoolToken, TokenType, EscrowRowProps } from '../state';
 
 // const ArrowDown = '/img/general/caret-down-white.svg';
 
@@ -75,15 +75,15 @@ const PoolRow: React.FC<EscrowRowProps> = ({
                     <Logo size="lg" ticker={marketTicker} />
                     <Styles.PoolName>{poolName}</Styles.PoolName>
                 </Styles.PoolTableRowCell>
-                <Styles.ButtonCell>
-                    <Styles.Buttons>
+                <Styles.PoolRowButtonCell>
+                    <Styles.PoolRowButtons>
                         <Styles.ClaimButton marketTicker={marketTicker} onClick={() => claim(poolAddress)}>
                             CLAIM ALL
                             <Styles.ClaimButtonLogo size="sm" ticker={marketTicker} />
                             {poolName}
                         </Styles.ClaimButton>
-                    </Styles.Buttons>
-                </Styles.ButtonCell>
+                    </Styles.PoolRowButtons>
+                </Styles.PoolRowButtonCell>
             </Styles.PoolTableRow>
             {[claimableLongTokens, claimableShortTokens, claimableSettlementTokens].map((claimableAsset) => {
                 if (claimableAsset.type === TokenType.Settlement) {
@@ -100,9 +100,10 @@ const PoolRow: React.FC<EscrowRowProps> = ({
                         !claimableAsset.balance.eq(0) && (
                             <ClaimablePoolTokenRow
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
-                                {...(claimableAsset as ClaimablePoolToken)}
                                 poolAddress={poolAddress}
                                 onClickCommitAction={onClickCommitAction}
+                                settlementTokenSymbol={claimableSettlementTokens.symbol}
+                                {...(claimableAsset as OverviewPoolToken)}
                             />
                         )
                     );

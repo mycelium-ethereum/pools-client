@@ -1,15 +1,37 @@
 import React, { useState } from 'react';
-import { ethers } from 'ethers';
 import { PlusOutlined } from '@ant-design/icons';
 import { Popover } from 'react-tiny-popover';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import More from '~/public/img/general/more.svg';
+import { useStore } from '~/store/main';
+import { selectProvider } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { openBlockExplorer } from '~/utils/blockExplorers';
 import { watchAsset } from '~/utils/rpcMethods';
 
-export default (({ provider, token, arbiscanTarget, otherActions }) => {
+export const TokenActions = ({
+    token,
+    arbiscanTarget,
+    otherActions,
+}: {
+    token: {
+        address: string;
+        symbol: string;
+        decimals: number;
+    };
+    arbiscanTarget?: {
+        type: BlockExplorerAddressType;
+        target: string;
+    };
+    otherActions?: {
+        type: BlockExplorerAddressType;
+        target: string;
+        logo: LogoTicker;
+        text: string;
+    }[];
+}): JSX.Element => {
+    const provider = useStore(selectProvider);
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     return (
@@ -75,21 +97,5 @@ export default (({ provider, token, arbiscanTarget, otherActions }) => {
             </div>
         </Popover>
     );
-}) as React.FC<{
-    provider: ethers.providers.JsonRpcProvider | null;
-    token: {
-        address: string;
-        symbol: string;
-        decimals: number;
-    };
-    arbiscanTarget?: {
-        type: BlockExplorerAddressType;
-        target: string;
-    };
-    otherActions?: {
-        type: BlockExplorerAddressType;
-        target: string;
-        logo: LogoTicker;
-        text: string;
-    }[];
-}>;
+};
+export default TokenActions;

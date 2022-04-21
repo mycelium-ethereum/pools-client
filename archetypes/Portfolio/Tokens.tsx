@@ -1,6 +1,7 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import { toApproxCurrency } from '~/utils/converters';
+import { InnerCellSubText } from './styles';
 
 export const TokensAt = ({
     amount,
@@ -13,26 +14,26 @@ export const TokensAt = ({
 }): JSX.Element => (
     <>
         <div>{amount.toFixed(2)} tokens</div>
-        <div className="text-cool-gray-500">
+        <InnerCellSubText>
             at {toApproxCurrency(price)} {tokenSymbol}/token
-        </div>
+        </InnerCellSubText>
     </>
 );
 
 export const TokensNotional = ({
     amount,
     price,
-    tokenSymbol,
+    settlementTokenSymbol,
 }: {
     amount: BigNumber;
     price: BigNumber;
-    tokenSymbol: string;
+    settlementTokenSymbol: string;
 }): JSX.Element => (
     <>
-        <div>{amount.toFixed(2)} tokens</div>
-        <div className="text-cool-gray-500">
-            {toApproxCurrency(price.times(amount))} {tokenSymbol}
-        </div>
+        <div>{`${amount.times(price).toFixed(3)} ${settlementTokenSymbol}`}</div>
+        <InnerCellSubText>
+            {`${amount.toFixed(3)} tokens at ${price.toFixed(2)} ${settlementTokenSymbol}/token`}
+        </InnerCellSubText>
     </>
 );
 

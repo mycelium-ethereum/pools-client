@@ -1,99 +1,123 @@
 import React from 'react';
-import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '~/archetypes/Pools/state';
-import { TableRowCell, TableRow } from '~/components/General/TWTable';
+import { TableRow } from '~/components/General/TWTable';
+import Actions from '~/components/TokenActions';
 import UpOrDown from '~/components/UpOrDown';
-import { toApproxCurrency } from '~/utils/converters';
-import { TokenType, InnerText, EscrowButton, Buttons } from './styles';
-import { ClaimableAsset, ClaimablePoolTokenRowProps } from '../state';
+import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { Market, SettlementToken } from '../Market';
+import { OverviewTableRowCell, ActionsCell, ActionsButton } from '../OverviewTable/styles';
+import { OverviewAsset, ClaimablePoolTokenRowProps } from '../state';
+import { TokensNotional } from '../Tokens';
 
-export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps> = ({
+export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { settlementTokenSymbol: string }> = ({
     balance,
     notionalValue,
     entryPrice,
     currentTokenPrice,
     onClickCommitAction,
-    type,
+    symbol,
+    address,
+    decimals,
     side,
     poolAddress,
+    settlementTokenSymbol,
 }) => {
-    // TODO assume this will want to be interchangeable with USD
-    const currency = 'USD';
-
     return (
         <TableRow>
-            <TableRowCell>
-                <TokenType type={type}>{type}</TokenType>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>{toApproxCurrency(currentTokenPrice.times(balance), 3)}</InnerText>
-                <InnerText className="sub-text">
-                    {`${balance.toFixed(3)} tokens at ${currentTokenPrice.toFixed(3)} ${currency}`}
-                </InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>{toApproxCurrency(entryPrice.times(balance), 3)}</InnerText>
-                <InnerText className="sub-text">
-                    {`${balance.toFixed(3)} tokens at ${entryPrice.toFixed(3)} ${currency}`}
-                </InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>
+            <OverviewTableRowCell>
+                <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <TokensNotional
+                    amount={currentTokenPrice.times(balance)}
+                    price={currentTokenPrice}
+                    settlementTokenSymbol={settlementTokenSymbol}
+                />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <TokensNotional
+                    amount={currentTokenPrice.times(balance)}
+                    price={currentTokenPrice}
+                    settlementTokenSymbol={settlementTokenSymbol}
+                />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <div>
                     <UpOrDown
-                        oldValue={entryPrice ? balance.times(entryPrice) : balance.times(currentTokenPrice)}
+                        oldValue={balance.times(entryPrice)}
                         newValue={balance.times(currentTokenPrice)}
                         deltaDenotation={DeltaEnum.Numeric}
-                        currency={currency}
+                        currency={settlementTokenSymbol}
                         showCurrencyTicker={true}
                     />
-                </InnerText>
-            </TableRowCell>
-            <TableRowCell>
-                <InnerText>{`${toApproxCurrency(notionalValue)} ${currency}`}</InnerText>
-            </TableRowCell>
-            {type !== TokenType.Settlement ? (
-                <TableRowCell>
-                    <Buttons>
-                        <EscrowButton
-                            size="xs"
-                            variant="primary-light"
-                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                        >
-                            Burn
-                        </EscrowButton>
-                        <EscrowButton
-                            size="xs"
-                            variant="primary-light"
-                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
-                        >
-                            Flip
-                        </EscrowButton>
-                    </Buttons>
-                </TableRowCell>
-            ) : null}
+                </div>
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <div>{`${notionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
+            </OverviewTableRowCell>
+            <ActionsCell>
+                <ActionsButton
+                    size="xs"
+                    variant="primary-light"
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                >
+                    Burn
+                </ActionsButton>
+                <ActionsButton
+                    size="xs"
+                    variant="primary-light"
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                >
+                    Flip
+                </ActionsButton>
+                <Actions
+                    token={{
+                        address,
+                        symbol,
+                        decimals,
+                    }}
+                    arbiscanTarget={{
+                        type: BlockExplorerAddressType.token,
+                        target: address,
+                    }}
+                />
+            </ActionsCell>
         </TableRow>
     );
 };
 
-export const ClaimableQuoteTokenRow: React.FC<ClaimableAsset> = ({ type, symbol, balance }) => (
+export const ClaimableQuoteTokenRow: React.FC<OverviewAsset> = ({ symbol, balance, address, decimals }) => (
     <TableRow>
-        <TableRowCell>
-            <TokenType type={type}>{type}</TokenType>
-        </TableRowCell>
-        <TableRowCell>
-            <InnerText>
+        <OverviewTableRowCell>
+            <SettlementToken tokenSymbol={symbol} />
+        </OverviewTableRowCell>
+        <OverviewTableRowCell>
+            <div>
                 {balance.toFixed(2)} {symbol}
-            </InnerText>
-        </TableRowCell>
-        <TableRowCell>
-            <InnerText>-</InnerText>
-        </TableRowCell>
-        <TableRowCell>
-            <InnerText>-</InnerText>
-        </TableRowCell>
-        <TableRowCell>
-            <InnerText>-</InnerText>
-        </TableRowCell>
-        <TableRowCell />
+            </div>
+        </OverviewTableRowCell>
+        <OverviewTableRowCell>
+            <div>-</div>
+        </OverviewTableRowCell>
+        <OverviewTableRowCell>
+            <div>-</div>
+        </OverviewTableRowCell>
+        <OverviewTableRowCell>
+            <div>-</div>
+        </OverviewTableRowCell>
+        <ActionsCell>
+            <Actions
+                token={{
+                    address,
+                    symbol,
+                    decimals,
+                }}
+                arbiscanTarget={{
+                    type: BlockExplorerAddressType.token,
+                    target: address,
+                }}
+            />
+        </ActionsCell>
     </TableRow>
 );

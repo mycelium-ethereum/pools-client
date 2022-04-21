@@ -75,7 +75,7 @@ export const PortfolioPage = (): JSX.Element => {
     const totalValuation = function () {
         let total = 0;
         rows.forEach((row) => {
-            total += row.holdings.times(row.price).toNumber();
+            total += row.balance.times(row.currentTokenPrice).toNumber();
         });
 
         escrowRows.forEach((pool) => {

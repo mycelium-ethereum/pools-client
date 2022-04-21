@@ -1,8 +1,9 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`
     margin: auto 0;
@@ -15,6 +16,10 @@ const MarketLogo = styled(Logo)`
     display: inline;
 `;
 
+const MarketText = styled.div`
+    display: flex;
+`;
+
 export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: boolean }): JSX.Element => {
     const leverage = tokenSymbol.split('-')[0][0];
     const marketName = tokenSymbol.split('-')[1];
@@ -23,18 +28,25 @@ export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: b
         <MarketContainer>
             <MarketLogo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
             <div>
-                <div className="flex">
+                <MarketText>
                     <div>
                         {leverage}-{marketSymbolToAssetName[marketName]}
                     </div>
                     &nbsp;
                     <div className={`${isLong ? 'green' : 'red'}`}>{isLong ? 'Long' : 'Short'}</div>
-                </div>
-                <div className="text-cool-gray-500">{tokenSymbol}</div>
+                </MarketText>
+                <InnerCellSubText>{tokenSymbol}</InnerCellSubText>
             </div>
         </MarketContainer>
     );
 };
+
+export const SettlementToken = ({ tokenSymbol }: { tokenSymbol: string }): JSX.Element => (
+    <MarketContainer>
+        <MarketLogo size="lg" ticker={tokenSymbol as LogoTicker} />
+        <div>{tokenSymbol}</div>
+    </MarketContainer>
+);
 
 export const MarketPrice = ({
     tokenSymbol,
