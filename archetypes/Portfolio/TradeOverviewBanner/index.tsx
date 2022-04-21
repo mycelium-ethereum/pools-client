@@ -57,7 +57,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                         <Styles.CardTitle>Unrealised Profit and Loss</Styles.CardTitle>
                         <Styles.CardValue>{toApproxCurrency(unrealisedProfit)}</Styles.CardValue>
                     </Styles.Card>
-                    <Styles.Card className={realisedProfit.gt(0) ? 'up' : realisedProfit.lt(0) ? 'down' : ''}>
+                    <Styles.Card className={realisedProfit.gt(0) ? 'up' : ''}>
                         <Styles.CardTitle>Realised Profit and Loss</Styles.CardTitle>
                         <Styles.CardValue>{toApproxCurrency(realisedProfit)}</Styles.CardValue>
                     </Styles.Card>
