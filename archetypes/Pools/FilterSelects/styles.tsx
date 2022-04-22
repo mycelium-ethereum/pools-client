@@ -32,7 +32,7 @@ export const Content = styled.div`
     flex-direction: column;
     border-radius: 7px;
     gap: 20px;
-    background-color: ${({ theme }) => theme['background-secondary']};
+    background-color: ${({ theme }) => theme.background.secondary};
     box-shadow: ${({ theme }) => {
         switch (theme.theme) {
             case Theme.Light:
@@ -71,13 +71,13 @@ export const FilterPopup = styled(TWPopup)`
     position: relative;
 
     .action-button {
-        border: 1px ${({ theme }) => theme.border} solid !important;
+        border: 1px ${({ theme }) => theme.border.primary} solid !important;
         font-size: 16px !important;
         font-weight: 400 !important;
         color: rgb(156 163 175);
         display: inline-flex;
         padding: 0.67rem 1rem;
-        background-color: ${({ theme }) => theme['button-bg']};
+        background-color: ${({ theme }) => theme.button.bg};
         white-space: nowrap;
         display: inline-flex;
         justify-content: center;
@@ -86,7 +86,7 @@ export const FilterPopup = styled(TWPopup)`
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
         &:hover {
-            background-color: ${({ theme }) => theme['button-bg-hover']};
+            background-color: ${({ theme }) => theme.button.hover};
         }
     }
 
@@ -103,13 +103,13 @@ export const FilterIcon = styled(FilterToggleIcon)`
 export const Heading = styled.h3`
     margin-bottom: 0.25rem;
     font-weight: 500;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
 `;
 
 export const Text = styled.div`
     margin-bottom: 0.7rem;
     font-weight: 500;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     font-size: 12px;
 `;
 

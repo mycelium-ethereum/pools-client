@@ -7,7 +7,7 @@ import { device } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
-    background: ${({ theme }) => theme['background-secondary']};
+    background: ${({ theme }) => theme.background.secondary};
     height: 220px;
     box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 10px 10px rgba(0, 0, 0, 0.04);
     border-radius: 7px;
@@ -116,7 +116,7 @@ export const TokenSelectRow = styled.tr<{
 `;
 
 export const TokenSelectHead = styled.thead`
-    background-color: ${({ theme }) => theme['border-secondary']};
+    background-color: ${({ theme }) => theme.border.secondary};
     padding: 1rem;
     text-align: center;
     border-radius: 7px;
@@ -131,12 +131,12 @@ export const HeaderCell = styled.th`
         right: 0;
         height: 70%;
         width: 1px;
-        background: ${({ theme }) => (theme.isDark ? '' : theme.text)};
+        background: ${({ theme }) => (theme.isDark ? '' : theme.fontColor.primary)};
     }
 `;
 
 export const TokenSelectBody = styled.tbody`
-    background-color: ${({ theme }) => (theme.isDark ? theme['button-bg'] : theme.backgroud)};
+    background-color: ${({ theme }) => (theme.isDark ? theme.button.bg : theme.backgroud)};
 `;
 
 interface TokenSelectCell {

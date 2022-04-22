@@ -26,7 +26,7 @@ export const InputContainer = styled.div<{
     padding: 0.75rem;
     border-width: 1px;
     border-radius: 0.25rem;
-    background: ${({ theme }) => theme['button-bg']};
+    background: ${({ theme }) => theme.button.bg}
     outline: 1px solid transparent;
 
     ${({ theme, variation }) => {
@@ -37,11 +37,11 @@ export const InputContainer = styled.div<{
                 return warningStyles;
             default:
                 return `
-                    border-color: ${theme.border};
-                    color: ${theme.text};
+                    border-color: ${theme.border.primary};
+                    color: ${theme.fontColor.primary};
                     opacity: 0.8;
                     &:focus-within {
-                        outline-color: ${theme.primary};
+                        outline-color: ${theme.colors.primary};
                     }
 
             `;
@@ -57,5 +57,5 @@ export const InnerInputText = styled.div`
     bottom: 0;
     right: 1.25rem;
     height: 50%;
-    color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.colors.primary};
 `;

@@ -16,7 +16,7 @@ export const ViewOnArbiscanOption = styled.a`
     display: flex;
     padding: 0.5rem 1rem;
     &:hover {
-        background: ${({ theme }) => theme['button-bg-hover']};
+        background: ${({ theme }) => theme.button.hover};
     }
 
     font-size: 0.875rem; /* 14px */

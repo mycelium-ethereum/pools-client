@@ -14,7 +14,7 @@ export const Header = styled.div`
 `;
 
 export const Heading = styled.h1`
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin: 2rem 0 0.5rem;
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -54,7 +54,7 @@ export const DataRow = styled.div`
     margin-bottom: 2.5rem;
     border-radius: 0.25rem;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    background-color: ${({ theme }) => theme.background};
+    background-color: ${({ theme }) => theme.background.primary};
 
     @media ${device.sm} {
         border-radius: 1rem;

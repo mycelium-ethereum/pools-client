@@ -13,15 +13,15 @@ interface SearchInputProps {
 export const InputWrapper = styled.div`
     position: relative;
     width: 100%;
-    border: 1px ${({ theme }) => theme.border} solid;
+    border: 1px ${({ theme }) => theme.border.primary} solid;
     border-radius: 0.375rem; /* 6px */
-    background-color: ${({ theme }) => theme['button-bg']};
-    color: ${({ theme }) => theme['text-secondary']};
+    background-color: ${({ theme }) => theme.button.bg}
+    color: ${({ theme }) => theme.fontColor.secondary};
     font-weight: 500;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 
     &:hover {
-        background-color: ${({ theme }) => theme['button-bg-hover']};
+        background-color: ${({ theme }) => theme.button.hover};
     }
 `;
 
@@ -50,11 +50,11 @@ export const InnerSearchInput = styled.input`
     // -1 px for the border top and bottom
     padding: calc(0.7rem - 1px) 1rem calc(0.7rem - 1px) 2.5rem;
 
-    border-color: ${({ theme }) => theme.border};
+    border-color: ${({ theme }) => theme.border.primary};
     border-radius: inherit;
 
     &:focus-visible {
-        outline: 1px solid ${({ theme }) => theme.primary};
+        outline: 1px solid ${({ theme }) => theme.colors.primary};
     }
 
     @media (${device.sm}) {
