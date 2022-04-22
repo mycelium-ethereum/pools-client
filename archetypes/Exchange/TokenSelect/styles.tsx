@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HiddenExpand, Logo } from '~/components/General';
 import { InnerSearchInput, InputWrapper } from '~/components/General/SearchInput';
 import { Table } from '~/components/General/TWTable';
-import { device } from '~/store/ThemeSlice/themes';
+import { device, Theme } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
@@ -107,7 +107,14 @@ export const TokenSelectRow = styled.tr<{
         right: 0;
         height: 40%;
         width: 1px;
-        background: ${({ theme }) => (theme.isDark ? '#F9FAFB' : '#E5E7EB')};
+        background: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#E5E7EB';
+                default:
+                    return '#F9FAFB';
+            }
+        }};
     }
 
     &:hover {
@@ -131,12 +138,12 @@ export const HeaderCell = styled.th`
         right: 0;
         height: 70%;
         width: 1px;
-        background: ${({ theme }) => (theme.isDark ? '' : theme.fontColor.primary)};
+        background: ${({ theme }) => theme.fontColor.primary};
     }
 `;
 
 export const TokenSelectBody = styled.tbody`
-    background-color: ${({ theme }) => (theme.isDark ? theme.button.bg : theme.backgroud)};
+    background-color: ${({ theme }) => theme.button.bg};
 `;
 
 interface TokenSelectCell {

@@ -20,7 +20,6 @@ export const StyledThemeProvider = ({ children }: { children: React.ReactNode })
             theme={{
                 ...baseTheme,
                 theme: theme,
-                isDark: theme === Theme.Dark || theme === Theme.Matrix,
             }}
         >
             {children}
