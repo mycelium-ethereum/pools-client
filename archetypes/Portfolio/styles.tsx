@@ -10,10 +10,11 @@ export const Container = styled(GeneralContainer)`
     gap: 24px;
 `;
 
-export const Wrapper = styled.div<{ isFullWidth?: boolean }>`
+export const Wrapper = styled.div`
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
+    height: 100%;
 `;
 
 export const Banner = styled.div`

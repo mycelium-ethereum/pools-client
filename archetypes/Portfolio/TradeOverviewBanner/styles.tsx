@@ -1,19 +1,20 @@
+import { ArrowDownOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Dropdown as UnstyledDropdown } from '~/components/General';
-import Arrow from '~/public/img/general/arrow.svg';
 import { device } from '~/store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
 
-    @media (min-width: 1200px) {
+    @media ${device.xl} {
         flex-direction: row;
     }
 `;
 
-export const Banner = styled.div<{ showFullWidth?: boolean }>`
+export const Banner = styled.div`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -24,17 +25,13 @@ export const Banner = styled.div<{ showFullWidth?: boolean }>`
     flex-direction: column;
     width: 100%;
 
-    @media (min-width: 1200px) {
+    @media ${device.xl} {
         width: 75%;
-    }
-`;
 
-export const Text = styled.div<{ isBold?: boolean; showOpacity?: boolean }>`
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin: 0;
-    font-weight: ${({ isBold }) => (isBold ? '700' : '600')};
-    opacity: ${({ showOpacity }) => (showOpacity ? '0.5' : '1')};
+        &.empty-state {
+            width: 50%;
+        }
+    }
 `;
 
 export const BannerContent = styled.div`
@@ -84,7 +81,10 @@ export const Dropdown = styled(UnstyledDropdown)`
 export const Currency = styled.div`
     font-size: 20px;
     font-weight: 700;
-    margin-right: 5px;
+
+    @media ${device.sm} {
+        margin-right: 5px;
+    }
 
     @media ${device.md} {
         font-size: 32px;
@@ -92,10 +92,11 @@ export const Currency = styled.div`
 `;
 
 export const Value = styled.div`
-    font-size: 40px;
+    font-size: 28px;
+    line-height: 28px;
     font-weight: 700;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     font-family: 'Inter', 'sans-serif';
 
     &.up {
@@ -106,50 +107,96 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
+    @media ${device.sm} {
+        font-size: 40px;
+        line-height: 40px;
+    }
+
     @media ${device.md} {
         font-size: 60px;
+        line-height: 60px;
     }
 
     @media ${device.lg} {
         font-size: 80px;
+        line-height: 80px;
     }
 `;
 
-export const ArrowIcon = styled(Arrow)`
-    // default is down
-    -webkit-transform: rotateX(180deg) scale(0.5);
-    transform: rotateX(180deg) scale(0.5);
-    path {
-        fill: #111928;
+export const ArrowIcon = styled(ArrowDownOutlined)<{ center?: boolean }>`
+    align-self: ${({ center }) => (center ? 'center' : 'flex-start')};
+    display: flex;
+
+    svg {
+        height: 28px;
+        width: 28px;
+        stroke-width: 35px;
+
+        stroke: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#374151';
+                default:
+                    '#fff';
+            }
+        }};
+
+        stroke-linecap: round;
+
+        @media ${device.sm} {
+            height: 40px;
+            width: 40px;
+        }
+
+        @media ${device.md} {
+            height: 60px;
+            width: 60px;
+        }
+
+        @media ${device.lg} {
+            height: 80px;
+            width: 80px;
+        }
+
+        ${({ center }) => {
+            if (center) {
+                return `
+                    height: 60px !important;
+                    width: 60px !important;
+                `;
+            }
+        }};
     }
+
+    path {
+        fill: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#374151';
+                default:
+                    '#fff';
+            }
+        }};
+    }
+
     &.down {
+        svg {
+            stroke: #ef4444;
+        }
         path {
             fill: #ef4444;
         }
     }
 
     &.up {
-        -webkit-transform: scale(0.5);
-        transform: scale(0.5);
+        -webkit-transform: rotateX(180deg);
+        transform: rotateX(180deg);
+
+        svg {
+            stroke: #0e9f6e;
+        }
         path {
             fill: #0e9f6e;
-        }
-    }
-
-    @media ${device.md} {
-        -webkit-transform: rotateX(180deg) scale(0.75);
-        transform: rotateX(180deg) scale(0.75);
-        &.up {
-            -webkit-transform: scale(0.75);
-            transform: scale(0.75);
-        }
-    }
-    @media ${device.lg} {
-        -webkit-transform: rotateX(180deg) scale(1);
-        transform: rotateX(180deg) scale(1);
-        &.up {
-            -webkit-transform: scale(1);
-            transform: scale(1);
         }
     }
 `;
@@ -164,7 +211,7 @@ export const CardContainer = styled.div`
         background-color: light-blue;
     }
 
-    @media (min-width: 1200px) {
+    @media ${device.xl} {
         flex-direction: column;
         width: 25%;
     }
@@ -189,9 +236,24 @@ export const Card = styled.div`
 
     background: rgba(243, 244, 246, 0.05);
     border: 1px solid #6b7280;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+
+    &.arrow {
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        flex-direction: row;
+        justify-content: space-between;
+    }
 
     &.down {
-        background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%), rgba(255, 77, 93, 0.2);
+        background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%),
+            rgba(255, 77, 93, 0.2);
         border: 1px solid #ef4444;
         ${CardTitle} {
             color: #ef4444;
@@ -201,7 +263,8 @@ export const Card = styled.div`
         }
     }
     &.up {
-        background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%), rgba(14, 159, 110, 0.2);
+        background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%),
+            rgba(14, 159, 110, 0.2);
         border: 1px solid #0e9f6e;
         ${CardTitle} {
             color: #0e9f6e;
@@ -215,7 +278,7 @@ export const Card = styled.div`
         width: 50%;
     }
 
-    @media (min-width: 1024px) {
+    @media ${device.lg} {
         width: 100%;
     }
 `;

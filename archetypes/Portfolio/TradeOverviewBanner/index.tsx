@@ -1,12 +1,14 @@
 import React from 'react';
-import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
+import { ConnectWalletBanner } from '../ConnectWalletBanner';
 import { PortfolioOverview } from '../state';
+import { toApproxCurrency } from '~/utils/converters';
 
 type BannerTypes = {
     title: string;
     account: boolean;
     portfolioOverview: PortfolioOverview;
+    handleConnect?: () => void;
 };
 
 export const LEVERAGE_FILTER_OPTIONS = [
@@ -14,7 +16,7 @@ export const LEVERAGE_FILTER_OPTIONS = [
     { key: 'All Time', value: 'All Time' },
 ];
 
-export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, portfolioOverview }) => {
+export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, portfolioOverview, handleConnect }) => {
     const { portfolioDelta, realisedProfit, totalPortfolioValue, unrealisedProfit } = portfolioOverview;
 
     const deltaClassName = portfolioDelta > 0 ? 'up' : portfolioDelta < 0 ? 'down' : undefined;
@@ -23,7 +25,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
         <>
             <Styles.Title>{title}</Styles.Title>
             <Styles.Container>
-                <Styles.Banner>
+                <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>
                         <Styles.Subtitle>Valuation</Styles.Subtitle>
                         <Styles.Actions>
@@ -53,15 +55,24 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                 </Styles.Banner>
 
                 <Styles.CardContainer>
-                    <Styles.Card className={unrealisedProfit.gt(0) ? 'up' : unrealisedProfit.lt(0) ? 'down' : ''}>
-                        <Styles.CardTitle>Unrealised Profit and Loss</Styles.CardTitle>
-                        <Styles.CardValue>{toApproxCurrency(unrealisedProfit)}</Styles.CardValue>
+                    <Styles.Card
+                        className={`${unrealisedProfit.gt(0) ? 'up' : unrealisedProfit.lt(0) ? 'down' : ''} arrow`}
+                    >
+                        <div>
+                            <Styles.CardTitle>Unrealised Profit and Loss</Styles.CardTitle>
+                            <Styles.CardValue>{toApproxCurrency(unrealisedProfit)}</Styles.CardValue>
+                        </div>
+                        <Styles.ArrowIcon
+                            className={unrealisedProfit.gt(0) ? 'up' : unrealisedProfit.lt(0) ? 'down' : ''}
+                            center
+                        />
                     </Styles.Card>
                     <Styles.Card className={realisedProfit.gt(0) ? 'up' : ''}>
                         <Styles.CardTitle>Realised Profit and Loss</Styles.CardTitle>
                         <Styles.CardValue>{toApproxCurrency(realisedProfit)}</Styles.CardValue>
                     </Styles.Card>
                 </Styles.CardContainer>
+                {!account && handleConnect && <ConnectWalletBanner handleConnect={handleConnect} />}
             </Styles.Container>
         </>
     );
