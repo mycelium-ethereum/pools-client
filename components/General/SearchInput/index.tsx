@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
-import { device } from '~/store/ThemeSlice/themes';
 
 interface SearchInputProps {
     className?: string;
@@ -57,7 +56,7 @@ export const InnerSearchInput = styled.input`
         outline: 1px solid ${({ theme }) => theme.colors.primary};
     }
 
-    @media (${device.sm}) {
+    @media ${({ theme }) => theme.device.sm} {
         // TODO create font-size css variables
         font-size: 0.875rem; /* 14px */
         line-height: 1.25rem; /* 20px */

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { HiddenExpand, Logo } from '~/components/General';
 import { InnerSearchInput, InputWrapper } from '~/components/General/SearchInput';
 import { Table } from '~/components/General/TWTable';
-import { device, Theme } from '~/store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
@@ -25,7 +25,7 @@ export const TokenSelectDropdown = styled(HiddenExpand)`
     padding: 0 1rem;
     margin-left: -1rem;
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         padding: 0 4rem;
         margin-left: -4rem;
     }
@@ -162,7 +162,7 @@ export const TokenSelectCell = styled.td<TokenSelectCell>`
     span {
         color: #6b7280;
     }
-    @media (${device.sm}) {
+    @media (${({ theme }) => theme.device.sm}) {
         font-size: 14px;
     }
 `;

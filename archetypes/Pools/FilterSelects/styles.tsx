@@ -6,7 +6,6 @@ import TWPopup from '~/components/General/TWPopup';
 import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
-import { device } from '~/store/ThemeSlice/themes';
 
 export const Container = styled(UnstyledContainer)`
     display: flex;
@@ -17,11 +16,11 @@ export const Container = styled(UnstyledContainer)`
     padding: 0;
     max-width: 720px;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         flex-direction: row;
     }
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         align-items: flex-end;
     }
 `;
@@ -61,7 +60,7 @@ export const Wrapper = styled.div`
 export const SearchInput = styled(UnstyledSearchInput)`
     width: 100%;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         width: 50%;
     }
 `;
@@ -90,7 +89,7 @@ export const FilterPopup = styled(TWPopup)`
         }
     }
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         width: 50%;
     }
 `;
