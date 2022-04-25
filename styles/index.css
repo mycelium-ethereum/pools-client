@@ -151,11 +151,26 @@ body > div:first-child {
 
 .page {
     @apply flex min-h-screen flex-col;
+    position: relative;
     background: var(--background-secondary);
+    z-index: 1;
 }
 
-.page.faded-background {
-    background: var(--background-faded);
+.page::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--background-faded);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.page.faded-background::before {
+  opacity: 1;
 }
 
 html,

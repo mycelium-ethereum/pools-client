@@ -191,7 +191,8 @@ export const Card = styled.div`
     border: 1px solid #6b7280;
 
     &.down {
-        background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%), rgba(255, 77, 93, 0.2);
+        background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%),
+            rgba(255, 77, 93, 0.2);
         border: 1px solid #ef4444;
         ${CardTitle} {
             color: #ef4444;
@@ -201,7 +202,8 @@ export const Card = styled.div`
         }
     }
     &.up {
-        background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%), rgba(14, 159, 110, 0.2);
+        background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%),
+            rgba(14, 159, 110, 0.2);
         border: 1px solid #0e9f6e;
         ${CardTitle} {
             color: #0e9f6e;
