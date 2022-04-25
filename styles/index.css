@@ -178,7 +178,7 @@ html {
 
     /* cool-gray-700 */
     --text: #374151;
-    text-secondary: #374151;
+    --text-secondary: #374151;
 
     /* cool-gray-300*/
     --border: #d1d5db;
