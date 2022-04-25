@@ -4,7 +4,7 @@ export const Banner = styled.div<{ showFullWidth?: boolean }>`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.background.primary};
 `;
 
 export const Text = styled.div<{ isBold?: boolean; showOpacity?: boolean }>`
@@ -27,7 +27,7 @@ export const Card = styled.div`
     padding: 2.5rem 1.25rem 1.5rem;
     margin-top: 1.25rem;
     border-radius: 0.75rem;
-    background-color: ${({ theme }) => theme['background-secondary']};
+    background-color: ${({ theme }) => theme.background.secondary};
 `;
 
 export const CardTitle = styled.div`

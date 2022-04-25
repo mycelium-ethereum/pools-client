@@ -1,25 +1,24 @@
 import styled from 'styled-components';
-import { device } from '~/store/ThemeSlice/themes';
 
 type Display = HTMLDivElement['style']['display'];
 
 const MD = styled.div<{ display?: Display }>`
     ${({ display }) => (display ? `display: ${display};` : '')}
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         display: none;
     }
 `;
 
 const LG = styled.div<{ display?: Display }>`
     ${({ display }) => (display ? `display: ${display};` : '')}
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         display: none;
     }
 `;
 
 const XL = styled.div<{ display?: Display }>`
     ${({ display }) => (display ? `display: ${display};` : '')}
-    @media ${device.xl} {
+    @media ${({ theme }) => theme.device.xl} {
         display: none;
     }
 `;

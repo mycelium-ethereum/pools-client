@@ -6,7 +6,6 @@ import TWPopup from '~/components/General/TWPopup';
 import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
-import { device } from '~/store/ThemeSlice/themes';
 
 export const Container = styled(UnstyledContainer)`
     display: flex;
@@ -17,11 +16,11 @@ export const Container = styled(UnstyledContainer)`
     padding: 0;
     max-width: 720px;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         flex-direction: row;
     }
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         align-items: flex-end;
     }
 `;
@@ -32,7 +31,7 @@ export const Content = styled.div`
     flex-direction: column;
     border-radius: 7px;
     gap: 20px;
-    background-color: ${({ theme }) => theme['background-secondary']};
+    background-color: ${({ theme }) => theme.background.secondary};
     box-shadow: ${({ theme }) => {
         switch (theme.theme) {
             case Theme.Light:
@@ -61,7 +60,7 @@ export const Wrapper = styled.div`
 export const SearchInput = styled(UnstyledSearchInput)`
     width: 100%;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         width: 50%;
     }
 `;
@@ -71,13 +70,13 @@ export const FilterPopup = styled(TWPopup)`
     position: relative;
 
     .action-button {
-        border: 1px ${({ theme }) => theme.border} solid !important;
+        border: 1px ${({ theme }) => theme.border.primary} solid !important;
         font-size: 16px !important;
         font-weight: 400 !important;
         color: rgb(156 163 175);
         display: inline-flex;
         padding: 0.67rem 1rem;
-        background-color: ${({ theme }) => theme['button-bg']};
+        background-color: ${({ theme }) => theme.button.bg};
         white-space: nowrap;
         display: inline-flex;
         justify-content: center;
@@ -86,11 +85,11 @@ export const FilterPopup = styled(TWPopup)`
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 
         &:hover {
-            background-color: ${({ theme }) => theme['button-bg-hover']};
+            background-color: ${({ theme }) => theme.button.hover};
         }
     }
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         width: 50%;
     }
 `;
@@ -103,13 +102,13 @@ export const FilterIcon = styled(FilterToggleIcon)`
 export const Heading = styled.h3`
     margin-bottom: 0.25rem;
     font-weight: 500;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
 `;
 
 export const Text = styled.div`
     margin-bottom: 0.7rem;
     font-weight: 500;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     font-size: 12px;
 `;
 

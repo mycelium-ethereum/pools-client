@@ -160,6 +160,13 @@ body {
     font-size: 16px;
 }
 
+@media (max-height: 800px) and (min-width: 1024px) {
+    html {
+        font-size: 12px;
+    }
+}
+
+
 /* Colour themes */
 html {
     --background: #fff;
@@ -171,9 +178,12 @@ html {
 
     /* cool-gray-700 */
     --text: #374151;
+    --text-secondary: #374151;
 
     /* cool-gray-300*/
     --border: #d1d5db;
+
+    --border-secondary: #E5E7EB;
 
     /* tracer-800*/
     --primary: #0000b0;
@@ -183,12 +193,6 @@ html {
 
     /* cool-gray-100 */
     --button-bg-hover: #f3f4f6;
-}
-
-@media (max-height: 800px) and (min-width: 1024px) {
-    html {
-        font-size: 12px;
-    }
 }
 
 html.theme-dark {
@@ -208,6 +212,7 @@ html.theme-dark {
 
     /* cool-gray-500*/
     --border: #6b7280;
+    --border-secondary: #374151;
 
     /* tracer-100*/
     --primary: #dedeff;
@@ -228,10 +233,10 @@ html.theme-matrix {
     --background-nav-secondary: #020204;
 
     --text: #22b455;
-
     --text-secondary: #80ce87;
 
     --border: #008f11;
+    --border-secondary: #008f11;
 
     --primary: #00ff41;
 

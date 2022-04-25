@@ -14,7 +14,7 @@ type NotificationProps = {
 
 const Title = styled.span`
     font-weight: 700;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin-left: 15px;
 `;
 

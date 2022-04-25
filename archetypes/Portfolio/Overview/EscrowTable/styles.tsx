@@ -4,8 +4,8 @@ import { TableRowCell } from '~/components/General/TWTable';
 import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.tr`
-    color: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme['background-secondary']};
+    color: ${({ theme }) => theme.fontColor.primary};
+    background: ${({ theme }) => theme.background.secondary};
     display: flex;
     border-radius: 10px;
     overflow-x: auto;

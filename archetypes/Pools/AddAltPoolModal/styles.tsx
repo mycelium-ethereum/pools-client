@@ -21,7 +21,7 @@ export const Close = styled(CloseIcon)`
 export const Title = styled.h2`
     font-weight: 500;
     font-size: 20px;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin: -5px 0 25px;
 
     @media (min-width: 640px) {
@@ -32,14 +32,14 @@ export const Title = styled.h2`
 export const Label = styled.div`
     font-weight: 600;
     font-size: 16px;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin-bottom: 5px;
 `;
 
 export const Message = styled.div`
     font-weight: 400;
     font-size: 14px;
-    color: ${({ theme }) => theme['text-secondary']};
+    color: ${({ theme }) => theme.fontColor.secondary};
     margin-bottom: 20px;
     text-align: center;
 `;

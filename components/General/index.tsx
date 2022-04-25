@@ -25,7 +25,7 @@ export const Section: React.FC<SProps> = styled(
     font-size: 14px;
     line-height: 18px;
     box-sizing: border-box;
-    color: ${({ theme }) => theme['text-secondary']};
+    color: ${({ theme }) => theme.fontColor.secondary};
     margin-bottom: 3px;
     &:not(.header) {
         margin-bottom: 1px;

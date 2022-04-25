@@ -2,19 +2,18 @@ import styled from 'styled-components';
 import { default as UnstyledButton } from '~/components/General/Button';
 import { Container as UnstyledContainer } from '~/components/General/Container';
 import { default as UnstyledLoading } from '~/components/General/Loading';
-import { device } from '~/store/ThemeSlice/themes';
 
 export const Header = styled.div`
     margin-bottom: 2rem;
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         display: flex;
         gap: 20px;
     }
 `;
 
 export const Heading = styled.h1`
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin: 2rem 0 0.5rem;
     font-size: 1.875rem;
     line-height: 2.25rem;
@@ -27,7 +26,7 @@ export const SubHeading = styled.div`
     line-height: 1.25rem;
     font-weight: 300;
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         margin-bottom: 0;
     }
 `;
@@ -54,12 +53,12 @@ export const DataRow = styled.div`
     margin-bottom: 2.5rem;
     border-radius: 0.25rem;
     box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    background-color: ${({ theme }) => theme.background};
+    background-color: ${({ theme }) => theme.background.primary};
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         border-radius: 1rem;
     }
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         padding: 2rem;
         border-radius: 1.5rem;
     }
@@ -99,24 +98,24 @@ export const AltPoolActions = styled.div`
     flex-direction: column;
     gap: 20px;
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         gap: 0;
         flex-direction: row;
     }
 `;
 
 export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         max-width: 220px;
     }
 
-    ${({ disabled }) => {
+    ${({ disabled, theme }) => {
         if (disabled) {
             return `
                 cursor: not-allowed; 
                 opacity: 0.5; 
 
-                @media ${device.sm} {
+                @media ${theme.device.sm} {
                     margin-left: 1.25rem; 
                 }
             `;
