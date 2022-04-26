@@ -135,36 +135,37 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         if (!provider || !account) {
             return false;
         }
-        const uniqueSettlementTokensMap: Record<string, string[]> = Object.values(get().pools).reduce(
-            (
-                o,
-                {
-                    poolInstance: {
-                        address,
-                        settlementToken: { address: tokenAddress },
-                    },
-                },
-            ) => {
+
+        const allPools = get().pools;
+
+        // gets all settlementTokens and maps them to their relevant pools
+        const uniqueSettlementTokensMap: Record<string, string[]> = Object.values(allPools).reduce(
+            (o, { poolInstance }) => {
+                const tokenAddress = poolInstance.settlementToken.address;
+                const address = poolInstance.address;
                 o[tokenAddress] = o[tokenAddress] || [];
                 o[tokenAddress].push(address);
                 return o;
             },
             {} as Record<string, string[]>,
         );
-        const relevantSettlementTokens = Object.keys(
+
+        // array of settlementTokens relevant to inputted pools
+        //  used with the above to fetch all relevant pools for each settlementToken
+        const relevantSettlementTokens: string[] = Object.keys(
             pools_.reduce((o, pool) => {
-                const settlementToken = get().pools[pool]?.poolInstance?.settlementToken?.address;
-                if (settlementToken) {
-                    o[settlementToken] = true;
-                }
+                const settlementToken = allPools[pool]?.poolInstance?.settlementToken?.address;
+                settlementToken && o.set(settlementToken, true);
                 return o;
-            }, {} as Record<string, boolean>),
+            }, new Map<string, boolean>()),
         );
+
+        // fetches tokenBalances for each settlementToken relevant to inputted pools_
         fetchTokenBalances(relevantSettlementTokens, provider, account)
             .then((balances) => {
                 console.count('Fetched settlement token balances');
                 set((state) => {
-                    balances.map((settlementTokenBalance_, index) => {
+                    balances.forEach((settlementTokenBalance_, index) => {
                         const pools = uniqueSettlementTokensMap[relevantSettlementTokens[index]];
                         // pool[0] must exist otherwise the entry would not exist in uniqueSettlementTokens
                         const decimals = state.pools[pools[0]].poolInstance.settlementToken.decimals;
