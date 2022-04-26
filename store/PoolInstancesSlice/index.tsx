@@ -182,11 +182,13 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             });
     },
     updatePoolTokenBalances: (pools_, provider, account) => {
-        if (!provider || !account) {
-            return false;
-        }
         pools_.forEach((pool_) => {
-            if (!get().pools[pool_]) {
+            if (!get().pools[pool_] || !provider || !account) {
+                get().setAggregateBalances(pool_, DEFAULT_POOLSTATE.userBalances.aggregateBalances);
+                get().setTokenBalances(pool_, {
+                    shortTokenBalance: DEFAULT_POOLSTATE.userBalances.shortToken.balance,
+                    longTokenBalance: DEFAULT_POOLSTATE.userBalances.longToken.balance,
+                });
                 return;
             }
             const pool = get().pools[pool_].poolInstance;
@@ -224,16 +226,16 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         });
     },
     updateTradeStats: (pools_, network, account) => {
-        pools_.forEach((pool) => {
-            if (!network || !pool || !account) {
-                get().setTradeStats(pool, DEFAULT_POOLSTATE.userBalances.tradeStats);
+        pools_.forEach((pool_) => {
+            if (!network || !get().pools[pool_] || !account) {
+                get().setTradeStats(pool_, DEFAULT_POOLSTATE.userBalances.tradeStats);
                 return;
             }
-            const poolState = get().pools[pool].poolInstance;
-            const decimals = poolState.settlementToken.decimals;
-            fetchTradeStats(network, pool, account, decimals)
+            const pool = get().pools[pool_].poolInstance;
+            const decimals = pool.settlementToken.decimals;
+            fetchTradeStats(network, pool_, account, decimals)
                 .then((tradeStats) => {
-                    get().setTradeStats(pool, tradeStats);
+                    get().setTradeStats(pool_, tradeStats);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch aggregate balance', err);

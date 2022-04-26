@@ -30,7 +30,6 @@ export const fetchAggregateBalance: (
     const contract = PoolCommitter__factory.connect(committer, provider);
     const balances = await contract.getAggregateBalance(account);
 
-    // const balances = await contract.getAggregateBalance('0x110af92Ba116fD7868216AA794a7E4dA3b9D7D11');
     return {
         longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens, settlementTokenDecimals)),
         shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens, settlementTokenDecimals)),

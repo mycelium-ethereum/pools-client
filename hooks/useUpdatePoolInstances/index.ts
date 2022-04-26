@@ -26,7 +26,7 @@ export const useUpdatePoolInstances = (): void => {
         selectPoolInstanceActions,
         shallow,
     );
-    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances, updateTradeStats  } = useStore(
+    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances, updateTradeStats } = useStore(
         selectPoolInstanceUpdateActions,
         shallow,
     );

@@ -43,11 +43,7 @@ export interface IPoolsInstancesSlice {
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
-    updateTradeStats: (
-        pools: string [],
-        network: KnownNetwork | undefined,
-        account: string | undefined,
-    ) => void;
+    updateTradeStats: (pools: string[], network: KnownNetwork | undefined, account: string | undefined) => void;
     updateTokenApprovals: (
         pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
