@@ -224,17 +224,10 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         });
     },
     updateTradeStats: (pools_, network, account) => {
-        if (!network || !account) {
-            return DEFAULT_POOLSTATE.userBalances.tradeStats;
-        }
         pools_.forEach((pool) => {
             if (!network || !pool || !account) {
-                return {
-                    longPriceWallet: new BigNumber(0),
-                    shortPriceWallet: new BigNumber(0),
-                    longPriceAggregate: new BigNumber(0),
-                    shortPriceAggregate: new BigNumber(0),
-                };
+                get().setTradeStats(pool, DEFAULT_POOLSTATE.userBalances.tradeStats);
+                return;
             }
             const poolState = get().pools[pool].poolInstance;
             const decimals = poolState.settlementToken.decimals;
