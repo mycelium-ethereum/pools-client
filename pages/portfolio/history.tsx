@@ -6,11 +6,13 @@ import NavBar from '~/components/Nav/Navbar';
 
 export default (() => {
     return (
-        <div className={`page relative matrix:bg-matrix-bg`}>
-            <NavBar />
-            <Portfolio page={TradePortfolioPage.History} />
-            <UnsupportedNetworkPopup />
+        <>
+            <div className={`page relative matrix:bg-matrix-bg`}>
+                <NavBar />
+                <Portfolio page={TradePortfolioPage.History} />
+                <UnsupportedNetworkPopup />
+            </div>
             <Footer />
-        </div>
+        </>
     );
 }) as React.FC;

@@ -10,7 +10,7 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
 }) => {
     return (
         <div className={classNames('flex h-full flex-col overflow-hidden', className ?? '')}>
-            <div className="h-full overflow-x-auto">
+            <div className="overflow-x-auto">
                 <div className="inline-block min-w-full align-middle">
                     <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
                         <table className={`min-w-full ${showDivider ? 'divide-y divide-theme-border' : ''}`}>

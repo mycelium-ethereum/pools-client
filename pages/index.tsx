@@ -17,24 +17,26 @@ export default (() => {
     }, []);
 
     return (
-        <div className={`page relative matrix:bg-matrix-bg`}>
-            <NavBar setShowOnboardModal={setShowOnboardModal} />
-            <SwapStore>
-                <Browse />
-            </SwapStore>
-            <UnsupportedNetworkPopup />
-            <OnboardTradeModal
-                onboardStep={onboardStep}
-                setOnboardStep={setOnboardStep}
-                showOnboardModal={showOnboardModal}
-                setShowOnboardModal={() => {
-                    setShowOnboardModal(false);
-                    setTimeout(() => {
-                        setOnboardStep(1);
-                    }, 1000);
-                }}
-            />
+        <>
+            <div className={`page relative matrix:bg-matrix-bg`}>
+                <NavBar setShowOnboardModal={setShowOnboardModal} />
+                <SwapStore>
+                    <Browse />
+                </SwapStore>
+                <UnsupportedNetworkPopup />
+                <OnboardTradeModal
+                    onboardStep={onboardStep}
+                    setOnboardStep={setOnboardStep}
+                    showOnboardModal={showOnboardModal}
+                    setShowOnboardModal={() => {
+                        setShowOnboardModal(false);
+                        setTimeout(() => {
+                            setOnboardStep(1);
+                        }, 1000);
+                    }}
+                />
+            </div>
             <Footer />
-        </div>
+        </>
     );
 }) as React.FC;
