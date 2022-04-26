@@ -6,8 +6,8 @@ import { Theme } from '~/store/ThemeSlice/themes';
 import { TokenType as TokenTypeEnum } from '../state';
 
 export const Pool = styled.div`
-    color: ${({ theme }) => theme.text};
-    background: ${({ theme }) => theme['background-secondary']};
+    color: ${({ theme }) => theme.fontColor.primary};
+    background: ${({ theme }) => theme.background.secondary};
     display: flex;
 `;
 

@@ -4,20 +4,19 @@ import Button from '~/components/General/Button';
 import { SearchInput as UnstyledSearchInput } from '~/components/General/SearchInput';
 import { TableRowCell } from '~/components/General/TWTable';
 import ArrowRight_ from '~/public/img/general/arrow-right.svg';
-import { device } from '~/store/ThemeSlice/themes';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.background.primary};
 `;
 
 export const Wrapper = styled.div`
     white-space: nowrap;
     padding: 1rem;
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         display: flex;
         justify-content: space-between;
     }
@@ -55,7 +54,7 @@ export const Content = styled.div`
     & > * {
         margin-top: 1rem;
     }
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         & > * {
             margin-top: 0rem;
         }
@@ -67,7 +66,7 @@ export const Actions = styled.div`
     &:first-child {
         margin-right: 0.5rem;
 
-        @media ${device.md} {
+        @media ${({ theme }) => theme.device.md} {
             margin-right: 1.25rem;
         }
     }
@@ -96,7 +95,7 @@ export const OverviewHeaderRow = styled.tr`
                 case Theme.Light:
                     return '#E5E7EB';
                 default:
-                    return theme.background;
+                    return theme.background.primary;
             }
         }};
     }

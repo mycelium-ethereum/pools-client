@@ -1,7 +1,6 @@
 import { CopyOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Logo } from '~/components/General';
-import { device } from '~/store/ThemeSlice/themes';
 
 export const ArbitrumLogo = styled(Logo)`
     display: inline;
@@ -16,7 +15,7 @@ export const ViewOnArbiscanOption = styled.a`
     display: flex;
     padding: 0.5rem 1rem;
     &:hover {
-        background: ${({ theme }) => theme['button-bg-hover']};
+        background: ${({ theme }) => theme.button.hover};
     }
 
     font-size: 0.875rem; /* 14px */
@@ -68,7 +67,7 @@ export const Account = styled.div`
     white-space: nowrap;
     text-overflow: ellipsis;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         max-width: 100px;
     }
 `;

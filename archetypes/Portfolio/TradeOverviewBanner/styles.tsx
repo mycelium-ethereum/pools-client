@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import { Dropdown as UnstyledDropdown } from '~/components/General';
 import Arrow from '~/public/img/general/arrow.svg';
-import { device } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     display: flex;
@@ -17,7 +16,7 @@ export const Banner = styled.div<{ showFullWidth?: boolean }>`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.background.primary};
     justify-content: space-between;
     gap: 20px;
     display: flex;
@@ -46,7 +45,7 @@ export const BannerContent = styled.div`
 export const Title = styled.h1`
     font-size: 1.25rem;
     font-weight: 600;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
 `;
 
 export const Subtitle = styled.h2`
@@ -86,7 +85,7 @@ export const Currency = styled.div`
     font-weight: 700;
     margin-right: 5px;
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         font-size: 32px;
     }
 `;
@@ -106,11 +105,11 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
     }
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         font-size: 80px;
     }
 `;
@@ -136,7 +135,7 @@ export const ArrowIcon = styled(Arrow)`
         }
     }
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         -webkit-transform: rotateX(180deg) scale(0.75);
         transform: rotateX(180deg) scale(0.75);
         &.up {
@@ -144,7 +143,7 @@ export const ArrowIcon = styled(Arrow)`
             transform: scale(0.75);
         }
     }
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         -webkit-transform: rotateX(180deg) scale(1);
         transform: rotateX(180deg) scale(1);
         &.up {
@@ -159,7 +158,7 @@ export const CardContainer = styled.div`
     flex-direction: column;
     gap: 20px;
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         flex-direction: row;
         background-color: light-blue;
     }
@@ -213,7 +212,7 @@ export const Card = styled.div`
         }
     }
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         width: 50%;
     }
 

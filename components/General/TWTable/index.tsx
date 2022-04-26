@@ -64,7 +64,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     line-height: 1rem; /* 16px */
     text-align: left;
     font-weight: 500;
-    color: ${({ theme }) => theme['text-secondary']};
+    color: ${({ theme }) => theme.fontColor.secondary};
     letter-spacing: 0.05em;
     text-transform: uppercase;
 
@@ -79,12 +79,12 @@ TableHeaderCell.defaultProps = {
 
 export const TableRow = styled.tr<{ lined?: boolean }>`
     &:nth-child(even) {
-        background: ${({ theme }) => theme.background};
+        background: ${({ theme }) => theme.background.primary};
     }
     &:nth-child(odd) {
         background: ${({ theme, lined }) => {
             if (!lined) {
-                return theme.background;
+                return theme.background.primary;
             }
             switch (theme.theme) {
                 case Theme.Dark:
@@ -108,7 +108,7 @@ const CELL_SIZES: Record<Size, string> = {
 
 export const TableRowCell = styled.td<{ size?: Size }>`
     white-space: nowrap;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     ${({ size }) => size && `padding: ${CELL_SIZES[size]};`}
     font-size: 0.875rem;
 `;

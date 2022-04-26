@@ -9,8 +9,8 @@ export const HiddenExpand = styled(UnstyledHiddenExpand)<{ showBorder: boolean }
     font-size: 1rem;
     line-height: 1.5rem;
     border-width: 1px;
-    background-color: ${({ theme }) => theme.background};
-    border-color: ${({ showBorder, theme }) => (showBorder ? theme['border-secondary'] : 'transparent')};
+    background-color: ${({ theme }) => theme.background.primary};
+    border-color: ${({ showBorder, theme }) => (showBorder ? theme.border.secondary : 'transparent')};
 `;
 
 export const Wrapper = styled.div`
@@ -31,7 +31,7 @@ export const Countdown = styled.div`
     font-size: 0.875rem;
     line-height: 1.25rem;
     border-radius: 0.25rem;
-    background-color: ${({ theme }) => theme.background};
+    background-color: ${({ theme }) => theme.background.primary};
     z-index: 2;
     font-size: 15px;
     text-transform: capitalize;
@@ -43,8 +43,8 @@ export const TimeLeft = styled(UnstyledTimeLeft)`
     margin-left: 0.375rem;
     border-radius: 0.5rem;
     border-width: 1px;
-    background-color: ${({ theme }) => theme['button-bg']};
-    border-color: ${({ theme }) => theme['border-secondary']};
+    background-color: ${({ theme }) => theme.button.bg};
+    border-color: ${({ theme }) => theme.border.secondary};
 `;
 
 export const SumText = styled.span<{ setColor?: string }>`
@@ -75,7 +75,7 @@ export const Divider = styled.hr`
 export const ShowDetailsButton = styled(Button)`
     width: calc(100% + 2rem);
     margin: 23px -1rem 0;
-    background-color: ${({ theme }) => theme['border-secondary']} !important;
+    background-color: ${({ theme }) => theme.border.secondary} !important;
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
     height: 30px;
@@ -85,7 +85,7 @@ export const ShowDetailsButton = styled(Button)`
         margin: 0 auto;
         width: 15px;
         path {
-            fill: ${({ theme }) => theme.text} !important;
+            fill: ${({ theme }) => theme.fontColor.primary} !important;
         }
     }
 

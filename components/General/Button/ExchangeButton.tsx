@@ -129,7 +129,7 @@ const Text = styled.p`
     line-height: 1.25rem;
     text-align: center;
     opacity: 0.7;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
 `;
 
 const ButtonStyled = styled(Button)`

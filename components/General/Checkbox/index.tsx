@@ -46,7 +46,7 @@ const Input = styled.input`
 const Label = styled.label`
     margin-left: 30px;
     cursor: pointer;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     font-weight: 600;
 `;
 
