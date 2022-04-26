@@ -1,15 +1,13 @@
-import { ArrowDownOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { Dropdown as UnstyledDropdown } from '~/components/General';
-import { device } from '~/store/ThemeSlice/themes';
-import { Theme } from '~/store/ThemeSlice/themes';
+import Arrow from '~/public/img/general/arrow.svg';
 
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
     gap: 20px;
 
-    @media ${device.xl} {
+    @media ${({ theme }) => theme.device.xl} {
         flex-direction: row;
     }
 `;
@@ -18,14 +16,14 @@ export const Banner = styled.div`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background: ${({ theme }) => theme.background};
+    background: ${({ theme }) => theme.background.primary};
     justify-content: space-between;
     gap: 20px;
     display: flex;
     flex-direction: column;
     width: 100%;
 
-    @media ${device.xl} {
+    @media ${({ theme }) => theme.device.xl} {
         width: 75%;
 
         &.empty-state {
@@ -43,7 +41,7 @@ export const BannerContent = styled.div`
 export const Title = styled.h1`
     font-size: 1.25rem;
     font-weight: 600;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
 `;
 
 export const Subtitle = styled.h2`
@@ -79,21 +77,22 @@ export const Dropdown = styled(UnstyledDropdown)`
 `;
 
 export const Currency = styled.div`
-    font-size: 20px;
-    font-weight: 700;
+    &::before {
+        content: '$';
+        font-size: 20px;
+        font-weight: 700;
+        @media ${({ theme }) => theme.device.sm} {
+            margin-right: 5px;
+        }
 
-    @media ${device.sm} {
-        margin-right: 5px;
-    }
-
-    @media ${device.md} {
-        font-size: 32px;
+        @media ${({ theme }) => theme.device.md} {
+            font-size: 32px;
+        }
     }
 `;
 
 export const Value = styled.div`
     font-size: 28px;
-    line-height: 28px;
     font-weight: 700;
     display: flex;
     align-items: baseline;
@@ -107,97 +106,47 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         font-size: 40px;
-        line-height: 40px;
     }
 
-    @media ${device.md} {
+    @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
-        line-height: 60px;
     }
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         font-size: 80px;
-        line-height: 80px;
     }
 `;
 
-export const ArrowIcon = styled(ArrowDownOutlined)<{ center?: boolean }>`
-    align-self: ${({ center }) => (center ? 'center' : 'flex-start')};
+export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
+    align-self: center;
     display: flex;
+    height: 28px;
+    width: 28px;
 
-    svg {
-        height: 28px;
-        width: 28px;
-        stroke-width: 35px;
-
-        stroke: ${({ theme }) => {
-            switch (theme.theme) {
-                case Theme.Light:
-                    return '#374151';
-                default:
-                    '#fff';
-            }
-        }};
-
-        stroke-linecap: round;
-
-        @media ${device.sm} {
-            height: 40px;
-            width: 40px;
-        }
-
-        @media ${device.md} {
-            height: 60px;
-            width: 60px;
-        }
-
-        @media ${device.lg} {
-            height: 80px;
-            width: 80px;
-        }
-
-        ${({ center }) => {
-            if (center) {
-                return `
-                    height: 60px !important;
-                    width: 60px !important;
-                `;
-            }
-        }};
+    @media ${({ theme }) => theme.device.sm} {
+        height: 40px;
+        width: 40px;
     }
 
-    path {
-        fill: ${({ theme }) => {
-            switch (theme.theme) {
-                case Theme.Light:
-                    return '#374151';
-                default:
-                    '#fff';
-            }
-        }};
+    @media ${({ theme }) => theme.device.md} {
+        height: ${({ large }) => (large ? '50px' : '50px')};
+        width: ${({ large }) => (large ? '50px' : '50px')};
     }
+
+    @media ${({ theme }) => theme.device.lg} {
+        height: ${({ large }) => (large ? '65px' : '54px')};
+        width: ${({ large }) => (large ? '62px' : '51px')};
+    }
+
+    stroke-width: 35px;
+
+    stroke-linecap: round;
 
     &.down {
-        svg {
-            stroke: #ef4444;
-        }
-        path {
-            fill: #ef4444;
-        }
-    }
-
-    &.up {
         -webkit-transform: rotateX(180deg);
         transform: rotateX(180deg);
-
-        svg {
-            stroke: #0e9f6e;
-        }
-        path {
-            fill: #0e9f6e;
-        }
     }
 `;
 
@@ -206,12 +155,12 @@ export const CardContainer = styled.div`
     flex-direction: column;
     gap: 20px;
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         flex-direction: row;
         background-color: light-blue;
     }
 
-    @media ${device.xl} {
+    @media ${({ theme }) => theme.device.xl} {
         flex-direction: column;
         width: 25%;
     }
@@ -220,7 +169,7 @@ export const CardContainer = styled.div`
 export const CardTitle = styled.div<{ variant?: string }>`
     font-weight: 400;
     font-size: 16px;
-    color: #9ca3af;
+    white-space: nowrap;
 `;
 
 export const CardValue = styled.div<{ variant?: string }>`
@@ -239,6 +188,7 @@ export const Card = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
+    color: #9ca3af; // default color
 
     &.arrow {
         div {
@@ -255,30 +205,20 @@ export const Card = styled.div`
         background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%),
             rgba(255, 77, 93, 0.2);
         border: 1px solid #ef4444;
-        ${CardTitle} {
-            color: #ef4444;
-        }
-        ${CardValue} {
-            color: #ef4444;
-        }
+        color: #ef4444;
     }
     &.up {
         background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%),
             rgba(14, 159, 110, 0.2);
         border: 1px solid #0e9f6e;
-        ${CardTitle} {
-            color: #0e9f6e;
-        }
-        ${CardValue} {
-            color: #0e9f6e;
-        }
+        color: #0e9f6e;
     }
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         width: 50%;
     }
 
-    @media ${device.lg} {
+    @media ${({ theme }) => theme.device.lg} {
         width: 100%;
     }
 `;

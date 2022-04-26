@@ -159,7 +159,7 @@ export default styled((({ onClose, className }) => {
 const Title = styled.h2`
     font-weight: 600;
     font-size: 20px;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     margin-bottom: 15px;
 
     @media (min-width: 640px) {
@@ -198,7 +198,7 @@ const TWButtonGroupStyled = styled(TWButtonGroup)`
 
 const DividerRow = styled(Divider)`
     margin: 30px 0;
-    border-color: ${({ theme }) => theme['border-secondary']};
+    border-color: ${({ theme }) => theme.border.secondary};
 `;
 
 // TODO: dependent on auto-claim feature

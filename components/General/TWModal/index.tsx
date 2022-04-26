@@ -35,6 +35,11 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                         <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
                     </Transition.Child>
 
+                    {/* This element is to trick the browser into centering the modal contents. */}
+                    <span className="inline-block h-screen align-middle" aria-hidden="true">
+                        &#8203;
+                    </span>
+
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -46,7 +51,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                     >
                         <div
                             className={classNames(
-                                'inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-10 text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle',
+                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-10 text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle',
                                 SIZES[size],
                                 className,
                             )}
@@ -61,18 +66,17 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
 };
 
 const Wrapper = styled.div`
-    display: flex;
+    padding: 0 1rem;
     text-align: center;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    min-width: 100vw;
 `;
 
 const DialogStyled = styled(Dialog)<{ onClose: () => void }>`
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 10;
 `;

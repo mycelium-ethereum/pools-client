@@ -1,8 +1,8 @@
 import React from 'react';
+import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
 import { PortfolioOverview } from '../state';
-import { toApproxCurrency } from '~/utils/converters';
 
 type BannerTypes = {
     title: string;
@@ -43,12 +43,12 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                     </Styles.Header>
                     <Styles.BannerContent>
                         <Styles.Value>
-                            <Styles.Currency>$</Styles.Currency>
-                            {totalPortfolioValue.toFixed(2)}
+                            <Styles.Currency>{totalPortfolioValue.toFixed(2)}</Styles.Currency>
                         </Styles.Value>
                         {account && (
                             <Styles.Value className={deltaClassName}>
-                                {portfolioDelta.toFixed(2)}% <Styles.ArrowIcon className={deltaClassName} />
+                                {portfolioDelta.toFixed(2)}%
+                                {portfolioDelta !== 0 && <Styles.ArrowIcon large className={deltaClassName} />}
                             </Styles.Value>
                         )}
                     </Styles.BannerContent>
@@ -62,10 +62,9 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                             <Styles.CardTitle>Unrealised Profit and Loss</Styles.CardTitle>
                             <Styles.CardValue>{toApproxCurrency(unrealisedProfit)}</Styles.CardValue>
                         </div>
-                        <Styles.ArrowIcon
-                            className={unrealisedProfit.gt(0) ? 'up' : unrealisedProfit.lt(0) ? 'down' : ''}
-                            center
-                        />
+                        {!unrealisedProfit.eq(0) && (
+                            <Styles.ArrowIcon className={unrealisedProfit.lt(0) ? 'down' : ''} />
+                        )}
                     </Styles.Card>
                     <Styles.Card className={realisedProfit.gt(0) ? 'up' : ''}>
                         <Styles.CardTitle>Realised Profit and Loss</Styles.CardTitle>
