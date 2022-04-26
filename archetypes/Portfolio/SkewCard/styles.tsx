@@ -22,12 +22,17 @@ export const Card = styled.div`
 `;
 
 export const Vector = styled.div`
-    padding: 4rem;
+    padding: 4rem 2.5rem;
     background: linear-gradient(90deg, rgba(0, 0, 0, 0.23) 6.59%, rgba(0, 0, 0, 0.73) 96.04%);
+
+    @media ${({ theme }) => theme.device.md} {
+        padding: 4rem 3rem;
+    }
 `;
 
 export const Wrapper = styled.div`
     margin: auto;
+    padding: 10px;
 `;
 
 export const Content = styled.div`

@@ -7,12 +7,12 @@ export const Container = styled.div`
     flex-direction: column;
     gap: 20px;
 
-    @media (min-width: 1200px) {
+    @media ${({ theme }) => theme.device.xl} {
         flex-direction: row;
     }
 `;
 
-export const Banner = styled.div<{ showFullWidth?: boolean }>`
+export const Banner = styled.div`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
@@ -23,17 +23,13 @@ export const Banner = styled.div<{ showFullWidth?: boolean }>`
     flex-direction: column;
     width: 100%;
 
-    @media (min-width: 1200px) {
+    @media ${({ theme }) => theme.device.xl} {
         width: 75%;
-    }
-`;
 
-export const Text = styled.div<{ isBold?: boolean; showOpacity?: boolean }>`
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin: 0;
-    font-weight: ${({ isBold }) => (isBold ? '700' : '600')};
-    opacity: ${({ showOpacity }) => (showOpacity ? '0.5' : '1')};
+        &.empty-state {
+            width: 50%;
+        }
+    }
 `;
 
 export const BannerContent = styled.div`
@@ -81,20 +77,30 @@ export const Dropdown = styled(UnstyledDropdown)`
 `;
 
 export const Currency = styled.div`
-    font-size: 20px;
-    font-weight: 700;
-    margin-right: 5px;
+    &::before {
+        content: '$';
+        font-size: 20px;
+        font-weight: 700;
+        @media ${({ theme }) => theme.device.sm} {
+            margin-right: 5px;
+        }
 
+<<<<<<< HEAD
+        @media ${({ theme }) => theme.device.md} {
+            font-size: 32px;
+        }
+=======
     @media ${({ theme }) => theme.device.md} {
         font-size: 32px;
+>>>>>>> 795946254e6e30223e2095d8b0e9635645ea5c95
     }
 `;
 
 export const Value = styled.div`
-    font-size: 40px;
+    font-size: 28px;
     font-weight: 700;
     display: flex;
-    align-items: center;
+    align-items: baseline;
     font-family: 'Inter', 'sans-serif';
 
     &.up {
@@ -105,7 +111,11 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
-    @media ${({ theme }) => theme.device.md} {
+    <<<<<<< HEAD @media ${({ theme }) => theme.device.sm} {
+        font-size: 40px;
+    }
+
+    =======>>>>>>>795946254e6e30223e2095d8b0e9635645ea5c95 @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
     }
 
@@ -114,42 +124,22 @@ export const Value = styled.div`
     }
 `;
 
-export const ArrowIcon = styled(Arrow)`
-    // default is down
-    -webkit-transform: rotateX(180deg) scale(0.5);
-    transform: rotateX(180deg) scale(0.5);
-    path {
-        fill: #111928;
-    }
-    &.down {
-        path {
-            fill: #ef4444;
-        }
+export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
+    align-self: center;
+    display: flex;
+    height: 28px;
+    width: 28px;
+
+    @media ${({ theme }) => theme.device.lg} {
+        height: ${({ large }) => (large ? '65px' : '54px')};
+        width: ${({ large }) => (large ? '62px' : '51px')};
     }
 
-    &.up {
-        -webkit-transform: scale(0.5);
-        transform: scale(0.5);
-        path {
-            fill: #0e9f6e;
-        }
-    }
+    stroke-width: 35px;
+
+    stroke-linecap: round;
 
     @media ${({ theme }) => theme.device.md} {
-        -webkit-transform: rotateX(180deg) scale(0.75);
-        transform: rotateX(180deg) scale(0.75);
-        &.up {
-            -webkit-transform: scale(0.75);
-            transform: scale(0.75);
-        }
-    }
-    @media ${({ theme }) => theme.device.lg} {
-        -webkit-transform: rotateX(180deg) scale(1);
-        transform: rotateX(180deg) scale(1);
-        &.up {
-            -webkit-transform: scale(1);
-            transform: scale(1);
-        }
     }
 `;
 
@@ -163,7 +153,7 @@ export const CardContainer = styled.div`
         background-color: light-blue;
     }
 
-    @media (min-width: 1200px) {
+    @media ${({ theme }) => theme.device.xl} {
         flex-direction: column;
         width: 25%;
     }
@@ -172,7 +162,7 @@ export const CardContainer = styled.div`
 export const CardTitle = styled.div<{ variant?: string }>`
     font-weight: 400;
     font-size: 16px;
-    color: #9ca3af;
+    white-space: nowrap;
 `;
 
 export const CardValue = styled.div<{ variant?: string }>`
@@ -188,35 +178,40 @@ export const Card = styled.div`
 
     background: rgba(243, 244, 246, 0.05);
     border: 1px solid #6b7280;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    color: #9ca3af; // default color
+
+    &.arrow {
+        div {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+
+        flex-direction: row;
+        justify-content: space-between;
+    }
 
     &.down {
         background: linear-gradient(270deg, rgba(239, 68, 68, 0.2) -14.15%, rgba(239, 68, 68, 0) 22.33%),
             rgba(255, 77, 93, 0.2);
         border: 1px solid #ef4444;
-        ${CardTitle} {
-            color: #ef4444;
-        }
-        ${CardValue} {
-            color: #ef4444;
-        }
+        color: #ef4444;
     }
     &.up {
         background: linear-gradient(270deg, rgba(5, 122, 85, 0.8) -14.15%, rgba(5, 122, 85, 0) 22.33%),
             rgba(14, 159, 110, 0.2);
         border: 1px solid #0e9f6e;
-        ${CardTitle} {
-            color: #0e9f6e;
-        }
-        ${CardValue} {
-            color: #0e9f6e;
-        }
+        color: #0e9f6e;
     }
 
     @media ${({ theme }) => theme.device.sm} {
         width: 50%;
     }
 
-    @media (min-width: 1024px) {
+    @media ${({ theme }) => theme.device.lg} {
         width: 100%;
     }
 `;

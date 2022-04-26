@@ -9,7 +9,6 @@ import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 import { ClaimedTokens } from './ClaimedTokensTable';
-import { ConnectWalletBanner } from './ConnectWalletBanner';
 import { emptyStateHelpCardContent } from './content';
 import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
@@ -63,15 +62,15 @@ export const PortfolioPage = (): JSX.Element => {
     const emptyState = () => {
         return (
             <>
-                <Styles.Wrapper isFullWidth={!!account}>
+                <Styles.Wrapper>
                     <TradeOverviewBanner
                         title="Portfolio Overview"
                         portfolioOverview={portfolioOverview}
                         account={!!account}
+                        handleConnect={handleConnect}
                     />
-                    {!account && <ConnectWalletBanner handleConnect={handleConnect} />}
                 </Styles.Wrapper>
-                <Styles.Wrapper isFullWidth={maxSkew === undefined}>
+                <Styles.Wrapper>
                     <Styles.Banner>
                         {emptyStateHelpCardContent.map((v, i) => (
                             <HelpCard

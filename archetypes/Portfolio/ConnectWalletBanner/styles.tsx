@@ -7,6 +7,9 @@ export const Container = styled.div`
     padding: 1.25rem;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    justify-content: center;
+    display: flex;
+    align-items: center;
 `;
 
 export const Background = styled(CTABackground)`
