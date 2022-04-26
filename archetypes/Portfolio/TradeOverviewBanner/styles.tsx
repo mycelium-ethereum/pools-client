@@ -85,9 +85,14 @@ export const Currency = styled.div`
             margin-right: 5px;
         }
 
+<<<<<<< HEAD
         @media ${({ theme }) => theme.device.md} {
             font-size: 32px;
         }
+=======
+    @media ${({ theme }) => theme.device.md} {
+        font-size: 32px;
+>>>>>>> 795946254e6e30223e2095d8b0e9635645ea5c95
     }
 `;
 
@@ -106,10 +111,13 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
+<<<<<<< HEAD
     @media ${({ theme }) => theme.device.sm} {
         font-size: 40px;
     }
 
+=======
+>>>>>>> 795946254e6e30223e2095d8b0e9635645ea5c95
     @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
     }
@@ -125,16 +133,6 @@ export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
     height: 28px;
     width: 28px;
 
-    @media ${({ theme }) => theme.device.sm} {
-        height: 40px;
-        width: 40px;
-    }
-
-    @media ${({ theme }) => theme.device.md} {
-        height: ${({ large }) => (large ? '50px' : '50px')};
-        width: ${({ large }) => (large ? '50px' : '50px')};
-    }
-
     @media ${({ theme }) => theme.device.lg} {
         height: ${({ large }) => (large ? '65px' : '54px')};
         width: ${({ large }) => (large ? '62px' : '51px')};
@@ -144,9 +142,8 @@ export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
 
     stroke-linecap: round;
 
-    &.down {
-        -webkit-transform: rotateX(180deg);
-        transform: rotateX(180deg);
+        
+    @media ${({ theme }) => theme.device.md} {
     }
 `;
 

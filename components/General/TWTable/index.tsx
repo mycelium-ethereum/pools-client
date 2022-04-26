@@ -108,7 +108,7 @@ const CELL_SIZES: Record<Size, string> = {
 
 export const TableRowCell = styled.td<{ size?: Size }>`
     white-space: nowrap;
-    color: ${({ theme }) => theme.text};
+    color: ${({ theme }) => theme.fontColor.primary};
     ${({ size }) => size && `padding: ${CELL_SIZES[size]};`}
     font-size: 0.875rem;
 `;
