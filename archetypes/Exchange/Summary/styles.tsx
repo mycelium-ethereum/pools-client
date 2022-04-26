@@ -83,6 +83,7 @@ export const ShowDetailsButton = styled(Button)`
 
     svg {
         margin: 0 auto;
+        width: 15px;
         path {
             fill: ${({ theme }) => theme.fontColor.primary} !important;
         }

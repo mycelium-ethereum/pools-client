@@ -53,6 +53,7 @@ export default (() => {
                         decimals: longToken.decimals,
                         price: poolInstance.getNextLongTokenPrice(),
                         amount: commit.amount,
+                        isLong: true,
                     };
                     const parsedShortToken: Token = {
                         name: shortToken.name,
@@ -61,6 +62,7 @@ export default (() => {
                         decimals: shortToken.decimals,
                         price: poolInstance.getNextShortTokenPrice(),
                         amount: commit.amount,
+                        isLong: false,
                     };
 
                     if (commit.type === CommitEnum.longMint || commit.type === CommitEnum.shortMint) {
@@ -90,10 +92,6 @@ export default (() => {
                         ...commit,
                         tokenIn,
                         tokenOut,
-                        isLong:
-                            commit.type === CommitEnum.longMint ||
-                            commit.type === CommitEnum.longBurn ||
-                            commit.type === CommitEnum.longBurnShortMint,
                         settlementTokenSymbol: settlementToken.symbol,
                         expectedExecution: getExpectedExecutionTimestamp(
                             frontRunningInterval.toNumber(),

@@ -1,17 +1,23 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`
     margin: auto 0;
     display: flex;
+    align-items: center;
 `;
 
 const MarketLogo = styled(Logo)`
     margin: auto 0.5rem auto 0;
     display: inline;
+`;
+
+const MarketText = styled.div`
+    display: flex;
 `;
 
 export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: boolean }): JSX.Element => {
@@ -22,18 +28,25 @@ export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: b
         <MarketContainer>
             <MarketLogo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
             <div>
-                <div className="flex">
+                <MarketText>
                     <div>
                         {leverage}-{marketSymbolToAssetName[marketName]}
                     </div>
                     &nbsp;
                     <div className={`${isLong ? 'green' : 'red'}`}>{isLong ? 'Long' : 'Short'}</div>
-                </div>
-                <div className="text-cool-gray-500">{tokenSymbol}</div>
+                </MarketText>
+                <InnerCellSubText>{tokenSymbol}</InnerCellSubText>
             </div>
         </MarketContainer>
     );
 };
+
+export const SettlementToken = ({ tokenSymbol }: { tokenSymbol: string }): JSX.Element => (
+    <MarketContainer>
+        <MarketLogo size="lg" ticker={tokenSymbol as LogoTicker} />
+        <div>{tokenSymbol}</div>
+    </MarketContainer>
+);
 
 export const MarketPrice = ({
     tokenSymbol,
@@ -51,7 +64,29 @@ export const MarketPrice = ({
     </div>
 );
 
-export default {
-    MarketPrice,
-    Market,
-};
+export const TokenPrice = ({
+    tokenInSymbol,
+    tokenOutSymbol,
+    price,
+}: {
+    tokenOutSymbol: string;
+    tokenInSymbol: string;
+    price: BigNumber;
+}): JSX.Element => <div>{`${price.toFixed(2)} ${tokenOutSymbol}/${tokenInSymbol}`}</div>;
+
+export const Amount = ({ tokenSymbol, amount }: { tokenSymbol: string; amount: BigNumber }): JSX.Element => (
+    <MarketContainer>
+        <MarketLogo size="lg" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
+        <div>{amount.toFixed(3)}</div>
+    </MarketContainer>
+);
+
+export const TokenSymbol = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong?: boolean }): JSX.Element =>
+    isLong !== undefined ? (
+        <div>
+            <div>{tokenSymbol}</div>
+            <div className={`${isLong ? 'green' : 'red'}`}>{isLong ? 'Long' : 'Short'}</div>
+        </div>
+    ) : (
+        <>{tokenSymbol}</>
+    );

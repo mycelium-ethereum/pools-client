@@ -23,3 +23,27 @@ export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnu
             return false;
     }
 };
+
+export const generalMarketFilter: (poolName: string, marketFilterState: MarketFilterEnum) => boolean = (
+    name,
+    marketFilterState,
+) => {
+    switch (marketFilterState) {
+        case MarketFilterEnum.All:
+            return true;
+        case MarketFilterEnum.EUR:
+            return name.search('EUR') > -1;
+        case MarketFilterEnum.TOKE:
+            return name.search('TOKE') > -1;
+        case MarketFilterEnum.LINK:
+            return name.search('LINK') > -1;
+        case MarketFilterEnum.ETH:
+            return name.search('ETH') > -1;
+        case MarketFilterEnum.BTC:
+            return name.search('BTC') > -1;
+        case MarketFilterEnum.AAVE:
+            return name.search('AAVE') > -1;
+        default:
+            return false;
+    }
+};

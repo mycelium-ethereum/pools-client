@@ -11,7 +11,7 @@ const tokenImagesRootUrl = 'https://raw.githubusercontent.com/dospore/tracer-bal
  * @returns true if success and false otherwise
  */
 export const watchAsset: (
-    provider: ethers.providers.JsonRpcProvider | null,
+    provider: ethers.providers.JsonRpcProvider | null | undefined,
     token: {
         address: string;
         symbol: string;
