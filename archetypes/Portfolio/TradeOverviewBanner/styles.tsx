@@ -111,14 +111,11 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
-<<<<<<< HEAD
-    @media ${({ theme }) => theme.device.sm} {
+    <<<<<<< HEAD @media ${({ theme }) => theme.device.sm} {
         font-size: 40px;
     }
 
-=======
->>>>>>> 795946254e6e30223e2095d8b0e9635645ea5c95
-    @media ${({ theme }) => theme.device.md} {
+    =======>>>>>>>795946254e6e30223e2095d8b0e9635645ea5c95 @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
     }
 
@@ -142,7 +139,6 @@ export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
 
     stroke-linecap: round;
 
-        
     @media ${({ theme }) => theme.device.md} {
     }
 `;
