@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import { HiddenExpand, Logo } from '~/components/General';
 import { InnerSearchInput, InputWrapper } from '~/components/General/SearchInput';
 import { Table } from '~/components/General/TWTable';
-import { device } from '~/store/ThemeSlice/themes';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const TokenSelectBox = styled.div`
     width: 100%;
-    background: ${({ theme }) => theme['background-secondary']};
+    background: ${({ theme }) => theme.background.secondary};
     height: 220px;
     box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 10px 10px rgba(0, 0, 0, 0.04);
     border-radius: 7px;
@@ -25,7 +25,7 @@ export const TokenSelectDropdown = styled(HiddenExpand)`
     padding: 0 1rem;
     margin-left: -1rem;
 
-    @media ${device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         padding: 0 4rem;
         margin-left: -4rem;
     }
@@ -107,7 +107,14 @@ export const TokenSelectRow = styled.tr<{
         right: 0;
         height: 40%;
         width: 1px;
-        background: ${({ theme }) => (theme.isDark ? '#F9FAFB' : '#E5E7EB')};
+        background: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#E5E7EB';
+                default:
+                    return '#F9FAFB';
+            }
+        }};
     }
 
     &:hover {
@@ -116,7 +123,7 @@ export const TokenSelectRow = styled.tr<{
 `;
 
 export const TokenSelectHead = styled.thead`
-    background-color: ${({ theme }) => theme['border-secondary']};
+    background-color: ${({ theme }) => theme.border.secondary};
     padding: 1rem;
     text-align: center;
     border-radius: 7px;
@@ -131,12 +138,12 @@ export const HeaderCell = styled.th`
         right: 0;
         height: 70%;
         width: 1px;
-        background: ${({ theme }) => (theme.isDark ? '' : theme.text)};
+        background: ${({ theme }) => theme.fontColor.primary};
     }
 `;
 
 export const TokenSelectBody = styled.tbody`
-    background-color: ${({ theme }) => (theme.isDark ? theme['button-bg'] : theme.backgroud)};
+    background-color: ${({ theme }) => theme.button.bg};
 `;
 
 interface TokenSelectCell {
@@ -155,7 +162,7 @@ export const TokenSelectCell = styled.td<TokenSelectCell>`
     span {
         color: #6b7280;
     }
-    @media (${device.sm}) {
+    @media (${({ theme }) => theme.device.sm}) {
         font-size: 14px;
     }
 `;

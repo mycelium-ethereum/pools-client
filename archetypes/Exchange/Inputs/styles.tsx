@@ -17,7 +17,7 @@ export const Wrapper = styled.div<{ hasMargin?: boolean }>`
 
 export const InputContainerStyled = styled(InputContainer)`
     width: 100%;
-    border-color: ${({ theme }) => theme['border']};
+    border-color: ${({ theme }) => theme.border.primary};
     border-radius: 7px;
 `;
 
@@ -38,7 +38,7 @@ export const InputStyled = styled(Input)`
 
 export const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean }>`
     display: ${({ showContent }) => (showContent ? 'block' : 'none')};
-    color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.text)};
+    color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.fontColor.primary)};
     font-size: 15px;
     opacity: 0.7;
 

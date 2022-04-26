@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
-import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchAverageEntryPrices } from '~/utils/pools';
+import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
 
@@ -88,38 +88,13 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             state.pools[pool].userBalances.aggregateBalances = aggregateBalances;
         });
     },
-    setAverageEntryPrices: (pool, averageEntryPrices) => {
+    setTradeStats: (pool, tradeStats) => {
         if (!get().pools[pool]) {
             return;
         }
         set((state) => {
-            state.pools[pool].userBalances.averageEntryPrices = averageEntryPrices;
+            state.pools[pool].userBalances.tradeStats = tradeStats;
         });
-    },
-    setUpdatedPoolBalances: (pool, updatedBalances) => {
-        if (!get().pools[pool]) {
-            return;
-        }
-        console.log('updating balances', updatedBalances);
-        // set((state) => {
-        // state.pools[pool]
-        // })
-        // return {
-        // ...state,
-        // pools: {
-        // ...state.pools,
-        // [action.pool]: {
-        // ...state.pools[action.pool],
-        // lastUpdate: action.lastUpdate,
-        // lastPrice: action.lastPrice,
-        // longBalance: action.longBalance,
-        // shortBalance: action.shortBalance,
-        // nextLongBalance: action.longBalance,
-        // nextShortBalance: action.shortBalance,
-        // oraclePrice: action.oraclePrice,
-        // },
-        // },
-        // };
     },
     setPoolIsWaiting: (pool, isWaitingForUpkeep) => {
         if (!get().pools[pool]) {
@@ -152,7 +127,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         get().setPoolIsWaiting(pool, false);
         get().updatePoolTokenBalances([pool], provider, account);
         get().updateSettlementTokenBalances([pool], provider, account);
-        get().updateAverageEntryPrices(network, [pool], account);
+        get().updateTradeStats([pool], network, account);
         get().updatePoolBalances(pool, provider);
     },
 
@@ -206,7 +181,6 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 console.error('Failed to fetch settlementToken balances', err);
             });
     },
-
     updatePoolTokenBalances: (pools_, provider, account) => {
         if (!provider || !account) {
             return false;
@@ -249,8 +223,11 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 });
         });
     },
-    updateAverageEntryPrices: (network, pools_, account) => {
-        pools_.map((pool) => {
+    updateTradeStats: (pools_, network, account) => {
+        if (!network || !account) {
+            return DEFAULT_POOLSTATE.userBalances.tradeStats;
+        }
+        pools_.forEach((pool) => {
             if (!network || !pool || !account) {
                 return {
                     longPriceWallet: new BigNumber(0),
@@ -261,15 +238,9 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             }
             const poolState = get().pools[pool].poolInstance;
             const decimals = poolState.settlementToken.decimals;
-            fetchAverageEntryPrices(network, pool, account, decimals)
-                .then((averageEntryPrices) => {
-                    console.debug('Average Entry Prices', {
-                        longPriceWallet: averageEntryPrices.longPriceWallet.toFixed(),
-                        shortPriceWallet: averageEntryPrices.shortPriceWallet.toFixed(),
-                        longPriceAggregate: averageEntryPrices.longPriceAggregate.toFixed(),
-                        shortPriceAggregate: averageEntryPrices.shortPriceAggregate.toFixed(),
-                    });
-                    get().setAverageEntryPrices(pool, averageEntryPrices);
+            fetchTradeStats(network, pool, account, decimals)
+                .then((tradeStats) => {
+                    get().setTradeStats(pool, tradeStats);
                 })
                 .catch((err) => {
                     console.error('Failed to fetch aggregate balance', err);
@@ -358,12 +329,12 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updatePoolTokenBalances: IPoolsInstancesSlice['updatePoolTokenBalances'];
     updateSettlementTokenBalances: IPoolsInstancesSlice['updateSettlementTokenBalances'];
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
-    updateAverageEntryPrices: IPoolsInstancesSlice['updateAverageEntryPrices'];
+    updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
 } = (state) => ({
     handlePoolUpkeep: state.poolsInstancesSlice.handlePoolUpkeep,
     updatePoolBalances: state.poolsInstancesSlice.updatePoolBalances,
     updatePoolTokenBalances: state.poolsInstancesSlice.updatePoolTokenBalances,
     updateSettlementTokenBalances: state.poolsInstancesSlice.updateSettlementTokenBalances,
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
-    updateAverageEntryPrices: state.poolsInstancesSlice.updateAverageEntryPrices,
+    updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
 });

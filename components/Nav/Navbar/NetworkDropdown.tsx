@@ -34,7 +34,7 @@ const Option = styled.option`
     transition-duration: 150ms;
 
     &:hover {
-        background: ${({ theme }) => theme['button-bg-hover']};
+        background: ${({ theme }) => theme.button.hover};
     }
 `;
 

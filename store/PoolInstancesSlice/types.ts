@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, AverageEntryPrices, PoolInfo } from '~/types/pools';
+import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
 
 export interface IPoolsInstancesSlice {
     pools: Record<string, PoolInfo>;
@@ -22,17 +22,7 @@ export interface IPoolsInstancesSlice {
         approvals: { shortTokenAmount: BigNumber; longTokenAmount: BigNumber; settlementTokenAmount: BigNumber },
     ) => void;
     setAggregateBalances: (pool: string, aggregateBalances: AggregateBalances) => void;
-    setAverageEntryPrices: (pool: string, aggregateBalances: AverageEntryPrices) => void;
-    setUpdatedPoolBalances: (
-        pool: string,
-        updatedbalances: {
-            lastPrice: BigNumber;
-            oraclePrice: BigNumber;
-            longBalance: BigNumber;
-            shortBalance: BigNumber;
-            lastUpdate: BigNumber;
-        },
-    ) => void;
+    setTradeStats: (pool: string, aggregateBalances: TradeStats) => void;
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
@@ -44,18 +34,22 @@ export interface IPoolsInstancesSlice {
         network: KnownNetwork | undefined,
     ) => void;
     updatePoolTokenBalances: (
-        pool: string[],
+        pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
     updateSettlementTokenBalances: (
-        pool: string[],
+        pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
-    updateAverageEntryPrices: (network: KnownNetwork | undefined, pool: string[], account: string | undefined) => void;
+    updateTradeStats: (
+        pools: string [],
+        network: KnownNetwork | undefined,
+        account: string | undefined,
+    ) => void;
     updateTokenApprovals: (
-        pool: string[],
+        pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;

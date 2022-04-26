@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { Container } from '~/components/General/Container';
-import Loading from '~/components/General/Loading';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
 import AddAltPoolModal from './AddAltPoolModal';
-import FilterBar from './FilterSelects/Bar';
+import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
 import {
@@ -21,6 +20,7 @@ import {
     RebalanceEnum,
     SortByEnum,
 } from './state';
+import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
@@ -125,41 +125,50 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <Container className="mb-10">
-                <section className="mb-8">
-                    <h1 className="mt-8 mb-2 text-3xl font-semibold text-theme-text">Pools</h1>
-                    <div className="mb-6 text-sm font-light">
-                        The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink Oracles,
-                        via Tracer’s SMA Wrapper.{' '}
-                        <a
-                            href="https://tracer-1.gitbook.io/ppv2-beta-testnet"
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            className="text-tracer-400 underline"
-                        >
-                            Learn More
-                        </a>
+            <Styles.Container>
+                <Styles.Header>
+                    <div>
+                        <Styles.Heading>Pools</Styles.Heading>
+                        <Styles.SubHeading>
+                            The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink
+                            Oracles, via Tracer’s SMA Wrapper.{' '}
+                            <Styles.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">Learn More</Styles.Link>
+                        </Styles.SubHeading>
                     </div>
-                    <FilterBar state={state} dispatch={dispatch} />
-                </section>
-                {!filteredTokens.length ? <Loading className="mx-auto mt-10 w-10" /> : null}
+                    <FilterSelects state={state} dispatch={dispatch} />
+                </Styles.Header>
+                {!filteredTokens.length ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     return (
-                        <div
-                            key={index}
-                            className="mb-10 rounded bg-theme-background p-4 shadow-xl sm:rounded-2xl md:rounded-3xl md:p-8"
-                        >
+                        <Styles.DataRow key={index}>
                             <PoolsTable
                                 rows={dataRows}
                                 deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={showNextRebalance}
                             />
-                        </div>
+                        </Styles.DataRow>
                     );
                 })}
-            </Container>
+                <Styles.AltPoolRow>
+                    <Styles.AltPoolTitle>Don’t see the pool you’re after?</Styles.AltPoolTitle>
+                    <Styles.AltPoolActions>
+                        <Styles.Button
+                            variant="primary"
+                            size="sm"
+                            onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
+                        >
+                            Display Alternative Pool
+                        </Styles.Button>
+                        <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
+                            <Styles.Button variant="primary" size="sm" disabled>
+                                Deploy New Pool
+                            </Styles.Button>
+                        </TooltipSelector>
+                    </Styles.AltPoolActions>
+                </Styles.AltPoolRow>
+            </Styles.Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
             )}
