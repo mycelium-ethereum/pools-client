@@ -81,6 +81,8 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
         setPoolDetails(data);
     }, []);
 
+    console.log(rows[0], 'row');
+
     return (
         <>
             <Table>
@@ -247,7 +249,7 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     <div className="font-bold">{pool.name.split('-')[0][0]}</div>
                     <div className="flex items-center">
-                        USDC
+                        {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>
