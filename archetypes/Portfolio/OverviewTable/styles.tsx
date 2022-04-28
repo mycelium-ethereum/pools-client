@@ -118,6 +118,7 @@ export const ActionsButton = styled(Button)`
 export const RowCount = styled.div`
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 0.7rem;
     font-weight: 400;
     font-size: 24px;
@@ -125,7 +126,7 @@ export const RowCount = styled.div`
     text-align: center;
     width: 46px;
     height: 44px;
-    background: #e0f2ff;
+    background: rgba(61, 168, 245, 0.1);
     color: #3da8f5;
     border: 1px solid #3da8f5;
     box-sizing: border-box;
