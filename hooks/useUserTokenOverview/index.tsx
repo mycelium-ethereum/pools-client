@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain } from '@tracer-protocol/pools-js';
 import { TokenRowProps } from '~/archetypes/Portfolio/Overview/state';
 import { usePools } from '~/hooks/usePools';
+import { getMarketSymbol, marketSymbolToAssetName } from '~/utils/poolNames';
 
 export default (() => {
     const { pools } = usePools();
@@ -17,15 +18,31 @@ export default (() => {
             poolValues.forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 
-                const { address, oraclePrice, longToken, shortToken, longBalance, shortBalance, leverage } =
-                    poolInstance;
+                const {
+                    name: poolName,
+                    address,
+                    oraclePrice,
+                    longToken,
+                    shortToken,
+                    longBalance,
+                    shortBalance,
+                    leverage,
+                } = poolInstance;
                 const leverageBN = new BigNumber(leverage);
+
+                const marketSymbol = getMarketSymbol(poolName);
+                const marketInfo = {
+                    leverage,
+                    marketSymbol,
+                    marketName: marketSymbolToAssetName[marketSymbol],
+                };
 
                 rows.push(
                     {
                         name: shortToken.name,
                         poolAddress: address,
                         address: shortToken.address,
+                        marketInfo,
                         decimals: shortToken.decimals,
                         symbol: shortToken.symbol,
                         side: shortToken.side,
@@ -39,6 +56,7 @@ export default (() => {
                         name: longToken.name,
                         poolAddress: address,
                         address: longToken.address,
+                        marketInfo,
                         decimals: longToken.decimals,
                         symbol: longToken.symbol,
                         side: longToken.side,

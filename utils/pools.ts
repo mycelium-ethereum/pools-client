@@ -93,3 +93,36 @@ export const fetchTokenApprovals: (
 
 export const fromAggregateBalances: (balanceType: BalanceTypeEnum) => boolean = (balanceType) =>
     balanceType === BalanceTypeEnum.escrow;
+
+export const marketSymbolToAssetName: Record<string, string> = {
+    'ETH/USD': 'Ethereum',
+    'EUR/USD': 'Euro',
+    'BTC/USD': 'Bitcoin',
+    'TOKE/USD': 'Tokemak',
+    'LINK/USD': 'Chainlink',
+    'AAVE/USD': 'AAVE',
+};
+
+// export const tickerToName: (ticker: string) => string = (ticker) => {
+// const [leverage, market] = ticker.split('-');
+// return `${leverage}-${marketSymbolToAssetName[market]}`;
+// };
+
+// given a poolName, deconstruct it such that we are left with the
+// market and leverage
+export const formatPoolName = (
+    poolName: string,
+): {
+    leverage: string;
+    market: string;
+    // collateral: string
+} => {
+    const leverageRegex = /([0-9]*)\-/g;
+    const leverage = poolName.match(leverageRegex);
+    const marketRegex = /([A-Z]*\/[A-Z]*)/g;
+    const market = poolName.match(marketRegex);
+    return {
+        leverage: leverage ? leverage[0] : '',
+        market: market ? market[0] : '',
+    };
+};

@@ -18,6 +18,11 @@ export type TokenRowProps = {
     poolAddress: string;
     address: string;
     name: string;
+    marketInfo: {
+        marketSymbol: string;
+        marketName: string;
+        leverage: number;
+    };
     decimals: number;
     symbol: string;
     side: number;

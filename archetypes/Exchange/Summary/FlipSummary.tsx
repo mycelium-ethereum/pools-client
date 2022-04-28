@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
 
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
-import { getBaseAsset } from '~/utils/converters';
+import { getBaseAsset } from '~/utils/poolNames';
 import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } from './Sections';
 import * as Styles from './styles';
 import { FlipSummaryProps } from './types';
@@ -18,7 +18,6 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
         () => (isLong ? pool.getNextShortTokenPrice() : pool.getNextLongTokenPrice()),
         [isLong],
     );
-
     const baseAsset = getBaseAsset(pool.name);
     const expectedNotionalReturn = calcNotionalValue(nextTokenPrice, amount);
 

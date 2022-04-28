@@ -11,6 +11,7 @@ import { useStore } from '~/store/main';
 import { selectProvider } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { toApproxCurrency } from '~/utils/converters';
+import { getBaseAssetFromMarket } from '~/utils/poolNames';
 import { DenotedInEnum, TokenRowProps } from '../state';
 
 export default (({ rows, onClickCommitAction, denotedIn }) => {
@@ -63,6 +64,7 @@ export const TokenRow: React.FC<
 > = ({
     symbol,
     name,
+    marketInfo,
     address,
     poolAddress,
     decimals,
@@ -70,22 +72,22 @@ export const TokenRow: React.FC<
     price,
     holdings,
     provider,
-    // deposits,
     onClickCommitAction,
     oraclePrice,
     denotedIn,
 }) => {
     const netValue = useMemo(() => holdings.times(price), [holdings, price]);
-    // const pnl = useMemo(() => netValue.minus(deposits), [netValue, deposits]);
 
-    const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, name: string, leverage?: number) => {
+    const marketBase = getBaseAssetFromMarket(marketInfo.marketSymbol);
+
+    const BaseNumDenote = (netValue: BigNumber, oraclePrice: BigNumber, leverage?: number) => {
         if (netValue.eq(0)) {
             return netValue.toFixed(2);
-        } else if (name.split('-')[1].split('/')[0] === 'BTC') {
+        } else if (marketBase === 'BTC') {
             return leverage
                 ? ((netValue.toNumber() / oraclePrice.toNumber()) * leverage).toFixed(8)
                 : (netValue.toNumber() / oraclePrice.toNumber()).toFixed(8);
-        } else if (name.split('-')[1].split('/')[0] === 'ETH') {
+        } else if (marketBase === 'ETH') {
             return leverage
                 ? ((netValue.toNumber() / oraclePrice.toNumber()) * leverage).toFixed(6)
                 : (netValue.toNumber() / oraclePrice.toNumber()).toFixed(6);
@@ -99,20 +101,12 @@ export const TokenRow: React.FC<
     return (
         <TableRow lined>
             <TableRowCell>
-                {/*<div className="flex">*/}
-                {/*    <Logo ticker={tokenSymbolToLogoTicker(symbol)} size="md" className="inline mr-2 my-auto" />*/}
-                {/*    <div className="my-auto">*/}
-                {/*        <div className="font-bold">{tickerToName(name)}</div>*/}
-                {/*        <div className="text-xs">{name.split('-')[1]}</div>*/}
-                {/*    </div>*/}
-                {/*</div>*/}
                 <div className="my-auto flex">
                     <Logo size="lg" ticker={tokenSymbolToLogoTicker(symbol)} className="my-auto mr-2 inline" />
                     <div>
                         <div className="flex">
                             <div>
-                                {symbol.split('-')[0][0]}-
-                                {symbol.split('-')[1].split('/')[0] === 'BTC' ? 'Bitcoin' : 'Ethereum'}
+                                {marketInfo.leverage}-{marketInfo.marketName}
                             </div>
                             &nbsp;
                             <div className={`${side === SideEnum.long ? 'green' : 'red'}`}>
@@ -128,7 +122,7 @@ export const TokenRow: React.FC<
                     {
                         denotedIn === DenotedInEnum.BASE ? (
                             <>
-                                {BaseNumDenote(netValue, oraclePrice, name)} {name.split('-')[1].split('/')[0]}
+                                {BaseNumDenote(netValue, oraclePrice)} {marketBase}
                             </>
                         ) : (
                             `${toApproxCurrency(netValue)} USD`
@@ -139,21 +133,13 @@ export const TokenRow: React.FC<
                 </div>
                 <div className="opacity-80">{holdings.toFixed(2)} tokens</div>
             </TableRowCell>
-            {/*<TableRowCell>*/}
-            {/*    <div>{toApproxCurrency(deposits)}</div>*/}
-            {/*    <div className="opacity-80">{holdings.toFixed(2)} tokens</div>*/}
-            {/*</TableRowCell>*/}
-            {/*<TableRowCell className={pnl.gt(0) ? 'text-green-500' : 'text-red-500'}>*/}
-            {/*    {toApproxCurrency(pnl)}*/}
-            {/*</TableRowCell>*/}
             <TableRowCell>
                 {denotedIn === DenotedInEnum.BASE ? (
                     <>
-                        {BaseNumDenote(netValue, oraclePrice, name, parseInt(name.split('-')[0][0]))}{' '}
-                        {name.split('-')[1].split('/')[0]}
+                        {BaseNumDenote(netValue, oraclePrice, marketInfo.leverage)} {marketBase}
                     </>
                 ) : (
-                    `${NotionalDenote(netValue, parseInt(name.split('-')[0][0]))} USD`
+                    `${NotionalDenote(netValue, marketInfo.leverage)} USD`
                 )}
             </TableRowCell>
             <TableRowCell className="flex">

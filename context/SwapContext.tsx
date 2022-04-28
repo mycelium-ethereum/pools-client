@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
+import { getMarketInfoFromPoolName, getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
 interface ContextProps {
@@ -205,13 +206,13 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         if (poolsInitialized && Object.keys(pools)?.length) {
             const markets: Record<string, Market> = {};
             Object.values(pools).forEach((pool) => {
-                const [leverage, marketName] = pool.poolInstance.name.split('-');
+                const { leverage, marketSymbol } = getMarketInfoFromPoolName(pool.poolInstance.name);
                 // hopefully valid pool name
-                if (marketName) {
-                    if (!markets[marketName]) {
-                        markets[marketName] = {};
+                if (marketSymbol) {
+                    if (!markets[marketSymbol]) {
+                        markets[marketSymbol] = {};
                     }
-                    markets[marketName][parseInt(leverage)] = pool.poolInstance;
+                    markets[marketSymbol][leverage] = pool.poolInstance;
                 }
             });
             swapDispatch({
@@ -230,7 +231,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 swapDispatch({
                     type: 'setMarket',
                     // eg 3-BTC/USD -> BTC/USD
-                    value: name.split('-')[1],
+                    value: getMarketSymbol(name),
                 });
                 swapDispatch({
                     type: 'setLeverage',

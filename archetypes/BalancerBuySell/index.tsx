@@ -16,6 +16,7 @@ import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContex
 import { useStore } from '~/store/main';
 import { selectHandleConnect, selectWeb3Info } from '~/store/Web3Slice';
 import { classNames } from '~/utils/helpers';
+import { getBaseAsset, getBaseAssetFromMarket } from '~/utils/poolNames';
 
 export default (() => {
     const { network = NETWORKS.ARBITRUM, account } = useStore(selectWeb3Info, shallow);
@@ -107,11 +108,11 @@ export default (() => {
                         <Dropdown
                             className="w-full "
                             placeHolder="Select Market"
-                            placeHolderIcon={pool?.name?.split('-')[1]?.split('/')[0] as LogoTicker}
+                            placeHolderIcon={getBaseAsset(pool?.name) as LogoTicker}
                             size="lg"
                             options={Object.keys(markets).map((market) => ({
                                 key: market,
-                                ticker: market.split('/')[0] as LogoTicker,
+                                ticker: getBaseAssetFromMarket(market) as LogoTicker,
                                 text: market,
                             }))}
                             value={market}
