@@ -4,6 +4,7 @@ import { SideEnum } from '@tracer-protocol/pools-js';
 import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/Overview/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
+import { getBaseAsset } from '~/utils/poolNames';
 
 type EscrowRowInfo = Omit<EscrowRowProps, 'onClickCommitAction'>;
 
@@ -72,7 +73,7 @@ export default (() => {
                 _rows.push({
                     poolAddress: address,
                     poolName: name,
-                    marketTicker: name.split('-')[1].split('/')[0] as LogoTicker,
+                    marketTicker: getBaseAsset(name) as LogoTicker,
                     claimableSettlementTokens,
                     claimableLongTokens,
                     claimableShortTokens,

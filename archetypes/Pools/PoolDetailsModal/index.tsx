@@ -9,10 +9,13 @@ import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructExplorerLink } from '~/utils/blockExplorers';
-import { getPriceFeedUrl } from '~/utils/converters';
+import { formatAddress } from '~/utils/converters';
+import { getPriceFeedUrl } from '~/utils/poolNames';
 
-type PoolProps = {
+type Details = {
     name: string;
+    address: string;
+    marketSymbol: string;
     leverage: string;
     keeper: string;
     committer: string;
@@ -20,18 +23,32 @@ type PoolProps = {
     collateralAssetAddress: string;
 };
 
-export default (({ open, onClose, poolDetails, network }) => {
-    const { name, leverage, keeper, committer, collateralAsset, collateralAssetAddress } = poolDetails;
-
-    const formatAddress = (addr: string) => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
+export const PoolDetails = ({
+    open,
+    onClose,
+    poolDetails,
+    network,
+}: {
+    open: boolean;
+    onClose: () => void;
+    poolDetails: Details;
+    network: KnownNetwork | undefined;
+}): JSX.Element => {
+    const { name, address, marketSymbol, leverage, keeper, committer, collateralAsset, collateralAssetAddress } =
+        poolDetails;
 
     const poolDetailsData = useMemo(
         () => [
             { name: 'Pool Ticker', value: name },
             {
+                name: 'Pool Address',
+                value: formatAddress(address),
+                href: constructExplorerLink(BlockExplorerAddressType.address, address, network),
+            },
+            {
                 name: 'Price Feed',
-                value: name?.split('-')[1],
-                href: getPriceFeedUrl(name),
+                value: marketSymbol,
+                href: getPriceFeedUrl(marketSymbol),
             },
             {
                 name: 'Power Leverage',
@@ -89,12 +106,7 @@ export default (({ open, onClose, poolDetails, network }) => {
             </Table>
         </TWModal>
     );
-}) as React.FC<{
-    open: boolean;
-    onClose: () => void;
-    poolDetails: PoolProps;
-    network: KnownNetwork | undefined;
-}>;
+};
 
 const ModalHeader = styled((props: any) => <div className={props.className}>{props.children}</div>)`
     display: flex;
@@ -145,3 +157,5 @@ const CellContent = styled((props: any) => <div className={props.className}>{pro
         align-items: center;
     }
 `;
+
+export default PoolDetails;

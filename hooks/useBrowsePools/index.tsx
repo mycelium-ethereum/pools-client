@@ -5,7 +5,7 @@ import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
-import { tickerToName } from '~/utils/converters';
+import { getMarketSymbol } from '~/utils/poolNames';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useUpkeeps } from '../useUpkeeps';
 
@@ -70,11 +70,11 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
                     timestamp: lastUpdate.toNumber(),
                     tvl: tvl,
                 };
-
+                console.log(name);
                 rows.push({
                     address: address,
                     name: name,
-                    market: tickerToName(name),
+                    marketSymbol: getMarketSymbol(name),
                     leverage: leverage,
                     decimals: settlementToken.decimals,
                     settlementTokenSymbol: settlementToken.symbol,

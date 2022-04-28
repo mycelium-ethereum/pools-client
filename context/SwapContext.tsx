@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
+import { getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
 interface ContextProps {
@@ -230,7 +231,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 swapDispatch({
                     type: 'setMarket',
                     // eg 3-BTC/USD -> BTC/USD
-                    value: name.split('-')[1],
+                    value: getMarketSymbol(name),
                 });
                 swapDispatch({
                     type: 'setLeverage',

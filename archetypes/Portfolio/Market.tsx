@@ -2,7 +2,8 @@ import React from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
-import { marketSymbolToAssetName, toApproxCurrency } from '~/utils/converters';
+import { toApproxCurrency } from '~/utils/converters';
+import { getMarketInfoFromPoolName, marketSymbolToAssetName } from '~/utils/poolNames';
 
 const MarketContainer = styled.div`
     margin: auto 0;
@@ -15,8 +16,7 @@ const MarketLogo = styled(Logo)`
 `;
 
 export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: boolean }): JSX.Element => {
-    const leverage = tokenSymbol.split('-')[0][0];
-    const marketName = tokenSymbol.split('-')[1];
+    const { leverage, marketSymbol } = getMarketInfoFromPoolName(tokenSymbol);
 
     return (
         <MarketContainer>
@@ -24,7 +24,7 @@ export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: b
             <div>
                 <div className="flex">
                     <div>
-                        {leverage}-{marketSymbolToAssetName[marketName]}
+                        {leverage}-{marketSymbolToAssetName[marketSymbol]}
                     </div>
                     &nbsp;
                     <div className={`${isLong ? 'green' : 'red'}`}>{isLong ? 'Long' : 'Short'}</div>

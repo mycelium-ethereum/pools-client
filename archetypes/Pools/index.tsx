@@ -6,6 +6,7 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { marketFilter } from '~/utils/filters';
+import { getMarketLeverage } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
@@ -51,7 +52,7 @@ export const Browse: React.FC = () => {
                 case LeverageEnum.All:
                     return true;
                 default:
-                    return !!pool.name && pool.name.split('-')?.[0] === state.leverageFilter;
+                    return !!pool.name && getMarketLeverage(pool.name).toString() === state.leverageFilter;
             }
         },
         [state.leverageFilter],
@@ -64,7 +65,7 @@ export const Browse: React.FC = () => {
                 pool.name.toLowerCase().match(searchString) ||
                     pool.shortToken.symbol.toLowerCase().match(searchString) ||
                     pool.longToken.symbol.toLowerCase().match(searchString) ||
-                    pool.market.toLowerCase().match(searchString),
+                    pool.marketSymbol.toLowerCase().match(searchString),
             );
         },
         [state.search],
@@ -84,7 +85,7 @@ export const Browse: React.FC = () => {
         [state.sortBy],
     );
 
-    const filteredTokens = useMemo(
+    const filteredTokens: BrowseTableRowData[] = useMemo(
         () =>
             tokens
                 .filter((pool) => marketFilter(pool.name, state.marketFilter))
@@ -96,12 +97,12 @@ export const Browse: React.FC = () => {
 
     const groupedSortedFilteredTokens = useMemo(
         () =>
-            filteredTokens.reduce((groups, item) => {
+            filteredTokens.reduce((groups, token) => {
                 // @ts-ignore
-                const group = groups[item.name.split('-')[1]] || [];
-                group.push(item);
+                const group = groups[token.marketSymbol] || [];
+                group.push(token);
                 // @ts-ignore
-                groups[item.name.split('-')[1]] = group;
+                groups[token.marketSymbol] = group;
                 return groups;
             }, []),
         [filteredTokens],
