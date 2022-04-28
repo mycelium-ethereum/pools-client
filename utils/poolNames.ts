@@ -32,11 +32,6 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'AAVE/USD': 'AAVE',
 };
 
-// export const tickerToName: (ticker: string) => string = (ticker) => {
-// const [leverage, market] = ticker.split('-');
-// return `${leverage}-${marketSymbolToAssetName[market]}`;
-// };
-
 // given a poolName, get the marketSymbol
 export const getMarketSymbol = (poolName?: string): string => {
     if (!poolName) {
