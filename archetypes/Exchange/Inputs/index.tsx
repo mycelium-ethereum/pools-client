@@ -2,7 +2,6 @@ import React, { useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { SwapState, useBigNumber, SwapAction } from '~/context/SwapContext';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import usePoolTokens from '~/hooks/usePoolTokens';
@@ -10,7 +9,7 @@ import { PoolInfo } from '~/types/pools';
 import { toApproxCurrency } from '~/utils/converters';
 import AmountInput from './AmountInput';
 import * as Styles from './styles';
-import { InvalidAmount } from './types';
+import { InvalidAmount, WALLET_OPTIONS } from './types';
 import TokenSelect from '../TokenSelect';
 
 /* HELPER FUNCTIONS */
@@ -78,23 +77,6 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
     );
 
     const tokenPrice = useMemo(() => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()), [isLong]);
-
-    const TEMP_WALLET_OPTIONS = [
-        {
-            key: BalanceTypeEnum.wallet,
-            text: 'Wallet',
-        },
-        {
-            key: BalanceTypeEnum.escrow,
-            text: 'Escrow',
-            disabled:
-                isLong && commitAction === CommitActionEnum.mint
-                    ? {
-                          optionKey: TooltipKeys.EscrowLongUnavailable,
-                      }
-                    : undefined,
-        },
-    ];
 
     useEffect(() => {
         if (pool) {
@@ -168,7 +150,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                                 swapDispatch({ type: 'setBalanceType', value: val });
                             }
                         }}
-                        options={TEMP_WALLET_OPTIONS}
+                        options={WALLET_OPTIONS}
                     />
                 </Styles.Wrapper>
             </Styles.Container>

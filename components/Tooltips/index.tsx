@@ -78,10 +78,3 @@ export const GasPriceTooltip: React.FC<{
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
-
-export const EscrowLongUnavailableTooltip: React.FC = ({ children }) => {
-    const Content = (
-        <>Long mint from escrow unavailable. Please use tokens from wallet, or claim from escrow before minting</>
-    );
-    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
-};
