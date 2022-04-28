@@ -70,7 +70,6 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
                     timestamp: lastUpdate.toNumber(),
                     tvl: tvl,
                 };
-                console.log(name);
                 rows.push({
                     address: address,
                     name: name,

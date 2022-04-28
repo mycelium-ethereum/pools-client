@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
 
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
-// import { getBaseAsset } from '~/utils/poolNames';
 import { getBaseAsset } from '~/utils/poolNames';
 import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } from './Sections';
 import * as Styles from './styles';
