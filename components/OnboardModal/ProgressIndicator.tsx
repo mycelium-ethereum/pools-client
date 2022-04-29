@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Theme } from '~/store/ThemeSlice/themes';
 import { ProgressIndicatorProps } from './types';
 
 const StepsContainer = styled.div`
@@ -17,14 +16,14 @@ const Step = styled.div`
     width: 0.75rem;
     height: 0.75rem;
 
-    background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#f3f4f6' : '#1f2a37')};
+    background-color: #8383eb;
 
     &.current-step {
         width: 1.25rem;
         height: 1.25rem;
         border-width: 4px;
         border-color: #a6a6f2;
-        background-color: #3535dc;
+        background-color: #2a2ac7;
     }
 `;
 

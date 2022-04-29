@@ -51,7 +51,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                     >
                         <div
                             className={classNames(
-                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-10 text-left align-bottom shadow-xl transition-all sm:my-8 sm:align-middle',
+                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-10 text-left align-middle shadow-xl transition-all sm:my-8',
                                 SIZES[size],
                                 className,
                             )}
@@ -78,5 +78,5 @@ const DialogStyled = styled(Dialog)<{ onClose: () => void }>`
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 10;
+    z-index: 11;
 `;

@@ -1,9 +1,8 @@
 import React from 'react';
 import Button from '~/components/General/Button';
-import Divider from '~/components/General/Divider';
 import { TWModal } from '~/components/General/TWModal';
 import ProgressIndicator from '~/components/OnboardModal/ProgressIndicator';
-import * as Styled from './styles';
+import * as Styles from './styles';
 import { OnboardModalProps } from './types';
 
 const OnboardTradeModal: React.FC<OnboardModalProps> = ({
@@ -17,188 +16,128 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 1:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Wave />
-                        </div>
-                        <div className="my-5 text-center text-2xl">{`Welcome to Tracer's Perpetual Pools`}</div>
-                        <Divider className="mb-8" />
-                        <div className="text-center text-sm">
-                            Fully fungible leveraged tokens. No margin, No liquidations. Up to 3p{' '}
-                            <span className="green">long</span> or <span className="red">short</span> exposure to ETH or
-                            BTC in your wallet.
-                        </div>
-                        <div className="my-8 text-center text-sm font-bold">Want to learn more?</div>
+                        <Styles.Heading>Welcome to Tracer&#39;s Perpetual Pools</Styles.Heading>
+
+                        <Styles.Content>
+                            <Styles.Text>
+                                Your favourite assets, leveraged.
+                                <br />
+                                Now, mint tokens and hold them long-term.
+                            </Styles.Text>
+                            <Styles.Text>
+                                Go <Styles.Color variant="green">long</Styles.Color>, go{' '}
+                                <Styles.Color variant="red">short</Styles.Color>, and <Styles.Color>stake</Styles.Color>{' '}
+                                to earn.
+                            </Styles.Text>
+                        </Styles.Content>
+
                         <ProgressIndicator totalSteps={5} currentStep={1} />
-                        <div className="flex flex-col-reverse sm:flex-row">
-                            <Button
-                                variant="primary-light"
-                                className="mr-5 mt-3 sm:mt-0"
-                                onClick={() => setShowOnboardModal()}
-                            >
-                                {`No thanks, I'd like to get started`}
-                            </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
-                                Sure, show me around!
-                            </Button>
-                        </div>
+
+                        <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                            Show me around!
+                        </Button>
                     </>
                 );
             case 2:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Question />
-                        </div>
-                        <div className="my-5 text-center text-2xl">How it works</div>
-                        <Divider className="mb-8" />
-                        <div className="mb-8 text-sm">
-                            1. Deposit collateral into a pool. <br />
-                            2. Mint tokens that represent your ownership and entitle you to a fraction of the pools
-                            funds. <br />
-                            3. Funds move between long and short sides of the pool based on underlying asset movement,
-                            which is reflected in your pool token price. <br />
-                            4. Burn your tokens and claim your collateral/realise your PnL.
-                        </div>
+                        <Styles.Heading>Move Funds to Arbitrum</Styles.Heading>
+
+                        <Styles.Content>
+                            <Styles.Text>
+                                You need assets on Arbitrum to buy and mint tokens. Use the bridge to easily move funds
+                                between networks, without leaving the app.
+                            </Styles.Text>
+                            <Styles.Text>Reminder: It takes 7 days to withdraw to Ethereum.</Styles.Text>
+                        </Styles.Content>
                         <ProgressIndicator totalSteps={5} currentStep={2} />
-                        <div className="flex">
-                            <Button
-                                variant="primary-light"
-                                className="mr-5"
-                                onClick={() => setOnboardStep(onboardStep - 1)}
-                            >
+                        <Styles.ButtonContainer>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
                                 Previous
                             </Button>
                             <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
-                        </div>
+                        </Styles.ButtonContainer>
                     </>
                 );
             case 3:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Question />
-                        </div>
-                        <div className="my-5 text-center text-2xl">Crossing the bridge from L1 to Arbitrum</div>
-                        <Divider className="mb-8" />
-                        <div className="mb-8 text-sm">
-                            Perpetual Pools are native to Arbitrum. Move your funds from L1 to L2 with the{' '}
-                            <a href="https://bridge.arbitrum.io" target="_blank" rel="noreferrer">
-                                Arbitrum bridge
-                            </a>{' '}
-                            to get started. Please note the 7 day withdrawal timeframe from Arbitrum back to the
-                            main-chain. <br />
-                            <br />
-                            Read our{' '}
-                            <a
-                                href="https://tracer.finance/radar/bridging-to-arbitrum"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                guide on bridging to Arbitrum.
-                            </a>
-                        </div>
+                        <Styles.Heading>Join a Pool</Styles.Heading>
+
+                        <Styles.Content>
+                            <Styles.Text>
+                                Go long or short in a Pool to mint leveraged tokens. Just add funds and get new tokens
+                                in 8 hours.
+                            </Styles.Text>
+                            <Styles.Text>
+                                What&#39;s the wait for? See the docs:{' '}
+                                <Styles.Link href="https://tracer.finance/radar/minting-burning/">
+                                    Minting and Burning.
+                                </Styles.Link>
+                            </Styles.Text>
+                        </Styles.Content>
+
                         <ProgressIndicator totalSteps={5} currentStep={3} />
-                        <div className="flex">
-                            <Button
-                                variant="primary-light"
-                                className="mr-5"
-                                onClick={() => setOnboardStep(onboardStep - 1)}
-                            >
+                        <Styles.ButtonContainer>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
                                 Previous
                             </Button>
                             <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
-                        </div>
+                        </Styles.ButtonContainer>
                     </>
                 );
             case 4:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Question />
-                        </div>
-                        <div className="my-5 text-center text-2xl">Mint and burn Pool tokens</div>
-                        <Divider className="mb-8" />
-                        <div className="mb-8 text-sm">
-                            {`Once you've browsed the available markets, head to the exchange to mint tokens.`} <br />
-                            <br />
-                            Guide:{' '}
-                            <a href="https://tracer.finance/radar/minting-burning" target="_blank" rel="noreferrer">
-                                Minting and Burning
-                            </a>
-                        </div>
+                        <Styles.Heading>Track Tokens and Performance</Styles.Heading>
+
+                        <Styles.Content>
+                            <Styles.Text>
+                                All of your tokens in the one place. See holdings and order history in the Portfolio,
+                                and check PnL.
+                            </Styles.Text>
+                            <Styles.Text>Remember to claim if you want to move assets to a wallet.</Styles.Text>
+                        </Styles.Content>
+
                         <ProgressIndicator totalSteps={5} currentStep={4} />
-                        <div className="flex">
-                            <Button
-                                variant="primary-light"
-                                className="mr-5"
-                                onClick={() => setOnboardStep(onboardStep - 1)}
-                            >
+                        <Styles.ButtonContainer>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
                                 Previous
                             </Button>
                             <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
-                        </div>
+                        </Styles.ButtonContainer>
                     </>
                 );
             case 5:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Question />
-                        </div>
-                        <div className="my-5 text-center text-2xl">Want to learn more?</div>
-                        <Divider className="mb-8" />
-                        <div className="mb-8 text-sm">
-                            Read the{' '}
-                            <a
-                                href="https://tracer.finance/static/Tracer Perpetual Pools-efc7c29f638cb788832aafe0f41c07bd.pdf"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                litepaper
-                            </a>
-                            <br />
-                            <br />
-                            Browse the{' '}
-                            <a href="https://docs.tracer.finance" target="_blank" rel="noreferrer">
-                                documentation
-                            </a>
-                            <br />
-                            <br />
-                            Check out{' '}
-                            <a href="https://tracer.finance/radar" target="_blank" rel="noreferrer">
-                                {`Radar, Tracer's blog`}
-                            </a>
-                            <br />
-                            <br />
-                            Catch up on{' '}
-                            <a
-                                href="https://www.youtube.com/channel/UChQFEjLu4vaaS96iCRbasFg"
-                                target="_blank"
-                                rel="noreferrer"
-                            >
-                                episodes of the Tracer Drop
-                            </a>{' '}
-                            with RMIT Blockchain Innovation hub
-                        </div>
+                        <Styles.Heading>Want to Learn More?</Styles.Heading>
+
+                        <Styles.Content>
+                            <Styles.Text>
+                                Browse the user documentation.
+                                <br />
+                                Check out Radar, Tracer&#39;s Blog.
+                                <br />
+                                Join the community on Discord.
+                            </Styles.Text>
+                        </Styles.Content>
+
                         <ProgressIndicator totalSteps={5} currentStep={5} />
-                        <div className="flex">
-                            <Button
-                                variant="primary-light"
-                                className="mr-5"
-                                onClick={() => setOnboardStep(onboardStep - 1)}
-                            >
+                        <Styles.ButtonContainer>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
                                 Previous
                             </Button>
                             <Button variant="primary" onClick={() => setShowOnboardModal()}>
                                 Done
                             </Button>
-                        </div>
+                        </Styles.ButtonContainer>
                     </>
                 );
             default:
@@ -208,8 +147,8 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
 
     return (
         <TWModal open={showOnboardModal} onClose={() => setShowOnboardModal()}>
-            <Styled.Close onClick={() => setShowOnboardModal()} />
-            <Styled.OnboardContent className="onboard">{OnboardContent()}</Styled.OnboardContent>
+            <Styles.Close onClick={() => setShowOnboardModal()} />
+            <Styles.OnboardContent className="onboard">{OnboardContent()}</Styles.OnboardContent>
         </TWModal>
     );
 };
