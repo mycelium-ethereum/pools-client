@@ -2531,22 +2531,22 @@
     walletlink "^2.1.11"
     web3-provider-engine "^15.0.4"
 
-"@tracer-protocol/perpetual-pools-contracts@^1.1.2", "@tracer-protocol/perpetual-pools-contracts@^1.2.1":
+"@tracer-protocol/perpetual-pools-contracts@^1.2.1":
   version "1.2.1"
   resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.2.1.tgz#2d0a2d33400983f2cee43c87e5a3b67de372886a"
   integrity sha512-Q7LtX8XU0w4T0Zy5JkHz84LhVKjAsfopI58D5n0xl4PdQFkEXm2OvPFTRQ0O5k+IrTOhoqDLAtIIn3XuPDuspQ==
 
-"@tracer-protocol/perpetual-pools-v2-pool-watcher@^0.0.10":
-  version "0.0.10"
-  resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-v2-pool-watcher/-/perpetual-pools-v2-pool-watcher-0.0.10.tgz#de6681910c0cf202a4e823ed6369d34489f39da7"
-  integrity sha512-PO3+QSD5GhWUCbzhprfC6D3s3ZurILggAllc4+HL/4gWdrqUiprvQAi6tvFT8ycfAHu2VAB3NleLPF+pIVDioA==
+"@tracer-protocol/perpetual-pools-v2-pool-watcher@^0.0.11":
+  version "0.0.11"
+  resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-v2-pool-watcher/-/perpetual-pools-v2-pool-watcher-0.0.11.tgz#101c3209ae66ea9766a9c4cd98ac497010c1e831"
+  integrity sha512-yyFg2dVaiUGk3JjZkXLPcDNLUHq/3dQvk8B0Y02wIjomOXEMcoJwAlMDX9AlyH4OGmunCRo6lylYoUlqSfclaA==
   dependencies:
-    "@tracer-protocol/perpetual-pools-contracts" "^1.1.2"
-    "@tracer-protocol/pools-js" "^3.1.3"
+    "@tracer-protocol/perpetual-pools-contracts" "^1.2.1"
+    "@tracer-protocol/pools-js" "^3.1.4"
     ethers "5.5.1"
     tiny-typed-emitter "^2.1.0"
 
-"@tracer-protocol/pools-js@^3.1.3", "@tracer-protocol/pools-js@^3.1.4":
+"@tracer-protocol/pools-js@^3.1.4":
   version "3.1.4"
   resolved "https://registry.npmjs.org/@tracer-protocol/pools-js/-/pools-js-3.1.4.tgz#54f0c32ba68c1d9c3b177f4a409d2dbaff0980ad"
   integrity sha512-fS+AhCelF5ePiHsOyOOOsUusElnbp3duw6b8TGf1SQChMI7bo9HUiOjFiD/yrp8eoPNxSdE5/On0rteEBmhnKQ==
