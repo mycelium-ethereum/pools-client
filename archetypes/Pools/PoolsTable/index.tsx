@@ -1,5 +1,4 @@
 import React, { useState, useMemo, useCallback } from 'react';
-import { ethers } from 'ethers';
 import { LinkOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
@@ -72,7 +71,7 @@ const InfoIcon = styled(Info)`
 `;
 
 export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) => {
-    const { provider, account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
+    const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
 
@@ -210,7 +209,6 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                                 showNextRebalance={showNextRebalance}
                                 key={pool.address}
                                 account={account}
-                                provider={provider}
                                 deltaDenotation={deltaDenotation}
                             />
                         );
@@ -236,10 +234,9 @@ const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
         account: string | undefined;
-        provider: ethers.providers.JsonRpcProvider | undefined;
         onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
-> = ({ pool, account, onClickMintBurn, provider, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
+> = ({ pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
         <>
             <TableRow lined>
@@ -360,7 +357,6 @@ const PoolRow: React.FC<
                 {/** Token rows */}
                 <TokenRows
                     side={SideEnum.long}
-                    provider={provider}
                     showNextRebalance={showNextRebalance}
                     onClickMintBurn={onClickMintBurn}
                     antecedentUpkeepTokenInfo={{
@@ -384,7 +380,6 @@ const PoolRow: React.FC<
             <TableRow lined>
                 <TokenRows
                     side={SideEnum.short}
-                    provider={provider}
                     onClickMintBurn={onClickMintBurn}
                     showNextRebalance={showNextRebalance}
                     account={account}
@@ -440,7 +435,6 @@ const TokenRows: React.FC<
             tokenBalance: number;
         };
         poolTicker: string;
-        provider: ethers.providers.JsonRpcProvider | undefined;
     } & TProps
 > = ({
     side,
@@ -450,7 +444,6 @@ const TokenRows: React.FC<
     address: poolAddress,
     account,
     decimals,
-    provider,
     onClickMintBurn,
     showNextRebalance,
     deltaDenotation,
@@ -579,7 +572,6 @@ const TokenRows: React.FC<
                             COMMIT
                         </Button>
                         <Actions
-                            provider={provider as ethers.providers.JsonRpcProvider}
                             token={{
                                 address: poolAddress,
                                 decimals: decimals,

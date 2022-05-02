@@ -15,7 +15,7 @@ export interface IPoolsInstancesSlice {
 
     setTokenBalances: (
         pool: string,
-        balances: { shortTokenBalance: BigNumber; longTokenBalance: BigNumber; settlementTokenBalance: BigNumber },
+        balances: { shortTokenBalance: BigNumber; longTokenBalance: BigNumber; settlementTokenBalance?: BigNumber },
     ) => void;
     setTokenApprovals: (
         pool: string,
@@ -23,16 +23,6 @@ export interface IPoolsInstancesSlice {
     ) => void;
     setAggregateBalances: (pool: string, aggregateBalances: AggregateBalances) => void;
     setTradeStats: (pool: string, aggregateBalances: TradeStats) => void;
-    setUpdatedPoolBalances: (
-        pool: string,
-        updatedbalances: {
-            lastPrice: BigNumber;
-            oraclePrice: BigNumber;
-            longBalance: BigNumber;
-            shortBalance: BigNumber;
-            lastUpdate: BigNumber;
-        },
-    ) => void;
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
@@ -43,18 +33,19 @@ export interface IPoolsInstancesSlice {
         account: string | undefined,
         network: KnownNetwork | undefined,
     ) => void;
-    updateTokenBalances: (
-        pool: string,
+    updatePoolTokenBalances: (
+        pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
-    updateTradeStats: (
-        network: KnownNetwork | undefined,
-        pool: string | undefined,
+    updateSettlementTokenBalances: (
+        pools: string[],
+        provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
+    updateTradeStats: (pools: string[], network: KnownNetwork | undefined, account: string | undefined) => void;
     updateTokenApprovals: (
-        pool: string,
+        pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;

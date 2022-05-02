@@ -9,6 +9,15 @@ export const CommitTypeMap = {
     ShortBurnLongMint: CommitEnum.shortBurnLongMint,
 };
 
+export const CommitTypeName: Record<CommitEnum, string> = {
+    [CommitEnum.shortBurnLongMint]: 'FLIP',
+    [CommitEnum.longBurnShortMint]: 'FLIP',
+    [CommitEnum.shortMint]: 'MINT',
+    [CommitEnum.longMint]: 'MINT',
+    [CommitEnum.shortBurn]: 'BURN',
+    [CommitEnum.longBurn]: 'BURN',
+};
+
 const mintQueryFocus = 'mint';
 const burnQueryFocus = 'burn';
 const flipQueryFocus = 'flip';

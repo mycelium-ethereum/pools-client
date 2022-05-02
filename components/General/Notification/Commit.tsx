@@ -1,6 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
+import { OverviewPageFocus } from '~/archetypes/Portfolio/state';
 import TimeLeft from '~/components/TimeLeft';
 import { CommitProps } from '~/store/TransactionSlice/types';
 import { watchAsset } from '~/utils/rpcMethods';
@@ -35,11 +36,11 @@ export const CommitPendingNotification = ({
 export const CommitSuccessNotification = ({ expectedExecution, commitType, tokenSymbol }: CommitProps): JSX.Element => {
     const router = useRouter();
 
-    const handleClick = (focus: 'mint' | 'burn' | 'flip') =>
+    const handleClick = () =>
         router.push({
-            pathname: '/portfolio/commits',
+            pathname: '/portfolio',
             query: {
-                focus: focus,
+                focus: OverviewPageFocus.Queued,
             },
         });
 
@@ -64,10 +65,7 @@ export const CommitSuccessNotification = ({ expectedExecution, commitType, token
                         />
                     </div>
                 )}
-                <div
-                    className="cursor-pointer text-tracer-400 underline"
-                    onClick={() => handleClick(commitType ?? 'mint')}
-                >
+                <div className="cursor-pointer text-tracer-400 underline" onClick={() => handleClick()}>
                     View order
                 </div>
             </div>

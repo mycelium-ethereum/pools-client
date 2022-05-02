@@ -213,12 +213,13 @@ export const PageNumber: React.FC<{
     page: number;
     numResults: number;
     resultsPerPage: number;
-}> = ({ page, numResults, resultsPerPage }) => {
+    className?: string;
+}> = ({ page, numResults, resultsPerPage, className }) => {
     const start = (page - 1) * resultsPerPage + 1;
     const end = Math.min(start + resultsPerPage - 1, numResults);
 
     return (
-        <div className="text-right">
+        <div className={className}>
             <p className="text-sm text-theme-text">
                 Showing <span className="font-medium">{Math.min(start, numResults)}</span>-
                 <span className="font-medium">{end}</span> of <span className="font-medium">{numResults}</span>

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { CommitTypeMap } from '~/constants/commits';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
@@ -61,7 +62,7 @@ export const fetchPendingCommits: (
 export const fetchCommitHistory: (params: {
     network?: V2_SUPPORTED_NETWORKS;
     account: string;
-    type: 'mint' | 'burn' | 'flip';
+    type: CommitTypeFilter;
     page: number;
     pageSize: number;
 }) => Promise<{ results: TradeHistory[]; totalRecords: number }> = async ({
@@ -74,11 +75,11 @@ export const fetchCommitHistory: (params: {
     let route = `${TRACER_API}/poolsv2/tradeHistory?page=${page}&pageSize=${pageSize}&network=${
         network ?? NETWORKS.ARBITRUM
     }&userAddress=${account}`;
-    if (type === 'mint') {
+    if (type === CommitTypeFilter.Mint) {
         route += '&types=LongMint&types=ShortMint';
-    } else if (type === 'burn') {
+    } else if (type === CommitTypeFilter.Burn) {
         route += '&types=LongBurn&types=ShortBurn';
-    } else {
+    } else if (type === CommitTypeFilter.Flip) {
         route += '&types=LongBurnShortMint&types=ShortBurnLongMint';
     }
     const fetchedTradeHistory: { results: TradeHistory[]; totalRecords: number } = await fetch(route)
@@ -94,6 +95,22 @@ export const fetchCommitHistory: (params: {
                 const dateString = new Intl.DateTimeFormat('en-AU').format(date);
                 const decimals = row.tokenDecimals;
                 const commitType = CommitTypeMap[row.type];
+                let tokenInIsLong, tokenOutIsLong;
+                if (commitType === CommitEnum.longMint) {
+                    tokenOutIsLong = true;
+                } else if (commitType === CommitEnum.shortMint) {
+                    tokenOutIsLong = false;
+                } else if (commitType === CommitEnum.longBurn) {
+                    tokenInIsLong = true;
+                } else if (commitType === CommitEnum.shortBurn) {
+                    tokenInIsLong = false;
+                } else if (commitType === CommitEnum.shortBurnLongMint) {
+                    tokenInIsLong = false;
+                    tokenOutIsLong = true;
+                } else if (commitType === CommitEnum.longBurnShortMint) {
+                    tokenInIsLong = true;
+                    tokenOutIsLong = false;
+                }
                 parsedResults.push({
                     timestamp: row.date,
                     dateString,
@@ -102,7 +119,6 @@ export const fetchCommitHistory: (params: {
                     fee: formatBN(new BigNumber(row.fee), decimals),
                     txnHashIn: row.transactionHashIn,
                     txnHashOut: row.transactionHashOut,
-                    isLong: commitType === CommitEnum.longMint || commitType === CommitEnum.longBurn,
                     settlementToken: {
                         address: row.priceTokenAddress,
                         name: row.priceTokenName,
@@ -115,6 +131,7 @@ export const fetchCommitHistory: (params: {
                         symbol: row.tokenInSymbol,
                         amount: formatBN(new BigNumber(row.tokenInAmount), decimals),
                         price: formatBN(new BigNumber(row.priceIn), decimals),
+                        isLong: tokenInIsLong,
                     },
                     tokenOut: {
                         address: row.tokenOutAddress,
@@ -122,6 +139,7 @@ export const fetchCommitHistory: (params: {
                         symbol: row.tokenOutSymbol,
                         amount: formatBN(new BigNumber(row.tokenOutAmount), decimals),
                         price: formatBN(new BigNumber(row.priceOut), decimals),
+                        isLong: tokenOutIsLong,
                     },
                 });
             });

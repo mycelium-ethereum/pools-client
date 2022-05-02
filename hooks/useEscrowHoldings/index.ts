@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { SideEnum } from '@tracer-protocol/pools-js';
-import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/Overview/state';
+import { calcNotionalValue, SideEnum } from '@tracer-protocol/pools-js';
+import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
 import { getBaseAsset } from '~/utils/poolNames';
@@ -20,46 +20,61 @@ export default (() => {
 
                 const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
 
-                const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
-
-                const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
+                // TODO calc relevant token price
+                const longTokenPrice = poolInstance.getShortTokenPrice();
+                const shortTokenPrice = poolInstance.getLongTokenPrice();
 
                 // 1 for stable coins
+                // TODO support non stable coin settlement tokens
                 const settlementTokenPrice = new BigNumber(1);
 
-                const longTokenValue = userBalances.aggregateBalances.longTokens.times(nextLongTokenPrice);
-                const shortTokenValue = userBalances.aggregateBalances.shortTokens.times(nextShortTokenPrice);
+                const longEntryPrice = userBalances.tradeStats.avgLongEntryPriceAggregate;
+                const longTokenNotional = calcNotionalValue(longEntryPrice, userBalances.aggregateBalances.longTokens);
+
+                const shortEntryPrice = userBalances.tradeStats.avgShortEntryPriceAggregate;
+                const shortTokenNotional = calcNotionalValue(
+                    shortEntryPrice,
+                    userBalances.aggregateBalances.shortTokens,
+                );
+
                 const settlementTokenValue =
                     userBalances.aggregateBalances.settlementTokens.times(settlementTokenPrice);
 
                 const claimableLongTokens = {
                     symbol: longToken.symbol,
+                    address: longToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.longTokens,
-                    currentTokenPrice: nextLongTokenPrice,
+                    currentTokenPrice: longTokenPrice,
                     type: TokenType.Long,
                     side: SideEnum.long,
-                    entryPrice: userBalances.tradeStats.avgLongEntryPriceAggregate,
-                    notionalValue: longTokenValue.times(leverage),
+                    entryPrice: longEntryPrice,
+                    leveragedNotionalValue: longTokenNotional.times(leverage),
                 };
                 const claimableShortTokens = {
                     symbol: shortToken.symbol,
+                    address: shortToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.shortTokens,
-                    currentTokenPrice: nextShortTokenPrice,
+                    currentTokenPrice: shortTokenPrice,
                     type: TokenType.Short,
                     side: SideEnum.short,
-                    entryPrice: userBalances.tradeStats.avgShortEntryPriceAggregate,
-                    notionalValue: shortTokenValue.times(leverage),
+                    entryPrice: shortEntryPrice,
+                    leveragedNotionalValue: shortTokenNotional.times(leverage),
                 };
                 const claimableSettlementTokens = {
                     symbol: settlementToken.symbol,
+                    address: settlementToken.address,
+                    decimals: settlementToken.decimals,
                     balance: userBalances.aggregateBalances.settlementTokens,
                     currentTokenPrice: settlementTokenPrice,
                     type: TokenType.Settlement,
-                    notionalValue: settlementTokenValue,
+                    leveragedNotionalValue: settlementTokenValue,
                 };
                 const claimableSum = userBalances.aggregateBalances.settlementTokens
-                    .plus(userBalances.aggregateBalances.shortTokens.times(nextShortTokenPrice))
-                    .plus(userBalances.aggregateBalances.longTokens.times(nextLongTokenPrice));
+                    .plus(userBalances.aggregateBalances.shortTokens.times(shortEntryPrice))
+                    .plus(userBalances.aggregateBalances.longTokens.times(longEntryPrice));
+
                 const numClaimable = [claimableSettlementTokens, claimableShortTokens, claimableLongTokens].reduce(
                     (count, current) => {
                         if (current.balance.gt(0)) {

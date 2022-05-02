@@ -1,131 +1,154 @@
-import React, { useState, useEffect, useReducer } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import React, { useReducer, useState } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
-import { browseReducer, BrowseState } from '~/archetypes/Pools/state';
-import Button from '~/components/General/Button';
+import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import usePendingCommits from '~/hooks/useQueuedCommits';
-import History from './History';
-import Overview from './Overview';
-import { Container } from './Overview/styles';
-import Queued from './Queued';
+import useBrowsePools from '~/hooks/useBrowsePools';
+import usePortfolioOverview from '~/hooks/usePortfolioOverview';
+import { useStore } from '~/store/main';
+import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
-export enum PortfolioPage {
-    TradePortfolio = 0,
-    StakePortfolio = 1,
+import { ClaimedTokens } from './ClaimedTokensTable';
+import { emptyStateHelpCardContent } from './content';
+import { HelpCard } from './HelpCard';
+import HistoricCommits from './HistoricCommits';
+import QueuedCommits from './QueuedCommits';
+import { SkewCard } from './SkewCard';
+import { portfolioReducer, initialPortfolioState } from './state';
+import { Container } from './styles';
+import * as Styles from './styles';
+import { TradeOverviewBanner } from './TradeOverviewBanner';
+import UnclaimedTokens from './UnclaimedTokens';
+
+export enum LoadingState {
+    Idle = 0,
+    Fetching = 1,
+    HasFetched = 2,
 }
 
-export enum TradePortfolioPage {
-    Overview = 0,
-    History = 1,
-    Queued = 2,
+export enum TimescaleEnum {
+    AllTime = 'All Time',
 }
 
-export type PageOptions = {
-    key: CommitActionEnum;
-    text: React.ReactNode;
-}[];
+export enum CurrencyEnum {
+    USD = 'USD',
+    AUD = 'AUD',
+}
 
-export const PortfolioNav: React.FC<{
-    page: TradePortfolioPage;
-    numCommits: number;
-}> = ({ page, numCommits }) => {
-    const router = useRouter();
-
-    const overviewPage = page === TradePortfolioPage.Overview;
-    const queuedPage = page === TradePortfolioPage.Queued;
-    const historyPage = page === TradePortfolioPage.History;
-
-    return (
-        <div className="mt-5 flex overflow-x-auto whitespace-nowrap">
-            <div className="mr-5">
-                <Link href="/portfolio/">
-                    <Button variant={overviewPage ? 'primary' : 'unselected'}>Overview</Button>
-                </Link>
-            </div>
-            <div className="mr-5">
-                <Button
-                    variant={queuedPage ? 'primary' : 'unselected'}
-                    onClick={() =>
-                        router.push({
-                            pathname: '/portfolio/commits',
-                        })
-                    }
-                >
-                    Pending Commits ({numCommits})
-                </Button>
-            </div>
-            <div>
-                <Button
-                    variant={historyPage ? 'primary' : 'unselected'}
-                    onClick={() =>
-                        router.push({
-                            pathname: '/portfolio/history',
-                        })
-                    }
-                >
-                    Commit History
-                </Button>
-            </div>
-        </div>
-    );
-};
-
-export default (({ page }) => {
-    const [focus, setFocus] = useState<CommitActionEnum>(CommitActionEnum.mint);
-    const router = useRouter();
-
+export const PortfolioPage = (): JSX.Element => {
+    const account = useStore(selectAccount);
+    const handleConnect = useStore(selectHandleConnect);
     const { swapDispatch = noDispatch } = useSwapContext();
-    const [state, dispatch] = useReducer(browseReducer, {
-        mintBurnModalOpen: false,
-    } as BrowseState);
+    const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
+    const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
+    const portfolioOverview = usePortfolioOverview();
+    const { rows: tokens } = useBrowsePools();
 
-    const commits = usePendingCommits();
-
-    const handleCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
+    const onClickCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
         swapDispatch({ type: 'setSelectedPool', value: pool });
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: action });
-        dispatch({ type: 'setMintBurnModalOpen', open: true });
+        setMintBurnModalOpen(true);
     };
 
     const handleModalClose = () => {
-        dispatch({
-            type: 'setMintBurnModalOpen',
-            open: false,
-        });
+        setMintBurnModalOpen(false);
     };
 
-    useEffect(() => {
-        if (router.query.focus === 'burn') {
-            setFocus(CommitActionEnum.burn);
-        } else if (router.query.focus === 'mint') {
-            setFocus(CommitActionEnum.mint);
-        } else if (router.query.focus === 'flip') {
-            setFocus(CommitActionEnum.flip);
-        }
-    }, [router]);
+    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
-    const renderPage = (page: TradePortfolioPage) => {
-        switch (page) {
-            case TradePortfolioPage.History:
-                return <History focus={focus} />;
-            case TradePortfolioPage.Queued:
-                return <Queued focus={focus} commits={commits} />;
-            default:
-                return <Overview onClickCommitAction={handleCommitAction} />;
-        }
+    const emptyState = () => {
+        return (
+            <>
+                <Styles.Wrapper>
+                    <TradeOverviewBanner
+                        title="Portfolio Overview"
+                        portfolioOverview={portfolioOverview}
+                        account={!!account}
+                        handleConnect={handleConnect}
+                    />
+                </Styles.Wrapper>
+                <Styles.Wrapper>
+                    <Styles.Banner>
+                        {emptyStateHelpCardContent.map((v, i) => (
+                            <HelpCard
+                                badge={v.badge}
+                                title={v.title}
+                                content={v.content}
+                                href={v.href}
+                                linkText={v.linkText}
+                                key={`${v.title}-${i}`}
+                            />
+                        ))}
+                    </Styles.Banner>
+                    {maxSkew !== undefined && (
+                        <div>
+                            <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
+
+                            <HelpCard
+                                title={`Skew Farming Opportunity: ${maxSkew?.name}`}
+                                content={`Take a position in ${maxSkew?.name} and also take the opposite position of equal
+                                magnitude on another platform.`}
+                                href="https://tracer.finance/radar/skew-farming-explained/"
+                                linkText="Learn how to skew farm"
+                            />
+                        </div>
+                    )}
+                </Styles.Wrapper>
+            </>
+        );
+    };
+
+    const filledState = () => {
+        return (
+            <>
+                <Styles.Wrapper>
+                    <TradeOverviewBanner
+                        title="Trade Portfolio Overview"
+                        portfolioOverview={portfolioOverview}
+                        account={!!account}
+                    />
+                    <HelpCard
+                        badge="Roadmap"
+                        title="Perpetual Pools V2 Roadmap"
+                        content="Want to learn what is coming with the launch of V2?"
+                        href="https://tracer.finance/radar/perpetual-pools-v2-roadmap/"
+                        linkText="View V2 roadmap"
+                    />
+                </Styles.Wrapper>
+                <QueuedCommits
+                    queuedCommitsFilter={state.queuedCommitsFilter}
+                    queuedCommitsSearch={state.queuedCommitsSearch}
+                    dispatch={dispatch}
+                />
+                <ClaimedTokens
+                    claimedTokensMarketFilter={state.claimedTokensMarketFilter}
+                    claimedTokensSearch={state.claimedTokensSearch}
+                    dispatch={dispatch}
+                    onClickCommitAction={onClickCommitAction}
+                />
+                <UnclaimedTokens
+                    escrowSearch={state.escrowSearch}
+                    escrowMarketFilter={state.escrowMarketFilter}
+                    dispatch={dispatch}
+                    onClickCommitAction={onClickCommitAction}
+                />
+                <Divider text="Historical Data" />
+                <HistoricCommits
+                    historicCommitsFilter={state.historicCommitsFilter}
+                    historicCommitsSearch={state.historicCommitsSearch}
+                    dispatch={dispatch}
+                />
+            </>
+        );
     };
 
     return (
         <Container>
-            <PortfolioNav page={page} numCommits={commits.length} />
-            {renderPage(page)}
-            {state.mintBurnModalOpen && <MintBurnModal open={state.mintBurnModalOpen} onClose={handleModalClose} />}
+            <>{!!account ? filledState() : emptyState()}</>
+            {mintBurnModalOpen && <MintBurnModal open={mintBurnModalOpen} onClose={handleModalClose} />}
         </Container>
     );
-}) as React.FC<{
-    page: TradePortfolioPage;
-}>;
+};
+
+export default PortfolioPage;

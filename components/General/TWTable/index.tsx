@@ -3,13 +3,23 @@ import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { classNames } from '~/utils/helpers';
 
-export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
+const TableWrapper = styled.div<{
+    fullHeight: boolean;
+}>`
+    display: flex;
+    height: ${({ fullHeight }) => (fullHeight ? '100%' : 'auto')};
+    flex-direction: column;
+    overflow: hidden;
+`;
+
+export const Table: React.FC<{ showDivider?: boolean; fullHeight?: boolean; className?: string }> = ({
     showDivider = false,
+    fullHeight = true,
     className,
     children,
 }) => {
     return (
-        <div className={classNames('flex h-full flex-col overflow-hidden', className ?? '')}>
+        <TableWrapper className={className} fullHeight={fullHeight}>
             <div className="h-full overflow-x-auto">
                 <div className="inline-block min-w-full align-middle">
                     <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
@@ -19,7 +29,7 @@ export const Table: React.FC<{ showDivider?: boolean; className?: string }> = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </TableWrapper>
     );
 };
 
@@ -89,32 +99,28 @@ export const TableRow = styled.tr<{ lined?: boolean }>`
     }
 `;
 
-const CELL_SIZES = {
-    default: 'p-4',
+const CELL_SIZES: Record<Size, string> = {
+    default: '12px 1rem',
     ['default-x']: '0 1rem',
-    sm: 'px-2 py-1',
+    sm: '0.25rem 0.5rem',
     ['sm-x']: '0 0.5rem',
 };
 
-export const TableRowCell: React.FC<JSX.IntrinsicElements['td'] & { size?: Size }> = ({
-    children,
-    className,
-    size = 'default',
-    ...props
-}) => (
-    <td
-        {...props}
-        className={classNames(className ?? '', CELL_SIZES[size], 'whitespace-nowrap text-sm text-theme-text')}
-    >
-        {children}
-    </td>
-);
+export const TableRowCell = styled.td<{ size?: Size }>`
+    white-space: nowrap;
+    color: ${({ theme }) => theme.fontColor.primary};
+    ${({ size }) => size && `padding: ${CELL_SIZES[size]};`}
+    font-size: 0.875rem;
+`;
+TableRowCell.defaultProps = {
+    size: 'default',
+};
 
 /* Cheat to span all cols https://stackoverflow.com/questions/398734/colspan-all-columns */
 const MAX_COLS = 100;
 
 export const FullSpanCell: React.FC<JSX.IntrinsicElements['td']> = ({ children, className, ...props }) => (
     <td {...props} className={classNames(className ?? '')} colSpan={MAX_COLS}>
-        <div className="my-20 text-center">{children}</div>
+        {children}
     </td>
 );

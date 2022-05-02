@@ -151,7 +151,26 @@ body > div:first-child {
 
 .page {
     @apply flex min-h-screen flex-col;
+    position: relative;
     background: var(--background-secondary);
+    z-index: 1;
+}
+
+.page::before {
+  position: absolute;
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: var(--background-faded);
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.page.faded-background::before {
+  opacity: 1;
 }
 
 html,
@@ -173,6 +192,8 @@ html {
 
     /* gray-50 */
     --background-secondary: #f9fafb;
+
+    --background-faded: linear-gradient(180deg, #f9fafb, #f9fafb calc(100% - 900px), #e5e7eB calc(100% - 800px), #E5E7EB);
 
     --background-nav-secondary: #eeeef6;
 
@@ -200,6 +221,8 @@ html.theme-dark {
     --background: #111928;
 
     --background-secondary: #1b2436;
+
+    --background-faded: linear-gradient(180deg, #1b2436, #1b2436 calc(100% - 900px), #111928 calc(100% - 800px), #111928);
 
     /* cool-gray-900 */
     --background-nav-secondary: #111928;
@@ -296,4 +319,8 @@ html.theme-matrix {
         rgba(17, 25, 40, 0) 114.84%
     );
     background-size: 800px 104px;
+}
+
+.height-delay {
+    transition-delay: height 0.3s;
 }

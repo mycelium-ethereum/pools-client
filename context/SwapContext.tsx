@@ -4,7 +4,7 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
-import { getMarketInfoFromPoolName, getMarketSymbol } from '~/utils/poolNames';
+import { getMarketInfoFromSymbol, getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
 interface ContextProps {
@@ -206,7 +206,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
         if (poolsInitialized && Object.keys(pools)?.length) {
             const markets: Record<string, Market> = {};
             Object.values(pools).forEach((pool) => {
-                const { leverage, marketSymbol } = getMarketInfoFromPoolName(pool.poolInstance.name);
+                const { leverage, marketSymbol } = getMarketInfoFromSymbol(pool.poolInstance.name);
                 // hopefully valid pool name
                 if (marketSymbol) {
                     if (!markets[marketSymbol]) {
