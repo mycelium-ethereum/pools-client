@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import { toApproxCurrency } from '~/utils/converters';
-import { getMarketInfoFromPoolName, marketSymbolToAssetName } from '~/utils/poolNames';
+import { getMarketInfoFromSymbol, marketSymbolToAssetName } from '~/utils/poolNames';
 import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`
@@ -22,7 +22,7 @@ const MarketText = styled.div`
 `;
 
 export const Market = ({ tokenSymbol, isLong }: { tokenSymbol: string; isLong: boolean }): JSX.Element => {
-    const { leverage, marketSymbol } = getMarketInfoFromPoolName(tokenSymbol);
+    const { leverage, marketSymbol } = getMarketInfoFromSymbol(tokenSymbol);
 
     return (
         <MarketContainer>

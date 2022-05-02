@@ -32,35 +32,40 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'AAVE/USD': 'AAVE',
 };
 
-// given a poolName, get the marketSymbol
-export const getMarketSymbol = (poolName?: string): string => {
-    if (!poolName) {
+// given a pool symbol or token symbol, get the marketSymbol
+export const getMarketSymbol = (poolSymbol?: string): string => {
+    if (!poolSymbol) {
         return '';
     }
     const marketRegex = /([A-Z]*\/[A-Z]*)/g;
-    const market = poolName.match(marketRegex);
+    const market = poolSymbol.match(marketRegex);
     return market ? market[0] : '';
 };
 
-// given a poolName, get the leverage
-export const getMarketLeverage = (poolName?: string): number => {
-    if (!poolName) {
+// given a pool symbol or token symbol, get the leverage
+export const getMarketLeverage = (poolSymbol?: string): number => {
+    if (!poolSymbol) {
         return 0;
     }
-    const leverageRegex = /([0-9]*)\-/g;
-    const leverage = poolName.match(leverageRegex);
-    return leverage ? parseInt(leverage[0]) : 0;
+    const leverageRegex = /([0-9]*)(?:|L|S)\-/g;
+    const leverage = poolSymbol.match(leverageRegex);
+    return leverage ? parseInt(leverage[0].replace('-', '')) : 0;
 };
 
-export const getMarketInfoFromPoolName = (
-    poolName: string,
+/**
+ * Get the market info from relevant pool symbol.
+ * Will work on pool symbols and pool token symbols
+ * @param poolSymbol either poolSymbol or pool token symbol
+ */
+export const getMarketInfoFromSymbol = (
+    poolSymbol: string,
 ): {
     leverage: number;
     marketSymbol: string;
     marketBase: string;
 } => {
-    const marketSymbol = getMarketSymbol(poolName);
-    const leverage = getMarketLeverage(poolName);
+    const marketSymbol = getMarketSymbol(poolSymbol);
+    const leverage = getMarketLeverage(poolSymbol);
     return {
         marketSymbol,
         leverage,

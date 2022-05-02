@@ -85,14 +85,9 @@ export const Currency = styled.div`
             margin-right: 5px;
         }
 
-<<<<<<< HEAD
         @media ${({ theme }) => theme.device.md} {
             font-size: 32px;
         }
-=======
-    @media ${({ theme }) => theme.device.md} {
-        font-size: 32px;
->>>>>>> 795946254e6e30223e2095d8b0e9635645ea5c95
     }
 `;
 
@@ -111,12 +106,8 @@ export const Value = styled.div`
         color: #ef4444;
     }
 
-    <<<<<<< HEAD @media ${({ theme }) => theme.device.sm} {
+    @media ${({ theme }) => theme.device.sm} {
         font-size: 40px;
-    }
-
-    =======>>>>>>>795946254e6e30223e2095d8b0e9635645ea5c95 @media ${({ theme }) => theme.device.md} {
-        font-size: 60px;
     }
 
     @media ${({ theme }) => theme.device.lg} {
@@ -124,7 +115,7 @@ export const Value = styled.div`
     }
 `;
 
-export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
+export const ArrowIcon = styled(Arrow)<{ large?: boolean }>`
     align-self: center;
     display: flex;
     height: 28px;
@@ -139,7 +130,8 @@ export const ArrowIcon = styled(Arrow)<{ large?: boolean; down?: boolean }>`
 
     stroke-linecap: round;
 
-    @media ${({ theme }) => theme.device.md} {
+    &.down {
+        transform: rotate(180deg);
     }
 `;
 

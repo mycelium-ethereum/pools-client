@@ -11,10 +11,9 @@ type BannerTypes = {
     handleConnect?: () => void;
 };
 
-export const LEVERAGE_FILTER_OPTIONS = [
-    { key: 'USD', value: 'USD' },
-    { key: 'All Time', value: 'All Time' },
-];
+export const DENOTATION_FILTER_OPTIONS = [{ key: 'USD', value: 'USD' }];
+
+export const TIME_FILTER_OPTIONS = [{ key: 'All Time', value: 'All Time' }];
 
 export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, portfolioOverview, handleConnect }) => {
     const { portfolioDelta, realisedProfit, totalPortfolioValue, unrealisedProfit } = portfolioOverview;
@@ -30,13 +29,13 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                         <Styles.Subtitle>Valuation</Styles.Subtitle>
                         <Styles.Actions>
                             <Styles.Dropdown
-                                value={LEVERAGE_FILTER_OPTIONS[0].value}
-                                options={LEVERAGE_FILTER_OPTIONS}
+                                value={DENOTATION_FILTER_OPTIONS[0].value}
+                                options={DENOTATION_FILTER_OPTIONS}
                                 onSelect={() => console.log('add logic')}
                             />
                             <Styles.Dropdown
-                                value={LEVERAGE_FILTER_OPTIONS[1].value}
-                                options={LEVERAGE_FILTER_OPTIONS}
+                                value={TIME_FILTER_OPTIONS[0].value}
+                                options={TIME_FILTER_OPTIONS}
                                 onSelect={() => console.log('add logic')}
                             />
                         </Styles.Actions>

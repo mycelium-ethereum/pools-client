@@ -31,13 +31,7 @@ export const OverviewTable: React.FC<Props> = ({
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        switch (true) {
-            case router.query.focus === pageFocus:
-                setOpen(true);
-                return;
-            default:
-                return;
-        }
+        setOpen(router.query.focus === pageFocus);
     }, [router.query]);
 
     return (
