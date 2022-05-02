@@ -26,7 +26,6 @@ export enum OverviewPageFocus {
     Claimed = 'claimed',
     Unclaimed = 'unclaimed',
     History = 'history',
-
 }
 
 export type PortfolioOverview = {

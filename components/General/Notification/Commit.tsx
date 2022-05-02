@@ -1,12 +1,12 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { ethers } from 'ethers';
+import { OverviewPageFocus } from '~/archetypes/Portfolio/state';
 import TimeLeft from '~/components/TimeLeft';
 import { CommitProps } from '~/store/TransactionSlice/types';
 import { watchAsset } from '~/utils/rpcMethods';
 import { Logo, tokenSymbolToLogoTicker } from '..';
 import { Notification } from '.';
-import {OverviewPageFocus} from '~/archetypes/Portfolio/state';
 
 export const CommitPendingNotification = ({
     tokenSymbol,
@@ -65,10 +65,7 @@ export const CommitSuccessNotification = ({ expectedExecution, commitType, token
                         />
                     </div>
                 )}
-                <div
-                    className="cursor-pointer text-tracer-400 underline"
-                    onClick={() => handleClick()}
-                >
+                <div className="cursor-pointer text-tracer-400 underline" onClick={() => handleClick()}>
                     View order
                 </div>
             </div>

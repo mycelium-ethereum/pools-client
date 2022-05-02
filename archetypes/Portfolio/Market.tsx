@@ -2,9 +2,9 @@ import React from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
-import { InnerCellSubText } from './styles';
 import { toApproxCurrency } from '~/utils/converters';
 import { getMarketInfoFromPoolName, marketSymbolToAssetName } from '~/utils/poolNames';
+import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`
     margin: auto 0;
