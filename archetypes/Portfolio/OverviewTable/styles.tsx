@@ -30,7 +30,7 @@ export const TitleContent = styled.div`
 export const Title = styled.div`
     line-height: 150%;
     font-weight: 600;
-    font-size: 20px;
+    font-size: ${({ theme }) => theme.fontSize.xl};
     margin-top: 0.5rem;
     opacity: 1;
 `;
@@ -38,7 +38,7 @@ export const Title = styled.div`
 export const SubTitle = styled.div`
     line-height: 150%;
     font-weight: 400;
-    font-size: 12px;
+    font-size: ${({ theme }) => theme.fontSize.xxs};
     color: #71717a;
 `;
 
@@ -85,7 +85,7 @@ export const ArrowRight = styled(ArrowRight_)`
 `;
 
 export const OverviewTableRowCell = styled(TableRowCell)`
-    font-size: 16px;
+    font-size: ${({ theme }) => theme.fontSize.md};
 `;
 
 export const OverviewHeaderRow = styled.tr`
@@ -121,7 +121,7 @@ export const RowCount = styled.div`
     align-items: center;
     margin-top: 0.7rem;
     font-weight: 400;
-    font-size: 24px;
+    font-size: ${({ theme }) => theme.fontSize.xxl};
     line-height: 150%;
     text-align: center;
     width: 46px;
