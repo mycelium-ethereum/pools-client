@@ -12,7 +12,6 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    background-color: ${({ theme }) => theme.background.primary};
     width: 100vw;
 
     @media ${({ theme }) => theme.device.md} {

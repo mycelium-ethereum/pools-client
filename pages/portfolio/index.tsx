@@ -14,15 +14,13 @@ export default (() => {
     }, []);
 
     return (
-        <>
-            <div className={`page relative pb-10 matrix:bg-matrix-bg`}>
-                <NavBar />
-                <SwapStore>
-                    <Portfolio page={TradePortfolioPage.Overview} />
-                </SwapStore>
-                <UnsupportedNetworkPopup />
-            </div>
+        <div className={`page relative matrix:bg-matrix-bg`}>
+            <NavBar />
+            <SwapStore>
+                <Portfolio page={TradePortfolioPage.Overview} />
+            </SwapStore>
+            <UnsupportedNetworkPopup />
             <Footer />
-        </>
+        </div>
     );
 }) as React.FC;
