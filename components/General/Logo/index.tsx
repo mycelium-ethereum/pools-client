@@ -29,6 +29,7 @@ import TOKE_S from '~/public/img/logos/currencies/toke_short.svg';
 import USD from '~/public/img/logos/currencies/usd.svg';
 import USDC from '~/public/img/logos/currencies/usdc.svg';
 import { classNames } from '~/utils/helpers';
+import { getBaseAsset } from '~/utils/poolNames';
 
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
@@ -38,9 +39,9 @@ export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken =
         return 'DEFAULT';
     }
     try {
-        const [leverageSide, name] = tokenSymbol.split('-');
-        const side = leverageSide.slice(-1);
-        const asset = name.split('/')[0];
+        const asset = getBaseAsset(tokenSymbol);
+        // gets the last character of tokenNameFormat which should be an L or S
+        const side = tokenSymbol.split('-')[0].slice(-1);
         return `${asset}_${side}` as ShortLongToken;
     } catch (error) {
         return 'DEFAULT';

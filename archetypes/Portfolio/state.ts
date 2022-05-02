@@ -21,6 +21,14 @@ export enum TokenType {
     Settlement = 'Settlement',
 }
 
+export enum OverviewPageFocus {
+    Queued = 'queued',
+    Claimed = 'claimed',
+    Unclaimed = 'unclaimed',
+    History = 'history',
+
+}
+
 export type PortfolioOverview = {
     totalPortfolioValue: BigNumber;
     unrealisedProfit: BigNumber;

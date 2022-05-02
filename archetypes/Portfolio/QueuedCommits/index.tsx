@@ -5,7 +5,7 @@ import { QueuedCommit } from '~/types/commits';
 import QueuedCommitsTable from './QueuedCommitsTable';
 import { OverviewTable } from '../OverviewTable';
 import { CommitTypeDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { CommitTypeFilter, PortfolioAction, PortfolioState } from '../state';
+import { CommitTypeFilter, OverviewPageFocus, PortfolioAction, PortfolioState } from '../state';
 
 export const QueuedCommits = ({
     queuedCommitsFilter,
@@ -55,6 +55,7 @@ export const QueuedCommits = ({
         <OverviewTable
             title="Pending"
             subTitle="Your queued orders. Come back once they are processed to claim."
+            pageFocus={OverviewPageFocus.Queued}
             firstActionTitle="Commit Type"
             firstAction={
                 <CommitTypeDropdown

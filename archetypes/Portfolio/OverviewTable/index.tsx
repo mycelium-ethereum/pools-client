@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router'
 import DropdownArrowImage from '~/public/img/general/caret-down-white.svg';
 import * as Styles from './styles';
+import {OverviewPageFocus} from '../state';
 
 type Props = {
     title: string;
     subTitle?: string;
+    pageFocus?: OverviewPageFocus;
     firstActionTitle: string;
     firstAction: any;
     secondActionTitle?: any;
@@ -16,6 +19,7 @@ type Props = {
 export const OverviewTable: React.FC<Props> = ({
     title,
     subTitle,
+    pageFocus,
     firstActionTitle,
     firstAction,
     secondActionTitle,
@@ -23,7 +27,19 @@ export const OverviewTable: React.FC<Props> = ({
     rowCount,
     children,
 }) => {
+    const router = useRouter()
     const [open, setOpen] = useState(false);
+
+    useEffect(() => {
+        switch (true) {
+            case (router.query.focus === pageFocus):
+                setOpen(true);
+                return;
+            default:
+                return
+        }
+    }, [router.query])
+
     return (
         <Styles.Container>
             <Styles.Wrapper>

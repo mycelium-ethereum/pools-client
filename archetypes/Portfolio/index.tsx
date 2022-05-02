@@ -41,9 +41,7 @@ export const PortfolioPage = (): JSX.Element => {
     const { swapDispatch = noDispatch } = useSwapContext();
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
-
     const portfolioOverview = usePortfolioOverview();
-
     const { rows: tokens } = useBrowsePools();
 
     const onClickCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {

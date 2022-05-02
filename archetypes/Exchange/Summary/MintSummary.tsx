@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
-import { getBaseAsset } from '~/utils/converters';
+import { getBaseAsset } from '~/utils/poolNames';
 import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
 import * as Styles from './styles';
 import { MintSummaryProps } from './types';

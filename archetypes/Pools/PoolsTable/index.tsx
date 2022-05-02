@@ -18,8 +18,9 @@ import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { calcPercentageDifference, getPriceFeedUrl, toApproxCurrency } from '~/utils/converters';
+import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
+import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
@@ -28,7 +29,6 @@ type TProps = {
     showNextRebalance: boolean;
     deltaDenotation: DeltaEnum;
 };
-
 const SkewTip: React.FC = ({ children }) => (
     <StyledTooltip title="An indication of the difference between collateral in the long and short side of the pool. Pool Skew is calculated by dividing the TVL in the long side by the TVL in the short side.">
         {children}
@@ -94,10 +94,10 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                                     <Logo
                                         className="my-auto mr-3 inline"
                                         size="lg"
-                                        ticker={rows[0].name.split('-')[1].split('/')[0] as LogoTicker}
+                                        ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
                                     />
                                     <div className="my-auto">
-                                        <div className="text-lg font-bold">{rows[0].name.split('-')[1]}</div>
+                                        <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
                                 <div className="px-10">
@@ -111,7 +111,7 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                                         ORACLE
                                     </div>
                                     <a
-                                        href={getPriceFeedUrl(rows[0].name)}
+                                        href={getPriceFeedUrl(rows[0].marketSymbol)}
                                         target="_blank"
                                         rel="noreferrer"
                                         className="flex items-center"
@@ -242,9 +242,9 @@ const PoolRow: React.FC<
             <TableRow lined>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div className="font-bold">{pool.name.split('-')[0][0]}</div>
+                    <div className="font-bold">{pool.leverage}</div>
                     <div className="flex items-center">
-                        USDC
+                        {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
                 </TableRowCell>

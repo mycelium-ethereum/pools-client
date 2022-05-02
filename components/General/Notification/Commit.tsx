@@ -6,6 +6,7 @@ import { CommitProps } from '~/store/TransactionSlice/types';
 import { watchAsset } from '~/utils/rpcMethods';
 import { Logo, tokenSymbolToLogoTicker } from '..';
 import { Notification } from '.';
+import {OverviewPageFocus} from '~/archetypes/Portfolio/state';
 
 export const CommitPendingNotification = ({
     tokenSymbol,
@@ -35,11 +36,11 @@ export const CommitPendingNotification = ({
 export const CommitSuccessNotification = ({ expectedExecution, commitType, tokenSymbol }: CommitProps): JSX.Element => {
     const router = useRouter();
 
-    const handleClick = (focus: 'mint' | 'burn' | 'flip') =>
+    const handleClick = () =>
         router.push({
-            pathname: '/portfolio/commits',
+            pathname: '/portfolio',
             query: {
-                focus: focus,
+                focus: OverviewPageFocus.Queued,
             },
         });
 
@@ -66,7 +67,7 @@ export const CommitSuccessNotification = ({ expectedExecution, commitType, token
                 )}
                 <div
                     className="cursor-pointer text-tracer-400 underline"
-                    onClick={() => handleClick(commitType ?? 'mint')}
+                    onClick={() => handleClick()}
                 >
                     View order
                 </div>

@@ -232,37 +232,6 @@ export const toCommitType: (side: SideEnum, token: CommitActionEnum) => CommitEn
 export const calcPercentageDifference: (newValue: number, oldValue: number) => number = (newValue, oldValue) =>
     Number.isNaN(oldValue) || !oldValue ? 0 : ((newValue - oldValue) / oldValue) * 100;
 
-export const marketSymbolToAssetName: Record<string, string> = {
-    'ETH/USD': 'Ethereum',
-    'EUR/USD': 'Euro',
-    'BTC/USD': 'Bitcoin',
-    'TOKE/USD': 'Tokemak',
-    'LINK/USD': 'Chainlink',
-    'AAVE/USD': 'AAVE',
-};
-
-export const tickerToName: (ticker: string) => string = (ticker) => {
-    const [leverage, market] = ticker.split('-');
-    return `${leverage}-${marketSymbolToAssetName[market]}`;
-};
-
-export const getPriceFeedUrl: (v: string) => string = (v) => {
-    if (!v) {
-        return 'https://data.chain.link/arbitrum/mainnet/crypto-usd/';
-    }
-
-    let name = v?.split('-')[1];
-    name = name?.toLowerCase();
-    name = /\//.test(name) ? name?.replace('/', '-') : '';
-
-    const market = /eur/.test(name) ? 'fiat' : 'crypto-usd';
-    const FEED_URL = `https://data.chain.link/arbitrum/mainnet/${market}/`;
-
-    return `${FEED_URL}${name}`;
-};
-
-export const getBaseAsset: (poolName: string) => string = (poolName) => poolName?.split('-')[1]?.split('/')[0];
-
 export const convertCurrency: (value: string) => string = (value) => {
     return parseInt(value).toLocaleString('en-US');
 };
@@ -295,3 +264,4 @@ export const convertShortDate: (entryDate: number) => string = (entryDate) => {
 };
 
 export const formatBN = (n: BigNumber, decimals: number): BigNumber => n.div(10 ** decimals);
+export const formatAddress = (addr: string): string => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;

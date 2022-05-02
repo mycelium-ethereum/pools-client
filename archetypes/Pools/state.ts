@@ -56,7 +56,7 @@ interface BrowseTableTokenData {
 
 export interface BrowseTableRowData {
     name: string;
-    market: string;
+    marketSymbol: string;
     address: string;
     decimals: number;
     settlementTokenSymbol: string;
