@@ -115,8 +115,7 @@ export const Value = styled.div`
         font-size: 40px;
     }
 
-    =======>>>>>>>795946254e6e30223e2095d8b0e9635645ea5c95 
-    @media ${({ theme }) => theme.device.md} {
+    =======>>>>>>>795946254e6e30223e2095d8b0e9635645ea5c95 @media ${({ theme }) => theme.device.md} {
         font-size: 60px;
     }
 
@@ -202,7 +201,8 @@ export const Card = styled.div`
         color: #ef4444;
     }
     &.up {
-        background: linear-gradient(270deg, rgba(5, 122, 85, 0.2) -14.15%, rgba(5, 122, 85, 0) 22.33%), rgb(243, 250, 247, 0.1);
+        background: linear-gradient(270deg, rgba(5, 122, 85, 0.2) -14.15%, rgba(5, 122, 85, 0) 22.33%),
+            rgb(243, 250, 247, 0.1);
         border: 1px solid #0e9f6e;
         color: #0e9f6e;
     }

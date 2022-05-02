@@ -152,12 +152,14 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
 
         // array of settlementTokens relevant to inputted pools
         //  used with the above to fetch all relevant pools for each settlementToken
-        const relevantSettlementTokens: string[] = Object.keys(
-            pools_.reduce((o, pool) => {
-                const settlementToken = allPools[pool]?.poolInstance?.settlementToken?.address;
-                settlementToken && o.set(settlementToken, true);
-                return o;
-            }, new Map<string, boolean>()),
+        const relevantSettlementTokens: string[] = Array.from(
+            pools_
+                .reduce((o, pool) => {
+                    const settlementToken = allPools[pool]?.poolInstance?.settlementToken?.address;
+                    settlementToken && o.set(settlementToken, true);
+                    return o;
+                }, new Map<string, boolean>())
+                .keys(),
         );
 
         // fetches tokenBalances for each settlementToken relevant to inputted pools_
