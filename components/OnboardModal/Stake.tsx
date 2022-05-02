@@ -17,9 +17,6 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
             case 1:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Wave />
-                        </div>
                         <div className="my-5 text-center text-2xl">Stake Pool tokens</div>
                         <Divider className="mb-8" />
                         <div className="mb-8 text-sm">
@@ -49,9 +46,6 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
             case 2:
                 return (
                     <>
-                        <div className="flex justify-center">
-                            <Styled.Question />
-                        </div>
                         <div className="my-5 text-center text-2xl">Explore the wider landscape</div>
                         <Divider className="mb-8" />
                         <div className="mb-8 text-sm">
