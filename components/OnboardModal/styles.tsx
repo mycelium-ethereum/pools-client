@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 import CloseSVG from '/public/img/general/close.svg';
-import WaveSVG from '/public/img/onboard/wave.svg';
-import QuestionSVG from '/public/img/onboard/question.svg';
-import { Theme } from '~/store/ThemeSlice/themes';
 
 export const OnboardContent = styled.div`
     a {
@@ -12,30 +9,60 @@ export const OnboardContent = styled.div`
 `;
 
 export const Close = styled(CloseSVG)`
-    width: 0.75rem; /* 12px */
-    height: 0.75rem; /* 12px */
+    width: 1rem;
+    height: 1rem;
     margin-left: auto;
     cursor: pointer;
+    position: absolute;
+    right: 35px;
+    top: 46px;
 `;
 
-export const Wave = styled(WaveSVG)`
-    fill: ${({ theme }) => {
-        switch (theme.theme) {
-            case Theme.Light:
-                return '#F3F4F6';
+export const Heading = styled.p`
+    font-size: ${({ theme }) => theme.fontSize.xl};
+    font-weight: 500;
+    font-family: ${({ theme }) => theme.fontFamily.body};
+    text-align: center;
+    margin-bottom: 40px;
+`;
+
+export const Text = styled.p`
+    text-align: center;
+    font-family: ${({ theme }) => theme.fontFamily.body};
+    margin-top: 30px;
+    line-height: 28px;
+`;
+
+export const Color = styled.span<{ variant?: string }>`
+    color: ${({ variant }) => {
+        switch (variant) {
+            case 'green':
+                return '#05cb3a';
+            case 'red':
+                return '#f15025';
             default:
-                return '#374151';
+                return '#8383eb';
         }
     }};
 `;
 
-export const Question = styled(QuestionSVG)`
-    fill: ${({ theme }) => {
-        switch (theme.theme) {
-            case Theme.Light:
-                return '#E5E7EB';
-            default:
-                return '#374151';
-        }
-    }};
+export const Content = styled.div`
+    margin-bottom: 37px;
+`;
+
+export const ButtonContainer = styled.div`
+    display: flex;
+    gap: 10px;
+
+    @media ${({ theme }) => theme.device.sm} {
+        gap: 20px;
+    }
+`;
+
+export const Link = styled.a.attrs({
+    target: '_blank',
+    rel: 'noreferrer',
+})`
+    text-decoration: underline;
+    color: #3da8f5;
 `;

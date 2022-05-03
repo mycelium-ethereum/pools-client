@@ -54,11 +54,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
     }, [isValidAddress]);
 
     return (
-        <TWModal
-            open={open}
-            onClose={onClose}
-            className="mx-5 px-7 pt-9 pb-9 sm:px-16 sm:pb-20 sm:pt-7 md:max-w-[500px]"
-        >
+        <TWModal open={open} onClose={onClose} className="px-7 pt-9 pb-9 sm:px-16 sm:pb-20 sm:pt-7 md:max-w-[500px]">
             <Styles.Close onClick={handleCloseModal} className="close" />
             <Styles.Title>
                 Add an alternative Pool
