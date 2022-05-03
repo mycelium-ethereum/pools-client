@@ -1,20 +1,19 @@
 import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcNotionalValue, SideEnum } from '@tracer-protocol/pools-js';
-import { EscrowRowProps, TokenType } from '~/archetypes/Portfolio/state';
+import { UnclaimedRowInfo, TokenType } from '~/archetypes/Portfolio/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
+import { LoadingRows } from '~/types/hooks';
 import { getBaseAsset } from '~/utils/poolNames';
 
-type EscrowRowInfo = Omit<EscrowRowProps, 'onClickCommitAction'>;
-
-export default (() => {
-    const { pools } = usePools();
-    const [rows, setRows] = useState<EscrowRowInfo[]>([]);
+export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
+    const { pools, isLoadingPools } = usePools();
+    const [rows, setRows] = useState<UnclaimedRowInfo[]>([]);
 
     useEffect(() => {
         if (pools) {
-            const _rows: EscrowRowInfo[] = [];
+            const _rows: UnclaimedRowInfo[] = [];
             Object.values(pools).forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
 
@@ -100,5 +99,10 @@ export default (() => {
         }
     }, [pools]);
 
-    return rows;
-}) as () => EscrowRowProps[];
+    return {
+        rows,
+        isLoading: isLoadingPools && rows.length === 0,
+    };
+};
+
+export default useUserUnclaimedTokens;

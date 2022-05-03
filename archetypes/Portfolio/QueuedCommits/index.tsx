@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
-import usePendingCommits from '~/hooks/useQueuedCommits';
+import useQueuedCommits from '~/hooks/useQueuedCommits';
 import { QueuedCommit } from '~/types/commits';
 import QueuedCommitsTable from './QueuedCommitsTable';
 import { OverviewTable } from '../OverviewTable';
@@ -16,7 +16,7 @@ export const QueuedCommits = ({
     queuedCommitsSearch: PortfolioState['queuedCommitsSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
 }): JSX.Element => {
-    const commits = usePendingCommits();
+    const { rows: commits, isLoading } = useQueuedCommits();
 
     const searchFilterFunc = useCallback(
         (commit: QueuedCommit): boolean => {
@@ -71,6 +71,7 @@ export const QueuedCommits = ({
                     setSearch={(search) => void dispatch({ type: 'setQueuedCommitsSearch', search })}
                 />
             }
+            isLoading={isLoading}
             rowCount={commits.length}
         >
             <QueuedCommitsTable commits={filteredCommits} />

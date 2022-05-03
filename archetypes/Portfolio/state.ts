@@ -43,7 +43,11 @@ export type TokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     effectiveGain: number;
 };
 
-export interface EscrowRowProps {
+export type UnclaimedRowProps = UnclaimedRowInfo & {
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+};
+
+export type UnclaimedRowInfo = {
     poolName: string; // pool name
     poolAddress: string;
     marketTicker: LogoTicker;
@@ -52,8 +56,7 @@ export interface EscrowRowProps {
     claimableSettlementTokens: OverviewAsset;
     claimableSum: BigNumber;
     numClaimable: number;
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-}
+};
 
 export type OverviewAsset = {
     symbol: string;
@@ -71,8 +74,8 @@ export type OverviewPoolToken = {
 } & OverviewAsset;
 
 export type ClaimablePoolTokenRowProps = OverviewPoolToken & {
-    poolAddress: EscrowRowProps['poolAddress'];
-    onClickCommitAction: EscrowRowProps['onClickCommitAction'];
+    poolAddress: UnclaimedRowProps['poolAddress'];
+    onClickCommitAction: UnclaimedRowProps['onClickCommitAction'];
 };
 
 export interface PortfolioState {

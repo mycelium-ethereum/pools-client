@@ -1,15 +1,20 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Logo } from '~/components/General';
-import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
-import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './ClaimableRows';
 import * as Styles from './styles';
-import { OverviewPoolToken, TokenType, EscrowRowProps } from '../state';
+import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './UnclaimedTokensRows';
+import { UnclaimedRowInfo, OverviewPoolToken, TokenType, UnclaimedRowProps } from '../state';
 
-export const EscrowTable = (({ rows, onClickCommitAction }) => {
+export const UnclaimedTokensTable = ({
+    rows,
+    onClickCommitAction,
+}: {
+    rows: UnclaimedRowInfo[];
+    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+}): JSX.Element => {
     return (
         <>
             <Table>
@@ -46,25 +51,19 @@ export const EscrowTable = (({ rows, onClickCommitAction }) => {
                         })}
                 </tbody>
             </Table>
-            {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
         </>
     );
-}) as React.FC<{
-    rows: EscrowRowProps[];
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
-}>;
+};
 
-const PoolRow: React.FC<EscrowRowProps> = ({
+const PoolRow = ({
     poolName,
     poolAddress,
     marketTicker,
     claimableLongTokens,
     claimableShortTokens,
     claimableSettlementTokens,
-    // numClaimable,
-    // claimableSum,
     onClickCommitAction,
-}) => {
+}: UnclaimedRowProps): JSX.Element => {
     const { claim } = usePoolInstanceActions();
     return (
         <>

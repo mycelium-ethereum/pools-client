@@ -1,10 +1,9 @@
 import React from 'react';
+import { NoTableEntries } from '~/components/General/NoTableEntries';
 import { Table, TableHeaderCell } from '~/components/General/TWTable';
 import { TableHeader } from '~/components/General/TWTable';
 import { QueuedCommit } from '~/types/commits';
 import { QueuedCommitRow } from './QueuedCommitRow';
-
-import { NoEntries } from '../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
 
 export const QueuedCommitsTable = ({ commits }: { commits: QueuedCommit[] }): JSX.Element => {
@@ -31,7 +30,7 @@ export const QueuedCommitsTable = ({ commits }: { commits: QueuedCommit[] }): JS
             </TableHeader>
             <tbody>
                 {commits.length === 0 ? (
-                    <NoEntries isQueued />
+                    <NoTableEntries>You have no pending commits.</NoTableEntries>
                 ) : (
                     commits.map((commit) => <QueuedCommitRow key={commit.txnHash} {...commit} />)
                 )}

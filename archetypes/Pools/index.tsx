@@ -26,7 +26,7 @@ import * as Styles from './styles';
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
     const { swapDispatch = noDispatch } = useSwapContext();
-    const { rows: tokens } = useBrowsePools();
+    const { rows: tokens, isLoading } = useBrowsePools();
 
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
@@ -138,7 +138,7 @@ export const Browse: React.FC = () => {
                     </div>
                     <FilterSelects state={state} dispatch={dispatch} />
                 </Styles.Header>
-                {!filteredTokens.length ? <Styles.Loading /> : null}
+                {isLoading ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     return (

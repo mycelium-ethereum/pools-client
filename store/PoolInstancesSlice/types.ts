@@ -3,15 +3,23 @@ import BigNumber from 'bignumber.js';
 import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
 import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
 
+export enum KnownPoolsInitialisationErrors {
+    ProviderNotReady = 'Provider not ready',
+    NetworkNotSupported = 'Network not supported',
+    NoPools = 'No pools found',
+}
+
 export interface IPoolsInstancesSlice {
     pools: Record<string, PoolInfo>;
     selectedPool: string | undefined;
     poolsInitialized: boolean;
+    poolsInitializationError: any | undefined;
 
     setPool: (pool: Pool) => void;
     setMultiplePools: (pool: Pool[]) => void;
     resetPools: () => void;
     setPoolsInitialized: (initialized: boolean) => void;
+    setPoolsInitializationError: (error: any) => void;
 
     setTokenBalances: (
         pool: string,
