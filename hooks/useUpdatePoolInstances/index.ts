@@ -11,6 +11,7 @@ import {
     selectPoolInstanceUpdateActions,
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
+import { KnownPoolsInitialisationErrors } from '~/store/PoolInstancesSlice/types';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
@@ -22,10 +23,8 @@ import { useAllPoolLists } from '../useAllPoolLists';
  * Wrapper to update all pools information
  */
 export const useUpdatePoolInstances = (): void => {
-    const { setMultiplePools, resetPools, setPoolsInitialized, setTokenBalances } = useStore(
-        selectPoolInstanceActions,
-        shallow,
-    );
+    const { setMultiplePools, resetPools, setPoolsInitialized, setTokenBalances, setPoolsInitializationError } =
+        useStore(selectPoolInstanceActions, shallow);
     const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances, updateTradeStats } = useStore(
         selectPoolInstanceUpdateActions,
         shallow,
@@ -52,6 +51,7 @@ export const useUpdatePoolInstances = (): void => {
                     resetPools();
                     hasSetPools.current = false;
                     setPoolsInitialized(false);
+                    setPoolsInitializationError(undefined);
                     Promise.all(
                         poolLists.map((pool) =>
                             Pool.Create({
@@ -68,6 +68,8 @@ export const useUpdatePoolInstances = (): void => {
                                     setMultiplePools(pools_);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
+                                } else {
+                                    setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                                 }
                             }
                         })
@@ -75,16 +77,19 @@ export const useUpdatePoolInstances = (): void => {
                             console.error('Failed to initialise pools', err);
                             if (mounted) {
                                 setPoolsInitialized(false);
+                                setPoolsInitializationError(err);
                             }
                         });
                 };
                 fetchAndSetPools();
             } else {
                 console.error('Skipped pools initialisation, network not supported');
+                setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
             }
         } else {
             console.error('Skipped pools initialisation, provider not ready');
             resetPools();
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.ProviderNotReady);
         }
         return () => {
             mounted = false;

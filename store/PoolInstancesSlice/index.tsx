@@ -11,6 +11,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     pools: {},
     selectedPool: undefined,
     poolsInitialized: false,
+    poolsInitializationError: undefined,
 
     setPool: (pool) => {
         const now = Date.now() / 1000;
@@ -57,6 +58,9 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     },
     setPoolsInitialized: (initialized) => {
         set((state) => void (state.poolsInitialized = initialized));
+    },
+    setPoolsInitializationError: (error) => {
+        set((state) => void (state.poolsInitializationError = error));
     },
     setTokenBalances: (pool, balances) => {
         if (!get().pools[pool]) {
@@ -296,12 +300,16 @@ export const selectPoolInstances: (state: StoreState) => IPoolsInstancesSlice['p
     state.poolsInstancesSlice.pools;
 export const selectPoolsInitialized: (state: StoreState) => IPoolsInstancesSlice['poolsInitialized'] = (state) =>
     state.poolsInstancesSlice.poolsInitialized;
+export const selectPoolsInitializationError: (state: StoreState) => IPoolsInstancesSlice['poolsInitializationError'] = (
+    state,
+) => state.poolsInstancesSlice.poolsInitializationError;
 
 export const selectPoolInstanceActions: (state: StoreState) => {
     setPool: IPoolsInstancesSlice['setPool'];
     setMultiplePools: IPoolsInstancesSlice['setMultiplePools'];
     resetPools: IPoolsInstancesSlice['resetPools'];
     setPoolsInitialized: IPoolsInstancesSlice['setPoolsInitialized'];
+    setPoolsInitializationError: IPoolsInstancesSlice['setPoolsInitializationError'];
     setTokenBalances: IPoolsInstancesSlice['setTokenBalances'];
     setTokenApprovals: IPoolsInstancesSlice['setTokenApprovals'];
     setAggregateBalances: IPoolsInstancesSlice['setAggregateBalances'];
@@ -313,6 +321,7 @@ export const selectPoolInstanceActions: (state: StoreState) => {
     setMultiplePools: state.poolsInstancesSlice.setMultiplePools,
     resetPools: state.poolsInstancesSlice.resetPools,
     setPoolsInitialized: state.poolsInstancesSlice.setPoolsInitialized,
+    setPoolsInitializationError: state.poolsInstancesSlice.setPoolsInitializationError,
     setTokenBalances: state.poolsInstancesSlice.setTokenBalances,
     setTokenApprovals: state.poolsInstancesSlice.setTokenApprovals,
     setAggregateBalances: state.poolsInstancesSlice.setAggregateBalances,

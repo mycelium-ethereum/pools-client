@@ -1,10 +1,10 @@
 import React from 'react';
 import Loading from '~/components/General/Loading';
+import { NoTableEntries } from '~/components/General/NoTableEntries';
 import { FullSpanCell, Table } from '~/components/General/TWTable';
 import { TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { TradeHistory } from '~/types/commits';
 import { HistoricCommitRow } from './HisoricCommitRows';
-import { NoEntries } from '../NoEntries';
 import { OverviewHeaderRow } from '../OverviewTable/styles';
 
 export const HistoricCommitsTable = ({
@@ -45,7 +45,7 @@ export const HistoricCommitsTable = ({
             ) : (
                 <tbody>
                     {commits.length === 0 ? (
-                        <NoEntries />
+                        <NoTableEntries>You have no commit history.</NoTableEntries>
                     ) : (
                         commits.map((commit) => <HistoricCommitRow key={commit.txnHashIn} {...commit} />)
                     )}

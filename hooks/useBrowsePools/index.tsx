@@ -28,7 +28,7 @@ const STATIC_DEFAULT_UPKEEP = {
 // const useBrowsePools
 export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
     const network = useStore(selectNetwork);
-    const { pools, poolsInitialized } = usePools();
+    const { pools, isLoadingPools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const balancerPoolPrices = useBalancerSpotPrices(network);
     const upkeeps = useUpkeeps(network);
@@ -169,7 +169,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
 
     return {
         rows: finalRows,
-        isLoading: !poolsInitialized && rows.length === 0,
+        isLoading: isLoadingPools && rows.length === 0,
     };
 };
 

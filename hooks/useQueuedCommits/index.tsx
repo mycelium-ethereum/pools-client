@@ -14,7 +14,7 @@ type Token = QueuedCommit['tokenIn'] | QueuedCommit['tokenOut'];
 export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
     const { account = '', provider } = useStore(selectWeb3Info, shallow);
     const commits = useStore(selectCommits);
-    const { pools, poolsInitialized } = usePools();
+    const { pools, isLoadingPools } = usePools();
     const [rows, setRows] = useState<QueuedCommit[]>([]);
 
     useMemo(() => {
@@ -109,7 +109,7 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
 
     return {
         rows,
-        isLoading: !poolsInitialized && rows.length === 0,
+        isLoading: isLoadingPools && rows.length === 0,
     };
 };
 

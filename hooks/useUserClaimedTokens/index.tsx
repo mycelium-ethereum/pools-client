@@ -6,7 +6,7 @@ import { usePools } from '~/hooks/usePools';
 import { LoadingRows } from '~/types/hooks';
 
 export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
-    const { pools, poolsInitialized } = usePools();
+    const { pools, isLoadingPools } = usePools();
     const [rows, setRows] = useState<TokenRowProps[]>([]);
 
     useEffect(() => {
@@ -67,7 +67,7 @@ export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
     }, [pools]);
     return {
         rows,
-        isLoading: !poolsInitialized && rows.length === 0,
+        isLoading: isLoadingPools && rows.length === 0,
     };
 };
 

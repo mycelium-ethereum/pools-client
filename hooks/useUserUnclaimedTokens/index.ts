@@ -8,7 +8,7 @@ import { LoadingRows } from '~/types/hooks';
 import { getBaseAsset } from '~/utils/poolNames';
 
 export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
-    const { pools, poolsInitialized } = usePools();
+    const { pools, isLoadingPools } = usePools();
     const [rows, setRows] = useState<UnclaimedRowInfo[]>([]);
 
     useEffect(() => {
@@ -101,7 +101,7 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
 
     return {
         rows,
-        isLoading: !poolsInitialized && rows.length === 0,
+        isLoading: isLoadingPools && rows.length === 0,
     };
 };
 
