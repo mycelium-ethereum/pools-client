@@ -19,7 +19,7 @@ export const HistoricCommits = ({
     historicCommitsSearch: PortfolioState['historicCommitsSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
 }): JSX.Element => {
-    const { loading, tradeHistory, totalRecords, page, setPage } = useHistoricCommits(historicCommitsFilter);
+    const { isLoading, rows: tradeHistory, totalRecords, page, setPage } = useHistoricCommits(historicCommitsFilter);
 
     const searchFilterFunc = useCallback(
         (commit): boolean => {
@@ -76,8 +76,9 @@ export const HistoricCommits = ({
                     setSearch={(search) => void dispatch({ type: 'setHistoricCommitsSearch', search })}
                 />
             }
+            isLoading={isLoading}
         >
-            <HistoricCommitsTable loading={loading} commits={filteredCommits} />
+            <HistoricCommitsTable loading={isLoading} commits={filteredCommits} />
             <Styles.PaginationWrapper>
                 <PageNumber page={page} numResults={totalRecords} resultsPerPage={PAGE_ENTRIES} />
                 <div>

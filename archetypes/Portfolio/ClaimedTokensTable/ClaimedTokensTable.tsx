@@ -1,6 +1,5 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import Loading from '~/components/General/Loading';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
 import { TokenRowProps } from '../state';
@@ -31,7 +30,6 @@ export const ClaimedTokensTable = ({
                     ))}
                 </tbody>
             </Table>
-            {!rows.length ? <Loading className="mx-auto my-8 w-10" /> : null}
         </>
     );
 };

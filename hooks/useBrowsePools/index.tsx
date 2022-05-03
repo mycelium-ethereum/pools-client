@@ -5,6 +5,7 @@ import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
+import { LoadingRows } from '~/types/hooks';
 import { getMarketSymbol } from '~/utils/poolNames';
 import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useUpkeeps } from '../useUpkeeps';
@@ -25,9 +26,9 @@ const STATIC_DEFAULT_UPKEEP = {
 };
 
 // const useBrowsePools
-export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
+export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
     const network = useStore(selectNetwork);
-    const { pools } = usePools();
+    const { pools, poolsInitialized } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const balancerPoolPrices = useBalancerSpotPrices(network);
     const upkeeps = useUpkeeps(network);
@@ -168,6 +169,7 @@ export const useBrowsePools = (): { rows: BrowseTableRowData[] } => {
 
     return {
         rows: finalRows,
+        isLoading: !poolsInitialized && rows.length === 0,
     };
 };
 

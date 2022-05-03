@@ -7,14 +7,15 @@ import { useStore } from '~/store/main';
 import { selectCommits } from '~/store/PendingCommitSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { QueuedCommit } from '~/types/commits';
+import { LoadingRows } from '~/types/hooks';
 
 type Token = QueuedCommit['tokenIn'] | QueuedCommit['tokenOut'];
 
-export default (() => {
+export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
     const { account = '', provider } = useStore(selectWeb3Info, shallow);
     const commits = useStore(selectCommits);
-    const { pools } = usePools();
-    const [allQueuedCommits, setAllQueuedCommits] = useState<QueuedCommit[]>([]);
+    const { pools, poolsInitialized } = usePools();
+    const [rows, setRows] = useState<QueuedCommit[]>([]);
 
     useMemo(() => {
         // filter user commits
@@ -102,9 +103,14 @@ export default (() => {
                     });
                 }
             }
-            setAllQueuedCommits(parsedCommits);
+            setRows(parsedCommits);
         }
     }, [pools, commits, provider, account]);
 
-    return allQueuedCommits;
-}) as () => QueuedCommit[];
+    return {
+        rows,
+        isLoading: !poolsInitialized && rows.length === 0,
+    };
+};
+
+export default useQueuedCommits;

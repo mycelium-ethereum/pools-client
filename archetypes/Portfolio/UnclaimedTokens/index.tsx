@@ -1,12 +1,12 @@
 import React, { useMemo } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import useEscrowHoldings from '~/hooks/useEscrowHoldings';
+import useUserUnclaimedTokens from '~/hooks/useUserUnclaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
-import { EscrowTable } from './EscrowTable';
+import { UnclaimedTokensTable } from './UnclaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { EscrowRowProps, PortfolioAction, PortfolioState } from '../state';
+import { PortfolioAction, PortfolioState, UnclaimedRowInfo } from '../state';
 
 export const UnclaimedTokens = ({
     escrowMarketFilter,
@@ -19,19 +19,19 @@ export const UnclaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
 }): JSX.Element => {
-    const escrowRows = useEscrowHoldings();
+    const { rows: escrowRows, isLoading } = useUserUnclaimedTokens();
     const totalClaimable = useMemo(
         () => escrowRows.reduce((count, pool) => count + pool.numClaimable, 0),
         [escrowRows],
     );
 
-    const escrowSearchFilter = (pool: EscrowRowProps): boolean => {
+    const escrowSearchFilter = (pool: UnclaimedRowInfo): boolean => {
         const searchString = escrowSearch.toLowerCase();
         return Boolean(pool.poolName.toLowerCase().match(searchString));
     };
 
-    const filteredEscrowRows = escrowRows
-        .filter((pool: EscrowRowProps) => marketFilter(pool.poolName, escrowMarketFilter))
+    const filteredTokenRows = escrowRows
+        .filter((pool: UnclaimedRowInfo) => marketFilter(pool.poolName, escrowMarketFilter))
         .filter(escrowSearchFilter);
 
     return (
@@ -51,9 +51,10 @@ export const UnclaimedTokens = ({
                     setSearch={(search) => void dispatch({ type: 'setEscrowSearch', search })}
                 />
             }
+            isLoading={isLoading}
             rowCount={totalClaimable}
         >
-            <EscrowTable rows={filteredEscrowRows} onClickCommitAction={onClickCommitAction} />
+            <UnclaimedTokensTable rows={filteredTokenRows} onClickCommitAction={onClickCommitAction} />
         </OverviewTable>
     );
 };

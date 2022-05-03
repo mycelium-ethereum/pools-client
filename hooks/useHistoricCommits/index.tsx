@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
+import useSWR from 'swr';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { TradeHistory } from '~/types/commits';
+import { LoadingRows } from '~/types/hooks';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { fetchCommitHistory } from '~/utils/tracerAPI';
 
@@ -16,37 +18,36 @@ export const useHistoricCommits = (
     page: number;
     setPage: React.Dispatch<React.SetStateAction<number>>;
     totalRecords: number;
-    loading: boolean;
-    tradeHistory: TradeHistory[];
-} => {
+} & LoadingRows<TradeHistory> => {
     const { account, network } = useStore(selectWeb3Info, shallow);
-    const [tradeHistory, setTradeHistory] = useState<TradeHistory[]>([]);
-    const [loading, setLoading] = useState(false);
+    const [rows, setRows] = useState<TradeHistory[]>([]);
     const [page, setPage] = useState(1);
     const [totalRecords, setTotalRecords] = useState<number>(0);
 
-    useEffect(() => {
-        setLoading(true);
-        if (account) {
+    const { data, error } = useSWR(
+        ['/commitHistory', account, network, typeFilter, page],
+        (_url, account, network, type, page) =>
             fetchCommitHistory({
                 account: account ?? '0',
                 network: (network as V2_SUPPORTED_NETWORKS) ?? NETWORKS.ARBITRUM,
-                type: typeFilter,
+                type,
                 page,
                 pageSize: PAGE_ENTRIES, // TODO: allow user to choose results per page
-            }).then((r) => {
-                setLoading(false);
-                setTradeHistory(r.results);
-                setTotalRecords(r.totalRecords);
-            });
+            }),
+    );
+
+    useEffect(() => {
+        if (data) {
+            setTotalRecords(data.totalRecords ?? 0);
+            setRows(data.results ?? []);
         }
-    }, [typeFilter, page, account, network]);
+    }, [data]);
 
     return {
-        tradeHistory,
+        rows,
         page,
         setPage,
         totalRecords,
-        loading,
+        isLoading: !error && !data,
     };
 };

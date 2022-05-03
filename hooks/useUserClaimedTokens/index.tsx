@@ -3,14 +3,11 @@ import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
 import { TokenRowProps } from '~/archetypes/Portfolio//state';
 import { usePools } from '~/hooks/usePools';
+import { LoadingRows } from '~/types/hooks';
 
-export const useUserClaimedTokens = (): {
-    tokens: TokenRowProps[];
-    loading: boolean;
-} => {
-    const { pools } = usePools();
-    const [loading, setLoading] = useState<boolean>(true);
-    const [tokens, setTokens] = useState<TokenRowProps[]>([]);
+export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
+    const { pools, poolsInitialized } = usePools();
+    const [rows, setRows] = useState<TokenRowProps[]>([]);
 
     useEffect(() => {
         if (pools) {
@@ -65,13 +62,12 @@ export const useUserClaimedTokens = (): {
                 }
             });
 
-            setTokens(tokens);
-            setLoading(false);
+            setRows(tokens);
         }
     }, [pools]);
     return {
-        tokens,
-        loading,
+        rows,
+        isLoading: !poolsInitialized && rows.length === 0,
     };
 };
 

@@ -133,13 +133,15 @@ export const RowCount = styled.div`
     border-radius: 7px;
 `;
 
-export const DropdownArrow = styled.div<{
-    open: boolean;
-}>`
+export const IconContainer = styled.div`
     align-self: center;
     margin-left: 1.5rem;
     width: 20px;
     height: 10px;
+`;
+export const DropdownArrow = styled.div<{
+    open: boolean;
+}>`
     cursor: pointer;
 
     transform: ${({ open }) => (open ? 'rotate(180deg)' : '0deg')};

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Loading from '~/components/General/Loading';
 import DropdownArrowImage from '~/public/img/general/caret-down-white.svg';
 import * as Styles from './styles';
 import { OverviewPageFocus } from '../state';
@@ -12,8 +13,9 @@ type Props = {
     firstAction: any;
     secondActionTitle?: any;
     secondAction: any;
-    rowCount?: number;
     children: any;
+    isLoading: boolean;
+    rowCount?: number;
 };
 
 export const OverviewTable: React.FC<Props> = ({
@@ -26,12 +28,13 @@ export const OverviewTable: React.FC<Props> = ({
     secondAction,
     rowCount,
     children,
+    isLoading,
 }) => {
     const router = useRouter();
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        setOpen(router.query.focus === pageFocus);
+        setOpen(!!pageFocus && router.query.focus === pageFocus);
     }, [router.query]);
 
     return (
@@ -53,9 +56,15 @@ export const OverviewTable: React.FC<Props> = ({
                         {secondActionTitle && <Styles.Text>{secondActionTitle}</Styles.Text>}
                         {secondAction}
                     </Styles.Actions>
-                    <Styles.DropdownArrow open={open} onClick={() => setOpen(!open)}>
-                        <DropdownArrowImage />
-                    </Styles.DropdownArrow>
+                    <Styles.IconContainer>
+                        {isLoading ? (
+                            <Loading />
+                        ) : (
+                            <Styles.DropdownArrow open={open} onClick={() => setOpen(!open)}>
+                                <DropdownArrowImage />
+                            </Styles.DropdownArrow>
+                        )}
+                    </Styles.IconContainer>
                 </Styles.Content>
             </Styles.Wrapper>
             <Styles.HiddenExpand open={open} defaultHeight={0}>

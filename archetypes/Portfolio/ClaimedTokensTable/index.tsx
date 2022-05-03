@@ -19,7 +19,7 @@ export const ClaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
 }): JSX.Element => {
-    const { tokens } = useUserClaimedTokens();
+    const { rows: tokens, isLoading } = useUserClaimedTokens();
 
     const claimedSearchFilter = (token: TokenRowProps): boolean => {
         const searchString = claimedTokensSearch.toLowerCase();
@@ -53,6 +53,7 @@ export const ClaimedTokens = ({
                     setSearch={(search) => void dispatch({ type: 'setClaimedTokensSearch', search })}
                 />
             }
+            isLoading={isLoading}
             rowCount={tokens.length}
         >
             <ClaimedTokensTable rows={filteredTokens} onClickCommitAction={onClickCommitAction} />
