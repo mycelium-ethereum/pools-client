@@ -14,7 +14,6 @@ export const usePools: () => {
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
     const poolsInitializationError = useStore(selectPoolsInitializationError);
-    console.log(poolsInitializationError);
     return {
         pools,
         poolsInitialized,
