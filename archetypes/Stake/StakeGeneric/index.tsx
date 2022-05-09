@@ -9,9 +9,10 @@ import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectAccount } from '~/store/Web3Slice';
-import { SideFilterEnum, LeverageFilterEnum } from '~/types/filters';
+import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
+import { generalMarketFilter } from '~/utils/filters';
 import FarmsTable from '../FarmsTable';
 import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
@@ -100,6 +101,7 @@ export const StakeGeneric = ({
     const [state, dispatch] = useReducer(stakeReducer, {
         searchFilter: '',
         leverageFilter: LeverageFilterEnum.All,
+        marketFilter: MarketFilterEnum.All,
         sideFilter: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
         stakeModalState: 'closed',
@@ -160,7 +162,11 @@ export const StakeGeneric = ({
         }
     };
 
-    const filteredTokens = farmTableRows.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = farmTableRows
+        .filter(sideFilter)
+        .filter((farm) => generalMarketFilter(farm.name, state.marketFilter))
+        .filter(leverageFilter)
+        .filter(searchFilter);
     const sortedFilteredFarms = filteredTokens.sort(sorter);
 
     const handleStake = (farmAddress: string) => {
