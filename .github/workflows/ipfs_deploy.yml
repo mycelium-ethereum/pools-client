@@ -19,14 +19,14 @@ jobs:
               run: yarn export 
             - name: Upload to ipfs
               uses: aquiladev/ipfs-action@v0.1.3
+              id: upload
               with:
                 path: ./out
                 service: pinata
                 pinataKey: ${{ secrets.PINATA_KEY }}
                 pinataSecret: ${{ secrets.PINATA_SECRET }}
-            - name: Archive pinata upload
+            - name: Pinata upload
               uses: actions/upload-artifact@v3
-              id: upload
               with:
                 name: code-coverage-report
                 path: ipfs/ipfs-deploy.txt
