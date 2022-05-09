@@ -91,7 +91,7 @@ export const NavBarContent: React.FC<{
 
                 {/* DESKTOP */}
                 <span className="hidden xl:flex">
-                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
+                    {/* <VersionToggle pushContentRight={!!setShowOnboardModal} /> */}
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
@@ -102,10 +102,7 @@ export const NavBarContent: React.FC<{
                     {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
-                <div className="flex ml-auto">
-                    <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
-                    <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
-                </div>
+                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
             </div>
         </nav>
     );
