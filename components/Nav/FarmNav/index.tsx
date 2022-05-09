@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { Theme } from '~/store/ThemeSlice/themes';
 import { classNames } from '~/utils/helpers';
-import {Theme} from '~/store/ThemeSlice/themes';
 
 const POOLTOKEN = 0;
 const BPT = 1;
@@ -18,23 +18,23 @@ const StyledFarmNav = styled.div`
         switch (theme.theme) {
             case Theme.Matrix:
                 return 'transparent';
-            default: 
+            default:
                 return theme.background.tertiary;
         }
     }};
-`
+`;
 
 const NavLinks = styled.div`
     display: flex;
     justify-content: center;
     flex-grow: 1;
-`
+`;
 
 const Item = styled.div`
     display: inline;
     min-width: 130px;
     margin: auto 0.5rem;
-    padding:  0.375rem 0.75rem;
+    padding: 0.375rem 0.75rem;
     color: ${({ theme }) => theme.fontColor.primary};
     cursor: pointer;
     border-radius: 0.75rem;
@@ -47,20 +47,9 @@ const Item = styled.div`
         background: ${({ theme }) => theme.background.secondary};
         box-shadow: 0 0 #0000;
     }
-`
+`;
 
-const SideItem = styled.div<{ side: 'right' | 'left' }>`
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    ${({ side }) => side}: 0;
-    display: flex;
-    align-items: center;
-`
-        // <div className="relative flex w-full py-2 text-center bg-theme-background-nav-secondary matrix:bg-transparent">
-
-// const FarmNav
-export default (({ left, right }) => {
+export const FarmNav = (): JSX.Element => {
     const router = useRouter();
 
     useEffect(() => {
@@ -88,7 +77,6 @@ export default (({ left, right }) => {
 
     return (
         <StyledFarmNav>
-            <SideItem side="left">{left}</SideItem>
             <NavLinks>
                 <Item
                     onClick={(_e) => handleRoute(POOLTOKEN)}
@@ -103,10 +91,7 @@ export default (({ left, right }) => {
                     Stake BPT
                 </Item>
             </NavLinks>
-            <SideItem side="right">{right}</SideItem>
         </StyledFarmNav>
     );
-}) as React.FC<{
-    left?: JSX.Element;
-    right?: JSX.Element;
-}>;
+};
+export default FarmNav;

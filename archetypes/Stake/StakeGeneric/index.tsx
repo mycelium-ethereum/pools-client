@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { Container } from '~/components/General/Container';
 import { Logo, LogoTicker } from '~/components/General/Logo';
 import FarmNav from '~/components/Nav/FarmNav';
+import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
 import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
@@ -13,8 +12,7 @@ import { selectAccount } from '~/store/Web3Slice';
 import { Farm } from '~/types/staking';
 
 import FarmsTable from '../FarmsTable';
-import FilterBar from '../FilterSelects/Bar';
-import FilterModal from '../FilterSelects/Modal';
+import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
 import {
     stakeReducer,
@@ -102,7 +100,6 @@ export default (({
         leverage: LeverageFilterEnum.All,
         side: SideFilterEnum.All,
         sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
-        filterModalOpen: false,
         stakeModalState: 'closed',
         amount: new BigNumber(0),
         invalidAmount: { isInvalid: false },
@@ -315,50 +312,34 @@ export default (({
         }
     };
 
-    const SearchButton = (
-        <SearchOutlined
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
-        />
-    );
-    const FilterButton = (
-        <FilterFilled
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
-        />
-    );
-
     return (
         <>
-            <FarmNav left={SearchButton} right={FilterButton} />
-            <Container className="mt-0 md:mt-7">
-                <div className="border-3xl rounded-3xl bg-theme-background p-0 shadow-xl md:py-20 md:px-16">
-                    <section className="hidden md:block">
-                        <span className="align-items: inline-flex ">
-                            {!!logo ? <Logo ticker={logo} className="my-2 pb-0 pr-1 text-theme-text" /> : null}
-                            <h1 className="pl-1s sm:none flex-wrap: wrap; mx-0 pb-0 text-3xl font-bold text-theme-text">
-                                {title}
-                            </h1>
-                        </span>
-                        <p className="mb-1 text-gray-500">{subTitle}</p>
-                        <FilterBar
-                            hideLeverageFilter={hideLeverageFilter}
-                            hideSideFilter={hideSideFilter}
-                            state={state}
-                            dispatch={dispatch}
-                        />
-                    </section>
-                    <FarmsTable
-                        rows={sortedFilteredFarms}
-                        fetchingFarms={fetchingFarms}
-                        rewardsTokenUSDPrices={rewardsTokenUSDPrices}
-                        onClickClaim={handleClaim}
-                        onClickUnstake={handleUnstake}
-                        onClickStake={handleStake}
+            <FarmNav />
+            <PageTable.Container>
+                <PageTable.Header>
+                    <div>
+                        <PageTable.Heading>
+                            {!!logo ? <Logo ticker={logo} className="my-2 inline pb-0 pr-1 text-theme-text" /> : null}
+                            {title}
+                        </PageTable.Heading>
+                        <PageTable.SubHeading>{subTitle}</PageTable.SubHeading>
+                    </div>
+                    <FilterBar
+                        hideLeverageFilter={hideLeverageFilter}
+                        hideSideFilter={hideSideFilter}
+                        state={state}
+                        dispatch={dispatch}
                     />
-                </div>
-            </Container>
-            <FilterModal state={state} dispatch={dispatch} />
+                </PageTable.Header>
+                <FarmsTable
+                    rows={sortedFilteredFarms}
+                    fetchingFarms={fetchingFarms}
+                    rewardsTokenUSDPrices={rewardsTokenUSDPrices}
+                    onClickClaim={handleClaim}
+                    onClickUnstake={handleUnstake}
+                    onClickStake={handleStake}
+                />
+            </PageTable.Container>
             <StakeModalWithState
                 state={state}
                 tokenType={tokenType}

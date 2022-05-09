@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import PageTable from '~/components/PageTable';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
@@ -126,18 +127,20 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <Styles.Container>
-                <Styles.Header>
+            <PageTable.Container>
+                <PageTable.Header>
                     <div>
-                        <Styles.Heading>Pools</Styles.Heading>
-                        <Styles.SubHeading>
+                        <PageTable.Heading>Pools</PageTable.Heading>
+                        <PageTable.SubHeading>
                             The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink
                             Oracles, via Tracer’s SMA Wrapper.{' '}
-                            <Styles.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">Learn More</Styles.Link>
-                        </Styles.SubHeading>
+                            <PageTable.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">
+                                Learn More
+                            </PageTable.Link>
+                        </PageTable.SubHeading>
                     </div>
                     <FilterSelects state={state} dispatch={dispatch} />
-                </Styles.Header>
+                </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
@@ -169,7 +172,7 @@ export const Browse: React.FC = () => {
                         </TooltipSelector>
                     </Styles.AltPoolActions>
                 </Styles.AltPoolRow>
-            </Styles.Container>
+            </PageTable.Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
             )}

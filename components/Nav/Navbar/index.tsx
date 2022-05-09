@@ -32,7 +32,6 @@ const NavBar: React.FC<{
     );
 };
 
-
 export const NavBarContent: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {

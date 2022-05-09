@@ -36,7 +36,6 @@ export interface StakeState {
     side: SideFilterEnum;
     sortBy: SortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
-    filterModalOpen: boolean;
     amount: BigNumber;
     selectedFarm: string;
     invalidAmount: { isInvalid: boolean; message?: string };
@@ -47,7 +46,6 @@ export type StakeAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setLeverage'; leverage: LeverageFilterEnum }
     | { type: 'setSide'; side: SideFilterEnum }
-    | { type: 'setFilterModalOpen'; open: boolean }
     | { type: 'setStakeModalState'; state: StakeState['stakeModalState'] }
     | { type: 'setStakeModalBalance'; balance: StakeState['stakeModalBalance'] }
     | { type: 'setSelectedFarm'; farm: string }
@@ -77,11 +75,6 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
             return {
                 ...state,
                 sortBy: action.sortBy,
-            };
-        case 'setFilterModalOpen':
-            return {
-                ...state,
-                filterModalOpen: action.open,
             };
         case 'setStakeModalState':
             return {
