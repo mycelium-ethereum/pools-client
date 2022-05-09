@@ -1,0 +1,19 @@
+name: Actions
+on:
+  push:
+    branches:
+          - ipfs-backup-workflow
+jobs:
+    build_lint_export:
+        name: Run build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies
+              run: yarn install
+            - name: Build app
+              run: yarn build
+            - name: Run Prettier
+              run: yarn run lint
+            - name: Export app 
+              run: yarn export 
