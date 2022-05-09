@@ -11,10 +11,10 @@ jobs:
             - uses: actions/checkout@v2
             - name: Install dependencies
               run: yarn install
+            - name: Run lint 
+              run: yarn run lint
             - name: Build app
               run: yarn build
-            - name: Run Prettier
-              run: yarn run lint
             - name: Export app 
               run: yarn export 
             - name: Upload to ipfs
@@ -24,3 +24,10 @@ jobs:
                 service: pinata
                 pinataKey: ${{ secrets.PINATA_KEY }}
                 pinataSecret: ${{ secrets.PINATA_SECRET }}
+            - name: Archive pinata upload
+              uses: actions/upload-artifact@v3
+              id: upload
+              with:
+                name: code-coverage-report
+                path: ipfs/ipfs-deploy.txt
+              run: echo ${{ steps.upload.outputs.hash }}
