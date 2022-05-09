@@ -32,6 +32,7 @@ const NavBar: React.FC<{
     );
 };
 
+
 export const NavBarContent: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
@@ -70,6 +71,11 @@ export const NavBarContent: React.FC<{
                             <span className="m-auto">Documentation</span>
                         </li>
                     </a>
+                    <Link href="/stakepooltoken">
+                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
+                            <a className="m-auto">Stake</a>
+                        </li>
+                    </Link>
                 </ul>
                 <div className="ml-auto flex">
                     {setShowOnboardModal ? (
