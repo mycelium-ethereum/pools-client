@@ -8,9 +8,9 @@ export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnu
         case MarketFilterEnum.All:
             return true;
         // case MarketFilterEnum.EUR:
-            // return poolName.replace(/.\-/g, '').split('/')[0] === 'EUR';
+        // return poolName.replace(/.\-/g, '').split('/')[0] === 'EUR';
         // case MarketFilterEnum.TOKE:
-            // return poolName.replace(/.\-/g, '').split('/')[0] === 'TOKE';
+        // return poolName.replace(/.\-/g, '').split('/')[0] === 'TOKE';
         case MarketFilterEnum.LINK:
             return poolName.replace(/.\-/g, '').split('/')[0] === 'LINK';
         case MarketFilterEnum.ETH:
@@ -18,7 +18,7 @@ export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnu
         case MarketFilterEnum.BTC:
             return poolName.replace(/.\-/g, '').split('/')[0] === 'BTC';
         // case MarketFilterEnum.AAVE:
-            // return poolName.replace(/.\-/g, '').split('/')[0] === 'AAVE';
+        // return poolName.replace(/.\-/g, '').split('/')[0] === 'AAVE';
         default:
             return false;
     }
@@ -32,9 +32,9 @@ export const generalMarketFilter: (poolName: string, marketFilterState: MarketFi
         case MarketFilterEnum.All:
             return true;
         // case MarketFilterEnum.EUR:
-            // return name.search('EUR') > -1;
+        // return name.search('EUR') > -1;
         // case MarketFilterEnum.TOKE:
-            // return name.search('TOKE') > -1;
+        // return name.search('TOKE') > -1;
         case MarketFilterEnum.LINK:
             return name.search('LINK') > -1;
         case MarketFilterEnum.ETH:
@@ -42,7 +42,7 @@ export const generalMarketFilter: (poolName: string, marketFilterState: MarketFi
         case MarketFilterEnum.BTC:
             return name.search('BTC') > -1;
         // case MarketFilterEnum.AAVE:
-            // return name.search('AAVE') > -1;
+        // return name.search('AAVE') > -1;
         default:
             return false;
     }
