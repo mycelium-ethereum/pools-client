@@ -17,9 +17,10 @@ jobs:
               run: yarn run lint
             - name: Export app 
               run: yarn export 
-            - name: Archive production artifacts
-              uses: actions/upload-artifact@v3
+            - name: Upload to ipfs
+              uses: aquiladev/ipfs-action@v1
               with:
-                name: export_output
-                path: |
-                  out
+                path: ./out
+                service: pinata
+                pinataKey: ${{ secrets.PINATA_KEY }}
+                pinataSecret: ${{ secrets.PINATA_SECRET }}
