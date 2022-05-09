@@ -2,6 +2,7 @@
 const path = require('path');
 
 module.exports = {
+    assetPrefix: './', // fixes ipfs import
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
