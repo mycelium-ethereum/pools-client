@@ -30,4 +30,5 @@ jobs:
               with:
                 name: code-coverage-report
                 path: ipfs/ipfs-deploy.txt
+            - name: Save ipfs hash
               run: echo ${{ steps.upload.outputs.hash }}
