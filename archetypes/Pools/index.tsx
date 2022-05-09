@@ -6,22 +6,14 @@ import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
+import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
 import { getMarketLeverage } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
-import {
-    browseReducer,
-    BrowseState,
-    BrowseTableRowData,
-    DeltaEnum,
-    LeverageEnum,
-    MarketFilterEnum,
-    RebalanceEnum,
-    SortByEnum,
-} from './state';
+import { browseReducer, BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnum } from './state';
 import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
@@ -32,7 +24,7 @@ export const Browse: React.FC = () => {
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         marketFilter: MarketFilterEnum.All,
-        leverageFilter: LeverageEnum.All,
+        leverageFilter: LeverageFilterEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
@@ -50,7 +42,7 @@ export const Browse: React.FC = () => {
     const leverageFilter = useCallback(
         (pool: BrowseTableRowData): boolean => {
             switch (state.leverageFilter) {
-                case LeverageEnum.All:
+                case LeverageFilterEnum.All:
                     return true;
                 default:
                     return !!pool.name && getMarketLeverage(pool.name).toString() === state.leverageFilter;

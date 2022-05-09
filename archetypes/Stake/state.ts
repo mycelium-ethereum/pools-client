@@ -1,18 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
+import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum, SideFilterEnum } from '~/types/filters';
 import { FarmTableDetails } from '~/types/staking';
-
-export enum LeverageFilterEnum {
-    All = 'All',
-    One = '1',
-    Three = '3',
-}
-
-export enum SideFilterEnum {
-    Short = 'Short',
-    Long = 'Long',
-    All = 'All',
-}
 
 export enum SortByEnum {
     Name = 'Token',
@@ -31,9 +20,12 @@ export type FarmTableRowData = {
 } & FarmTableDetails;
 
 export interface StakeState {
-    search: string;
-    leverage: LeverageFilterEnum;
-    side: SideFilterEnum;
+    searchFilter: string;
+    leverageFilter: LeverageFilterEnum;
+    sideFilter: SideFilterEnum;
+    marketFilter: MarketFilterEnum;
+    collateralFilter: CollateralFilterEnum;
+
     sortBy: SortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
     amount: BigNumber;
@@ -43,9 +35,11 @@ export interface StakeState {
 }
 
 export type StakeAction =
-    | { type: 'setSearch'; search: string }
-    | { type: 'setLeverage'; leverage: LeverageFilterEnum }
-    | { type: 'setSide'; side: SideFilterEnum }
+    | { type: 'setSearchFilter'; search: string }
+    | { type: 'setLeverageFilter'; leverage: LeverageFilterEnum }
+    | { type: 'setCollateralFilter'; collateral: CollateralFilterEnum }
+    | { type: 'setMarketFilter'; market: MarketFilterEnum }
+    | { type: 'setSideFilter'; side: SideFilterEnum }
     | { type: 'setStakeModalState'; state: StakeState['stakeModalState'] }
     | { type: 'setStakeModalBalance'; balance: StakeState['stakeModalBalance'] }
     | { type: 'setSelectedFarm'; farm: string }
@@ -56,20 +50,30 @@ export type StakeAction =
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
     switch (action.type) {
-        case 'setLeverage':
+        case 'setLeverageFilter':
             return {
                 ...state,
-                leverage: action.leverage,
+                leverageFilter: action.leverage,
             };
-        case 'setSearch':
+        case 'setSearchFilter':
             return {
                 ...state,
-                search: action.search,
+                searchFilter: action.search,
             };
-        case 'setSide':
+        case 'setSideFilter':
             return {
                 ...state,
-                side: action.side,
+                sideFilter: action.side,
+            };
+        case 'setCollateralFilter':
+            return {
+                ...state,
+                collateralFilter: action.collateral,
+            };
+        case 'setMarketFilter':
+            return {
+                ...state,
+                marketFilter: action.market,
             };
         case 'setSortBy':
             return {

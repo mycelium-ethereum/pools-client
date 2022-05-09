@@ -1,27 +1,5 @@
 import { Upkeep } from '~/hooks/useUpkeeps';
-
-export enum MarketFilterEnum {
-    All = 'All',
-    ETH = 'Ethereum',
-    BTC = 'Bitcoin',
-    // TOKE = 'Tokemak',
-    LINK = 'Chainlink',
-    // EUR = 'Euro',
-    // AAVE = 'Aave',
-}
-
-export enum CollateralEnum {
-    All = 'All',
-    // USDC = 'USDC',
-    PPUSD = 'PPUSD',
-}
-
-export enum LeverageEnum {
-    All = 'All',
-    Three = '3',
-    Five = '5',
-    Seven = '7',
-}
+import { MarketFilterEnum, LeverageFilterEnum, CollateralFilterEnum, SortByEnum } from '~/types/filters';
 
 export enum DeltaEnum {
     Percentile = 0,
@@ -32,14 +10,6 @@ export enum RebalanceEnum {
     next = 0,
     last = 1,
     historic = 2,
-}
-
-export enum SortByEnum {
-    Name = 'Token',
-    Price = 'Price',
-    EffectiveGain = 'Effective Gain',
-    TotalValueLocked = 'TVL',
-    MyHoldings = 'My Holdings',
 }
 
 interface BrowseTableTokenData {
@@ -92,8 +62,8 @@ export interface BrowseState {
     search: string;
     deltaDenotation: DeltaEnum;
     marketFilter: MarketFilterEnum;
-    collateralFilter: CollateralEnum;
-    leverageFilter: LeverageEnum;
+    collateralFilter: CollateralFilterEnum;
+    leverageFilter: LeverageFilterEnum;
     rebalanceFocus: RebalanceEnum;
     sortBy: SortByEnum;
     filtersOpen: boolean;
@@ -105,8 +75,8 @@ export type BrowseAction =
     | { type: 'setSearch'; search: string }
     | { type: 'setRebalanceFocus'; focus: RebalanceEnum }
     | { type: 'setMarketFilter'; market: MarketFilterEnum }
-    | { type: 'setCollateralFilter'; collateral: CollateralEnum }
-    | { type: 'setLeverageFilter'; leverage: LeverageEnum }
+    | { type: 'setCollateralFilter'; collateral: CollateralFilterEnum }
+    | { type: 'setLeverageFilter'; leverage: LeverageFilterEnum }
     | { type: 'setMintBurnModalOpen'; open: boolean }
     | { type: 'setAddAltPoolModalOpen'; open: boolean }
     | { type: 'setDenotation'; denotation: DeltaEnum }

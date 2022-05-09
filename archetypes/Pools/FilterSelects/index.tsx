@@ -2,16 +2,10 @@ import React from 'react';
 import BaseFilters from '~/components/BaseFilters';
 import { LogoTicker } from '~/components/General';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { MARKET_FILTER_OPTIONS, LEVERAGE_FILTER_OPTIONS, COLLATERAL_FILTER_OPTIONS } from '~/constants/filters';
+import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import * as Styles from './styles';
-import {
-    BrowseAction,
-    BrowseState,
-    CollateralEnum,
-    DeltaEnum,
-    LeverageEnum,
-    MarketFilterEnum,
-    RebalanceEnum,
-} from '../state';
+import { BrowseAction, BrowseState, DeltaEnum, RebalanceEnum } from '../state';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -52,25 +46,12 @@ const DENOTATION_OPTIONS = [
     },
 ];
 
-const MARKET_FILTER_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
-    key: (MarketFilterEnum as any)[key],
-    ticker: (key !== 'All' ? key : '') as LogoTicker,
-}));
-
-const COLLATERAL_FILTER_OPTIONS = Object.keys(CollateralEnum).map((key) => ({
-    key: (CollateralEnum as any)[key],
-}));
-
-const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageEnum).map((key) => ({
-    key: (LeverageEnum as any)[key],
-}));
-
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
     const onCollateralFilterSelect = (val: string) =>
-        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum });
+        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralFilterEnum });
     const onLeverageFilterSelect = (val: string) =>
-        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum });
+        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageFilterEnum });
     const onSearchInputChange = (search: string) => dispatch({ type: 'setSearch', search });
     const onSetDenotation = (option: number) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum });
     const onRebalanceFocus = (option: number) =>
