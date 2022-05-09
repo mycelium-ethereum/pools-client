@@ -18,7 +18,7 @@ jobs:
             - name: Export app 
               run: yarn export 
             - name: Upload to ipfs
-              uses: aquiladev/ipfs-action@v1
+              uses: aquiladev/ipfs-action@v0.1.3
               with:
                 path: ./out
                 service: pinata
