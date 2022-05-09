@@ -17,3 +17,9 @@ jobs:
               run: yarn run lint
             - name: Export app 
               run: yarn export 
+            - name: Archive production artifacts
+              uses: actions/upload-artifact@v3
+              with:
+                name: export_output
+                path: |
+                  out
