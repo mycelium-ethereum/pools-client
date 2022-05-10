@@ -10,9 +10,12 @@ import { calcNumTokens } from './utils';
 
 export const ExpectedTokenPrice: React.FC<{
     tokenPrice: BigNumber;
-}> = ({ tokenPrice }) => (
+    settlementTokenSymbol: string;
+}> = ({ tokenPrice, settlementTokenSymbol }) => (
     <div>
-        <Styles.Transparent>{` at ${toApproxCurrency(tokenPrice ?? 1, 2)} USD/token`}</Styles.Transparent>
+        <Styles.Transparent>
+            {` at ${toApproxCurrency(tokenPrice ?? 1, 3)} ${settlementTokenSymbol}/token`}
+        </Styles.Transparent>
     </div>
 );
 
@@ -51,6 +54,7 @@ export const ExpectedTokensMinted: React.FC<
         expectedTokensMinted: number;
         nextTokenPrice: BigNumber;
         tokenSymbol: string;
+        settlementTokenSymbol: string;
     } & BaseSection
 > = ({ expectedTokensMinted, nextTokenPrice, tokenSymbol, showTransactionDetails }) => (
     <>
@@ -67,7 +71,7 @@ export const ExpectedTokensMinted: React.FC<
                     </Styles.Transparent>
                 </Section>
                 <Section label="Expected price" showSectionDetails>
-                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
+                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} settlementTokenSymbol={settlementTokenSymbol} />
                 </Section>
             </Styles.SectionDetails>
         )}
@@ -94,7 +98,7 @@ export const ExpectedTokenValue: React.FC<
                     <Styles.Transparent>{`${amount}`} tokens</Styles.Transparent>
                 </Section>
                 <Section label="Expected price" showSectionDetails>
-                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} />
+                    <ExpectedTokenPrice tokenPrice={nextTokenPrice} settlementTokenSymbol={settlementTokenSymbol} />
                 </Section>
             </Styles.SectionDetails>
         )}
@@ -211,7 +215,10 @@ export const ExpectedFlipAmounts: React.FC<
                         </Styles.Transparent>
                     </Section>
                     <Section label={`Expected ${isLong ? 'short' : 'long'} token price`} showSectionDetails>
-                        <ExpectedTokenPrice tokenPrice={nextFlipTokenPrice} />
+                        <ExpectedTokenPrice
+                            tokenPrice={nextFlipTokenPrice}
+                            settlementTokenSymbol={settlementTokenSymbol}
+                        />
                     </Section>
                     <Section label={`Expected amount of ${isLong ? 'short' : 'long'} tokens`} showSectionDetails>
                         <Styles.Transparent>
