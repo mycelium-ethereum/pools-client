@@ -31,7 +31,8 @@ jobs:
                 service: pinata
                 pinataKey: ${{ secrets.PINATA_KEY }}
                 pinataSecret: ${{ secrets.PINATA_SECRET }}
-                pinataPinName: ${{ steps.commit.outputs.branch }}-${{ steps.commit.outputs.sha }}
+                pinataPinName: test
+                # ${{ steps.commit.outputs.branch }}-${{ steps.commit.outputs.sha }}
             - name: Echo IPFS hash
               run: echo ${{ steps.upload.outputs.hash }} >> ipfs/ipfs-deploy.txt
             - name: Persist IPFS hash
