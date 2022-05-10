@@ -33,7 +33,9 @@ jobs:
                 pinataSecret: ${{ secrets.PINATA_SECRET }}
                 pinataPinName: ${{ steps.commit.outputs.branch }}-${{ steps.commit.outputs.sha_hash }}
             - name: Echo IPFS hash
-              run: echo ${{ steps.upload.outputs.hash }} >> ipfs/ipfs-deploy.txt
+              run: |
+                touch ipfs/ipfs-deploy.txt
+                echo ${{ steps.upload.outputs.hash }} >> ipfs/ipfs-deploy.txt
             - name: Persist IPFS hash
               uses: actions/upload-artifact@v3
               with:
