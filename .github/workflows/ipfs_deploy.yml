@@ -34,10 +34,9 @@ jobs:
                 pinataPinName: ${{ steps.commit.outputs.branch }}-${{ steps.commit.outputs.sha_hash }}
             - name: Echo IPFS hash
               run: |
-                touch ipfs/ipfs-deploy.txt
-                echo ${{ steps.upload.outputs.hash }} >> ipfs/ipfs-deploy.txt
+                echo ${{ steps.upload.outputs.hash }} >> ipfs-deploy.txt
             - name: Persist IPFS hash
               uses: actions/upload-artifact@v3
               with:
-                name: code-coverage-report
-                path: ipfs/ipfs-deploy.txt
+                name: ipfs-deploy
+                path: ipfs-deploy.txt
