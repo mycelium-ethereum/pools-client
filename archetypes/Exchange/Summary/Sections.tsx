@@ -56,7 +56,7 @@ export const ExpectedTokensMinted: React.FC<
         tokenSymbol: string;
         settlementTokenSymbol: string;
     } & BaseSection
-> = ({ expectedTokensMinted, nextTokenPrice, tokenSymbol, showTransactionDetails }) => (
+> = ({ expectedTokensMinted, nextTokenPrice, tokenSymbol, showTransactionDetails, settlementTokenSymbol }) => (
     <>
         <Section label="Expected tokens minted" className="header">
             <Styles.SumText>
