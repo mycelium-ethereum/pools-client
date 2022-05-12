@@ -1,10 +1,11 @@
-import React, { useContext, useState, useMemo, useEffect } from 'react';
+import React, { useContext, useState, useMemo } from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
-import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
@@ -49,7 +50,8 @@ export default styled((({ onClose, className }) => {
     const ethPrice = useBalancerETHPrice();
 
     const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, BigNumber>>>({});
-    const [commitType, setCommitType] = useState<CommitEnum>(0);
+
+    const commitType = CommitActionSideMap[commitAction][side];
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
     const amountBN = useBigNumber(amount);
@@ -69,16 +71,6 @@ export default styled((({ onClose, className }) => {
             }
         }
     }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
-
-    useEffect(() => {
-        if (commitAction === CommitActionEnum.mint) {
-            setCommitType(side === SideEnum.long ? CommitEnum.longMint : CommitEnum.shortMint);
-        } else if (commitAction === CommitActionEnum.flip) {
-            setCommitType(side === SideEnum.long ? CommitEnum.longBurnShortMint : CommitEnum.shortBurnLongMint);
-        } else {
-            setCommitType(side === SideEnum.long ? CommitEnum.longBurn : CommitEnum.shortBurn);
-        }
-    }, [commitAction]);
 
     return (
         <div className={className}>

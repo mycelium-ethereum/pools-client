@@ -174,6 +174,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                 settlementTokenDecimals,
             )}, Raw amount: ${amount.toFixed()}`,
         );
+        console.log('commit type', commitType);
         if (handleTransaction) {
             handleTransaction({
                 callMethod: committer.commit,
