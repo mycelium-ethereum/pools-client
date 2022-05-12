@@ -146,7 +146,9 @@ export type PoolCommitStatsAPIResponse = {
             mint: string; // total mint volume denoted in this token
             burn: string; // total burn volume denoted in this token
             total: string;
-            volumeUSD: string;
+            mintUSD: string;
+            burnUSD: string;
+            totalUSD: string;
         };
     };
 };
