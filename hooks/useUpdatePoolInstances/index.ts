@@ -25,10 +25,13 @@ import { useAllPoolLists } from '../useAllPoolLists';
 export const useUpdatePoolInstances = (): void => {
     const { setMultiplePools, resetPools, setPoolsInitialized, setTokenBalances, setPoolsInitializationError } =
         useStore(selectPoolInstanceActions, shallow);
-    const { updateTokenApprovals, updatePoolTokenBalances, updateSettlementTokenBalances, updateTradeStats } = useStore(
-        selectPoolInstanceUpdateActions,
-        shallow,
-    );
+    const {
+        updateTokenApprovals,
+        updatePoolTokenBalances,
+        updateSettlementTokenBalances,
+        updateTradeStats,
+        updatePoolCommitStats,
+    } = useStore(selectPoolInstanceUpdateActions, shallow);
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
@@ -155,4 +158,12 @@ export const useUpdatePoolInstances = (): void => {
             });
         }
     }, [account, network, poolsInitialized]);
+
+    // update poolStats when poolsInitialized changes
+    useEffect(() => {
+        if (poolsInitialized) {
+            const pools_ = Object.values(pools).map((pool) => pool.poolInstance.address);
+            updatePoolCommitStats(pools_, network);
+        }
+    }, [network, poolsInitialized]);
 };

@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
+import BigNumber from 'bignumber.js';
 import { LinkOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
@@ -24,11 +25,6 @@ import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
-type TProps = {
-    onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
-    showNextRebalance: boolean;
-    deltaDenotation: DeltaEnum;
-};
 const SkewTip: React.FC = ({ children }) => (
     <StyledTooltip title="An indication of the difference between collateral in the long and short side of the pool. Pool Skew is calculated by dividing the TVL in the long side by the TVL in the short side.">
         {children}
@@ -70,7 +66,22 @@ const InfoIcon = styled(Info)`
     }
 `;
 
-export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) => {
+type TProps = {
+    onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
+    showNextRebalance: boolean;
+    deltaDenotation: DeltaEnum;
+};
+
+export const PoolsTable = ({
+    rows,
+    onClickMintBurn,
+    showNextRebalance,
+    deltaDenotation,
+    oneDayVolume,
+}: {
+    rows: BrowseTableRowData[];
+    oneDayVolume: BigNumber;
+} & TProps): JSX.Element => {
     const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
@@ -121,8 +132,11 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
                                         <LinkIcon alt="Link" />
                                     </a>
                                 </div>
-                                <div className="px-10 font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                    24H VOLUME
+                                <div className="px-10">
+                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                        24H Volume
+                                    </div>
+                                    <div className="font-bold">{toApproxCurrency(oneDayVolume)}</div>
                                 </div>
                                 <div className="px-10">
                                     <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
@@ -223,11 +237,9 @@ export default (({ rows, onClickMintBurn, showNextRebalance, deltaDenotation }) 
             />
         </>
     );
-}) as React.FC<
-    {
-        rows: BrowseTableRowData[];
-    } & TProps
->;
+};
+
+export default PoolsTable;
 
 const calcPercentage: (value: number, total: number) => number = (value, total) => (value / total) * 100;
 const PoolRow: React.FC<
