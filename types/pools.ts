@@ -138,6 +138,7 @@ export type PoolCommitStatsAPIResponse = {
     totalShortBurns: number;
     totalShortBurnLongMints: number;
     totalLongBurnShortMints: number;
+    totalVolumeUSD: string;
     primaryMarketVolume: {
         [tokenAddress: string]: {
             tokenSymbol: string;
@@ -145,6 +146,7 @@ export type PoolCommitStatsAPIResponse = {
             mint: string; // total mint volume denoted in this token
             burn: string; // total burn volume denoted in this token
             total: string;
+            volumeUSD: string;
         };
     };
 };

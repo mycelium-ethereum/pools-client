@@ -201,7 +201,6 @@ export const fetchTradeStats: (params: {
 };
 
 const TWENTY_FOUR_HOURS_IN_SECONDS = 24 * 60 * 60;
-
 export const fetchPoolCommitStats: (
     network: KnownNetwork,
     pool: string,
@@ -214,18 +213,14 @@ export const fetchPoolCommitStats: (
     const fetchedPoolCommitStats: PoolCommitStats = await fetch(route)
         .then((res) => res.json())
         .then((commitStats: PoolCommitStatsAPIResponse) => {
-            console.log('commitStats', commitStats);
-            const oneDayVolume = new BigNumber(commitStats.totalShortMints).plus(
-                new BigNumber(commitStats.totalLongMints),
-            );
             return {
-                oneDayVolume,
+                oneDayVolume: new BigNumber(commitStats.totalVolumeUSD),
             };
         })
         .catch((err) => {
-            console.error('Failed to fetch average entry prices', err);
+            console.error('Failed to fetch pool commit stats', err);
             return {
-                oneDayVolume: new BigNumber(1),
+                oneDayVolume: new BigNumber(0),
             };
         });
     return fetchedPoolCommitStats;
