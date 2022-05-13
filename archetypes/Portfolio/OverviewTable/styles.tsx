@@ -74,7 +74,6 @@ export const Actions = styled.div`
 
 export const SearchInput = styled(UnstyledSearchInput)`
     min-width: 325px;
-    height: 38px;
     input {
         padding: calc(0.5rem - 1px) 1rem calc(0.5rem - 1px) 2.5rem;
     }
