@@ -131,7 +131,7 @@ export const Browse: React.FC = () => {
                     <div>
                         <Styles.Heading>Pools</Styles.Heading>
                         <Styles.SubHeading>
-                            The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink
+                            The most liquid, unique Pools with mitigated volatility decay. Secured by Chainlink
                             Oracles, via Tracer’s SMA Wrapper.{' '}
                             <Styles.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">Learn More</Styles.Link>
                         </Styles.SubHeading>
