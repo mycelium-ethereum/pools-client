@@ -82,7 +82,6 @@ export const Dropdown = styled(UnstyledDropdown)`
             }
         }}
     }
-
     span {
         font-size: 12px !important;
         font-weight: 600;
