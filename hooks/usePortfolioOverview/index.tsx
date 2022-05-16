@@ -47,7 +47,7 @@ export const usePortfolioOverview = (): PortfolioOverview => {
 
                 totalPortfolioValue = totalPortfolioValue
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance))
-                    .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.shortTokens))
+                    .plus(calcNotionalValue(shortTokenPrice, userBalances.aggregateBalances.shortTokens))
                     .plus(calcNotionalValue(longTokenPrice, userBalances.longToken.balance))
                     .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.longTokens));
 

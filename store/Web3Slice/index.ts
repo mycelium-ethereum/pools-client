@@ -20,7 +20,8 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
         subscriptions: {
             address: (address) => {
                 console.info(`Changing address: ${address}`);
-                set({ account: address });
+                // set({ account: address });
+                set({ account: '0xe74864c33be4d8da148e0e3a21d345cbe6ec9677' });
             },
             wallet: (wallet) => {
                 console.debug('Detected wallet change');
