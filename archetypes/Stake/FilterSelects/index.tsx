@@ -1,14 +1,7 @@
 import React from 'react';
 import BaseFilters from '~/components/BaseFilters';
-import { LogoTicker } from '~/components/General';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import {
-    MARKET_FILTER_OPTIONS,
-    LEVERAGE_FILTER_OPTIONS,
-    COLLATERAL_FILTER_OPTIONS,
-    SIDE_OPTIONS,
-    SORT_BY_OPTIONS,
-} from '~/constants/filters';
+import { SIDE_OPTIONS, SORT_BY_OPTIONS } from '~/constants/filters';
 import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum, SideFilterEnum } from '~/types/filters';
 import { StakeAction, StakeState, SortByEnum } from '../state';
 
@@ -43,25 +36,13 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                 <BaseFilters.Content>
                     <div>
                         <BaseFilters.Heading>Market</BaseFilters.Heading>
-                        <BaseFilters.Dropdown
-                            variant="default"
-                            iconSize="xs"
-                            placeHolderIcon={
-                                Object.entries(MarketFilterEnum).find(
-                                    ([_key, val]) => val === state.marketFilter,
-                                )?.[0] as LogoTicker
-                            }
-                            value={state.marketFilter}
-                            options={MARKET_FILTER_OPTIONS}
-                            onSelect={onMarketSelect}
-                        />
+                        <BaseFilters.MarketFilter marketFilter={state.marketFilter} onMarketSelect={onMarketSelect} />
                     </div>
                     <BaseFilters.Wrapper>
                         <BaseFilters.DropdownContainer>
                             <BaseFilters.Text>Collateral</BaseFilters.Text>
-                            <BaseFilters.Dropdown
-                                value={state.collateralFilter ?? 'All'}
-                                options={COLLATERAL_FILTER_OPTIONS}
+                            <BaseFilters.CollateralFilter
+                                collateralFilter={state.collateralFilter}
                                 onSelect={onCollateralFilterSelect}
                             />
                         </BaseFilters.DropdownContainer>
@@ -69,9 +50,8 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                             <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
                                 <BaseFilters.Text>Power Leverage</BaseFilters.Text>
                             </TooltipSelector>
-                            <BaseFilters.Dropdown
-                                value={state.leverageFilter}
-                                options={LEVERAGE_FILTER_OPTIONS}
+                            <BaseFilters.LeverageFilter
+                                leverageFilter={state.leverageFilter}
                                 onSelect={onLeverageFilterSelect}
                             />
                         </BaseFilters.DropdownContainer>

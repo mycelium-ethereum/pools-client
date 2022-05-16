@@ -6,6 +6,9 @@ import TWPopup from '~/components/General/TWPopup';
 import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { CollateralFilter } from './CollateralFilter';
+import { LeverageFilter } from './LeverageFilter';
+import { MarketFilter } from './MarketFilter';
 
 export const Container = styled(UnstyledContainer)`
     display: flex;
@@ -147,5 +150,8 @@ export const BaseFilters = {
     Preview,
     Heading,
     FilterIcon,
+    CollateralFilter,
+    MarketFilter,
+    LeverageFilter,
 };
 export default BaseFilters;
