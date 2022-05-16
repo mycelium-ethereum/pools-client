@@ -36,11 +36,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
-                <TokensNotional
-                    amount={balance}
-                    price={currentTokenPrice}
-                    settlementTokenSymbol={settlementTokenSymbol}
-                />
+                <TokensNotional amount={balance} price={entryPrice} settlementTokenSymbol={settlementTokenSymbol} />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <div>
