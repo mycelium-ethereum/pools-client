@@ -102,20 +102,11 @@ export const PortfolioPage = (): JSX.Element => {
     const filledState = () => {
         return (
             <>
-                <Styles.Wrapper>
-                    <TradeOverviewBanner
-                        title="Trade Portfolio Overview"
-                        portfolioOverview={portfolioOverview}
-                        account={!!account}
-                    />
-                    <HelpCard
-                        badge="Roadmap"
-                        title="Perpetual Pools V2 Roadmap"
-                        content="Want to learn what is coming with the launch of V2?"
-                        href="https://tracer.finance/radar/perpetual-pools-v2-roadmap/"
-                        linkText="View V2 roadmap"
-                    />
-                </Styles.Wrapper>
+                <TradeOverviewBanner
+                    title="Trade Portfolio Overview"
+                    portfolioOverview={portfolioOverview}
+                    account={!!account}
+                />
                 <QueuedCommits
                     queuedCommitsFilter={state.queuedCommitsFilter}
                     queuedCommitsSearch={state.queuedCommitsSearch}
