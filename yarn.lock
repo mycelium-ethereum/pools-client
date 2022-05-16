@@ -2536,6 +2536,11 @@
   resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.2.1.tgz#2d0a2d33400983f2cee43c87e5a3b67de372886a"
   integrity sha512-Q7LtX8XU0w4T0Zy5JkHz84LhVKjAsfopI58D5n0xl4PdQFkEXm2OvPFTRQ0O5k+IrTOhoqDLAtIIn3XuPDuspQ==
 
+"@tracer-protocol/perpetual-pools-contracts@^1.2.3":
+  version "1.2.3"
+  resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.2.3.tgz#ccf661cb88572074e0293f2aefe603bcf5cc9fef"
+  integrity sha512-5MpVa1oAdc9oCXMXSJlY6owoulgIzurkoOatwNbaTr4WqAphj1RcI8xVEbKnaIVGHN2p43TbAXLCzpO9BI4bLg==
+
 "@tracer-protocol/perpetual-pools-v2-pool-watcher@^0.0.11":
   version "0.0.11"
   resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-v2-pool-watcher/-/perpetual-pools-v2-pool-watcher-0.0.11.tgz#101c3209ae66ea9766a9c4cd98ac497010c1e831"
@@ -2552,6 +2557,15 @@
   integrity sha512-fS+AhCelF5ePiHsOyOOOsUusElnbp3duw6b8TGf1SQChMI7bo9HUiOjFiD/yrp8eoPNxSdE5/On0rteEBmhnKQ==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "^1.2.1"
+    bignumber.js "^9.0.1"
+    ethers "^5.6.1"
+
+"@tracer-protocol/pools-js@^3.1.5":
+  version "3.1.5"
+  resolved "https://registry.npmjs.org/@tracer-protocol/pools-js/-/pools-js-3.1.5.tgz#4aac7f911a86e57e88be072319216ab9a558bb48"
+  integrity sha512-9LvQ7CONReAvCY388rQoz4m8P51aPHW7ES5u++PnLiYPQvCgm0IoQNid2iAhtNzYd6aT5xhi0wbJe08KS0oiuw==
+  dependencies:
+    "@tracer-protocol/perpetual-pools-contracts" "^1.2.3"
     bignumber.js "^9.0.1"
     ethers "^5.6.1"
 
