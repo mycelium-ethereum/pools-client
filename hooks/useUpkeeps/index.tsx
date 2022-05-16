@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { KnownNetwork, calcSkew, calcTokenPrice } from '@tracer-protocol/pools-js';
+import { knownNetworkToSubgraphUrl } from '~/constants/networks';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
-import { last2UpkeepsQuery, subgraphUrlByNetwork } from '~/utils/tracerAPI/subgraph';
+import { last2UpkeepsQuery } from '~/utils/tracerAPI/subgraph';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 export type Upkeep = {
@@ -44,7 +45,7 @@ export const useUpkeeps: (network: KnownNetwork | undefined) => Record<string, U
     useEffect(() => {
         let mounted = true;
         const fetchUpkeeps = async () => {
-            const graphUrl = subgraphUrlByNetwork[network as V2_SUPPORTED_NETWORKS];
+            const graphUrl = knownNetworkToSubgraphUrl[network as V2_SUPPORTED_NETWORKS];
 
             if (!graphUrl) {
                 return;

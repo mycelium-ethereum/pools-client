@@ -2,15 +2,15 @@ import BigNumber from 'bignumber.js';
 import { CommitEnum, KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { CommitTypeFilter } from '~/archetypes/Portfolio/state';
 import { CommitTypeMap } from '~/constants/commits';
+import { knownNetworkToSubgraphUrl } from '~/constants/networks';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { PoolCommitStats, TradeStatsAPIResponse, PoolCommitStatsAPIResponse } from '~/types/pools';
-import { pendingCommitsQuery, subgraphUrlByNetwork } from './subgraph';
+import { pendingCommitsQuery } from './subgraph';
 import { formatBN } from '../converters';
 
 // Base API URL
 const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
-const V2_GRAPH_URI_TESTNET = subgraphUrlByNetwork['421611'];
 
 export const fetchPendingCommits: (
     network: V2_SUPPORTED_NETWORKS,
@@ -20,14 +20,12 @@ export const fetchPendingCommits: (
         to?: number;
         account?: string;
     },
-) => Promise<PendingCommits[]> = async (_network, { pool, account }) => {
-    // TODO uncomment when swapping back to api
-    // const pendingCommits =
-    // `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
-    // `${pool ? `&poolAddress=${pool}` : ''}` +
-    // `${account ? `&userAddress=${account}` : ''}`;
-    // const tracerCommits = await fetch(pendingCommits)
-    const tracerCommits = await fetch(V2_GRAPH_URI_TESTNET, {
+) => Promise<PendingCommits[]> = async (network, { pool, account }) => {
+    if (!knownNetworkToSubgraphUrl[network]) {
+        return [];
+    }
+
+    const tracerCommits = await fetch(knownNetworkToSubgraphUrl[network] as string, {
         method: 'POST',
         body: JSON.stringify({
             query: pendingCommitsQuery({ pool, account }),
@@ -36,7 +34,6 @@ export const fetchPendingCommits: (
         .then((res) => res.json())
         .then((allCommits) => {
             const parsedCommits: PendingCommits[] = [];
-            // allCommits.forEach((commit: PendingCommitsResult) => {
             allCommits.data.commits.forEach((commit: GraphCommit) => {
                 parsedCommits.push({
                     amount: commit.amount,
