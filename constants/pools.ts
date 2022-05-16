@@ -51,6 +51,9 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         isWaitingForUpkeep: false,
         expectedExecution: Math.floor(Date.now() / 1000),
     },
+    poolCommitStats: {
+        oneDayVolume: new BigNumber(0),
+    },
 };
 
 export interface PoolListMap {

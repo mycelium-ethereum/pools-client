@@ -38,7 +38,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool_) => {
-                const { poolInstance: pool, userBalances, upkeepInfo } = pool_;
+                const { poolInstance: pool, userBalances, upkeepInfo, poolCommitStats } = pool_;
                 const {
                     address,
                     lastUpdate,
@@ -87,6 +87,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
 
                     tvl: tvl,
                     nextTVL: expectedLongBalance.plus(expectedShortBalance).toNumber(),
+                    oneDayVolume: poolCommitStats.oneDayVolume,
 
                     shortToken: {
                         address: shortToken.address,

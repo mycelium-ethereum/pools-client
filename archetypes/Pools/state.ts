@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { Upkeep } from '~/hooks/useUpkeeps';
 
 export enum MarketFilterEnum {
@@ -70,6 +71,7 @@ export interface BrowseTableRowData {
 
     tvl: number;
     nextTVL: number;
+    oneDayVolume: BigNumber;
 
     shortToken: BrowseTableTokenData;
     longToken: BrowseTableTokenData;

@@ -31,6 +31,7 @@ export type MintSummaryProps = {
         name: string;
         oraclePrice: BigNumber;
         leverage: number;
+        settlementTokenSymbol: string;
     };
 } & SharedProps;
 

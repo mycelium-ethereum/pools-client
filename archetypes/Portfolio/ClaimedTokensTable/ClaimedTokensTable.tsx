@@ -1,5 +1,6 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
 import { TokenRowProps } from '../state';
@@ -25,9 +26,13 @@ export const ClaimedTokensTable = ({
                     </tr>
                 </TableHeader>
                 <tbody>
-                    {rows.map((token) => (
-                        <ClaimedTokenRow {...token} key={token.address} onClickCommitAction={onClickCommitAction} />
-                    ))}
+                    {rows.length === 0 ? (
+                        <NoTableEntries>You have no claimed tokens.</NoTableEntries>
+                    ) : (
+                        rows.map((token) => (
+                            <ClaimedTokenRow {...token} key={token.address} onClickCommitAction={onClickCommitAction} />
+                        ))
+                    )}
                 </tbody>
             </Table>
         </>
