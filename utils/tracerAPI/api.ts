@@ -21,12 +21,6 @@ export const fetchPendingCommits: (
         account?: string;
     },
 ) => Promise<PendingCommits[]> = async (network, { pool, account }) => {
-    // TODO uncomment when swapping back to api
-    // const pendingCommits =
-    // `${TRACER_API}/poolsv2/pendingCommits?network=${network}` +
-    // `${pool ? `&poolAddress=${pool}` : ''}` +
-    // `${account ? `&userAddress=${account}` : ''}`;
-    // const tracerCommits = await fetch(pendingCommits)
     if (!knownNetworkToSubgraphUrl[network]) {
         return [];
     }
@@ -40,7 +34,6 @@ export const fetchPendingCommits: (
         .then((res) => res.json())
         .then((allCommits) => {
             const parsedCommits: PendingCommits[] = [];
-            // allCommits.forEach((commit: PendingCommitsResult) => {
             allCommits.data.commits.forEach((commit: GraphCommit) => {
                 parsedCommits.push({
                     amount: commit.amount,
