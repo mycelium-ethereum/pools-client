@@ -7,10 +7,11 @@ type Props = {
     content: string;
     href: string;
     linkText: string;
+    roundedTop?: boolean;
 };
 
-export const HelpCard: React.FC<Props> = ({ badge, title, content, href, linkText }) => (
-    <Styles.GuideCard>
+export const HelpCard: React.FC<Props> = ({ badge, title, content, href, linkText, roundedTop = true }) => (
+    <Styles.GuideCard roundedTop={roundedTop}>
         {badge && <Styles.Badge>{badge}</Styles.Badge>}
         <Styles.GuideCardTitle>{title}</Styles.GuideCardTitle>
         <div>{content}</div>
