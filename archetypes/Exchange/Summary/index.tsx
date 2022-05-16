@@ -35,6 +35,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                                 name: pool.name,
                                 oraclePrice: pool.oraclePrice,
                                 leverage: pool.leverage,
+                                settlementTokenSymbol: pool.settlementToken.symbol,
                             }}
                             gasFee={gasFee}
                             isLong={isLong}

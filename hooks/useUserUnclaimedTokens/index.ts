@@ -20,8 +20,8 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
                 const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
 
                 // TODO calc relevant token price
-                const longTokenPrice = poolInstance.getShortTokenPrice();
-                const shortTokenPrice = poolInstance.getLongTokenPrice();
+                const longTokenPrice = poolInstance.getLongTokenPrice();
+                const shortTokenPrice = poolInstance.getShortTokenPrice();
 
                 // 1 for stable coins
                 // TODO support non stable coin settlement tokens

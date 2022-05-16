@@ -1,6 +1,7 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Logo } from '~/components/General';
+import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
@@ -29,26 +30,30 @@ export const UnclaimedTokensTable = ({
                     </tr>
                 </TableHeader>
                 <tbody>
-                    {rows
-                        .sort((a, b) => a.marketTicker.localeCompare(b.marketTicker))
-                        .map((pool) => {
-                            return (
-                                !!pool.numClaimable && (
-                                    <PoolRow
-                                        key={pool.poolAddress}
-                                        poolName={pool.poolName}
-                                        poolAddress={pool.poolAddress}
-                                        marketTicker={pool.marketTicker}
-                                        claimableLongTokens={pool.claimableLongTokens}
-                                        claimableShortTokens={pool.claimableShortTokens}
-                                        claimableSettlementTokens={pool.claimableSettlementTokens}
-                                        numClaimable={pool.numClaimable}
-                                        claimableSum={pool.claimableSum}
-                                        onClickCommitAction={onClickCommitAction}
-                                    />
-                                )
-                            );
-                        })}
+                    {rows.length === 0 ? (
+                        <NoTableEntries>You have no unclaimed tokens.</NoTableEntries>
+                    ) : (
+                        rows
+                            .sort((a, b) => a.marketTicker.localeCompare(b.marketTicker))
+                            .map((pool) => {
+                                return (
+                                    !!pool.numClaimable && (
+                                        <PoolRow
+                                            key={pool.poolAddress}
+                                            poolName={pool.poolName}
+                                            poolAddress={pool.poolAddress}
+                                            marketTicker={pool.marketTicker}
+                                            claimableLongTokens={pool.claimableLongTokens}
+                                            claimableShortTokens={pool.claimableShortTokens}
+                                            claimableSettlementTokens={pool.claimableSettlementTokens}
+                                            numClaimable={pool.numClaimable}
+                                            claimableSum={pool.claimableSum}
+                                            onClickCommitAction={onClickCommitAction}
+                                        />
+                                    )
+                                );
+                            })
+                    )}
                 </tbody>
             </Table>
         </>

@@ -5,7 +5,7 @@ import { CommitTypeMap } from '~/constants/commits';
 import { knownNetworkToSubgraphUrl } from '~/constants/networks';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
-import { TradeStatsAPIResponse } from '~/types/pools';
+import { PoolCommitStats, TradeStatsAPIResponse, PoolCommitStatsAPIResponse } from '~/types/pools';
 import { pendingCommitsQuery } from './subgraph';
 import { formatBN } from '../converters';
 
@@ -195,4 +195,30 @@ export const fetchTradeStats: (params: {
             };
         });
     return fetchedTradeStats;
+};
+
+const TWENTY_FOUR_HOURS_IN_SECONDS = 24 * 60 * 60;
+export const fetchPoolCommitStats: (
+    network: KnownNetwork,
+    pool: string,
+    decimals: number,
+) => Promise<PoolCommitStats> = async (network, pool) => {
+    const twentyFourHoursAgo = Math.floor(Date.now() / 1000) - TWENTY_FOUR_HOURS_IN_SECONDS;
+    const route = `${TRACER_API}/poolsv2/stats/commits?network=${
+        network ?? NETWORKS.ARBITRUM
+    }&poolAddress=${pool}&from=${twentyFourHoursAgo}`;
+    const fetchedPoolCommitStats: PoolCommitStats = await fetch(route)
+        .then((res) => res.json())
+        .then((commitStats: PoolCommitStatsAPIResponse) => {
+            return {
+                oneDayVolume: new BigNumber(commitStats.totalVolumeUSD),
+            };
+        })
+        .catch((err) => {
+            console.error('Failed to fetch pool commit stats', err);
+            return {
+                oneDayVolume: new BigNumber(0),
+            };
+        });
+    return fetchedPoolCommitStats;
 };

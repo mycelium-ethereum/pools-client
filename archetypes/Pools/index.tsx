@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
@@ -141,6 +142,11 @@ export const Browse: React.FC = () => {
                 {isLoading ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
+                    // sum of grouped pool volume
+                    const oneDayVolume = dataRows.reduce(
+                        (volume, row) => volume.plus(row.oneDayVolume),
+                        new BigNumber(0),
+                    );
                     return (
                         <Styles.DataRow key={index}>
                             <PoolsTable
@@ -148,6 +154,7 @@ export const Browse: React.FC = () => {
                                 deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={showNextRebalance}
+                                oneDayVolume={oneDayVolume}
                             />
                         </Styles.DataRow>
                     );

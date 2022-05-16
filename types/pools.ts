@@ -104,6 +104,7 @@ export type PoolInfo = {
         expectedExecution: number;
         isWaitingForUpkeep: boolean;
     };
+    poolCommitStats: PoolCommitStats;
 };
 
 export type TradeStatsAPIResponse = {
@@ -127,4 +128,31 @@ export type TradeStatsAPIResponse = {
     totalLongMints: number;
     totalShortBurns: number;
     totalShortMints: number;
+};
+
+export type PoolCommitStatsAPIResponse = {
+    uniqueWalletAddresses: number;
+    totalLongMints: number;
+    totalLongBurns: number;
+    totalShortMints: number;
+    totalShortBurns: number;
+    totalShortBurnLongMints: number;
+    totalLongBurnShortMints: number;
+    totalVolumeUSD: string;
+    primaryMarketVolume: {
+        [tokenAddress: string]: {
+            tokenSymbol: string;
+            tokenDecimals: number;
+            mint: string; // total mint volume denoted in this token
+            burn: string; // total burn volume denoted in this token
+            total: string;
+            mintUSD: string;
+            burnUSD: string;
+            totalUSD: string;
+        };
+    };
+};
+
+export type PoolCommitStats = {
+    oneDayVolume: BigNumber;
 };

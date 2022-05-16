@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
+import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats } from '~/types/pools';
 
 export enum KnownPoolsInitialisationErrors {
     ProviderNotReady = 'Provider not ready',
@@ -31,6 +31,7 @@ export interface IPoolsInstancesSlice {
     ) => void;
     setAggregateBalances: (pool: string, aggregateBalances: AggregateBalances) => void;
     setTradeStats: (pool: string, aggregateBalances: TradeStats) => void;
+    setPoolCommitStats: (pool: string, commitStats: PoolCommitStats) => void;
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
@@ -52,6 +53,7 @@ export interface IPoolsInstancesSlice {
         account: string | undefined,
     ) => void;
     updateTradeStats: (pools: string[], network: KnownNetwork | undefined, account: string | undefined) => void;
+    updatePoolCommitStats: (pools: string[], network: KnownNetwork | undefined) => void;
     updateTokenApprovals: (
         pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
