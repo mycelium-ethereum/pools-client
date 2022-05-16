@@ -10,7 +10,7 @@ import { LoadingRows } from '~/types/hooks';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { fetchCommitHistory } from '~/utils/tracerAPI';
 
-const PAGE_ENTRIES = 6;
+export const PAGE_ENTRIES = 6;
 
 export const useHistoricCommits = (
     typeFilter: CommitTypeFilter,

@@ -30,14 +30,14 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional
-                    amount={currentTokenPrice.times(balance)}
+                    amount={balance}
                     price={currentTokenPrice}
                     settlementTokenSymbol={settlementTokenSymbol}
                 />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional
-                    amount={currentTokenPrice.times(balance)}
+                    amount={balance}
                     price={currentTokenPrice}
                     settlementTokenSymbol={settlementTokenSymbol}
                 />

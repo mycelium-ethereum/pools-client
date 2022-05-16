@@ -1,8 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import Pagination, { PageNumber } from '~/components/General/Pagination';
-import { useHistoricCommits } from '~/hooks/useHistoricCommits';
-import { PAGE_ENTRIES } from '~/hooks/usePagination';
+import { useHistoricCommits, PAGE_ENTRIES } from '~/hooks/useHistoricCommits';
 import { TradeHistory } from '~/types/commits';
 import HistoricCommitsTable from './HistoricCommitsTable';
 import * as Styles from './styles';
