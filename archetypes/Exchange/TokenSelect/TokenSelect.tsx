@@ -79,7 +79,7 @@ const TokenSelect: React.FC<{
                                 >
                                     <Styles.TokenSelectCell hasLogo>
                                         <Styles.TokenLogo size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                        {token.symbol}+{token.pool.settlementTokenSymbol}-01
+                                        {token.symbol}-01
                                     </Styles.TokenSelectCell>
                                     <Styles.TokenSelectCell hasBalance={token.escrowBalance.toNumber() > 0}>
                                         {token.escrowBalance.toNumber() > 0 ? (
