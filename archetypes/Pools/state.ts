@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { Upkeep } from '~/hooks/useUpkeeps';
 import { MarketFilterEnum, LeverageFilterEnum, CollateralFilterEnum, SortByEnum } from '~/types/filters';
 
@@ -40,6 +41,7 @@ export interface BrowseTableRowData {
 
     tvl: number;
     nextTVL: number;
+    oneDayVolume: BigNumber;
 
     shortToken: BrowseTableTokenData;
     longToken: BrowseTableTokenData;

@@ -44,10 +44,10 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                         <Styles.Value>
                             <Styles.Currency>{totalPortfolioValue.toFixed(2)}</Styles.Currency>
                         </Styles.Value>
-                        {account && (
+                        {account && portfolioDelta !== 0 && (
                             <Styles.Value className={deltaClassName}>
                                 {portfolioDelta.toFixed(2)}%
-                                {portfolioDelta !== 0 && <Styles.ArrowIcon large className={deltaClassName} />}
+                                <Styles.ArrowIcon large className={deltaClassName} />
                             </Styles.Value>
                         )}
                     </Styles.BannerContent>

@@ -1,9 +1,12 @@
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 
-export const GuideCard = styled.div`
+export const GuideCard = styled.div<{ roundedTop?: boolean }>`
     padding: 1.5rem 1rem;
-    border-radius: 0.75rem;
+    border-top-left-radius: ${({ roundedTop }) => (roundedTop ? 0.75 : 0)}rem;
+    border-top-right-radius: ${({ roundedTop }) => (roundedTop ? 0.75 : 0)}rem;
+    border-bottom-left-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     background-color: ${({ theme }) => {

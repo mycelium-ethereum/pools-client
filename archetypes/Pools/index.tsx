@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import PageTable from '~/components/PageTable';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
@@ -124,7 +125,7 @@ export const Browse: React.FC = () => {
                     <div>
                         <PageTable.Heading>Pools</PageTable.Heading>
                         <PageTable.SubHeading>
-                            The most liquid, unique Pools with mitigated volatility decay*. Secured by Chainlink
+                            The most liquid, unique pools with mitigated volatility decay*. Secured by Chainlink
                             Oracles, via Tracer’s SMA Wrapper.{' '}
                             <PageTable.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">
                                 Learn More
@@ -136,6 +137,11 @@ export const Browse: React.FC = () => {
                 {isLoading ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
+                    // sum of grouped pool volume
+                    const oneDayVolume = dataRows.reduce(
+                        (volume, row) => volume.plus(row.oneDayVolume),
+                        new BigNumber(0),
+                    );
                     return (
                         <Styles.DataRow key={index}>
                             <PoolsTable
@@ -143,6 +149,7 @@ export const Browse: React.FC = () => {
                                 deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={showNextRebalance}
+                                oneDayVolume={oneDayVolume}
                             />
                         </Styles.DataRow>
                     );

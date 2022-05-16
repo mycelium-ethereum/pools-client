@@ -19,8 +19,8 @@ const Available: React.FC<{
             {`Available: `}
             {isPoolToken ? (
                 <>
-                    {`${balance.toFixed(2)} `}
-                    {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(2)}`}</span> : null}
+                    {`${balance.toFixed(3)} `}
+                    {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(3)}`}</span> : null}
                 </>
             ) : (
                 <>

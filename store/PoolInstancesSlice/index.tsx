@@ -4,6 +4,7 @@ import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
 import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
+import { fetchPoolCommitStats } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
 
@@ -29,6 +30,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     expectedExecution: expectedExecution,
                     isWaitingForUpkeep: expectedExecution < now,
                 },
+                poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
             };
         });
     },
@@ -49,6 +51,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                         expectedExecution: expectedExecution,
                         isWaitingForUpkeep: expectedExecution < now,
                     },
+                    poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                 };
             });
         });
@@ -98,6 +101,14 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         }
         set((state) => {
             state.pools[pool].userBalances.tradeStats = tradeStats;
+        });
+    },
+    setPoolCommitStats: (pool, commitStats) => {
+        if (!get().pools[pool]) {
+            return;
+        }
+        set((state) => {
+            state.pools[pool].poolCommitStats = commitStats;
         });
     },
     setPoolIsWaiting: (pool, isWaitingForUpkeep) => {
@@ -249,6 +260,23 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 });
         });
     },
+    updatePoolCommitStats: (pools_, network) => {
+        pools_.forEach((pool_) => {
+            if (!network || !get().pools[pool_]) {
+                get().setPoolCommitStats(pool_, DEFAULT_POOLSTATE.poolCommitStats);
+                return;
+            }
+            const pool = get().pools[pool_].poolInstance;
+            const decimals = pool.settlementToken.decimals;
+            fetchPoolCommitStats(network, pool_, decimals)
+                .then((poolCommitStats) => {
+                    get().setPoolCommitStats(pool_, poolCommitStats);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch aggregate balance', err);
+                });
+        });
+    },
     updatePoolBalances: (pool_, provider) => {
         if (!provider || !get().pools[pool_]) {
             console.debug(`Skipping pool balance update: Provider: ${provider}, pool: ${pool_}`);
@@ -337,6 +365,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateSettlementTokenBalances: IPoolsInstancesSlice['updateSettlementTokenBalances'];
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
     updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
+    updatePoolCommitStats: IPoolsInstancesSlice['updatePoolCommitStats'];
 } = (state) => ({
     handlePoolUpkeep: state.poolsInstancesSlice.handlePoolUpkeep,
     updatePoolBalances: state.poolsInstancesSlice.updatePoolBalances,
@@ -344,4 +373,5 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateSettlementTokenBalances: state.poolsInstancesSlice.updateSettlementTokenBalances,
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
     updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
+    updatePoolCommitStats: state.poolsInstancesSlice.updatePoolCommitStats,
 });

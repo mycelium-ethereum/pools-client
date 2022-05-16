@@ -107,12 +107,8 @@ export const MobileMenu = ({
                                             selected={route.startsWith('stake')}
                                             onClick={() => handleRoute('/stake')}
                                         >
-                                            <img
-                                                className="mr-2 inline"
-                                                src={'/img/general/stake.svg'}
-                                                alt="Stake"
-                                            />
-                                            Stake 
+                                            <img className="mr-2 inline" src={'/img/general/stake.svg'} alt="Stake" />
+                                            Stake
                                         </Styled.MobileLink>
                                         <Styled.MobileLink selected={route.startsWith('documentation')}>
                                             <a
