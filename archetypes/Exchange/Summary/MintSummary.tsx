@@ -23,6 +23,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token
                 expectedTokensMinted={expectedAmount.toNumber()}
                 nextTokenPrice={nextTokenPrice}
                 tokenSymbol={token.symbol}
+                settlementTokenSymbol={pool.settlementTokenSymbol}
             />
             <ExpectedExposure
                 label={'Expected equivalent exposure'}
