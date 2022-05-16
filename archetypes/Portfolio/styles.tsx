@@ -3,7 +3,6 @@ import { Container as GeneralContainer } from '~/components/General/Container';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled(GeneralContainer)`
-    margin-top: 20px;
     margin-bottom: 2.5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr);
