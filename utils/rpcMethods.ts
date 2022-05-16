@@ -38,7 +38,7 @@ export const watchAsset: (
                 address: token.address,
                 symbol: tokenSymbol,
                 decimals: token.decimals,
-                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(tokenSymbol)}.svg`,
+                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
             },
         })
         .then((success) => {

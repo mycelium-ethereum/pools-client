@@ -1,3 +1,5 @@
+import { KnownShortenedPoolTokenSymbols } from '../constants';
+
 /**
  * Format a market name into a chainlink feed url.
  * TODO the market name wont always match a chainlink feed url
@@ -39,7 +41,6 @@ export const getMarketSymbol = (poolSymbol?: string): string => {
     }
     const marketRegex = /([A-Z]*\/[A-Z]*)/g;
     const market = poolSymbol.match(marketRegex);
-    console.log('found market', market);
     return market ? market[0] : '';
 };
 
@@ -75,11 +76,11 @@ export const getMarketInfoFromSymbol = (
 };
 
 /**
- * Removes the +{SETTLEMENT_TOKEN} from the poolName or tokenSymbol
- * @param poolSymbol can either be a pool token symbol or pool symbol
- * @returns the poolSymbol with SETTLEMENT_TOKEN removed or poolSymbol if no SETTLEMENT was found
+ * Converts a token symbol to a shortened version < 11 characters
+ * @param tokenSymbol pool generated token symbol
+ * @returns the shortened tokenSymbol if recognized otherwise returns the original tokenSymbol
  */
-export const getShortenedSymbol = (poolSymbol: string): string => poolSymbol.split('+')?.[0] ?? poolSymbol;
+export const getShortenedSymbol = (tokenSymbol: string): string => KnownShortenedPoolTokenSymbols[tokenSymbol] ?? tokenSymbol;
 
 // gets the market base asset from pool name
 export const getBaseAsset = (poolName?: string): string => getBaseAssetFromMarket(getMarketSymbol(poolName));
