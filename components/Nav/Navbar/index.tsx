@@ -60,6 +60,11 @@ export const NavBarContent: React.FC<{
                             <a className="m-auto">Portfolio</a>
                         </li>
                     </Link>
+                    <Link href="/stake">
+                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
+                            <a className="m-auto">Stake</a>
+                        </li>
+                    </Link>
                     <a
                         href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
                         target="_blank"
@@ -70,11 +75,6 @@ export const NavBarContent: React.FC<{
                             <span className="m-auto">Documentation</span>
                         </li>
                     </a>
-                    <Link href="/stakepooltoken">
-                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
-                            <a className="m-auto">Stake</a>
-                        </li>
-                    </Link>
                 </ul>
                 <div className="ml-auto flex">
                     {setShowOnboardModal ? (

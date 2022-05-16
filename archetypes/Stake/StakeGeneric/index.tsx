@@ -2,7 +2,6 @@ import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General/Logo';
-import FarmNav from '~/components/Nav/FarmNav';
 import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
 import { useStore } from '~/store/main';
@@ -322,7 +321,6 @@ export const StakeGeneric = ({
 
     return (
         <>
-            <FarmNav />
             <PageTable.Container>
                 <PageTable.Header>
                     <div>

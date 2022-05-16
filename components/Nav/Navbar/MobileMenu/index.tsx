@@ -103,6 +103,17 @@ export const MobileMenu = ({
                                             />
                                             Portfolio
                                         </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route.startsWith('stake')}
+                                            onClick={() => handleRoute('/stake')}
+                                        >
+                                            <img
+                                                className="mr-2 inline"
+                                                src={'/img/general/stake.svg'}
+                                                alt="Stake"
+                                            />
+                                            Stake 
+                                        </Styled.MobileLink>
                                         <Styled.MobileLink selected={route.startsWith('documentation')}>
                                             <a
                                                 href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"

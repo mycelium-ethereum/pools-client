@@ -13,7 +13,7 @@ export default (() => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     useEffect(() => {
-        router.prefetch('/stakepooltoken');
+        router.prefetch('/stake');
     }, []);
 
     return (
