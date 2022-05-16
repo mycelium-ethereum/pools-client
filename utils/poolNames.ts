@@ -39,6 +39,7 @@ export const getMarketSymbol = (poolSymbol?: string): string => {
     }
     const marketRegex = /([A-Z]*\/[A-Z]*)/g;
     const market = poolSymbol.match(marketRegex);
+    console.log('found market', market);
     return market ? market[0] : '';
 };
 
@@ -72,6 +73,13 @@ export const getMarketInfoFromSymbol = (
         marketBase: getBaseAssetFromMarket(marketSymbol),
     };
 };
+
+/**
+ * Removes the +{SETTLEMENT_TOKEN} from the poolName or tokenSymbol
+ * @param poolSymbol can either be a pool token symbol or pool symbol
+ * @returns the poolSymbol with SETTLEMENT_TOKEN removed or poolSymbol if no SETTLEMENT was found
+ */
+export const getShortenedSymbol = (poolSymbol: string): string => poolSymbol.split('+')?.[0] ?? poolSymbol;
 
 // gets the market base asset from pool name
 export const getBaseAsset = (poolName?: string): string => getBaseAssetFromMarket(getMarketSymbol(poolName));

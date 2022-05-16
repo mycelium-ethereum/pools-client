@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
+import { getShortenedSymbol } from './poolNames';
 
 const tokenImagesRootUrl = 'https://raw.githubusercontent.com/dospore/tracer-balancer-token-list/master/assets';
 /**
@@ -22,6 +23,8 @@ export const watchAsset: (
         return new Promise(() => false);
     }
 
+    const shortenedTokenSymbol = getShortenedSymbol(token.symbol);
+
     return provider
         ?.send('wallet_watchAsset', {
             // @ts-ignore
@@ -29,9 +32,9 @@ export const watchAsset: (
             options: {
                 type: 'ERC20',
                 address: token.address,
-                symbol: token.symbol,
+                symbol: shortenedTokenSymbol,
                 decimals: token.decimals,
-                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
+                image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(shortenedTokenSymbol)}.svg`,
             },
         })
         .then((success) => {
