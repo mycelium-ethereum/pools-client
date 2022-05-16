@@ -7,9 +7,20 @@ import ArrowRight_ from '~/public/img/general/arrow-right.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
+    position: relative;
     border-radius: 0.75rem;
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     background: ${({ theme }) => theme.background.primary};
+`;
+
+export const Behind = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    max-height: 88px;
+    cursor: pointer;
 `;
 
 export const Wrapper = styled.div`
