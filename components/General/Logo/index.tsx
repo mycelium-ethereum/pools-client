@@ -34,9 +34,12 @@ import { getBaseAsset } from '~/utils/poolNames';
 // this doesnt actually enforce anything but helpful to understand what it is expecting
 // @requires tokenName in the format {leverage}(UP|DOWN)-${ASSET}/${COLLATERAL}
 type ShortLongToken = 'ETH_L' | 'ETH_S' | 'BTC_L' | 'BTC_S' | 'EUR_L' | 'EUR_S' | 'DEFAULT';
-export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => ShortLongToken = (tokenSymbol) => {
+export const tokenSymbolToLogoTicker: (tokenSymbol?: string) => LogoTicker = (tokenSymbol) => {
     if (!tokenSymbol) {
         return 'DEFAULT';
+    } else if (!!logos[tokenSymbol as LogoTicker]) {
+        // its already a logo ticker
+        return tokenSymbol as LogoTicker;
     }
     try {
         const asset = getBaseAsset(tokenSymbol);
