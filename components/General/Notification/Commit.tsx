@@ -50,18 +50,12 @@ export const CommitSuccessNotification = ({ expectedExecution, commitType, token
                     <Styles.CommitContent>
                         <Styles.Logo size="md" ticker={tokenSymbolToLogoTicker(tokenSymbol)} />
                         <div>{tokenSymbol} ready to claim in</div>
-                        <Styles.TimeLeft
-                            // className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
-                            targetTime={expectedExecution}
-                        />
+                        <Styles.TimeLeft targetTime={expectedExecution} />
                     </Styles.CommitContent>
                 ) : (
                     <Styles.CommitContent>
                         <div>USDC ready to claim in</div>
-                        <Styles.TimeLeft
-                            // className="ml-2 rounded border bg-gray-50 px-3 py-1 dark:bg-cool-gray-800"
-                            targetTime={expectedExecution}
-                        />
+                        <Styles.TimeLeft targetTime={expectedExecution} />
                     </Styles.CommitContent>
                 )}
                 <Styles.ViewOrder onClick={() => handleClick()}>View order</Styles.ViewOrder>
