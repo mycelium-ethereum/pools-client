@@ -305,15 +305,17 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             return;
         }
         const prices = await getBalancerPrices(balancerConfig[network]);
-        console.log('prices', prices);
 
         set((state) => {
             pools_.forEach((pool) => {
-                const poolInstance = state.pools[pool].poolInstance;
-                state.pools[pool].balancerPrices = {
-                    longToken: prices[poolInstance.longToken.address.toLowerCase()] ?? new BigNumber(0),
-                    shortToken: prices[poolInstance.shortToken.address.toLowerCase()] ?? new BigNumber(0),
-                };
+                const poolInstance = state.pools[pool]?.poolInstance;
+                // pool exists in store we can safely set balancerPrices
+                if (poolInstance) {
+                    state.pools[pool].balancerPrices = {
+                        longToken: prices[poolInstance.longToken.address.toLowerCase()] ?? new BigNumber(0),
+                        shortToken: prices[poolInstance.shortToken.address.toLowerCase()] ?? new BigNumber(0),
+                    };
+                }
             });
         });
     },

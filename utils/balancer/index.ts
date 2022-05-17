@@ -85,7 +85,6 @@ export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<
     ) => void = (pools, baseAssets) => {
         for (const pool of pools) {
             const baseAsset = pool.tokens.filter((token: any) => baseAssets.includes(token.symbol))[0];
-            console.log(baseAsset);
             const poolTokens = pool.tokens.filter((token: any) => !baseAssets.includes(token.symbol));
             let baseBalance = new BigNumber(baseAsset.balance);
             if (baseAsset.symbol !== 'USDC') {
