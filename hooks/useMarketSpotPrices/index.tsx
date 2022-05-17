@@ -34,9 +34,10 @@ export default (): Record<string, BigNumber> => {
                     setMarketSpotPrices(result);
                 }
             });
+        } else {
+            setMarketSpotPrices(result);
         }
 
-        setMarketSpotPrices(result);
         return () => {
             mounted = false;
         };
