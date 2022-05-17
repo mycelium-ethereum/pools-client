@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useUserUnclaimedTokens from '~/hooks/useUserUnclaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
@@ -7,7 +6,7 @@ import { escapeRegExp } from '~/utils/helpers';
 import { UnclaimedTokensTable } from './UnclaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { PortfolioAction, PortfolioState, UnclaimedRowInfo } from '../state';
+import { OnClickCommit, PortfolioAction, PortfolioState, UnclaimedRowInfo } from '../state';
 
 export const UnclaimedTokens = ({
     escrowMarketFilter,
@@ -18,7 +17,7 @@ export const UnclaimedTokens = ({
     escrowMarketFilter: PortfolioState['escrowMarketFilter'];
     escrowSearch: PortfolioState['escrowSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
-    onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
+    onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
     const { rows: escrowRows, isLoading } = useUserUnclaimedTokens();
     const totalClaimable = useMemo(
