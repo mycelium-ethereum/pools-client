@@ -12,6 +12,7 @@ import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectAccount } from '~/store/Web3Slice';
 import { Farm } from '~/types/staking';
 
+import { escapeRegExp } from '~/utils/helpers';
 import FarmsTable from '../FarmsTable';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
@@ -142,7 +143,7 @@ export default (({
     };
 
     const searchFilter = (farm: FarmTableRowData): boolean => {
-        const searchString = state.search.toLowerCase();
+        const searchString = escapeRegExp(state.search.toLowerCase());
         return Boolean(farm.name.toLowerCase().match(searchString));
     };
 

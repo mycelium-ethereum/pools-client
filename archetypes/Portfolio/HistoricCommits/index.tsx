@@ -3,6 +3,7 @@ import { CommitEnum } from '@tracer-protocol/pools-js';
 import Pagination, { PageNumber } from '~/components/General/Pagination';
 import { useHistoricCommits, PAGE_ENTRIES } from '~/hooks/useHistoricCommits';
 import { TradeHistory } from '~/types/commits';
+import { escapeRegExp } from '~/utils/helpers';
 import HistoricCommitsTable from './HistoricCommitsTable';
 import * as Styles from './styles';
 import { OverviewTable } from '../OverviewTable';
@@ -22,7 +23,7 @@ export const HistoricCommits = ({
 
     const searchFilterFunc = useCallback(
         (commit): boolean => {
-            const searchString = historicCommitsSearch.toLowerCase();
+            const searchString = escapeRegExp(historicCommitsSearch.toLowerCase());
             return Boolean(
                 commit.tokenIn.symbol.toLowerCase().match(searchString) ||
                     commit.tokenOut.symbol.toLowerCase().match(searchString),
