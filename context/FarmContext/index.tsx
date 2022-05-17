@@ -232,23 +232,19 @@ export const FarmStore: React.FC = ({ children }) => {
         });
     };
 
-    // update prices on network change
-    useEffect(() => {
-        refreshTcrPriceUSDC();
-        refreshFxsPriceUSDC();
-    }, [network]);
-
-    // update farms on account change
+    // fetch farms initially
     useEffect(() => {
         fetchFarms({ reset: false });
-    }, [account]);
+        refreshTcrPriceUSDC();
+        refreshFxsPriceUSDC();
+    }, []);
 
     // update farms on network change
     useEffect(() => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
         refreshFxsPriceUSDC();
-    }, [provider, network, staticPoolInfo]);
+    }, [provider, config, account, staticPoolInfo]);
 
     return (
         <FarmContext.Provider

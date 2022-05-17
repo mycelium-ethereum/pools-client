@@ -2,7 +2,6 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import Pool, { StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
 
-// ORIGINAL FUNCTION
 export const fetchTokenPrice: (
     poolInfo: StaticPoolInfo,
     tokenAddresses: [string] | [string, string],
