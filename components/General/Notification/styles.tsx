@@ -36,6 +36,7 @@ export const Logo = styled(UnstyledLogo)`
 
 export const TimeLeft = styled(UnstyledTimeLeft)`
     margin-bottom: auto;
+    margin-left: auto;
     min-width: fit-content;
     border-radius: 0.5rem;
     border-width: 1px;
