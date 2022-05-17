@@ -147,12 +147,12 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             attachedBalancerPrices.map((row) => {
                 for (const pool of Object.keys(upkeeps)) {
                     if (pool === row.address) {
-                        const defualtUpkeep = {
+                        const defaultUpkeep = {
                             ...STATIC_DEFAULT_UPKEEP,
                             pool,
                         };
 
-                        const pastUpkeep = upkeeps[pool][0] ?? defualtUpkeep;
+                        const pastUpkeep = upkeeps[pool][0] ?? defaultUpkeep;
                         const antecedentUpkeep = upkeeps[pool][1] ?? pastUpkeep;
 
                         return {

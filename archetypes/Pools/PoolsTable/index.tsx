@@ -13,6 +13,7 @@ import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
+import useMarketSpotPrices from '~/hooks/useMarketSpotPrices';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -85,6 +86,7 @@ export const PoolsTable = ({
     const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
+    const marketSpotPrices = useMarketSpotPrices();
 
     const handlePoolDetailsClick = useCallback((data: BrowseTableRowData) => {
         setShowModalPoolDetails(true);
@@ -115,7 +117,11 @@ export const PoolsTable = ({
                                     <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                         SPOT PRICE
                                     </div>
-                                    <div className="font-bold">{toApproxCurrency(rows[0].oraclePrice)}</div>
+                                    <div className="font-bold">
+                                        {marketSpotPrices[rows[0].marketSymbol]
+                                            ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
+                                            : '-'}
+                                    </div>
                                 </div>
                                 <div className="px-10">
                                     <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">

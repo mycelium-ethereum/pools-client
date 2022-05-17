@@ -36,7 +36,6 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
             },
         ],
         sushiRouterAddress: '',
-        knownUSDCPriceFeeds: {},
     },
     [NETWORKS.ARBITRUM]: {
         poolFarms: [
@@ -61,12 +60,6 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 abi: StakingRewards__factory.abi,
             },
         ],
-        knownUSDCPriceFeeds: {
-            // wBTC: BTC/USD
-            '0x2f2a2543B76A4166549F7aaB2e75Bef0aefC5B0f': '0x6ce185860a4963106506C203335A2910413708e9',
-            // wETH: ETH/USD
-            '0x82aF49447D8a07e3bd95BD0d56f35241523fBab1': '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
-        },
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
         stakingRewardTokens: {
             fxs: {
@@ -78,16 +71,13 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
     [NETWORKS.MAINNET]: {
         poolFarms: [],
         sushiRouterAddress: '0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F',
-        knownUSDCPriceFeeds: {},
     },
     [NETWORKS.RINKEBY]: {
         poolFarms: [],
         sushiRouterAddress: '',
-        knownUSDCPriceFeeds: {},
     },
     [NETWORKS.KOVAN]: {
         poolFarms: [],
         sushiRouterAddress: '',
-        knownUSDCPriceFeeds: {},
     },
 };
