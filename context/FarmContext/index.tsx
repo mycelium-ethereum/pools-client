@@ -83,7 +83,7 @@ export const FarmStore: React.FC = ({ children }) => {
     };
 
     const fetchFarms = async ({ reset }: { reset: boolean }) => {
-        if (provider && account && staticPoolInfo.length !== 0) {
+        if (!!signer && !!provider && account && staticPoolInfo.length !== 0) {
             if (reset) {
                 setFetchingFarms(true);
                 setFarms({});
@@ -92,7 +92,7 @@ export const FarmStore: React.FC = ({ children }) => {
             Promise.all(
                 config.poolFarms.map(async ({ address, abi, pool, link, linkText, rewardsEnded }) => {
                     try {
-                        const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
+                        const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
 
                         const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
                             await Promise.all([
@@ -103,8 +103,8 @@ export const FarmStore: React.FC = ({ children }) => {
                                 contract.rewardsToken(),
                             ]);
 
-                        const stakingToken = ERC20__factory.connect(stakingTokenAddress, provider);
-                        const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, provider);
+                        const stakingToken = ERC20__factory.connect(stakingTokenAddress, signer);
+                        const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
 
                         const [
                             stakingTokenName,
@@ -244,7 +244,7 @@ export const FarmStore: React.FC = ({ children }) => {
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
         refreshFxsPriceUSDC();
-    }, [provider, config, account, staticPoolInfo]);
+    }, [signer, provider, config, account, staticPoolInfo]);
 
     return (
         <FarmContext.Provider
