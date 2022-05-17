@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { COLLATERAL_FILTERS } from '~/constants/filters';
-import { useStore } from '~/store/main';
-import { selectNetwork } from '~/store/Web3Slice';
 import { CollateralFilterEnum } from '~/types/filters';
+import { CollateralFilterProps } from './types';
 import { Dropdown } from './';
 
-type CollateralFilterProps = {
-    collateralFilter: CollateralFilterEnum;
-    onSelect: (val: string) => void;
-};
-
 // TODO this could be made to fetch pools list and set depending on settlementTokens found
-export const CollateralFilter = ({ collateralFilter, onSelect }: CollateralFilterProps): JSX.Element => {
-    const network = useStore(selectNetwork);
+export const CollateralFilter = ({ collateralFilter, onSelect, network }: CollateralFilterProps): JSX.Element => {
     const [options, setOptions] = useState<{ key: CollateralFilterEnum }[]>([]);
 
     useEffect(() => {

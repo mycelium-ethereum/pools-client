@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BaseFilters from '~/components/BaseFilters';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import * as Styles from './styles';
 import { BrowseAction, BrowseState, DeltaEnum, RebalanceEnum } from '../state';
@@ -45,6 +47,7 @@ const DENOTATION_OPTIONS = [
 ];
 
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
+    const network = useStore(selectNetwork);
     const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
     const onCollateralFilterSelect = (val: string) =>
         dispatch({ type: 'setCollateralFilter', collateral: val as CollateralFilterEnum });
@@ -54,6 +57,14 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const onSetDenotation = (option: number) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum });
     const onRebalanceFocus = (option: number) =>
         dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
+
+    useEffect(() => {
+        if (network) {
+            onMarketSelect(MarketFilterEnum.All);
+            onLeverageFilterSelect(LeverageFilterEnum.All);
+            onCollateralFilterSelect(CollateralFilterEnum.All);
+        }
+    }, [network]);
 
     return (
         <BaseFilters.Container>
@@ -70,7 +81,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 <BaseFilters.Content>
                     <div>
                         <BaseFilters.Heading>Market</BaseFilters.Heading>
-                        <BaseFilters.MarketFilter marketFilter={state.marketFilter} onMarketSelect={onMarketSelect} />
+                        <BaseFilters.MarketFilter
+                            marketFilter={state.marketFilter}
+                            onMarketSelect={onMarketSelect}
+                            network={network}
+                        />
                     </div>
                     <BaseFilters.Wrapper>
                         <BaseFilters.DropdownContainer>
@@ -78,6 +93,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             <BaseFilters.CollateralFilter
                                 collateralFilter={state.collateralFilter}
                                 onSelect={onCollateralFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                         <BaseFilters.DropdownContainer>
@@ -85,6 +101,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             <BaseFilters.LeverageFilter
                                 leverageFilter={state.leverageFilter}
                                 onSelect={onLeverageFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                     </BaseFilters.Wrapper>

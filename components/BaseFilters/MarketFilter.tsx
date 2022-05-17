@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { MARKET_FILTERS } from '~/constants/filters';
-import { useStore } from '~/store/main';
-import { selectNetwork } from '~/store/Web3Slice';
 import { MarketFilterEnum } from '~/types/filters';
+import { MarketFilterProps } from './types';
 import { LogoTicker } from '../General';
 import { Dropdown } from './';
 
@@ -14,13 +13,7 @@ const findTicker = (v: MarketFilterEnum): string => {
     return Object.keys(MarketFilterEnum)[i] ?? '';
 };
 
-type MarketFilterProps = {
-    marketFilter: MarketFilterEnum;
-    onMarketSelect: (val: string) => void;
-};
-
-export const MarketFilter = ({ marketFilter, onMarketSelect }: MarketFilterProps): JSX.Element => {
-    const network = useStore(selectNetwork);
+export const MarketFilter = ({ marketFilter, onMarketSelect, network }: MarketFilterProps): JSX.Element => {
     const [options, setOptions] = useState<{ key: MarketFilterEnum; ticker: LogoTicker }[]>([]);
 
     useEffect(() => {
@@ -31,10 +24,13 @@ export const MarketFilter = ({ marketFilter, onMarketSelect }: MarketFilterProps
             } else {
                 setOptions([]);
             }
+            onMarketSelect(MarketFilterEnum.All);
         } else {
             setOptions([]);
+            onMarketSelect(MarketFilterEnum.All);
         }
     }, [network]);
+
     return (
         <Dropdown
             variant="default"

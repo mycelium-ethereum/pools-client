@@ -1,10 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BaseFilters from '~/components/BaseFilters';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import {
-    SIDE_OPTIONS,
-    STAKE_SORT_BY_OPTIONS,
-} from '~/constants/filters';
+import { SIDE_OPTIONS, STAKE_SORT_BY_OPTIONS } from '~/constants/filters';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import {
     CollateralFilterEnum,
     LeverageFilterEnum,
@@ -21,6 +20,8 @@ interface FilterSelectsProps {
 }
 
 const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps): JSX.Element => {
+    const network = useStore(selectNetwork);
+
     const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
     const onCollateralFilterSelect = (val: string) =>
         dispatch({ type: 'setCollateralFilter', collateral: val as CollateralFilterEnum });
@@ -29,6 +30,14 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
     const onSearchInputChange = (search: string) => dispatch({ type: 'setSearchFilter', search });
     const onSideFilterSelect = (val: string) => dispatch({ type: 'setSideFilter', side: val as SideFilterEnum });
     const onSortByFilterSelect = (val: string) => dispatch({ type: 'setSortBy', sortBy: val as StakeSortByEnum });
+
+    useEffect(() => {
+        if (network) {
+            onMarketSelect(MarketFilterEnum.All);
+            onLeverageFilterSelect(LeverageFilterEnum.All);
+            onCollateralFilterSelect(CollateralFilterEnum.All);
+        }
+    }, [network]);
 
     return (
         <BaseFilters.Container>
@@ -45,7 +54,11 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                 <BaseFilters.Content>
                     <div>
                         <BaseFilters.Heading>Market</BaseFilters.Heading>
-                        <BaseFilters.MarketFilter marketFilter={state.marketFilter} onMarketSelect={onMarketSelect} />
+                        <BaseFilters.MarketFilter
+                            marketFilter={state.marketFilter}
+                            onMarketSelect={onMarketSelect}
+                            network={network}
+                        />
                     </div>
                     <BaseFilters.Wrapper>
                         <BaseFilters.DropdownContainer>
@@ -53,6 +66,7 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                             <BaseFilters.CollateralFilter
                                 collateralFilter={state.collateralFilter}
                                 onSelect={onCollateralFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                         <BaseFilters.DropdownContainer>
@@ -62,6 +76,7 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                             <BaseFilters.LeverageFilter
                                 leverageFilter={state.leverageFilter}
                                 onSelect={onLeverageFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                     </BaseFilters.Wrapper>

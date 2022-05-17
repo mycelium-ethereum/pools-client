@@ -1,18 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { LEVERAGE_FILTERS } from '~/constants/filters';
-import { useStore } from '~/store/main';
-import { selectNetwork } from '~/store/Web3Slice';
 import { LeverageFilterEnum } from '~/types/filters';
+import { LeverageFilterProps } from './types';
 import { Dropdown } from './';
 
-type LeverageFilterProps = {
-    leverageFilter: LeverageFilterEnum;
-    onSelect: (val: string) => void;
-};
-
 // TODO this could be made to fetch pools list and set depending on settlementTokens found
-export const LeverageFilter = ({ leverageFilter, onSelect }: LeverageFilterProps): JSX.Element => {
-    const network = useStore(selectNetwork);
+export const LeverageFilter = ({ leverageFilter, onSelect, network }: LeverageFilterProps): JSX.Element => {
     const [options, setOptions] = useState<{ key: LeverageFilterEnum }[]>([]);
 
     useEffect(() => {

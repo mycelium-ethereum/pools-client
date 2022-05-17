@@ -5,7 +5,7 @@ import {
     MarketFilterEnum,
     SideFilterEnum,
     SortByEnum,
-    StakeSortByEnum
+    StakeSortByEnum,
 } from '~/types/filters';
 
 export const MARKET_FILTERS: Partial<Record<KnownNetwork, MarketFilterEnum[]>> = {
