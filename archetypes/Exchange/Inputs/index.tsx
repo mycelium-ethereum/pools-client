@@ -109,7 +109,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                     }}
                 />
                 <Styles.Subtext showContent={!!pool.address}>
-                    Expected Price: {toApproxCurrency(tokenPrice)}
+                    Expected Price: {toApproxCurrency(tokenPrice, 3)}
                 </Styles.Subtext>
             </Styles.Wrapper>
             <Styles.Container>

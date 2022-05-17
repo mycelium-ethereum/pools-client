@@ -1,26 +1,20 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import PageTable from '~/components/PageTable';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
+import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
 import { getMarketLeverage } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
-import {
-    browseReducer,
-    BrowseState,
-    BrowseTableRowData,
-    DeltaEnum,
-    LeverageEnum,
-    MarketFilterEnum,
-    RebalanceEnum,
-    SortByEnum,
-} from './state';
+import { browseReducer, BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnum } from './state';
 import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
@@ -31,7 +25,7 @@ export const Browse: React.FC = () => {
     const [state, dispatch] = useReducer(browseReducer, {
         search: '',
         marketFilter: MarketFilterEnum.All,
-        leverageFilter: LeverageEnum.All,
+        leverageFilter: LeverageFilterEnum.All,
         rebalanceFocus: RebalanceEnum.next,
         sortBy: account ? SortByEnum.MyHoldings : SortByEnum.Name,
         filtersOpen: false,
@@ -49,7 +43,7 @@ export const Browse: React.FC = () => {
     const leverageFilter = useCallback(
         (pool: BrowseTableRowData): boolean => {
             switch (state.leverageFilter) {
-                case LeverageEnum.All:
+                case LeverageFilterEnum.All:
                     return true;
                 default:
                     return !!pool.name && getMarketLeverage(pool.name).toString() === state.leverageFilter;
@@ -126,21 +120,28 @@ export const Browse: React.FC = () => {
 
     return (
         <>
-            <Styles.Container>
-                <Styles.Header>
+            <PageTable.Container>
+                <PageTable.Header>
                     <div>
-                        <Styles.Heading>Pools</Styles.Heading>
-                        <Styles.SubHeading>
+                        <PageTable.Heading>Pools</PageTable.Heading>
+                        <PageTable.SubHeading>
                             The most liquid, unique pools with mitigated volatility decay*. Secured by Chainlink
                             Oracles, via Tracer’s SMA Wrapper.{' '}
-                            <Styles.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">Learn More</Styles.Link>
-                        </Styles.SubHeading>
+                            <PageTable.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">
+                                Learn More
+                            </PageTable.Link>
+                        </PageTable.SubHeading>
                     </div>
                     <FilterSelects state={state} dispatch={dispatch} />
-                </Styles.Header>
+                </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
+                    // sum of grouped pool volume
+                    const oneDayVolume = dataRows.reduce(
+                        (volume, row) => volume.plus(row.oneDayVolume),
+                        new BigNumber(0),
+                    );
                     return (
                         <Styles.DataRow key={index}>
                             <PoolsTable
@@ -148,6 +149,7 @@ export const Browse: React.FC = () => {
                                 deltaDenotation={state.deltaDenotation}
                                 onClickMintBurn={handleMintBurn}
                                 showNextRebalance={showNextRebalance}
+                                oneDayVolume={oneDayVolume}
                             />
                         </Styles.DataRow>
                     );
@@ -169,7 +171,7 @@ export const Browse: React.FC = () => {
                         </TooltipSelector>
                     </Styles.AltPoolActions>
                 </Styles.AltPoolRow>
-            </Styles.Container>
+            </PageTable.Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />
             )}

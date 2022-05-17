@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { Dropdown as UnstyledDropdown } from '~/components/General';
 import Arrow from '~/public/img/general/arrow.svg';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     display: flex;
@@ -38,12 +39,6 @@ export const BannerContent = styled.div`
     justify-content: space-between;
 `;
 
-export const Title = styled.h1`
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: ${({ theme }) => theme.fontColor.primary};
-`;
-
 export const Subtitle = styled.h2`
     font-size: 1rem;
     font-weight: 400;
@@ -64,14 +59,25 @@ export const Actions = styled.h2`
 
 export const Dropdown = styled(UnstyledDropdown)`
     button {
-        background-color: #f3f4f6 !important;
-        border-color: #f3f4f6 !important;
-        padding: 5px 15px !important;
+        ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return `
+                        background-color: #f3f4f6 !important;
+                        border-color: #f3f4f6 !important;
+                        padding: 5px 15px !important;
+                    `;
+                default:
+                    return `
+                        background-color: #1F2A37 !important;
+                        border-color: #1F2A37 !important;
+                        padding: 5px 15px !important;
+                    `;
+            }
+        }}
     }
-
     span {
         font-size: 12px !important;
-        color: #111928 !important;
         font-weight: 600;
     }
 `;
