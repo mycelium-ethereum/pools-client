@@ -34,7 +34,7 @@ export const LockTip: React.FC = ({ children }) => {
             <a
                 onClick={() =>
                     window.open(
-                        'https://docs.tracer.finance/tracer-faqs/perpetual-pools-faqs#what-is-the-front-running-interval',
+                        'https://pools.docs.tracer.finance/faq#what-is-the-front-running-interval',
                         '_blank',
                         'noopener',
                     )
@@ -53,11 +53,7 @@ export const PowerLeverageTip: React.FC = ({ children }) => {
             A new type of leverage used by Perpetual Pools to amplify returns.{' '}
             <a
                 onClick={() =>
-                    window.open(
-                        'https://docs.tracer.finance/market-types/perpetual-pools/mechanism-design#power-leverage',
-                        '_blank',
-                        'noopener',
-                    )
+                    window.open('https://pools.docs.tracer.finance/advanced-topics/mechanism#v2', '_blank', 'noopener')
                 }
             >
                 Learn more.
