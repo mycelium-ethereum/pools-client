@@ -2,23 +2,17 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
-import {
-    AggregatorV3Interface,
-    AggregatorV3Interface__factory,
-    ERC20__factory,
-} from '@tracer-protocol/perpetual-pools-contracts/types';
-import { KnownNetwork, calcBptTokenPrice } from '@tracer-protocol/pools-js';
-import { poolMap } from '@tracer-protocol/pools-js/data';
+import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
 
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
+import { useAllPoolLists } from '~/hooks/useAllPoolLists';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
-import { Children } from '~/types/general';
 import { Network } from '~/types/networks';
-import { BalancerPoolAsset, Farm, FarmConfig } from '~/types/staking';
-import { Vault, Vault__factory } from '~/types/staking/balancerV2Vault';
+import { Farm, FarmConfig } from '~/types/staking';
 import { StakingRewards } from '~/types/staking/typechain';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
 import { fetchTokenPrice } from '~/utils/farms';
@@ -39,16 +33,13 @@ export const FarmContext = React.createContext<ContextProps>({
     rewardsTokenUSDPrices: {},
 });
 
-export type FarmContexts = 'bptFarms' | 'poolFarms';
+export type FarmContexts = 'poolFarms';
 
 /**
  * Wrapper store for the FarmContext.
  */
-export const FarmStore: React.FC<
-    {
-        farmContext: FarmContexts;
-    } & Children
-> = ({ farmContext, children }) => {
+export const FarmStore: React.FC = ({ children }) => {
+    const staticPoolInfo = useAllPoolLists();
     const { signer, account, provider, network } = useStore(selectWeb3Info, shallow);
     const [farms, setFarms] = useState<ContextProps['farms']>({});
     const [fetchingFarms, setFetchingFarms] = useState<boolean>(false);
@@ -58,106 +49,10 @@ export const FarmStore: React.FC<
     const config: FarmConfig | undefined = farmConfig[network ?? ('0' as KnownNetwork)];
     const networkConfig: Network | undefined = networkConfig_[network ?? ('0' as KnownNetwork)];
 
-    // used to fetch details of tokens that make up a balancer pool
-    const getBptDetails = async (
-        balancerPoolId: string,
-        pool: string,
-        balancerPoolName: string,
-    ): Promise<Farm['bptDetails']> => {
-        if (!network) {
-            return undefined;
-        }
-
-        const balancerPool = new ethers.Contract(config.balancerVaultAddress, Vault__factory.abi, provider) as Vault;
-
-        const [tokenAddresses, tokenBalances] = await balancerPool.getPoolTokens(balancerPoolId);
-
-        const tokenLookup: Record<string, BalancerPoolAsset> = {};
-
-        // populate token details and add to lookup
-        await Promise.all(
-            tokenAddresses.map(async (address, index) => {
-                if (!provider) {
-                    console.error('Failed to fetch bptDetails: provider undefined');
-                    return;
-                }
-                // @ts-ignore
-                const tokenContract = ERC20__factory.connect(address, provider);
-
-                const [decimals, symbol] = await Promise.all([tokenContract.decimals(), tokenContract.symbol()]);
-                const tokenBalance = tokenBalances[index];
-
-                let isPoolToken = false;
-
-                let usdPrice = new BigNumber(0);
-
-                if (address.toLowerCase() === networkConfig.usdcAddress.toLowerCase()) {
-                    usdPrice = new BigNumber(1);
-                } else if (config?.knownUSDCPriceFeeds?.[address]) {
-                    // fetch USDC price for known markets (BTC and ETH)
-                    // known market price feed addresses are configured in Web3Context.Config.ts
-                    const priceFeedAggregator = AggregatorV3Interface__factory.connect(
-                        config.knownUSDCPriceFeeds[address],
-                        provider as ethers.providers.Provider,
-                    ) as AggregatorV3Interface;
-
-                    const [{ answer }, priceFeedDecimals] = await Promise.all([
-                        priceFeedAggregator.latestRoundData(),
-                        priceFeedAggregator.decimals(),
-                    ]);
-
-                    usdPrice = new BigNumber(ethers.utils.formatUnits(answer, priceFeedDecimals));
-                } else {
-                    // not usdc and not listed as a known non-pool token
-                    // assume it is a perpetual pools token
-
-                    const poolInfo = poolMap[provider?.network?.chainId.toString() as KnownNetwork]?.[pool];
-                    if (!poolInfo) {
-                        console.error('Failed to find pool in poolList');
-                        return;
-                    }
-                    [usdPrice] = await fetchTokenPrice(poolInfo, [address], provider);
-                    isPoolToken = true;
-                }
-
-                tokenLookup[symbol] = {
-                    address,
-                    symbol,
-                    isPoolToken,
-                    reserves: new BigNumber(ethers.utils.formatUnits(tokenBalance, decimals)),
-                    usdPrice,
-                    decimals,
-                };
-            }),
-        );
-
-        // ensure the tokens are ordered the same as the pool name
-        // this is just for display purposes
-        // the pool name is formatted like so:
-        // 50 wETH 33 3S-ETH 17 3L-ETH
-        const poolNameComponents = balancerPoolName.split(' ');
-        // results in something like
-        // ['50', 'wETH', '33', '3S-ETH', '17', '3L-ETH']
-
-        const token1 = poolNameComponents[1].toUpperCase();
-        const token2 = poolNameComponents[3].toUpperCase();
-        const token3 = poolNameComponents[5].toUpperCase();
-
-        // the tracer pool token symbols have a trailing '/USD' in the symbol
-        // but the balancer pool name omits this trailing '/USD'
-        const tokens: BalancerPoolAsset[] = [
-            tokenLookup[token1] || tokenLookup[`${token1}/USD`],
-            tokenLookup[token2] || tokenLookup[`${token2}/USD`],
-            tokenLookup[token3] || tokenLookup[`${token3}/USD`],
-        ];
-
-        return { tokens };
-    };
-
     const refreshFarm = async (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { stakingToken, stakingTokenDecimals } = farm;
-        if (account && signer && farm) {
+        if (account && network && farm) {
             const [stakingTokenBalance, stakingTokenAllowance, myStaked, myRewards, rewardsTokenAddress] =
                 await Promise.all([
                     stakingToken.balanceOf(account),
@@ -189,117 +84,100 @@ export const FarmStore: React.FC<
 
     const fetchFarms = useCallback(
         async ({ reset }: { reset: boolean }) => {
-            if (signer && provider && account) {
+            if (provider && account && staticPoolInfo.length !== 0) {
                 if (reset) {
                     setFarms({});
                     setFetchingFarms(true);
                 }
 
                 Promise.all(
-                    config[farmContext].map(
-                        async ({ address, abi, pool, balancerPoolId, link, linkText, rewardsEnded }) => {
-                            try {
-                                const contract = new ethers.Contract(address, abi, signer) as StakingRewards;
+                    config.poolFarms.map(async ({ address, abi, pool, link, linkText, rewardsEnded }) => {
+                        try {
+                            const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
 
-                                const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
-                                    await Promise.all([
-                                        contract.balanceOf(account),
-                                        contract.stakingToken(),
-                                        contract.earned(account),
-                                        contract.getRewardForDuration(),
-                                        contract.rewardsToken(),
-                                    ]);
-
-                                const stakingToken = ERC20__factory.connect(stakingTokenAddress, signer);
-                                const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, signer);
-
-                                const [
-                                    stakingTokenName,
-                                    stakingTokenDecimals,
-                                    stakingTokenBalance,
-                                    stakingTokenAllowance,
-                                    _totalStaked,
-                                    rewardsTokenDecimals,
-                                    _stakingTokenSupply,
-                                ] = await Promise.all([
-                                    stakingToken.name(),
-                                    stakingToken.decimals(),
-                                    stakingToken.balanceOf(account),
-                                    stakingToken.allowance(account, address),
-                                    contract.totalSupply(),
-                                    rewardsToken.decimals(),
-                                    stakingToken.totalSupply(),
+                            const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
+                                await Promise.all([
+                                    contract.balanceOf(account),
+                                    contract.stakingToken(),
+                                    contract.earned(account),
+                                    contract.getRewardForDuration(),
+                                    contract.rewardsToken(),
                                 ]);
 
-                                const totalStaked = new BigNumber(
-                                    ethers.utils.formatUnits(_totalStaked, stakingTokenDecimals),
-                                );
+                            const stakingToken = ERC20__factory.connect(stakingTokenAddress, provider);
+                            const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, provider);
 
-                                const isPoolTokenFarm = farmContext === 'poolFarms';
+                            const [
+                                stakingTokenName,
+                                stakingTokenDecimals,
+                                stakingTokenBalance,
+                                stakingTokenAllowance,
+                                _totalStaked,
+                                rewardsTokenDecimals,
+                                _stakingTokenSupply,
+                            ] = await Promise.all([
+                                stakingToken.name(),
+                                stakingToken.decimals(),
+                                stakingToken.balanceOf(account),
+                                stakingToken.allowance(account, address),
+                                contract.totalSupply(),
+                                rewardsToken.decimals(),
+                                stakingToken.totalSupply(),
+                            ]);
 
-                                const bptDetails = isPoolTokenFarm
-                                    ? undefined
-                                    : await getBptDetails(balancerPoolId as string, pool, stakingTokenName);
+                            const totalStaked = new BigNumber(
+                                ethers.utils.formatUnits(_totalStaked, stakingTokenDecimals),
+                            );
 
-                                const poolInfo =
-                                    poolMap[provider?.network?.chainId?.toString() as KnownNetwork]?.[pool];
-                                if (!poolInfo) {
-                                    console.error('Failed to find pool in poolList');
-                                    return;
-                                }
-                                const poolDetails = isPoolTokenFarm
-                                    ? {
-                                          poolTokenPrice: (
-                                              await fetchTokenPrice(poolInfo, [stakingTokenAddress], provider)
-                                          )[0],
-                                      }
-                                    : undefined;
-
-                                const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
-                                const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
-                                // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-                                const stakingTokenSupply = new BigNumber(_stakingTokenSupply.toString()).div(
-                                    stakingDecimalMultiplier,
-                                );
-
-                                const tvl = poolDetails
-                                    ? poolDetails.poolTokenPrice.times(totalStaked)
-                                    : calcBptTokenPrice(stakingTokenSupply, bptDetails?.tokens).times(totalStaked);
-
-                                return {
-                                    name: stakingTokenName,
-                                    address,
-                                    contract,
-                                    totalStaked,
-                                    stakingToken: stakingToken,
-                                    stakingTokenDecimals,
-                                    stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
-                                        stakingDecimalMultiplier,
-                                    ),
-                                    stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
-                                        stakingDecimalMultiplier,
-                                    ),
-                                    stakingTokenSupply,
-                                    myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
-                                    myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
-                                    rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
-                                        .div(rewardsDecimalMultiplier)
-                                        .times(52),
-                                    isPoolTokenFarm,
-                                    bptDetails,
-                                    poolDetails: poolDetails,
-                                    tvl,
-                                    link,
-                                    linkText,
-                                    rewardsEnded: Boolean(rewardsEnded),
-                                    rewardsTokenAddress,
-                                };
-                            } catch (error) {
-                                console.error('Failed fetching farm with address: ', address, error);
+                            const poolInfo = staticPoolInfo.find((poolInfo) => poolInfo.address === pool);
+                            if (!poolInfo) {
+                                console.error(`Failed find to ${pool} in poolList`, staticPoolInfo.slice());
                                 return;
                             }
-                        },
-                    ),
+                            const poolDetails = {
+                                poolTokenPrice: (await fetchTokenPrice(poolInfo, [stakingTokenAddress], provider))[0],
+                            };
+
+                            const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
+                            const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
+                            // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
+                            const stakingTokenSupply = new BigNumber(_stakingTokenSupply.toString()).div(
+                                stakingDecimalMultiplier,
+                            );
+
+                            const tvl = poolDetails.poolTokenPrice.times(totalStaked);
+
+                            return {
+                                name: stakingTokenName,
+                                address,
+                                contract,
+                                totalStaked,
+                                stakingToken: stakingToken,
+                                stakingTokenDecimals,
+                                stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
+                                    stakingDecimalMultiplier,
+                                ),
+                                stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
+                                    stakingDecimalMultiplier,
+                                ),
+                                stakingTokenSupply,
+                                myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
+                                myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
+                                rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
+                                    .div(rewardsDecimalMultiplier)
+                                    .times(52),
+                                poolDetails,
+                                tvl,
+                                link,
+                                linkText,
+                                rewardsEnded: Boolean(rewardsEnded),
+                                rewardsTokenAddress,
+                            };
+                        } catch (error) {
+                            console.error('Failed fetching farm with address: ', address, error);
+                            return;
+                        }
+                    }),
                 ).then((farms_) => {
                     const farms: FarmsLookup = {};
                     farms_.forEach((farm: Farm | undefined) => {
@@ -312,11 +190,11 @@ export const FarmStore: React.FC<
                 });
             }
         },
-        [signer, provider, account],
+        [provider, account, staticPoolInfo],
     );
 
     const refreshRewardsTokenPriceUSDC = async ({ address, decimals }: { address?: string; decimals?: number }) => {
-        if (!config?.sushiRouterAddress || !address || !decimals || !networkConfig.usdcAddress || !signer) {
+        if (!config?.sushiRouterAddress || !address || !decimals || !networkConfig.usdcAddress || !provider) {
             // no update to perform
             return;
         }
@@ -371,7 +249,7 @@ export const FarmStore: React.FC<
         fetchFarms({ reset: true });
         refreshTcrPriceUSDC();
         refreshFxsPriceUSDC();
-    }, [signer, config, account]);
+    }, [provider, network, account, staticPoolInfo]);
 
     return (
         <FarmContext.Provider

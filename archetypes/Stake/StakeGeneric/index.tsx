@@ -27,25 +27,6 @@ const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side
     };
 };
 
-const getFilterFieldsFromBPTFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
-    if (!farm.bptDetails) {
-        return {};
-    }
-
-    const firstFoundPoolToken = farm.bptDetails.tokens.find((token) => token.isPoolToken);
-
-    if (!firstFoundPoolToken) {
-        return {};
-    }
-
-    // pool tokens have format <leverage><side>-<market>
-    // first character is leverage (1, 3)
-    const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
-    return {
-        leverage,
-    };
-};
-
 export const StakeGeneric = ({
     logo,
     tokenType,
@@ -71,9 +52,7 @@ export const StakeGeneric = ({
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const filterFields = farm?.poolDetails
-            ? getFilterFieldsFromPoolTokenFarm(farm)
-            : getFilterFieldsFromBPTFarm(farm);
+        const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
 
         return {
             farm: farm.address,
@@ -88,7 +67,6 @@ export const StakeGeneric = ({
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
             stakingTokenSupply: farm.stakingTokenSupply,
-            bptDetails: farm.bptDetails,
             poolDetails: farm.poolDetails,
             link: farm.link,
             linkText: farm.linkText,
