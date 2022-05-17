@@ -40,6 +40,7 @@ export const OverviewTable: React.FC<Props> = ({
     return (
         <Styles.Container>
             <Styles.Wrapper>
+                <Styles.Behind onClick={() => setOpen(!open)} />
                 <Styles.TitleContent>
                     {!!rowCount && <Styles.RowCount>{rowCount}</Styles.RowCount>}
                     <div>
