@@ -28,7 +28,7 @@ const Footer: React.FC = () => {
                 <div className="my-6 flex lg:my-0 ">
                     <a
                         className="my-auto mr-4 transition-opacity hover:opacity-80"
-                        href="https://docs.tracer.finance"
+                        href="https://pools.docs.tracer.finance"
                         target="_blank"
                         rel="noreferrer"
                     >
@@ -102,7 +102,7 @@ const Footer: React.FC = () => {
                     </div>
                     <div className={item}>
                         <a
-                            href="https://docs.tracer.finance/audits-and-security/perpetual-pools"
+                            href="https://docs.tracer.finance/security/audits-and-security"
                             target="_blank"
                             rel="noopener noreferrer"
                         >

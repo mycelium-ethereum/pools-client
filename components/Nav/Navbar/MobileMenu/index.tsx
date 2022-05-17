@@ -112,7 +112,7 @@ export const MobileMenu = ({
                                         </Styled.MobileLink>
                                         <Styled.MobileLink selected={route.startsWith('documentation')}>
                                             <a
-                                                href="https://tracer-1.gitbook.io/ppv2-beta-testnet/"
+                                                href="https://pools.docs.tracer.finance/perpetual-pools/readme"
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="my-auto"
