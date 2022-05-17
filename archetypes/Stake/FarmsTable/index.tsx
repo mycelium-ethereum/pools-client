@@ -1,14 +1,13 @@
-import { calcAPY, calcBptTokenPrice } from '@tracer-protocol/pools-js';
+import { calcAPY } from '@tracer-protocol/pools-js';
 import BigNumber from 'bignumber.js';
 import React, { useEffect, useMemo, useState } from 'react';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
-import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
+import { Logo, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { APYTip, RewardsEndedTip } from '~/components/Tooltips';
 import { TokenToFarmAddressMap } from '~/constants/staking';
-import { BalancerPoolAsset } from '~/types/staking';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
 import Close from '/public/img/general/close.svg';
@@ -104,13 +103,7 @@ const PoolRow: React.FC<{
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
-    const tokenPrice = useMemo(
-        () =>
-            farm?.poolDetails
-                ? farm.poolDetails.poolTokenPrice
-                : calcBptTokenPrice(farm.stakingTokenSupply, farm?.bptDetails?.tokens),
-        [farm],
-    );
+    const tokenPrice = useMemo(() => farm.poolDetails.poolTokenPrice, [farm]);
 
     const rewardsTokenPrice = rewardsTokenUSDPrices[farm.rewardsTokenAddress] || new BigNumber(0);
 
@@ -121,8 +114,6 @@ const PoolRow: React.FC<{
     }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, rewardsTokenPrice]);
 
     const apy = useMemo(() => calcAPY(apr), [apr]);
-
-    const { bptDetails } = farm;
 
     useEffect(() => {
         if (
@@ -138,16 +129,7 @@ const PoolRow: React.FC<{
         <TableRow key={farm.farm} lined>
             <TableRowCell>
                 <div className="inline">
-                    {farm?.bptDetails ? (
-                        <BalancerPoolLogoGroup tokens={bptDetails?.tokens || []} />
-                    ) : (
-                        <Logo
-                            className="mr-2 inline"
-                            size="md"
-                            // since there are no bptDetails, we assume this is a pool token farm
-                            ticker={tokenSymbolToLogoTicker(farm.name)}
-                        />
-                    )}
+                    <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(farm.name)} />
                 </div>
                 <div className="inline-flex flex-col justify-center">
                     {farm.link ? (
@@ -217,16 +199,3 @@ const PoolRow: React.FC<{
         </TableRow>
     );
 };
-
-const BalancerPoolLogoGroup: React.FC<{ tokens: BalancerPoolAsset[] }> = ({ tokens }) => (
-    <>
-        {tokens.map((token) => (
-            <Logo
-                key={`balancer-asset-${token.symbol}`}
-                size="md"
-                className="mr-2 inline"
-                ticker={token.isPoolToken ? tokenSymbolToLogoTicker(token.symbol) : (token.symbol as LogoTicker)}
-            />
-        ))}
-    </>
-);

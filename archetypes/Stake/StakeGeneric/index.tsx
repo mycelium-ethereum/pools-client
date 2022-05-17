@@ -8,14 +8,14 @@ import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectAccount } from '~/store/Web3Slice';
-import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
+import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
 import { generalMarketFilter } from '~/utils/filters';
 import FarmsTable from '../FarmsTable';
 import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
-import { stakeReducer, StakeAction, StakeState, SortByEnum, FarmTableRowData } from '../state';
+import { stakeReducer, StakeAction, StakeState, FarmTableRowData } from '../state';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];
@@ -24,25 +24,6 @@ const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side
     return {
         leverage: parseInt(leverage),
         side: side === 'L' ? SideEnum.long : SideEnum.short,
-    };
-};
-
-const getFilterFieldsFromBPTFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
-    if (!farm.bptDetails) {
-        return {};
-    }
-
-    const firstFoundPoolToken = farm.bptDetails.tokens.find((token) => token.isPoolToken);
-
-    if (!firstFoundPoolToken) {
-        return {};
-    }
-
-    // pool tokens have format <leverage><side>-<market>
-    // first character is leverage (1, 3)
-    const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
-    return {
-        leverage,
     };
 };
 
@@ -71,9 +52,7 @@ export const StakeGeneric = ({
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const filterFields = farm?.poolDetails
-            ? getFilterFieldsFromPoolTokenFarm(farm)
-            : getFilterFieldsFromBPTFarm(farm);
+        const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
 
         return {
             farm: farm.address,
@@ -88,7 +67,6 @@ export const StakeGeneric = ({
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
             stakingTokenSupply: farm.stakingTokenSupply,
-            bptDetails: farm.bptDetails,
             poolDetails: farm.poolDetails,
             link: farm.link,
             linkText: farm.linkText,
@@ -102,15 +80,15 @@ export const StakeGeneric = ({
         leverageFilter: LeverageFilterEnum.All,
         marketFilter: MarketFilterEnum.All,
         sideFilter: SideFilterEnum.All,
-        sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
+        sortBy: account ? StakeSortByEnum.MyStaked : StakeSortByEnum.Name,
         stakeModalState: 'closed',
         amount: new BigNumber(0),
         invalidAmount: { isInvalid: false },
     } as StakeState);
 
     useEffect(() => {
-        if (account && state.sortBy === SortByEnum.Name) {
-            dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyStaked });
+        if (account && state.sortBy === StakeSortByEnum.Name) {
+            dispatch({ type: 'setSortBy', sortBy: StakeSortByEnum.MyStaked });
         }
     }, [account]);
 
@@ -148,13 +126,13 @@ export const StakeGeneric = ({
 
     const sorter = (farmA: FarmTableRowData, farmB: FarmTableRowData): number => {
         switch (state.sortBy) {
-            case SortByEnum.Name:
+            case StakeSortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
-            case SortByEnum.TotalValueLocked:
+            case StakeSortByEnum.TotalValueLocked:
                 return farmB.tvl.toNumber() - farmA.tvl.toNumber();
-            case SortByEnum.MyRewards:
+            case StakeSortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
-            case SortByEnum.MyStaked:
+            case StakeSortByEnum.MyStaked:
                 return farmB.myStaked.toNumber() - farmA.myStaked.toNumber();
             default:
                 return 0;

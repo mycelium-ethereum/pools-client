@@ -1,9 +1,18 @@
 import React from 'react';
 import BaseFilters from '~/components/BaseFilters';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import { SIDE_OPTIONS, SORT_BY_OPTIONS } from '~/constants/filters';
-import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum, SideFilterEnum } from '~/types/filters';
-import { StakeAction, StakeState, SortByEnum } from '../state';
+import {
+    SIDE_OPTIONS,
+    STAKE_SORT_BY_OPTIONS,
+} from '~/constants/filters';
+import {
+    CollateralFilterEnum,
+    LeverageFilterEnum,
+    MarketFilterEnum,
+    SideFilterEnum,
+    StakeSortByEnum,
+} from '~/types/filters';
+import { StakeAction, StakeState } from '../state';
 
 interface FilterSelectsProps {
     state: StakeState;
@@ -19,7 +28,7 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
         dispatch({ type: 'setLeverageFilter', leverage: val as LeverageFilterEnum });
     const onSearchInputChange = (search: string) => dispatch({ type: 'setSearchFilter', search });
     const onSideFilterSelect = (val: string) => dispatch({ type: 'setSideFilter', side: val as SideFilterEnum });
-    const onSortByFilterSelect = (val: string) => dispatch({ type: 'setSortBy', sortBy: val as SortByEnum });
+    const onSortByFilterSelect = (val: string) => dispatch({ type: 'setSortBy', sortBy: val as StakeSortByEnum });
 
     return (
         <BaseFilters.Container>
@@ -71,7 +80,7 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                             <BaseFilters.Text>Sort</BaseFilters.Text>
                             <BaseFilters.Dropdown
                                 value={state.sortBy}
-                                options={SORT_BY_OPTIONS}
+                                options={STAKE_SORT_BY_OPTIONS}
                                 onSelect={onSortByFilterSelect}
                             />
                         </BaseFilters.DropdownContainer>

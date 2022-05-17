@@ -5,6 +5,7 @@ import {
     MarketFilterEnum,
     SideFilterEnum,
     SortByEnum,
+    StakeSortByEnum
 } from '~/types/filters';
 
 export const MARKET_FILTERS: Partial<Record<KnownNetwork, MarketFilterEnum[]>> = {
@@ -25,3 +26,5 @@ export const LEVERAGE_FILTERS: Partial<Record<KnownNetwork, LeverageFilterEnum[]
 export const SIDE_OPTIONS = Object.values(SideFilterEnum).map((key) => ({ key: key }));
 
 export const SORT_BY_OPTIONS = Object.values(SortByEnum).map((key) => ({ key: key }));
+
+export const STAKE_SORT_BY_OPTIONS = Object.values(StakeSortByEnum).map((key) => ({ key: key }));

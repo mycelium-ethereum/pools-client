@@ -1,15 +1,13 @@
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum, SideFilterEnum } from '~/types/filters';
+import {
+    CollateralFilterEnum,
+    LeverageFilterEnum,
+    MarketFilterEnum,
+    SideFilterEnum,
+    StakeSortByEnum,
+} from '~/types/filters';
 import { FarmTableDetails } from '~/types/staking';
-
-export enum SortByEnum {
-    Name = 'Token',
-    // apr = 'apr',
-    TotalValueLocked = 'TVL',
-    MyStaked = 'My Staked',
-    MyRewards = 'My Rewards',
-}
 
 export type FarmTableRowData = {
     farm: string;
@@ -26,7 +24,7 @@ export interface StakeState {
     marketFilter: MarketFilterEnum;
     collateralFilter: CollateralFilterEnum;
 
-    sortBy: SortByEnum;
+    sortBy: StakeSortByEnum;
     stakeModalState: 'stake' | 'unstake' | 'claim' | 'closed';
     amount: BigNumber;
     selectedFarm: string;
@@ -45,7 +43,7 @@ export type StakeAction =
     | { type: 'setSelectedFarm'; farm: string }
     | { type: 'setAmount'; amount: BigNumber }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
-    | { type: 'setSortBy'; sortBy: SortByEnum }
+    | { type: 'setSortBy'; sortBy: StakeSortByEnum }
     | { type: 'reset' };
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {

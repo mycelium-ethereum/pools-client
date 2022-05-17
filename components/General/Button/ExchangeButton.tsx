@@ -43,6 +43,15 @@ type Options = {
     onSuccess?: (...args: any) => any;
 };
 
+const commitText: Record<CommitEnum, string> = {
+    [CommitEnum.shortBurnLongMint]: 'Short Flip',
+    [CommitEnum.longBurnShortMint]: 'Long Flip',
+    [CommitEnum.shortMint]: 'Short Mint',
+    [CommitEnum.longMint]: 'Long Mint',
+    [CommitEnum.shortBurn]: 'Short Burn',
+    [CommitEnum.longBurn]: 'Long Burn',
+};
+
 const ExchangeButton: React.FC<ExchangeButton> = ({
     onClose,
     swapState,
@@ -115,7 +124,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                     });
                 }}
             >
-                Commit {CommitActionEnum[commitAction]}
+                Commit {commitText[commitType]}
             </ButtonStyled>
         );
     }

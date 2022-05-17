@@ -38,3 +38,11 @@ export enum SortByEnum {
     TotalValueLocked = 'TVL',
     MyHoldings = 'My Holdings',
 }
+
+export enum StakeSortByEnum {
+    Name = 'Token',
+    TotalValueLocked = 'TVL',
+    // Rewards = 'APR',
+    MyStaked = 'My Staked',
+    MyRewards = 'My Rewards',
+}
