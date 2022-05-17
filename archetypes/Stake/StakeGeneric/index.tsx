@@ -7,7 +7,7 @@ import { MAX_SOL_UINT } from '~/constants/general';
 import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
-import { selectAccount } from '~/store/Web3Slice';
+import { selectAccount, selectProvider } from '~/store/Web3Slice';
 import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
@@ -50,6 +50,7 @@ export const StakeGeneric = ({
     rewardsTokenUSDPrices: Record<string, BigNumber>;
 }): JSX.Element => {
     const account = useStore(selectAccount);
+    const provider = useStore(selectProvider);
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
@@ -207,11 +208,17 @@ export const StakeGeneric = ({
     const stake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
         const { contract, stakingTokenDecimals } = farm;
+        const signer = provider?.getSigner();
+        if (!signer) {
+            console.error('Failed to stake: No signer');
+            return;
+        }
+        const signingContract = contract.connect(signer);
         console.debug(`staking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
             handleTransaction({
-                callMethod: contract.stake,
+                callMethod: signingContract.stake,
                 params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
                 type: TransactionType.FARM_STAKE_WITHDRAW,
                 injectedProps: {
@@ -233,11 +240,17 @@ export const StakeGeneric = ({
     const unstake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
         const { contract, stakingTokenDecimals } = farm;
+        const signer = provider?.getSigner();
+        if (!signer) {
+            console.error('Failed to unstake: No signer');
+            return;
+        }
+        const signingContract = contract.connect(signer);
         console.debug(`unstaking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
 
         if (handleTransaction) {
             handleTransaction({
-                callMethod: contract.withdraw,
+                callMethod: signingContract.withdraw,
                 params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
                 type: TransactionType.FARM_STAKE_WITHDRAW,
                 injectedProps: {
@@ -259,9 +272,15 @@ export const StakeGeneric = ({
     const claim = (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { contract } = farm;
+        const signer = provider?.getSigner();
+        if (!signer) {
+            console.error('Failed to unstake: No signer');
+            return;
+        }
+        const signingContract = contract.connect(signer);
         if (handleTransaction) {
             handleTransaction({
-                callMethod: contract.getReward,
+                callMethod: signingContract.getReward,
                 params: [],
                 type: TransactionType.FARM_CLAIM,
                 injectedProps: undefined,
@@ -280,10 +299,16 @@ export const StakeGeneric = ({
     const approve = (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { stakingToken } = farm;
+        const signer = provider?.getSigner();
+        if (!signer) {
+            console.error('Failed to unstake: No signer');
+            return;
+        }
+        const signingStakingToken = stakingToken.connect(signer);
 
         if (handleTransaction) {
             handleTransaction({
-                callMethod: stakingToken.approve,
+                callMethod: signingStakingToken.approve,
                 params: [farmAddress, MAX_SOL_UINT],
                 type: TransactionType.APPROVE,
                 injectedProps: {
