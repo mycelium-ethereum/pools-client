@@ -105,6 +105,12 @@ export type PoolInfo = {
         isWaitingForUpkeep: boolean;
     };
     poolCommitStats: PoolCommitStats;
+    balancerPrices: {
+        longToken: BigNumber; // in settlementToken
+        shortToken: BigNumber; // in settlementToken
+        // TODO
+        // settlementToken: BigNumber; // in some stable coin of our choosing
+    };
 };
 
 export type TradeStatsAPIResponse = {

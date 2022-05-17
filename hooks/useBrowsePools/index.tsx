@@ -7,7 +7,6 @@ import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { LoadingRows } from '~/types/hooks';
 import { getMarketSymbol } from '~/utils/poolNames';
-import useBalancerSpotPrices from '../useBalancerSpotPrices';
 import { useUpkeeps } from '../useUpkeeps';
 
 const STATIC_DEFAULT_UPKEEP = {
@@ -30,7 +29,6 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
     const network = useStore(selectNetwork);
     const { pools, isLoadingPools } = usePools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
-    const balancerPoolPrices = useBalancerSpotPrices(network);
     const upkeeps = useUpkeeps(network);
 
     useEffect(() => {
@@ -38,7 +36,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool_) => {
-                const { poolInstance: pool, userBalances, upkeepInfo, poolCommitStats } = pool_;
+                const { poolInstance: pool, userBalances, upkeepInfo, poolCommitStats, balancerPrices } = pool_;
                 const {
                     address,
                     lastUpdate,
@@ -97,7 +95,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTCRPrice: newShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
                         nextTvl: expectedShortBalance.toNumber(),
-                        balancerPrice: balancerPoolPrices[shortToken.symbol]?.toNumber() ?? 0,
+                        balancerPrice: balancerPrices.shortToken.toNumber(),
                         userHoldings: userBalances.shortToken.balance.toNumber(),
                     },
                     longToken: {
@@ -108,7 +106,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTCRPrice: newLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),
                         nextTvl: expectedLongBalance.toNumber(),
-                        balancerPrice: balancerPoolPrices[longToken.symbol]?.toNumber() ?? 0,
+                        balancerPrice: balancerPrices.longToken.toNumber(),
                         userHoldings: userBalances.longToken.balance.toNumber(),
                     },
                     isWaitingForUpkeep: upkeepInfo.isWaitingForUpkeep,
@@ -128,23 +126,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
         }
     }, [pools]);
 
-    const attachedBalancerPrices: BrowseTableRowData[] = useMemo(() => {
-        return rows.map((row) => ({
-            ...row,
-            longToken: {
-                ...row.longToken,
-                balancerPrice: balancerPoolPrices[row.longToken.symbol]?.toNumber() ?? 0,
-            },
-            shortToken: {
-                ...row.shortToken,
-                balancerPrice: balancerPoolPrices[row.shortToken.symbol]?.toNumber() ?? 0,
-            },
-        }));
-    }, [rows, balancerPoolPrices]);
-
     const finalRows: BrowseTableRowData[] = useMemo(
         () =>
-            attachedBalancerPrices.map((row) => {
+            rows.map((row) => {
                 for (const pool of Object.keys(upkeeps)) {
                     if (pool === row.address) {
                         const defualtUpkeep = {
@@ -165,7 +149,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                 // else
                 return row;
             }),
-        [attachedBalancerPrices, upkeeps],
+        [rows, upkeeps],
     );
 
     return {

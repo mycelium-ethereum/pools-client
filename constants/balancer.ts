@@ -5,10 +5,15 @@ export const balancerConfig: Partial<Record<KnownNetwork, BalancerInfo>> = {
     [NETWORKS.ARBITRUM]: {
         graphUri: 'https://api.thegraph.com/subgraphs/name/balancer-labs/balancer-arbitrum-v2',
         baseUri: 'https://arbitrum.balancer.fi/#/trade',
-        // 1-BTC/USD and 1-ETH/USD
-        pools: ['0x6ee86e032173716a41818e6d6d320a752176d697', '0x17a35e3d578797e34131d10e66c11170848c6da1'],
-        // 3-BTC/USD and 3-ETH/USD
-        leveragedPools: ['0xcf3ae4b9235b1c203457e472a011c12c3a2fde93', '0x996616bde0cb4974e571f17d31c844da2bd177f8'],
+        pools: [],
+        // USDC
+        recommendedSwapToken: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
+        leveragedPools: [
+            // 3-BTC/USD
+            '0x3fF51DE6D96d4A88182b7006b8E8d9DB7D43931c',
+            // 3-ETH/USD
+            '0x03F3919407b9ef2Df36436C256029A16A51B107b',
+        ],
         // wETH wBTC USDC pool
         wPool: '0x64541216bafffeec8ea535bb71fbc927831d0595',
     },

@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
-import { calcBptTokenSpotPrice } from '@tracer-protocol/pools-js';
+import { calcBptTokenSpotPrice, KnownNetwork } from '@tracer-protocol/pools-js';
+import { balancerConfig } from '~/constants/balancer';
 import { BalancerInfo } from '~/types/balancer';
 
 export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<string, BigNumber>> = async (
@@ -12,7 +13,7 @@ export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<
     const data = {
         query: `{
                 leveragedPools: pools(where: {
-                    address_in: ${JSON.stringify(balancerInfo.leveragedPools)}
+                    address_in: ${JSON.stringify(balancerInfo.leveragedPools.map((pool) => pool.toLowerCase()))}
                 }) {
                     id
                     address
@@ -26,7 +27,7 @@ export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<
                     }
                 },
                 nonLeveragedPools: pools(where: {
-                    address_in: ${JSON.stringify(balancerInfo.pools)}
+                    address_in: ${JSON.stringify(balancerInfo.pools.map((pool) => pool.toLowerCase()))}
                 }) {
                     id
                     address
@@ -84,13 +85,14 @@ export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<
     ) => void = (pools, baseAssets) => {
         for (const pool of pools) {
             const baseAsset = pool.tokens.filter((token: any) => baseAssets.includes(token.symbol))[0];
+            console.log(baseAsset);
             const poolTokens = pool.tokens.filter((token: any) => !baseAssets.includes(token.symbol));
             let baseBalance = new BigNumber(baseAsset.balance);
             if (baseAsset.symbol !== 'USDC') {
-                baseBalance = baseBalance.times(tokenPrices[baseAsset.symbol]);
+                baseBalance = baseBalance.times(tokenPrices[baseAsset.address]);
             }
             for (const token of poolTokens) {
-                tokenPrices[token.symbol] = calcBptTokenSpotPrice(
+                tokenPrices[token.address] = calcBptTokenSpotPrice(
                     {
                         balance: baseBalance,
                         weight: new BigNumber(baseAsset.weight),
@@ -106,6 +108,17 @@ export const getBalancerPrices: (balancerInfo?: BalancerInfo) => Promise<Record<
     };
     getTokenPrices(res.data.wPool, ['USDC']);
     getTokenPrices(res.data.nonLeveragedPools, ['USDC']);
-    getTokenPrices(res.data.leveragedPools, ['WETH', 'WBTC']);
+    getTokenPrices(res.data.leveragedPools, ['USDC']);
     return tokenPrices;
+};
+
+export const constructBalancerLink: (token: string | undefined, network: KnownNetwork, isBuy: boolean) => string = (
+    token,
+    network,
+    isBuy,
+) => {
+    const balancerInfo = balancerConfig[network];
+    return isBuy
+        ? `${balancerInfo?.baseUri}/${balancerInfo?.recommendedSwapToken}/${token}`
+        : `${balancerInfo?.baseUri}/${token}/${balancerInfo?.recommendedSwapToken}`;
 };
