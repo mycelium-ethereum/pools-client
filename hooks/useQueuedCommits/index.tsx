@@ -70,19 +70,19 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
                         tokenIn = parsedSettlementToken;
                         tokenOut = {
                             ...parsedLongToken,
-                            amount: commit.amount.times(parsedLongToken.price),
+                            amount: commit.amount.div(parsedLongToken.price),
                         };
                     } else if (commit.type === CommitEnum.shortMint) {
                         tokenIn = parsedSettlementToken;
                         tokenOut = {
                             ...parsedShortToken,
-                            amount: commit.amount.times(parsedShortToken.price),
+                            amount: commit.amount.div(parsedShortToken.price),
                         };
                     } else if (commit.type === CommitEnum.longBurn) {
                         tokenIn = parsedLongToken;
                         tokenOut = {
                             ...parsedSettlementToken,
-                            amount: commit.amount.div(parsedLongToken.price),
+                            amount: commit.amount.times(parsedLongToken.price),
                         };
                     } else if (commit.type === CommitEnum.shortBurn) {
                         tokenIn = parsedShortToken;
