@@ -19,7 +19,7 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <NavBar setShowOnboardModal={setShowOnboardModal} />
-            <FarmStore farmContext="poolFarms">
+            <FarmStore>
                 <StakePool />
             </FarmStore>
             <UnsupportedNetworkPopup />
