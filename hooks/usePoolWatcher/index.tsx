@@ -8,6 +8,7 @@ import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import { selectPoolInstanceActions, selectPoolInstanceUpdateActions } from '~/store/PoolInstancesSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { formatBN } from '~/utils/converters';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 export const usePoolWatcher = (): void => {
@@ -41,7 +42,7 @@ export const usePoolWatcher = (): void => {
                                 id: commitInfo.txHash,
                                 type: commitInfo.commitType,
                                 txnHash: commitInfo.txHash,
-                                amount: commitInfo.amount.div(10 ** commitInfo.settlementTokenDecimals),
+                                amount: formatBN(commitInfo.amount, commitInfo.settlementTokenDecimals),
                                 from: commitInfo.user,
                                 created: commitInfo.timestamp,
                                 appropriateIntervalId: commitInfo.appropriateIntervalId,
