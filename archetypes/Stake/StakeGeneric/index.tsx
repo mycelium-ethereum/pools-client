@@ -11,8 +11,8 @@ import { selectAccount, selectProvider } from '~/store/Web3Slice';
 import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
-import { escapeRegExp } from '~/utils/helpers';
 import { generalMarketFilter } from '~/utils/filters';
+import { escapeRegExp } from '~/utils/helpers';
 import FarmsTable from '../FarmsTable';
 import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
