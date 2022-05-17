@@ -86,3 +86,20 @@ export const POOL_LIST_MAP: TokenListMapByNetwork = {
 
 export const TCR_DECIMALS = 18;
 export const USDC_DECIMALS = 6;
+
+export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
+    '3L-ETH/USD+USDC': '3L-ETH+USDC',
+    '3S-ETH/USD+USDC': '3S-ETH+USDC',
+    '3L-BTC/USD+USDC': '3L-BTC+USDC',
+    '3S-BTC/USD+USDC': '3S-BTC+USDC',
+    '3L-XAU/USD+USDC': '3L-XAU+USDC',
+    '3S-XAU/USD+USDC': '3S-XAU+USDC',
+    '3L-ETH/USD+gOHM': '3L-ETH+gOHM',
+    '3S-ETH/USD+gOHM': '3S-ETH+gOHM',
+    '3L-(AVAX+BNB+SOL)/USD+USDC': '3L-ethkilla',
+    '3S-(AVAX+BNB+SOL)/USD+USDC': '3S-ethkilla',
+    '15L-ETHMCAP/BTCMCAP+USDC': '15L-FLIPPEN',
+    '15S-ETHMCAP/BTCMCAP+USDC': '15S-FLIPPEN',
+    '5L-PUNK/ETH+wETH': '5L-PUNK/ETH',
+    '5S-PUNK/ETH+wETH': '5S-PUNK/ETH',
+};

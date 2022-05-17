@@ -5,9 +5,9 @@ import { Network } from '~/types/networks';
 export const UNKNOWN_NETWORK = '0';
 
 export const knownNetworkToSubgraphUrl: Partial<Record<KnownNetwork, string>> = {
-    [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-one',
-    // [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v1-arbitrum-rinkeby'
-    [NETWORKS.ARBITRUM_RINKEBY]: 'https://api.thegraph.com/subgraphs/name/scaredibis/tracer-pools-v2-arbitrum-rinkeby',
+    [NETWORKS.ARBITRUM]: 'https://api.thegraph.com/subgraphs/name/tracer-protocol/perpetual-pools-v2-arbitrum-one',
+    [NETWORKS.ARBITRUM_RINKEBY]:
+        'https://api.thegraph.com/subgraphs/name/tracer-protocol/perpetual-pools-v2-arbitrum-rinkeby',
 };
 
 /**
