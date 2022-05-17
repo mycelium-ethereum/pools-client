@@ -9,7 +9,6 @@ import NetworkDropdown from './NetworkDropdown';
 import AccountBalance from './AccountBalance';
 import { classNames } from '@libs/utils/functions';
 import ThemeSwitcher from './ThemeSwitcher';
-import VersionToggle from './VersionToggle';
 
 import RevisitOnboard from '/public/img/general/onboard-revisit.svg';
 
