@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import shallow from 'zustand/shallow';
-import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher/dist';
+import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
