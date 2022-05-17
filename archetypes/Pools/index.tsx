@@ -125,8 +125,8 @@ export const Browse: React.FC = () => {
                     <div>
                         <PageTable.Heading>Pools</PageTable.Heading>
                         <PageTable.SubHeading>
-                            The most liquid, unique pools with mitigated volatility decay*. Secured by Chainlink
-                            Oracles, via Tracer’s SMA Wrapper.{' '}
+                            The most liquid, unique pools with mitigated volatility decay. Secured by Chainlink Oracles,
+                            via Tracer’s SMA Wrapper.{' '}
                             <PageTable.Link href="https://pools.docs.tracer.finance/perpetual-pools/readme">
                                 Learn More
                             </PageTable.Link>
