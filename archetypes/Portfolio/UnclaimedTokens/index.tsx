@@ -3,6 +3,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useUserUnclaimedTokens from '~/hooks/useUserUnclaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
+import { escapeRegExp } from '~/utils/helpers';
 import { UnclaimedTokensTable } from './UnclaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
@@ -26,7 +27,7 @@ export const UnclaimedTokens = ({
     );
 
     const escrowSearchFilter = (pool: UnclaimedRowInfo): boolean => {
-        const searchString = escrowSearch.toLowerCase();
+        const searchString = escapeRegExp(escrowSearch.toLowerCase());
         return Boolean(pool.poolName.toLowerCase().match(searchString));
     };
 

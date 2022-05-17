@@ -11,6 +11,7 @@ import { selectAccount } from '~/store/Web3Slice';
 import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
+import { escapeRegExp } from '~/utils/helpers';
 import { generalMarketFilter } from '~/utils/filters';
 import FarmsTable from '../FarmsTable';
 import FilterBar from '../FilterSelects';
@@ -120,7 +121,7 @@ export const StakeGeneric = ({
     };
 
     const searchFilter = (farm: FarmTableRowData): boolean => {
-        const searchString = state.searchFilter.toLowerCase();
+        const searchString = escapeRegExp(state.searchFilter.toLowerCase());
         return Boolean(farm.name.toLowerCase().match(searchString));
     };
 

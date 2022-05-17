@@ -9,6 +9,7 @@ import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
+import { escapeRegExp } from '~/utils/helpers';
 import { getMarketLeverage } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
@@ -54,7 +55,7 @@ export const Browse: React.FC = () => {
 
     const searchFilter = useCallback(
         (pool: BrowseTableRowData): boolean => {
-            const searchString = state.search.toLowerCase();
+            const searchString = escapeRegExp(state.search.toLowerCase());
             return Boolean(
                 pool.name.toLowerCase().match(searchString) ||
                     pool.shortToken.symbol.toLowerCase().match(searchString) ||

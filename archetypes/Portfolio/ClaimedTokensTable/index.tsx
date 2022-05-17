@@ -3,6 +3,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useUserClaimedTokens from '~/hooks/useUserClaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { generalMarketFilter } from '~/utils/filters';
+import { escapeRegExp } from '~/utils/helpers';
 import { ClaimedTokensTable } from './ClaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
@@ -22,7 +23,7 @@ export const ClaimedTokens = ({
     const { rows: tokens, isLoading } = useUserClaimedTokens();
 
     const claimedSearchFilter = (token: TokenRowProps): boolean => {
-        const searchString = claimedTokensSearch.toLowerCase();
+        const searchString = escapeRegExp(claimedTokensSearch.toLowerCase());
         return Boolean(token.name.toLowerCase().match(searchString));
     };
 
