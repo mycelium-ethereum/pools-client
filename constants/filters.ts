@@ -5,6 +5,7 @@ import {
     MarketFilterEnum,
     SideFilterEnum,
     SortByEnum,
+    StakeSortByEnum,
 } from '~/types/filters';
 
 export const MARKET_FILTER_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
@@ -23,3 +24,5 @@ export const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageFilterEnum).map((key)
 export const SIDE_OPTIONS = Object.values(SideFilterEnum).map((key) => ({ key: key }));
 
 export const SORT_BY_OPTIONS = Object.values(SortByEnum).map((key) => ({ key: key }));
+
+export const STAKE_SORT_BY_OPTIONS = Object.values(StakeSortByEnum).map((key) => ({ key: key }));
