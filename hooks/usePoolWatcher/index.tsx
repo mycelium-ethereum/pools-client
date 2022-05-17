@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import shallow from 'zustand/shallow';
-import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher';
+import { EVENT_NAMES, MultiplePoolWatcher } from '@tracer-protocol/perpetual-pools-v2-pool-watcher/dist';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
@@ -41,8 +41,7 @@ export const usePoolWatcher = (): void => {
                                 id: commitInfo.txHash,
                                 type: commitInfo.commitType,
                                 txnHash: commitInfo.txHash,
-                                // TODO parse in Decimals
-                                amount: commitInfo.amount.times(10 ** -18),
+                                amount: commitInfo.amount.div(10 ** commitInfo.settlementTokenDecimals),
                                 from: commitInfo.user,
                                 created: commitInfo.timestamp,
                                 appropriateIntervalId: commitInfo.appropriateIntervalId,

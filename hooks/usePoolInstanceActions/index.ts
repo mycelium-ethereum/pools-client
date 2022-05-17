@@ -216,7 +216,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                                 txnHash: txnHash as string,
                                 id: txnHash,
                                 type: commitType,
-                                amount: new BigNumber(ethers.utils.formatUnits(commitInfo.amount)),
+                                amount: new BigNumber(ethers.utils.formatUnits(commitInfo.amount, settlementTokenDecimals)),
                                 from: commitInfo.user,
                                 created: Math.floor(Date.now() / 1000),
                                 appropriateIntervalId: commitInfo.appropriateUpdateIntervalId.toNumber(),
