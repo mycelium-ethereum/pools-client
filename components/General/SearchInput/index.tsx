@@ -30,6 +30,8 @@ export const SearchIconWrap = styled.div`
     align-items: center;
     height: 100%;
     left: 0;
+    top: 0;
+    bottom: 0;
     padding-left: 0.75rem;
     padding-top: 0.25rem;
     pointer-events: none;

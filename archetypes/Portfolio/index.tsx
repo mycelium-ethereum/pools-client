@@ -59,63 +59,40 @@ export const PortfolioPage = (): JSX.Element => {
 
     const emptyState = () => {
         return (
-            <>
-                <Styles.Wrapper>
-                    <TradeOverviewBanner
-                        title="Portfolio Overview"
-                        portfolioOverview={portfolioOverview}
-                        account={!!account}
-                        handleConnect={handleConnect}
-                    />
-                </Styles.Wrapper>
-                <Styles.Wrapper>
-                    <Styles.Banner>
-                        {emptyStateHelpCardContent.map((v, i) => (
-                            <HelpCard
-                                badge={v.badge}
-                                title={v.title}
-                                content={v.content}
-                                href={v.href}
-                                linkText={v.linkText}
-                                key={`${v.title}-${i}`}
-                            />
-                        ))}
-                    </Styles.Banner>
-                    {maxSkew !== undefined && (
-                        <div>
-                            <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
+            <Styles.Wrapper>
+                <Styles.Banner>
+                    {emptyStateHelpCardContent.map((v, i) => (
+                        <HelpCard
+                            badge={v.badge}
+                            title={v.title}
+                            content={v.content}
+                            href={v.href}
+                            linkText={v.linkText}
+                            key={`${v.title}-${i}`}
+                        />
+                    ))}
+                </Styles.Banner>
+                {maxSkew !== undefined && (
+                    <div>
+                        <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
 
-                            <HelpCard
-                                title={`Skew Farming Opportunity: ${maxSkew?.name}`}
-                                content={`Take a position in ${maxSkew?.name} and also take the opposite position of equal
-                                magnitude on another platform.`}
-                                href="https://tracer.finance/radar/skew-farming-explained/"
-                                linkText="Learn how to skew farm"
-                            />
-                        </div>
-                    )}
-                </Styles.Wrapper>
-            </>
+                        <HelpCard
+                            title={`Skew Farming Opportunity: ${maxSkew?.name}`}
+                            content={`Take a position in ${maxSkew?.name} and also take the opposite position of equal
+                            magnitude on another platform.`}
+                            href="https://tracer.finance/radar/skew-farming-explained/"
+                            linkText="Learn how to skew farm"
+                            roundedTop={false}
+                        />
+                    </div>
+                )}
+            </Styles.Wrapper>
         );
     };
 
     const filledState = () => {
         return (
             <>
-                <Styles.Wrapper>
-                    <TradeOverviewBanner
-                        title="Trade Portfolio Overview"
-                        portfolioOverview={portfolioOverview}
-                        account={!!account}
-                    />
-                    <HelpCard
-                        badge="Roadmap"
-                        title="Perpetual Pools V2 Roadmap"
-                        content="Want to learn what is coming with the launch of V2?"
-                        href="https://tracer.finance/radar/perpetual-pools-v2-roadmap/"
-                        linkText="View V2 roadmap"
-                    />
-                </Styles.Wrapper>
                 <QueuedCommits
                     queuedCommitsFilter={state.queuedCommitsFilter}
                     queuedCommitsSearch={state.queuedCommitsSearch}
@@ -145,6 +122,12 @@ export const PortfolioPage = (): JSX.Element => {
 
     return (
         <Container>
+            <TradeOverviewBanner
+                title={'Portfolio Overview'}
+                portfolioOverview={portfolioOverview}
+                account={!!account}
+                handleConnect={handleConnect}
+            />
             <>{!!account ? filledState() : emptyState()}</>
             {mintBurnModalOpen && <MintBurnModal open={mintBurnModalOpen} onClose={handleModalClose} />}
         </Container>

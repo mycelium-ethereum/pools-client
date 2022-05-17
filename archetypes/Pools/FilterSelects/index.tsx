@@ -1,16 +1,11 @@
 import React from 'react';
+import BaseFilters from '~/components/BaseFilters';
 import { LogoTicker } from '~/components/General';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { MARKET_FILTER_OPTIONS, LEVERAGE_FILTER_OPTIONS, COLLATERAL_FILTER_OPTIONS } from '~/constants/filters';
+import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import * as Styles from './styles';
-import {
-    BrowseAction,
-    BrowseState,
-    CollateralEnum,
-    DeltaEnum,
-    LeverageEnum,
-    MarketFilterEnum,
-    RebalanceEnum,
-} from '../state';
+import { BrowseAction, BrowseState, DeltaEnum, RebalanceEnum } from '../state';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -51,46 +46,33 @@ const DENOTATION_OPTIONS = [
     },
 ];
 
-const MARKET_FILTER_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
-    key: (MarketFilterEnum as any)[key],
-    ticker: (key !== 'All' ? key : '') as LogoTicker,
-}));
-
-const COLLATERAL_FILTER_OPTIONS = Object.keys(CollateralEnum).map((key) => ({
-    key: (CollateralEnum as any)[key],
-}));
-
-const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageEnum).map((key) => ({
-    key: (LeverageEnum as any)[key],
-}));
-
 const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
     const onCollateralFilterSelect = (val: string) =>
-        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralEnum });
+        dispatch({ type: 'setCollateralFilter', collateral: val as CollateralFilterEnum });
     const onLeverageFilterSelect = (val: string) =>
-        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageEnum });
+        dispatch({ type: 'setLeverageFilter', leverage: val as LeverageFilterEnum });
     const onSearchInputChange = (search: string) => dispatch({ type: 'setSearch', search });
     const onSetDenotation = (option: number) => dispatch({ type: 'setDenotation', denotation: option as DeltaEnum });
     const onRebalanceFocus = (option: number) =>
         dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
 
     return (
-        <Styles.Container>
-            <Styles.SearchInput placeholder="Search" value={state.search} onChange={onSearchInputChange} />
-            <Styles.FilterPopup
+        <BaseFilters.Container>
+            <BaseFilters.SearchInput placeholder="Search" value={state.search} onChange={onSearchInputChange} />
+            <BaseFilters.FilterPopup
                 preview={
-                    <Styles.Preview>
-                        <Styles.FilterIcon />
+                    <BaseFilters.Preview>
+                        <BaseFilters.FilterIcon />
                         Filter Results
-                    </Styles.Preview>
+                    </BaseFilters.Preview>
                 }
                 buttonClasses="action-button"
             >
-                <Styles.Content>
+                <BaseFilters.Content>
                     <div>
-                        <Styles.Heading>Market</Styles.Heading>
-                        <Styles.Dropdown
+                        <BaseFilters.Heading>Market</BaseFilters.Heading>
+                        <BaseFilters.Dropdown
                             variant="default"
                             iconSize="xs"
                             placeHolderIcon={
@@ -103,25 +85,25 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             onSelect={onMarketSelect}
                         />
                     </div>
-                    <Styles.Wrapper>
-                        <Styles.DropdownContainer>
-                            <Styles.Text>Collateral</Styles.Text>
-                            <Styles.Dropdown
+                    <BaseFilters.Wrapper>
+                        <BaseFilters.DropdownContainer>
+                            <BaseFilters.Text>Collateral</BaseFilters.Text>
+                            <BaseFilters.Dropdown
                                 value={state.collateralFilter ?? 'All'}
                                 options={COLLATERAL_FILTER_OPTIONS}
                                 onSelect={onCollateralFilterSelect}
                             />
-                        </Styles.DropdownContainer>
-                        <Styles.DropdownContainer>
-                            <Styles.Text>Power Leverage</Styles.Text>
-                            <Styles.Dropdown
+                        </BaseFilters.DropdownContainer>
+                        <BaseFilters.DropdownContainer>
+                            <BaseFilters.Text>Power Leverage</BaseFilters.Text>
+                            <BaseFilters.Dropdown
                                 value={state.leverageFilter}
                                 options={LEVERAGE_FILTER_OPTIONS}
                                 onSelect={onLeverageFilterSelect}
                             />
-                        </Styles.DropdownContainer>
-                    </Styles.Wrapper>
-                    <Styles.DropdownContainer>
+                        </BaseFilters.DropdownContainer>
+                    </BaseFilters.Wrapper>
+                    <BaseFilters.DropdownContainer>
                         <TWButtonGroup
                             size="responsive"
                             value={state.deltaDenotation}
@@ -132,8 +114,8 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             options={DENOTATION_OPTIONS}
                             fullWidth
                         />
-                    </Styles.DropdownContainer>
-                    <Styles.DropdownContainer>
+                    </BaseFilters.DropdownContainer>
+                    <BaseFilters.DropdownContainer>
                         <TWButtonGroup
                             size="responsive"
                             value={state.rebalanceFocus}
@@ -142,10 +124,10 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             options={REBALANCE_OPTIONS}
                             fullWidth
                         />
-                    </Styles.DropdownContainer>
-                </Styles.Content>
-            </Styles.FilterPopup>
-        </Styles.Container>
+                    </BaseFilters.DropdownContainer>
+                </BaseFilters.Content>
+            </BaseFilters.FilterPopup>
+        </BaseFilters.Container>
     );
 };
 
