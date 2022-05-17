@@ -72,7 +72,7 @@ export const TokenPrice = ({
     tokenOutSymbol: string;
     tokenInSymbol: string;
     price: BigNumber;
-}): JSX.Element => <div>{`${price.toFixed(2)} ${tokenOutSymbol}/${tokenInSymbol}`}</div>;
+}): JSX.Element => <div>{`${price.toFixed(3)} ${tokenOutSymbol}/${tokenInSymbol}`}</div>;
 
 export const Amount = ({ tokenSymbol, amount }: { tokenSymbol: string; amount: BigNumber }): JSX.Element => (
     <MarketContainer>
