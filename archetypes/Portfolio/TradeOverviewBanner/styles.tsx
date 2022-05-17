@@ -39,12 +39,6 @@ export const BannerContent = styled.div`
     justify-content: space-between;
 `;
 
-export const Title = styled.h1`
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: ${({ theme }) => theme.fontColor.primary};
-`;
-
 export const Subtitle = styled.h2`
     font-size: 1rem;
     font-weight: 400;

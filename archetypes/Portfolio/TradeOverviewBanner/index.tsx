@@ -1,4 +1,5 @@
 import React from 'react';
+import { Heading } from '~/components/PageTable';
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
@@ -22,7 +23,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
 
     return (
         <>
-            <Styles.Title>{title}</Styles.Title>
+            <Heading>{title}</Heading>
             <Styles.Container>
                 <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>

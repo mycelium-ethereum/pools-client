@@ -1,4 +1,5 @@
-/stake	/stakepooltoken
+/stakepooltoken /stake
+/stakebpt /stake
 /privacy-policy	https://tracer.finance/privacy-policy
 /terms-of-use https://tracer.finance/privacy-policy#terms-of-use
 /disclaimer https://tracer.finance/privacy-policy#interfaces-disclaimer
