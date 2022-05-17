@@ -307,7 +307,6 @@ export const FarmStore: React.FC<
                             farms[farm.address] = farm;
                         }
                     });
-                    console.log('farms', farms);
                     setFarms(farms);
                     setFetchingFarms(false);
                 });
