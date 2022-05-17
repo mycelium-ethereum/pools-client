@@ -1,3 +1,5 @@
+import { KnownShortenedPoolTokenSymbols } from '../constants';
+
 /**
  * Format a market name into a chainlink feed url.
  * TODO the market name wont always match a chainlink feed url
@@ -72,6 +74,13 @@ export const getMarketInfoFromSymbol = (
         marketBase: getBaseAssetFromMarket(marketSymbol),
     };
 };
+
+/**
+ * Converts a token symbol to a shortened version < 11 characters
+ * @param tokenSymbol pool generated token symbol
+ * @returns the shortened tokenSymbol if recognized otherwise returns the original tokenSymbol
+ */
+export const getShortenedSymbol = (tokenSymbol: string): string => KnownShortenedPoolTokenSymbols[tokenSymbol] ?? tokenSymbol;
 
 // gets the market base asset from pool name
 export const getBaseAsset = (poolName?: string): string => getBaseAssetFromMarket(getMarketSymbol(poolName));

@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { networkConfig } from '~/constants/networks';
+import { getShortenedSymbol } from './poolNames';
 
 const tokenImagesRootUrl = 'https://raw.githubusercontent.com/dospore/tracer-balancer-token-list/master/assets';
 /**
@@ -21,6 +22,12 @@ export const watchAsset: (
     if (!provider) {
         return new Promise(() => false);
     }
+    // metmask currently only allows tokenSymbols of length 11
+    let tokenSymbol = token.symbol;
+    if (tokenSymbol.length > 11) {
+        // if its still longer than 11 we could slice it but I think its better it errors out
+        tokenSymbol = getShortenedSymbol(token.symbol);
+    }
 
     return provider
         ?.send('wallet_watchAsset', {
@@ -29,7 +36,7 @@ export const watchAsset: (
             options: {
                 type: 'ERC20',
                 address: token.address,
-                symbol: token.symbol,
+                symbol: tokenSymbol,
                 decimals: token.decimals,
                 image: `${tokenImagesRootUrl}/${tokenSymbolToLogoTicker(token.symbol)}.svg`,
             },
