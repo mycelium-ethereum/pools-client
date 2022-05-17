@@ -50,7 +50,6 @@ const UnsupportedNetwork: React.FC = () => {
                                 Get started
                             </a>
                         </span>
-                        ,
                     </Notification>,
                     {
                         type: 'error',

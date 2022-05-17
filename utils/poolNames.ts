@@ -80,7 +80,8 @@ export const getMarketInfoFromSymbol = (
  * @param tokenSymbol pool generated token symbol
  * @returns the shortened tokenSymbol if recognized otherwise returns the original tokenSymbol
  */
-export const getShortenedSymbol = (tokenSymbol: string): string => KnownShortenedPoolTokenSymbols[tokenSymbol] ?? tokenSymbol;
+export const getShortenedSymbol = (tokenSymbol: string): string =>
+    KnownShortenedPoolTokenSymbols[tokenSymbol] ?? tokenSymbol;
 
 // gets the market base asset from pool name
 export const getBaseAsset = (poolName?: string): string => getBaseAssetFromMarket(getMarketSymbol(poolName));
