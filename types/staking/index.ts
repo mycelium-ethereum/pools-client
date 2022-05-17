@@ -3,15 +3,6 @@ import BigNumber from 'bignumber.js';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { StakingRewards } from './typechain/StakingRewards';
 
-export type BalancerPoolAsset = {
-    address: string;
-    symbol: string;
-    isPoolToken: boolean;
-    reserves: BigNumber;
-    usdPrice: BigNumber;
-    decimals: number;
-};
-
 export type FarmTableDetails = {
     totalStaked: BigNumber;
     tvl: BigNumber;
@@ -24,10 +15,7 @@ export type FarmTableDetails = {
     rewardsTokenAddress: string;
     link?: string;
     linkText?: string;
-    bptDetails?: {
-        tokens: BalancerPoolAsset[];
-    };
-    poolDetails?: {
+    poolDetails: {
         poolTokenPrice: BigNumber;
     };
 };
@@ -53,8 +41,6 @@ type FarmInfo = {
 
 export type FarmConfig = {
     poolFarms: FarmInfo[];
-    bptFarms: FarmInfo[];
-    balancerVaultAddress: string;
     // lookup from known token addresses to Chainink price feed address
     // https://docs.chain.link/docs/arbitrum-price-feeds/
     knownUSDCPriceFeeds: {

@@ -1,4 +1,4 @@
-import { CommitActionEnum, CommitEnum } from '@tracer-protocol/pools-js/types';
+import { CommitActionEnum, CommitEnum, SideEnum } from '@tracer-protocol/pools-js/types';
 
 export const CommitTypeMap = {
     LongBurn: CommitEnum.longBurn,
@@ -7,6 +7,21 @@ export const CommitTypeMap = {
     ShortMint: CommitEnum.shortMint,
     LongBurnShortMint: CommitEnum.longBurnShortMint,
     ShortBurnLongMint: CommitEnum.shortBurnLongMint,
+};
+
+export const CommitActionSideMap: Record<CommitActionEnum, Record<SideEnum, CommitEnum>> = {
+    [CommitActionEnum.mint]: {
+        [SideEnum.long]: CommitEnum.longMint,
+        [SideEnum.short]: CommitEnum.shortMint,
+    },
+    [CommitActionEnum.burn]: {
+        [SideEnum.long]: CommitEnum.longBurn,
+        [SideEnum.short]: CommitEnum.shortBurn,
+    },
+    [CommitActionEnum.flip]: {
+        [SideEnum.long]: CommitEnum.longBurnShortMint,
+        [SideEnum.short]: CommitEnum.shortBurnLongMint,
+    },
 };
 
 export const CommitTypeName: Record<CommitEnum, string> = {

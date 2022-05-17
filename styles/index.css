@@ -324,3 +324,8 @@ html.theme-matrix {
 .height-delay {
     transition-delay: height 0.3s;
 }
+
+
+.react-tiny-popover-container {
+    z-index: 1;
+}

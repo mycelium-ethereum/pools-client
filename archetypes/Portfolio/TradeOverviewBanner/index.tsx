@@ -1,5 +1,6 @@
 import React from 'react';
-import { toApproxCurrency } from '~/utils/converters';
+import { Heading } from '~/components/PageTable';
+import { toApproxCurrency, toApproxLocaleString } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
 import { PortfolioOverview } from '../state';
@@ -22,7 +23,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
 
     return (
         <>
-            <Styles.Title>{title}</Styles.Title>
+            <Heading>{title}</Heading>
             <Styles.Container>
                 <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>
@@ -42,7 +43,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                     </Styles.Header>
                     <Styles.BannerContent>
                         <Styles.Value>
-                            <Styles.Currency>{totalPortfolioValue.toFixed(2)}</Styles.Currency>
+                            <Styles.Currency>{toApproxLocaleString(totalPortfolioValue)}</Styles.Currency>
                         </Styles.Value>
                         {account && portfolioDelta !== 0 && (
                             <Styles.Value className={deltaClassName}>

@@ -1,31 +1,22 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
-import { FilterFilled, SearchOutlined } from '@ant-design/icons';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { Container } from '~/components/General/Container';
 import { Logo, LogoTicker } from '~/components/General/Logo';
-import FarmNav from '~/components/Nav/FarmNav';
+import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
 import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
 import { selectAccount } from '~/store/Web3Slice';
+import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
 import { escapeRegExp } from '~/utils/helpers';
+import { generalMarketFilter } from '~/utils/filters';
 import FarmsTable from '../FarmsTable';
-import FilterBar from '../FilterSelects/Bar';
-import FilterModal from '../FilterSelects/Modal';
+import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
-import {
-    stakeReducer,
-    StakeAction,
-    StakeState,
-    LeverageFilterEnum,
-    SideFilterEnum,
-    SortByEnum,
-    FarmTableRowData,
-} from '../state';
+import { stakeReducer, StakeAction, StakeState, FarmTableRowData } from '../state';
 
 const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side: SideEnum } = (farm) => {
     const leverageSide = farm.name.split('-')[0];
@@ -37,44 +28,32 @@ const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side
     };
 };
 
-const getFilterFieldsFromBPTFarm = (farm: Farm): { leverage?: number; side?: SideEnum } => {
-    if (!farm.bptDetails) {
-        return {};
-    }
-
-    const firstFoundPoolToken = farm.bptDetails.tokens.find((token) => token.isPoolToken);
-
-    if (!firstFoundPoolToken) {
-        return {};
-    }
-
-    // pool tokens have format <leverage><side>-<market>
-    // first character is leverage (1, 3)
-    const leverage = Number(firstFoundPoolToken.symbol.slice(0, 1));
-    return {
-        leverage,
-    };
-};
-
-export default (({
+export const StakeGeneric = ({
     logo,
     tokenType,
     title,
     subTitle,
     farms,
     refreshFarm,
-    hideLeverageFilter,
     hideSideFilter,
     fetchingFarms,
     rewardsTokenUSDPrices,
-}) => {
+}: {
+    logo?: LogoTicker;
+    title: string;
+    subTitle: string;
+    tokenType: string;
+    farms: Record<string, Farm>;
+    refreshFarm: (farmAddress: string) => void;
+    hideSideFilter?: boolean;
+    fetchingFarms: boolean;
+    rewardsTokenUSDPrices: Record<string, BigNumber>;
+}): JSX.Element => {
     const account = useStore(selectAccount);
     const handleTransaction = useStore(selectHandleTransaction);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
-        const filterFields = farm?.poolDetails
-            ? getFilterFieldsFromPoolTokenFarm(farm)
-            : getFilterFieldsFromBPTFarm(farm);
+        const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
 
         return {
             farm: farm.address,
@@ -89,7 +68,6 @@ export default (({
             stakingTokenBalance: farm.stakingTokenBalance,
             rewardsPerYear: farm.rewardsPerYear,
             stakingTokenSupply: farm.stakingTokenSupply,
-            bptDetails: farm.bptDetails,
             poolDetails: farm.poolDetails,
             link: farm.link,
             linkText: farm.linkText,
@@ -99,25 +77,25 @@ export default (({
     });
 
     const [state, dispatch] = useReducer(stakeReducer, {
-        search: '',
-        leverage: LeverageFilterEnum.All,
-        side: SideFilterEnum.All,
-        sortBy: account ? SortByEnum.MyStaked : SortByEnum.Name,
-        filterModalOpen: false,
+        searchFilter: '',
+        leverageFilter: LeverageFilterEnum.All,
+        marketFilter: MarketFilterEnum.All,
+        sideFilter: SideFilterEnum.All,
+        sortBy: account ? StakeSortByEnum.MyStaked : StakeSortByEnum.Name,
         stakeModalState: 'closed',
         amount: new BigNumber(0),
         invalidAmount: { isInvalid: false },
     } as StakeState);
 
     useEffect(() => {
-        if (account && state.sortBy === SortByEnum.Name) {
-            dispatch({ type: 'setSortBy', sortBy: SortByEnum.MyStaked });
+        if (account && state.sortBy === StakeSortByEnum.Name) {
+            dispatch({ type: 'setSortBy', sortBy: StakeSortByEnum.MyStaked });
         }
     }, [account]);
 
     // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: FarmTableRowData): boolean => {
-        switch (state.leverage) {
+        switch (state.leverageFilter) {
             case LeverageFilterEnum.All:
                 return true;
             case LeverageFilterEnum.One:
@@ -130,7 +108,7 @@ export default (({
     };
 
     const sideFilter = (pool: FarmTableRowData): boolean => {
-        switch (state.side) {
+        switch (state.sideFilter) {
             case SideFilterEnum.All:
                 return true;
             case SideFilterEnum.Long:
@@ -143,26 +121,30 @@ export default (({
     };
 
     const searchFilter = (farm: FarmTableRowData): boolean => {
-        const searchString = escapeRegExp(state.search.toLowerCase());
+        const searchString = escapeRegExp(state.searchFilter.toLowerCase());
         return Boolean(farm.name.toLowerCase().match(searchString));
     };
 
     const sorter = (farmA: FarmTableRowData, farmB: FarmTableRowData): number => {
         switch (state.sortBy) {
-            case SortByEnum.Name:
+            case StakeSortByEnum.Name:
                 return farmA.name.localeCompare(farmB.name);
-            case SortByEnum.TotalValueLocked:
+            case StakeSortByEnum.TotalValueLocked:
                 return farmB.tvl.toNumber() - farmA.tvl.toNumber();
-            case SortByEnum.MyRewards:
+            case StakeSortByEnum.MyRewards:
                 return farmB.myRewards.toNumber() - farmA.myRewards.toNumber();
-            case SortByEnum.MyStaked:
+            case StakeSortByEnum.MyStaked:
                 return farmB.myStaked.toNumber() - farmA.myStaked.toNumber();
             default:
                 return 0;
         }
     };
 
-    const filteredTokens = farmTableRows.filter(sideFilter).filter(leverageFilter).filter(searchFilter);
+    const filteredTokens = farmTableRows
+        .filter(sideFilter)
+        .filter((farm) => generalMarketFilter(farm.name, state.marketFilter))
+        .filter(leverageFilter)
+        .filter(searchFilter);
     const sortedFilteredFarms = filteredTokens.sort(sorter);
 
     const handleStake = (farmAddress: string) => {
@@ -316,50 +298,28 @@ export default (({
         }
     };
 
-    const SearchButton = (
-        <SearchOutlined
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
-        />
-    );
-    const FilterButton = (
-        <FilterFilled
-            className="m-2 cursor-pointer md:hidden"
-            onClick={() => dispatch({ type: 'setFilterModalOpen', open: true })}
-        />
-    );
-
     return (
         <>
-            <FarmNav left={SearchButton} right={FilterButton} />
-            <Container className="mt-0 md:mt-7">
-                <div className="border-3xl rounded-3xl bg-theme-background p-0 shadow-xl md:py-20 md:px-16">
-                    <section className="hidden md:block">
-                        <span className="align-items: inline-flex ">
-                            {!!logo ? <Logo ticker={logo} className="my-2 pb-0 pr-1 text-theme-text" /> : null}
-                            <h1 className="pl-1s sm:none flex-wrap: wrap; mx-0 pb-0 text-3xl font-bold text-theme-text">
-                                {title}
-                            </h1>
-                        </span>
-                        <p className="mb-1 text-gray-500">{subTitle}</p>
-                        <FilterBar
-                            hideLeverageFilter={hideLeverageFilter}
-                            hideSideFilter={hideSideFilter}
-                            state={state}
-                            dispatch={dispatch}
-                        />
-                    </section>
-                    <FarmsTable
-                        rows={sortedFilteredFarms}
-                        fetchingFarms={fetchingFarms}
-                        rewardsTokenUSDPrices={rewardsTokenUSDPrices}
-                        onClickClaim={handleClaim}
-                        onClickUnstake={handleUnstake}
-                        onClickStake={handleStake}
-                    />
-                </div>
-            </Container>
-            <FilterModal state={state} dispatch={dispatch} />
+            <PageTable.Container>
+                <PageTable.Header>
+                    <div>
+                        <PageTable.Heading>
+                            {!!logo ? <Logo ticker={logo} className="my-2 inline pb-0 pr-1 text-theme-text" /> : null}
+                            {title}
+                        </PageTable.Heading>
+                        <PageTable.SubHeading>{subTitle}</PageTable.SubHeading>
+                    </div>
+                    <FilterBar hideSideFilter={hideSideFilter} state={state} dispatch={dispatch} />
+                </PageTable.Header>
+                <FarmsTable
+                    rows={sortedFilteredFarms}
+                    fetchingFarms={fetchingFarms}
+                    rewardsTokenUSDPrices={rewardsTokenUSDPrices}
+                    onClickClaim={handleClaim}
+                    onClickUnstake={handleUnstake}
+                    onClickStake={handleStake}
+                />
+            </PageTable.Container>
             <StakeModalWithState
                 state={state}
                 tokenType={tokenType}
@@ -371,18 +331,7 @@ export default (({
             />
         </>
     );
-}) as React.FC<{
-    logo?: LogoTicker;
-    title: string;
-    subTitle: string;
-    tokenType: string;
-    farms: Record<string, Farm>;
-    refreshFarm: (farmAddress: string) => void;
-    hideLeverageFilter?: boolean;
-    hideSideFilter?: boolean;
-    fetchingFarms: boolean;
-    rewardsTokenUSDPrices: Record<string, BigNumber>;
-}>;
+};
 
 const StakeModalWithState: React.FC<{
     state: StakeState;
@@ -432,3 +381,5 @@ const StakeModalWithState: React.FC<{
             return null;
     }
 };
+
+export default StakeGeneric;
