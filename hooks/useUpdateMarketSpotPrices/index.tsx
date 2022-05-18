@@ -45,7 +45,7 @@ export const useUpdateMarketSpotPrices: () => Record<string, BigNumber> = () => 
         return () => {
             mounted = false;
         };
-    }, [network]);
+    }, [network, provider]);
 
     return marketSpotPrices;
 };
