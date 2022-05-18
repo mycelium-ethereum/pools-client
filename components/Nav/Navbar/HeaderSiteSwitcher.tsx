@@ -126,7 +126,7 @@ const DropdownMenu: React.FC = () => {
                     />
                     <DropdownOption href={'https://vote.tracer.finance/#/'} label={'Governance'} boxColor={'#1AAA8D'} />
                     <DropdownOption
-                        href={'https://docs.tracer.finance/'}
+                        href={'https://pools.docs.tracer.finance/'}
                         label={'Documentation'}
                         boxColor={'#1e5cf5'}
                     />

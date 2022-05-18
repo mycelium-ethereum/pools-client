@@ -32,6 +32,5 @@ export const fetchTokenPrice: (
     if (!provider || !poolInfo_) {
         return [new BigNumber(1)];
     }
-    // TODO return this to get short and long prices
     return tokenAddresses.map((_tokenAddress) => new BigNumber(1));
 };

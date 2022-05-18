@@ -10,6 +10,7 @@ import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
 import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
+import { escapeRegExp } from '~/utils/helpers';
 import { getMarketLeverage } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
@@ -55,7 +56,7 @@ export const Browse: React.FC = () => {
 
     const searchFilter = useCallback(
         (pool: BrowseTableRowData): boolean => {
-            const searchString = state.search.toLowerCase();
+            const searchString = escapeRegExp(state.search.toLowerCase());
             return Boolean(
                 pool.name.toLowerCase().match(searchString) ||
                     pool.shortToken.symbol.toLowerCase().match(searchString) ||
@@ -131,9 +132,9 @@ export const Browse: React.FC = () => {
                             </NetworkHintContainer>
                         </PageTable.Heading>
                         <PageTable.SubHeading>
-                            The most liquid, unique pools with mitigated volatility decay*. Secured by Chainlink
-                            Oracles, via Tracer’s SMA Wrapper.{' '}
-                            <PageTable.Link href="https://tracer-1.gitbook.io/ppv2-beta-testnet">
+                            The most liquid, unique pools with mitigated volatility decay. Secured by Chainlink Oracles,
+                            via Tracer’s SMA Wrapper.{' '}
+                            <PageTable.Link href="https://pools.docs.tracer.finance/perpetual-pools/readme">
                                 Learn More
                             </PageTable.Link>
                         </PageTable.SubHeading>

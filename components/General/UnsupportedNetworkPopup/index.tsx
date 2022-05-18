@@ -42,7 +42,7 @@ const UnsupportedNetwork: React.FC = () => {
                             <br />
                             <span>New to Arbitrum? </span>
                             <a
-                                href="https://docs.tracer.finance/tutorials/add-arbitrum-mainnet-to-metamask"
+                                href="https://pools.docs.tracer.finance/tutorials/tutorials/arbitrum-one"
                                 target="_blank"
                                 rel="noreferrer noopner"
                                 className="mt-3 cursor-pointer text-tracer-400 underline hover:opacity-80"
@@ -50,7 +50,6 @@ const UnsupportedNetwork: React.FC = () => {
                                 Get started
                             </a>
                         </span>
-                        ,
                     </Notification>,
                     {
                         type: 'error',

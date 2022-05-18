@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 import { CommitEnum } from '@tracer-protocol/pools-js';
 import useQueuedCommits from '~/hooks/useQueuedCommits';
 import { QueuedCommit } from '~/types/commits';
+import { escapeRegExp } from '~/utils/helpers';
 import QueuedCommitsTable from './QueuedCommitsTable';
 import { OverviewTable } from '../OverviewTable';
 import { CommitTypeDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
@@ -20,7 +21,7 @@ export const QueuedCommits = ({
 
     const searchFilterFunc = useCallback(
         (commit: QueuedCommit): boolean => {
-            const searchString = queuedCommitsSearch.toLowerCase();
+            const searchString = escapeRegExp(queuedCommitsSearch.toLowerCase());
             return Boolean(
                 commit.tokenIn.symbol.toLowerCase().match(searchString) ||
                     commit.tokenOut.symbol.toLowerCase().match(searchString),

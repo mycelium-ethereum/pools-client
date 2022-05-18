@@ -2586,10 +2586,10 @@
   resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-contracts/-/perpetual-pools-contracts-1.2.3.tgz#ccf661cb88572074e0293f2aefe603bcf5cc9fef"
   integrity sha512-5MpVa1oAdc9oCXMXSJlY6owoulgIzurkoOatwNbaTr4WqAphj1RcI8xVEbKnaIVGHN2p43TbAXLCzpO9BI4bLg==
 
-"@tracer-protocol/perpetual-pools-v2-pool-watcher@^0.0.12":
-  version "0.0.12"
-  resolved "https://registry.npmjs.org/@tracer-protocol/perpetual-pools-v2-pool-watcher/-/perpetual-pools-v2-pool-watcher-0.0.12.tgz#4a2162d132aec20eca9b7c994cd4d14896c4b7f9"
-  integrity sha512-VX6Qu7lwISpQemiW4mvboeBezLf15LbaRxlEKbzAIq0i+N2L9hucB82VKZCLOfdpKCi2a6b4a7P95FvwZ23AXA==
+"@tracer-protocol/perpetual-pools-v2-pool-watcher@^0.0.13":
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/@tracer-protocol/perpetual-pools-v2-pool-watcher/-/perpetual-pools-v2-pool-watcher-0.0.13.tgz#981b796545b57a1b09e11184da47b024e03be8fe"
+  integrity sha512-+Ta+X5mzbtCdioXFkX4dkg0Ee+HKdOrBPCQlcJgDH1+SNeECzAED8Vz4WybC3Tr5JqOCeGMhLmlIQdiVEMW25A==
   dependencies:
     "@tracer-protocol/perpetual-pools-contracts" "^1.2.3"
     "@tracer-protocol/pools-js" "^3.1.5"

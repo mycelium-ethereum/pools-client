@@ -32,7 +32,7 @@ const Content = styled.div`
     word-break: break-word;
     font-size: 1rem;
     margin-top: 0.5rem;
-    margin-left: calc(15px + 24px); // Title margin + width of icon
+    padding-left: calc(15px + 24px); // Title margin + width of icon
 
     color: ${({ theme: { theme } }) => {
         switch (theme) {

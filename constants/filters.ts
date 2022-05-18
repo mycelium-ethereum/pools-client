@@ -1,4 +1,4 @@
-import { LogoTicker } from '~/components/General';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import {
     CollateralFilterEnum,
     LeverageFilterEnum,
@@ -8,18 +8,20 @@ import {
     StakeSortByEnum,
 } from '~/types/filters';
 
-export const MARKET_FILTER_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
-    key: (MarketFilterEnum as any)[key],
-    ticker: (key !== 'All' ? key : '') as LogoTicker,
-}));
+export const MARKET_FILTERS: Partial<Record<KnownNetwork, MarketFilterEnum[]>> = {
+    [NETWORKS.ARBITRUM]: [MarketFilterEnum.All, MarketFilterEnum.ETH, MarketFilterEnum.BTC],
+    [NETWORKS.ARBITRUM_RINKEBY]: [MarketFilterEnum.All, MarketFilterEnum.ETH, MarketFilterEnum.BTC],
+};
 
-export const COLLATERAL_FILTER_OPTIONS = Object.keys(CollateralFilterEnum).map((key) => ({
-    key: (CollateralFilterEnum as any)[key],
-}));
+export const COLLATERAL_FILTERS: Partial<Record<KnownNetwork, CollateralFilterEnum[]>> = {
+    [NETWORKS.ARBITRUM]: [CollateralFilterEnum.All, CollateralFilterEnum.USDC],
+    [NETWORKS.ARBITRUM_RINKEBY]: [CollateralFilterEnum.All, CollateralFilterEnum.PPUSD],
+};
 
-export const LEVERAGE_FILTER_OPTIONS = Object.keys(LeverageFilterEnum).map((key) => ({
-    key: (LeverageFilterEnum as any)[key],
-}));
+export const LEVERAGE_FILTERS: Partial<Record<KnownNetwork, LeverageFilterEnum[]>> = {
+    [NETWORKS.ARBITRUM]: [LeverageFilterEnum.All, LeverageFilterEnum.Three],
+    [NETWORKS.ARBITRUM_RINKEBY]: [LeverageFilterEnum.All, LeverageFilterEnum.Three],
+};
 
 export const SIDE_OPTIONS = Object.values(SideFilterEnum).map((key) => ({ key: key }));
 

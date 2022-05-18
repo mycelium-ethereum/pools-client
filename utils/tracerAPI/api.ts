@@ -113,7 +113,7 @@ export const fetchCommitHistory: (params: {
                     dateString,
                     timeString,
                     commitType,
-                    fee: formatBN(new BigNumber(row.fee), decimals),
+                    fee: formatBN(new BigNumber(row.fee), 18), // fees is always in WAD (18 decimal places)
                     txnHashIn: row.transactionHashIn,
                     txnHashOut: row.transactionHashOut,
                     settlementToken: {
