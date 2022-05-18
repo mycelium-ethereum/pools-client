@@ -1,4 +1,6 @@
 import React from 'react';
+import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { MarketFilter } from '~/components/BaseFilters/MarketFilter';
 import { Dropdown, LogoTicker } from '~/components/General';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { MarketFilterEnum } from '~/types/filters';
@@ -78,24 +80,22 @@ export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
     );
 };
 
-const MARKET_DROPDOWN_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
-    key: (MarketFilterEnum as any)[key],
-    ticker: (key !== 'All' ? key : '') as LogoTicker,
-}));
 export const MarketDropdown = ({
     market,
     setMarket,
+    network,
 }: {
     market: MarketFilterEnum;
     setMarket: (market: string) => void;
+    network: KnownNetwork | undefined;
 }): JSX.Element => {
     return (
-        <Dropdown
+        <MarketFilter
             size="sm"
-            value={market}
+            marketFilter={market}
             className="mt-auto w-32"
-            options={MARKET_DROPDOWN_OPTIONS}
-            onSelect={setMarket}
+            network={network}
+            onMarketSelect={setMarket}
         />
     );
 };

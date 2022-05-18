@@ -1,5 +1,7 @@
 import React, { useMemo } from 'react';
 import useUserClaimedTokens from '~/hooks/useUserClaimedTokens';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import { MarketFilterEnum } from '~/types/filters';
 import { generalMarketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
@@ -19,6 +21,7 @@ export const ClaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
+    const network = useStore(selectNetwork);
     const { rows: tokens, isLoading } = useUserClaimedTokens();
 
     const claimedSearchFilter = (token: TokenRowProps): boolean => {
@@ -45,6 +48,7 @@ export const ClaimedTokens = ({
                     setMarket={(m) =>
                         void dispatch({ type: 'setClaimedTokensMarketFilter', market: m as MarketFilterEnum })
                     }
+                    network={network}
                 />
             }
             secondAction={
