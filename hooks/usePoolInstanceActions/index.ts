@@ -200,6 +200,7 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                 callBacks: {
                     onSuccess: (receipt) => {
                         console.debug('Successfully submitted commit txn: ', receipt);
+                        updatePoolTokenBalances([pool], provider, account);
                         updateSettlementTokenBalances([pool], provider, account);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                         // @ts-ignore receipt type is a bitch
