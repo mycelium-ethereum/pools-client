@@ -320,6 +320,29 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 });
         });
     },
+    simulateUpdateAvgEntryPrices: (pool_) => {
+        set((state) => {
+            const pool = state.pools[pool_];
+            if (!pool) {
+                return state;
+            }
+            const {
+                avgLongEntryPriceAggregate,
+                avgLongEntryPriceWallet,
+                avgShortEntryPriceWallet,
+                avgShortEntryPriceAggregate,
+            } = pool.userBalances.tradeStats;
+            const newAvgLongPriceWallet = (avgLongEntryPriceAggregate.plus(avgLongEntryPriceWallet)).div(2);
+            const newAvgShortPriceWallet = (avgShortEntryPriceAggregate.plus(avgShortEntryPriceWallet)).div(2);
+            state.pools[pool_].userBalances.tradeStats = {
+                ...state.pools[pool_].userBalances.tradeStats,
+                avgLongEntryPriceAggregate: new BigNumber(0),
+                avgShortEntryPriceAggregate: new BigNumber(0),
+                avgLongEntryPriceWallet: newAvgLongPriceWallet,
+                avgShortEntryPriceWallet: newAvgShortPriceWallet,
+            };
+        });
+    },
 });
 
 export const selectSelectedPool: (state: StoreState) => IPoolsInstancesSlice['selectedPool'] = (state) =>
@@ -366,6 +389,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
     updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
     updatePoolCommitStats: IPoolsInstancesSlice['updatePoolCommitStats'];
+    simulateUpdateAvgEntryPrices: IPoolsInstancesSlice['simulateUpdateAvgEntryPrices'];
 } = (state) => ({
     handlePoolUpkeep: state.poolsInstancesSlice.handlePoolUpkeep,
     updatePoolBalances: state.poolsInstancesSlice.updatePoolBalances,
@@ -374,4 +398,5 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
     updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
     updatePoolCommitStats: state.poolsInstancesSlice.updatePoolCommitStats,
+    simulateUpdateAvgEntryPrices: state.poolsInstancesSlice.simulateUpdateAvgEntryPrices,
 });
