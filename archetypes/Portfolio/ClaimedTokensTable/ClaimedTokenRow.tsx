@@ -8,12 +8,12 @@ import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
-import { TokenRowProps } from '../state';
+import { OnClickCommit, TokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
 
 export const ClaimedTokenRow: React.FC<
     TokenRowProps & {
-        onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+        onClickCommitAction: OnClickCommit;
     }
 > = ({
     symbol,

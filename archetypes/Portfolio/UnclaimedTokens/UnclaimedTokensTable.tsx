@@ -1,5 +1,4 @@
 import React from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Logo } from '~/components/General';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
@@ -7,14 +6,14 @@ import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
 import * as Styles from './styles';
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './UnclaimedTokensRows';
-import { UnclaimedRowInfo, OverviewPoolToken, TokenType, UnclaimedRowProps } from '../state';
+import { UnclaimedRowInfo, OverviewPoolToken, TokenType, UnclaimedRowProps, OnClickCommit } from '../state';
 
 export const UnclaimedTokensTable = ({
     rows,
     onClickCommitAction,
 }: {
     rows: UnclaimedRowInfo[];
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+    onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
     return (
         <>

@@ -47,7 +47,7 @@ const committerInterface = new ethers.utils.Interface(PoolCommitter__factory.abi
 
 export const usePoolInstanceActions = (): PoolInstanceActions => {
     const { setTokenApproved } = useStore(selectPoolInstanceActions, shallow);
-    const { updatePoolTokenBalances, updateSettlementTokenBalances } = useStore(
+    const { updatePoolTokenBalances, updateSettlementTokenBalances, simulateUpdateAvgEntryPrices } = useStore(
         selectPoolInstanceUpdateActions,
         shallow,
     );
@@ -94,6 +94,9 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                         // get and set token balances
                         updatePoolTokenBalances([pool], provider, account);
                         updateSettlementTokenBalances([pool], provider, account);
+                        // simulate claim for aggregatebalances
+                        // this is because the graph can be delayed in picking up the claim
+                        simulateUpdateAvgEntryPrices(pool);
                         options?.onSuccess ? options.onSuccess(receipt) : null;
                     },
                 },
@@ -216,7 +219,9 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                                 txnHash: txnHash as string,
                                 id: txnHash,
                                 type: commitType,
-                                amount: new BigNumber(ethers.utils.formatUnits(commitInfo.amount)),
+                                amount: new BigNumber(
+                                    ethers.utils.formatUnits(commitInfo.amount, settlementTokenDecimals),
+                                ),
                                 from: commitInfo.user,
                                 created: Math.floor(Date.now() / 1000),
                                 appropriateIntervalId: commitInfo.appropriateUpdateIntervalId.toNumber(),

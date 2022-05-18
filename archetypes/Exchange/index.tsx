@@ -5,6 +5,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
@@ -16,6 +17,7 @@ import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
+import { formatBN } from '~/utils/converters';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Summary from './Summary';
@@ -65,7 +67,7 @@ export default styled((({ onClose, className }) => {
                 amountBN,
             ).catch((_err) => undefined);
             if (fee) {
-                const gasPriceInEth = new BigNumber(gasPrice ?? 0).div(10 ** 9);
+                const gasPriceInEth = formatBN(new BigNumber(gasPrice ?? 0), 9);
                 const costInEth = fee.times(gasPriceInEth);
                 setCommitGasFees({ ...commitGasFees, [commitAction]: ethPrice.times(costInEth) });
             }
@@ -75,7 +77,12 @@ export default styled((({ onClose, className }) => {
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
-            <Title>New Commit</Title>
+            <Title>
+                <NetworkHintContainer>
+                    New Commit
+                    <NetworkHint />
+                </NetworkHintContainer>
+            </Title>
 
             <Header>
                 <TWButtonGroupStyled

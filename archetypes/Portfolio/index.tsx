@@ -1,5 +1,5 @@
 import React, { useReducer, useState } from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
@@ -14,26 +14,11 @@ import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
 import QueuedCommits from './QueuedCommits';
 import { SkewCard } from './SkewCard';
-import { portfolioReducer, initialPortfolioState } from './state';
+import { portfolioReducer, initialPortfolioState, OnClickCommit } from './state';
 import { Container } from './styles';
 import * as Styles from './styles';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
 import UnclaimedTokens from './UnclaimedTokens';
-
-export enum LoadingState {
-    Idle = 0,
-    Fetching = 1,
-    HasFetched = 2,
-}
-
-export enum TimescaleEnum {
-    AllTime = 'All Time',
-}
-
-export enum CurrencyEnum {
-    USD = 'USD',
-    AUD = 'AUD',
-}
 
 export const PortfolioPage = (): JSX.Element => {
     const account = useStore(selectAccount);
@@ -44,7 +29,8 @@ export const PortfolioPage = (): JSX.Element => {
     const portfolioOverview = usePortfolioOverview();
     const { rows: tokens } = useBrowsePools();
 
-    const onClickCommitAction = (pool: string, side: SideEnum, action?: CommitActionEnum) => {
+    const onClickCommitAction: OnClickCommit = (pool, side, action, unclaimed) => {
+        swapDispatch({ type: 'setBalanceType', value: unclaimed ? BalanceTypeEnum.escrow : BalanceTypeEnum.wallet });
         swapDispatch({ type: 'setSelectedPool', value: pool });
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: action });

@@ -61,4 +61,5 @@ export interface IPoolsInstancesSlice {
     ) => void;
     updatePoolBalances: (pool: string, provider: ethers.providers.JsonRpcProvider | undefined) => void;
     updatePoolBalancerPrices: (pool: string[], network: KnownNetwork | undefined) => void;
+    simulateUpdateAvgEntryPrices: (pool: string) => void;
 }
