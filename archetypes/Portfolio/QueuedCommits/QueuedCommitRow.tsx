@@ -21,6 +21,7 @@ export const QueuedCommitRow = ({
     const [pendingUpkeep, setPendingUpkeep] = useState(false);
     const { amount: tokenInAmount, symbol: tokenInSymbol, price: tokenInPrice, isLong: tokenInIslong } = tokenIn;
     const { amount: tokenOutAmount, symbol: tokenOutSymbol, price: tokenOutPrice, isLong: tokenOutIsLong } = tokenOut;
+
     return (
         <TableRow key={txnHash} lined>
             <OverviewTableRowCell>{CommitTypeName[type]}</OverviewTableRowCell>
@@ -44,7 +45,7 @@ export const QueuedCommitRow = ({
                 <Amount tokenSymbol={tokenOutSymbol} amount={tokenOutAmount} />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
-                <TokenSymbol tokenSymbol={tokenInSymbol} isLong={tokenOutIsLong} />
+                <TokenSymbol tokenSymbol={tokenOutSymbol} isLong={tokenOutIsLong} />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <ReceiveIn
