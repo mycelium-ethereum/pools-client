@@ -6,6 +6,13 @@ import TWPopup from '~/components/General/TWPopup';
 import ArrowDownIcon from '~/public/img/general/arrow-circle-down.svg';
 import FilterToggleIcon from '~/public/img/general/filters.svg';
 import { Theme } from '~/store/ThemeSlice/themes';
+import { CollateralFilter } from './CollateralFilter';
+import { LeverageFilter } from './LeverageFilter';
+import { MarketFilter } from './MarketFilter';
+
+// Magic number padding. Used in FilterPopup and SearchInput
+// to make them the same size
+const buttonPadding = '9.5px';
 
 export const Container = styled(UnstyledContainer)`
     display: flex;
@@ -36,7 +43,7 @@ export const FilterPopup = styled(TWPopup)`
         font-weight: 400 !important;
         color: rgb(156 163 175);
         display: inline-flex;
-        padding: 0.67rem 1rem;
+        padding: ${buttonPadding} 1rem;
         background-color: ${({ theme }) => theme.button.bg};
         white-space: nowrap;
         display: inline-flex;
@@ -90,8 +97,7 @@ export const Wrapper = styled.div`
 export const SearchInput = styled(UnstyledSearchInput)`
     width: 100%;
     input {
-        height: calc(24px + 0.67rem * 2);
-        padding: 0.67rem 1rem;
+        height: calc(24px + ${buttonPadding} * 2);
         font-size: 16px;
         padding: 0 1rem 0 2.5rem;
     }
@@ -147,5 +153,8 @@ export const BaseFilters = {
     Preview,
     Heading,
     FilterIcon,
+    CollateralFilter,
+    MarketFilter,
+    LeverageFilter,
 };
 export default BaseFilters;

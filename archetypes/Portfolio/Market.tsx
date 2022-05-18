@@ -75,7 +75,7 @@ export const TokenPrice = ({
 }): JSX.Element => {
     const simplifiedIn = getSimplifiedTokenName(tokenInSymbol);
     const simplifiedOut = getSimplifiedTokenName(tokenOutSymbol);
-    return <div>{`${price.toFixed(2)} ${simplifiedIn}/${simplifiedOut}`}</div>;
+    return <div>{`${price.toFixed(3)} ${simplifiedIn}/${simplifiedOut}`}</div>;
 };
 
 export const Amount = ({ tokenSymbol, amount }: { tokenSymbol: string; amount: BigNumber }): JSX.Element => (

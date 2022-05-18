@@ -66,12 +66,30 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
                         isLong: false,
                     };
 
-                    if (commit.type === CommitEnum.longMint || commit.type === CommitEnum.shortMint) {
+                    if (commit.type === CommitEnum.longMint) {
                         tokenIn = parsedSettlementToken;
-                        tokenOut = commit.type === CommitEnum.longMint ? parsedLongToken : parsedShortToken;
-                    } else if (commit.type === CommitEnum.longBurn || commit.type === CommitEnum.shortBurn) {
-                        tokenIn = commit.type === CommitEnum.longBurn ? parsedLongToken : parsedShortToken;
-                        tokenOut = parsedSettlementToken;
+                        tokenOut = {
+                            ...parsedLongToken,
+                            amount: commit.amount.div(parsedLongToken.price),
+                        };
+                    } else if (commit.type === CommitEnum.shortMint) {
+                        tokenIn = parsedSettlementToken;
+                        tokenOut = {
+                            ...parsedShortToken,
+                            amount: commit.amount.div(parsedShortToken.price),
+                        };
+                    } else if (commit.type === CommitEnum.longBurn) {
+                        tokenIn = parsedLongToken;
+                        tokenOut = {
+                            ...parsedSettlementToken,
+                            amount: commit.amount.times(parsedLongToken.price),
+                        };
+                    } else if (commit.type === CommitEnum.shortBurn) {
+                        tokenIn = parsedShortToken;
+                        tokenOut = {
+                            ...parsedSettlementToken,
+                            amount: commit.amount.times(parsedShortToken.price),
+                        };
                     } else if (commit.type === CommitEnum.longBurnShortMint) {
                         // flips
                         tokenIn = parsedLongToken;
@@ -82,7 +100,6 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
                     } else {
                         // shortBurnLongMint
                         tokenIn = parsedShortToken;
-                        tokenOut = parsedLongToken;
                         tokenOut = {
                             ...parsedLongToken,
                             amount: commit.amount.times(parsedShortToken.price).div(parsedLongToken.price), // estimate

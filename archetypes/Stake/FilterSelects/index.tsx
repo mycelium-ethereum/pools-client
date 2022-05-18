@@ -1,14 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import BaseFilters from '~/components/BaseFilters';
-import { LogoTicker } from '~/components/General';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import {
-    MARKET_FILTER_OPTIONS,
-    LEVERAGE_FILTER_OPTIONS,
-    COLLATERAL_FILTER_OPTIONS,
-    SIDE_OPTIONS,
-    STAKE_SORT_BY_OPTIONS,
-} from '~/constants/filters';
+import { SIDE_OPTIONS, STAKE_SORT_BY_OPTIONS } from '~/constants/filters';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import {
     CollateralFilterEnum,
     LeverageFilterEnum,
@@ -25,6 +20,8 @@ interface FilterSelectsProps {
 }
 
 const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps): JSX.Element => {
+    const network = useStore(selectNetwork);
+
     const onMarketSelect = (val: string) => dispatch({ type: 'setMarketFilter', market: val as MarketFilterEnum });
     const onCollateralFilterSelect = (val: string) =>
         dispatch({ type: 'setCollateralFilter', collateral: val as CollateralFilterEnum });
@@ -33,6 +30,14 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
     const onSearchInputChange = (search: string) => dispatch({ type: 'setSearchFilter', search });
     const onSideFilterSelect = (val: string) => dispatch({ type: 'setSideFilter', side: val as SideFilterEnum });
     const onSortByFilterSelect = (val: string) => dispatch({ type: 'setSortBy', sortBy: val as StakeSortByEnum });
+
+    useEffect(() => {
+        if (network) {
+            onMarketSelect(MarketFilterEnum.All);
+            onLeverageFilterSelect(LeverageFilterEnum.All);
+            onCollateralFilterSelect(CollateralFilterEnum.All);
+        }
+    }, [network]);
 
     return (
         <BaseFilters.Container>
@@ -49,36 +54,29 @@ const FilterSelects = ({ state, dispatch, hideSideFilter }: FilterSelectsProps):
                 <BaseFilters.Content>
                     <div>
                         <BaseFilters.Heading>Market</BaseFilters.Heading>
-                        <BaseFilters.Dropdown
-                            variant="default"
-                            iconSize="xs"
-                            placeHolderIcon={
-                                Object.entries(MarketFilterEnum).find(
-                                    ([_key, val]) => val === state.marketFilter,
-                                )?.[0] as LogoTicker
-                            }
-                            value={state.marketFilter}
-                            options={MARKET_FILTER_OPTIONS}
-                            onSelect={onMarketSelect}
+                        <BaseFilters.MarketFilter
+                            marketFilter={state.marketFilter}
+                            onMarketSelect={onMarketSelect}
+                            network={network}
                         />
                     </div>
                     <BaseFilters.Wrapper>
                         <BaseFilters.DropdownContainer>
                             <BaseFilters.Text>Collateral</BaseFilters.Text>
-                            <BaseFilters.Dropdown
-                                value={state.collateralFilter ?? 'All'}
-                                options={COLLATERAL_FILTER_OPTIONS}
+                            <BaseFilters.CollateralFilter
+                                collateralFilter={state.collateralFilter}
                                 onSelect={onCollateralFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                         <BaseFilters.DropdownContainer>
                             <TooltipSelector tooltip={{ key: TooltipKeys.PowerLeverage }}>
                                 <BaseFilters.Text>Power Leverage</BaseFilters.Text>
                             </TooltipSelector>
-                            <BaseFilters.Dropdown
-                                value={state.leverageFilter}
-                                options={LEVERAGE_FILTER_OPTIONS}
+                            <BaseFilters.LeverageFilter
+                                leverageFilter={state.leverageFilter}
                                 onSelect={onLeverageFilterSelect}
+                                network={network}
                             />
                         </BaseFilters.DropdownContainer>
                     </BaseFilters.Wrapper>

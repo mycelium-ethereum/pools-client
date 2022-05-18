@@ -16,6 +16,7 @@ import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
+import { formatBN } from '~/utils/converters';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Summary from './Summary';
@@ -65,7 +66,7 @@ export default styled((({ onClose, className }) => {
                 amountBN,
             ).catch((_err) => undefined);
             if (fee) {
-                const gasPriceInEth = new BigNumber(gasPrice ?? 0).div(10 ** 9);
+                const gasPriceInEth = formatBN(new BigNumber(gasPrice ?? 0), 9);
                 const costInEth = fee.times(gasPriceInEth);
                 setCommitGasFees({ ...commitGasFees, [commitAction]: ethPrice.times(costInEth) });
             }

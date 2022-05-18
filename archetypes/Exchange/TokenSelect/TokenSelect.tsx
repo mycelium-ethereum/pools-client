@@ -2,6 +2,7 @@ import React, { useMemo, useState, useRef, useEffect } from 'react';
 import { Pool } from '@tracer-protocol/pools-js';
 import { tokenSymbolToLogoTicker } from '~/components/General';
 import { TokenRow } from '~/hooks/usePoolTokens';
+import { escapeRegExp } from '~/utils/helpers';
 import * as Styles from './styles';
 
 const TokenSelect: React.FC<{
@@ -39,7 +40,7 @@ const TokenSelect: React.FC<{
     }, [show]);
 
     const searchFilter = (token: TokenRow): boolean => {
-        const searchString = filter.toLowerCase();
+        const searchString = escapeRegExp(filter.toLowerCase());
         const extendedTokenName = `${token.symbol}+${token.pool.settlementTokenSymbol}`.toLowerCase();
         return Boolean(extendedTokenName.match(searchString));
     };
@@ -79,7 +80,7 @@ const TokenSelect: React.FC<{
                                 >
                                     <Styles.TokenSelectCell hasLogo>
                                         <Styles.TokenLogo size="md" ticker={tokenSymbolToLogoTicker(token.symbol)} />
-                                        {token.symbol}+{token.pool.settlementTokenSymbol}-01
+                                        {token.symbol}-01
                                     </Styles.TokenSelectCell>
                                     <Styles.TokenSelectCell hasBalance={token.escrowBalance.toNumber() > 0}>
                                         {token.escrowBalance.toNumber() > 0 ? (
