@@ -1,4 +1,5 @@
 import React from 'react';
+import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import { Heading } from '~/components/PageTable';
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
@@ -23,7 +24,12 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
 
     return (
         <>
-            <Heading>{title}</Heading>
+            <Heading>
+                <NetworkHintContainer>
+                    {title}
+                    <NetworkHint />
+                </NetworkHintContainer>
+            </Heading>
             <Styles.Container>
                 <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>

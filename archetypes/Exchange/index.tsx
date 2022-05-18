@@ -5,6 +5,7 @@ import { CommitEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-j
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
+import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
@@ -83,7 +84,12 @@ export default styled((({ onClose, className }) => {
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
-            <Title>New Commit</Title>
+            <Title>
+                <NetworkHintContainer>
+                    New Commit
+                    <NetworkHint />
+                </NetworkHintContainer>
+            </Title>
 
             <Header>
                 <TWButtonGroupStyled

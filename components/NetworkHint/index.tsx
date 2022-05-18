@@ -16,7 +16,7 @@ const StyledNetworkHint = styled.div`
     font-size: 13px;
     padding: 0.25rem;
     top: 0;
-    right: -100%;
+    left: calc(100% + 1rem);
     line-height: 150%;
     border-radius: 3px;
 `;
