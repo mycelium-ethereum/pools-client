@@ -1,6 +1,7 @@
 import { SetState, GetState } from 'zustand';
 import { IENSSlice } from './ENSSlice/types';
 import { IGasSlice } from './GasSlice/types';
+import { IMarketSpotPricesSlice } from './MarketSpotPricesSlice/types';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
 import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
@@ -20,6 +21,7 @@ export type StoreState = {
     unsupportedNetworkSlice: IUnsupportedNetworkSlice;
     pendingCommitSlice: IPendingCommitSlice;
     ensSlice: IENSSlice;
+    marketSpotPricesSlice: IMarketSpotPricesSlice;
 };
 
 // Seperated return type to allow for a different

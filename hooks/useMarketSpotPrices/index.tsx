@@ -1,14 +1,18 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
 import { AggregatorV3Interface__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
+import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
+import { selectMarketSpotPricesActions } from '~/store/MarketSpotPricesSlice';
+
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 export default (): Record<string, BigNumber> => {
-    const [marketSpotPrices, setMarketSpotPrices] = useState<Record<string, BigNumber>>({});
+    const marketSpotPrices = useStore(selectMarketSpotPrices);
+    const { setMarketSpotPrices } = useStore(selectMarketSpotPricesActions, shallow);
     const { provider, network } = useStore(selectWeb3Info, shallow);
 
     useMemo(() => {
