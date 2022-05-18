@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
+import { NetworkHintContainer, NetworkHint } from '@components/NetworkHint';
 import FarmsTable from '../FarmsTable';
 import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
 import {
@@ -349,6 +350,7 @@ export default (({
 
     return (
         <>
+<<<<<<< HEAD
             <FarmNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-7">
                 <div className="p-0 md:py-20 md:px-16 shadow-xl bg-theme-background border-3xl rounded-3xl">
@@ -378,6 +380,30 @@ export default (({
                 </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />
+=======
+            <PageTable.Container>
+                <PageTable.Header>
+                    <div>
+                        <PageTable.Heading>
+                            <NetworkHintContainer>
+                                {title}
+                                <NetworkHint />
+                            </NetworkHintContainer>
+                        </PageTable.Heading>
+                        <PageTable.SubHeading>{subTitle}</PageTable.SubHeading>
+                    </div>
+                    <FilterBar hideSideFilter={hideSideFilter} state={state} dispatch={dispatch} />
+                </PageTable.Header>
+                <FarmsTable
+                    rows={sortedFilteredFarms}
+                    fetchingFarms={fetchingFarms}
+                    rewardsTokenUSDPrices={rewardsTokenUSDPrices}
+                    onClickClaim={handleClaim}
+                    onClickUnstake={handleUnstake}
+                    onClickStake={handleStake}
+                />
+            </PageTable.Container>
+>>>>>>> dd765d09 (Add network hint)
             <StakeModalWithState
                 state={state}
                 tokenType={tokenType}
