@@ -10,9 +10,9 @@ export const balancerConfig: Partial<Record<KnownNetwork, BalancerInfo>> = {
         recommendedSwapToken: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         leveragedPools: [
             // 3-BTC/USD
-            '0x3fF51DE6D96d4A88182b7006b8E8d9DB7D43931c',
+            '0x0d9fEC3a621387A3ceC87DA24c4aeC7cA261C856',
             // 3-ETH/USD
-            '0x03F3919407b9ef2Df36436C256029A16A51B107b',
+            '0x14D162E10eCCe3935c1F64cd49faB28b3cC2B527',
         ],
         // wETH wBTC USDC pool
         wPool: '0x64541216bafffeec8ea535bb71fbc927831d0595',
