@@ -90,5 +90,5 @@ export const networkConfig: Record<KnownNetwork, Network> = {
     },
 };
 
-export const DEFAULT_NETWORK = NETWORKS.ARBITRUM_RINKEBY;
+export const DEFAULT_NETWORK = NETWORKS.ARBITRUM;
 export const DEFAULT_WSS_RPC = networkConfig[DEFAULT_NETWORK].publicWebsocketRPC;
