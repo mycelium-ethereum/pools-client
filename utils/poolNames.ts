@@ -75,6 +75,21 @@ export const getMarketInfoFromSymbol = (
     };
 };
 
+export const getSimplifiedTokenName = (tokenSymbol: string): string => {
+    // not 100% accurate but is unlikely other tokenSymbols have this form
+    const tokenSymbolRegex = /([0-9]*)(?:|L|S)\-([A-Z]*)/g;
+    const symbol = tokenSymbol.match(tokenSymbolRegex)?.[0];
+    if (!symbol) {
+        return tokenSymbol;
+    } else {
+        const side = tokenSymbol.split('-')[0].slice(-1);
+        if (!side) {
+            return tokenSymbol;
+        }
+        return side === 'L' ? 'Long Token' : 'Short Token';
+    }
+};
+
 /**
  * Converts a token symbol to a shortened version < 11 characters
  * @param tokenSymbol pool generated token symbol
