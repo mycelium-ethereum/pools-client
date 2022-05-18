@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
-import { Logo, LogoTicker } from '~/components/General/Logo';
+import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
 import { useStore } from '~/store/main';
@@ -29,7 +29,6 @@ const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side
 };
 
 export const StakeGeneric = ({
-    logo,
     tokenType,
     title,
     subTitle,
@@ -39,7 +38,6 @@ export const StakeGeneric = ({
     fetchingFarms,
     rewardsTokenUSDPrices,
 }: {
-    logo?: LogoTicker;
     title: string;
     subTitle: string;
     tokenType: string;
@@ -329,8 +327,10 @@ export const StakeGeneric = ({
                 <PageTable.Header>
                     <div>
                         <PageTable.Heading>
-                            {!!logo ? <Logo ticker={logo} className="my-2 inline pb-0 pr-1 text-theme-text" /> : null}
-                            {title}
+                            <NetworkHintContainer>
+                                {title}
+                                <NetworkHint />
+                            </NetworkHintContainer>
                         </PageTable.Heading>
                         <PageTable.SubHeading>{subTitle}</PageTable.SubHeading>
                     </div>
