@@ -1,8 +1,10 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
+import { balancerConfig } from '~/constants/balancer';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
+import { getBalancerPrices } from '~/utils/balancer';
 import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
 import { fetchPoolCommitStats } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
@@ -31,6 +33,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     isWaitingForUpkeep: expectedExecution < now,
                 },
                 poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
+                balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
             };
         });
     },
@@ -52,6 +55,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                         isWaitingForUpkeep: expectedExecution < now,
                     },
                     poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
+                    balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
                 };
             });
         });
@@ -295,6 +299,26 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             console.debug('Pool updated', res);
         });
     },
+    updatePoolBalancerPrices: async (pools_, network) => {
+        if (!network) {
+            console.error('Failed to update balancer prices');
+            return;
+        }
+        const prices = await getBalancerPrices(balancerConfig[network]);
+
+        set((state) => {
+            pools_.forEach((pool) => {
+                const poolInstance = state.pools[pool]?.poolInstance;
+                // pool exists in store we can safely set balancerPrices
+                if (poolInstance) {
+                    state.pools[pool].balancerPrices = {
+                        longToken: prices[poolInstance.longToken.address.toLowerCase()] ?? new BigNumber(0),
+                        shortToken: prices[poolInstance.shortToken.address.toLowerCase()] ?? new BigNumber(0),
+                    };
+                }
+            });
+        });
+    },
     updateTokenApprovals: (pools_, provider, account) => {
         // get and set approvals
         if (!provider || !account) {
@@ -389,6 +413,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
     updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
     updatePoolCommitStats: IPoolsInstancesSlice['updatePoolCommitStats'];
+    updatePoolBalancerPrices: IPoolsInstancesSlice['updatePoolBalancerPrices'];
     simulateUpdateAvgEntryPrices: IPoolsInstancesSlice['simulateUpdateAvgEntryPrices'];
 } = (state) => ({
     handlePoolUpkeep: state.poolsInstancesSlice.handlePoolUpkeep,
@@ -398,5 +423,6 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
     updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
     updatePoolCommitStats: state.poolsInstancesSlice.updatePoolCommitStats,
+    updatePoolBalancerPrices: state.poolsInstancesSlice.updatePoolBalancerPrices,
     simulateUpdateAvgEntryPrices: state.poolsInstancesSlice.simulateUpdateAvgEntryPrices,
 });

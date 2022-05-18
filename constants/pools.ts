@@ -54,6 +54,10 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
     poolCommitStats: {
         oneDayVolume: new BigNumber(0),
     },
+    balancerPrices: {
+        longToken: new BigNumber(0),
+        shortToken: new BigNumber(0),
+    },
 };
 
 export interface PoolListMap {

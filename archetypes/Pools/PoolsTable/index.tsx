@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import shallow from 'zustand/shallow';
 import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 
-import { constructBalancerLink } from '~/archetypes/BalancerBuySell';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
@@ -19,6 +18,7 @@ import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
