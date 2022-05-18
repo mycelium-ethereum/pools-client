@@ -10,7 +10,7 @@ import { selectMarketSpotPricesActions } from '~/store/MarketSpotPricesSlice';
 
 import { selectWeb3Info } from '~/store/Web3Slice';
 
-export default (): Record<string, BigNumber> => {
+export const useUpdateMarketSpotPrices: () => Record<string, BigNumber> = () => {
     const marketSpotPrices = useStore(selectMarketSpotPrices);
     const { setMarketSpotPrices } = useStore(selectMarketSpotPricesActions, shallow);
     const { provider, network } = useStore(selectWeb3Info, shallow);
