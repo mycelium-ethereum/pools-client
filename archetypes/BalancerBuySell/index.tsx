@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import shallow from 'zustand/shallow';
-import { poolMap, StaticPoolInfo, KnownNetwork, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { poolMap, StaticPoolInfo, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import Divider from '~/components/General/Divider';
@@ -10,11 +10,10 @@ import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { StyledTooltip } from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 
-import { balancerConfig } from '~/constants/balancer';
-import { networkConfig } from '~/constants/networks';
 import { LEVERAGE_OPTIONS, SIDE_OPTIONS, noDispatch, swapDefaults, useSwapContext } from '~/context/SwapContext';
 import { useStore } from '~/store/main';
 import { selectHandleConnect, selectWeb3Info } from '~/store/Web3Slice';
+import { constructBalancerLink } from '~/utils/balancer';
 import { classNames } from '~/utils/helpers';
 import { getBaseAsset, getBaseAssetFromMarket } from '~/utils/poolNames';
 
@@ -177,17 +176,3 @@ export default (() => {
         </div>
     );
 }) as React.FC;
-
-export const constructBalancerLink: (token: string | undefined, network: KnownNetwork, isBuy: boolean) => string = (
-    token,
-    network,
-    isBuy,
-) => {
-    const { usdcAddress } = networkConfig[network];
-    const balancerInfo = balancerConfig[network];
-
-    // balancerInfo will not be undefined due to the network === ARBITRUM in BalancerLink
-    return isBuy
-        ? `${balancerInfo?.baseUri}/${usdcAddress}/${token}`
-        : `${balancerInfo?.baseUri}/${token}/${usdcAddress}`;
-};

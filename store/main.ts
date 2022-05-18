@@ -6,6 +6,8 @@ import { createENSSlice } from './ENSSlice';
 import { IENSSlice } from './ENSSlice/types';
 import { createGasSlice } from './GasSlice';
 import { IGasSlice } from './GasSlice/types';
+import { createMarketSpotPricesSlice } from './MarketSpotPricesSlice';
+import { IMarketSpotPricesSlice } from './MarketSpotPricesSlice/types';
 import { createPendingCommitSlice } from './PendingCommitSlice';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
 import { createPoolsInstancesSlice } from './PoolInstancesSlice';
@@ -67,6 +69,7 @@ export const useStore = create<
                 unsupportedNetworkSlice: lens<IUnsupportedNetworkSlice>(createUnsupportedNetwork),
                 pendingCommitSlice: lens<IPendingCommitSlice>(createPendingCommitSlice),
                 ensSlice: lens<IENSSlice>(createENSSlice),
+                marketSpotPricesSlice: lens<IMarketSpotPricesSlice>(createMarketSpotPricesSlice),
             })),
         ),
     ),

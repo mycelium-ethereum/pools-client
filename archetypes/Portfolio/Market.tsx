@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import { toApproxCurrency } from '~/utils/converters';
-import { getMarketInfoFromSymbol, marketSymbolToAssetName } from '~/utils/poolNames';
+import { getMarketInfoFromSymbol, getSimplifiedTokenName, marketSymbolToAssetName } from '~/utils/poolNames';
 import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`
@@ -72,7 +72,11 @@ export const TokenPrice = ({
     tokenOutSymbol: string;
     tokenInSymbol: string;
     price: BigNumber;
-}): JSX.Element => <div>{`${price.toFixed(3)} ${tokenOutSymbol}/${tokenInSymbol}`}</div>;
+}): JSX.Element => {
+    const simplifiedIn = getSimplifiedTokenName(tokenInSymbol);
+    const simplifiedOut = getSimplifiedTokenName(tokenOutSymbol);
+    return <div>{`${price.toFixed(3)} ${simplifiedIn}/${simplifiedOut}`}</div>;
+};
 
 export const Amount = ({ tokenSymbol, amount }: { tokenSymbol: string; amount: BigNumber }): JSX.Element => (
     <MarketContainer>

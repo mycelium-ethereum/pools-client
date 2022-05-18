@@ -41,11 +41,6 @@ type FarmInfo = {
 
 export type FarmConfig = {
     poolFarms: FarmInfo[];
-    // lookup from known token addresses to Chainink price feed address
-    // https://docs.chain.link/docs/arbitrum-price-feeds/
-    knownUSDCPriceFeeds: {
-        [address: string]: string;
-    };
     sushiRouterAddress: string;
     stakingRewardTokens?: {
         [key: string]: {

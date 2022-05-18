@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import shallow from 'zustand/shallow';
 import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 
-import { constructBalancerLink } from '~/archetypes/BalancerBuySell';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
@@ -13,12 +12,15 @@ import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
+
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
+import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
@@ -85,6 +87,7 @@ export const PoolsTable = ({
     const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
+    const marketSpotPrices = useStore(selectMarketSpotPrices, shallow);
 
     const handlePoolDetailsClick = useCallback((data: BrowseTableRowData) => {
         setShowModalPoolDetails(true);
@@ -115,7 +118,11 @@ export const PoolsTable = ({
                                     <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                         SPOT PRICE
                                     </div>
-                                    <div className="font-bold">{toApproxCurrency(rows[0].oraclePrice)}</div>
+                                    <div className="font-bold">
+                                        {marketSpotPrices[rows[0].marketSymbol]
+                                            ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
+                                            : '-'}
+                                    </div>
                                 </div>
                                 <div className="px-10">
                                     <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">

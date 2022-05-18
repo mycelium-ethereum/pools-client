@@ -65,6 +65,7 @@ export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
             setRows(tokens);
         }
     }, [pools]);
+
     return {
         rows,
         isLoading: isLoadingPools && rows.length === 0,

@@ -43,8 +43,10 @@ export type TokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     effectiveGain: number;
 };
 
+export type OnClickCommit = (pool: string, side: SideEnum, action: CommitActionEnum, unclaimed?: boolean) => void;
+
 export type UnclaimedRowProps = UnclaimedRowInfo & {
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+    onClickCommitAction: OnClickCommit;
 };
 
 export type UnclaimedRowInfo = {
@@ -75,7 +77,7 @@ export type OverviewPoolToken = {
 
 export type ClaimablePoolTokenRowProps = OverviewPoolToken & {
     poolAddress: UnclaimedRowProps['poolAddress'];
-    onClickCommitAction: UnclaimedRowProps['onClickCommitAction'];
+    onClickCommitAction: OnClickCommit;
 };
 
 export interface PortfolioState {

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
@@ -124,7 +125,12 @@ export const Browse: React.FC = () => {
             <PageTable.Container>
                 <PageTable.Header>
                     <div>
-                        <PageTable.Heading>Pools</PageTable.Heading>
+                        <PageTable.Heading>
+                            <NetworkHintContainer>
+                                Pools
+                                <NetworkHint />
+                            </NetworkHintContainer>
+                        </PageTable.Heading>
                         <PageTable.SubHeading>
                             The most liquid, unique pools with mitigated volatility decay. Secured by Chainlink Oracles,
                             via Tracer’s SMA Wrapper.{' '}
