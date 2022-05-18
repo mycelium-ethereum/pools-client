@@ -61,6 +61,10 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.aggregateBalances.shortTokens))
                     .plus(calcNotionalValue(longTokenPrice, userBalances.longToken.balance))
                     .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.longTokens))
+                    // TODO handle non stable coin settlementTokens
+                    .plus(userBalances.aggregateBalances.settlementTokens)
+                    .plus(pendingAmounts.longMint)
+                    .plus(pendingAmounts.shortMint)
                     // not accurate but not sure how much it matters
                     .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
                     .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn));
