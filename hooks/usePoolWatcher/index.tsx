@@ -16,7 +16,7 @@ export const usePoolWatcher = (): void => {
     const { network, account } = useStore(selectWeb3Info, shallow);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);
     const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions, shallow);
-    const { handlePoolUpkeep, addToPendingBalances } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions, shallow);
     const poolLists = useAllPoolLists();
 
     useEffect(() => {
@@ -46,10 +46,6 @@ export const usePoolWatcher = (): void => {
                                 from: commitInfo.user,
                                 created: commitInfo.timestamp,
                                 appropriateIntervalId: commitInfo.appropriateIntervalId,
-                            });
-                            addToPendingBalances({
-                                type: commitInfo.commitType,
-                                amount: formatBN(commitInfo.amount, commitInfo.settlementTokenDecimals),
                             });
                         }
                     });
