@@ -350,7 +350,6 @@ export default (({
 
     return (
         <>
-<<<<<<< HEAD
             <FarmNav left={SearchButton} right={FilterButton} />
             <div className="container mt-0 md:mt-7">
                 <div className="p-0 md:py-20 md:px-16 shadow-xl bg-theme-background border-3xl rounded-3xl">
@@ -358,7 +357,10 @@ export default (({
                         <span className="align-items: inline-flex ">
                             {!!logo ? <Logo ticker={logo} className="pb-0 my-2 pr-1 text-theme-text" /> : null}
                             <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-theme-text sm:none flex-wrap: wrap;">
-                                {title}
+                                <NetworkHintContainer>
+                                    {title}
+                                    <NetworkHint />
+                                </NetworkHintContainer>
                             </h1>
                         </span>
                         <p className="mb-1 text-gray-500">{subTitle}</p>
@@ -380,30 +382,6 @@ export default (({
                 </div>
             </div>
             <FilterModal state={state} dispatch={dispatch} />
-=======
-            <PageTable.Container>
-                <PageTable.Header>
-                    <div>
-                        <PageTable.Heading>
-                            <NetworkHintContainer>
-                                {title}
-                                <NetworkHint />
-                            </NetworkHintContainer>
-                        </PageTable.Heading>
-                        <PageTable.SubHeading>{subTitle}</PageTable.SubHeading>
-                    </div>
-                    <FilterBar hideSideFilter={hideSideFilter} state={state} dispatch={dispatch} />
-                </PageTable.Header>
-                <FarmsTable
-                    rows={sortedFilteredFarms}
-                    fetchingFarms={fetchingFarms}
-                    rewardsTokenUSDPrices={rewardsTokenUSDPrices}
-                    onClickClaim={handleClaim}
-                    onClickUnstake={handleUnstake}
-                    onClickStake={handleStake}
-                />
-            </PageTable.Container>
->>>>>>> dd765d09 (Add network hint)
             <StakeModalWithState
                 state={state}
                 tokenType={tokenType}

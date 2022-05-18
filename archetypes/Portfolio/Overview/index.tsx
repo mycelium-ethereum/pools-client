@@ -11,6 +11,7 @@ import { TooltipKeys } from '@components/Tooltips/TooltipSelector';
 
 import CTABackground from '@public/img/cta-bg.svg';
 import BVector from '@public/img/b-vector.svg';
+import NetworkHint, { NetworkHintContainer } from '@components/NetworkHint';
 
 export enum LoadingState {
     Idle = 0,
@@ -131,7 +132,12 @@ export default (({ onClickBurn }) => {
             <div className="mt-5">
                 <div className="flex flex-col xl:flex-row">
                     <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
-                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
+                        <div className="font-semibold text-2xl">
+                            <NetworkHintContainer>
+                                Trade Portfolio Overview
+                                <NetworkHint />
+                            </NetworkHintContainer>
+                        </div>
                         <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
                             <div className="font-bold text-2xl opacity-50">0.00</div>
                             <div className="font-bold text-md text-cool-gray-500 opacity-50">Portfolio Valuation</div>
@@ -274,7 +280,12 @@ export default (({ onClickBurn }) => {
             <div className="mt-5">
                 <div className="flex flex-col xl:flex-row">
                     <div className="xl:w-2/3 xl:mr-12 p-5 rounded-xl shadow-md bg-theme-background dark:bg-theme-background">
-                        <div className="font-semibold text-2xl">Trade Portfolio Overview</div>
+                        <div className="font-semibold text-2xl">
+                            <NetworkHintContainer>
+                                Trade Portfolio Overview
+                                <NetworkHint />
+                            </NetworkHintContainer>
+                        </div>
                         <div className="w-full mt-5 px-5 pt-10 pb-5 rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary">
                             <div className="flex">
                                 {/* <Logo size="md" ticker="USD" className="mr-1 my-auto" /> */}
