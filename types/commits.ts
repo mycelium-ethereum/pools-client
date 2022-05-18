@@ -110,3 +110,6 @@ export type GraphCommit = {
     txnHash: string;
     updateIntervalId: string;
 };
+
+export type CommitTypeString = keyof typeof CommitEnum;
+export type PendingCommitAmounts = { [key in CommitTypeString]: BigNumber };

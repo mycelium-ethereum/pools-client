@@ -131,6 +131,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             );
         });
     },
+
     setTokenApproved: (pool, token, approvedAmount) => {
         if (!get().pools[pool]) {
             return;
