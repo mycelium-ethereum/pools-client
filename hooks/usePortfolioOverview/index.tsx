@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { PortfolioOverview } from '~/archetypes/Portfolio/state';
+import { DEFAULT_PENDING_COMMIT_AMOUNTS } from '~/constants/commits';
 import { useStore } from '~/store/main';
+import { selectUserPendingCommitAmounts } from '~/store/PendingCommitSlice';
 import { selectAccount } from '~/store/Web3Slice';
 import { calcPercentageDifference } from '~/utils/converters';
 import usePools from '../usePools';
@@ -10,6 +12,8 @@ import usePools from '../usePools';
 export const usePortfolioOverview = (): PortfolioOverview => {
     const { pools } = usePools();
     const account = useStore(selectAccount);
+    const poolPendingCommitAmounts = useStore(selectUserPendingCommitAmounts);
+
     const [portfolioOverview, setPortfolioOverview] = useState<PortfolioOverview>({
         totalPortfolioValue: new BigNumber(0),
         unrealisedProfit: new BigNumber(0),
@@ -42,14 +46,28 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     totalShortMintSpend,
                 } = userBalances.tradeStats;
 
+                const pendingAmounts =
+                    poolPendingCommitAmounts?.[pool.poolInstance.address.toLowerCase()]?.[account] ??
+                    DEFAULT_PENDING_COMMIT_AMOUNTS;
+
                 const shortTokenPrice = poolInstance.getShortTokenPrice();
                 const longTokenPrice = poolInstance.getLongTokenPrice();
+
+                const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
+                const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
 
                 totalPortfolioValue = totalPortfolioValue
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance))
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.aggregateBalances.shortTokens))
                     .plus(calcNotionalValue(longTokenPrice, userBalances.longToken.balance))
-                    .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.longTokens));
+                    .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.longTokens))
+                    // TODO handle non stable coin settlementTokens
+                    .plus(userBalances.aggregateBalances.settlementTokens)
+                    .plus(pendingAmounts.longMint)
+                    .plus(pendingAmounts.shortMint)
+                    // not accurate but not sure how much it matters
+                    .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
+                    .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn));
 
                 totalSettlementSpend = totalSettlementSpend.plus(totalLongMintSpend).plus(totalShortMintSpend);
 
@@ -66,7 +84,7 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                 unrealisedProfit: totalPortfolioValue.minus(totalSettlementSpend),
             });
         }
-    }, [pools, account]);
+    }, [pools, account, poolPendingCommitAmounts]);
 
     return portfolioOverview;
 };

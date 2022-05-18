@@ -215,14 +215,15 @@ export const usePoolInstanceActions = (): PoolInstanceActions => {
                         const createdCommit = parsedLogs?.find((log: any) => log?.name === 'CreateCommit');
                         if (!!createdCommit) {
                             const commitInfo = createdCommit.args;
+                            const commitEventAmount = new BigNumber(
+                                ethers.utils.formatUnits(commitInfo.amount, settlementTokenDecimals),
+                            );
                             addCommit({
                                 pool: pool.slice(),
                                 txnHash: txnHash as string,
                                 id: txnHash,
                                 type: commitType,
-                                amount: new BigNumber(
-                                    ethers.utils.formatUnits(commitInfo.amount, settlementTokenDecimals),
-                                ),
+                                amount: commitEventAmount,
                                 from: commitInfo.user,
                                 created: Math.floor(Date.now() / 1000),
                                 appropriateIntervalId: commitInfo.appropriateUpdateIntervalId.toNumber(),

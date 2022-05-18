@@ -1,3 +1,4 @@
+import BigNumber from 'bignumber.js';
 import { CommitActionEnum, CommitEnum, SideEnum } from '@tracer-protocol/pools-js/types';
 
 export const CommitTypeMap = {
@@ -54,3 +55,12 @@ export const CommitActionToQueryFocusMap: Record<CommitActionEnum, QueryFocus> =
 };
 
 export const PENDING_COMMIT = 1;
+
+export const DEFAULT_PENDING_COMMIT_AMOUNTS = {
+    longBurn: new BigNumber(0),
+    shortBurn: new BigNumber(0),
+    longMint: new BigNumber(0),
+    shortMint: new BigNumber(0),
+    longBurnShortMint: new BigNumber(0),
+    shortBurnLongMint: new BigNumber(0),
+};
