@@ -1,16 +1,15 @@
 import React from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
-import { TokenRowProps } from '../state';
+import { OnClickCommit, TokenRowProps } from '../state';
 
 export const ClaimedTokensTable = ({
     rows,
     onClickCommitAction,
 }: {
     rows: TokenRowProps[];
-    onClickCommitAction: (pool: string, side: SideEnum, action: CommitActionEnum) => void;
+    onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
     return (
         <>

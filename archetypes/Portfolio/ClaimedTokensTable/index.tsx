@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import useUserClaimedTokens from '~/hooks/useUserClaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { generalMarketFilter } from '~/utils/filters';
@@ -7,7 +6,7 @@ import { escapeRegExp } from '~/utils/helpers';
 import { ClaimedTokensTable } from './ClaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { PortfolioAction, PortfolioState, TokenRowProps } from '../state';
+import { OnClickCommit, PortfolioAction, PortfolioState, TokenRowProps } from '../state';
 
 export const ClaimedTokens = ({
     claimedTokensMarketFilter,
@@ -18,7 +17,7 @@ export const ClaimedTokens = ({
     claimedTokensMarketFilter: PortfolioState['claimedTokensMarketFilter'];
     claimedTokensSearch: PortfolioState['claimedTokensSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
-    onClickCommitAction: (pool: string, side: SideEnum, action?: CommitActionEnum) => void;
+    onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
     const { rows: tokens, isLoading } = useUserClaimedTokens();
 

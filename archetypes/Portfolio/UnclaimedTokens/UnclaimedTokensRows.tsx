@@ -56,14 +56,14 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 <ActionsButton
                     size="xs"
                     variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn, true)}
                 >
                     Burn
                 </ActionsButton>
                 <ActionsButton
                     size="xs"
                     variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
                 >
                     Flip
                 </ActionsButton>
