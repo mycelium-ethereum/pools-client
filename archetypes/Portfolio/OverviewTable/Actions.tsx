@@ -1,8 +1,9 @@
 import React from 'react';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { MarketFilter } from '~/components/BaseFilters/MarketFilter';
+import BaseFilters from '~/components/BaseFilters';
 import { Dropdown, LogoTicker } from '~/components/General';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import { MarketFilterEnum } from '~/types/filters';
 import { SearchInput } from './styles';
 import { CommitTypeFilter, DenotedInEnum, PortfolioAction, PortfolioState } from '../state';
@@ -83,14 +84,13 @@ export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
 export const MarketDropdown = ({
     market,
     setMarket,
-    network,
 }: {
     market: MarketFilterEnum;
     setMarket: (market: string) => void;
-    network: KnownNetwork | undefined;
 }): JSX.Element => {
+    const network = useStore(selectNetwork);
     return (
-        <MarketFilter
+        <BaseFilters.MarketFilter
             size="sm"
             marketFilter={market}
             className="mt-auto w-32"

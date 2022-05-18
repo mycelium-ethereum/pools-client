@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
 import useUserUnclaimedTokens from '~/hooks/useUserUnclaimedTokens';
-import { useStore } from '~/store/main';
-import { selectNetwork } from '~/store/Web3Slice';
 import { MarketFilterEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
@@ -21,7 +19,6 @@ export const UnclaimedTokens = ({
     dispatch: React.Dispatch<PortfolioAction>;
     onClickCommitAction: OnClickCommit;
 }): JSX.Element => {
-    const network = useStore(selectNetwork);
     const { rows: escrowRows, isLoading } = useUserUnclaimedTokens();
     const totalClaimable = useMemo(
         () => escrowRows.reduce((count, pool) => count + pool.numClaimable, 0),
@@ -46,7 +43,6 @@ export const UnclaimedTokens = ({
                 <MarketDropdown
                     market={escrowMarketFilter}
                     setMarket={(m) => void dispatch({ type: 'setEscrowMarketFilter', market: m as MarketFilterEnum })}
-                    network={network}
                 />
             }
             secondAction={
