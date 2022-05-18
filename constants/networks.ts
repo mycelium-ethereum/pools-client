@@ -25,6 +25,16 @@ export const networkConfig: Record<KnownNetwork, Network> = {
         publicWebsocketRPC: process.env.NEXT_PUBLIC_TESTNET_WSS_RPC,
         usdcAddress: '',
         tcrAddress: '',
+        knownMarketSpotPriceChainlinkFeeds: {
+            'BTC/USD': {
+                feedAddress: '0x0c9973e7a27d00e656B9f153348dA46CaD70d03d',
+                decimals: 8,
+            },
+            'ETH/USD': {
+                feedAddress: '0x5f0423B1a6935dc5596e7A24d98532b67A0AeFd8',
+                decimals: 8,
+            },
+        },
     },
     [NETWORKS.ARBITRUM]: {
         id: NETWORKS.ARBITRUM,
@@ -36,6 +46,16 @@ export const networkConfig: Record<KnownNetwork, Network> = {
         publicWebsocketRPC: process.env.NEXT_PUBLIC_MAINNET_WSS_RPC,
         usdcAddress: '0xff970a61a04b1ca14834a43f5de4533ebddb5cc8',
         tcrAddress: '0xA72159FC390f0E3C6D415e658264c7c4051E9b87',
+        knownMarketSpotPriceChainlinkFeeds: {
+            'BTC/USD': {
+                feedAddress: '0x6ce185860a4963106506C203335A2910413708e9',
+                decimals: 8,
+            },
+            'ETH/USD': {
+                feedAddress: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
+                decimals: 8,
+            },
+        },
     },
     [NETWORKS.MAINNET]: {
         id: NETWORKS.MAINNET,

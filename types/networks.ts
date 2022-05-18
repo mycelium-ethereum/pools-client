@@ -17,4 +17,9 @@ export type Network = {
 
     publicRPC: string;
     publicWebsocketRPC?: string;
+
+    // chainlink USD spot price feeds
+    // lookup from market name -> chainlink feed address
+    // ie ETH/USD -> { feedAddress: 0x6ce185860a4963106506C203335A2910413708e9, decimals: 8 }
+    knownMarketSpotPriceChainlinkFeeds?: Record<string, { feedAddress: string; decimals: number }>;
 };
