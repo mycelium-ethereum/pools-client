@@ -332,8 +332,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 avgShortEntryPriceWallet,
                 avgShortEntryPriceAggregate,
             } = pool.userBalances.tradeStats;
-            const newAvgLongPriceWallet = avgLongEntryPriceAggregate.plus(avgLongEntryPriceWallet).div(2);
-            const newAvgShortPriceWallet = avgShortEntryPriceAggregate.plus(avgShortEntryPriceWallet).div(2);
+            const newAvgLongPriceWallet = (avgLongEntryPriceAggregate.plus(avgLongEntryPriceWallet)).div(2);
+            const newAvgShortPriceWallet = (avgShortEntryPriceAggregate.plus(avgShortEntryPriceWallet)).div(2);
             state.pools[pool_].userBalances.tradeStats = {
                 ...state.pools[pool_].userBalances.tradeStats,
                 avgLongEntryPriceAggregate: new BigNumber(0),
