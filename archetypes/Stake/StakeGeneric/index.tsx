@@ -156,6 +156,10 @@ export const StakeGeneric = ({
             balance: farms[farmAddress].stakingTokenBalance,
         });
         dispatch({
+            type: 'setMaxDecimals',
+            value: farms[farmAddress].stakingTokenDecimals,
+        });
+        dispatch({
             type: 'setAmount',
             amount: new BigNumber(0),
         });
@@ -175,6 +179,10 @@ export const StakeGeneric = ({
             balance: farms[farmAddress].myStaked,
         });
         dispatch({
+            type: 'setMaxDecimals',
+            value: farms[farmAddress].stakingTokenDecimals,
+        });
+        dispatch({
             type: 'setAmount',
             amount: new BigNumber(0),
         });
@@ -192,6 +200,10 @@ export const StakeGeneric = ({
         dispatch({
             type: 'setStakeModalBalance',
             balance: farms[farmAddress].myRewards,
+        });
+        dispatch({
+            type: 'setMaxDecimals',
+            value: farms[farmAddress].stakingTokenDecimals,
         });
         dispatch({
             type: 'setAmount',

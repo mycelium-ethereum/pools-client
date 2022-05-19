@@ -30,6 +30,7 @@ export interface StakeState {
     selectedFarm: string;
     invalidAmount: { isInvalid: boolean; message?: string };
     stakeModalBalance: BigNumber;
+    maxDecimals: number;
 }
 
 export type StakeAction =
@@ -44,6 +45,7 @@ export type StakeAction =
     | { type: 'setAmount'; amount: BigNumber }
     | { type: 'setInvalidAmount'; value: { isInvalid: boolean; message?: string } }
     | { type: 'setSortBy'; sortBy: StakeSortByEnum }
+    | { type: 'setMaxDecimals'; value: number }
     | { type: 'reset' };
 
 export const stakeReducer: (state: StakeState, action: StakeAction) => StakeState = (state, action) => {
@@ -102,6 +104,11 @@ export const stakeReducer: (state: StakeState, action: StakeAction) => StakeStat
             return {
                 ...state,
                 invalidAmount: action.value,
+            };
+        case 'setMaxDecimals':
+            return {
+                ...state,
+                maxDecimals: action.value,
             };
         case 'reset':
             return {

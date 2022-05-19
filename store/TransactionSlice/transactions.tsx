@@ -216,6 +216,8 @@ export const transactionMap: Record<
                 render: <Notification title={`${props.type === 'withdraw' ? 'Unstake' : 'Stake'} ${props.farmName}`} />,
                 type: 'error',
                 isLoading: false,
+                closeButton: true,
+                autoClose: AUTO_DISMISS,
             },
     },
 };

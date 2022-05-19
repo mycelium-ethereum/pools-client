@@ -6,6 +6,7 @@ import Close from '/public/img/general/close.svg';
 import { Currency } from '~/components/General/Currency';
 import { InnerInputText, InputContainer } from '~/components/General/Input';
 import { Input as NumericInput } from '~/components/General/Input/Numeric';
+import Max from '~/components/General/Max';
 import { TWModal } from '~/components/General/TWModal';
 import { useFarms } from '~/context/FarmContext';
 import { StakeAction, StakeState } from '../state';
@@ -37,7 +38,7 @@ const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => { isInvalid: b
 };
 
 const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApprove, title, btnLabel }) => {
-    const { amount, selectedFarm, invalidAmount, stakeModalBalance } = state;
+    const { amount, selectedFarm, invalidAmount, stakeModalBalance, maxDecimals } = state;
     const { farms } = useFarms();
 
     const farm = useMemo(() => farms[selectedFarm], [selectedFarm, farms]);
@@ -81,6 +82,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                 {state.stakeModalState !== 'claim' ? (
                     <InputContainer>
                         <NumericInput
+                            maxDecimals={maxDecimals}
                             disabled={!isApproved}
                             className="h-full w-full text-base font-normal "
                             value={amount.eq(0) ? '' : amount.toFixed()}
@@ -92,12 +94,8 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 ticker={tokenSymbolToLogoTicker(farm?.name)}
                                 className="shadow-md"
                             />
-                            <div
-                                className={
-                                    !isApproved
-                                        ? 'cursor-disabled m-auto text-gray-800'
-                                        : 'm-auto cursor-pointer hover:underline'
-                                }
+                            <Max
+                                className="m-auto"
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
@@ -106,7 +104,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                                 }
                             >
                                 Max
-                            </div>
+                            </Max>
                         </InnerInputText>
                     </InputContainer>
                 ) : (
