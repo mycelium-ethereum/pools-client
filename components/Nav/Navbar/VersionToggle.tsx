@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 export default (({ hideOnDesktop }) => (
     <VersionToggle hideOnDesktop={hideOnDesktop}>
-        <V1 href="https://pools.tracer.finance">V1</V1>
+        <V1 href="https://poolsv1.tracer.finance">V1</V1>
         <V2>
             V2 <New>BETA</New>
         </V2>
