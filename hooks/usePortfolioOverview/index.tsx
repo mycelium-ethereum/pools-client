@@ -38,13 +38,8 @@ export const usePortfolioOverview = (): PortfolioOverview => {
 
             poolValues.forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
-                const {
-                    totalLongBurnReceived,
-                    totalShortBurnReceived,
-
-                    totalLongMintSpend,
-                    totalShortMintSpend,
-                } = userBalances.tradeStats;
+                const { totalLongBurnReceived, totalShortBurnReceived, totalLongMintSpend, totalShortMintSpend } =
+                    userBalances.tradeStats;
 
                 const pendingAmounts =
                     poolPendingCommitAmounts?.[pool.poolInstance.address.toLowerCase()]?.[account] ??
@@ -63,13 +58,17 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     .plus(calcNotionalValue(longTokenPrice, userBalances.aggregateBalances.longTokens))
                     // TODO handle non stable coin settlementTokens
                     .plus(userBalances.aggregateBalances.settlementTokens)
-                    .plus(pendingAmounts.longMint)
-                    .plus(pendingAmounts.shortMint)
+                    .plus(pendingAmounts.longMint.div(nextLongTokenPrice))
+                    .plus(pendingAmounts.shortMint.div(nextShortTokenPrice))
                     // not accurate but not sure how much it matters
                     .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
                     .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn));
 
-                totalSettlementSpend = totalSettlementSpend.plus(totalLongMintSpend).plus(totalShortMintSpend);
+                totalSettlementSpend = totalSettlementSpend
+                    .plus(totalLongMintSpend)
+                    .plus(totalShortMintSpend)
+                    .plus(pendingAmounts.longMint)
+                    .plus(pendingAmounts.longMint);
 
                 realisedProfit = realisedProfit.plus(totalShortBurnReceived).plus(totalLongBurnReceived);
             });
