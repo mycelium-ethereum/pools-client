@@ -122,7 +122,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         )}
                     </div>
                 ) : (
-                    <>{state.stakeModalState !== 'claim' ? 'Token approval required' : ''}</>
+                    <>{state.stakeModalState !== 'claim' ? 'Token approval required to stake' : ''}</>
                 )}
                 {isApproved ? (
                     <Button
