@@ -2,36 +2,47 @@ import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { FarmConfig } from '~/types/staking';
 import { StakingRewards__factory } from '~/types/staking/typechain/factories/StakingRewards__factory';
 
-export const TokenToFarmAddressMap: (tokenAddress: string | null) => string = (tokenAddress) => {
-    switch (tokenAddress) {
-        // 3 LONG BTC/USD
-        case '0x2Dc6B0D6580f3E2d6107D41A6ada0d8c6c605F88':
-            return '0xcD8c0662cf72512857e98646b5C8363782c137A7';
-        // 3 SHORT BTC/USD
-        case '0x00F70af6D1148E3127DB138ce633895e5eF6Bdb2':
-            return '0x046B21659C445f43f2c621c874F79868dC6FA159';
-        // 3 LONG ETH/USD
-        case '0x44822C092C5ece611830DC0e1B86E80645749ae8':
-            return '0xC21159bF0252A37b0c281DF2D9B723120cAa86c7';
-        // 3 SHORT ETH/USD
-        case '0x466598c279C2e2B7c7f2cd591Ac539720A205582':
-            return '0x224949832f3dbf9a365D9bA3ec504727a103E96E';
-        default:
-            return '';
-    }
-};
-
 export const farmConfig: Record<KnownNetwork, FarmConfig> = {
     [NETWORKS.ARBITRUM_RINKEBY]: {
         poolFarms: [
             {
-                address: '0xa39fA0857D5967E6Ab3A247b179C474cFE5415A9',
-                pool: '',
+                address: '0xefD71C53282F29E8B6c7D8064a1Cd1de2E1C375d', // 4L-BTC/USD+PPUSD
+                pool: '0x4146D18b82C9a9Eb02B1ffdf1331f9563eab8cDf',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x6213c21518EF9d4875d9C41F7ad8d16B4f986cB2',
-                pool: '',
+                address: '0x1F2A35FA2f4189670D0B4192e896c391DB3e308a', // 4S-BTC/USD+PPUSD
+                pool: '0x4146D18b82C9a9Eb02B1ffdf1331f9563eab8cDf',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x966c0F7800eECf70f7425EC25f8fbD604dc5461a', // 4L-ETH/USD+PPUSD
+                pool: '0x9FBc47E8be32991Aaf1c3E59d13eA9ca20897cef',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x03509F6d41735D93Ba9ee4a94D8F3b8C81666742', // 4S-ETH/USD+PPUSD
+                pool: '0x9FBc47E8be32991Aaf1c3E59d13eA9ca20897cef',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0xc2feb6495087baf98f1a1A3b122e688513030206', // 3L-ETH/USD+PPUSD
+                pool: '0xB5E515fcd57DA6BAc06b011057669C2e365A6959',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0xdD4bAD744E095C35a8c34157D08C8719A6a4c651', // 3S-ETH/USD+PPUSD
+                pool: '0xB5E515fcd57DA6BAc06b011057669C2e365A6959',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x759eD7CBfB35E601227E5408a103C8BD0331cEbc', // 3L-BTC/USD+PPUSD
+                pool: '0xF7844d494d16eAC8F576D014DC92D407f64a6F60',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x5573402AC9F00EE49815fe9aFfDce3c4ac1cffd6', // 3S-BTC/USD+PPUSD
+                pool: '0xF7844d494d16eAC8F576D014DC92D407f64a6F60',
                 abi: StakingRewards__factory.abi,
             },
         ],
