@@ -1,6 +1,9 @@
 import React from 'react';
+import BaseFilters from '~/components/BaseFilters';
 import { Dropdown, LogoTicker } from '~/components/General';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
+import { useStore } from '~/store/main';
+import { selectNetwork } from '~/store/Web3Slice';
 import { MarketFilterEnum } from '~/types/filters';
 import { SearchInput } from './styles';
 import { CommitTypeFilter, DenotedInEnum, PortfolioAction, PortfolioState } from '../state';
@@ -78,10 +81,6 @@ export const DenoteInDropDown = ({ state }: TableProps): JSX.Element => {
     );
 };
 
-const MARKET_DROPDOWN_OPTIONS = Object.keys(MarketFilterEnum).map((key) => ({
-    key: (MarketFilterEnum as any)[key],
-    ticker: (key !== 'All' ? key : '') as LogoTicker,
-}));
 export const MarketDropdown = ({
     market,
     setMarket,
@@ -89,13 +88,14 @@ export const MarketDropdown = ({
     market: MarketFilterEnum;
     setMarket: (market: string) => void;
 }): JSX.Element => {
+    const network = useStore(selectNetwork);
     return (
-        <Dropdown
+        <BaseFilters.MarketFilter
             size="sm"
-            value={market}
+            marketFilter={market}
             className="mt-auto w-32"
-            options={MARKET_DROPDOWN_OPTIONS}
-            onSelect={setMarket}
+            network={network}
+            onMarketSelect={setMarket}
         />
     );
 };
