@@ -111,11 +111,11 @@ const Footer: React.FC = () => {
                     </div>
                     <div className={item}>
                         <a
-                            href="/terms_and_conditions_tracer_competitions.pdf"
+                            href="https://feedback.tracer.finance/feature-requests"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            {'Competition T&Cs'}
+                            Request a Feature
                         </a>
                     </div>
                 </div>
