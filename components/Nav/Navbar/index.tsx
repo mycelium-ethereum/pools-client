@@ -66,7 +66,7 @@ export const NavBarContent: React.FC<{
                         </li>
                     </Link>
                     <a
-                        href="https://pools.docs.tracer.finance/perpetual-pools/readme"
+                        href="https://pools.docs.tracer.finance"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="my-auto"
