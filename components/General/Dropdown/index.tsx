@@ -22,6 +22,7 @@ type HEProps = {
     open: boolean;
     className?: string;
 } & Children;
+
 export const HiddenExpand: React.FC<HEProps> = ({ className, children, defaultHeight, open }: HEProps) => {
     const main = useRef<HTMLDivElement>(null);
     const { height, ref } = useResizeDetector();
@@ -81,7 +82,7 @@ export type ButtonVariant = 'default' | 'tracer' | 'blue' | 'unselected';
 
 export type ButtonSize = 'xs' | 'sm' | 'lg' | 'default' | 'none';
 
-interface DropdownProps {
+export interface DropdownProps {
     value: string;
     placeHolder?: string;
     placeHolderIcon?: LogoTicker;

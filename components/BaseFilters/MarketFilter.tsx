@@ -13,7 +13,13 @@ const findTicker = (v: MarketFilterEnum): string => {
     return Object.keys(MarketFilterEnum)[i] ?? '';
 };
 
-export const MarketFilter = ({ marketFilter, onMarketSelect, network }: MarketFilterProps): JSX.Element => {
+export const MarketFilter = ({
+    marketFilter,
+    onMarketSelect,
+    network,
+    size,
+    className,
+}: MarketFilterProps): JSX.Element => {
     const [options, setOptions] = useState<{ key: MarketFilterEnum; ticker: LogoTicker }[]>([]);
 
     useEffect(() => {
@@ -33,6 +39,8 @@ export const MarketFilter = ({ marketFilter, onMarketSelect, network }: MarketFi
 
     return (
         <Dropdown
+            className={className}
+            size={size}
             variant="default"
             iconSize="xs"
             placeHolderIcon={
