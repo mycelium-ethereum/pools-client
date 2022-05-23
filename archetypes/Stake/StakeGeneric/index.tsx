@@ -2,6 +2,7 @@ import React, { useEffect, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import FilterBar from '../FilterSelects/Bar';
 import FilterModal from '../FilterSelects/Modal';
+import { NetworkHintContainer, NetworkHint } from '@components/NetworkHint';
 import FarmsTable from '../FarmsTable';
 import { MAX_SOL_UINT, SideEnum } from '@libs/constants';
 import {
@@ -356,7 +357,10 @@ export default (({
                         <span className="align-items: inline-flex ">
                             {!!logo ? <Logo ticker={logo} className="pb-0 my-2 pr-1 text-theme-text" /> : null}
                             <h1 className="mx-0 font-bold pb-0 pl-1s text-3xl text-theme-text sm:none flex-wrap: wrap;">
-                                {title}
+                                <NetworkHintContainer>
+                                    {title}
+                                    <NetworkHint />
+                                </NetworkHintContainer>
                             </h1>
                         </span>
                         <p className="mb-1 text-gray-500">{subTitle}</p>

@@ -33,7 +33,6 @@ export default (({ onClose }) => {
     return (
         <div className="w-full justify-center sm:mt-14">
             <Close onClick={onClose} className="absolute right-4 top-4 sm:right-10 sm:top-10 w-3 h-3 cursor-pointer" />
-
             <div className="flex">
                 <TWButtonGroup
                     value={swapState?.commitAction ?? CommitActionEnum.mint}

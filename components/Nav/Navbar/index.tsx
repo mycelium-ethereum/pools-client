@@ -11,6 +11,7 @@ import { classNames } from '@libs/utils/functions';
 import ThemeSwitcher from './ThemeSwitcher';
 
 import RevisitOnboard from '/public/img/general/onboard-revisit.svg';
+import VersionToggle from './VersionToggle';
 
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -90,7 +91,7 @@ export const NavBarContent: React.FC<{
 
                 {/* DESKTOP */}
                 <span className="hidden xl:flex">
-                    {/* <VersionToggle pushContentRight={!!setShowOnboardModal} /> */}
+                    <VersionToggle pushContentRight={!!setShowOnboardModal} />
                     {account ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
 
                     <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
@@ -98,10 +99,12 @@ export const NavBarContent: React.FC<{
                     {/* Hide if showing queued */}
                     <AccountBalance className="my-auto mx-2" />
 
-                    {/*<CommitDropdown hide={!showQueued} setShowQueued={setShowQueued} />*/}
                     <ThemeSwitcher />
                 </span>
-                <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
+                <div className="flex">
+                    <VersionToggle hideOnDesktop pushContentRight={!!setShowOnboardModal} />
+                    <MobileMenu className={`${setShowOnboardModal ? '' : 'ml-auto'}`} account={account ?? ''} />
+                </div>
             </div>
         </nav>
     );
