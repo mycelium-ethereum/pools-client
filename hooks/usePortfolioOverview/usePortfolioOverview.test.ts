@@ -6,28 +6,30 @@ import { selectAccount } from '~/store/Web3Slice';
 import usePools from '../usePools';
 import usePortfolioOverview from './';
 
-const MOCK_ACCOUNT = '0x9332e38f1a9BA964e166DE3eb5c637bc36cD4D27';
-
 jest.mock('~/store/PendingCommitSlice');
 // const mockedPendingCommitSlice = jest.genMockFromModule('~/store/PendingCommitSlice');
 
 jest.mock('~/store/Web3Slice');
-selectAccount.mockReturnValue(MOCK_ACCOUNT);
+jest.mock('../usePools');
+
+beforeEach(() => {
+    selectAccount.mockReturnValue(MOCK_ACCOUNT);
+    usePools.mockReturnValue({
+        pools: [
+            {
+                ...DEFAULT_POOLSTATE,
+                poolInstance: TEST_POOL_INSTANCE,
+            },
+        ],
+    });
+});
+
+const MOCK_ACCOUNT = '0x9332e38f1a9BA964e166DE3eb5c637bc36cD4D27';
 
 const TEST_POOL_INSTANCE = {
     ...DEFAULT_POOLSTATE.poolInstance,
     address: '420_69',
 };
-
-jest.mock('../usePools');
-usePools.mockReturnValue({
-    pools: [
-        {
-            ...DEFAULT_POOLSTATE,
-            poolInstance: TEST_POOL_INSTANCE,
-        },
-    ],
-});
 
 // base set filled state
 // used to test varying token prices or addition mint amounts
@@ -57,7 +59,7 @@ const FIXED_BALANCES = {
             balance: new BigNumber(20), // should ignore settlementToken
         },
     },
-}
+};
 
 const FILLED_INITIAL_STATE = {
     pools: [
@@ -93,7 +95,6 @@ describe('usePortfolioOverview hook', () => {
     });
 
     it('caclulates filled state', () => {
-
         usePools.mockReturnValue(FILLED_INITIAL_STATE);
 
         const { result, rerender } = renderHook(() => usePortfolioOverview());
@@ -123,7 +124,7 @@ describe('usePortfolioOverview hook', () => {
                 shortMint: new BigNumber(20),
                 longBurnShortMint: new BigNumber(25), // should ignore flip amounts for total portfolio value
                 shortBurnLongMint: new BigNumber(30), // should ignore flip amounts for total portfolio value
-            }
+            };
             selectUserPendingCommitAmounts.mockReturnValue({
                 ['420_69']: {
                     ['0x9332e38f1a9BA964e166DE3eb5c637bc36cD4D27']: mintAmounts,
@@ -148,12 +149,12 @@ describe('usePortfolioOverview hook', () => {
                 ['420_69']: {
                     ['0x9332e38f1a9BA964e166DE3eb5c637bc36cD4D27']: {
                         longBurn: new BigNumber(15),
-                        shortBurn: new BigNumber(10), 
+                        shortBurn: new BigNumber(10),
                         longMint: new BigNumber(0),
                         shortMint: new BigNumber(0),
                         longBurnShortMint: new BigNumber(25), // should ignore flip amounts for total portfolio value
                         shortBurnLongMint: new BigNumber(30), // should ignore flip amounts for total portfolio value
-                    }
+                    },
                 },
             });
             usePools.mockReturnValue({
@@ -169,12 +170,12 @@ describe('usePortfolioOverview hook', () => {
                         userBalances: {
                             ...FIXED_BALANCES.userBalances,
                             longToken: {
-                                balance: new BigNumber(0)
+                                balance: new BigNumber(0),
                             },
                             shortToken: {
-                                balance: new BigNumber(0)
+                                balance: new BigNumber(0),
                             },
-                        }
+                        },
                     },
                 ],
             });
@@ -187,4 +188,14 @@ describe('usePortfolioOverview hook', () => {
             expect(result.current.realisedProfit.toNumber()).toBe(25);
             expect(result.current.portfolioDelta).toBe(5.111111111111112);
         });
+    it('handles disconnected account', () => {
+        selectAccount.mockReturnValue(undefined);
+        const { result } = renderHook(() => usePortfolioOverview());
+
+        // portfolio value should remain the same
+        expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
+        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
+        expect(result.current.realisedProfit.toNumber()).toBe(0);
+        expect(result.current.portfolioDelta).toBe(0);
+    });
 });
