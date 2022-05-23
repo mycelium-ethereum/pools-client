@@ -132,6 +132,7 @@ export const FarmStore: React.FC = ({ children }) => {
                             return;
                         }
                         const poolDetails = {
+                            address: poolInfo.address,
                             poolTokenPrice: (await fetchTokenPrice(poolInfo, [stakingTokenAddress], provider))[0],
                         };
 

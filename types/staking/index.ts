@@ -16,6 +16,7 @@ export type FarmTableDetails = {
     link?: string;
     linkText?: string;
     poolDetails: {
+        address: string;
         poolTokenPrice: BigNumber;
     };
 };

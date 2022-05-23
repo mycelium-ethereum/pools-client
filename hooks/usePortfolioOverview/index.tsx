@@ -7,12 +7,14 @@ import { useStore } from '~/store/main';
 import { selectUserPendingCommitAmounts } from '~/store/PendingCommitSlice';
 import { selectAccount } from '~/store/Web3Slice';
 import { calcPercentageDifference } from '~/utils/converters';
+import useFarmBalances from '../useFarmBalances';
 import usePools from '../usePools';
 
 export const usePortfolioOverview = (): PortfolioOverview => {
     const { pools } = usePools();
     const account = useStore(selectAccount);
     const poolPendingCommitAmounts = useStore(selectUserPendingCommitAmounts);
+    const farmBalances = useFarmBalances();
 
     const [portfolioOverview, setPortfolioOverview] = useState<PortfolioOverview>({
         totalPortfolioValue: new BigNumber(0),
@@ -51,6 +53,8 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                 const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
                 const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
 
+                const totalStaked: BigNumber = farmBalances[pool.poolInstance.address] ?? new BigNumber(0);
+
                 totalPortfolioValue = totalPortfolioValue
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance))
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.aggregateBalances.shortTokens))
@@ -62,13 +66,15 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     .plus(pendingAmounts.shortMint)
                     // not accurate but not sure how much it matters
                     .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
-                    .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn));
+                    .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn))
+                    .minus(totalStaked);
 
                 totalSettlementSpend = totalSettlementSpend
                     .plus(totalLongMintSpend)
                     .plus(totalShortMintSpend)
                     .plus(pendingAmounts.longMint)
-                    .plus(pendingAmounts.shortMint);
+                    .plus(pendingAmounts.shortMint)
+                    .minus(totalStaked);
 
                 realisedProfit = realisedProfit.plus(totalShortBurnReceived).plus(totalLongBurnReceived);
             });
@@ -83,7 +89,7 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                 unrealisedProfit: totalPortfolioValue.minus(totalSettlementSpend),
             });
         }
-    }, [pools, account, poolPendingCommitAmounts]);
+    }, [pools, account, poolPendingCommitAmounts, farmBalances]);
 
     return portfolioOverview;
 };

@@ -5,6 +5,7 @@ import Portfolio from '~/archetypes/Portfolio';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
+import { FarmStore } from '~/context/FarmContext';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -29,7 +30,9 @@ export default (() => {
         <div className={`page relative matrix:bg-matrix-bg`} ref={ref}>
             <NavBar />
             <SwapStore>
-                <Portfolio />
+                <FarmStore>
+                    <Portfolio />
+                </FarmStore>
             </SwapStore>
             <UnsupportedNetworkPopup />
             <Footer />
