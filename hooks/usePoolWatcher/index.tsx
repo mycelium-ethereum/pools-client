@@ -36,7 +36,6 @@ export const usePoolWatcher = (): void => {
                 // set new watcher
                 currentSubscribed.current = watcher;
 
-
                 watcher.initializePoolWatchers().then(() => {
                     watcher.on(EVENT_NAMES.COMMIT, (commitInfo) => {
                         console.debug('Received commit', commitInfo);

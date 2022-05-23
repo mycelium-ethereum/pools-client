@@ -62,7 +62,7 @@ export const useUpdatePoolInstances = (): void => {
                                 ...pool,
                                 address: pool.address,
                                 provider,
-                            })
+                            }),
                         ),
                     )
                         .then((pools_) => {
