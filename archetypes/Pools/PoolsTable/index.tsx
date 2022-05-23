@@ -157,7 +157,9 @@ export const PoolsTable = ({
                     <tr className="h-5" />
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">Leverage / Collateral</TableHeaderCell>
+                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">
+                            Leverage / Collateral
+                        </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             {'INDEX PRICE (USD)'}
