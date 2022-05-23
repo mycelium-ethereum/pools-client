@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '@context/SwapContext';
 import { CommitActionEnum, SideEnum } from '@libs/constants';
-import { NetworkHintContainer, NetworkHint } from '@components/NetworkHint';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Divider from '@components/General/Divider';
@@ -35,22 +34,19 @@ export default (({ onClose }) => {
         <div className="w-full justify-center sm:mt-14">
             <Close onClick={onClose} className="absolute right-4 top-4 sm:right-10 sm:top-10 w-3 h-3 cursor-pointer" />
             <div className="flex">
-                <NetworkHintContainer>
-                    <TWButtonGroup
-                        value={swapState?.commitAction ?? CommitActionEnum.mint}
-                        size={'xl'}
-                        color={'tracer'}
-                        onClick={(val) => {
-                            if (swapDispatch) {
-                                swapDispatch({ type: 'setAmount', value: '' });
-                                swapDispatch({ type: 'setLeverage', value: 1 });
-                                swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
-                            }
-                        }}
-                        options={TRADE_OPTIONS}
-                    />
-                    <NetworkHint />
-                </NetworkHintContainer>
+                <TWButtonGroup
+                    value={swapState?.commitAction ?? CommitActionEnum.mint}
+                    size={'xl'}
+                    color={'tracer'}
+                    onClick={(val) => {
+                        if (swapDispatch) {
+                            swapDispatch({ type: 'setAmount', value: '' });
+                            swapDispatch({ type: 'setLeverage', value: 1 });
+                            swapDispatch({ type: 'setCommitAction', value: val as CommitActionEnum });
+                        }
+                    }}
+                    options={TRADE_OPTIONS}
+                />
                 <Gas />
             </div>
 

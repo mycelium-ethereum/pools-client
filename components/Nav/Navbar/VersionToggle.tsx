@@ -1,19 +1,27 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 
-export default (({ hideOnDesktop, pushContentRight }) => (
-    <VersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
-        <V1>V1</V1>
-        <V2 href="https://v2beta.tracer.finance">
-            V2 <New>BETA</New>
-        </V2>
-    </VersionToggle>
-)) as React.FC<{
-    hideOnDesktop?: boolean;
+type VersionToggleProps = {
     pushContentRight: boolean;
-}>;
+    hideOnDesktop?: boolean;
+};
 
-const VersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: boolean }>`
+export const VersionToggle = ({ hideOnDesktop, pushContentRight }: VersionToggleProps): JSX.Element => {
+    const router = useRouter();
+    return (
+        <StyledVersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
+            <V1>V1</V1>
+            <V2 href={`https://pools.tracer.finance${router.route}`}>
+                V2 <New>BETA</New>
+            </V2>
+        </StyledVersionToggle>
+    );
+};
+
+export default VersionToggle;
+
+const StyledVersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRight: boolean }>`
     border: 1px solid #fff;
     border-radius: 7px;
     background-color: rgba(255, 255, 255, 0.25);
