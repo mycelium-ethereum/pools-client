@@ -14,6 +14,7 @@ export const VersionToggle = ({ hideOnDesktop }: VersionToggleProps): JSX.Elemen
         if (router.route === '/') {
             return `${basePath}/pools`;
         } else {
+            // assumes that the destination base path appropriately handles redirects
             return `${basePath}${router.route}`;
         }
     }, [router.route]);
