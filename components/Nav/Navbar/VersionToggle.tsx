@@ -12,9 +12,7 @@ export const VersionToggle = ({ hideOnDesktop, pushContentRight }: VersionToggle
     return (
         <StyledVersionToggle hideOnDesktop={hideOnDesktop} pushContentRight={pushContentRight}>
             <V1>V1</V1>
-            <V2 href={`https://pools.tracer.finance${router.route}`}>
-                V2 <New>BETA</New>
-            </V2>
+            <V2 href={`https://pools.tracer.finance${router.route}`}>V2</V2>
         </StyledVersionToggle>
     );
 };
@@ -42,14 +40,14 @@ const StyledVersionToggle = styled.span<{ hideOnDesktop?: boolean; pushContentRi
 `;
 
 const V1 = styled.span`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
     background-color: #fff;
     color: #3535dc;
     border-radius: 5px;
-    height: 100%;
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    white-space: nowrap;
 `;
 
 const V2 = styled.a`
@@ -57,23 +55,8 @@ const V2 = styled.a`
     justify-content: center;
     align-items: center;
     height: 100%;
-    padding: 0 10px;
+
     &:hover {
         color: #fff;
     }
-`;
-
-const New = styled.span`
-    background-color: #3535dc;
-    color: #fff;
-    font-size: 10px;
-    font-weight: 700;
-    border-radius: 3px;
-    padding: 0 4px;
-    margin-left: 3px;
-    height: 13px;
-    display: flex;
-    align-items: center;
-    margin-bottom: -1px;
-    letter-spacing: 0;
 `;
