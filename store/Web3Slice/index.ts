@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import Onboard from '@tracer-protocol/onboard';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
-import { DEFAULT_WSS_RPC, DEFAULT_NETWORK } from '~/constants/networks';
+import { DEFAULT_NETWORK, networkConfig } from '~/constants/networks';
 import { onboardConfig } from '~/constants/onboard';
 import { StateSlice } from '~/store/types';
 import { IWeb3Slice } from './types';
@@ -56,15 +56,18 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     }),
 
     defaultProvider: undefined,
-    setDefaultProvider: async () => {
-        if (!!DEFAULT_WSS_RPC) {
-            const defaultProvider = new ethers.providers.WebSocketProvider(DEFAULT_WSS_RPC);
+    setDefaultProvider: async (network = DEFAULT_NETWORK) => {
+        const defaultWssRPC = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;
+        if (!!defaultWssRPC) {
+            const defaultProvider = new ethers.providers.WebSocketProvider(defaultWssRPC);
             await defaultProvider.ready;
             // if a provider is already set dont set it again
             if (!get().provider) {
                 console.debug('Provider not set, using default provider');
-                set({ defaultProvider, network: DEFAULT_NETWORK });
+                set({ defaultProvider, network: network as KnownNetwork });
             }
+        } else {
+            console.error(`No provided default RPC for network: ${network}`);
         }
     },
 

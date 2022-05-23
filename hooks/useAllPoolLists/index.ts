@@ -5,6 +5,7 @@ import { StoreState } from '~/store/types';
 import { selectNetwork } from '~/store/Web3Slice';
 import { flattenAllPoolLists } from '~/utils/poolLists';
 
+const EMPTY: StaticPoolInfo[] = [];
 // wrapper hook to memoize fetching of poolLists
 export const useAllPoolLists = (): StaticPoolInfo[] => {
     // can be used to trigger a state udpate
@@ -19,6 +20,11 @@ export const useAllPoolLists = (): StaticPoolInfo[] => {
         if (!!poolLists) {
             console.count('Flattening pools list');
             ref.current = flattenAllPoolLists(poolLists);
+            forceUpdate();
+        } else {
+            // set to empty list
+            console.count('Pools list not found');
+            ref.current = EMPTY;
             forceUpdate();
         }
     }, [poolLists]);
