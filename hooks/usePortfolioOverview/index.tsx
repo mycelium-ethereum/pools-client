@@ -53,7 +53,9 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                 const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
                 const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
 
-                const totalStaked: BigNumber = farmBalances[pool.poolInstance.address] ?? new BigNumber(0);
+                const shortStaked: BigNumber = farmBalances[pool.poolInstance.shortToken.address] ?? new BigNumber(0);
+                const longStaked: BigNumber = farmBalances[pool.poolInstance.longToken.address] ?? new BigNumber(0);
+                const totalStaked = shortStaked.times(nextShortTokenPrice).plus(longStaked.times(nextLongTokenPrice));
 
                 totalPortfolioValue = totalPortfolioValue
                     .plus(calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance))

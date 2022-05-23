@@ -24,7 +24,8 @@ beforeEach(() => {
         ],
     });
     (useFarmBalances as jest.Mock).mockReturnValue({
-        [MOCK_POOL]: new BigNumber(0),
+        [MOCK_LONG_TOKEN]: new BigNumber(0),
+        [MOCK_SHORT_TOKEN]: new BigNumber(0),
     });
 });
 
@@ -33,11 +34,21 @@ afterEach(() => {
 });
 
 const MOCK_ACCOUNT = '0x9332e38f1a9BA964e166DE3eb5c637bc36cD4D27';
-const MOCK_POOL = '420_69';
+const MOCK_POOL = 'MOCK_420';
+const MOCK_LONG_TOKEN = 'LONG';
+const MOCK_SHORT_TOKEN = 'SHORT';
 
 const TEST_POOL_INSTANCE = {
     ...DEFAULT_POOLSTATE.poolInstance,
     address: MOCK_POOL,
+    longToken: {
+        ...DEFAULT_POOLSTATE.poolInstance.longToken,
+        address: MOCK_LONG_TOKEN,
+    },
+    shortToken: {
+        ...DEFAULT_POOLSTATE.poolInstance.shortToken,
+        address: MOCK_SHORT_TOKEN,
+    },
 };
 
 // base set filled state
@@ -130,12 +141,13 @@ describe('usePortfolioOverview hook', () => {
         it('handles partially staked', () => {
             (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
             (useFarmBalances as jest.Mock).mockReturnValue({
-                [MOCK_POOL]: new BigNumber(10),
+                [MOCK_LONG_TOKEN]: new BigNumber(5),
+                [MOCK_SHORT_TOKEN]: new BigNumber(0),
             });
 
             const { result } = renderHook(() => usePortfolioOverview());
 
-            expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 10);
+            expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 5);
             expect(result.current.unrealisedProfit.toNumber()).toBe(0);
             expect(result.current.realisedProfit.toNumber()).toBe(25);
             expect(result.current.portfolioDelta).toBe(0);
@@ -143,7 +155,8 @@ describe('usePortfolioOverview hook', () => {
     it('handles fully staked', () => {
         (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
         (useFarmBalances as jest.Mock).mockReturnValue({
-            [MOCK_POOL]: new BigNumber(25),
+            [MOCK_LONG_TOKEN]: new BigNumber(10),
+            [MOCK_SHORT_TOKEN]: new BigNumber(15),
         });
 
         const { result } = renderHook(() => usePortfolioOverview());
@@ -157,7 +170,8 @@ describe('usePortfolioOverview hook', () => {
         // staking more tokens than have minted (have received from another wallet);
         (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
         (useFarmBalances as jest.Mock).mockReturnValue({
-            [MOCK_POOL]: new BigNumber(10000),
+            [MOCK_LONG_TOKEN]: new BigNumber(0),
+            [MOCK_SHORT_TOKEN]: new BigNumber(10000),
         });
 
         const { result } = renderHook(() => usePortfolioOverview());
@@ -177,7 +191,7 @@ describe('usePortfolioOverview hook', () => {
             shortBurnLongMint: new BigNumber(30), // should ignore flip amounts for total portfolio value
         };
         (selectUserPendingCommitAmounts as jest.Mock).mockReturnValue({
-            [MOCK_POOL]: {
+            [MOCK_POOL.toLowerCase()]: {
                 [MOCK_ACCOUNT]: mintAmounts,
             },
         });
@@ -197,7 +211,7 @@ describe('usePortfolioOverview hook', () => {
             // burning from thin air. RIP when people buy on secondary market;
             // this is burning all tokens in the wallet
             (selectUserPendingCommitAmounts as jest.Mock).mockReturnValue({
-                [MOCK_POOL]: {
+                [MOCK_POOL.toLowerCase()]: {
                     [MOCK_ACCOUNT]: {
                         longBurn: new BigNumber(15),
                         shortBurn: new BigNumber(10),
@@ -249,26 +263,4 @@ describe('usePortfolioOverview hook', () => {
         expect(result.current.realisedProfit.toNumber()).toBe(0);
         expect(result.current.portfolioDelta).toBe(0);
     });
-    // it('handles partially staked', () => {
-    // (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
-
-    // const { result, rerender } = renderHook(() => usePortfolioOverview());
-
-    // token prices are $1 for the first case
-    // totalPortfolioValue summation of aggregateBalances (200), walletBalances (25), and pendingCommits (50)
-    // expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
-    // expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-    // expect(result.current.realisedProfit.toNumber()).toBe(25);
-    // expect(result.current.portfolioDelta).toBe(0);
-
-    // (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
-
-    // const { result } = renderHook(() => usePortfolioOverview());
-
-    // $5 for each token
-    // expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 10);
-    // expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-    // expect(result.current.realisedProfit.toNumber()).toBe(25);
-    // expect(result.current.portfolioDelta).toBe(0);
-    // })
 });

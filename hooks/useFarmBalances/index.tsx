@@ -9,12 +9,10 @@ export const useFarmBalances = (): Record<string, BigNumber> => {
     return useMemo(
         () =>
             Object.values(farms).reduce((o, farm) => {
-                const totalPoolStaked = o[farm.poolDetails.address] ?? new BigNumber(0);
+                const totalPoolStaked = o[farm.stakingToken.address] ?? new BigNumber(0);
                 return {
                     ...o,
-                    [farm.poolDetails.address]: totalPoolStaked
-                        .plus(farm.myStaked)
-                        .times(farm.poolDetails.poolTokenPrice),
+                    [farm.stakingToken.address]: totalPoolStaked.plus(farm.myStaked),
                 };
             }, {} as Record<string, BigNumber>),
         [farms],
