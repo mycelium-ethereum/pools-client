@@ -10,7 +10,7 @@ jest.mock('~/store/PendingCommitSlice');
 // const mockedPendingCommitSlice = jest.genMockFromModule('~/store/PendingCommitSlice');
 
 jest.mock('~/store/Web3Slice');
-jest.mock('../(usePools as jest.Mock)');
+jest.mock('../usePools');
 
 beforeEach(() => {
     (selectAccount as jest.Mock).mockReturnValue(MOCK_ACCOUNT);
