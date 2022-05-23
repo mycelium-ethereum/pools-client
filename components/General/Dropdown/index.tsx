@@ -3,7 +3,7 @@ import { DownOutlined, LoadingOutlined } from '@ant-design/icons';
 import { Menu, Transition } from '@headlessui/react';
 import { useResizeDetector } from 'react-resize-detector';
 import styled from 'styled-components';
-import { Logo, LogoSize, LogoTicker } from 'components/General/Logo';
+import { Logo, LogoSize, LogoTicker } from '~/components/General/Logo';
 import TooltipSelector, { TooltipSelectorProps } from '~/components/Tooltips/TooltipSelector';
 import { Children } from '~/types/general';
 import { classNames } from '~/utils/helpers';
