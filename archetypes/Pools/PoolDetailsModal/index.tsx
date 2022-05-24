@@ -9,7 +9,6 @@ import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructExplorerLink } from '~/utils/blockExplorers';
-import { formatAddress } from '~/utils/converters';
 import { getPriceFeedUrl } from '~/utils/poolNames';
 
 type Details = {
@@ -42,7 +41,7 @@ export const PoolDetails = ({
             { name: 'Pool Ticker', value: name },
             {
                 name: 'Pool Address',
-                value: formatAddress(address),
+                value: address,
                 href: constructExplorerLink(BlockExplorerAddressType.address, address, network),
             },
             {
@@ -61,12 +60,12 @@ export const PoolDetails = ({
             },
             {
                 name: 'Deployer',
-                value: formatAddress(committer),
+                value: committer,
                 href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
             },
             {
                 name: 'Keeper Contract',
-                value: formatAddress(keeper),
+                value: keeper,
                 href: constructExplorerLink(BlockExplorerAddressType.address, keeper, network),
             },
         ],
@@ -91,7 +90,7 @@ export const PoolDetails = ({
                                 <CellContent>
                                     <div className="name">{v.name}</div>
                                     <div className="info">
-                                        {v.value}
+                                        <span className="value">{v.value}</span>
                                         {v.href ? (
                                             <a href={v.href} target="_blank" rel="noopener noreferrer">
                                                 <FollowLinkIcon />
@@ -155,6 +154,14 @@ const CellContent = styled((props: any) => <div className={props.className}>{pro
     .info {
         display: flex;
         align-items: center;
+    }
+    .info .value {
+        max-width: 100px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        @media ${({ theme }) => theme.device.sm} {
+            max-width: 100%;
+        }
     }
 `;
 
