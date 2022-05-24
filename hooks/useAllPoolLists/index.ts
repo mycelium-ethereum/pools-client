@@ -20,6 +20,15 @@ export const useAllPoolLists = (): StaticPoolInfo[] => {
             console.count('Flattening pools list');
             ref.current = flattenAllPoolLists(poolLists);
             forceUpdate();
+        } else {
+            // set to empty list
+            console.debug('Pools list not found');
+            if (ref.current.length !== 0) {
+                ref.current = [];
+                forceUpdate();
+            } else {
+                console.debug('Pools list already empty');
+            }
         }
     }, [poolLists]);
 

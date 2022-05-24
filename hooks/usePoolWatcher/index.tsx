@@ -12,7 +12,7 @@ import { formatBN } from '~/utils/converters';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 export const usePoolWatcher = (): void => {
-    const currentSubscribed = useRef<string | undefined>();
+    const currentSubscribed = useRef<MultiplePoolWatcher | undefined>();
     const { network, account } = useStore(selectWeb3Info, shallow);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);
     const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions, shallow);
@@ -22,16 +22,19 @@ export const usePoolWatcher = (): void => {
     useEffect(() => {
         const wssProvider = networkConfig[network as KnownNetwork]?.publicWebsocketRPC;
         if (!!poolLists?.length && !!wssProvider && !!network) {
-            if (!currentSubscribed.current || currentSubscribed.current !== network) {
-                currentSubscribed.current = network;
+            if (currentSubscribed.current && currentSubscribed.current?.chainId !== network) {
+                currentSubscribed.current.removeAllListeners(); // remove all listners
+            }
+            if (!currentSubscribed.current || currentSubscribed.current.chainId !== network) {
                 console.count(`Setting pool watcher: ${network}`);
-
                 const watcher = new MultiplePoolWatcher({
                     nodeUrl: wssProvider,
                     commitmentWindowBuffer: 20, // calculate and emit expected state 20 seconds before expected end of commitment window
                     chainId: network,
                     poolAddresses: poolLists.map((pool) => pool.address),
                 });
+                // set new watcher
+                currentSubscribed.current = watcher;
 
                 watcher.initializePoolWatchers().then(() => {
                     watcher.on(EVENT_NAMES.COMMIT, (commitInfo) => {

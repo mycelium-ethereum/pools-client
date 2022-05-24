@@ -2,13 +2,13 @@ import React from 'react';
 import Icon from '@ant-design/icons';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
-import { NETWORKS } from '@tracer-protocol/pools-js';
+import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import TWPopup from '~/components/General/TWPopup';
 import { networkConfig } from '~/constants/networks';
 import Error from '~/public/img/notifications/error.svg';
 import { useStore } from '~/store/main';
-import { selectWeb3Info } from '~/store/Web3Slice';
+import { selectSetDefaultProvider, selectWeb3Info } from '~/store/Web3Slice';
 import { switchNetworks } from '~/utils/rpcMethods';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 
@@ -39,7 +39,16 @@ const Option = styled.option`
 `;
 
 export default (({ className }) => {
-    const { provider, network } = useStore(selectWeb3Info, shallow);
+    const { account, provider, network } = useStore(selectWeb3Info, shallow);
+    const setDefaultProvider = useStore(selectSetDefaultProvider);
+
+    const handleClick = (network: KnownNetwork) => {
+        if (!account) {
+            setDefaultProvider(network);
+        } else {
+            switchNetworks(provider, network);
+        }
+    };
 
     return (
         <TWPopup
@@ -54,13 +63,10 @@ export default (({ className }) => {
                 />
             }
         >
-            <Option value={NETWORKS.ARBITRUM} onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}>
+            <Option value={NETWORKS.ARBITRUM} onClick={() => handleClick(NETWORKS.ARBITRUM)}>
                 Arbitrum
             </Option>
-            <Option
-                value={NETWORKS.ARBITRUM_RINKEBY}
-                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
-            >
+            <Option value={NETWORKS.ARBITRUM_RINKEBY} onClick={() => handleClick(NETWORKS.ARBITRUM_RINKEBY)}>
                 Arbitrum Rinkeby
             </Option>
         </TWPopup>

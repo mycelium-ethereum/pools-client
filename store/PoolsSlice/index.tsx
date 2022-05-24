@@ -6,9 +6,6 @@ import { StoreState } from '..';
 
 export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
     poolLists: {},
-    setPoolLists: (network, lists) => {
-        set((state) => void (state.poolLists[network] = lists));
-    },
     importPool: (network, pool) => {
         if (get().poolLists[network]) {
             set((state) => void state.poolLists[network]?.Imported.pools.push({ address: pool }));
@@ -17,12 +14,14 @@ export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
     fetchPoolLists: async (network) => {
         // if list not already set for this network
         if (!get().poolLists[network]) {
-            const poolLists = await getAllPoolLists(network).catch((err) => console.error(err));
+            const poolLists = await getAllPoolLists(network).catch((err) => console.error('Failed fetching list', err));
             if (!poolLists) {
                 console.error('Failed to initialise pools: poolsList undefined');
                 return;
             }
-            set((state) => void (state.poolLists[network] = poolLists));
+            set((state) => {
+                state.poolLists[network] = poolLists;
+            });
         }
     },
 });

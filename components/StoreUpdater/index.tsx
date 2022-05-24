@@ -15,6 +15,7 @@ export const StoreUpdater = (): JSX.Element => {
     useUpdatePoolInstances();
     useUpdateENS();
     useUpdateMarketSpotPrices();
+
     return <></>;
 };
 

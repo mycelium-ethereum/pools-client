@@ -11,7 +11,7 @@ export interface IWeb3Slice {
     wallet: Wallet | undefined;
 
     defaultProvider: ethers.providers.WebSocketProvider | undefined;
-    setDefaultProvider: () => Promise<void>;
+    setDefaultProvider: (network?: string) => Promise<void>;
 
     checkIsReady: () => Promise<boolean>;
     resetOnboard: () => Promise<void>;

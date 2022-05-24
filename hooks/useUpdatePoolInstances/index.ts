@@ -45,13 +45,13 @@ export const useUpdatePoolInstances = (): void => {
     // if the pools from the factory change, re-init them
     useEffect(() => {
         let mounted = true;
-        console.debug('Attempting to initialise pools');
+        console.debug('Attempting to initialise pools', provider?.network?.chainId?.toString());
         // this is not the greatest for the time being
         if (!!poolLists.length && provider?.network?.chainId) {
             const network = provider.network?.chainId?.toString();
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
-                    console.debug(`Initialising pools ${network.slice()}`, poolLists);
+                    console.debug(`Initialising pools ${network.slice()}`, poolLists.slice());
                     resetPools();
                     hasSetPools.current = false;
                     setPoolsInitialized(false);
