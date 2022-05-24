@@ -176,10 +176,25 @@ describe('usePortfolioOverview hook', () => {
 
         const { result } = renderHook(() => usePortfolioOverview());
 
-        expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 10000);
+        expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
         expect(result.current.unrealisedProfit.toNumber()).toBe(0);
         expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(-0);
+        expect(result.current.portfolioDelta).toBe(0);
+    });
+    it('handles staked with 0 balances', () => {
+        // staking more tokens than have minted (have received from another wallet);
+        // (usePools as jest.Mock).mockReturnValue();
+        (useFarmBalances as jest.Mock).mockReturnValue({
+            [MOCK_LONG_TOKEN]: new BigNumber(200),
+            [MOCK_SHORT_TOKEN]: new BigNumber(100),
+        });
+
+        const { result } = renderHook(() => usePortfolioOverview());
+
+        expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
+        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
+        expect(result.current.realisedProfit.toNumber()).toBe(0);
+        expect(result.current.portfolioDelta).toBe(0);
     });
     it('handles mints', () => {
         const mintAmounts = {

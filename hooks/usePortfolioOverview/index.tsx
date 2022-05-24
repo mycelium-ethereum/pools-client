@@ -71,12 +71,16 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn))
                     .minus(totalStaked);
 
+                totalPortfolioValue = BigNumber.max(totalPortfolioValue, 0);
+
                 totalSettlementSpend = totalSettlementSpend
                     .plus(totalLongMintSpend)
                     .plus(totalShortMintSpend)
                     .plus(pendingAmounts.longMint)
                     .plus(pendingAmounts.shortMint)
                     .minus(totalStaked);
+
+                totalSettlementSpend = BigNumber.max(totalSettlementSpend, 0);
 
                 realisedProfit = realisedProfit.plus(totalShortBurnReceived).plus(totalLongBurnReceived);
             });
