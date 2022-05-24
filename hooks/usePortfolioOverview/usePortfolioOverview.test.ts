@@ -139,49 +139,71 @@ describe('usePortfolioOverview hook', () => {
         expect(selectAccount as jest.Mock).toHaveBeenCalledTimes(1);
     }),
         it('handles partially staked', () => {
-            (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
+            const stakedLongTokens = 5;
+            const stakedShortTokens = 0;
+            (usePools as jest.Mock).mockReturnValue({
+                pools: [
+                    {
+                        ...DEFAULT_POOLSTATE,
+                        poolInstance: TEST_POOL_INSTANCE,
+                        userBalances: {
+                            ...FIXED_BALANCES.userBalances,
+                            longToken: {
+                                balance: FIXED_BALANCES.userBalances.longToken.balance.minus(stakedLongTokens),
+                            },
+                            shortToken: {
+                                balance: FIXED_BALANCES.userBalances.shortToken.balance.minus(stakedShortTokens),
+                            },
+                        },
+                    },
+                ],
+            });
             (useFarmBalances as jest.Mock).mockReturnValue({
-                [MOCK_LONG_TOKEN]: new BigNumber(5),
-                [MOCK_SHORT_TOKEN]: new BigNumber(0),
+                [MOCK_LONG_TOKEN]: new BigNumber(stakedLongTokens),
+                [MOCK_SHORT_TOKEN]: new BigNumber(stakedShortTokens),
             });
 
             const { result } = renderHook(() => usePortfolioOverview());
 
-            expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 5);
+            expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
             expect(result.current.unrealisedProfit.toNumber()).toBe(0);
             expect(result.current.realisedProfit.toNumber()).toBe(25);
             expect(result.current.portfolioDelta).toBe(0);
         });
     it('handles fully staked', () => {
-        (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
+        const stakedLongTokens = 10;
+        const stakedShortTokens = 15;
+        (usePools as jest.Mock).mockReturnValue({
+            pools: [
+                {
+                    ...DEFAULT_POOLSTATE,
+                    poolInstance: TEST_POOL_INSTANCE,
+                    ...FIXED_BALANCES,
+                    userBalances: {
+                        ...FIXED_BALANCES.userBalances,
+                        longToken: {
+                            balance: FIXED_BALANCES.userBalances.longToken.balance.minus(stakedLongTokens),
+                        },
+                        shortToken: {
+                            balance: FIXED_BALANCES.userBalances.shortToken.balance.minus(stakedShortTokens),
+                        },
+                    },
+                },
+            ],
+        });
         (useFarmBalances as jest.Mock).mockReturnValue({
-            [MOCK_LONG_TOKEN]: new BigNumber(10),
-            [MOCK_SHORT_TOKEN]: new BigNumber(15),
+            [MOCK_LONG_TOKEN]: new BigNumber(stakedLongTokens),
+            [MOCK_SHORT_TOKEN]: new BigNumber(stakedShortTokens),
         });
 
         const { result } = renderHook(() => usePortfolioOverview());
 
-        expect(result.current.totalPortfolioValue.toNumber()).toBe(225 - 25);
+        expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
         expect(result.current.unrealisedProfit.toNumber()).toBe(0);
         expect(result.current.realisedProfit.toNumber()).toBe(25);
         expect(result.current.portfolioDelta).toBe(0);
     });
-    it('handles over staked', () => {
-        // staking more tokens than have minted (have received from another wallet);
-        (usePools as jest.Mock).mockReturnValue(FILLED_INITIAL_STATE);
-        (useFarmBalances as jest.Mock).mockReturnValue({
-            [MOCK_LONG_TOKEN]: new BigNumber(0),
-            [MOCK_SHORT_TOKEN]: new BigNumber(10000),
-        });
-
-        const { result } = renderHook(() => usePortfolioOverview());
-
-        expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-        expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(0);
-    });
-    it('handles staked with 0 balances', () => {
+    it('handles over staked with 0 balances', () => {
         // staking more tokens than have minted (have received from another wallet);
         // (usePools as jest.Mock).mockReturnValue();
         (useFarmBalances as jest.Mock).mockReturnValue({
@@ -191,8 +213,8 @@ describe('usePortfolioOverview hook', () => {
 
         const { result } = renderHook(() => usePortfolioOverview());
 
-        expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
+        expect(result.current.totalPortfolioValue.toNumber()).toBe(300);
+        expect(result.current.unrealisedProfit.toNumber()).toBe(300);
         expect(result.current.realisedProfit.toNumber()).toBe(0);
         expect(result.current.portfolioDelta).toBe(0);
     });

@@ -53,8 +53,8 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                 const nextLongTokenPrice = poolInstance.getNextLongTokenPrice();
                 const nextShortTokenPrice = poolInstance.getNextShortTokenPrice();
 
-                const shortStaked: BigNumber = farmBalances[pool.poolInstance.shortToken.address] ?? new BigNumber(0);
-                const longStaked: BigNumber = farmBalances[pool.poolInstance.longToken.address] ?? new BigNumber(0);
+                const shortStaked: BigNumber = farmBalances[poolInstance.shortToken.address] ?? new BigNumber(0);
+                const longStaked: BigNumber = farmBalances[poolInstance.longToken.address] ?? new BigNumber(0);
                 const totalStaked = shortStaked.times(nextShortTokenPrice).plus(longStaked.times(nextLongTokenPrice));
 
                 totalPortfolioValue = totalPortfolioValue
@@ -69,18 +69,13 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     // not accurate but not sure how much it matters
                     .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
                     .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn))
-                    .minus(totalStaked);
-
-                totalPortfolioValue = BigNumber.max(totalPortfolioValue, 0);
+                    .plus(totalStaked);
 
                 totalSettlementSpend = totalSettlementSpend
                     .plus(totalLongMintSpend)
                     .plus(totalShortMintSpend)
                     .plus(pendingAmounts.longMint)
-                    .plus(pendingAmounts.shortMint)
-                    .minus(totalStaked);
-
-                totalSettlementSpend = BigNumber.max(totalSettlementSpend, 0);
+                    .plus(pendingAmounts.shortMint);
 
                 realisedProfit = realisedProfit.plus(totalShortBurnReceived).plus(totalLongBurnReceived);
             });
