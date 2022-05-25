@@ -1,16 +1,16 @@
 import React from 'react';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
-import { OnClickCommit, TokenRowProps } from '../state';
 
 export const ClaimedTokensTable = ({
     rows,
     onClickCommitAction,
+    onClickStake,
 }: {
-    rows: TokenRowProps[];
-    onClickCommitAction: OnClickCommit;
-}): JSX.Element => {
+    rows: ClaimedTokenRowProps[];
+} & ClaimedRowActions): JSX.Element => {
     return (
         <>
             <Table fullHeight={false}>
@@ -29,7 +29,12 @@ export const ClaimedTokensTable = ({
                         <NoTableEntries>You have no claimed tokens.</NoTableEntries>
                     ) : (
                         rows.map((token) => (
-                            <ClaimedTokenRow {...token} key={token.address} onClickCommitAction={onClickCommitAction} />
+                            <ClaimedTokenRow
+                                {...token}
+                                key={token.address}
+                                onClickCommitAction={onClickCommitAction}
+                                onClickStake={onClickStake}
+                            />
                         ))
                     )}
                 </tbody>

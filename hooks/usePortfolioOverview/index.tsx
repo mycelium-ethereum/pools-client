@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
-import { PortfolioOverview } from '~/archetypes/Portfolio/state';
+import { PortfolioOverview } from '~/types/portfolio';
 import { DEFAULT_PENDING_COMMIT_AMOUNTS } from '~/constants/commits';
 import { useStore } from '~/store/main';
 import { selectUserPendingCommitAmounts } from '~/store/PendingCommitSlice';

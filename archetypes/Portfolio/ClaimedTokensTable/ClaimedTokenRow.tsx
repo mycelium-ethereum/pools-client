@@ -5,17 +5,13 @@ import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
-import { OnClickCommit, TokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
 
-export const ClaimedTokenRow: React.FC<
-    TokenRowProps & {
-        onClickCommitAction: OnClickCommit;
-    }
-> = ({
+export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
     symbol,
     address,
     poolAddress,
@@ -25,8 +21,10 @@ export const ClaimedTokenRow: React.FC<
     balance,
     currentTokenPrice,
     onClickCommitAction,
+    onClickStake,
     leveragedNotionalValue,
     entryPrice,
+    stakedTokens,
 }) => {
     return (
         <TableRow lined>
@@ -56,6 +54,14 @@ export const ClaimedTokenRow: React.FC<
                 <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
+                <ActionsButton
+                    size="xs"
+                    variant="primary-light"
+                    disabled={!balance.toNumber()}
+                    onClick={() => onClickStake(address)}
+                >
+                    {stakedTokens.eq(0) || !stakedTokens.eq(balance) ? 'Stake' : 'Unstake'}
+                </ActionsButton>
                 <ActionsButton
                     size="xs"
                     variant="primary-light"

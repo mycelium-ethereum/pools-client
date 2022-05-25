@@ -14,11 +14,12 @@ import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
 import QueuedCommits from './QueuedCommits';
 import { SkewCard } from './SkewCard';
-import { portfolioReducer, initialPortfolioState, OnClickCommit } from './state';
+import { portfolioReducer, initialPortfolioState } from './state';
 import { Container } from './styles';
 import * as Styles from './styles';
 import { TradeOverviewBanner } from './TradeOverviewBanner';
 import UnclaimedTokens from './UnclaimedTokens';
+import {OnClickCommit, OnClickStake} from '~/types/portfolio';
 
 export const PortfolioPage = (): JSX.Element => {
     const account = useStore(selectAccount);
@@ -35,6 +36,10 @@ export const PortfolioPage = (): JSX.Element => {
         swapDispatch({ type: 'setSide', value: side });
         swapDispatch({ type: 'setCommitAction', value: action });
         setMintBurnModalOpen(true);
+    };
+
+    const onClickStake: OnClickStake = (token: string) => {
+        console.log(token);
     };
 
     const handleModalClose = () => {
@@ -89,6 +94,7 @@ export const PortfolioPage = (): JSX.Element => {
                     claimedTokensSearch={state.claimedTokensSearch}
                     dispatch={dispatch}
                     onClickCommitAction={onClickCommitAction}
+                    onClickStake={onClickStake}
                 />
                 <UnclaimedTokens
                     escrowSearch={state.escrowSearch}

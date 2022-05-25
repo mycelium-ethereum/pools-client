@@ -4,7 +4,7 @@ import { Heading } from '~/components/PageTable';
 import { toApproxCurrency, toApproxLocaleString } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
-import { PortfolioOverview } from '../state';
+import { PortfolioOverview } from '~/types/portfolio';
 
 type BannerTypes = {
     title: string;
