@@ -2,12 +2,11 @@ import BigNumber from 'bignumber.js';
 import { LogoTicker } from '~/components/General';
 import { OnClickCommit, OverviewAsset, OverviewPoolToken } from './portfolio';
 
-/* Unclaimed tokens */
 export type UnclaimedRowActions = {
     onClickCommitAction: OnClickCommit;
 };
 export type UnclaimedRowInfo = {
-    poolName: string; // pool name
+    poolName: string;
     poolAddress: string;
     marketTicker: LogoTicker;
     claimableLongTokens: OverviewPoolToken;

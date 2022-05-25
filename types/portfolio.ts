@@ -12,7 +12,6 @@ export type PortfolioOverview = {
 export type OnClickStake = (token: string, action: 'stake' | 'unstake') => void;
 export type OnClickCommit = (pool: string, side: SideEnum, action: CommitActionEnum, unclaimed?: boolean) => void;
 
-/* General Overview types */
 export type OverviewAsset = {
     symbol: string;
     balance: BigNumber;
