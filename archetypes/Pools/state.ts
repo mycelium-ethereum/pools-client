@@ -23,6 +23,9 @@ interface BrowseTableTokenData {
     tvl: number;
     nextTvl: number;
     userHoldings: number;
+    pendingMints: number;
+    pendingBurns: number;
+    expectedValueTransfer: number;
 }
 
 export interface BrowseTableRowData {

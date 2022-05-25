@@ -13,6 +13,7 @@ import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
 
+import Clock from '~/public/img/general/clock.svg';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -49,10 +50,41 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const TokenTVLTip: React.FC<{
+    currentTvl: number;
+    pendingMints: number;
+    pendingBurns: number;
+    expectedValueTransfer: number;
+}> = ({ currentTvl, pendingMints, pendingBurns, expectedValueTransfer, children }) => (
+    <StyledTooltip
+        title={
+            <>
+                <div>Current: {toApproxCurrency(currentTvl)}</div>
+                <div>Pending mints: {toApproxCurrency(pendingMints)}</div>
+                <div>Pending burns: {toApproxCurrency(pendingBurns)}</div>
+                <div>Expected value transfer: {toApproxCurrency(expectedValueTransfer)}</div>
+                <div>
+                    Pending TVL: {toApproxCurrency(currentTvl - pendingBurns + pendingMints + expectedValueTransfer)}
+                </div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const ClockIcon = styled(Clock)`
+    margin-left: 5px;
+    width: 16px;
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
 const InfoIcon = styled(Info)`
     margin-left: 15px;
 
-    :hover {
+    &:hover {
         cursor: pointer;
     }
 
@@ -493,6 +525,14 @@ const TokenRows: React.FC<
                                 tokenMetricSide={side}
                                 showNextRebalance={showNextRebalance}
                             />
+                            <TokenTVLTip
+                                currentTvl={tokenInfo.tvl}
+                                pendingMints={tokenInfo.pendingMints}
+                                pendingBurns={tokenInfo.pendingBurns}
+                                expectedValueTransfer={tokenInfo.expectedValueTransfer}
+                            >
+                                <ClockIcon />
+                            </TokenTVLTip>
                         </div>
                     </>
                 ) : (

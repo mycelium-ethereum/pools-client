@@ -1,6 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
-import { calcEffectiveLongGain, calcEffectiveShortGain, calcSkew } from '@tracer-protocol/pools-js';
+import {
+    calcEffectiveLongGain,
+    calcEffectiveShortGain,
+    calcSkew,
+} from '@tracer-protocol/pools-js';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
@@ -56,10 +60,14 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                 const {
                     expectedLongBalance,
                     expectedShortBalance,
+                    valueTransfer,
                     newLongTokenPrice,
                     newShortTokenPrice,
                     expectedSkew,
                 } = pool.getNextPoolState();
+
+                const pendingLong = pool.committer.pendingLong;
+                const pendingShort = pool.committer.pendingShort;
 
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
@@ -97,6 +105,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTvl: expectedShortBalance.toNumber(),
                         balancerPrice: balancerPrices.shortToken.toNumber(),
                         userHoldings: userBalances.shortToken.balance.toNumber(),
+                        pendingMints: pendingShort.mint.toNumber(),
+                        pendingBurns: pendingShort.burn.times(newShortTokenPrice).toNumber(),
+                        expectedValueTransfer: valueTransfer.shortValueTransfer.toNumber(),
                     },
                     longToken: {
                         address: longToken.address,
@@ -108,6 +119,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTvl: expectedLongBalance.toNumber(),
                         balancerPrice: balancerPrices.longToken.toNumber(),
                         userHoldings: userBalances.longToken.balance.toNumber(),
+                        pendingMints: pendingLong.mint.toNumber(),
+                        pendingBurns: pendingLong.burn.times(newLongTokenPrice).toNumber(),
+                        expectedValueTransfer: valueTransfer.longValueTransfer.toNumber(),
                     },
                     isWaitingForUpkeep: upkeepInfo.isWaitingForUpkeep,
                     expectedExecution: upkeepInfo.expectedExecution,
