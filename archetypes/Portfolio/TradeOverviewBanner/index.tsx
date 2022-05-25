@@ -1,10 +1,10 @@
 import React from 'react';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import { Heading } from '~/components/PageTable';
+import { PortfolioOverview } from '~/types/portfolio';
 import { toApproxCurrency, toApproxLocaleString } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
-import { PortfolioOverview } from '~/types/portfolio';
 
 type BannerTypes = {
     title: string;

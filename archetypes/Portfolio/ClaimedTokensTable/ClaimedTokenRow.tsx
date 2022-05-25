@@ -24,8 +24,9 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     onClickStake,
     leveragedNotionalValue,
     entryPrice,
-    stakedTokens,
 }) => {
+    // if there is any balance at all they should stake
+    const shouldStake = !balance.eq(0);
     return (
         <TableRow lined>
             <OverviewTableRowCell>
@@ -57,10 +58,10 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 <ActionsButton
                     size="xs"
                     variant="primary-light"
-                    disabled={!balance.toNumber()}
-                    onClick={() => onClickStake(address)}
+                    // will never be disabled if it gets included as a row it will always be either to stake or to unstake
+                    onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
                 >
-                    {stakedTokens.eq(0) || !stakedTokens.eq(balance) ? 'Stake' : 'Unstake'}
+                    {shouldStake ? 'Stake' : 'Unstake'}
                 </ActionsButton>
                 <ActionsButton
                     size="xs"

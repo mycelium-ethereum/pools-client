@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
-import { ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { usePools } from '~/hooks/usePools';
+import { ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { LoadingRows } from '~/types/hooks';
 import useFarmBalances from '../useFarmBalances';
 

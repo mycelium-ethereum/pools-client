@@ -6,9 +6,9 @@ import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
 import { OverviewPoolToken } from '~/types/portfolio';
 import { UnclaimedRowInfo, UnclaimedRowProps, UnclaimedRowActions } from '~/types/unclaimedTokens';
-import {TokenType} from '../state';
 import * as Styles from './styles';
 import { UnclaimedQuoteTokenRow, UnclaimedPoolTokenRow } from './UnclaimedTokensRows';
+import { TokenType } from '../state';
 
 export const UnclaimedTokensTable = ({
     rows,

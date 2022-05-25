@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcNotionalValue, SideEnum } from '@tracer-protocol/pools-js';
 import { TokenType } from '~/archetypes/Portfolio/state';
-import { UnclaimedRowInfo } from '~/types/unclaimedTokens';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
 import { LoadingRows } from '~/types/hooks';
+import { UnclaimedRowInfo } from '~/types/unclaimedTokens';
 import { getBaseAsset } from '~/utils/poolNames';
 
 export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
