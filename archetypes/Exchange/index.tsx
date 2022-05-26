@@ -6,6 +6,7 @@ import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
+import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
@@ -17,15 +18,22 @@ import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
+import { PoolStatus } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Summary from './Summary';
 
-const TRADE_OPTIONS = [
+const getTradeOptions = (poolStatus: PoolStatus) => [
     {
         key: CommitActionEnum.mint,
         text: 'Mint',
+        disabled:
+            poolStatus === PoolStatus.Deprecated
+                ? {
+                      optionKey: TooltipKeys.DeprecatedPoolMintCommit,
+                  }
+                : undefined,
     },
     {
         key: CommitActionEnum.burn,
@@ -34,6 +42,12 @@ const TRADE_OPTIONS = [
     {
         key: CommitActionEnum.flip,
         text: 'Flip',
+        disabled:
+            poolStatus === PoolStatus.Deprecated
+                ? {
+                      optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
+                  }
+                : undefined,
     },
 ];
 
@@ -73,6 +87,10 @@ export default styled((({ onClose, className }) => {
             }
         }
     }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
+
+    const TRADE_OPTIONS = useMemo(() => {
+        return getTradeOptions(swapState.poolStatus);
+    }, [swapState.poolStatus]);
 
     return (
         <div className={className}>

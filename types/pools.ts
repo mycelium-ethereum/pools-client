@@ -162,3 +162,8 @@ export type PoolCommitStatsAPIResponse = {
 export type PoolCommitStats = {
     oneDayVolume: BigNumber;
 };
+
+export enum PoolStatus {
+    Live,
+    Deprecated,
+}

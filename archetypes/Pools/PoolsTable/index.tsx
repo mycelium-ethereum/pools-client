@@ -8,11 +8,13 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
 
+import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -20,6 +22,7 @@ import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
@@ -87,6 +90,7 @@ export const PoolsTable = ({
     const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
+    const deprecatedPools = useDeprecatedPools();
     const marketSpotPrices = useStore(selectMarketSpotPrices, shallow);
 
     const handlePoolDetailsClick = useCallback((data: BrowseTableRowData) => {
@@ -101,7 +105,7 @@ export const PoolsTable = ({
                     <tr>
                         <TableHeaderCell
                             className="rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary"
-                            colSpan={13}
+                            colSpan={14}
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
@@ -160,6 +164,7 @@ export const PoolsTable = ({
                         <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">
                             Leverage / Collateral
                         </TableHeaderCell>
+                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             {'INDEX PRICE (USD)'}
@@ -201,7 +206,7 @@ export const PoolsTable = ({
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
+                        <TableHeaderCell colSpan={showNextRebalance ? 6 : 5} />
 
                         {/* Token Cols */}
                         <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
@@ -226,6 +231,7 @@ export const PoolsTable = ({
                     {rows.map((pool) => {
                         return (
                             <PoolRow
+                                status={deprecatedPools[pool.address] ? PoolStatus.Deprecated : PoolStatus.Live}
                                 pool={pool}
                                 onClickMintBurn={onClickMintBurn}
                                 onClickShowPoolDetailsModal={handlePoolDetailsClick}
@@ -255,9 +261,10 @@ const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
         account: string | undefined;
+        status: PoolStatus;
         onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
-> = ({ pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
+> = ({ status, pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
         <>
             <TableRow lined>
@@ -268,6 +275,11 @@ const PoolRow: React.FC<
                         {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
+                </TableRowCell>
+                <TableRowCell rowSpan={2}>
+                    <PoolStatusBadgeContainer>
+                        <PoolStatusBadge status={status} />
+                    </PoolStatusBadgeContainer>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (

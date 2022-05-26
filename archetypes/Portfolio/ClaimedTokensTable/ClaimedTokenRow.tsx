@@ -2,9 +2,11 @@ import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
@@ -14,8 +16,10 @@ import { TokensNotional } from '../Tokens';
 export const ClaimedTokenRow: React.FC<
     TokenRowProps & {
         onClickCommitAction: OnClickCommit;
+        status: PoolStatus;
     }
 > = ({
+    status,
     symbol,
     address,
     poolAddress,
@@ -32,6 +36,11 @@ export const ClaimedTokenRow: React.FC<
         <TableRow lined>
             <OverviewTableRowCell>
                 <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={status} />
+                </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional

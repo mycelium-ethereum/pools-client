@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { LogoTicker } from '~/components/General';
 import { MarketFilterEnum } from '~/types/filters';
+import { PoolStatus } from '~/types/pools';
 
 export enum DenotedInEnum {
     BASE = 'BASE',
@@ -76,6 +77,7 @@ export type OverviewPoolToken = {
 } & OverviewAsset;
 
 export type ClaimablePoolTokenRowProps = OverviewPoolToken & {
+    status: PoolStatus;
     poolAddress: UnclaimedRowProps['poolAddress'];
     onClickCommitAction: OnClickCommit;
 };

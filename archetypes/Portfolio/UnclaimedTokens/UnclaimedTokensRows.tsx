@@ -2,6 +2,7 @@ import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -11,6 +12,7 @@ import { OverviewAsset, ClaimablePoolTokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
 
 export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { settlementTokenSymbol: string }> = ({
+    status,
     balance,
     leveragedNotionalValue,
     entryPrice,
@@ -27,6 +29,11 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
         <TableRow>
             <OverviewTableRowCell>
                 <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={status} />
+                </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional

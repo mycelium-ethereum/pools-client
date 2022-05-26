@@ -133,6 +133,7 @@ export const FarmStore: React.FC = ({ children }) => {
                         }
                         const poolDetails = {
                             poolTokenPrice: await fetchTokenPrice(poolInfo, stakingTokenAddress, provider),
+                            address: poolInfo.address,
                         };
 
                         const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;

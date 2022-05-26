@@ -2,8 +2,10 @@ import React from 'react';
 import { Logo } from '~/components/General';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
+import { PoolStatus } from '~/types/pools';
 import * as Styles from './styles';
 import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './UnclaimedTokensRows';
 import { UnclaimedRowInfo, OverviewPoolToken, TokenType, UnclaimedRowProps, OnClickCommit } from '../state';
@@ -21,6 +23,7 @@ export const UnclaimedTokensTable = ({
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
@@ -69,6 +72,8 @@ const PoolRow = ({
     onClickCommitAction,
 }: UnclaimedRowProps): JSX.Element => {
     const { claim } = usePoolInstanceActions();
+    const deprecatedPools = useDeprecatedPools();
+
     return (
         <>
             <Styles.PoolTableRow marketTicker={marketTicker}>
@@ -100,6 +105,7 @@ const PoolRow = ({
                     return (
                         !claimableAsset.balance.eq(0) && (
                             <ClaimablePoolTokenRow
+                                status={deprecatedPools[poolAddress] ? PoolStatus.Deprecated : PoolStatus.Live}
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
                                 poolAddress={poolAddress}
                                 onClickCommitAction={onClickCommitAction}

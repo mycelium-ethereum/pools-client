@@ -1,17 +1,21 @@
-import BigNumber from 'bignumber.js';
 import React, { useMemo, useState } from 'react';
+import BigNumber from 'bignumber.js';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip } from '~/components/Tooltips';
+import { PoolStatus } from '~/types/pools';
+import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
 import Close from '/public/img/general/close.svg';
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);
+    const deprecatedPools = useDeprecatedPools();
 
     return (
         <>
@@ -19,6 +23,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 <TableHeader className="uppercase">
                     <tr>
                         <TableHeaderCell>Strategy</TableHeaderCell>
+                        <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>APR</TableHeaderCell>
                         <TableHeaderCell>TVL (USD)</TableHeaderCell>
                         <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
@@ -30,6 +35,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 {rows.map((farm) => {
                     return (
                         <PoolRow
+                            status={deprecatedPools[farm.poolDetails.address] ? PoolStatus.Deprecated : PoolStatus.Live}
                             key={`${farm.farm}`}
                             farm={farm}
                             rewardsTokenUSDPrices={rewardsTokenUSDPrices}
@@ -93,12 +99,13 @@ const largeDecimal: (num: BigNumber) => string = (num) => {
 };
 
 const PoolRow: React.FC<{
+    status: PoolStatus;
     farm: FarmTableRowData;
     rewardsTokenUSDPrices: Record<string, BigNumber>;
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
+}> = ({ status, farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
     const tokenPrice = useMemo(() => farm.poolDetails.poolTokenPrice, [farm]);
 
     const rewardsTokenPrice = rewardsTokenUSDPrices[farm.rewardsTokenAddress] || new BigNumber(0);
@@ -129,6 +136,11 @@ const PoolRow: React.FC<{
                         <div>{farm.name}</div>
                     )}
                 </div>
+            </TableRowCell>
+            <TableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={status} />
+                </PoolStatusBadgeContainer>
             </TableRowCell>
             <TableRowCell>
                 {farm.rewardsEnded ? <RewardsEndedTip>N/A</RewardsEndedTip> : `${largeDecimal(apr)}%`}
