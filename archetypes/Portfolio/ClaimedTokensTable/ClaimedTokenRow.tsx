@@ -4,6 +4,7 @@ import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { PoolStatus } from '~/types/pools';
@@ -32,6 +33,8 @@ export const ClaimedTokenRow: React.FC<
     leveragedNotionalValue,
     entryPrice,
 }) => {
+    const poolIsDeprecated = status === PoolStatus.Deprecated;
+
     return (
         <TableRow lined>
             <OverviewTableRowCell>
@@ -73,14 +76,20 @@ export const ClaimedTokenRow: React.FC<
                 >
                     Burn
                 </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!balance.toNumber()}
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                <TooltipSelector
+                    tooltip={{
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                    }}
                 >
-                    Flip
-                </ActionsButton>
+                    <ActionsButton
+                        size="xs"
+                        variant="primary-light"
+                        disabled={!balance.toNumber()}
+                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                    >
+                        Flip
+                    </ActionsButton>
+                </TooltipSelector>
                 <Actions
                     token={{
                         address,

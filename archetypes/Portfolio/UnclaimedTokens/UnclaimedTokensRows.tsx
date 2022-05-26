@@ -4,8 +4,10 @@ import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { Market, SettlementToken } from '../Market';
 import { OverviewTableRowCell, ActionsCell, ActionsButton } from '../OverviewTable/styles';
 import { OverviewAsset, ClaimablePoolTokenRowProps } from '../state';
@@ -25,6 +27,8 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
     poolAddress,
     settlementTokenSymbol,
 }) => {
+    const poolIsDeprecated = status === PoolStatus.Deprecated;
+
     return (
         <TableRow>
             <OverviewTableRowCell>
@@ -67,13 +71,20 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 >
                     Burn
                 </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                <TooltipSelector
+                    tooltip={{
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                    }}
                 >
-                    Flip
-                </ActionsButton>
+                    <ActionsButton
+                        size="xs"
+                        variant="primary-light"
+                        disabled={poolIsDeprecated}
+                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                    >
+                        Flip
+                    </ActionsButton>
+                </TooltipSelector>
                 <Actions
                     token={{
                         address,
