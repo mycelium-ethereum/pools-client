@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import BigNumber from 'bignumber.js';
 import { Transition } from '@headlessui/react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
@@ -14,6 +15,10 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
         () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
         [isLong],
     );
+
+    const mintingFee = pool.committer.mintingFee.times(amount);
+    const burningFee = pool.committer.burningFee.times(amount);
+
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
             <Styles.Wrapper>
@@ -39,6 +44,8 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             }}
                             gasFee={gasFee}
                             isLong={isLong}
+                            mintingFee={mintingFee}
+                            annualFeePercent={new BigNumber(2)}
                         />
                     )}
 
@@ -48,6 +55,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             nextTokenPrice={nextTokenPrice}
                             gasFee={gasFee}
                             token={token}
+                            burningFee={burningFee}
                             pool={{
                                 settlementTokenSymbol: pool.settlementToken.symbol,
                             }}
@@ -62,6 +70,8 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             isLong={isLong}
                             pool={pool}
                             gasFee={gasFee}
+                            mintingFee={mintingFee}
+                            burningFee={burningFee}
                         />
                     )}
                 </Transition>

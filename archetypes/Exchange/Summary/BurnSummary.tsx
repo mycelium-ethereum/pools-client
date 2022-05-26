@@ -14,7 +14,12 @@ export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice
                 settlementTokenSymbol={pool.settlementTokenSymbol}
                 showTransactionDetails={showTransactionDetails}
             />
-            <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />
+            <ExpectedFees
+                amount={amount}
+                gasFee={gasFee}
+                showTransactionDetails={showTransactionDetails}
+                poolTransactionFee={burningFee}
+            />
 
             <ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />

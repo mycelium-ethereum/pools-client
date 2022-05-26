@@ -23,6 +23,8 @@ type SharedProps = {
 export type FlipSummaryProps = {
     isLong: SummaryProps['isLong'];
     pool: SummaryProps['pool'];
+    mintingFee: BigNumber;
+    burningFee: BigNumber;
 } & SharedProps;
 
 export type MintSummaryProps = {
@@ -33,12 +35,15 @@ export type MintSummaryProps = {
         leverage: number;
         settlementTokenSymbol: string;
     };
+    mintingFee: BigNumber;
+    annualFeePercent: BigNumber;
 } & SharedProps;
 
 export type BurnSummaryProps = {
     pool: {
         settlementTokenSymbol: string;
     };
+    burningFee: BigNumber;
 } & SharedProps;
 
 export type BaseSection = {
