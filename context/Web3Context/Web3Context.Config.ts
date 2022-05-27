@@ -140,41 +140,49 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 address: '0xA2bACCD1AA980f80b37BC950CE3eE2d5816d7EC0', // 1-BTC/USDC-long
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xD04dDCAEca6bf283A430Cb9E847CEEd5Da419Fa0', // 1-BTC/USDC-short
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xEb05e160D3C1990719aa25d74294783fE4e3D3Ef', // 3-BTC/USD-long
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xeA4FF5ED11F93AA0Ce7744B1D40093f52eA1cda8', // 3-BTC/USDC-short
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xA18413dC5506A91138e0604C283E36B021b8849B', // 1-ETH/USDC-long
                 pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x9769F208239C740cC40E9CB3427c34513213B83f', // 1-ETH/USDC-short
                 pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x07cCcDC913bCbab246fC6E38E81b0C53AaB3De9b', // 3-ETH/USDC-long
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xE1c9C69a26BD5c6E4b39E6870a4a2B01b4e033bC', // 3-ETH/USDC-short
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x2c8373688d20b87e492F9860c7639997a0Cb968B', // 3-TOKE/USDC-long
@@ -244,6 +252,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 balancerPoolId: '0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
                 pool: '0x54114e9e1eEf979070091186D7102805819e916B',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
                 link: 'https://arbitrum.balancer.fi/#/pool/0x996616bde0cb4974e571f17d31c844da2bd177f8000100000000000000000018',
             },
             {
@@ -252,6 +261,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 balancerPoolId: '0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
                 pool: '0x70988060e1FD9bbD795CA097A09eA1539896Ff5D',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
                 link: 'https://arbitrum.balancer.fi/#/pool/0xcf3ae4b9235b1c203457e472a011c12c3a2fde93000100000000000000000019',
             },
             {
@@ -260,6 +270,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 balancerPoolId: '0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
                 pool: '0x3A52aD74006D927e3471746D4EAC73c9366974Ee',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
                 link: 'https://arbitrum.balancer.fi/#/pool/0x6ee86e032173716a41818e6d6d320a752176d69700010000000000000000001c',
             },
             {
@@ -268,6 +279,7 @@ export const networkConfig: Record<AvailableNetwork, Network> = {
                 balancerPoolId: '0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
                 pool: '0x146808f54DB24Be2902CA9f595AD8f27f56B2E76',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
                 link: 'https://arbitrum.balancer.fi/#/pool/0x17a35e3d578797e34131d10e66c11170848c6da100010000000000000000001d',
             },
         ],
