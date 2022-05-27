@@ -70,14 +70,15 @@ export const DisabledButtonWrap = styled.div`
     @media ${({ theme }) => theme.device.sm} {
         margin-left: 1.25rem;
     }
-    & div:first-child {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        cursor: not-allowed;
-    }
+`;
+
+export const DummyButton = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    cursor: not-allowed;
 `;
 
 export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`

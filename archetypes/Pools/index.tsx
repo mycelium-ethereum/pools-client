@@ -182,7 +182,7 @@ export const Browse: React.FC = () => {
                         </Styles.Button>
                         <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
                             <Styles.DisabledButtonWrap>
-                                <div />
+                                <Styles.DummyButton />
                                 <Styles.Button variant="primary" size="sm" disabled>
                                     Deploy New Pool
                                 </Styles.Button>
