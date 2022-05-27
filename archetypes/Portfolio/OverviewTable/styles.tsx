@@ -123,6 +123,15 @@ export const ActionsButton = styled(Button)`
     margin-left: 0.25rem;
     margin-right: 0.25rem;
     text-transform: uppercase;
+    ${({ disabled }) => {
+        if (disabled) {
+            return `
+                cursor: not-allowed;
+                pointer-events: none;
+                z-index: -1;
+            `;
+        }
+    }};
 `;
 
 export const RowCount = styled.div`

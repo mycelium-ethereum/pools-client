@@ -81,14 +81,16 @@ export const ClaimedTokenRow: React.FC<
                         key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
                     }}
                 >
-                    <ActionsButton
-                        size="xs"
-                        variant="primary-light"
-                        disabled={!balance.toNumber()}
-                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
-                    >
-                        Flip
-                    </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            disabled={poolIsDeprecated || !balance.toNumber()}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                        >
+                            Flip
+                        </ActionsButton>
+                    </div>
                 </TooltipSelector>
                 <Actions
                     token={{
