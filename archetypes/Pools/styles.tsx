@@ -63,20 +63,24 @@ export const AltPoolActions = styled.div`
     }
 `;
 
+export const DisabledButtonWrap = styled.div`
+    cursor: not-allowed;
+    opacity: 0.5;
+    @media ${({ theme }) => theme.device.sm} {
+        margin-left: 1.25rem;
+    }
+`;
+
 export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
     @media ${({ theme }) => theme.device.sm} {
         max-width: 220px;
     }
 
-    ${({ disabled, theme }) => {
+    ${({ disabled }) => {
         if (disabled) {
             return `
-                cursor: not-allowed; 
-                opacity: 0.5; 
+                pointer-events: none;
 
-                @media ${theme.device.sm} {
-                    margin-left: 1.25rem; 
-                }
             `;
         }
     }};

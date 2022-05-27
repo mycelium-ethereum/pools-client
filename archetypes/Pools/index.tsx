@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef } from 'react';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
@@ -20,6 +20,7 @@ import { browseReducer, BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnu
 import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
+    const buttonRef = useRef(null);
     const account = useStore(selectAccount);
     const { swapDispatch = noDispatch } = useSwapContext();
     const { rows: tokens, isLoading } = useBrowsePools();
@@ -35,6 +36,14 @@ export const Browse: React.FC = () => {
         addAltPoolModalOpen: false,
         deltaDenotation: DeltaEnum.Percentile,
     } as BrowseState);
+
+    useEffect(() => {
+        if (buttonRef.current) {
+            (buttonRef.current as HTMLButtonElement).addEventListener('mouseover', () => {
+                console.log('Over');
+            });
+        }
+    }, []);
 
     useEffect(() => {
         if (account && state.sortBy === SortByEnum.Name) {
@@ -172,9 +181,11 @@ export const Browse: React.FC = () => {
                             Display Alternative Pool
                         </Styles.Button>
                         <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                            <Styles.Button variant="primary" size="sm" disabled>
-                                Deploy New Pool
-                            </Styles.Button>
+                            <div>
+                                <Styles.Button variant="primary" size="sm" disabled>
+                                    Deploy New Pool
+                                </Styles.Button>
+                            </div>
                         </TooltipSelector>
                     </Styles.AltPoolActions>
                 </Styles.AltPoolRow>
