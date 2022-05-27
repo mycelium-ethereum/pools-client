@@ -66,8 +66,17 @@ export const AltPoolActions = styled.div`
 export const DisabledButtonWrap = styled.div`
     cursor: not-allowed;
     opacity: 0.5;
+    position: relative;
     @media ${({ theme }) => theme.device.sm} {
         margin-left: 1.25rem;
+    }
+    & div:first-child {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        cursor: not-allowed;
     }
 `;
 
@@ -79,8 +88,9 @@ export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
     ${({ disabled }) => {
         if (disabled) {
             return `
+                cursor: not-allowed;
                 pointer-events: none;
-
+                z-index: -1;
             `;
         }
     }};
