@@ -5,12 +5,13 @@ import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { OverviewAsset } from '~/types/portfolio';
+import { UnclaimedPoolTokenRowProps } from '~/types/unclaimedTokens';
 import { Market, SettlementToken } from '../Market';
 import { OverviewTableRowCell, ActionsCell, ActionsButton } from '../OverviewTable/styles';
-import { OverviewAsset, ClaimablePoolTokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
 
-export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { settlementTokenSymbol: string }> = ({
+export const UnclaimedPoolTokenRow = ({
     balance,
     leveragedNotionalValue,
     entryPrice,
@@ -22,7 +23,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
     side,
     poolAddress,
     settlementTokenSymbol,
-}) => {
+}: UnclaimedPoolTokenRowProps): JSX.Element => {
     return (
         <TableRow>
             <OverviewTableRowCell>
@@ -83,7 +84,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
     );
 };
 
-export const ClaimableQuoteTokenRow: React.FC<OverviewAsset> = ({ symbol, balance, address, decimals }) => (
+export const UnclaimedQuoteTokenRow = ({ symbol, balance, address, decimals }: OverviewAsset): JSX.Element => (
     <TableRow>
         <OverviewTableRowCell>
             <SettlementToken tokenSymbol={symbol} />

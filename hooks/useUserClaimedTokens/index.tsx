@@ -1,18 +1,20 @@
 import { useState, useEffect } from 'react';
 import { BigNumber } from 'bignumber.js';
 import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from '@tracer-protocol/pools-js';
-import { TokenRowProps } from '~/archetypes/Portfolio//state';
 import { usePools } from '~/hooks/usePools';
+import { ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { LoadingRows } from '~/types/hooks';
+import useFarmBalances from '../useFarmBalances';
 
-export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
+export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
     const { pools, isLoadingPools } = usePools();
-    const [rows, setRows] = useState<TokenRowProps[]>([]);
+    const farmBalances = useFarmBalances();
+    const [rows, setRows] = useState<ClaimedTokenRowProps[]>([]);
 
     useEffect(() => {
         if (pools) {
             const poolValues = Object.values(pools);
-            const tokens: TokenRowProps[] = [];
+            const tokens: ClaimedTokenRowProps[] = [];
 
             poolValues.forEach((pool) => {
                 const { poolInstance, userBalances } = pool;
@@ -26,7 +28,10 @@ export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
                 const shortTokenPrice = poolInstance.getShortTokenPrice();
                 const shortNotionalValue = calcNotionalValue(shortTokenPrice, userBalances.shortToken.balance);
 
-                if (!userBalances.shortToken.balance.eq(0)) {
+                const shortStaked: BigNumber = farmBalances[poolInstance.shortToken.address] ?? new BigNumber(0);
+                const longStaked: BigNumber = farmBalances[poolInstance.longToken.address] ?? new BigNumber(0);
+
+                if (!userBalances.shortToken.balance.eq(0) || !shortStaked.eq(0)) {
                     tokens.push({
                         name: shortToken.name,
                         poolAddress: address,
@@ -41,9 +46,10 @@ export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         entryPrice: userBalances.tradeStats.avgShortEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
+                        stakedTokens: shortStaked,
                     });
                 }
-                if (!userBalances.longToken.balance.eq(0)) {
+                if (!userBalances.longToken.balance.eq(0) || !longStaked.eq(0)) {
                     tokens.push({
                         name: longToken.name,
                         poolAddress: address,
@@ -58,13 +64,14 @@ export const useUserClaimedTokens = (): LoadingRows<TokenRowProps> => {
                         effectiveGain: calcEffectiveLongGain(longBalance, longBalance, leverageBN).toNumber(),
                         entryPrice: userBalances.tradeStats.avgLongEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
+                        stakedTokens: longStaked,
                     });
                 }
             });
 
             setRows(tokens);
         }
-    }, [pools]);
+    }, [pools, farmBalances]);
 
     return {
         rows,
