@@ -1,0 +1,10 @@
+{
+  "redirects": [
+    { "source": "/bridge", "destination": "https://bridge.arbitrum.io/" },
+    { "source": "/pools", "destination": "/" },
+    { "source": "/stakebpt", "destination": "/stake" },
+    { "source": "/privacy-policy", "destination": "https://tracer.finance/privacy-policy" },
+    { "source": "/terms-of-use", "destination": "https://tracer.finance/privacy-policy#terms-of-use" },
+    { "source": "/disclaimer", "destination": "https://tracer.finance/privacy-policy#interfaces-disclaimer" }
+  ]
+}
