@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
-import { PortfolioOverview } from '~/archetypes/Portfolio/state';
 import { DEFAULT_PENDING_COMMIT_AMOUNTS } from '~/constants/commits';
 import { useStore } from '~/store/main';
 import { selectUserPendingCommitAmounts } from '~/store/PendingCommitSlice';
 import { selectAccount } from '~/store/Web3Slice';
+import { PortfolioOverview } from '~/types/portfolio';
 import { calcPercentageDifference } from '~/utils/converters';
 import useFarmBalances from '../useFarmBalances';
 import usePools from '../usePools';

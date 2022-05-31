@@ -7,20 +7,14 @@ import Actions from '~/components/TokenActions';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { PoolStatus } from '~/types/pools';
+import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
-import { OnClickCommit, TokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
+import { PoolStatus } from '~/types/pools';
 
-export const ClaimedTokenRow: React.FC<
-    TokenRowProps & {
-        onClickCommitAction: OnClickCommit;
-        status: PoolStatus;
-    }
-> = ({
-    status,
+export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
     symbol,
     address,
     poolAddress,
@@ -30,11 +24,15 @@ export const ClaimedTokenRow: React.FC<
     balance,
     currentTokenPrice,
     onClickCommitAction,
+    onClickStake,
     leveragedNotionalValue,
     entryPrice,
+    poolStatus
 }) => {
-    const poolIsDeprecated = status === PoolStatus.Deprecated;
+    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
 
+    // if there is any balance at all they should stake
+    const shouldStake = !balance.eq(0);
     return (
         <TableRow lined>
             <OverviewTableRowCell>
@@ -42,7 +40,7 @@ export const ClaimedTokenRow: React.FC<
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <PoolStatusBadgeContainer>
-                    <PoolStatusBadge status={status} />
+                    <PoolStatusBadge status={poolStatus} />
                 </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
@@ -68,6 +66,14 @@ export const ClaimedTokenRow: React.FC<
                 <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
+                <ActionsButton
+                    size="xs"
+                    variant="primary-light"
+                    // will never be disabled if it gets included as a row it will always be either to stake or to unstake
+                    onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
+                >
+                    {shouldStake ? 'Stake' : 'Unstake'}
+                </ActionsButton>
                 <ActionsButton
                     size="xs"
                     variant="primary-light"

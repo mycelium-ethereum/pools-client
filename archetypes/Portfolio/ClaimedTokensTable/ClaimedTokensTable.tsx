@@ -3,16 +3,17 @@ import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import { PoolStatus } from '~/types/pools';
+import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
-import { OnClickCommit, TokenRowProps } from '../state';
 
 export const ClaimedTokensTable = ({
     rows,
     onClickCommitAction,
+    onClickStake,
 }: {
-    rows: TokenRowProps[];
-    onClickCommitAction: OnClickCommit;
-}): JSX.Element => {
+    rows: ClaimedTokenRowProps[];
+} & ClaimedRowActions): JSX.Element => {
+
     const deprecatedPools = useDeprecatedPools();
 
     return (
@@ -35,10 +36,11 @@ export const ClaimedTokensTable = ({
                     ) : (
                         rows.map((token) => (
                             <ClaimedTokenRow
-                                status={deprecatedPools[token.poolAddress] ? PoolStatus.Deprecated : PoolStatus.Live}
                                 {...token}
                                 key={token.address}
+                                poolStatus={deprecatedPools[token.poolAddress] ? PoolStatus.Deprecated : PoolStatus.Live}
                                 onClickCommitAction={onClickCommitAction}
+                                onClickStake={onClickStake}
                             />
                         ))
                     )}

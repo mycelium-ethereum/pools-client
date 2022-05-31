@@ -1,8 +1,4 @@
-import BigNumber from 'bignumber.js';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { LogoTicker } from '~/components/General';
 import { MarketFilterEnum } from '~/types/filters';
-import { PoolStatus } from '~/types/pools';
 
 export enum DenotedInEnum {
     BASE = 'BASE',
@@ -29,59 +25,7 @@ export enum OverviewPageFocus {
     History = 'history',
 }
 
-export type PortfolioOverview = {
-    totalPortfolioValue: BigNumber;
-    unrealisedProfit: BigNumber;
-    realisedProfit: BigNumber;
-    portfolioDelta: number; //percentage change
-};
-
-export type TokenRowProps = Omit<OverviewPoolToken, 'type'> & {
-    name: string;
-    poolAddress: string;
-    settlementTokenSymbol: string;
-    oraclePrice: BigNumber;
-    effectiveGain: number;
-};
-
-export type OnClickCommit = (pool: string, side: SideEnum, action: CommitActionEnum, unclaimed?: boolean) => void;
-
-export type UnclaimedRowProps = UnclaimedRowInfo & {
-    onClickCommitAction: OnClickCommit;
-};
-
-export type UnclaimedRowInfo = {
-    poolName: string; // pool name
-    poolAddress: string;
-    marketTicker: LogoTicker;
-    claimableLongTokens: OverviewPoolToken;
-    claimableShortTokens: OverviewPoolToken;
-    claimableSettlementTokens: OverviewAsset;
-    claimableSum: BigNumber;
-    numClaimable: number;
-};
-
-export type OverviewAsset = {
-    symbol: string;
-    balance: BigNumber;
-    address: string;
-    decimals: number;
-    currentTokenPrice: BigNumber;
-    type: TokenType;
-    leveragedNotionalValue: BigNumber;
-};
-
-export type OverviewPoolToken = {
-    entryPrice: BigNumber;
-    side: SideEnum;
-} & OverviewAsset;
-
-export type ClaimablePoolTokenRowProps = OverviewPoolToken & {
-    status: PoolStatus;
-    poolAddress: UnclaimedRowProps['poolAddress'];
-    onClickCommitAction: OnClickCommit;
-};
-
+/* State */
 export interface PortfolioState {
     escrowSearch: string;
     escrowMarketFilter: MarketFilterEnum;

@@ -1,12 +1,13 @@
 import React, { useMemo } from 'react';
 import useUserUnclaimedTokens from '~/hooks/useUserUnclaimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
+import { UnclaimedRowActions, UnclaimedRowInfo } from '~/types/unclaimedTokens';
 import { marketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
 import { UnclaimedTokensTable } from './UnclaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { OnClickCommit, PortfolioAction, PortfolioState, UnclaimedRowInfo } from '../state';
+import { PortfolioAction, PortfolioState } from '../state';
 
 export const UnclaimedTokens = ({
     escrowMarketFilter,
@@ -17,8 +18,7 @@ export const UnclaimedTokens = ({
     escrowMarketFilter: PortfolioState['escrowMarketFilter'];
     escrowSearch: PortfolioState['escrowSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
-    onClickCommitAction: OnClickCommit;
-}): JSX.Element => {
+} & UnclaimedRowActions): JSX.Element => {
     const { rows: escrowRows, isLoading } = useUserUnclaimedTokens();
     const totalClaimable = useMemo(
         () => escrowRows.reduce((count, pool) => count + pool.numClaimable, 0),

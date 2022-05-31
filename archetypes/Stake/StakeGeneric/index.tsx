@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useEffect, useReducer, useRef } from 'react';
+import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
@@ -47,6 +48,8 @@ export const StakeGeneric = ({
     fetchingFarms: boolean;
     rewardsTokenUSDPrices: Record<string, BigNumber>;
 }): JSX.Element => {
+    const router = useRouter();
+    const hasSetFromQuery = useRef(false);
     const account = useStore(selectAccount);
     const provider = useStore(selectProvider);
     const handleTransaction = useStore(selectHandleTransaction);
@@ -91,6 +94,38 @@ export const StakeGeneric = ({
             dispatch({ type: 'setSortBy', sortBy: StakeSortByEnum.MyStaked });
         }
     }, [account]);
+
+    useEffect(() => {
+        const farmsArray = Object.values(farms);
+        let tokenAddress;
+        if (router.query.stake && !hasSetFromQuery.current) {
+            if (typeof router.query.stake === 'string') {
+                tokenAddress = router.query.stake;
+            } else if (Array.isArray(router.query.stake)) {
+                tokenAddress = router.query.stake[0];
+            }
+            if (tokenAddress) {
+                const farm = farmsArray.find((farm) => farm.stakingToken.address === router.query.stake);
+                if (farm) {
+                    handleStake(farm.address);
+                    hasSetFromQuery.current = true;
+                }
+            }
+        } else if (router.query.unstake && !hasSetFromQuery.current) {
+            if (typeof router.query.unstake === 'string') {
+                tokenAddress = router.query.unstake;
+            } else if (Array.isArray(router.query.unstake)) {
+                tokenAddress = router.query.unstake[0];
+            }
+            if (tokenAddress) {
+                const farm = farmsArray.find((farm) => farm.stakingToken.address === router.query.unstake);
+                if (farm) {
+                    handleUnstake(farm.address);
+                    hasSetFromQuery.current = true;
+                }
+            }
+        }
+    }, [farms, router?.query?.stake, router?.query?.unstake]);
 
     // TODO make these dynamic with a list of leverages given by pools
     const leverageFilter = (pool: FarmTableRowData): boolean => {
