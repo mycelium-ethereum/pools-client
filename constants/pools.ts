@@ -4,6 +4,8 @@ import { NETWORKS } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
 import { PoolInfo } from '~/types/pools';
 
+const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
+
 export const DEFAULT_POOLSTATE: PoolInfo = {
     poolInstance: Pool.CreateDefault(),
     userBalances: {
@@ -76,13 +78,13 @@ type TokenListMapByNetwork = Partial<Record<KnownNetwork, PoolListMap>>;
 export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
-            verified: 'https://api.tracer.finance/poolsv2/poolList?network=42161',
+            verified: `${TRACER_API}/poolsv2/poolList?network=42161&list=verified`,
         },
         External: [],
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
-            verified: 'https://dev.api.tracer.finance/poolsv2/poolList?network=421611',
+            verified: `${TRACER_API}/poolsv2/poolList?network=421611&list=verified`,
         },
         External: [],
     },
