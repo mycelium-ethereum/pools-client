@@ -4,11 +4,14 @@ import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from
 import { usePools } from '~/hooks/usePools';
 import { ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { LoadingRows } from '~/types/hooks';
+import { PoolStatus } from '~/types/pools';
 import useFarmBalances from '../useFarmBalances';
+import { useDeprecatedPools } from '../useDeprecatedPools';
 
 export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
     const { pools, isLoadingPools } = usePools();
     const farmBalances = useFarmBalances();
+    const deprecatedPools = useDeprecatedPools();
     const [rows, setRows] = useState<ClaimedTokenRowProps[]>([]);
 
     useEffect(() => {
@@ -23,6 +26,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
                     poolInstance;
                 const leverageBN = new BigNumber(leverage);
 
+                const poolStatus = deprecatedPools[address] ? PoolStatus.Deprecated : PoolStatus.Live
                 const longTokenPrice = poolInstance.getLongTokenPrice();
                 const longNotionalValue = calcNotionalValue(longTokenPrice, userBalances.longToken.balance);
                 const shortTokenPrice = poolInstance.getShortTokenPrice();
@@ -47,6 +51,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
                         entryPrice: userBalances.tradeStats.avgShortEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
                         stakedTokens: shortStaked,
+                        poolStatus
                     });
                 }
                 if (!userBalances.longToken.balance.eq(0) || !longStaked.eq(0)) {
@@ -65,6 +70,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
                         entryPrice: userBalances.tradeStats.avgLongEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
                         stakedTokens: longStaked,
+                        poolStatus
                     });
                 }
             });
