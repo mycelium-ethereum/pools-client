@@ -12,6 +12,17 @@ module.exports = {
         ignored: ['node_modules', 'public/static'],
     },
 
+    async redirects() {
+        return [
+            { "source": "/bridge", "destination": "https://bridge.arbitrum.io/", permanent: true },
+            { "source": "/pools", "destination": "/", permanent: true },
+            { "source": "/stakebpt", "destination": "/stake" , permanent: true },
+            { "source": "/privacy-policy", "destination": "https://tracer.finance/privacy-policy", permanent: true },
+            { "source": "/terms-of-use", "destination": "https://tracer.finance/privacy-policy#terms-of-use", permanent: true },
+            { "source": "/disclaimer", "destination": "https://tracer.finance/privacy-policy#interfaces-disclaimer", permanent: true }
+        ]
+    },
+
     webpack(config) {
         // Fixes npm packages that depend on `fs` module
         config.resolve.fallback = {
