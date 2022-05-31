@@ -98,6 +98,8 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '3S-BTC/USD+USDC': '3S-BTC+USDC',
     '3L-XAU/USD+USDC': '3L-XAU+USDC',
     '3S-XAU/USD+USDC': '3S-XAU+USDC',
+    '3L-WTI/USD+USDC': '3L-WTI+USDC',
+    '3S-WTI/USD+USDC': '3S-WTI+USDC',
     '3L-ETH/USD+gOHM': '3L-ETH+gOHM',
     '3S-ETH/USD+gOHM': '3S-ETH+gOHM',
     '3L-(AVAX+BNB+SOL)/USD+USDC': '3L-ethkilla',

@@ -32,6 +32,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'TOKE/USD': 'Tokemak',
     'LINK/USD': 'Chainlink',
     'AAVE/USD': 'AAVE',
+    'WTI/USD': 'WTI Oil',
 };
 
 // given a pool symbol or token symbol, get the marketSymbol
