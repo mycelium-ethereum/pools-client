@@ -17,6 +17,7 @@ module.exports = {
           {
             source: '/stake',
             destination: '/stakepooltoken',
+            permanent: true
           },
         ]
       },
