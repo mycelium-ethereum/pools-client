@@ -1,0 +1,6 @@
+
+{
+  "redirects": [
+    { "source": "/stake", "destination": "/stakepooltoken" }
+  ]
+}
