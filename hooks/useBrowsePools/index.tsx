@@ -6,7 +6,9 @@ import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { LoadingRows } from '~/types/hooks';
+import { PoolStatus } from '~/types/pools';
 import { getMarketSymbol } from '~/utils/poolNames';
+import { useDeprecatedPools } from '../useDeprecatedPools';
 import { useUpkeeps } from '../useUpkeeps';
 
 const STATIC_DEFAULT_UPKEEP = {
@@ -28,6 +30,7 @@ const STATIC_DEFAULT_UPKEEP = {
 export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
     const network = useStore(selectNetwork);
     const { pools, isLoadingPools } = usePools();
+    const deprecatedPools = useDeprecatedPools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const upkeeps = useUpkeeps(network);
 
@@ -50,6 +53,8 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     keeper,
                     committer,
                 } = pool;
+
+                const poolStatus = deprecatedPools[address] ? PoolStatus.Deprecated : PoolStatus.Live;
 
                 const leverageBN = new BigNumber(leverage);
 
@@ -119,6 +124,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     committer: committer.address,
                     collateralAsset: settlementToken.symbol,
                     collateralAssetAddress: settlementToken.address,
+                    poolStatus,
                 });
             });
 

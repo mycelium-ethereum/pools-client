@@ -14,5 +14,5 @@ export type ClaimedTokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     oraclePrice: BigNumber;
     effectiveGain: number;
     stakedTokens: BigNumber;
-    poolStatus: PoolStatus
+    poolStatus: PoolStatus;
 };

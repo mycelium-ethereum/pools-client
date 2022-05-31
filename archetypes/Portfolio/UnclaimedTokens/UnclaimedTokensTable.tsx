@@ -2,10 +2,8 @@ import React from 'react';
 import { Logo } from '~/components/General';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
-import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
-import { PoolStatus } from '~/types/pools';
 import { OverviewPoolToken } from '~/types/portfolio';
 import { UnclaimedRowInfo, UnclaimedRowProps, UnclaimedRowActions } from '~/types/unclaimedTokens';
 import * as Styles from './styles';
@@ -52,6 +50,7 @@ export const UnclaimedTokensTable = ({
                                             numClaimable={pool.numClaimable}
                                             claimableSum={pool.claimableSum}
                                             onClickCommitAction={onClickCommitAction}
+                                            poolStatus={pool.poolStatus}
                                         />
                                     )
                                 );
@@ -66,6 +65,7 @@ export const UnclaimedTokensTable = ({
 const PoolRow = ({
     poolName,
     poolAddress,
+    poolStatus,
     marketTicker,
     claimableLongTokens,
     claimableShortTokens,
@@ -73,7 +73,6 @@ const PoolRow = ({
     onClickCommitAction,
 }: UnclaimedRowProps): JSX.Element => {
     const { claim } = usePoolInstanceActions();
-    const deprecatedPools = useDeprecatedPools();
 
     return (
         <>
@@ -108,7 +107,7 @@ const PoolRow = ({
                             <UnclaimedPoolTokenRow
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
                                 poolAddress={poolAddress}
-                                poolStatus={deprecatedPools[poolAddress] ? PoolStatus.Deprecated : PoolStatus.Live}
+                                poolStatus={poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 settlementTokenSymbol={claimableSettlementTokens.symbol}
                                 {...(claimableAsset as OverviewPoolToken)}

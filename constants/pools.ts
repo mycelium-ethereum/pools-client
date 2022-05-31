@@ -2,7 +2,7 @@ import { BigNumber } from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
-import { PoolInfo } from '~/types/pools';
+import { PoolInfo, PoolStatus } from '~/types/pools';
 
 export const DEFAULT_POOLSTATE: PoolInfo = {
     poolInstance: Pool.CreateDefault(),

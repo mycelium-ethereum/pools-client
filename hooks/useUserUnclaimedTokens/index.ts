@@ -5,11 +5,14 @@ import { TokenType } from '~/archetypes/Portfolio/state';
 import { LogoTicker } from '~/components/General';
 import { usePools } from '~/hooks/usePools';
 import { LoadingRows } from '~/types/hooks';
+import { PoolStatus } from '~/types/pools';
 import { UnclaimedRowInfo } from '~/types/unclaimedTokens';
 import { getBaseAsset } from '~/utils/poolNames';
+import { useDeprecatedPools } from '../useDeprecatedPools';
 
 export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
     const { pools, isLoadingPools } = usePools();
+    const deprecatedPools = useDeprecatedPools();
     const [rows, setRows] = useState<UnclaimedRowInfo[]>([]);
 
     useEffect(() => {
@@ -19,6 +22,8 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
                 const { poolInstance, userBalances } = pool;
 
                 const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
+
+                const poolStatus = deprecatedPools[address] ? PoolStatus.Deprecated : PoolStatus.Live;
 
                 // TODO calc relevant token price
                 const longTokenPrice = poolInstance.getLongTokenPrice();
@@ -94,6 +99,7 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
                     claimableShortTokens,
                     claimableSum,
                     numClaimable,
+                    poolStatus,
                 });
             });
             setRows(_rows);

@@ -26,9 +26,8 @@ export const UnclaimedPoolTokenRow = ({
     side,
     poolAddress,
     settlementTokenSymbol,
-    poolStatus
+    poolStatus,
 }: UnclaimedPoolTokenRowProps): JSX.Element => {
-
     const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
 
     return (

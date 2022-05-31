@@ -15,6 +15,7 @@ export type UnclaimedRowInfo = {
     claimableSettlementTokens: OverviewAsset;
     claimableSum: BigNumber;
     numClaimable: number;
+    poolStatus: PoolStatus;
 };
 
 export type UnclaimedRowProps = UnclaimedRowInfo & UnclaimedRowActions;

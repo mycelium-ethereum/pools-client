@@ -90,7 +90,6 @@ export const PoolsTable = ({
     const { account, network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const [showModalPoolDetails, setShowModalPoolDetails] = useState(false);
     const [poolDetails, setPoolDetails] = useState<any>({});
-    const deprecatedPools = useDeprecatedPools();
     const marketSpotPrices = useStore(selectMarketSpotPrices, shallow);
 
     const handlePoolDetailsClick = useCallback((data: BrowseTableRowData) => {
@@ -231,7 +230,6 @@ export const PoolsTable = ({
                     {rows.map((pool) => {
                         return (
                             <PoolRow
-                                status={deprecatedPools[pool.address] ? PoolStatus.Deprecated : PoolStatus.Live}
                                 pool={pool}
                                 onClickMintBurn={onClickMintBurn}
                                 onClickShowPoolDetailsModal={handlePoolDetailsClick}
@@ -261,10 +259,9 @@ const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
         account: string | undefined;
-        status: PoolStatus;
         onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
-> = ({ status, pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
+> = ({ pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
     return (
         <>
             <TableRow lined>
@@ -278,7 +275,7 @@ const PoolRow: React.FC<
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     <PoolStatusBadgeContainer>
-                        <PoolStatusBadge status={status} />
+                        <PoolStatusBadge status={pool.poolStatus} />
                     </PoolStatusBadgeContainer>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>

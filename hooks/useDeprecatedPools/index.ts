@@ -1,7 +1,6 @@
-import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
-import { selectWeb3Info } from '~/store/Web3Slice';
+import { selectNetwork } from '~/store/Web3Slice';
 
 type DeprecatedPoolsForNetwork = Record<string, boolean>;
 
@@ -14,7 +13,7 @@ const deprecatedPoolsLookup: Record<string, DeprecatedPoolsForNetwork> = {
 };
 
 export const useDeprecatedPools: () => DeprecatedPoolsForNetwork = () => {
-    const { network } = useStore(selectWeb3Info, shallow);
+    const network = useStore(selectNetwork);
 
     if (!network) {
         return {};

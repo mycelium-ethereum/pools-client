@@ -1,8 +1,6 @@
 import React from 'react';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
-import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
-import { PoolStatus } from '~/types/pools';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
 
@@ -13,9 +11,6 @@ export const ClaimedTokensTable = ({
 }: {
     rows: ClaimedTokenRowProps[];
 } & ClaimedRowActions): JSX.Element => {
-
-    const deprecatedPools = useDeprecatedPools();
-
     return (
         <>
             <Table fullHeight={false}>
@@ -38,7 +33,7 @@ export const ClaimedTokensTable = ({
                             <ClaimedTokenRow
                                 {...token}
                                 key={token.address}
-                                poolStatus={deprecatedPools[token.poolAddress] ? PoolStatus.Deprecated : PoolStatus.Live}
+                                poolStatus={token.poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 onClickStake={onClickStake}
                             />
