@@ -17,6 +17,8 @@ export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnu
             return poolName.replace(/.\-/g, '').split('/')[0] === 'ETH';
         case MarketFilterEnum.BTC:
             return poolName.replace(/.\-/g, '').split('/')[0] === 'BTC';
+        case MarketFilterEnum.WTI:
+            return poolName.replace(/.\-/g, '').split('/')[0] === 'WTI';
         // case MarketFilterEnum.AAVE:
         // return poolName.replace(/.\-/g, '').split('/')[0] === 'AAVE';
         default:
@@ -41,6 +43,8 @@ export const generalMarketFilter: (poolName: string, marketFilterState: MarketFi
             return name.search('ETH') > -1;
         case MarketFilterEnum.BTC:
             return name.search('BTC') > -1;
+        case MarketFilterEnum.WTI:
+            return name.search('WTI') > -1;
         // case MarketFilterEnum.AAVE:
         // return name.search('AAVE') > -1;
         default:
