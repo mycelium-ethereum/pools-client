@@ -55,6 +55,10 @@ export const networkConfig: Record<KnownNetwork, Network> = {
                 feedAddress: '0x639Fe6ab55C921f74e7fac1ee960C0B6293ba612',
                 decimals: 8,
             },
+            'WTI/USD': {
+                feedAddress: '0x594b919AD828e693B935705c3F816221729E7AE8',
+                decimals: 8,
+            },
         },
     },
     [NETWORKS.MAINNET]: {

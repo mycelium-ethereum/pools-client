@@ -60,7 +60,7 @@ export const PoolDetails = ({
                 href: constructExplorerLink(BlockExplorerAddressType.token, collateralAssetAddress, network),
             },
             {
-                name: 'Deployer',
+                name: 'Pool Committer',
                 value: formatAddress(committer),
                 href: constructExplorerLink(BlockExplorerAddressType.address, committer, network),
             },
