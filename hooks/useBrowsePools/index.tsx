@@ -6,9 +6,7 @@ import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { LoadingRows } from '~/types/hooks';
-import { PoolStatus } from '~/types/pools';
 import { getMarketSymbol } from '~/utils/poolNames';
-import { useDeprecatedPools } from '../useDeprecatedPools';
 import { useUpkeeps } from '../useUpkeeps';
 
 const STATIC_DEFAULT_UPKEEP = {
@@ -30,7 +28,6 @@ const STATIC_DEFAULT_UPKEEP = {
 export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
     const network = useStore(selectNetwork);
     const { pools, isLoadingPools } = usePools();
-    const deprecatedPools = useDeprecatedPools();
     const [rows, setRows] = useState<BrowseTableRowData[]>([]);
     const upkeeps = useUpkeeps(network);
 
@@ -39,7 +36,14 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool_) => {
-                const { poolInstance: pool, userBalances, upkeepInfo, poolCommitStats, balancerPrices } = pool_;
+                const {
+                    poolInstance: pool,
+                    poolStatus,
+                    userBalances,
+                    upkeepInfo,
+                    poolCommitStats,
+                    balancerPrices,
+                } = pool_;
                 const {
                     address,
                     lastUpdate,
@@ -53,8 +57,6 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     keeper,
                     committer,
                 } = pool;
-
-                const poolStatus = deprecatedPools[address] ? PoolStatus.Deprecated : PoolStatus.Live;
 
                 const leverageBN = new BigNumber(leverage);
 

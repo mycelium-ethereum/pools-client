@@ -6,6 +6,7 @@ import { PoolInfo, PoolStatus } from '~/types/pools';
 
 export const DEFAULT_POOLSTATE: PoolInfo = {
     poolInstance: Pool.CreateDefault(),
+    poolStatus: PoolStatus.Live,
     userBalances: {
         shortToken: {
             approvedAmount: new BigNumber(0),

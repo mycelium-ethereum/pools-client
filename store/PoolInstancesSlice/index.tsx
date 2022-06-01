@@ -2,8 +2,10 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { balancerConfig } from '~/constants/balancer';
+import { deprecatedPools } from '~/constants/deprecatedPools';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
+import { PoolStatus } from '~/types/pools';
 import { getBalancerPrices } from '~/utils/balancer';
 import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
 import { fetchPoolCommitStats } from '~/utils/tracerAPI';
@@ -16,7 +18,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     poolsInitialized: false,
     poolsInitializationError: undefined,
 
-    setPool: (pool) => {
+    setPool: (pool, network) => {
         const now = Date.now() / 1000;
         const expectedExecution = getExpectedExecutionTimestamp(
             pool.frontRunningInterval.toNumber(),
@@ -27,6 +29,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         set((state) => {
             state.pools[pool.address] = {
                 poolInstance: pool,
+                poolStatus: deprecatedPools?.[network]?.[pool.address] ? PoolStatus.Deprecated : PoolStatus.Live,
                 userBalances: DEFAULT_POOLSTATE.userBalances,
                 upkeepInfo: {
                     expectedExecution: expectedExecution,
@@ -37,7 +40,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             };
         });
     },
-    setMultiplePools: (pools) => {
+    setMultiplePools: (pools, network) => {
         const now = Date.now() / 1000;
         set((state) => {
             pools.forEach((pool) => {
@@ -49,6 +52,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 );
                 state.pools[pool.address] = {
                     poolInstance: pool,
+                    poolStatus: deprecatedPools?.[network]?.[pool.address] ? PoolStatus.Deprecated : PoolStatus.Live,
                     userBalances: DEFAULT_POOLSTATE.userBalances,
                     upkeepInfo: {
                         expectedExecution: expectedExecution,

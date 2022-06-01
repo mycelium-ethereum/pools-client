@@ -4,14 +4,11 @@ import { calcEffectiveLongGain, calcEffectiveShortGain, calcNotionalValue } from
 import { usePools } from '~/hooks/usePools';
 import { ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { LoadingRows } from '~/types/hooks';
-import { PoolStatus } from '~/types/pools';
-import { useDeprecatedPools } from '../useDeprecatedPools';
 import useFarmBalances from '../useFarmBalances';
 
 export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
     const { pools, isLoadingPools } = usePools();
     const farmBalances = useFarmBalances();
-    const deprecatedPools = useDeprecatedPools();
     const [rows, setRows] = useState<ClaimedTokenRowProps[]>([]);
 
     useEffect(() => {
@@ -20,13 +17,12 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
             const tokens: ClaimedTokenRowProps[] = [];
 
             poolValues.forEach((pool) => {
-                const { poolInstance, userBalances } = pool;
+                const { poolInstance, userBalances, poolStatus } = pool;
 
                 const { address, oraclePrice, longToken, shortToken, longBalance, shortBalance, leverage } =
                     poolInstance;
                 const leverageBN = new BigNumber(leverage);
 
-                const poolStatus = deprecatedPools[address] ? PoolStatus.Deprecated : PoolStatus.Live;
                 const longTokenPrice = poolInstance.getLongTokenPrice();
                 const longNotionalValue = calcNotionalValue(longTokenPrice, userBalances.longToken.balance);
                 const shortTokenPrice = poolInstance.getShortTokenPrice();

@@ -5,6 +5,7 @@ import shallow from 'zustand/shallow';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 
+import { deprecatedPools } from '~/constants/deprecatedPools';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
@@ -12,6 +13,7 @@ import { useAllPoolLists } from '~/hooks/useAllPoolLists';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { Network } from '~/types/networks';
+import { PoolStatus } from '~/types/pools';
 import { Farm, FarmConfig } from '~/types/staking';
 import { StakingRewards } from '~/types/staking/typechain';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
@@ -134,6 +136,10 @@ export const FarmStore: React.FC = ({ children }) => {
                         const poolDetails = {
                             poolTokenPrice: await fetchTokenPrice(poolInfo, stakingTokenAddress, provider),
                             address: poolInfo.address,
+                            status:
+                                network && deprecatedPools?.[network]?.[poolInfo.address]
+                                    ? PoolStatus.Deprecated
+                                    : PoolStatus.Live,
                         };
 
                         const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;

@@ -69,7 +69,7 @@ export const useUpdatePoolInstances = (): void => {
                             if (!hasSetPools.current && mounted) {
                                 if (pools_.length) {
                                     // if pools exist
-                                    setMultiplePools(pools_);
+                                    setMultiplePools(pools_, network);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
                                 } else {

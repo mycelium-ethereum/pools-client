@@ -8,11 +8,11 @@ import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelec
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
+import { PoolStatus } from '~/types/pools';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
 import { TokensNotional } from '../Tokens';
-import { PoolStatus } from '~/types/pools';
 
 export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
     symbol,
@@ -27,7 +27,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     onClickStake,
     leveragedNotionalValue,
     entryPrice,
-    poolStatus
+    poolStatus,
 }) => {
     const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
 
