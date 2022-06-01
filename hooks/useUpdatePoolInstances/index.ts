@@ -47,8 +47,7 @@ export const useUpdatePoolInstances = (): void => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
-        if (!!poolLists.length && provider?.network?.chainId) {
-            const network = provider.network?.chainId?.toString();
+        if (!!poolLists.length && provider && network) {
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
                     console.debug(`Initialising pools ${network.slice()}`, poolLists);
@@ -98,7 +97,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [provider, poolLists]);
+    }, [poolLists]);
 
     // fetch all pending commits
     useEffect(() => {
