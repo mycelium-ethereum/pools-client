@@ -9,7 +9,7 @@ export enum MarketFilterEnum {
     LINK = 'Chainlink',
     EUR = 'Euro',
     AAVE = 'Aave',
-    WTI = 'WTI Oil',
+    WTI = 'Oil',
 }
 
 export enum CollateralFilterEnum {

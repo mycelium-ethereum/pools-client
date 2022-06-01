@@ -24,6 +24,7 @@ import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
+import { marketSymbolToAssetName } from '~/utils/poolNames';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
@@ -106,12 +107,17 @@ export const PoolsTable = ({
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
-                                    <Logo
-                                        className="my-auto mr-3 inline"
-                                        size="lg"
-                                        ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
-                                    />
+                                    <div className="flex">
+                                        <Logo
+                                            className="my-auto mr-3"
+                                            size="lg"
+                                            ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
+                                        />
+                                    </div>
                                     <div className="my-auto">
+                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                            {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
+                                        </div>
                                         <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
