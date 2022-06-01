@@ -17,6 +17,7 @@ export const ClaimedTokensTable = ({
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Value</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
@@ -32,6 +33,7 @@ export const ClaimedTokensTable = ({
                             <ClaimedTokenRow
                                 {...token}
                                 key={token.address}
+                                poolStatus={token.poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 onClickStake={onClickStake}
                             />

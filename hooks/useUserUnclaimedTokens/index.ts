@@ -16,7 +16,7 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
         if (pools) {
             const _rows: UnclaimedRowInfo[] = [];
             Object.values(pools).forEach((pool) => {
-                const { poolInstance, userBalances } = pool;
+                const { poolInstance, userBalances, poolStatus } = pool;
 
                 const { shortToken, longToken, settlementToken, leverage, address, name } = poolInstance;
 
@@ -94,6 +94,7 @@ export const useUserUnclaimedTokens = (): LoadingRows<UnclaimedRowInfo> => {
                     claimableShortTokens,
                     claimableSum,
                     numClaimable,
+                    poolStatus,
                 });
             });
             setRows(_rows);

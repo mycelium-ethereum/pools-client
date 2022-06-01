@@ -17,7 +17,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
             const tokens: ClaimedTokenRowProps[] = [];
 
             poolValues.forEach((pool) => {
-                const { poolInstance, userBalances } = pool;
+                const { poolInstance, userBalances, poolStatus } = pool;
 
                 const { address, oraclePrice, longToken, shortToken, longBalance, shortBalance, leverage } =
                     poolInstance;
@@ -47,6 +47,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
                         entryPrice: userBalances.tradeStats.avgShortEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
                         stakedTokens: shortStaked,
+                        poolStatus,
                     });
                 }
                 if (!userBalances.longToken.balance.eq(0) || !longStaked.eq(0)) {
@@ -65,6 +66,7 @@ export const useUserClaimedTokens = (): LoadingRows<ClaimedTokenRowProps> => {
                         entryPrice: userBalances.tradeStats.avgLongEntryPriceWallet,
                         settlementTokenSymbol: poolInstance.settlementToken.symbol,
                         stakedTokens: longStaked,
+                        poolStatus,
                     });
                 }
             });

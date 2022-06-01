@@ -75,7 +75,7 @@ const TokenSelect: React.FC<{
                         <Styles.TokenSelectBody>
                             {filteredTokens.map((token) => (
                                 <Styles.TokenSelectRow
-                                    key={token.symbol}
+                                    key={token.pool.address}
                                     onClick={() => setToken(token.pool.address, token.side)}
                                 >
                                     <Styles.TokenSelectCell hasLogo>

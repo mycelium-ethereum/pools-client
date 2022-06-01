@@ -22,6 +22,7 @@ export const UnclaimedTokensTable = ({
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
@@ -49,6 +50,7 @@ export const UnclaimedTokensTable = ({
                                             numClaimable={pool.numClaimable}
                                             claimableSum={pool.claimableSum}
                                             onClickCommitAction={onClickCommitAction}
+                                            poolStatus={pool.poolStatus}
                                         />
                                     )
                                 );
@@ -63,6 +65,7 @@ export const UnclaimedTokensTable = ({
 const PoolRow = ({
     poolName,
     poolAddress,
+    poolStatus,
     marketTicker,
     claimableLongTokens,
     claimableShortTokens,
@@ -70,6 +73,7 @@ const PoolRow = ({
     onClickCommitAction,
 }: UnclaimedRowProps): JSX.Element => {
     const { claim } = usePoolInstanceActions();
+
     return (
         <>
             <Styles.PoolTableRow marketTicker={marketTicker}>
@@ -103,6 +107,7 @@ const PoolRow = ({
                             <UnclaimedPoolTokenRow
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
                                 poolAddress={poolAddress}
+                                poolStatus={poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 settlementTokenSymbol={claimableSettlementTokens.symbol}
                                 {...(claimableAsset as OverviewPoolToken)}

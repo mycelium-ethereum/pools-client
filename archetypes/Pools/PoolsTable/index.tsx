@@ -8,6 +8,7 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
@@ -101,7 +102,7 @@ export const PoolsTable = ({
                     <tr>
                         <TableHeaderCell
                             className="rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary"
-                            colSpan={13}
+                            colSpan={14}
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
@@ -160,6 +161,7 @@ export const PoolsTable = ({
                         <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">
                             Leverage / Collateral
                         </TableHeaderCell>
+                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             {'INDEX PRICE (USD)'}
@@ -201,7 +203,7 @@ export const PoolsTable = ({
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
+                        <TableHeaderCell colSpan={showNextRebalance ? 6 : 5} />
 
                         {/* Token Cols */}
                         <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
@@ -268,6 +270,11 @@ const PoolRow: React.FC<
                         {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
+                </TableRowCell>
+                <TableRowCell rowSpan={2}>
+                    <PoolStatusBadgeContainer>
+                        <PoolStatusBadge status={pool.poolStatus} />
+                    </PoolStatusBadgeContainer>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (

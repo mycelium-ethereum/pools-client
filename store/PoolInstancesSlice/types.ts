@@ -15,8 +15,8 @@ export interface IPoolsInstancesSlice {
     poolsInitialized: boolean;
     poolsInitializationError: any | undefined;
 
-    setPool: (pool: Pool) => void;
-    setMultiplePools: (pool: Pool[]) => void;
+    setPool: (pool: Pool, network: string) => void;
+    setMultiplePools: (pool: Pool[], network: string) => void;
     resetPools: () => void;
     setPoolsInitialized: (initialized: boolean) => void;
     setPoolsInitializationError: (error: any) => void;

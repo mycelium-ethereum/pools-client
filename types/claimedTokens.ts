@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { PoolStatus } from './pools';
 import { OnClickCommit, OnClickStake, OverviewPoolToken } from './portfolio';
 
 export type ClaimedRowActions = {
@@ -13,4 +14,5 @@ export type ClaimedTokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     oraclePrice: BigNumber;
     effectiveGain: number;
     stakedTokens: BigNumber;
+    poolStatus: PoolStatus;
 };

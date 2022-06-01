@@ -2,10 +2,13 @@ import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
+import { PoolStatus } from '~/types/pools';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
@@ -24,13 +27,21 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     onClickStake,
     leveragedNotionalValue,
     entryPrice,
+    poolStatus,
 }) => {
+    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
+
     // if there is any balance at all they should stake
     const shouldStake = !balance.eq(0);
     return (
         <TableRow lined>
             <OverviewTableRowCell>
                 <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={poolStatus} />
+                </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional
@@ -71,14 +82,22 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 >
                     Burn
                 </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!balance.toNumber()}
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                <TooltipSelector
+                    tooltip={{
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                    }}
                 >
-                    Flip
-                </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            disabled={poolIsDeprecated || !balance.toNumber()}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
+                        >
+                            Flip
+                        </ActionsButton>
+                    </div>
+                </TooltipSelector>
                 <Actions
                     token={{
                         address,

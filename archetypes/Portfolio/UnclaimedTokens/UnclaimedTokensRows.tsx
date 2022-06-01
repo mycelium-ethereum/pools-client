@@ -2,9 +2,12 @@ import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { OverviewAsset } from '~/types/portfolio';
 import { UnclaimedPoolTokenRowProps } from '~/types/unclaimedTokens';
 import { Market, SettlementToken } from '../Market';
@@ -23,11 +26,19 @@ export const UnclaimedPoolTokenRow = ({
     side,
     poolAddress,
     settlementTokenSymbol,
+    poolStatus,
 }: UnclaimedPoolTokenRowProps): JSX.Element => {
+    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
+
     return (
         <TableRow>
             <OverviewTableRowCell>
                 <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+            </OverviewTableRowCell>
+            <OverviewTableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={poolStatus} />
+                </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional
@@ -61,13 +72,22 @@ export const UnclaimedPoolTokenRow = ({
                 >
                     Burn
                 </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                <TooltipSelector
+                    tooltip={{
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                    }}
                 >
-                    Flip
-                </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            disabled={poolIsDeprecated}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                        >
+                            Flip
+                        </ActionsButton>
+                    </div>
+                </TooltipSelector>
                 <Actions
                     token={{
                         address,
