@@ -93,6 +93,7 @@ export type TradeStats = {
 
 export type PoolInfo = {
     poolInstance: Pool;
+    poolStatus: PoolStatus;
     userBalances: {
         shortToken: TokenBalance;
         longToken: TokenBalance;

@@ -254,12 +254,16 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
 
     // sets the pool status when the selectedPool changes
     useEffect(() => {
+        const isDeprecated = swapState.selectedPool && deprecatedPools[swapState.selectedPool];
+        if (isDeprecated) {
+            swapDispatch({
+                type: 'setCommitAction',
+                value: CommitActionEnum.burn,
+            });
+        }
         swapDispatch({
             type: 'setPoolStatus',
-            value:
-                swapState.selectedPool && deprecatedPools[swapState.selectedPool]
-                    ? PoolStatus.Deprecated
-                    : PoolStatus.Live,
+            value: isDeprecated ? PoolStatus.Deprecated : PoolStatus.Live,
         });
     }, [swapState.selectedPool]);
 

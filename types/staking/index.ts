@@ -2,6 +2,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { ERC20 } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { StakingRewards } from './typechain/StakingRewards';
+import { PoolStatus } from '../pools';
 
 export type FarmTableDetails = {
     totalStaked: BigNumber;
@@ -18,6 +19,7 @@ export type FarmTableDetails = {
     poolDetails: {
         poolTokenPrice: BigNumber;
         address: string;
+        status: PoolStatus;
     };
 };
 

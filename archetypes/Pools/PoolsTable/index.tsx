@@ -14,7 +14,6 @@ import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
 
-import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -22,7 +21,6 @@ import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
