@@ -60,7 +60,7 @@ export default styled((({ onClose, className }) => {
 
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};
-    const { poolInstance: pool, userBalances } = usePool(selectedPool);
+    const { poolInstance: pool, userBalances, poolStatus } = usePool(selectedPool);
     const { commit, approve, commitGasFee } = usePoolInstanceActions();
 
     const ethPrice = useBalancerETHPrice();
@@ -89,8 +89,11 @@ export default styled((({ onClose, className }) => {
     }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
 
     const TRADE_OPTIONS = useMemo(() => {
-        return getTradeOptions(swapState.poolStatus);
-    }, [swapState.poolStatus]);
+        if (poolStatus === PoolStatus.Deprecated) {
+            swapDispatch({ type: 'setCommitAction', value: CommitActionEnum.burn });
+        }
+        return getTradeOptions(poolStatus);
+    }, [poolStatus]);
 
     return (
         <div className={className}>

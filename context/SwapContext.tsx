@@ -2,10 +2,8 @@ import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { useDeprecatedPools } from '~/hooks/useDeprecatedPools';
 import { Children } from '~/types/general';
 import { PoolType } from '~/types/pools';
-import { PoolStatus } from '~/types/pools';
 import { getMarketInfoFromSymbol, getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
@@ -28,7 +26,6 @@ export type SwapState = {
 
     // address of selected pool
     selectedPool: string | undefined;
-    poolStatus: PoolStatus;
 
     leverage: number;
 
@@ -54,7 +51,6 @@ export type SwapAction =
     | { type: 'setPoolOptions'; options: PoolType[] }
     | { type: 'setInvalidAmount'; value: { message?: string; isInvalid: boolean } }
     | { type: 'setSide'; value: SideEnum }
-    | { type: 'setPoolStatus'; value: PoolStatus }
     | { type: 'reset' };
 
 export const LEVERAGE_OPTIONS = (market: string): { leverage: number; disabled: boolean }[] => [
@@ -100,7 +96,6 @@ export const swapDefaults: SwapState = {
     commitAction: CommitActionEnum.mint,
     balanceType: BalanceTypeEnum.wallet,
     selectedPool: undefined,
-    poolStatus: PoolStatus.Live,
     side: NaN,
     leverage: NaN,
     market: '',
@@ -115,7 +110,6 @@ export const SwapContext = React.createContext<Partial<ContextProps>>({});
 export const SwapStore: React.FC<Children> = ({ children }: Children) => {
     const router = useRouter();
     const { pools, poolsInitialized } = usePools();
-    const deprecatedPools = useDeprecatedPools();
     const initialState: SwapState = swapDefaults;
 
     const reducer = (state: SwapState, action: SwapAction) => {
@@ -182,11 +176,6 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                     ...swapDefaults,
                     commitAction: state.commitAction,
                 };
-            case 'setPoolStatus':
-                return {
-                    ...state,
-                    poolStatus: action.value,
-                };
             default:
                 throw new Error('Unexpected action');
         }
@@ -251,21 +240,6 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             }
         }
     }, [poolsInitialized, router]);
-
-    // sets the pool status when the selectedPool changes
-    useEffect(() => {
-        const isDeprecated = swapState.selectedPool && deprecatedPools[swapState.selectedPool];
-        if (isDeprecated) {
-            swapDispatch({
-                type: 'setCommitAction',
-                value: CommitActionEnum.burn,
-            });
-        }
-        swapDispatch({
-            type: 'setPoolStatus',
-            value: isDeprecated ? PoolStatus.Deprecated : PoolStatus.Live,
-        });
-    }, [swapState.selectedPool]);
 
     return (
         <SwapContext.Provider
