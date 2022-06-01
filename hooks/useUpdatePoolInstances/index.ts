@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
-import { KnownNetwork, Pool } from '@tracer-protocol/pools-js';
+import { Pool } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -69,7 +69,7 @@ export const useUpdatePoolInstances = (): void => {
                             if (!hasSetPools.current && mounted) {
                                 if (pools_.length) {
                                     // if pools exist
-                                    setMultiplePools(pools_, provider.network.chainId.toString() as KnownNetwork);
+                                    setMultiplePools(pools_, network);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
                                 } else {
