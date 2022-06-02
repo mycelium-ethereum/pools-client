@@ -352,7 +352,7 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.skew.toFixed(3)}</div>
+                            <div>{pool.nextSkew.toFixed(3)}</div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.skew}
