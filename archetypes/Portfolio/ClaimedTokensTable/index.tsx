@@ -1,27 +1,28 @@
 import React, { useMemo } from 'react';
 import useUserClaimedTokens from '~/hooks/useUserClaimedTokens';
+import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { MarketFilterEnum } from '~/types/filters';
 import { generalMarketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
 import { ClaimedTokensTable } from './ClaimedTokensTable';
 import { OverviewTable } from '../OverviewTable';
 import { MarketDropdown, OverviewTableSearch } from '../OverviewTable/Actions';
-import { OnClickCommit, PortfolioAction, PortfolioState, TokenRowProps } from '../state';
+import { PortfolioAction, PortfolioState } from '../state';
 
 export const ClaimedTokens = ({
     claimedTokensMarketFilter,
     claimedTokensSearch,
     dispatch,
     onClickCommitAction,
+    onClickStake,
 }: {
     claimedTokensMarketFilter: PortfolioState['claimedTokensMarketFilter'];
     claimedTokensSearch: PortfolioState['claimedTokensSearch'];
     dispatch: React.Dispatch<PortfolioAction>;
-    onClickCommitAction: OnClickCommit;
-}): JSX.Element => {
+} & ClaimedRowActions): JSX.Element => {
     const { rows: tokens, isLoading } = useUserClaimedTokens();
 
-    const claimedSearchFilter = (token: TokenRowProps): boolean => {
+    const claimedSearchFilter = (token: ClaimedTokenRowProps): boolean => {
         const searchString = escapeRegExp(claimedTokensSearch.toLowerCase());
         return Boolean(token.name.toLowerCase().match(searchString));
     };
@@ -56,7 +57,11 @@ export const ClaimedTokens = ({
             isLoading={isLoading}
             rowCount={tokens.length}
         >
-            <ClaimedTokensTable rows={filteredTokens} onClickCommitAction={onClickCommitAction} />
+            <ClaimedTokensTable
+                rows={filteredTokens}
+                onClickCommitAction={onClickCommitAction}
+                onClickStake={onClickStake}
+            />
         </OverviewTable>
     );
 };

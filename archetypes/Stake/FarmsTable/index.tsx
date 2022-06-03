@@ -1,10 +1,11 @@
-import BigNumber from 'bignumber.js';
 import React, { useMemo, useState } from 'react';
+import BigNumber from 'bignumber.js';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip } from '~/components/Tooltips';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
@@ -19,6 +20,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 <TableHeader className="uppercase">
                     <tr>
                         <TableHeaderCell>Strategy</TableHeaderCell>
+                        <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>APR</TableHeaderCell>
                         <TableHeaderCell>TVL (USD)</TableHeaderCell>
                         <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
@@ -129,6 +131,11 @@ const PoolRow: React.FC<{
                         <div>{farm.name}</div>
                     )}
                 </div>
+            </TableRowCell>
+            <TableRowCell>
+                <PoolStatusBadgeContainer>
+                    <PoolStatusBadge status={farm.poolDetails.status} />
+                </PoolStatusBadgeContainer>
             </TableRowCell>
             <TableRowCell>
                 {farm.rewardsEnded ? <RewardsEndedTip>N/A</RewardsEndedTip> : `${largeDecimal(apr)}%`}

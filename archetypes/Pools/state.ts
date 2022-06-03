@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Upkeep } from '~/hooks/useUpkeeps';
 import { MarketFilterEnum, LeverageFilterEnum, CollateralFilterEnum, SortByEnum } from '~/types/filters';
+import { PoolStatus } from '~/types/pools';
 
 export enum DeltaEnum {
     Percentile = 0,
@@ -61,6 +62,8 @@ export interface BrowseTableRowData {
     committer: string;
     collateralAsset: string;
     collateralAssetAddress: string;
+
+    poolStatus: PoolStatus;
 }
 
 export interface BrowseState {

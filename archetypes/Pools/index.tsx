@@ -172,9 +172,12 @@ export const Browse: React.FC = () => {
                             Display Alternative Pool
                         </Styles.Button>
                         <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                            <Styles.Button variant="primary" size="sm" disabled>
-                                Deploy New Pool
-                            </Styles.Button>
+                            <Styles.DisabledButtonWrap>
+                                <Styles.DummyButton />
+                                <Styles.Button variant="primary" size="sm" disabled>
+                                    Deploy New Pool
+                                </Styles.Button>
+                            </Styles.DisabledButtonWrap>
                         </TooltipSelector>
                     </Styles.AltPoolActions>
                 </Styles.AltPoolRow>

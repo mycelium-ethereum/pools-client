@@ -69,3 +69,14 @@ export const GasPriceTooltip: React.FC<{
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
+
+export const DeprecatedPoolMintCommitTooltip: React.FC = ({ children }) => {
+    const Content = <>Minting is disabled since this pool is deprecated.</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const DeprecatedPoolFlipCommitTooltip: React.FC = ({ children }) => {
+    const Content = <>Flipping is disabled since this pool is deprecated.</>;
+
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};

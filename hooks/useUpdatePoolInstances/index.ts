@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
@@ -41,16 +41,17 @@ export const useUpdatePoolInstances = (): void => {
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
+    const [isFetchingPools, setIsFetchingPools] = useState(false);
 
     // if the pools from the factory change, re-init them
     useEffect(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
         // this is not the greatest for the time being
-        if (!!poolLists.length && provider?.network?.chainId) {
-            const network = provider.network?.chainId?.toString();
+        if (!!poolLists.length && provider && network && !isFetchingPools) {
             if (isSupportedNetwork(network)) {
                 const fetchAndSetPools = async () => {
+                    setIsFetchingPools(true);
                     console.debug(`Initialising pools ${network.slice()}`, poolLists);
                     resetPools();
                     hasSetPools.current = false;
@@ -69,7 +70,7 @@ export const useUpdatePoolInstances = (): void => {
                             if (!hasSetPools.current && mounted) {
                                 if (pools_.length) {
                                     // if pools exist
-                                    setMultiplePools(pools_);
+                                    setMultiplePools(pools_, network);
                                     setPoolsInitialized(true);
                                     hasSetPools.current = true;
                                 } else {
@@ -83,6 +84,9 @@ export const useUpdatePoolInstances = (): void => {
                                 setPoolsInitialized(false);
                                 setPoolsInitializationError(err);
                             }
+                        })
+                        .finally(() => {
+                            setIsFetchingPools(false);
                         });
                 };
                 fetchAndSetPools();
@@ -98,7 +102,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [provider, poolLists]);
+    }, [poolLists, provider]);
 
     // fetch all pending commits
     useEffect(() => {

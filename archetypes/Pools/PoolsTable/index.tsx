@@ -8,6 +8,7 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
@@ -24,6 +25,7 @@ import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
+import { marketSymbolToAssetName } from '~/utils/poolNames';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
@@ -133,16 +135,21 @@ export const PoolsTable = ({
                     <tr>
                         <TableHeaderCell
                             className="rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary"
-                            colSpan={13}
+                            colSpan={14}
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
-                                    <Logo
-                                        className="my-auto mr-3 inline"
-                                        size="lg"
-                                        ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
-                                    />
+                                    <div className="flex">
+                                        <Logo
+                                            className="my-auto mr-3"
+                                            size="lg"
+                                            ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
+                                        />
+                                    </div>
                                     <div className="my-auto">
+                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                            {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
+                                        </div>
                                         <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
@@ -192,6 +199,7 @@ export const PoolsTable = ({
                         <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">
                             Leverage / Collateral
                         </TableHeaderCell>
+                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             {'INDEX PRICE (USD)'}
@@ -233,7 +241,7 @@ export const PoolsTable = ({
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
-                        <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
+                        <TableHeaderCell colSpan={showNextRebalance ? 6 : 5} />
 
                         {/* Token Cols */}
                         <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
@@ -300,6 +308,11 @@ const PoolRow: React.FC<
                         {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
                     </div>
+                </TableRowCell>
+                <TableRowCell rowSpan={2}>
+                    <PoolStatusBadgeContainer>
+                        <PoolStatusBadge status={pool.poolStatus} />
+                    </PoolStatusBadgeContainer>
                 </TableRowCell>
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
@@ -371,7 +384,7 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.skew.toFixed(3)}</div>
+                            <div>{pool.nextSkew.toFixed(3)}</div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.skew}

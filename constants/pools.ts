@@ -2,10 +2,13 @@ import { BigNumber } from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
-import { PoolInfo } from '~/types/pools';
+import { PoolInfo, PoolStatus } from '~/types/pools';
+
+const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 
 export const DEFAULT_POOLSTATE: PoolInfo = {
     poolInstance: Pool.CreateDefault(),
+    poolStatus: PoolStatus.Live,
     userBalances: {
         shortToken: {
             approvedAmount: new BigNumber(0),
@@ -76,13 +79,13 @@ type TokenListMapByNetwork = Partial<Record<KnownNetwork, PoolListMap>>;
 export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
-            verified: 'https://api.tracer.finance/poolsv2/poolList?network=42161',
+            verified: `${TRACER_API}/poolsv2/poolList?network=42161&list=verified`,
         },
         External: [],
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
-            verified: 'https://api.tracer.finance/poolsv2/poolList?network=421611',
+            verified: `${TRACER_API}/poolsv2/poolList?network=421611&list=verified`,
         },
         External: [],
     },
@@ -98,6 +101,8 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '3S-BTC/USD+USDC': '3S-BTC+USDC',
     '3L-XAU/USD+USDC': '3L-XAU+USDC',
     '3S-XAU/USD+USDC': '3S-XAU+USDC',
+    '3L-WTI/USD+USDC': '3L-WTI+USDC',
+    '3S-WTI/USD+USDC': '3S-WTI+USDC',
     '3L-ETH/USD+gOHM': '3L-ETH+gOHM',
     '3S-ETH/USD+gOHM': '3S-ETH+gOHM',
     '3L-(AVAX+BNB+SOL)/USD+USDC': '3L-ethkilla',

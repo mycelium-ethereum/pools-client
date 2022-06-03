@@ -93,6 +93,7 @@ export type TradeStats = {
 
 export type PoolInfo = {
     poolInstance: Pool;
+    poolStatus: PoolStatus;
     userBalances: {
         shortToken: TokenBalance;
         longToken: TokenBalance;
@@ -162,3 +163,8 @@ export type PoolCommitStatsAPIResponse = {
 export type PoolCommitStats = {
     oneDayVolume: BigNumber;
 };
+
+export enum PoolStatus {
+    Live,
+    Deprecated,
+}

@@ -99,6 +99,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'TOKE/USD': 'Tokemak',
     'LINK/USD': 'Chainlink',
     'AAVE/USD': 'AAVE',
+    'WTI/USD': 'Oil',
 };
 
 // export const tickerToName: (ticker: string) => string = (ticker) => {

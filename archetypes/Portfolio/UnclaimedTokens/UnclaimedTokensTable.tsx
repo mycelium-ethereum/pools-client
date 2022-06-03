@@ -4,23 +4,25 @@ import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
+import { OverviewPoolToken } from '~/types/portfolio';
+import { UnclaimedRowInfo, UnclaimedRowProps, UnclaimedRowActions } from '~/types/unclaimedTokens';
 import * as Styles from './styles';
-import { ClaimableQuoteTokenRow, ClaimablePoolTokenRow } from './UnclaimedTokensRows';
-import { UnclaimedRowInfo, OverviewPoolToken, TokenType, UnclaimedRowProps, OnClickCommit } from '../state';
+import { UnclaimedQuoteTokenRow, UnclaimedPoolTokenRow } from './UnclaimedTokensRows';
+import { TokenType } from '../state';
 
 export const UnclaimedTokensTable = ({
     rows,
     onClickCommitAction,
 }: {
     rows: UnclaimedRowInfo[];
-    onClickCommitAction: OnClickCommit;
-}): JSX.Element => {
+} & UnclaimedRowActions): JSX.Element => {
     return (
         <>
             <Table>
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
+                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
@@ -48,6 +50,7 @@ export const UnclaimedTokensTable = ({
                                             numClaimable={pool.numClaimable}
                                             claimableSum={pool.claimableSum}
                                             onClickCommitAction={onClickCommitAction}
+                                            poolStatus={pool.poolStatus}
                                         />
                                     )
                                 );
@@ -62,6 +65,7 @@ export const UnclaimedTokensTable = ({
 const PoolRow = ({
     poolName,
     poolAddress,
+    poolStatus,
     marketTicker,
     claimableLongTokens,
     claimableShortTokens,
@@ -69,6 +73,7 @@ const PoolRow = ({
     onClickCommitAction,
 }: UnclaimedRowProps): JSX.Element => {
     const { claim } = usePoolInstanceActions();
+
     return (
         <>
             <Styles.PoolTableRow marketTicker={marketTicker}>
@@ -90,7 +95,7 @@ const PoolRow = ({
                 if (claimableAsset.type === TokenType.Settlement) {
                     return (
                         !claimableAsset.balance.eq(0) && (
-                            <ClaimableQuoteTokenRow
+                            <UnclaimedQuoteTokenRow
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
                                 {...claimableAsset}
                             />
@@ -99,9 +104,10 @@ const PoolRow = ({
                 } else {
                     return (
                         !claimableAsset.balance.eq(0) && (
-                            <ClaimablePoolTokenRow
+                            <UnclaimedPoolTokenRow
                                 key={`${poolAddress}-${claimableAsset.symbol}`}
                                 poolAddress={poolAddress}
+                                poolStatus={poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 settlementTokenSymbol={claimableSettlementTokens.symbol}
                                 {...(claimableAsset as OverviewPoolToken)}

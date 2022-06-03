@@ -62,6 +62,10 @@ const MARKET_COLORS: Record<
         backgroundColor: 'rgba(55, 91, 210, 0.3)',
         borderColor: 'rgb(55, 91, 210)',
     },
+    WTI: {
+        backgroundColor: 'rgba(65, 102, 139, 0.3)',
+        borderColor: 'rgb(95, 102, 139)',
+    },
 };
 
 export const PoolTableRow = styled.tr<{
