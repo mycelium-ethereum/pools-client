@@ -19,8 +19,6 @@ export const ClaimedTokensTable = ({
                         <TableHeaderCell>Token</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Value</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Acquisition Cost</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Unrealised PnL</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Leveraged Value</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>

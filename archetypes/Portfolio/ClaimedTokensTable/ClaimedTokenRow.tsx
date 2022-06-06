@@ -1,11 +1,9 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { PoolStatus } from '~/types/pools';
@@ -26,7 +24,6 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     onClickCommitAction,
     onClickStake,
     leveragedNotionalValue,
-    entryPrice,
     poolStatus,
 }) => {
     const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
@@ -48,18 +45,6 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                     amount={balance}
                     price={currentTokenPrice}
                     settlementTokenSymbol={settlementTokenSymbol}
-                />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <TokensNotional amount={balance} price={entryPrice} settlementTokenSymbol={settlementTokenSymbol} />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <UpOrDown
-                    oldValue={balance.times(entryPrice)}
-                    newValue={balance.times(currentTokenPrice)}
-                    deltaDenotation={DeltaEnum.Numeric}
-                    currency={settlementTokenSymbol}
-                    showCurrencyTicker={true}
                 />
             </OverviewTableRowCell>
             <OverviewTableRowCell>

@@ -4,9 +4,6 @@ import { TokenType } from '~/archetypes/Portfolio/state';
 
 export type PortfolioOverview = {
     totalPortfolioValue: BigNumber;
-    unrealisedProfit: BigNumber;
-    realisedProfit: BigNumber;
-    portfolioDelta: number; //percentage change
 };
 
 export type OnClickStake = (token: string, action: 'stake' | 'unstake') => void;

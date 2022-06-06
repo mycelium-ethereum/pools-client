@@ -109,9 +109,6 @@ describe('usePortfolioOverview hook', () => {
     it('usePortfolioOverview runs correctly', () => {
         const { result } = renderHook(() => usePortfolioOverview());
         expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-        expect(result.current.realisedProfit.toNumber()).toBe(0);
-        expect(result.current.portfolioDelta).toBe(0);
     });
 
     it('caclulates filled state', () => {
@@ -122,9 +119,6 @@ describe('usePortfolioOverview hook', () => {
         // token prices are $1 for the first case
         // totalPortfolioValue summation of aggregateBalances (200), walletBalances (25), and pendingCommits (50)
         expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-        expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(0);
 
         // long token increase
         (usePools as jest.Mock).mockReturnValue(LONG_TOKEN_PRICE_INCREASE);
@@ -132,9 +126,6 @@ describe('usePortfolioOverview hook', () => {
 
         // all long tokens value increase by 10%
         expect(result.current.totalPortfolioValue.toNumber()).toBe(236.5);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(11.5);
-        expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(5.111111111111112);
 
         expect(selectAccount as jest.Mock).toHaveBeenCalledTimes(1);
     }),
@@ -166,9 +157,6 @@ describe('usePortfolioOverview hook', () => {
             const { result } = renderHook(() => usePortfolioOverview());
 
             expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
-            expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-            expect(result.current.realisedProfit.toNumber()).toBe(25);
-            expect(result.current.portfolioDelta).toBe(0);
         });
     it('handles fully staked', () => {
         const stakedLongTokens = 10;
@@ -199,9 +187,6 @@ describe('usePortfolioOverview hook', () => {
         const { result } = renderHook(() => usePortfolioOverview());
 
         expect(result.current.totalPortfolioValue.toNumber()).toBe(225);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-        expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(0);
     });
     it('handles over staked with 0 balances', () => {
         // staking more tokens than have minted (have received from another wallet);
@@ -214,9 +199,6 @@ describe('usePortfolioOverview hook', () => {
         const { result } = renderHook(() => usePortfolioOverview());
 
         expect(result.current.totalPortfolioValue.toNumber()).toBe(300);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(300);
-        expect(result.current.realisedProfit.toNumber()).toBe(0);
-        expect(result.current.portfolioDelta).toBe(0);
     });
     it('handles mints', () => {
         const mintAmounts = {
@@ -239,9 +221,6 @@ describe('usePortfolioOverview hook', () => {
         // should only increase totalPortfolioValue
         // price delta will decrease slightly since the portfolio increase and dilution of profit/loss
         expect(result.current.totalPortfolioValue.toNumber()).toBe(271.5);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(11.5);
-        expect(result.current.realisedProfit.toNumber()).toBe(25);
-        expect(result.current.portfolioDelta).toBe(4.423076923076923);
     }),
         it('handles burns', () => {
             // with burns we also have to reduce from either wallet balance or aggregate balances other wise we are
@@ -286,9 +265,6 @@ describe('usePortfolioOverview hook', () => {
 
             // portfolio value should remain the same
             expect(result.current.totalPortfolioValue.toNumber()).toBe(236.5);
-            expect(result.current.unrealisedProfit.toNumber()).toBe(11.5);
-            expect(result.current.realisedProfit.toNumber()).toBe(25);
-            expect(result.current.portfolioDelta).toBe(5.111111111111112);
         });
     it('handles disconnected account', () => {
         (selectAccount as jest.Mock).mockReturnValue(undefined);
@@ -296,8 +272,5 @@ describe('usePortfolioOverview hook', () => {
 
         // portfolio value should remain the same
         expect(result.current.totalPortfolioValue.toNumber()).toBe(0);
-        expect(result.current.unrealisedProfit.toNumber()).toBe(0);
-        expect(result.current.realisedProfit.toNumber()).toBe(0);
-        expect(result.current.portfolioDelta).toBe(0);
     });
 });
