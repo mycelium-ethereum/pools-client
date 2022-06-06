@@ -54,6 +54,9 @@ export const usePortfolioOverview = (): PortfolioOverview => {
                     .plus(userBalances.aggregateBalances.settlementTokens)
                     .plus(pendingAmounts.longMint)
                     .plus(pendingAmounts.shortMint)
+                    // not accurate but not sure how much it matters
+                    .plus(calcNotionalValue(nextLongTokenPrice, pendingAmounts.longBurn))
+                    .plus(calcNotionalValue(nextShortTokenPrice, pendingAmounts.shortBurn))
                     .plus(totalStaked);
             });
 
