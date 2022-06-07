@@ -12,6 +12,16 @@ module.exports = {
         ignored: ['node_modules', 'public/static'],
     },
 
+    async redirects() {
+        return [
+          {
+            source: '/stake',
+            destination: '/stakepooltoken',
+            permanent: true
+          },
+        ]
+      },
+
     webpack(config) {
         // Fixes npm packages that depend on `fs` module
         config.resolve.fallback = {
