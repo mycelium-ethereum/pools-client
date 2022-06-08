@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import Button from '~/components/General/Button';
 import { TWModal } from '~/components/General/TWModal';
@@ -45,8 +46,9 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
 
                         <Styles.Content>
                             <Styles.Text>
-                                You need assets on Arbitrum to buy and mint tokens. Use the bridge to easily move funds
-                                between networks, without leaving the app.
+                                You need assets on Arbitrum to buy and mint tokens. Use the{' '}
+                                <Styles.Link href="https://bridge.arbitrum.io/">bridge</Styles.Link> to easily move
+                                funds between networks, without leaving the app.
                             </Styles.Text>
                             <Styles.Text>Reminder: It takes 7 days to withdraw to Ethereum.</Styles.Text>
                         </Styles.Content>
@@ -121,11 +123,17 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
 
                         <Styles.Content>
                             <Styles.Text>
-                                Browse the user documentation.
+                                Browse the{' '}
+                                <Styles.Link href="https://pools.docs.tracer.finance/perpetual-pools/readme">
+                                    user documentation
+                                </Styles.Link>
+                                .
                                 <br />
-                                Check out Radar, Tracer&#39;s Blog.
+                                Check out <Styles.Link href="https://tracer.finance/radar/">Radar</Styles.Link>,
+                                Tracer&#39;s Blog.
                                 <br />
-                                Join the community on Discord.
+                                Join the community on{' '}
+                                <Styles.Link href="https://discord.gg/TracerDAO">Discord</Styles.Link>.
                             </Styles.Text>
                         </Styles.Content>
 
