@@ -41,16 +41,16 @@ const EffectiveLeverageTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
-
 const SpotPriceTip: React.FC = ({ children }) => (
     <StyledTooltip title="The price of the tracked asset before subjecting it to any Data Manipulations.">
+        {children}
+    </StyledTooltip>
 );
 const TracerTip: React.FC = ({ children }) => (
     <StyledTooltip title="The current token price on Tracer. Please note that the price may change as minting the token is not immediate.">
         {children}
     </StyledTooltip>
 );
-
 
 const IndexPriceTip: React.FC = ({ children }) => (
     <StyledTooltip title="The value used for settling this market.">{children}</StyledTooltip>
