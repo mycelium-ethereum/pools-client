@@ -67,6 +67,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     color: ${({ theme }) => theme.fontColor.secondary};
     letter-spacing: 0.05em;
     text-transform: uppercase;
+    transform: translate3d(0, 0, 0) perspective(999px);
 
     vertical-align: ${(props) => props.twAlign};
     padding: ${({ size }) => HEADER_CELL_SIZES[size as Size]};
