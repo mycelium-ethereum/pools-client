@@ -1,11 +1,9 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import UpOrDown from '~/components/UpOrDown';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { PoolStatus } from '~/types/pools';
 import { OverviewAsset } from '~/types/portfolio';
@@ -17,7 +15,6 @@ import { TokensNotional } from '../Tokens';
 export const UnclaimedPoolTokenRow = ({
     balance,
     leveragedNotionalValue,
-    entryPrice,
     currentTokenPrice,
     onClickCommitAction,
     symbol,
@@ -46,20 +43,6 @@ export const UnclaimedPoolTokenRow = ({
                     price={currentTokenPrice}
                     settlementTokenSymbol={settlementTokenSymbol}
                 />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <TokensNotional amount={balance} price={entryPrice} settlementTokenSymbol={settlementTokenSymbol} />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <div>
-                    <UpOrDown
-                        oldValue={balance.times(entryPrice)}
-                        newValue={balance.times(currentTokenPrice)}
-                        deltaDenotation={DeltaEnum.Numeric}
-                        currency={settlementTokenSymbol}
-                        showCurrencyTicker={true}
-                    />
-                </div>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
