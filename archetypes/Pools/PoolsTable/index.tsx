@@ -41,14 +41,24 @@ const EffectiveLeverageTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
+
 const SpotPriceTip: React.FC = ({ children }) => (
     <StyledTooltip title="The price of the tracked asset before subjecting it to any Data Manipulations.">
+);
+const TracerTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The current token price on Tracer. Please note that the price may change as minting the token is not immediate.">
         {children}
     </StyledTooltip>
 );
 
+
 const IndexPriceTip: React.FC = ({ children }) => (
     <StyledTooltip title="The value used for settling this market.">{children}</StyledTooltip>
+);
+const BalancerTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The current token price on Balancer. You can buy the Pool Token immediately at this price (slippage may impact final pricing)">
+        {children}
+    </StyledTooltip>
 );
 
 const CommittmentTip: React.FC = ({ children }) => (
@@ -232,11 +242,15 @@ export const PoolsTable = ({
                             <div className="capitalize text-cool-gray-400">{'Losses'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                            <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
+                            <TracerTip>
+                                <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
+                            </TracerTip>
                         </TableHeaderCell>
                         {showNextRebalance ? (
                             <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                                <div className="capitalize text-cool-gray-400">{'Balancer'}</div>
+                                <BalancerTip>
+                                    <div className="capitalize text-cool-gray-400">{'Balancer'}</div>
+                                </BalancerTip>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
