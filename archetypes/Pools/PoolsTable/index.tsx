@@ -22,6 +22,7 @@ import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
@@ -52,22 +53,33 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
-const TokenTVLTip: React.FC<{
+const EstimatedTVLTip: React.FC<{
+    estimatedTvl: number;
     currentTvl: number;
-    pendingMints: number;
-    pendingBurns: number;
-    expectedValueTransfer: number;
-}> = ({ currentTvl, pendingMints, pendingBurns, expectedValueTransfer, children }) => (
+}> = ({ children, estimatedTvl, currentTvl }) => (
     <StyledTooltip
         title={
             <>
-                <div>Current: {toApproxCurrency(currentTvl)}</div>
-                <div>Pending mints: {toApproxCurrency(pendingMints)}</div>
-                <div>Pending burns: {toApproxCurrency(pendingBurns)}</div>
-                <div>Expected value transfer: {toApproxCurrency(expectedValueTransfer)}</div>
-                <div>
-                    Pending TVL: {toApproxCurrency(currentTvl - pendingBurns + pendingMints + expectedValueTransfer)}
-                </div>
+                <strong>After all pending commits</strong>
+                <div>Estimated TVL: {toApproxCurrency(estimatedTvl)}</div>
+                <div>Change: {toApproxCurrency(estimatedTvl - currentTvl)}</div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const EstimatedSkewTip: React.FC<{
+    estimatedSkew: number;
+    currentSkew: number;
+}> = ({ children, estimatedSkew, currentSkew }) => (
+    <StyledTooltip
+        title={
+            <>
+                <strong>After all pending commits</strong>
+                <div>Estimated Skew: {estimatedSkew.toFixed(3)}</div>
+                <div>Change: {(estimatedSkew - currentSkew).toFixed(3)}</div>
             </>
         }
     >
@@ -384,7 +396,14 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.nextSkew.toFixed(3)}</div>
+                            <div className="flex">
+                                {pool.nextSkew.toFixed(3)}
+                                {pool.poolStatus === PoolStatus.Live ? (
+                                    <EstimatedSkewTip estimatedSkew={pool.estimatedSkew} currentSkew={pool.nextSkew}>
+                                        <ClockIcon />
+                                    </EstimatedSkewTip>
+                                ) : null}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.skew}
@@ -538,14 +557,11 @@ const TokenRows: React.FC<
                                 tokenMetricSide={side}
                                 showNextRebalance={showNextRebalance}
                             />
-                            <TokenTVLTip
-                                currentTvl={tokenInfo.tvl}
-                                pendingMints={tokenInfo.pendingMints}
-                                pendingBurns={tokenInfo.pendingBurns}
-                                expectedValueTransfer={tokenInfo.expectedValueTransfer}
-                            >
-                                <ClockIcon />
-                            </TokenTVLTip>
+                            {tokenInfo.poolStatus === PoolStatus.Live ? (
+                                <EstimatedTVLTip estimatedTvl={tokenInfo.estimatedTvl} currentTvl={tokenInfo.nextTvl}>
+                                    <ClockIcon />
+                                </EstimatedTVLTip>
+                            ) : null}
                         </div>
                     </>
                 ) : (

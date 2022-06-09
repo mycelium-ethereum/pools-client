@@ -5,7 +5,12 @@ import { CommitTypeMap } from '~/constants/commits';
 import { knownNetworkToSubgraphUrl } from '~/constants/networks';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
-import { PoolCommitStats, TradeStatsAPIResponse, PoolCommitStatsAPIResponse } from '~/types/pools';
+import {
+    PoolCommitStats,
+    TradeStatsAPIResponse,
+    PoolCommitStatsAPIResponse,
+    NextPoolStateAPIResponse,
+} from '~/types/pools';
 import { pendingCommitsQuery } from './subgraph';
 import { formatBN } from '../converters';
 
@@ -195,6 +200,51 @@ export const fetchTradeStats: (params: {
             };
         });
     return fetchedTradeStats;
+};
+
+export const fetchNextPoolState: (params: {
+    network: KnownNetwork;
+    pool: string;
+}) => Promise<NextPoolStateAPIResponse> = async ({ network, pool }) => {
+    const route = `${TRACER_API}/poolsv2/nextPoolState?network=${network ?? NETWORKS.ARBITRUM}&poolAddress=${pool}`;
+
+    const fetchedNextPoolState: NextPoolStateAPIResponse = await fetch(route)
+        .then((res) => res.json())
+        .then((nextPoolState) => {
+            return nextPoolState;
+        })
+        .catch((err) => {
+            console.error('Failed to fetch average entry prices', err);
+            return {
+                currentSkew: '0',
+                currentLongBalance: '0',
+                currentLongSupply: '0',
+                currentShortBalance: '0',
+                currentShortSupply: '0',
+                expectedSkew: '0',
+                expectedLongBalance: '0',
+                expectedLongSupply: '0',
+                expectedShortBalance: '0',
+                expectedShortSupply: '0',
+                totalNetPendingLong: '0',
+                totalNetPendingShort: '0',
+                expectedLongTokenPrice: '0',
+                expectedShortTokenPrice: '0',
+                lastOraclePrice: '0',
+                expectedOraclePrice: '0',
+                expectedFrontRunningSkew: '0',
+                expectedFrontRunningLongBalance: '0',
+                expectedFrontRunningLongSupply: '0',
+                expectedFrontRunningShortBalance: '0',
+                expectedFrontRunningShortSupply: '0',
+                totalNetFrontRunningPendingLong: '0',
+                totalNetFrontRunningPendingShort: '0',
+                expectedFrontRunningLongTokenPrice: '0',
+                expectedFrontRunningShortTokenPrice: '0',
+                expectedFrontRunningOraclePrice: '0',
+            };
+        });
+    return fetchedNextPoolState;
 };
 
 const TWENTY_FOUR_HOURS_IN_SECONDS = 24 * 60 * 60;

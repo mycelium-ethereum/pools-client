@@ -32,6 +32,7 @@ export const useUpdatePoolInstances = (): void => {
         updateTradeStats,
         updatePoolCommitStats,
         updatePoolBalancerPrices,
+        updateNextPoolStates,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
@@ -169,6 +170,7 @@ export const useUpdatePoolInstances = (): void => {
         if (poolsInitialized) {
             const pools_ = Object.values(pools).map((pool) => pool.poolInstance.address);
             updatePoolCommitStats(pools_, network);
+            updateNextPoolStates(pools_, network);
             updatePoolBalancerPrices(pools_, network);
         }
     }, [network, poolsInitialized]);
