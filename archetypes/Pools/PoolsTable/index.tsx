@@ -41,12 +41,20 @@ const EffectiveLeverageTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
+const SpotPriceTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The price of the tracked asset before subjecting it to any Data Manipulations.">
+        {children}
+    </StyledTooltip>
+);
 const TracerTip: React.FC = ({ children }) => (
     <StyledTooltip title="The current token price on Tracer. Please note that the price may change as minting the token is not immediate.">
         {children}
     </StyledTooltip>
 );
 
+const IndexPriceTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The value used for settling this market.">{children}</StyledTooltip>
+);
 const BalancerTip: React.FC = ({ children }) => (
     <StyledTooltip title="The current token price on Balancer. You can buy the Pool Token immediately at this price (slippage may impact final pricing)">
         {children}
@@ -134,9 +142,11 @@ export const PoolsTable = ({
                                     </div>
                                 </div>
                                 <div className="px-10">
-                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                        SPOT PRICE
-                                    </div>
+                                    <SpotPriceTip>
+                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                            SPOT PRICE
+                                        </div>
+                                    </SpotPriceTip>
                                     <div className="font-bold">
                                         {marketSpotPrices[rows[0].marketSymbol]
                                             ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
@@ -182,7 +192,7 @@ export const PoolsTable = ({
                         <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
-                            {'INDEX PRICE (USD)'}
+                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">{'TVL (USD)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
