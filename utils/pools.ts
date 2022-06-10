@@ -2,7 +2,7 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, NextPoolState, TradeStats } from '~/types/pools';
+import { AggregateBalances, TradeStats } from '~/types/pools';
 import { BNFromString } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
@@ -34,45 +34,6 @@ export const fetchAggregateBalance: (
         longTokens: new BigNumber(ethers.utils.formatUnits(balances.longTokens, settlementTokenDecimals)),
         shortTokens: new BigNumber(ethers.utils.formatUnits(balances.shortTokens, settlementTokenDecimals)),
         settlementTokens: new BigNumber(ethers.utils.formatUnits(balances.settlementTokens, settlementTokenDecimals)),
-    };
-};
-
-export const fetchNextPoolState: (network: KnownNetwork, pool: string) => Promise<NextPoolState> = async (
-    network,
-    pool,
-) => {
-    const nextPoolState = await _fetchNextPoolState({
-        network,
-        pool,
-    });
-
-    return {
-        currentSkew: new BigNumber(nextPoolState.currentSkew),
-        currentLongBalance: new BigNumber(nextPoolState.currentLongBalance),
-        currentLongSupply: new BigNumber(nextPoolState.currentLongSupply),
-        currentShortBalance: new BigNumber(nextPoolState.currentShortBalance),
-        currentShortSupply: new BigNumber(nextPoolState.currentShortSupply),
-        expectedSkew: new BigNumber(nextPoolState.expectedSkew),
-        expectedLongBalance: new BigNumber(nextPoolState.expectedLongBalance),
-        expectedLongSupply: new BigNumber(nextPoolState.expectedLongSupply),
-        expectedShortBalance: new BigNumber(nextPoolState.expectedShortBalance),
-        expectedShortSupply: new BigNumber(nextPoolState.expectedShortSupply),
-        totalNetPendingLong: new BigNumber(nextPoolState.totalNetPendingLong),
-        totalNetPendingShort: new BigNumber(nextPoolState.totalNetPendingShort),
-        expectedLongTokenPrice: new BigNumber(nextPoolState.expectedLongTokenPrice),
-        expectedShortTokenPrice: new BigNumber(nextPoolState.expectedShortTokenPrice),
-        lastOraclePrice: new BigNumber(nextPoolState.lastOraclePrice),
-        expectedOraclePrice: new BigNumber(nextPoolState.expectedOraclePrice),
-        expectedFrontRunningSkew: new BigNumber(nextPoolState.expectedFrontRunningSkew),
-        expectedFrontRunningLongBalance: new BigNumber(nextPoolState.expectedFrontRunningLongBalance),
-        expectedFrontRunningLongSupply: new BigNumber(nextPoolState.expectedFrontRunningLongSupply),
-        expectedFrontRunningShortBalance: new BigNumber(nextPoolState.expectedFrontRunningShortBalance),
-        expectedFrontRunningShortSupply: new BigNumber(nextPoolState.expectedFrontRunningShortSupply),
-        totalNetFrontRunningPendingLong: new BigNumber(nextPoolState.totalNetFrontRunningPendingLong),
-        totalNetFrontRunningPendingShort: new BigNumber(nextPoolState.totalNetFrontRunningPendingShort),
-        expectedFrontRunningLongTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningLongTokenPrice),
-        expectedFrontRunningShortTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningShortTokenPrice),
-        expectedFrontRunningOraclePrice: new BigNumber(nextPoolState.expectedFrontRunningOraclePrice),
     };
 };
 

@@ -7,14 +7,8 @@ import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
 import { PoolStatus } from '~/types/pools';
 import { getBalancerPrices } from '~/utils/balancer';
-import {
-    fetchAggregateBalance,
-    fetchTokenApprovals,
-    fetchTokenBalances,
-    fetchTradeStats,
-    fetchNextPoolState,
-} from '~/utils/pools';
-import { fetchPoolCommitStats } from '~/utils/tracerAPI';
+import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
+import { fetchPoolCommitStats, fetchNextPoolState } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
 
@@ -292,7 +286,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 get().setTradeStats(pool_, DEFAULT_POOLSTATE.userBalances.tradeStats);
                 return;
             }
-            fetchNextPoolState(network, pool_)
+            fetchNextPoolState({ network, pool: pool_ })
                 .then((nextPoolState) => {
                     get().setNextPoolState(pool_, nextPoolState);
                 })
