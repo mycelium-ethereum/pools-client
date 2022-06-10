@@ -91,6 +91,35 @@ export type TradeStats = {
     totalShortMints: number;
 };
 
+export type NextPoolState = {
+    currentSkew: BigNumber;
+    currentLongBalance: BigNumber;
+    currentLongSupply: BigNumber;
+    currentShortBalance: BigNumber;
+    currentShortSupply: BigNumber;
+    expectedSkew: BigNumber;
+    expectedLongBalance: BigNumber;
+    expectedLongSupply: BigNumber;
+    expectedShortBalance: BigNumber;
+    expectedShortSupply: BigNumber;
+    totalNetPendingLong: BigNumber;
+    totalNetPendingShort: BigNumber;
+    expectedLongTokenPrice: BigNumber;
+    expectedShortTokenPrice: BigNumber;
+    lastOraclePrice: BigNumber;
+    expectedOraclePrice: BigNumber;
+    expectedFrontRunningSkew: BigNumber;
+    expectedFrontRunningLongBalance: BigNumber;
+    expectedFrontRunningLongSupply: BigNumber;
+    expectedFrontRunningShortBalance: BigNumber;
+    expectedFrontRunningShortSupply: BigNumber;
+    totalNetFrontRunningPendingLong: BigNumber;
+    totalNetFrontRunningPendingShort: BigNumber;
+    expectedFrontRunningLongTokenPrice: BigNumber;
+    expectedFrontRunningShortTokenPrice: BigNumber;
+    expectedFrontRunningOraclePrice: BigNumber;
+};
+
 export type PoolInfo = {
     poolInstance: Pool;
     poolStatus: PoolStatus;
@@ -112,6 +141,7 @@ export type PoolInfo = {
         // TODO
         // settlementToken: BigNumber; // in some stable coin of our choosing
     };
+    nextPoolState: NextPoolState;
 };
 
 export type TradeStatsAPIResponse = {
@@ -135,6 +165,35 @@ export type TradeStatsAPIResponse = {
     totalLongMints: number;
     totalShortBurns: number;
     totalShortMints: number;
+};
+
+export type NextPoolStateAPIResponse = {
+    currentSkew: string;
+    currentLongBalance: string;
+    currentLongSupply: string;
+    currentShortBalance: string;
+    currentShortSupply: string;
+    expectedSkew: string;
+    expectedLongBalance: string;
+    expectedLongSupply: string;
+    expectedShortBalance: string;
+    expectedShortSupply: string;
+    totalNetPendingLong: string;
+    totalNetPendingShort: string;
+    expectedLongTokenPrice: string;
+    expectedShortTokenPrice: string;
+    lastOraclePrice: string;
+    expectedOraclePrice: string;
+    expectedFrontRunningSkew: string;
+    expectedFrontRunningLongBalance: string;
+    expectedFrontRunningLongSupply: string;
+    expectedFrontRunningShortBalance: string;
+    expectedFrontRunningShortSupply: string;
+    totalNetFrontRunningPendingLong: string;
+    totalNetFrontRunningPendingShort: string;
+    expectedFrontRunningLongTokenPrice: string;
+    expectedFrontRunningShortTokenPrice: string;
+    expectedFrontRunningOraclePrice: string;
 };
 
 export type PoolCommitStatsAPIResponse = {

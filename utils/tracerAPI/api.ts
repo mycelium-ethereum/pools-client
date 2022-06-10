@@ -5,7 +5,13 @@ import { CommitTypeMap } from '~/constants/commits';
 import { knownNetworkToSubgraphUrl } from '~/constants/networks';
 import { PendingCommits, GraphCommit, TradeHistoryResult, TradeHistory } from '~/types/commits';
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
-import { PoolCommitStats, TradeStatsAPIResponse, PoolCommitStatsAPIResponse } from '~/types/pools';
+import {
+    PoolCommitStats,
+    TradeStatsAPIResponse,
+    PoolCommitStatsAPIResponse,
+    NextPoolState,
+    NextPoolStateAPIResponse,
+} from '~/types/pools';
 import { pendingCommitsQuery } from './subgraph';
 import { formatBN } from '../converters';
 
@@ -195,6 +201,78 @@ export const fetchTradeStats: (params: {
             };
         });
     return fetchedTradeStats;
+};
+
+export const fetchNextPoolState: (params: { network: KnownNetwork; pool: string }) => Promise<NextPoolState> = async ({
+    network,
+    pool,
+}) => {
+    const route = `${TRACER_API}/poolsv2/nextPoolState?network=${network ?? NETWORKS.ARBITRUM}&poolAddress=${pool}`;
+
+    const fetchedNextPoolState: NextPoolState = await fetch(route)
+        .then((res) => res.json())
+        .then((nextPoolState: NextPoolStateAPIResponse) => {
+            return {
+                currentSkew: new BigNumber(nextPoolState.currentSkew),
+                currentLongBalance: new BigNumber(nextPoolState.currentLongBalance),
+                currentLongSupply: new BigNumber(nextPoolState.currentLongSupply),
+                currentShortBalance: new BigNumber(nextPoolState.currentShortBalance),
+                currentShortSupply: new BigNumber(nextPoolState.currentShortSupply),
+                expectedSkew: new BigNumber(nextPoolState.expectedSkew),
+                expectedLongBalance: new BigNumber(nextPoolState.expectedLongBalance),
+                expectedLongSupply: new BigNumber(nextPoolState.expectedLongSupply),
+                expectedShortBalance: new BigNumber(nextPoolState.expectedShortBalance),
+                expectedShortSupply: new BigNumber(nextPoolState.expectedShortSupply),
+                totalNetPendingLong: new BigNumber(nextPoolState.totalNetPendingLong),
+                totalNetPendingShort: new BigNumber(nextPoolState.totalNetPendingShort),
+                expectedLongTokenPrice: new BigNumber(nextPoolState.expectedLongTokenPrice),
+                expectedShortTokenPrice: new BigNumber(nextPoolState.expectedShortTokenPrice),
+                lastOraclePrice: new BigNumber(nextPoolState.lastOraclePrice),
+                expectedOraclePrice: new BigNumber(nextPoolState.expectedOraclePrice),
+                expectedFrontRunningSkew: new BigNumber(nextPoolState.expectedFrontRunningSkew),
+                expectedFrontRunningLongBalance: new BigNumber(nextPoolState.expectedFrontRunningLongBalance),
+                expectedFrontRunningLongSupply: new BigNumber(nextPoolState.expectedFrontRunningLongSupply),
+                expectedFrontRunningShortBalance: new BigNumber(nextPoolState.expectedFrontRunningShortBalance),
+                expectedFrontRunningShortSupply: new BigNumber(nextPoolState.expectedFrontRunningShortSupply),
+                totalNetFrontRunningPendingLong: new BigNumber(nextPoolState.totalNetFrontRunningPendingLong),
+                totalNetFrontRunningPendingShort: new BigNumber(nextPoolState.totalNetFrontRunningPendingShort),
+                expectedFrontRunningLongTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningLongTokenPrice),
+                expectedFrontRunningShortTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningShortTokenPrice),
+                expectedFrontRunningOraclePrice: new BigNumber(nextPoolState.expectedFrontRunningOraclePrice),
+            };
+        })
+        .catch((err) => {
+            console.error('Failed to fetch average entry prices', err);
+            return {
+                currentSkew: new BigNumber(0),
+                currentLongBalance: new BigNumber(0),
+                currentLongSupply: new BigNumber(0),
+                currentShortBalance: new BigNumber(0),
+                currentShortSupply: new BigNumber(0),
+                expectedSkew: new BigNumber(0),
+                expectedLongBalance: new BigNumber(0),
+                expectedLongSupply: new BigNumber(0),
+                expectedShortBalance: new BigNumber(0),
+                expectedShortSupply: new BigNumber(0),
+                totalNetPendingLong: new BigNumber(0),
+                totalNetPendingShort: new BigNumber(0),
+                expectedLongTokenPrice: new BigNumber(0),
+                expectedShortTokenPrice: new BigNumber(0),
+                lastOraclePrice: new BigNumber(0),
+                expectedOraclePrice: new BigNumber(0),
+                expectedFrontRunningSkew: new BigNumber(0),
+                expectedFrontRunningLongBalance: new BigNumber(0),
+                expectedFrontRunningLongSupply: new BigNumber(0),
+                expectedFrontRunningShortBalance: new BigNumber(0),
+                expectedFrontRunningShortSupply: new BigNumber(0),
+                totalNetFrontRunningPendingLong: new BigNumber(0),
+                totalNetFrontRunningPendingShort: new BigNumber(0),
+                expectedFrontRunningLongTokenPrice: new BigNumber(0),
+                expectedFrontRunningShortTokenPrice: new BigNumber(0),
+                expectedFrontRunningOraclePrice: new BigNumber(0),
+            };
+        });
+    return fetchedNextPoolState;
 };
 
 const TWENTY_FOUR_HOURS_IN_SECONDS = 24 * 60 * 60;

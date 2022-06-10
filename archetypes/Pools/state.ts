@@ -24,6 +24,9 @@ interface BrowseTableTokenData {
     tvl: number;
     nextTvl: number;
     userHoldings: number;
+    pendingTvl: number;
+    estimatedTvl: number;
+    poolStatus: PoolStatus;
 }
 
 export interface BrowseTableRowData {
@@ -61,6 +64,7 @@ export interface BrowseTableRowData {
     collateralAssetAddress: string;
 
     poolStatus: PoolStatus;
+    estimatedSkew: number;
 }
 
 export interface BrowseState {

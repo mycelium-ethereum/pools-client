@@ -8,7 +8,7 @@ import { StateSlice } from '~/store/types';
 import { PoolStatus } from '~/types/pools';
 import { getBalancerPrices } from '~/utils/balancer';
 import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
-import { fetchPoolCommitStats } from '~/utils/tracerAPI';
+import { fetchPoolCommitStats, fetchNextPoolState } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
 
@@ -37,6 +37,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 },
                 poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                 balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
+                nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
             };
         });
     },
@@ -60,6 +61,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     },
                     poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                     balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
+                    nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
                 };
             });
         });
@@ -111,6 +113,14 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             state.pools[pool].userBalances.tradeStats = tradeStats;
         });
     },
+    setNextPoolState: (pool, nextPoolState) => {
+        if (!get().pools[pool]) {
+            return;
+        }
+        set((state) => {
+            state.pools[pool].nextPoolState = nextPoolState;
+        });
+    },
     setPoolCommitStats: (pool, commitStats) => {
         if (!get().pools[pool]) {
             return;
@@ -152,6 +162,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         get().updatePoolTokenBalances([pool], provider, account);
         get().updateSettlementTokenBalances([pool], provider, account);
         get().updateTradeStats([pool], network, account);
+        get().updateNextPoolStates([pool], network);
         get().updatePoolBalances(pool, provider);
     },
 
@@ -266,6 +277,21 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 })
                 .catch((err) => {
                     console.error('Failed to fetch aggregate balance', err);
+                });
+        });
+    },
+    updateNextPoolStates: (pools_, network) => {
+        pools_.forEach((pool_) => {
+            if (!network || !get().pools[pool_]) {
+                get().setTradeStats(pool_, DEFAULT_POOLSTATE.userBalances.tradeStats);
+                return;
+            }
+            fetchNextPoolState({ network, pool: pool_ })
+                .then((nextPoolState) => {
+                    get().setNextPoolState(pool_, nextPoolState);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch next pool state', err);
                 });
         });
     },
@@ -417,6 +443,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateSettlementTokenBalances: IPoolsInstancesSlice['updateSettlementTokenBalances'];
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
     updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
+    updateNextPoolStates: IPoolsInstancesSlice['updateNextPoolStates'];
     updatePoolCommitStats: IPoolsInstancesSlice['updatePoolCommitStats'];
     updatePoolBalancerPrices: IPoolsInstancesSlice['updatePoolBalancerPrices'];
     simulateUpdateAvgEntryPrices: IPoolsInstancesSlice['simulateUpdateAvgEntryPrices'];
@@ -427,6 +454,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updateSettlementTokenBalances: state.poolsInstancesSlice.updateSettlementTokenBalances,
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
     updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
+    updateNextPoolStates: state.poolsInstancesSlice.updateNextPoolStates,
     updatePoolCommitStats: state.poolsInstancesSlice.updatePoolCommitStats,
     updatePoolBalancerPrices: state.poolsInstancesSlice.updatePoolBalancerPrices,
     simulateUpdateAvgEntryPrices: state.poolsInstancesSlice.simulateUpdateAvgEntryPrices,

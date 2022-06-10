@@ -14,6 +14,7 @@ import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
 
+import Clock from '~/public/img/general/clock.svg';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -21,6 +22,7 @@ import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
@@ -71,10 +73,58 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const EstimatedTVLTip: React.FC<{
+    estimatedTvl: number;
+    currentTvl: number;
+}> = ({ children, estimatedTvl, currentTvl }) => (
+    <StyledTooltip
+        title={
+            <>
+                <strong>After all pending commits</strong>
+                <div>Estimated TVL: {toApproxCurrency(estimatedTvl)}</div>
+                <div>
+                    Change: {estimatedTvl > currentTvl ? '+' : ''}
+                    {toApproxCurrency(estimatedTvl - currentTvl)}
+                </div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const EstimatedSkewTip: React.FC<{
+    estimatedSkew: number;
+    currentSkew: number;
+}> = ({ children, estimatedSkew, currentSkew }) => (
+    <StyledTooltip
+        title={
+            <>
+                <strong>After all pending commits</strong>
+                <div>Estimated Skew: {estimatedSkew.toFixed(3)}</div>
+                <div>
+                    Change: {estimatedSkew > currentSkew ? '+' : ''}
+                    {(estimatedSkew - currentSkew).toFixed(3)}
+                </div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const ClockIcon = styled(Clock)`
+    margin-left: 5px;
+    width: 16px;
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
 const InfoIcon = styled(Info)`
     margin-left: 15px;
 
-    :hover {
+    &:hover {
         cursor: pointer;
     }
 
@@ -378,7 +428,14 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.nextSkew.toFixed(3)}</div>
+                            <div className="flex">
+                                {pool.nextSkew.toFixed(3)}
+                                {pool.poolStatus === PoolStatus.Live ? (
+                                    <EstimatedSkewTip estimatedSkew={pool.estimatedSkew} currentSkew={pool.nextSkew}>
+                                        <ClockIcon />
+                                    </EstimatedSkewTip>
+                                ) : null}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.skew}
@@ -532,6 +589,11 @@ const TokenRows: React.FC<
                                 tokenMetricSide={side}
                                 showNextRebalance={showNextRebalance}
                             />
+                            {tokenInfo.poolStatus === PoolStatus.Live ? (
+                                <EstimatedTVLTip estimatedTvl={tokenInfo.estimatedTvl} currentTvl={tokenInfo.nextTvl}>
+                                    <ClockIcon />
+                                </EstimatedTVLTip>
+                            ) : null}
                         </div>
                     </>
                 ) : (

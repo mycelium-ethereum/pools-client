@@ -4,7 +4,7 @@ import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetu
 import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
 import { AggregateBalances, TradeStats } from '~/types/pools';
 import { BNFromString } from './helpers';
-import { fetchTradeStats as _fetchTradeStats } from './tracerAPI';
+import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
 export const fetchTokenBalances: (
     tokens: string[],

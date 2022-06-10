@@ -6,6 +6,7 @@ import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { LoadingRows } from '~/types/hooks';
+import { formatBN } from '~/utils/converters';
 import { getMarketSymbol } from '~/utils/poolNames';
 import { useUpkeeps } from '../useUpkeeps';
 
@@ -43,6 +44,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     upkeepInfo,
                     poolCommitStats,
                     balancerPrices,
+                    nextPoolState,
                 } = pool_;
                 const {
                     address,
@@ -68,6 +70,13 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     expectedSkew,
                 } = pool.getNextPoolState();
 
+                const {
+                    totalNetFrontRunningPendingShort,
+                    expectedFrontRunningShortBalance,
+                    totalNetFrontRunningPendingLong,
+                    expectedFrontRunningLongBalance,
+                } = nextPoolState;
+
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
                 const defaultUpkeep = {
@@ -89,6 +98,8 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
 
                     skew: calcSkew(shortBalance, longBalance).toNumber(),
                     nextSkew: expectedSkew.toNumber(),
+                    // estimatedSkew with all pending commits
+                    estimatedSkew: nextPoolState.expectedFrontRunningSkew.toNumber(),
 
                     tvl: tvl,
                     nextTVL: expectedLongBalance.plus(expectedShortBalance).toNumber(),
@@ -104,6 +115,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTvl: expectedShortBalance.toNumber(),
                         balancerPrice: balancerPrices.shortToken.toNumber(),
                         userHoldings: userBalances.shortToken.balance.toNumber(),
+                        pendingTvl: formatBN(totalNetFrontRunningPendingShort, settlementToken.decimals).toNumber(),
+                        estimatedTvl: formatBN(expectedFrontRunningShortBalance, settlementToken.decimals).toNumber(),
+                        poolStatus,
                     },
                     longToken: {
                         address: longToken.address,
@@ -115,6 +129,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         nextTvl: expectedLongBalance.toNumber(),
                         balancerPrice: balancerPrices.longToken.toNumber(),
                         userHoldings: userBalances.longToken.balance.toNumber(),
+                        pendingTvl: formatBN(totalNetFrontRunningPendingLong, settlementToken.decimals).toNumber(),
+                        estimatedTvl: formatBN(expectedFrontRunningLongBalance, settlementToken.decimals).toNumber(),
+                        poolStatus,
                     },
                     isWaitingForUpkeep: upkeepInfo.isWaitingForUpkeep,
                     expectedExecution: upkeepInfo.expectedExecution,
