@@ -62,7 +62,10 @@ const EstimatedTVLTip: React.FC<{
             <>
                 <strong>After all pending commits</strong>
                 <div>Estimated TVL: {toApproxCurrency(estimatedTvl)}</div>
-                <div>Change: {toApproxCurrency(estimatedTvl - currentTvl)}</div>
+                <div>
+                    Change: {estimatedTvl > currentTvl ? '+' : ''}
+                    {toApproxCurrency(estimatedTvl - currentTvl)}
+                </div>
             </>
         }
     >
@@ -79,7 +82,10 @@ const EstimatedSkewTip: React.FC<{
             <>
                 <strong>After all pending commits</strong>
                 <div>Estimated Skew: {estimatedSkew.toFixed(3)}</div>
-                <div>Change: {(estimatedSkew - currentSkew).toFixed(3)}</div>
+                <div>
+                    Change: {estimatedSkew > currentSkew ? '+' : ''}
+                    {(estimatedSkew - currentSkew).toFixed(3)}
+                </div>
             </>
         }
     >
