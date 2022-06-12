@@ -278,6 +278,7 @@ export const PoolsTable = ({
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
+                        <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                     <tr>
                         {/* Pools  Cols */}
@@ -303,6 +304,7 @@ export const PoolsTable = ({
                                 </BalancerTip>
                             </TableHeaderCell>
                         ) : null}
+                        <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
                     </tr>
                 </TableHeader>
@@ -706,6 +708,9 @@ const TokenRows: React.FC<
                         />
                     </div>
                 ) : null}
+            </TableRowCell>
+            <TableRowCell size={'sm'} className={styles}>
+                <img src="/img/general/share.svg" className="h-4 w-4" />
             </TableRowCell>
         </>
     );
