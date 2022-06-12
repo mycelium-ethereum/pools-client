@@ -23,6 +23,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     currentTokenPrice,
     onClickCommitAction,
     onClickStake,
+    onClickSell,
     leveragedNotionalValue,
     poolStatus,
 }) => {
@@ -58,6 +59,15 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                     onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
                 >
                     {shouldStake ? 'Stake' : 'Unstake'}
+                </ActionsButton>
+                <ActionsButton
+                    size="xs"
+                    variant="primary-light"
+                    disabled={!balance.toNumber()}
+                    onClick={() => onClickSell(address, shouldStake ? 'stake' : 'unstake')}
+                >
+                    Sell
+                    {address}
                 </ActionsButton>
                 <ActionsButton
                     size="xs"
