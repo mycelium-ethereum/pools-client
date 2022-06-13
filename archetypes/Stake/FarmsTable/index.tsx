@@ -6,7 +6,7 @@ import { Logo, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
-import { RewardsEndedTip } from '~/components/Tooltips';
+import { RewardsEndedTip, StakingTvlTip } from '~/components/Tooltips';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
 import Close from '/public/img/general/close.svg';
@@ -22,7 +22,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                         <TableHeaderCell>Strategy</TableHeaderCell>
                         <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>APR</TableHeaderCell>
-                        <TableHeaderCell>TVL (USD)</TableHeaderCell>
+                        <TableHeaderCell>
+                            <StakingTvlTip>
+                                <div>TVL (USD)</div>
+                            </StakingTvlTip>
+                        </TableHeaderCell>
                         <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
                         <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
                         <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
