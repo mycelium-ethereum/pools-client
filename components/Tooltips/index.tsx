@@ -85,3 +85,23 @@ export const DeprecatedPoolFlipCommitTooltip: React.FC = ({ children }) => {
 
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
+
+export const PortfolioStakeTooltip: React.FC = ({ children }) => {
+    const Content = 'Stake the Pool Token to earn liquidity mining rewards!';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const PortfolioSellTooltip: React.FC = ({ children }) => {
+    const Content = 'Sell the Pool Token instantly using Balancer.';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const PortfolioBurnTooltip: React.FC = ({ children }) => {
+    const Content = 'Burn the Pool Token on Tracer and receive it in {time}.';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const PortfolioFlipTooltip: React.FC = ({ children }) => {
+    const Content = 'Flip the Pool Token to take an opposite view in the market.';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};

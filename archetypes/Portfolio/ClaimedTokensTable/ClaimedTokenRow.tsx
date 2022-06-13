@@ -1,12 +1,19 @@
 import React from 'react';
-import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
+import {
+    PortfolioBurnTooltip,
+    PortfolioFlipTooltip,
+    PortfolioSellTooltip,
+    PortfolioStakeTooltip,
+} from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { PoolStatus } from '~/types/pools';
+import { constructBalancerLink } from '~/utils/balancer';
 import { Market } from '../Market';
 import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
@@ -23,7 +30,6 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     currentTokenPrice,
     onClickCommitAction,
     onClickStake,
-    onClickSell,
     leveragedNotionalValue,
     poolStatus,
 }) => {
@@ -52,34 +58,39 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    // will never be disabled if it gets included as a row it will always be either to stake or to unstake
-                    onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
-                >
-                    {shouldStake ? 'Stake' : 'Unstake'}
-                </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!balance.toNumber()}
-                    onClick={() => onClickSell(address, shouldStake ? 'stake' : 'unstake')}
-                >
-                    Sell
-                    {address}
-                </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    disabled={!balance.toNumber()}
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                >
-                    Burn
-                </ActionsButton>
+                <PortfolioStakeTooltip>
+                    <ActionsButton
+                        size="xs"
+                        variant="primary-light"
+                        // will never be disabled if it gets included as a row it will always be either to stake or to unstake
+                        onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
+                    >
+                        {shouldStake ? 'Stake' : 'Unstake'}
+                    </ActionsButton>
+                </PortfolioStakeTooltip>
+                <PortfolioSellTooltip>
+                    <ActionsButton
+                        size="xs"
+                        variant="primary-light"
+                        disabled={!balance.toNumber()}
+                        onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, true), '_blank')}
+                    >
+                        Sell
+                    </ActionsButton>
+                </PortfolioSellTooltip>
+                <PortfolioBurnTooltip>
+                    <ActionsButton
+                        size="xs"
+                        variant="primary-light"
+                        disabled={!balance.toNumber()}
+                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                    >
+                        Burn
+                    </ActionsButton>
+                </PortfolioBurnTooltip>
                 <TooltipSelector
                     tooltip={{
-                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : TooltipKeys.PortfolioFlip,
                     }}
                 >
                     <div>
