@@ -16,7 +16,7 @@ export const PoolName = styled.span`
     font-weight: bold;
     font-size: 18px;
     line-height: 150%;
-    margin-left: 1rem;
+    margin: 0rem 1rem;
     white-space: nowrap;
 `;
 

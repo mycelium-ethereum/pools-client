@@ -7,12 +7,17 @@ import { PoolStatus } from '~/types/pools';
 export const PoolStatusBadgeContainer = styled.div`
     position: relative;
     width: fit-content;
+    display: flex;
 `;
 
 const sharedBadgeStyles = `
-    border-radius: 0.75rem;
-    padding: 0.3rem 0.5rem;
-    border-width: 0.063rem;
+    background: #3535dc;
+    color: #fff;
+    font-size: 13px;
+    padding: 0.25rem 0.5rem;
+    top: 0;
+    line-height: 150%;
+    border-radius: 3px;
     font-weight: 700;
 `;
 
