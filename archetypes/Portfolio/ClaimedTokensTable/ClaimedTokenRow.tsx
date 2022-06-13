@@ -68,7 +68,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         size="xs"
                         variant="primary-light"
                         disabled={!balance.toNumber()}
-                        onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, true), '_blank')}
+                        onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, false), '_blank')}
                     >
                         Sell
                     </ActionsButton>
