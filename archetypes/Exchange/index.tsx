@@ -100,7 +100,7 @@ export default styled((({ onClose, className }) => {
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    New Commit
+                    New Trade
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>

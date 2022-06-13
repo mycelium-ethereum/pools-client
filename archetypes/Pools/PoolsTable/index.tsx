@@ -691,7 +691,7 @@ const TokenRows: React.FC<
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
                         >
-                            COMMIT
+                            Trade
                         </Button>
                         <Actions
                             token={{

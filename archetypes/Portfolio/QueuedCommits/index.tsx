@@ -55,7 +55,7 @@ export const QueuedCommits = ({
     return (
         <OverviewTable
             title="Pending"
-            subTitle="Your queued orders. Come back once they are processed to claim."
+            subTitle="Your queued trades. Come back once they are processed to claim."
             pageFocus={OverviewPageFocus.Queued}
             firstActionTitle="Commit Type"
             firstAction={
