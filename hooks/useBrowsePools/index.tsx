@@ -114,7 +114,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         tvl: shortBalance.toNumber(),
                         nextTvl: expectedShortBalance.toNumber(),
                         balancerPrice: balancerPrices.shortToken.toNumber(),
-                        userHoldings: userBalances.shortToken.balance.toNumber(),
+                        userHoldings: userBalances.shortToken.balance
+                            .plus(userBalances.aggregateBalances.shortTokens)
+                            .toNumber(),
                         pendingTvl: formatBN(totalNetFrontRunningPendingShort, settlementToken.decimals).toNumber(),
                         estimatedTvl: formatBN(expectedFrontRunningShortBalance, settlementToken.decimals).toNumber(),
                         poolStatus,
@@ -128,7 +130,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         tvl: longBalance.toNumber(),
                         nextTvl: expectedLongBalance.toNumber(),
                         balancerPrice: balancerPrices.longToken.toNumber(),
-                        userHoldings: userBalances.longToken.balance.toNumber(),
+                        userHoldings: userBalances.longToken.balance
+                            .plus(userBalances.aggregateBalances.longTokens)
+                            .toNumber(),
                         pendingTvl: formatBN(totalNetFrontRunningPendingLong, settlementToken.decimals).toNumber(),
                         estimatedTvl: formatBN(expectedFrontRunningLongBalance, settlementToken.decimals).toNumber(),
                         poolStatus,
