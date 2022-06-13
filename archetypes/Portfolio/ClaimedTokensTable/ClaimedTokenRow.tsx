@@ -2,8 +2,9 @@ import React from 'react';
 import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
+import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
-import { PortfolioBurnTooltip, PortfolioSellTooltip, PortfolioStakeTooltip } from '~/components/Tooltips';
+import { PortfolioSellTooltip, PortfolioStakeTooltip, StyledTooltip } from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
@@ -26,6 +27,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     onClickCommitAction,
     onClickStake,
     leveragedNotionalValue,
+    expectedExecution,
     poolStatus,
 }) => {
     const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
@@ -73,7 +75,14 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         Sell
                     </ActionsButton>
                 </PortfolioSellTooltip>
-                <PortfolioBurnTooltip>
+                {console.log(expectedExecution)}
+                <StyledTooltip
+                    title={
+                        <>
+                            Burn the Pool Token on Tracer and receive it in <TimeLeft targetTime={expectedExecution} />.
+                        </>
+                    }
+                >
                     <ActionsButton
                         size="xs"
                         variant="primary-light"
@@ -82,7 +91,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                     >
                         Burn
                     </ActionsButton>
-                </PortfolioBurnTooltip>
+                </StyledTooltip>
                 <TooltipSelector
                     tooltip={{
                         key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : TooltipKeys.PortfolioFlip,
