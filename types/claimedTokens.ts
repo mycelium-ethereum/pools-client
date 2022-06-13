@@ -15,4 +15,5 @@ export type ClaimedTokenRowProps = Omit<OverviewPoolToken, 'type'> & {
     effectiveGain: number;
     stakedTokens: BigNumber;
     poolStatus: PoolStatus;
+    expectedExecution: number;
 };
