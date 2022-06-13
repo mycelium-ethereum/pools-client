@@ -75,7 +75,6 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         Sell
                     </ActionsButton>
                 </PortfolioSellTooltip>
-                {console.log(expectedExecution)}
                 <StyledTooltip
                     title={
                         <>
