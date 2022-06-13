@@ -59,7 +59,7 @@ export const HistoricCommits = ({
 
     return (
         <OverviewTable
-            title="Commit History"
+            title="Trade History"
             subTitle="Your past orders."
             firstActionTitle="Commit Type"
             firstAction={
