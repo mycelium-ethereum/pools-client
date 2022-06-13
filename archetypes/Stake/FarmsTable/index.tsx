@@ -20,7 +20,6 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                 <TableHeader className="uppercase">
                     <tr>
                         <TableHeaderCell>Strategy</TableHeaderCell>
-                        <TableHeaderCell>Status</TableHeaderCell>
                         <TableHeaderCell>APR</TableHeaderCell>
                         <TableHeaderCell>
                             <StakingTvlTip>
@@ -118,26 +117,29 @@ const PoolRow: React.FC<{
     return (
         <TableRow key={farm.farm} lined>
             <TableRowCell>
-                <div className="inline">
-                    <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(farm.name)} />
-                </div>
-                <div className="inline-flex flex-col justify-center">
-                    {farm.link ? (
-                        <>
-                            <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">
-                                {farm.name}
-                            </a>
-                            <a className="flex opacity-50" href={farm.link} target="_blank" rel="noopener noreferrer">
-                                {farm.linkText || '(click to view pool)'}
-                            </a>
-                        </>
-                    ) : (
-                        <div>{farm.name}</div>
-                    )}
-                </div>
-            </TableRowCell>
-            <TableRowCell>
                 <PoolStatusBadgeContainer>
+                    <div className="inline">
+                        <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                    </div>
+                    <div className="mr-2 inline-flex flex-col justify-center">
+                        {farm.link ? (
+                            <>
+                                <a className="flex" href={farm.link} target="_blank" rel="noopener noreferrer">
+                                    {farm.name}
+                                </a>
+                                <a
+                                    className="flex opacity-50"
+                                    href={farm.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {farm.linkText || '(click to view pool)'}
+                                </a>
+                            </>
+                        ) : (
+                            <div>{farm.name}</div>
+                        )}
+                    </div>
                     <PoolStatusBadge status={farm.poolDetails.status} />
                 </PoolStatusBadgeContainer>
             </TableRowCell>

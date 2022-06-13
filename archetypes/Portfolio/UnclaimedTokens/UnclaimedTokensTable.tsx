@@ -2,6 +2,7 @@ import React from 'react';
 import { Logo } from '~/components/General';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 
 import { OverviewPoolToken } from '~/types/portfolio';
@@ -22,7 +23,6 @@ export const UnclaimedTokensTable = ({
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Token Valuation</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Notional Value</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
@@ -77,7 +77,10 @@ const PoolRow = ({
             <Styles.PoolTableRow marketTicker={marketTicker}>
                 <Styles.PoolTableRowCell variant="title">
                     <Logo size="lg" ticker={marketTicker} />
-                    <Styles.PoolName>{poolName}</Styles.PoolName>
+                    <PoolStatusBadgeContainer>
+                        <Styles.PoolName>{poolName}</Styles.PoolName>
+                        <PoolStatusBadge status={poolStatus} />
+                    </PoolStatusBadgeContainer>
                 </Styles.PoolTableRowCell>
                 <Styles.PoolRowButtonCell>
                     <Styles.PoolRowButtons>

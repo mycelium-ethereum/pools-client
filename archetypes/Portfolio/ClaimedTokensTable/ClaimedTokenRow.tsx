@@ -33,11 +33,11 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
     return (
         <TableRow lined>
             <OverviewTableRowCell>
-                <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
                 <PoolStatusBadgeContainer>
-                    <PoolStatusBadge status={poolStatus} />
+                    <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
+                    <div className="ml-2">
+                        <PoolStatusBadge status={poolStatus} />
+                    </div>
                 </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>

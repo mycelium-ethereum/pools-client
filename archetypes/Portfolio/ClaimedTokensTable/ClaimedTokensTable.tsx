@@ -17,7 +17,6 @@ export const ClaimedTokensTable = ({
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Value</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Leveraged Value</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>

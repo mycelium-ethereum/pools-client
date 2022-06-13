@@ -1,7 +1,6 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
-import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -31,11 +30,6 @@ export const UnclaimedPoolTokenRow = ({
         <TableRow>
             <OverviewTableRowCell>
                 <Market tokenSymbol={symbol} isLong={side === SideEnum.long} />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <PoolStatusBadgeContainer>
-                    <PoolStatusBadge status={poolStatus} />
-                </PoolStatusBadgeContainer>
             </OverviewTableRowCell>
             <OverviewTableRowCell>
                 <TokensNotional
@@ -96,12 +90,6 @@ export const UnclaimedQuoteTokenRow = ({ symbol, balance, address, decimals }: O
             <div>
                 {balance.toFixed(2)} {symbol}
             </div>
-        </OverviewTableRowCell>
-        <OverviewTableRowCell>
-            <div>-</div>
-        </OverviewTableRowCell>
-        <OverviewTableRowCell>
-            <div>-</div>
         </OverviewTableRowCell>
         <OverviewTableRowCell>
             <div>-</div>
