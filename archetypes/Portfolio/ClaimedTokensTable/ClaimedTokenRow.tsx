@@ -3,12 +3,7 @@ import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js'
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import Actions from '~/components/TokenActions';
-import {
-    PortfolioBurnTooltip,
-    PortfolioFlipTooltip,
-    PortfolioSellTooltip,
-    PortfolioStakeTooltip,
-} from '~/components/Tooltips';
+import { PortfolioBurnTooltip, PortfolioSellTooltip, PortfolioStakeTooltip } from '~/components/Tooltips';
 import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';

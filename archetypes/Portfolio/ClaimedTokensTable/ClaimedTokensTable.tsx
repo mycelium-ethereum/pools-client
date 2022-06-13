@@ -31,7 +31,6 @@ export const ClaimedTokensTable = ({
                             <ClaimedTokenRow
                                 {...token}
                                 key={token.address}
-                                tokenAddress={token.address}
                                 poolStatus={token.poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 onClickStake={onClickStake}
