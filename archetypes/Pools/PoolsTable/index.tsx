@@ -685,21 +685,12 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            disabled={tokenInfo.poolStatus === PoolStatus.Deprecated}
                             className="mx-1 my-auto ml-auto w-[70px] uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
                         >
-                            BUY
-                        </Button>
-                        <Button
-                            className="mx-1 my-auto ml-auto w-[70px] uppercase"
-                            size="xs"
-                            variant="primary-light"
-                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
-                        >
-                            SELL
+                            COMMIT
                         </Button>
                         <Actions
                             token={{
