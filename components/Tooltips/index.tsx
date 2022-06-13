@@ -22,6 +22,11 @@ export const RewardsEndedTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
+export const StakingTvlTip: React.FC = ({ children }) => {
+    const Content = 'Total value locked in the staking contract';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const LockTip: React.FC = ({ children }) => {
     const Content = (
         <>
