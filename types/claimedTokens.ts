@@ -9,7 +9,7 @@ export type ClaimedRowActions = {
 };
 
 export type ClaimedTokenRowProps = Omit<OverviewPoolToken, 'type'> & {
-    network: KnownNetwork | undefined,
+    network?: KnownNetwork | undefined,
     name: string;
     poolAddress: string;
     settlementTokenSymbol: string;
