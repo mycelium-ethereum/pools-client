@@ -16,6 +16,7 @@ import { OverviewTableRowCell } from '../OverviewTable/styles';
 import { TokensNotional } from '../Tokens';
 
 export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
+    network,
     symbol,
     address,
     poolAddress,
@@ -56,25 +57,31 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
             </OverviewTableRowCell>
             <ActionsCell>
                 <PortfolioStakeTooltip>
-                    <ActionsButton
-                        size="xs"
-                        variant="primary-light"
-                        // will never be disabled if it gets included as a row it will always be either to stake or to unstake
-                        onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
-                    >
-                        {shouldStake ? 'Stake' : 'Unstake'}
-                    </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            // will never be disabled if it gets included as a row it will always be either to stake or to unstake
+                            onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
+                        >
+                            {shouldStake ? 'Stake' : 'Unstake'}
+                        </ActionsButton>
+                    </div>
                 </PortfolioStakeTooltip>
-                <PortfolioSellTooltip>
-                    <ActionsButton
-                        size="xs"
-                        variant="primary-light"
-                        disabled={!balance.toNumber()}
-                        onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, false), '_blank')}
-                    >
-                        Sell
-                    </ActionsButton>
-                </PortfolioSellTooltip>
+                {network === NETWORKS.ARBITRUM && (
+                    <PortfolioSellTooltip>
+                        <div>
+                            <ActionsButton
+                                size="xs"
+                                variant="primary-light"
+                                disabled={!balance.toNumber()}
+                                onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, false), '_blank')}
+                            >
+                                Sell
+                            </ActionsButton>
+                        </div>
+                    </PortfolioSellTooltip>
+                )}
                 <StyledTooltip
                     title={
                         <>
@@ -82,14 +89,16 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         </>
                     }
                 >
-                    <ActionsButton
-                        size="xs"
-                        variant="primary-light"
-                        disabled={!balance.toNumber()}
-                        onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                    >
-                        Burn
-                    </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            disabled={!balance.toNumber()}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
+                        >
+                            Burn
+                        </ActionsButton>
+                    </div>
                 </StyledTooltip>
                 <TooltipSelector
                     tooltip={{
