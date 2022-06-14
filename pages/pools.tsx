@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import BalancerBuySell from '~/archetypes/BalancerBuySell';
+import { Browse } from '~/archetypes/Pools';
 import Footer from '~/components/Footer';
 import SEO from '~/components/General/SEO';
+import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
 import { seoContent } from '~/constants/seo';
+import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
     const router = useRouter();
@@ -13,14 +15,17 @@ export default (() => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     useEffect(() => {
-        router.prefetch('/buy');
+        router.prefetch('/');
     }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <SEO {...seoContent.buyTokens} />
+            <SEO {...seoContent.pools} />
             <NavBar setShowOnboardModal={setShowOnboardModal} />
-            <BalancerBuySell />
+            <SwapStore>
+                <Browse />
+            </SwapStore>
+            <UnsupportedNetworkPopup />
             <OnboardTradeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}

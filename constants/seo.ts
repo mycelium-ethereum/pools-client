@@ -1,4 +1,9 @@
 export const seoContent = {
+    buyTokens: {
+        title: 'Buy Pool Tokens',
+        description: 'Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world.',
+        image: '/img/opengraph/main.jpg',
+    },
     pools: {
         title: 'Pools',
         description: 'Mint and Burn your Pool Tokens.',
