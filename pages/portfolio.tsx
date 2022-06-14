@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 import { useResizeDetector } from 'react-resize-detector';
 import Portfolio from '~/archetypes/Portfolio';
 import Footer from '~/components/Footer';
+import SEO from '~/components/General/SEO';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
+import { seoContent } from '~/constants/seo';
 import { FarmStore } from '~/context/FarmContext';
 import { SwapStore } from '~/context/SwapContext';
 
@@ -23,11 +25,12 @@ export default (() => {
     const { ref } = useResizeDetector({ onResize, handleWidth: false });
 
     useEffect(() => {
-        router.prefetch('/');
+        router.prefetch('/portfolio');
     }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`} ref={ref}>
+            <SEO {...seoContent.portfolio} />
             <NavBar />
             <SwapStore>
                 <FarmStore>
