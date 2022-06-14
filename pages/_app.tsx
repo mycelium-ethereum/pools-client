@@ -33,7 +33,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                     name="description"
                     content="Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world."
                 />
-                <meta name="viewport" content="width=device-width, user-scalable=no" />
+                <meta name="viewport" content="width=device-width" />
                 <link rel="shortcut icon" type="image/svg" href="/favicon.svg" />
                 <meta name="keywords" content="Tracer, DeFi, Bitcoin, Crypto, Exchange, Governance, DAO, Protocol" />
                 <meta name="robots" content="index, follow" />
