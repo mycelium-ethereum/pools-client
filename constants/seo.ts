@@ -2,7 +2,7 @@ export const seoContent = {
     pools: {
         title: 'Pools',
         description: 'Mint and Burn your Pool Tokens.',
-        image: '/img/opengraph/pools.jpg',
+        image: '/img/opengraph/main.jpg',
     },
     portfolio: {
         title: 'Portfolio',
