@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js';
+import { KnownNetwork } from '@tracer-protocol/pools-js/types';
 import { PoolStatus } from './pools';
 import { OnClickCommit, OnClickStake, OverviewPoolToken } from './portfolio';
 
@@ -8,6 +9,7 @@ export type ClaimedRowActions = {
 };
 
 export type ClaimedTokenRowProps = Omit<OverviewPoolToken, 'type'> & {
+    network?: KnownNetwork | undefined,
     name: string;
     poolAddress: string;
     settlementTokenSymbol: string;
