@@ -12,6 +12,13 @@ module.exports = {
         ignored: ['node_modules', 'public/static'],
     },
 
+    env: {
+        siteTitle: 'Tracer Perpetual Pools',
+        siteDescription: '',
+        siteUrl: 'https://pools.tracer.finance',
+        siteImagePreviewUrl: 'img/opengraph/main.png',
+    },
+
     async redirects() {
         return [
             { source: '/bridge', destination: 'https://bridge.arbitrum.io/', permanent: true },
