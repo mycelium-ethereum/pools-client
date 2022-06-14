@@ -5,17 +5,19 @@ import { useRouter } from 'next/router';
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
-const SEO: React.FC<{
+export type SEOProps = {
     title: string;
     image?: string;
     description?: string;
-}> = ({ title, image, description = '' }) => {
+};
+
+const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const router = useRouter();
     const pathname = router.pathname;
-    const metaDescription = description !== '' ? description : process.env.siteDescription;
+    const metaDescription = description || process.env.siteDescription;
     const keywords = process.env.siteKeywords;
     const siteURL = process.env.siteUrl;
-    const imagePreview = image ? image : `${siteURL}/${process.env.siteImagePreviewUrl}`;
+    const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
 
     // load usersnap
