@@ -39,8 +39,9 @@ export const NavBarContent: React.FC<{
     const route = routes[1];
     const { account, network } = useStore(selectWeb3Info, shallow);
 
+    const listItemStyles = 'flex';
     const linkStyles =
-        'flex transition-all m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer whitespace-nowrap';
+        'flex transition-all items-center m-2 px-4 py-2 rounded-lg text-base hover:opacity-80 cursor-pointer whitespace-nowrap';
     const selectedStyles = 'bg-tracer-900 dark:bg-black dark:bg-opacity-50';
 
     return (
@@ -48,33 +49,35 @@ export const NavBarContent: React.FC<{
             <Container className={'flex h-full'}>
                 <HeaderSiteSwitcher />
                 <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
-                    <Link href="/">
-                        <li className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
-                            <a id="browse-pools" className="m-auto">
+                    <li className={listItemStyles}>
+                        <Link href="/" passHref>
+                            <a id="browse-pools" className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
                                 Pools
                             </a>
-                        </li>
-                    </Link>
-                    <Link href="/portfolio">
-                        <li className={classNames(linkStyles, route.startsWith('portfolio') ? selectedStyles : '')}>
-                            <a className="m-auto">Portfolio</a>
-                        </li>
-                    </Link>
-                    <Link href="/stake">
-                        <li className={classNames(linkStyles, route.startsWith('stake') ? selectedStyles : '')}>
-                            <a className="m-auto">Stake</a>
-                        </li>
-                    </Link>
-                    <a
-                        href="https://pools.docs.tracer.finance"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="my-auto"
-                    >
-                        <li className={classNames(linkStyles)}>
-                            <span className="m-auto">Documentation</span>
-                        </li>
-                    </a>
+                        </Link>
+                    </li>
+                    <li className={listItemStyles}>
+                        <Link href="/portfolio" passHref>
+                            <a className={classNames(linkStyles, route === 'portfolio' ? selectedStyles : '')}>
+                                Portfolio
+                            </a>
+                        </Link>
+                    </li>
+                    <li className={listItemStyles}>
+                        <Link href="/stake" passHref>
+                            <a className={classNames(linkStyles, route === 'stake' ? selectedStyles : '')}>Stake</a>
+                        </Link>
+                    </li>
+                    <li className={listItemStyles}>
+                        <a
+                            href="https://pools.docs.tracer.finance"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={linkStyles}
+                        >
+                            <span>Documentation</span>
+                        </a>
+                    </li>
                 </ul>
                 <div className="ml-auto flex">
                     {setShowOnboardModal ? (
