@@ -3,6 +3,8 @@ import {
     StyledTooltip,
     LockTip,
     ComingSoonTip,
+    UnavailableTip,
+    SelectMarketTip,
     PowerLeverageTip,
     DeprecatedPoolMintCommitTooltip,
     DeprecatedPoolFlipCommitTooltip,
@@ -11,6 +13,8 @@ import {
 
 export enum TooltipKeys {
     ComingSoon = 'coming-soon',
+    SelectMarket = 'select-market',
+    Unavailable = 'unavailable',
     Lock = 'Lock',
     PowerLeverage = 'power-leverage',
     DeprecatedPoolMintCommit = 'deprecated-pool-mint-commit',
@@ -27,6 +31,12 @@ const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip,
     switch (tooltip.key) {
         case TooltipKeys.ComingSoon:
             return <ComingSoonTip>{children}</ComingSoonTip>;
+
+        case TooltipKeys.SelectMarket:
+            return <SelectMarketTip>{children}</SelectMarketTip>;
+
+        case TooltipKeys.Unavailable:
+            return <UnavailableTip>{children}</UnavailableTip>;
 
         case TooltipKeys.Lock:
             return <LockTip>{children}</LockTip>;

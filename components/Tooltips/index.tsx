@@ -17,6 +17,16 @@ export const ComingSoonTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
+export const SelectMarketTip: React.FC = ({ children }) => {
+    const Content = <>Please select a market</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const UnavailableTip: React.FC = ({ children }) => {
+    const Content = <>Unavailable</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const RewardsEndedTip: React.FC = ({ children }) => {
     const Content = 'Staking rewards have ended for this pool.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;

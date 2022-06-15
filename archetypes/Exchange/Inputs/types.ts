@@ -14,7 +14,7 @@ export type AmountProps = {
     selectedPool: string | undefined;
     swapDispatch: React.Dispatch<SwapAction>;
     balance: BigNumber;
-    tokenSymbol: string;
+    tokenSymbol?: string;
     isPoolToken: boolean;
 };
 

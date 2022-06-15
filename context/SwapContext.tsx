@@ -14,7 +14,7 @@ interface ContextProps {
 
 // the key here is the leverage amount
 // this allows access through Markets[selectedMarket][selectedLeverage]
-type Market = Record<string, PoolType>;
+export type Market = Record<string, PoolType>;
 
 export type SwapState = {
     amount: string;
@@ -52,29 +52,6 @@ export type SwapAction =
     | { type: 'setInvalidAmount'; value: { message?: string; isInvalid: boolean } }
     | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
-
-export const LEVERAGE_OPTIONS = (market: string): { leverage: number; disabled: boolean }[] => [
-    {
-        leverage: 1,
-        disabled: market === 'TOKE/USD' || market === 'LINK/USD' || market === 'AAVE/USD',
-    },
-    {
-        leverage: 2,
-        disabled: true,
-    },
-    {
-        leverage: 3,
-        disabled: false,
-    },
-    {
-        leverage: 5,
-        disabled: true,
-    },
-    {
-        leverage: 10,
-        disabled: true,
-    },
-];
 
 export const SIDE_OPTIONS = [
     {

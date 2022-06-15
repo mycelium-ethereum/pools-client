@@ -1,6 +1,8 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
+import { Currency } from '~/components/General/Currency';
 import { InnerInputText } from '~/components/General/Input';
+import { LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import Max from '~/components/General/Max';
 
 import { toApproxCurrency } from '~/utils/converters';
@@ -41,7 +43,7 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
-    // tokenSymbol,
+    tokenSymbol,
     isPoolToken,
 }) => {
     return (
@@ -54,12 +56,12 @@ const AmountInput: React.FC<AmountProps> = ({
                     }}
                 />
                 <InnerInputText>
-                    {/*{tokenSymbol ? (*/}
-                    {/*    <Currency*/}
-                    {/*        ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}*/}
-                    {/*        label={tokenSymbol}*/}
-                    {/*    />*/}
-                    {/*) : null}*/}
+                    {tokenSymbol ? (
+                        <Currency
+                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
+                            label={tokenSymbol}
+                        />
+                    ) : null}
                     <Max
                         className="m-auto"
                         onClick={(_e) =>
