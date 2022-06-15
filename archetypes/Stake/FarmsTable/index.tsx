@@ -7,6 +7,7 @@ import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip, StakingTvlTip } from '~/components/Tooltips';
+import { getBaseAsset } from '~/utils/poolNames';
 import { toApproxCurrency } from '~/utils/converters';
 import { FarmTableRowData } from '../state';
 import Close from '/public/img/general/close.svg';
@@ -104,22 +105,28 @@ const PoolRow: React.FC<{
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
 }> = ({ farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
-    const tokenPrice = useMemo(() => farm.poolDetails.poolTokenPrice, [farm]);
+    const stakingTokenPrice = useMemo(() => farm.stakingTokenPrice || new BigNumber(1), [farm]);
 
     const rewardsTokenPrice = rewardsTokenUSDPrices[farm.rewardsTokenAddress] || new BigNumber(0);
 
     const apr = useMemo(() => {
         const aprNumerator = farm.rewardsPerYear.times(rewardsTokenPrice);
-        const aprDenominator = tokenPrice.times(farm.totalStaked);
+        const aprDenominator = stakingTokenPrice.times(farm.totalStaked);
         return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
-    }, [tokenPrice, farm.totalStaked, farm.rewardsPerYear, rewardsTokenPrice]);
+    }, [stakingTokenPrice, farm.totalStaked, farm.rewardsPerYear, rewardsTokenPrice]);
 
     return (
         <TableRow key={farm.farm} lined>
             <TableRowCell>
                 <PoolStatusBadgeContainer>
                     <div className="inline">
-                        <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(farm.name)} />
+                        <Logo
+                            className="mr-2 inline"
+                            size="md"
+                            ticker={tokenSymbolToLogoTicker(
+                                farm.isBPTFarm ? getBaseAsset(farm.poolDetails.name) : farm.name,
+                            )}
+                        />
                     </div>
                     <div className="mr-2 inline-flex flex-col justify-center">
                         {farm.link ? (
@@ -147,15 +154,15 @@ const PoolRow: React.FC<{
                 {farm.rewardsEnded ? <RewardsEndedTip>N/A</RewardsEndedTip> : `${largeDecimal(apr)}%`}
             </TableRowCell>
             <TableRowCell>
-                <TableRowCell>{toApproxCurrency(tokenPrice.times(farm.totalStaked))}</TableRowCell>
+                <TableRowCell>{toApproxCurrency(stakingTokenPrice.times(farm.totalStaked))}</TableRowCell>
             </TableRowCell>
             <TableRowCell>
                 <div>{farm.myStaked.toFixed(2)}</div>
-                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.myStaked))}</div>
+                <div className="opacity-50">{toApproxCurrency(stakingTokenPrice.times(farm.myStaked))}</div>
             </TableRowCell>
             <TableRowCell>
                 <div>{farm.stakingTokenBalance.toFixed(2)}</div>
-                <div className="opacity-50">{toApproxCurrency(tokenPrice.times(farm.stakingTokenBalance))}</div>
+                <div className="opacity-50">{toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance))}</div>
             </TableRowCell>
             <TableRowCell>
                 <span>{farm.myRewards.toFixed(6)}</span>

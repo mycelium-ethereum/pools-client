@@ -9,6 +9,7 @@ export type FarmTableDetails = {
     tvl: BigNumber;
     myStaked: BigNumber;
     myRewards: BigNumber;
+    stakingTokenSymbol: string;
     stakingTokenBalance: BigNumber;
     stakingTokenSupply: BigNumber;
     rewardsPerYear: BigNumber;
@@ -16,8 +17,10 @@ export type FarmTableDetails = {
     rewardsTokenAddress: string;
     link?: string;
     linkText?: string;
+    stakingTokenPrice: BigNumber;
+    isBPTFarm: boolean;
     poolDetails: {
-        poolTokenPrice: BigNumber;
+        name: string;
         address: string;
         status: PoolStatus;
     };
@@ -40,6 +43,7 @@ type FarmInfo = {
     link?: string;
     linkText?: string;
     rewardsEnded?: boolean;
+    isBPTFarm?: boolean;
 };
 
 export type FarmConfig = {
