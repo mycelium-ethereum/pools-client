@@ -159,7 +159,7 @@ const TokenBuySell: React.FC = () => {
                     })}
                 </tbody>
             </Table>
-            {poolTokens.length && token && token.symbol && (
+            {poolTokens.length && token && token.symbol ? (
                 <ExchangeButtons
                     account={account}
                     amount={amount}
@@ -176,8 +176,9 @@ const TokenBuySell: React.FC = () => {
                     amountBN={amountBN}
                     commitType={commitType}
                     handleConnect={handleConnect}
+                    isInvalid={invalidAmount.isInvalid}
                 />
-            )}
+            ) : null}
         </FormBackdrop>
     );
 };
@@ -194,7 +195,7 @@ const FormBackdrop = styled.section`
     margin: 16px auto 32px;
     max-width: calc(100% - 20px);
     @media (min-width: 640px) {
-        padding: 48px;
+        padding: 48px 48px 8px;
         margin: 63px auto 150px;
         max-width: 656px;
     }
@@ -260,12 +261,14 @@ const TokenReceiveBox = styled.div`
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 13px 20px;
+    padding: 0px 20px;
     color: var(--text-secondary);
     border: 1px solid var(--border);
     border-radius: 7px;
     margin-bottom: 20px;
+    user-select: none;
     @media (min-width: 640px) {
+        margin-bottom: 0px;
         padding-bottom: 0px;
     }
 `;

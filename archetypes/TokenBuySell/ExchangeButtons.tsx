@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
+import { Transition } from '@headlessui/react';
 import styled from 'styled-components';
 import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import MintButton from '~/archetypes/TokenBuySell/MintButton';
+import { HiddenExpand } from '~/components/General';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TimeLeft from '~/components/TimeLeft';
 import { useBigNumber } from '~/context/SwapContext';
@@ -20,6 +22,7 @@ export type EXButtonsProps = {
     leverage: number;
     market: string;
     poolTokens: BrowseTableRowData[];
+    isInvalid: boolean;
 } & ExchangeButtonProps;
 
 export const ExchangeButtons: React.FC<EXButtonsProps> = ({
@@ -31,6 +34,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     leverage,
     market,
     poolTokens,
+    isInvalid,
     swapState,
     swapDispatch,
     account,
@@ -73,69 +77,85 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
         : useBigNumber('0');
 
     const isValidOnBalancer = isFinite(expectedBalancerAmount.toNumber());
+    const isValidAmount = parseInt(amount) > 0 && amount.length > 0;
     const sideIndicator = side === SideEnum.long ? 'L' : 'S';
     const timeLeft = useMemo(
-        () => poolTokens.filter((poolToken) => poolToken.address === token?.pool)[0].expectedExecution,
+        () => poolTokens.filter((poolToken) => poolToken.address === token?.pool)[0]?.expectedExecution,
         [poolTokens, token],
     );
 
     return (
-        <>
-            <BuyButtonContainer>
-                <BuyText>
-                    Mint <b>{`${expectedAmount.toNumber().toFixed(3)}`}</b> tokens at{' '}
-                    <b>{toApproxCurrency(tokenPrice, 3)}</b> in{' '}
-                    <b>
-                        <TimeLeft targetTime={timeLeft} />
-                    </b>
-                </BuyText>
-                <MintButtonContainer>
-                    <TracerMintButton hidden={mintButtonClicked} onClick={handleClick}>
-                        <span className="mr-2 inline-block">Mint on</span>
-                        <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
-                    </TracerMintButton>
-                    <MintButton
-                        swapState={swapState}
-                        swapDispatch={swapDispatch}
-                        account={account}
-                        handleConnect={handleConnect}
-                        userBalances={userBalances}
-                        approve={approve}
-                        pool={pool}
-                        amountBN={amountBN}
-                        commit={commit}
-                        commitType={commitType}
-                    />
-                </MintButtonContainer>
-            </BuyButtonContainer>
-            <BuyButtonContainer>
-                <BuyText>
-                    {isValidOnBalancer ? (
-                        <>
-                            Buy <b>{expectedBalancerAmount?.toNumber().toFixed(3)}</b> tokens at{' '}
-                            <b>${balancerPrice && parseFloat(balancerPrice.toString()).toFixed(3)}</b> instantly
-                        </>
-                    ) : (
-                        <>
-                            There are no Balancer pools for pool tokens tracking the {leverage}
-                            {sideIndicator} {market} market yet.
-                        </>
-                    )}
-                </BuyText>
-                <BalancerBuyButton
-                    onClick={() => open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')}
-                    className={isValidOnBalancer ? 'opacity-100' : 'cursor-not-allowed opacity-50'}
-                    disabled={!isValidOnBalancer}
-                >
-                    <span className="mr-2 inline-block">Take me to</span>
-                    <img className="w-[105px]" alt="tracer-logo" src={'/img/logos/balancer/balancer_logo.svg'} />
-                </BalancerBuyButton>
-            </BuyButtonContainer>
-        </>
+        <StyledHiddenExpand defaultHeight={0} open={!isInvalid && !!timeLeft}>
+            <Transition
+                show={!isInvalid}
+                enter="transition-opacity duration-50 delay-100"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="transition-opacity duration-150"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+            >
+                <BuyButtonContainer>
+                    <BuyText>
+                        Mint <b>{`${expectedAmount.toNumber().toFixed(3)}`}</b> tokens at{' '}
+                        <b>{toApproxCurrency(tokenPrice, 3)}</b> in{' '}
+                        <b>
+                            <TimeLeft targetTime={timeLeft} />
+                        </b>
+                    </BuyText>
+                    <MintButtonContainer isValidAmount={isValidAmount}>
+                        <TracerMintButton hidden={mintButtonClicked} onClick={handleClick} disabled={!isValidAmount}>
+                            <span className="mr-2 inline-block">Mint on</span>
+                            <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
+                        </TracerMintButton>
+                        <MintButton
+                            swapState={swapState}
+                            swapDispatch={swapDispatch}
+                            account={account}
+                            handleConnect={handleConnect}
+                            userBalances={userBalances}
+                            approve={approve}
+                            pool={pool}
+                            amountBN={amountBN}
+                            commit={commit}
+                            commitType={commitType}
+                        />
+                    </MintButtonContainer>
+                </BuyButtonContainer>
+                <BuyButtonContainer>
+                    <BuyText>
+                        {isValidOnBalancer ? (
+                            <>
+                                Buy <b>{expectedBalancerAmount?.toNumber().toFixed(3)}</b> tokens at{' '}
+                                <b>${balancerPrice && parseFloat(balancerPrice.toString()).toFixed(3)}</b> instantly
+                            </>
+                        ) : (
+                            <>
+                                There are no Balancer pools for pool tokens tracking the {leverage}
+                                {sideIndicator} {market} market yet.
+                            </>
+                        )}
+                    </BuyText>
+                    <BalancerBuyButton
+                        onClick={() => open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')}
+                        isValidOnBalancer={isValidOnBalancer}
+                        isValidAmount={isValidAmount}
+                        disabled={!isValidOnBalancer || !isValidAmount}
+                    >
+                        <span className="mr-2 inline-block">Take me to</span>
+                        <img className="w-[105px]" alt="tracer-logo" src={'/img/logos/balancer/balancer_logo.svg'} />
+                    </BalancerBuyButton>
+                </BuyButtonContainer>
+            </Transition>
+        </StyledHiddenExpand>
     );
 };
 
 export default ExchangeButtons;
+
+const StyledHiddenExpand = styled(HiddenExpand)`
+    margin-top: 0;
+`;
 
 const BuyButtonContainer = styled.div`
     display: flex;
@@ -154,10 +174,16 @@ const BuyButtonContainer = styled.div`
     }
 `;
 
-const MintButtonContainer = styled.div`
+const MintButtonContainer = styled.div<{
+    isValidAmount: boolean;
+}>`
     position: relative;
     width: 220px;
     height: 56px;
+    opacity: ${({ isValidAmount }) => (isValidAmount ? '1' : '0.5')};
+    button {
+        cursor: ${({ isValidAmount }) => (isValidAmount ? 'pointer' : 'not-allowed')};
+    }
 `;
 
 const TracerMintButton = styled.button`
@@ -181,7 +207,10 @@ const TracerMintButton = styled.button`
     z-index: 1;
 `;
 
-const BalancerBuyButton = styled.button`
+const BalancerBuyButton = styled.button<{
+    isValidOnBalancer: boolean;
+    isValidAmount: boolean;
+}>`
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -190,12 +219,15 @@ const BalancerBuyButton = styled.button`
     width: 220px;
     height: 56px;
     background: #16bdca;
-    border-radius: 7px;
+    border-radius: 4px;
     color: white;
     font-family: 'Inter';
     font-weight: 400;
     font-size: 16px;
     line-height: 150%;
+    opacity: ${({ isValidOnBalancer, isValidAmount }) => (isValidOnBalancer && isValidAmount ? '1' : '0.5')};
+    cursor: ${({ isValidOnBalancer, isValidAmount }) =>
+        isValidOnBalancer && isValidAmount ? 'default' : 'not-allowed'};
 `;
 
 const BuyText = styled.p`

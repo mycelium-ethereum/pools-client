@@ -83,17 +83,19 @@ export type LeverageSelectorProps = {
 
 export const LeverageSelector: React.FC<LeverageSelectorProps> = ({ leverage, market, markets, swapDispatch }) => {
     const LEVERAGE_OPTIONS = marketToLeverage(markets);
+    const DEFAULT_OPTIONS = ['3', '10']; // Placeholder while waiting for correct options to load
+    const SELECTOR_OPTIONS = LEVERAGE_OPTIONS && LEVERAGE_OPTIONS.length > 0 ? LEVERAGE_OPTIONS : DEFAULT_OPTIONS;
     return (
         <>
             <TWButtonGroup
                 fullWidth
                 value={leverage}
                 borderColor={'tracer'}
-                options={LEVERAGE_OPTIONS.map((option) => ({
+                options={SELECTOR_OPTIONS.map((option) => ({
                     key: parseInt(option),
                     text: option.toString(),
                     disabled: market
-                        ? !hasLeverageOption(option, markets, market)
+                        ? markets && !hasLeverageOption(option, markets, market)
                             ? {
                                   optionKey: TooltipKeys.Unavailable,
                               }
