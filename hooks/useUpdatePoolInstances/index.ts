@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
-import { Pool } from '@tracer-protocol/pools-js';
+import { KnownNetwork, Pool } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -39,6 +39,7 @@ export const useUpdatePoolInstances = (): void => {
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
+    const [retryCount, setRetryCount] = useState(0);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
@@ -48,62 +49,66 @@ export const useUpdatePoolInstances = (): void => {
     useEffect(() => {
         let mounted = true;
         console.debug('Attempting to initialise pools');
-        // this is not the greatest for the time being
-        if (!!poolLists.length && provider && network && !isFetchingPools) {
-            if (isSupportedNetwork(network)) {
-                const fetchAndSetPools = async () => {
-                    setIsFetchingPools(true);
-                    console.debug(`Initialising pools ${network.slice()}`, poolLists);
-                    resetPools();
-                    hasSetPools.current = false;
-                    setPoolsInitialized(false);
-                    setPoolsInitializationError(undefined);
-                    Promise.all(
-                        poolLists.map((pool) =>
-                            Pool.Create({
-                                ...pool,
-                                address: pool.address,
-                                provider,
-                            }),
-                        ),
-                    )
-                        .then((pools_) => {
-                            if (!hasSetPools.current && mounted) {
-                                if (pools_.length) {
-                                    // if pools exist
-                                    setMultiplePools(pools_, network);
-                                    setPoolsInitialized(true);
-                                    hasSetPools.current = true;
-                                } else {
-                                    setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
-                                }
-                            }
-                        })
-                        .catch((err) => {
-                            console.error('Failed to initialise pools', err);
-                            if (mounted) {
-                                setPoolsInitialized(false);
-                                setPoolsInitializationError(err);
-                            }
-                        })
-                        .finally(() => {
-                            setIsFetchingPools(false);
-                        });
-                };
-                fetchAndSetPools();
-            } else {
-                console.error('Skipped pools initialisation, network not supported');
-                setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
-            }
-        } else {
+        if (isFetchingPools) {
+            console.error('Skipped pools initialisation, already fetching pools');
+        } else if (!provider) {
             console.error('Skipped pools initialisation, provider not ready');
             resetPools();
             setPoolsInitializationError(KnownPoolsInitialisationErrors.ProviderNotReady);
+        } else if (!poolLists.length) {
+            console.error('Skipped pools initialisation, poolList is empty');
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
+        } else if (!network || !isSupportedNetwork(network)) {
+            console.error(`Skipped pools initialisation, network: ${network} not supported`);
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
+        } else { // all is good
+            const fetchAndSetPools = async () => {
+                setIsFetchingPools(true);
+                console.debug(`Initialising pools ${network.slice()}`, poolLists);
+                resetPools();
+                hasSetPools.current = false;
+                setPoolsInitialized(false);
+                setPoolsInitializationError(undefined);
+                Promise.all(
+                    poolLists.map((pool) =>
+                        Pool.Create({
+                            ...pool,
+                            address: pool.address,
+                            provider,
+                        }),
+                    ),
+                )
+                    .then((pools_) => {
+                        if (!hasSetPools.current && mounted) {
+                            if (pools_.length) {
+                                // if pools exist
+                                setMultiplePools(pools_, network);
+                                setPoolsInitialized(true);
+                                hasSetPools.current = true;
+                            } else {
+                                setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
+                            }
+                        }
+                    })
+                    .catch((err) => {
+                        console.error('Failed to initialise pools', err);
+                        if (mounted) {
+                            setPoolsInitialized(false);
+                            setPoolsInitializationError(err);
+                            setIsFetchingPools(false);
+                            setRetryCount(retryCount + 1);
+                        }
+                    })
+                    .finally(() => {
+                        setIsFetchingPools(false);
+                    });
+            };
+            fetchAndSetPools();
         }
         return () => {
             mounted = false;
         };
-    }, [poolLists, provider]);
+    }, [poolLists, provider, retryCount]);
 
     // fetch all pending commits
     useEffect(() => {
