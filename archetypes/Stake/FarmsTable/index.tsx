@@ -121,7 +121,7 @@ const PoolRow: React.FC<{
         <TableRow key={farm.farm} lined>
             <TableRowCell>
                 <PoolStatusBadgeContainer>
-                    <div className="inline">
+                    <div className="inline self-center">
                         <Logo
                             className="mr-2 inline"
                             size="md"
@@ -149,7 +149,9 @@ const PoolRow: React.FC<{
                             <div>{farm.name}</div>
                         )}
                     </div>
-                    <PoolStatusBadge status={farm.poolDetails.status} />
+                    <div>
+                        <PoolStatusBadge status={farm.poolDetails.status} />
+                    </div>
                 </PoolStatusBadgeContainer>
             </TableRowCell>
             <TableRowCell>
@@ -174,7 +176,7 @@ const PoolRow: React.FC<{
                     disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] font-bold uppercase "
                     size="xs"
-                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
+                    variant="primary-light"
                     onClick={() => onClickStake(farm.farm)}
                 >
                     STAKE
@@ -183,7 +185,7 @@ const PoolRow: React.FC<{
                     disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] font-bold uppercase "
                     size="xs"
-                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
+                    variant="primary-light"
                     onClick={() => onClickUnstake(farm.farm)}
                 >
                     UNSTAKE
@@ -192,7 +194,7 @@ const PoolRow: React.FC<{
                     disabled={farm.myRewards.eq(0)}
                     className="mx-1 w-[76px] font-bold uppercase "
                     size="xs"
-                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
+                    variant="primary-light"
                     onClick={() => onClickClaim(farm.farm)}
                 >
                     CLAIM

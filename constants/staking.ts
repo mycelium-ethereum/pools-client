@@ -57,6 +57,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
                 balancerPoolId: '0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
             },
             {
                 address: '0x04Ff29F8F379B2AA7d79BA66Ce76649334D83e48', // 3L-BTC/USD+USDC
@@ -74,6 +75,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
                 balancerPoolId: '0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
             },
             {
                 address: '0x111278bf2CC2Fd862183CF34896c60DbbEA0706F', // 3L-ETH/USD+USDC
@@ -91,6 +93,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
                 balancerPoolId: '0xfe7b8f8fca690ab0cd2b8d979abeeac94c06805d00010000000000000000009c',
+                link: 'https://arbitrum.balancer.fi/#/pool/0xfe7b8f8fca690ab0cd2b8d979abeeac94c06805d00010000000000000000009c',
             },
             {
                 address: '0x38B90a6268b1a20F7A7319D533bc9d31678Cd7d8', // 3L-WTI/USD+USDC
