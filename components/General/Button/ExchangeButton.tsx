@@ -52,7 +52,7 @@ const commitText: Record<CommitEnum, string> = {
     [CommitEnum.longBurn]: 'Long Burn',
 };
 
-const ExchangeButton: React.FC<ExchangeButton> = ({
+const ExchangeButton: React.FC<ExchangeButtonProps> = ({
     onClose,
     swapState,
     swapDispatch,
@@ -119,7 +119,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                     commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
-                            onClose();
+                            onClose && onClose();
                         },
                     });
                 }}
