@@ -195,7 +195,7 @@ const FormBackdrop = styled.section`
     margin: 16px auto 32px;
     max-width: calc(100% - 20px);
     @media (min-width: 640px) {
-        padding: 48px 48px 8px;
+        padding: 48px 48px 0px;
         margin: 63px auto 150px;
         max-width: 656px;
     }

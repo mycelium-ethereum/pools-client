@@ -155,6 +155,10 @@ export default ExchangeButtons;
 
 const StyledHiddenExpand = styled(HiddenExpand)`
     margin-top: 0;
+    margin-bottom: 16px;
+    @media (min-width: 640px) {
+        margin-bottom: 48px;
+    }
 `;
 
 const BuyButtonContainer = styled.div`
