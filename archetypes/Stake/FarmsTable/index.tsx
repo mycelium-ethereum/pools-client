@@ -149,7 +149,7 @@ const PoolRow: React.FC<{
                             <div>{farm.name}</div>
                         )}
                     </div>
-                    <div>
+                    <div className="self-center">
                         <PoolStatusBadge status={farm.poolDetails.status} />
                     </div>
                 </PoolStatusBadgeContainer>
