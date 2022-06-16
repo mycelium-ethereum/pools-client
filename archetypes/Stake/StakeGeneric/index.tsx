@@ -30,7 +30,6 @@ const getFilterFieldsFromPoolTokenFarm: (farm: Farm) => { leverage: number; side
 };
 
 export const StakeGeneric = ({
-    tokenType,
     title,
     subTitle,
     farms,
@@ -41,7 +40,6 @@ export const StakeGeneric = ({
 }: {
     title: string;
     subTitle: string;
-    tokenType: string;
     farms: Record<string, Farm>;
     refreshFarm: (farmAddress: string) => void;
     hideSideFilter?: boolean;
@@ -75,6 +73,9 @@ export const StakeGeneric = ({
             linkText: farm.linkText,
             rewardsEnded: farm.rewardsEnded,
             rewardsTokenAddress: farm.rewardsTokenAddress,
+            stakingTokenPrice: farm.stakingTokenPrice,
+            isBPTFarm: farm.isBPTFarm,
+            stakingTokenSymbol: farm.stakingTokenSymbol,
         };
     });
 
@@ -394,7 +395,6 @@ export const StakeGeneric = ({
             </PageTable.Container>
             <StakeModalWithState
                 state={state}
-                tokenType={tokenType}
                 dispatch={dispatch}
                 approve={approve}
                 stake={stake}
@@ -407,24 +407,16 @@ export const StakeGeneric = ({
 
 const StakeModalWithState: React.FC<{
     state: StakeState;
-    tokenType: string;
     approve: (farmAddress: string) => void;
     stake: (farmAddress: string, amount: BigNumber) => void;
     unstake: (farmAddress: string, amount: BigNumber) => void;
     claim: (farmAddress: string) => void;
     dispatch: React.Dispatch<StakeAction>;
-}> = ({ state, tokenType, approve, stake, unstake, claim, dispatch }) => {
+}> = ({ state, approve, stake, unstake, claim, dispatch }) => {
     switch (state.stakeModalState) {
         case 'stake':
             return (
-                <StakeModal
-                    state={state}
-                    dispatch={dispatch}
-                    onStake={stake}
-                    onApprove={approve}
-                    title={`Stake ${tokenType} Tokens`}
-                    btnLabel="Stake"
-                />
+                <StakeModal state={state} dispatch={dispatch} onStake={stake} onApprove={approve} btnLabel="Stake" />
             );
         case 'unstake':
             return (
@@ -433,20 +425,12 @@ const StakeModalWithState: React.FC<{
                     dispatch={dispatch}
                     onStake={unstake}
                     onApprove={approve}
-                    title={`Unstake ${tokenType} Tokens`}
                     btnLabel="Unstake"
                 />
             );
         case 'claim':
             return (
-                <StakeModal
-                    state={state}
-                    dispatch={dispatch}
-                    onStake={claim}
-                    onApprove={approve}
-                    title={`Claim ${tokenType} Token Rewards`}
-                    btnLabel="Claim"
-                />
+                <StakeModal state={state} dispatch={dispatch} onStake={claim} onApprove={approve} btnLabel="Claim" />
             );
         case 'closed':
         default:
