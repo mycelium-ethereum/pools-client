@@ -1,35 +1,34 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import shallow from 'zustand/shallow';
-import { NETWORKS, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
 import ExchangeButtons from '~/archetypes/TokenBuySell/ExchangeButtons';
 import { LeverageSelector, MarketDropdown, SideSelector } from '~/archetypes/TokenBuySell/Inputs';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import Button from '~/components/General/Button';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import { useStore } from '~/store/main';
-import { selectWeb3Info, selectAccount, selectHandleConnect } from '~/store/Web3Slice';
+import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 const TokenBuySell: React.FC = () => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { amount, leverage, market, markets, selectedPool, side, commitAction, balanceType, invalidAmount } =
         swapState || {};
+    const { rows: poolTokens } = useBrowsePools();
 
     const account = useStore(selectAccount);
     const handleConnect = useStore(selectHandleConnect);
 
     const amountBN = useBigNumber(amount);
     const isLong = side === SideEnum.long;
-    const { network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
     const commitType = CommitActionSideMap[commitAction][side];
 
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
-    const { rows: poolTokens } = useBrowsePools();
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const tokenBalance = useMemo(() => {
@@ -109,7 +108,18 @@ const TokenBuySell: React.FC = () => {
                         swapDispatch={swapDispatch}
                         selectedPool={selectedPool}
                         isPoolToken={false}
+                        decimalPlaces={pool.settlementToken.decimals}
                     />
+                ),
+            },
+            {
+                name: '',
+                selector: (
+                    <ArrowContainer>
+                        <ArrowImg src="/img/general/arrow-down.svg" alt="Arrow down" />
+                        <ArrowImg src="/img/general/arrow-down.svg" alt="Arrow down" />
+                        <ArrowImg src="/img/general/arrow-down.svg" alt="Arrow down" />
+                    </ArrowContainer>
                 ),
             },
             {
@@ -123,7 +133,7 @@ const TokenBuySell: React.FC = () => {
             },
         ],
         [
-            network,
+            account,
             market,
             markets,
             leverage,
@@ -134,9 +144,12 @@ const TokenBuySell: React.FC = () => {
             amountBN,
             side,
             pool,
+            settlementTokenBalance,
             selectedPool,
         ],
     );
+
+    console.log(pool.settlementToken.decimals);
 
     return (
         <FormBackdrop>
@@ -146,20 +159,30 @@ const TokenBuySell: React.FC = () => {
             <Divider />
             <Table>
                 <tbody>
-                    {/* Only show 'token to receive' row after user selection */}
+                    {/* Only show 'token to receive' and arrow row after user selection */}
                     {buyTableData.map((v, i) => {
-                        if ((v.name === 'Token to receive' && token && token.symbol) || v.name !== 'Token to receive') {
+                        if (
+                            ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
+                            (v.name !== 'Token to receive' && v.name !== '')
+                        ) {
                             return (
                                 <TableRow key={`${v.name}-${i}`}>
                                     <TableCellLeft>{v.name}</TableCellLeft>
-                                    <TableCellRight>{v.selector}</TableCellRight>
+                                    <TableCellRight
+                                        noPadding={
+                                            (!!token && v.name === '') ||
+                                            (!!token && !!token.symbol && v.name === 'Token to spend')
+                                        }
+                                    >
+                                        {v.selector}
+                                    </TableCellRight>
                                 </TableRow>
                             );
                         }
                     })}
                 </tbody>
             </Table>
-            {poolTokens.length && token && token.symbol ? (
+            {account && poolTokens.length && token && token.symbol ? (
                 <ExchangeButtons
                     account={account}
                     amount={amount}
@@ -175,10 +198,20 @@ const TokenBuySell: React.FC = () => {
                     userBalances={userBalances}
                     amountBN={amountBN}
                     commitType={commitType}
-                    handleConnect={handleConnect}
                     isInvalid={invalidAmount.isInvalid}
                 />
             ) : null}
+            {!account && (
+                <ConnectButtonStyled
+                    size="lg"
+                    variant="primary"
+                    onClick={(_e) => {
+                        handleConnect();
+                    }}
+                >
+                    Connect Wallet
+                </ConnectButtonStyled>
+            )}
         </FormBackdrop>
     );
 };
@@ -231,7 +264,7 @@ const TableRow = styled.tr`
     }
 `;
 
-const TableCellLeft = styled.td`
+const TableCellLeft = styled.td<{ noPadding?: boolean }>`
     display: flex;
     padding-top: 16px;
     min-width: 160px;
@@ -240,17 +273,29 @@ const TableCellLeft = styled.td`
     font-size: 16px;
     line-height: 24px;
     color: var(--text);
-    padding-bottom: 10px;
+`;
+
+const TableCellRight = styled.td<{ noPadding?: boolean }>`
+    width: 100%;
+    padding-bottom: ${({ noPadding }) => (noPadding ? '0' : '10px')};
     @media (min-width: 640px) {
-        padding-bottom: 40px;
+        padding-bottom: ${({ noPadding }) => (noPadding ? '0' : '38px')};
     }
 `;
 
-const TableCellRight = styled.td`
-    width: 100%;
-    padding-bottom: 10px;
-    @media (min-width: 640px) {
-        padding-bottom: 40px;
+const ArrowContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+`;
+
+const ArrowImg = styled.img`
+    height: 33px;
+    width: 24px;
+    margin-right: 40px;
+    &:last-of-type {
+        margin-right: 0px;
     }
 `;
 
@@ -270,5 +315,14 @@ const TokenReceiveBox = styled.div`
     @media (min-width: 640px) {
         margin-bottom: 0px;
         padding-bottom: 0px;
+    }
+`;
+
+const ConnectButtonStyled = styled(Button)`
+    text-transform: capitalize;
+    z-index: 0;
+    margin-bottom: 16px;
+    @media (min-width: 640px) {
+        margin-bottom: 48px;
     }
 `;

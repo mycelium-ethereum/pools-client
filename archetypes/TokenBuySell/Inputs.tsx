@@ -33,23 +33,21 @@ export type MarketDropdownProps = {
 
 export const MarketDropdown: React.FC<MarketDropdownProps> = ({ market, markets, swapDispatch }) => {
     return (
-        <>
-            <Dropdown
-                className="w-full"
-                placeHolder="Select Market"
-                placeHolderIcon={getBaseAssetFromMarket(market) as LogoTicker}
-                size="lg"
-                options={Object.keys(markets).map((market) => ({
-                    key: market,
-                    ticker: getBaseAssetFromMarket(market) as LogoTicker,
-                    text: market,
-                }))}
-                value={market}
-                onSelect={(selectedMarket) => {
-                    swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
-                }}
-            />
-        </>
+        <Dropdown
+            className="w-full"
+            placeHolder="Select Market"
+            placeHolderIcon={getBaseAssetFromMarket(market) as LogoTicker}
+            size="lg"
+            options={Object.keys(markets).map((market) => ({
+                key: market,
+                ticker: getBaseAssetFromMarket(market) as LogoTicker,
+                text: market,
+            }))}
+            value={market}
+            onSelect={(selectedMarket) => {
+                swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
+            }}
+        />
     );
 };
 
@@ -60,17 +58,14 @@ export type SideSelectorProps = {
 
 export const SideSelector: React.FC<SideSelectorProps> = ({ side, swapDispatch }) => {
     return (
-        <>
-            <TWButtonGroup
-                value={side}
-                fullWidth
-                onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
-                size={'lg'}
-                // color={'tracer'}
-                borderColor={'tracer'}
-                options={SIDE_OPTIONS}
-            />
-        </>
+        <TWButtonGroup
+            value={side}
+            fullWidth
+            onClick={(option) => swapDispatch({ type: 'setSide', value: option as SideEnum })}
+            size={'lg'}
+            borderColor={'tracer'}
+            options={SIDE_OPTIONS}
+        />
     );
 };
 
@@ -86,62 +81,29 @@ export const LeverageSelector: React.FC<LeverageSelectorProps> = ({ leverage, ma
     const DEFAULT_OPTIONS = ['3', '10']; // Placeholder while waiting for correct options to load
     const SELECTOR_OPTIONS = LEVERAGE_OPTIONS && LEVERAGE_OPTIONS.length > 0 ? LEVERAGE_OPTIONS : DEFAULT_OPTIONS;
     return (
-        <>
-            <TWButtonGroup
-                fullWidth
-                value={leverage}
-                borderColor={'tracer'}
-                options={SELECTOR_OPTIONS.map((option) => ({
-                    key: parseInt(option),
-                    text: option.toString(),
-                    disabled: market
-                        ? markets && !hasLeverageOption(option, markets, market)
-                            ? {
-                                  optionKey: TooltipKeys.Unavailable,
-                              }
-                            : undefined
-                        : {
+        <TWButtonGroup
+            fullWidth
+            value={leverage}
+            borderColor={'tracer'}
+            options={SELECTOR_OPTIONS.map((option) => ({
+                key: parseInt(option),
+                text: option.toString(),
+                disabled: market
+                    ? markets && !hasLeverageOption(option, markets, market)
+                        ? {
                               optionKey: TooltipKeys.Unavailable,
                           }
-                        ? { optionKey: TooltipKeys.SelectMarket }
-                        : undefined,
-                }))}
-                onClick={(index) => {
-                    swapDispatch({ type: 'setLeverage', value: index });
-                    swapDispatch({ type: 'setPoolFromLeverage', value: index });
-                }}
-            />
-        </>
+                        : undefined
+                    : {
+                          optionKey: TooltipKeys.Unavailable,
+                      }
+                    ? { optionKey: TooltipKeys.SelectMarket }
+                    : undefined,
+            }))}
+            onClick={(index) => {
+                swapDispatch({ type: 'setLeverage', value: index });
+                swapDispatch({ type: 'setPoolFromLeverage', value: index });
+            }}
+        />
     );
 };
-
-// export type TSInputProps = {
-//     pool;
-// } & AmountProps;
-
-// export const TokenToSpendInput: React.FC<TSInputProps> = ({
-//     pool,
-//     invalidAmount,
-//     selectedPool,
-//     amount,
-//     amountBN,
-//     swapDispatch,
-//     balance,
-//     tokenSymbol,
-//     isPoolToken,
-// }) => {
-//     return (
-//         <>
-//             <AmountInput
-//                 invalidAmount={invalidAmount}
-//                 amount={amount}
-//                 amountBN={amountBN}
-//                 balance={balance}
-//                 tokenSymbol={pool.settlementToken.symbol}
-//                 swapDispatch={swapDispatch}
-//                 selectedPool={selectedPool}
-//                 isPoolToken={false}
-//             />
-//         </>
-//     );
-// };

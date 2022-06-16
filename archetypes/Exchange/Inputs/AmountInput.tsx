@@ -45,12 +45,19 @@ const AmountInput: React.FC<AmountProps> = ({
     balance,
     tokenSymbol,
     isPoolToken,
+    decimalPlaces = 8,
 }) => {
+    const validateInputDecimalPlaces = (e: React.FormEvent<HTMLInputElement>) => {
+        let t = (e.target as HTMLInputElement).value;
+        (e.target as HTMLInputElement).value =
+            t.indexOf('.') >= 0 ? t.slice(0, t.indexOf('.')) + t.slice(t.indexOf('.'), decimalPlaces) : t;
+    };
     return (
         <>
             <Styles.InputContainerStyled variation={invalidAmount.isInvalid ? 'error' : undefined}>
                 <Styles.InputStyled
                     value={amount}
+                    onInput={validateInputDecimalPlaces}
                     onUserInput={(val) => {
                         swapDispatch({ type: 'setAmount', value: val || '' });
                     }}

@@ -16,6 +16,7 @@ export type AmountProps = {
     balance: BigNumber;
     tokenSymbol?: string;
     isPoolToken: boolean;
+    decimalPlaces?: number;
 };
 
 export const WALLET_OPTIONS = [

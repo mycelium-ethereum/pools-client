@@ -1,14 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import { TracerMintButton } from '~/archetypes/TokenBuySell/ExchangeButtons';
 import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 
 const MintButton: React.FC<ExchangeButtonProps> = ({
     swapState,
     swapDispatch,
-    account,
-    handleConnect,
     userBalances,
     approve,
     pool,
@@ -18,19 +16,7 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
 }) => {
     const { selectedPool, invalidAmount, commitAction, balanceType } = swapState;
 
-    if (!account) {
-        return (
-            <Button
-                size="lg"
-                variant="primary"
-                onClick={(_e) => {
-                    handleConnect();
-                }}
-            >
-                Connect Wallet
-            </Button>
-        );
-    } else if (
+    if (
         (!userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
             userBalances.settlementToken.approvedAmount.eq(0)) &&
         commitAction !== CommitActionEnum.burn
@@ -52,9 +38,7 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
         );
     } else {
         return (
-            <ButtonStyled
-                size="lg"
-                variant="primary"
+            <TracerMintButton
                 disabled={!selectedPool || amountBN.eq(0) || invalidAmount.isInvalid}
                 onClick={(_e) => {
                     if (!commit) {
@@ -68,18 +52,11 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
                     });
                 }}
             >
-                Mint Tokens
-            </ButtonStyled>
+                <span className="mr-2 inline-block">Mint on</span>
+                <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
+            </TracerMintButton>
         );
     }
 };
 
 export default MintButton;
-
-const ButtonStyled = styled(Button)`
-    text-transform: capitalize;
-    z-index: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-`;

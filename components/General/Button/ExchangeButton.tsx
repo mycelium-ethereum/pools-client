@@ -12,7 +12,7 @@ export type ExchangeButtonProps = {
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
     account?: string;
-    handleConnect: () => void;
+    handleConnect?: () => void;
     userBalances: UserBalances;
     approve?: (selectedPool: string, symbol: string) => void;
     pool: Pool;

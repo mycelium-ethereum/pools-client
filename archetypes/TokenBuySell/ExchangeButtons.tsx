@@ -38,7 +38,6 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     swapState,
     swapDispatch,
     account,
-    handleConnect,
     userBalances,
     commitType,
 }) => {
@@ -85,7 +84,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     );
 
     return (
-        <StyledHiddenExpand defaultHeight={0} open={!isInvalid && !!timeLeft}>
+        <StyledHiddenExpand defaultHeight={0} open={!isInvalid && !!timeLeft && account !== undefined}>
             <Transition
                 show={!isInvalid}
                 enter="transition-opacity duration-50 delay-100"
@@ -103,16 +102,20 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                             <TimeLeft targetTime={timeLeft} />
                         </b>
                     </BuyText>
-                    <MintButtonContainer isValidAmount={isValidAmount}>
-                        <TracerMintButton hidden={mintButtonClicked} onClick={handleClick} disabled={!isValidAmount}>
-                            <span className="mr-2 inline-block">Mint on</span>
-                            <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
-                        </TracerMintButton>
+                    <MintButtonContainer isValidAmount={isValidAmount} account={account}>
+                        {userBalances.settlementToken.approvedAmount.eq(0) && (
+                            <TracerMintButton
+                                hidden={mintButtonClicked}
+                                onClick={handleClick}
+                                disabled={!isValidAmount}
+                            >
+                                <span className="mr-2 inline-block">Mint on</span>
+                                <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
+                            </TracerMintButton>
+                        )}
                         <MintButton
                             swapState={swapState}
                             swapDispatch={swapDispatch}
-                            account={account}
-                            handleConnect={handleConnect}
                             userBalances={userBalances}
                             approve={approve}
                             pool={pool}
@@ -131,8 +134,8 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                             </>
                         ) : (
                             <>
-                                There are no Balancer pools for pool tokens tracking the {leverage}
-                                {sideIndicator} {market} market yet.
+                                There are no Balancer pools for the {leverage}
+                                {sideIndicator}-{market} token yet.
                             </>
                         )}
                     </BuyText>
@@ -180,17 +183,18 @@ const BuyButtonContainer = styled.div`
 
 const MintButtonContainer = styled.div<{
     isValidAmount: boolean;
+    account?: string;
 }>`
     position: relative;
     width: 220px;
     height: 56px;
-    opacity: ${({ isValidAmount }) => (isValidAmount ? '1' : '0.5')};
+    opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
     button {
-        cursor: ${({ isValidAmount }) => (isValidAmount ? 'pointer' : 'not-allowed')};
+        cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
     }
 `;
 
-const TracerMintButton = styled.button`
+export const TracerMintButton = styled.button`
     position: absolute;
     left: 0;
     top: 0;
