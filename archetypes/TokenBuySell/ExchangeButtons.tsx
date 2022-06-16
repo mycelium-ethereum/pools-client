@@ -189,8 +189,9 @@ const MintButtonContainer = styled.div<{
     width: 220px;
     height: 56px;
     opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
+    cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
     button {
-        cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
+        pointer-events: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'auto' : 'none')};
     }
 `;
 

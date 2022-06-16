@@ -47,11 +47,12 @@ export const Input = React.memo(
                 value={value}
                 onChange={(event) => {
                     const { value } = event.target;
-                    const decimals = value.toString().split('.')[1];
+                    const strWithoutLeadingsZeroes = value.replace(/^[0]+/g, '0');
+                    const decimals = strWithoutLeadingsZeroes.toString().split('.')[1];
                     // limit the amount of decimals
                     if (!decimals || decimals?.length <= maxDecimals) {
                         // replace commas with periods
-                        onUserInput(value.replace(/,/g, '.'));
+                        onUserInput(strWithoutLeadingsZeroes.replace(/,/g, '.'));
                     }
                 }}
                 // universal input options
@@ -65,6 +66,7 @@ export const Input = React.memo(
                 placeholder={placeholder || '0.0'}
                 onKeyPress={onKeyPress}
                 min={0}
+                pattern={'[1-9]d*'}
                 minLength={1}
                 maxLength={80}
                 spellCheck="false"
