@@ -8,7 +8,6 @@ const supportedNetworks: string[] = [NETWORKS.ARBITRUM, NETWORKS.ARBITRUM_RINKEB
 // for now this is exactly the same as the function above
 export const isSupportedNetwork = (networkId: number | string | undefined): boolean => {
     const networkIdString = networkId?.toString();
-
     return supportedNetworks.includes(networkIdString ?? '');
 };
 

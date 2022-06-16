@@ -29,3 +29,6 @@ export type StoreState = {
 //  since it receives a StoreState get and set but does not have to return the entire store state
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type StateSlice<T extends object> = (set: SetState<T>, get: GetState<T>) => T;
+
+export type StoreNetwork = StoreState['web3Slice']['network'];
+export type StoreAccount = StoreState['web3Slice']['account'];
