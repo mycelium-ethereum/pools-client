@@ -73,7 +73,7 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                 size="lg"
                 variant="primary"
                 onClick={(_e) => {
-                    handleConnect();
+                    handleConnect && handleConnect();
                 }}
             >
                 Connect Wallet

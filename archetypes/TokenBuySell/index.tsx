@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from 'react';
+import React, { useContext, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
@@ -148,8 +148,6 @@ const TokenBuySell: React.FC = () => {
             selectedPool,
         ],
     );
-
-    console.log(pool.settlementToken.decimals);
 
     return (
         <FormBackdrop>
