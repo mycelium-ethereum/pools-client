@@ -14,7 +14,7 @@ import { createPoolsInstancesSlice } from './PoolInstancesSlice';
 import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { createPoolsSlice } from './PoolsSlice';
 import { IPoolsSlice } from './PoolsSlice/types';
-import {onNetworkChange, onAccountChange} from './subscriptions';
+import { onNetworkChange, onAccountChange } from './subscriptions';
 import { createThemeSlice } from './ThemeSlice';
 import { IThemeSlice } from './ThemeSlice/types';
 import { createTransactionSlice } from './TransactionSlice';
@@ -76,11 +76,5 @@ export const useStore = create<
     ),
 );
 
-
 export const networkSub = useStore.subscribe((state) => state.web3Slice.network, onNetworkChange);
 export const accountSub = useStore.subscribe((state) => state.web3Slice.account, onAccountChange);
-
-
-
-
-

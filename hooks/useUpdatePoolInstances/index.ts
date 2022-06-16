@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
-import { KnownNetwork, Pool } from '@tracer-protocol/pools-js';
+import { Pool } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -18,6 +18,8 @@ import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
+
+const MAX_RETRY_COUNT = 5;
 
 /**
  * Wrapper to update all pools information
@@ -61,7 +63,11 @@ export const useUpdatePoolInstances = (): void => {
         } else if (!network || !isSupportedNetwork(network)) {
             console.error(`Skipped pools initialisation, network: ${network} not supported`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
-        } else { // all is good
+        } else if (retryCount > 5) {
+            console.error(`Skipped pools initialisation, retry count as exceeded ${MAX_RETRY_COUNT}`);
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
+        } else {
+            // all is good
             const fetchAndSetPools = async () => {
                 setIsFetchingPools(true);
                 console.debug(`Initialising pools ${network.slice()}`, poolLists);
