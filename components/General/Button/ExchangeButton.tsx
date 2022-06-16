@@ -7,8 +7,8 @@ import Button from '~/components/General/Button';
 import { SwapAction, SwapState } from '~/context/SwapContext';
 import { AggregateBalances } from '~/types/pools';
 
-type ExchangeButton = {
-    onClose: () => void;
+export type ExchangeButtonProps = {
+    onClose?: () => void;
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
     account?: string;
@@ -27,7 +27,7 @@ type ExchangeButton = {
     commitType: CommitEnum;
 };
 
-type UserBalances = {
+export type UserBalances = {
     shortToken: TokenBalance;
     longToken: TokenBalance;
     settlementToken: TokenBalance;

@@ -1,44 +1,35 @@
 import React, { useContext, useEffect, useMemo } from 'react';
-// import Link from 'next/link';
-// import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
-import { NETWORKS } from '@tracer-protocol/pools-js';
-import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { NETWORKS, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
+import ExchangeButtons from '~/archetypes/TokenBuySell/ExchangeButtons';
 import { LeverageSelector, MarketDropdown, SideSelector } from '~/archetypes/TokenBuySell/Inputs';
-// import Button from '~/components/General/Button';
-import TWButtonGroup from '~/components/General/TWButtonGroup';
-// import { StyledTooltip } from '~/components/Tooltips';
-
+import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
-// import { useAllPoolLists } from '~/hooks/useAllPoolLists';
+import useBrowsePools from '~/hooks/useBrowsePools';
 import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import { useStore } from '~/store/main';
-import { selectWeb3Info } from '~/store/Web3Slice';
+import { selectWeb3Info, selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 const TokenBuySell: React.FC = () => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { amount, leverage, market, markets, selectedPool, side, commitAction, balanceType, invalidAmount } =
         swapState || {};
+
+    const account = useStore(selectAccount);
+    const handleConnect = useStore(selectHandleConnect);
+
     const amountBN = useBigNumber(amount);
     const isLong = side === SideEnum.long;
-    // const staticPoolInfo = useAllPoolLists();
     const { network = NETWORKS.ARBITRUM } = useStore(selectWeb3Info, shallow);
-    // const handleConnect = useStore(selectHandleConnect);
+    const commitType = CommitActionSideMap[commitAction][side];
 
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
-
-    // const valid = !Number.isNaN(leverage) && !!market && !Number.isNaN(side);
-
-    // const hasBalancerPool = market && (market === 'ETH/USD' || market === 'BTC/USD');
-
-    // const token = side === SideEnum.long ? pool?.longToken : pool?.shortToken;
-    // const settlementTokens = staticPoolInfo.map((p) => p.settlementToken);
-
-    // const uniqueTokens = [...new Map(settlementTokens.map((token) => [token?.symbol, token])).values()];
+    const { rows: poolTokens } = useBrowsePools();
 
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const tokenBalance = useMemo(() => {
@@ -121,6 +112,15 @@ const TokenBuySell: React.FC = () => {
                     />
                 ),
             },
+            {
+                name: 'Token to receive',
+                selector: (
+                    <TokenReceiveBox>
+                        <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(token?.symbol)} />
+                        {token?.symbol}
+                    </TokenReceiveBox>
+                ),
+            },
         ],
         [
             network,
@@ -138,68 +138,6 @@ const TokenBuySell: React.FC = () => {
         ],
     );
 
-    // const button = () => {
-    //     if (!account) {
-    //         return (
-    //             <Button size="lg" variant="primary" onClick={handleConnect}>
-    //                 Connect Wallet
-    //             </Button>
-    //         );
-    //     } else if (!valid) {
-    //         return (
-    //             <StyledTooltip title="Select the market, side, and power leverage you're after.">
-    //                 <div>
-    //                     <Button
-    //                         size="lg"
-    //                         variant="primary"
-    //                         onClick={() =>
-    //                             open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')
-    //                         }
-    //                         disabled={true}
-    //                     >
-    //                         Take me to Balancer
-    //                     </Button>
-    //                 </div>
-    //             </StyledTooltip>
-    //         );
-    //     } else if (!hasBalancerPool) {
-    //         return (
-    //             <StyledTooltip
-    //                 title={
-    //                     <>
-    //                         {`There are no Balancer pools for pool tokens tracking the ${market} market yet. `}
-    //                         <Link href="/pools">Mint/burn here.</Link>
-    //                     </>
-    //                 }
-    //             >
-    //                 <div>
-    //                     <Button
-    //                         size="lg"
-    //                         variant="primary"
-    //                         onClick={() =>
-    //                             open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')
-    //                         }
-    //                         disabled={true}
-    //                     >
-    //                         Take me to Balancer
-    //                     </Button>
-    //                 </div>
-    //             </StyledTooltip>
-    //         );
-    //     } else {
-    //         return (
-    //             <Button
-    //                 size="lg"
-    //                 variant="primary"
-    //                 onClick={() => open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')}
-    //                 disabled={!valid}
-    //             >
-    //                 Take me to Balancer
-    //             </Button>
-    //         );
-    //     }
-    // };
-
     return (
         <FormBackdrop>
             <Header>
@@ -208,35 +146,38 @@ const TokenBuySell: React.FC = () => {
             <Divider />
             <Table>
                 <tbody>
-                    {buyTableData.map((v, i) => (
-                        <TableRow key={`${v.name}-${i}`}>
-                            <TableCellLeft>{v.name}</TableCellLeft>
-                            <TableCellRight>{v.selector}</TableCellRight>
-                        </TableRow>
-                    ))}
+                    {/* Only show 'token to receive' row after user selection */}
+                    {buyTableData.map((v, i) => {
+                        if ((v.name === 'Token to receive' && token && token.symbol) || v.name !== 'Token to receive') {
+                            return (
+                                <TableRow key={`${v.name}-${i}`}>
+                                    <TableCellLeft>{v.name}</TableCellLeft>
+                                    <TableCellRight>{v.selector}</TableCellRight>
+                                </TableRow>
+                            );
+                        }
+                    })}
                 </tbody>
             </Table>
-            {/* Markets[selectedMarket][selectedLeverage] */}
-            {/*
-                <HiddenExpand
-                    defaultHeight={0}
-                    open={!!pool?.name}
-                    className={classNames(
-                        'border-2xl border bg-theme-background text-base',
-                        !!pool?.name ? 'border-theme-border' : 'border-transparent',
-                    )}
-                >
-                    <div className="border-box relative px-4 pt-4 pb-2">
-                        <h2 className="text-theme-text">
-                            <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(token?.symbol)} />
-                            {token?.name}
-                        </h2>
-                        <div className={'absolute left-6 -top-4 z-[2] rounded bg-theme-background p-1.5 text-sm'}>
-                            {'I want to trade'}
-                        </div>
-                    </div>
-                </HiddenExpand>
-                <div className="mt-8">{button()}</div> */}
+            {poolTokens.length && token && token.symbol && (
+                <ExchangeButtons
+                    account={account}
+                    amount={amount}
+                    pool={pool}
+                    token={token}
+                    isLong={isLong}
+                    side={side}
+                    leverage={leverage}
+                    market={market}
+                    poolTokens={poolTokens}
+                    swapState={swapState}
+                    swapDispatch={swapDispatch}
+                    userBalances={userBalances}
+                    amountBN={amountBN}
+                    commitType={commitType}
+                    handleConnect={handleConnect}
+                />
+            )}
         </FormBackdrop>
     );
 };
@@ -244,14 +185,19 @@ const TokenBuySell: React.FC = () => {
 export default TokenBuySell;
 
 const FormBackdrop = styled.section`
-    padding: 48px;
     background: var(--background);
     border-radius: 20px;
     box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
-    max-width: 656px;
     width: 100%;
-    margin: 63px auto 0;
     font-family: 'Inter';
+    padding: 16px;
+    margin: 16px auto 32px;
+    max-width: calc(100% - 20px);
+    @media (min-width: 640px) {
+        padding: 48px;
+        margin: 63px auto 150px;
+        max-width: 656px;
+    }
 `;
 
 const Header = styled.header`
@@ -268,7 +214,7 @@ const H1 = styled.h1`
 `;
 
 const Divider = styled.hr`
-    border-top: 1px solid #e6e6e6;
+    border-top: 1px solid var(--border);
     margin-bottom: 32px;
 `;
 
@@ -276,7 +222,13 @@ const Table = styled.table`
     width: 100%;
 `;
 
-const TableRow = styled.tr``;
+const TableRow = styled.tr`
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 640px) {
+        display: table-row;
+    }
+`;
 
 const TableCellLeft = styled.td`
     display: flex;
@@ -287,18 +239,33 @@ const TableCellLeft = styled.td`
     font-size: 16px;
     line-height: 24px;
     color: var(--text);
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+    @media (min-width: 640px) {
+        padding-bottom: 40px;
+    }
 `;
 
 const TableCellRight = styled.td`
     width: 100%;
-    padding-bottom: 40px;
+    padding-bottom: 10px;
+    @media (min-width: 640px) {
+        padding-bottom: 40px;
+    }
 `;
 
-const TWButtonGroupStyled = styled(TWButtonGroup)`
-    z-index: 0;
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0.125rem;
-    width: auto;
+const TokenReceiveBox = styled.div`
+    width: 100%;
+    height: 55px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 13px 20px;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    margin-bottom: 20px;
+    @media (min-width: 640px) {
+        padding-bottom: 0px;
+    }
 `;
