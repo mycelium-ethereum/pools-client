@@ -174,7 +174,7 @@ const PoolRow: React.FC<{
                     disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] font-bold uppercase "
                     size="xs"
-                    variant="primary-light"
+                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
                     onClick={() => onClickStake(farm.farm)}
                 >
                     STAKE
@@ -183,7 +183,7 @@ const PoolRow: React.FC<{
                     disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] font-bold uppercase "
                     size="xs"
-                    variant="primary-light"
+                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
                     onClick={() => onClickUnstake(farm.farm)}
                 >
                     UNSTAKE
@@ -192,7 +192,7 @@ const PoolRow: React.FC<{
                     disabled={farm.myRewards.eq(0)}
                     className="mx-1 w-[76px] font-bold uppercase "
                     size="xs"
-                    variant="primary-light"
+                    variant={farm.isBPTFarm ? 'primary' : 'primary-light'}
                     onClick={() => onClickClaim(farm.farm)}
                 >
                     CLAIM
