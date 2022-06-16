@@ -33,18 +33,20 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                 </TableHeader>
-                {rows.map((farm) => {
-                    return (
-                        <PoolRow
-                            key={`${farm.farm}`}
-                            farm={farm}
-                            rewardsTokenUSDPrices={rewardsTokenUSDPrices}
-                            onClickClaim={onClickClaim}
-                            onClickStake={onClickStake}
-                            onClickUnstake={onClickUnstake}
-                        />
-                    );
-                })}
+                <tbody>
+                    {rows.map((farm) => {
+                        return (
+                            <PoolRow
+                                key={`${farm.farm}`}
+                                farm={farm}
+                                rewardsTokenUSDPrices={rewardsTokenUSDPrices}
+                                onClickClaim={onClickClaim}
+                                onClickStake={onClickStake}
+                                onClickUnstake={onClickUnstake}
+                            />
+                        );
+                    })}
+                </tbody>
             </Table>
             {fetchingFarms ? <Loading className="mx-auto my-8 w-10" /> : null}
             <TWModal open={showModal} onClose={() => setShowModal(false)}>
@@ -154,7 +156,7 @@ const PoolRow: React.FC<{
                 {farm.rewardsEnded ? <RewardsEndedTip>N/A</RewardsEndedTip> : `${largeDecimal(apr)}%`}
             </TableRowCell>
             <TableRowCell>
-                <TableRowCell>{toApproxCurrency(stakingTokenPrice.times(farm.totalStaked))}</TableRowCell>
+                <div>{toApproxCurrency(stakingTokenPrice.times(farm.totalStaked))}</div>
             </TableRowCell>
             <TableRowCell>
                 <div>{farm.myStaked.toFixed(2)}</div>

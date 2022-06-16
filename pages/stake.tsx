@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import StakePool from '~/archetypes/Stake/StakePool';
 import Footer from '~/components/Footer';
+import SEO from '~/components/General/SEO';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardStakeModal from '~/components/OnboardModal/Stake';
+import { seoContent } from '~/constants/seo';
 import { FarmStore } from '~/context/FarmContext';
 
 export default (() => {
@@ -18,6 +20,7 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
+            <SEO {...seoContent.stake} />
             <NavBar setShowOnboardModal={setShowOnboardModal} />
             <FarmStore>
                 <StakePool />

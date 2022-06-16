@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Browse } from '~/archetypes/Pools';
 import Footer from '~/components/Footer';
+import SEO from '~/components/General/SEO';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
+import { seoContent } from '~/constants/seo';
 import { SwapStore } from '~/context/SwapContext';
 
 export default (() => {
@@ -18,6 +20,7 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
+            <SEO {...seoContent.pools} />
             <NavBar setShowOnboardModal={setShowOnboardModal} />
             <SwapStore>
                 <Browse />

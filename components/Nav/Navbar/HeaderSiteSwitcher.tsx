@@ -84,6 +84,7 @@ const DropdownMenu: React.FC = () => {
             </Link>
             <button
                 id="toggle"
+                aria-label="Site selector dropdown"
                 className="w-22 h-22 outline-none left-0 top-0 z-0 flex cursor-pointer items-center justify-center border-none pl-3"
                 onClick={(e) => {
                     e.stopPropagation();
