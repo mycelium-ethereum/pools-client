@@ -70,7 +70,7 @@ export const useUpdatePoolInstances = (): void => {
             // all is good
             const fetchAndSetPools = async () => {
                 setIsFetchingPools(true);
-                console.debug(`Initialising pools ${network.slice()}`, poolLists);
+                console.debug(`Initialising pools ${network.slice()}: ${retryCount}`, poolLists);
                 resetPools();
                 hasSetPools.current = false;
                 setPoolsInitialized(false);
