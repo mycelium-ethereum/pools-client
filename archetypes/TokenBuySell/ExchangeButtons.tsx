@@ -76,7 +76,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
         : useBigNumber('0');
 
     const isValidOnBalancer = isFinite(expectedBalancerAmount.toNumber());
-    const isValidAmount = parseInt(amount) > 0 && amount.length > 0;
+    const isValidAmount = parseFloat(amount) > 0 && amount.length > 0;
     const sideIndicator = side === SideEnum.long ? 'L' : 'S';
     const timeLeft = useMemo(
         () => poolTokens.filter((poolToken) => poolToken.address === token?.pool)[0]?.expectedExecution,
