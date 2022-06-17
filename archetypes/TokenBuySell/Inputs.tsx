@@ -49,7 +49,6 @@ export const MarketDropdown: React.FC<MarketDropdownProps> = ({ market, markets,
             }))}
             value={market}
             onSelect={(selectedMarket) => {
-                console.log(selectedMarket);
                 swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
             }}
         />
