@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { LogoTicker } from '~/components/General';
 import { Dropdown } from '~/components/General/Dropdown';
@@ -32,6 +32,10 @@ export type MarketDropdownProps = {
 };
 
 export const MarketDropdown: React.FC<MarketDropdownProps> = ({ market, markets, swapDispatch }) => {
+    useEffect(() => {
+        swapDispatch({ type: 'setPoolFromMarket', market: market as string });
+    }, [markets]);
+
     return (
         <Dropdown
             className="w-full"
@@ -45,6 +49,7 @@ export const MarketDropdown: React.FC<MarketDropdownProps> = ({ market, markets,
             }))}
             value={market}
             onSelect={(selectedMarket) => {
+                console.log(selectedMarket);
                 swapDispatch({ type: 'setPoolFromMarket', market: selectedMarket as string });
             }}
         />
