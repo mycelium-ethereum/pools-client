@@ -66,7 +66,6 @@ export const Input = React.memo(
                 placeholder={placeholder || '0.0'}
                 onKeyPress={onKeyPress}
                 min={0}
-                pattern={'[1-9]d*'}
                 minLength={1}
                 maxLength={80}
                 spellCheck="false"
