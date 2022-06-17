@@ -14,4 +14,4 @@ export const seoContent = {
         description: 'Stake your Pool Tokens to earn TCR rewards.',
         image: '/img/opengraph/stake.jpg',
     },
-}
+};
