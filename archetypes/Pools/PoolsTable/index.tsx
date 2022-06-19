@@ -694,7 +694,7 @@ const TokenRows: React.FC<
                         </Button>
                         <Actions
                             token={{
-                                address: poolAddress,
+                                address: tokenInfo.address,
                                 decimals: decimals,
                                 symbol: tokenInfo.symbol,
                             }}
