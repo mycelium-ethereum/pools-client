@@ -77,38 +77,49 @@ export const useUpdatePoolInstances = (): void => {
                 if (!poolLists.length) {
                     return setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                 }
-
-                const initialisedPools: Pool[] = [];
-
                 try {
-                    for (const pool of poolLists) {
-                        const poolSDKInstance = await attemptPromiseRecursively({
-                            promise: () =>
-                                Pool.Create({
-                                    ...pool,
-                                    address: pool.address,
-                                    provider,
-                                }),
-                            retryCheck: async () => {
-                                retryCount += 1;
+                    const initialisedPools = await Promise.all(
+                        poolLists.map(async (pool) => {
+                            const poolSDKInstance = await attemptPromiseRecursively({
+                                promise: () =>
+                                    Pool.Create({
+                                        ...pool,
+                                        address: pool.address,
+                                        provider,
+                                    }),
+                                interval: 500, // half a second between retries
+                                retryCheck: async () => {
+                                    retryCount += 1;
 
-                                if (retryCount >= MAX_RETRY_COUNT) {
-                                    console.debug(
-                                        `Skipped pools initialisation, retry count has exceeded ${MAX_RETRY_COUNT}`,
-                                    );
+                                    if (retryCount >= MAX_RETRY_COUNT) {
+                                        console.debug(
+                                            `Skipped pools initialisation, retry count has exceeded ${MAX_RETRY_COUNT}`,
+                                        );
 
-                                    setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
-                                }
+                                        setPoolsInitializationError(
+                                            KnownPoolsInitialisationErrors.ExceededMaxRetryCount,
+                                        );
+                                    }
 
-                                return retryCount < MAX_RETRY_COUNT;
-                            },
-                            maxAttempts: MAX_RETRY_COUNT,
-                        });
+                                    return retryCount < MAX_RETRY_COUNT;
+                                },
+                                maxAttempts: MAX_RETRY_COUNT,
+                            }).catch((error) => {
+                                console.debug(
+                                    `Abandoning loading of ${pool.name || pool.address}, retry limit reached: ${error}`,
+                                );
 
-                        initialisedPools.push(poolSDKInstance);
-                    }
+                                return null;
+                            });
 
-                    setMultiplePools(initialisedPools, network);
+                            return poolSDKInstance;
+                        }),
+                    );
+
+                    // filter out abandoned attempts (which result in null)
+                    const poolsToSet = initialisedPools.filter((pool) => Boolean(pool)) as Pool[];
+
+                    setMultiplePools(poolsToSet, network);
                     setPoolsInitialized(true);
                     hasSetPools.current = true;
                 } catch (error) {
