@@ -41,7 +41,7 @@ export const useUpdatePoolInstances = (): void => {
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
-    const [retryCount, setRetryCount] = useState(0);
+    // const [retryCount, setRetryCount] = useState(0);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
@@ -63,13 +63,11 @@ export const useUpdatePoolInstances = (): void => {
         } else if (!network || !isSupportedNetwork(network)) {
             console.debug(`Skipped pools initialisation, network: ${network} not supported`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
-        } else if (retryCount >= MAX_RETRY_COUNT) {
-            console.debug(`Skipped pools initialisation, retry count as exceeded ${MAX_RETRY_COUNT}`);
-            setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
         } else {
             // all is good
             const fetchAndSetPools = async () => {
                 setIsFetchingPools(true);
+                let retryCount = 0;
                 console.debug(`Initialising pools ${network.slice()}: ${retryCount}`, poolLists);
                 resetPools();
                 hasSetPools.current = false;
@@ -80,30 +78,30 @@ export const useUpdatePoolInstances = (): void => {
                     return setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                 }
 
-                const initialisedPools: Pool[] = [];
-
                 try {
-                    for (const pool of poolLists) {
-                        const poolSDKInstance = await attemptPromiseRecursively({
-                            promise: () =>
-                                Pool.Create({
-                                    ...pool,
-                                    address: pool.address,
-                                    provider,
-                                }),
-                            retryCheck: async () => {
-                                if (retryCount < MAX_RETRY_COUNT) {
-                                    setRetryCount(retryCount + 1);
-                                }
 
-                                return retryCount < MAX_RETRY_COUNT;
-                            },
-                            maxAttempts: MAX_RETRY_COUNT,
-                        });
+                    const initialisedPools: Pool[] = await Promise.all(
+                        poolLists.map((pool) => 
+                            attemptPromiseRecursively({
+                                promise: () => {
+                                    return Pool.Create({
+                                        ...pool,
+                                        address: pool.address,
+                                        provider,
+                                    })
+                                },
+                                retryCheck: async () => {
+                                    console.log("Failed to fetch retrying", retryCount);
+                                    if (retryCount < MAX_RETRY_COUNT) {
+                                        retryCount += 1;
+                                    }
 
-                        initialisedPools.push(poolSDKInstance);
-                    }
-
+                                    return retryCount < MAX_RETRY_COUNT;
+                                },
+                                maxAttempts: MAX_RETRY_COUNT,
+                            })
+                        )
+                    );
                     setMultiplePools(initialisedPools, network);
                     setPoolsInitialized(true);
                     hasSetPools.current = true;
@@ -115,14 +113,18 @@ export const useUpdatePoolInstances = (): void => {
                     }
                 }
 
+                if (retryCount >= MAX_RETRY_COUNT) {
+                    console.debug(`Skipped pools initialisation, retry count as exceeded ${MAX_RETRY_COUNT}`);
+                    setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
+                };
                 setIsFetchingPools(false);
-            };
+            }
             fetchAndSetPools();
         }
         return () => {
             mounted = false;
         };
-    }, [poolLists, provider, retryCount]);
+    }, [poolLists, provider]);
 
     // fetch all pending commits
     useEffect(() => {
