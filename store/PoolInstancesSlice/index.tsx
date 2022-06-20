@@ -19,7 +19,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     poolsInitializationError: undefined,
 
     setPool: (pool, network) => {
-        const now = Date.now() / 1000;
+        const now = Math.floor(Date.now() / 1000);
         const expectedExecution = getExpectedExecutionTimestamp(
             pool.frontRunningInterval.toNumber(),
             pool.updateInterval.toNumber(),
@@ -42,7 +42,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
         });
     },
     setMultiplePools: (pools, network) => {
-        const now = Date.now() / 1000;
+        const now = Math.floor(Date.now() / 1000);
         set((state) => {
             pools.forEach((pool) => {
                 const expectedExecution = getExpectedExecutionTimestamp(
