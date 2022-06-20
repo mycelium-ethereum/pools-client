@@ -41,7 +41,6 @@ export const useUpdatePoolInstances = (): void => {
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
     const poolsInitialized = useStore(selectPoolsInitialized);
-    const [retryCount, setRetryCount] = useState(0);
 
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
@@ -63,12 +62,11 @@ export const useUpdatePoolInstances = (): void => {
         } else if (!network || !isSupportedNetwork(network)) {
             console.debug(`Skipped pools initialisation, network: ${network} not supported`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
-        } else if (retryCount >= MAX_RETRY_COUNT) {
-            console.debug(`Skipped pools initialisation, retry count as exceeded ${MAX_RETRY_COUNT}`);
-            setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
         } else {
             // all is good
             const fetchAndSetPools = async () => {
+                let retryCount = 0;
+
                 setIsFetchingPools(true);
                 console.debug(`Initialising pools ${network.slice()}: ${retryCount}`, poolLists);
                 resetPools();
@@ -92,8 +90,14 @@ export const useUpdatePoolInstances = (): void => {
                                     provider,
                                 }),
                             retryCheck: async () => {
-                                if (retryCount < MAX_RETRY_COUNT) {
-                                    setRetryCount(retryCount + 1);
+                                retryCount += 1;
+
+                                if (retryCount >= MAX_RETRY_COUNT) {
+                                    console.debug(
+                                        `Skipped pools initialisation, retry count has exceeded ${MAX_RETRY_COUNT}`,
+                                    );
+
+                                    setPoolsInitializationError(KnownPoolsInitialisationErrors.ExceededMaxRetryCount);
                                 }
 
                                 return retryCount < MAX_RETRY_COUNT;
@@ -122,7 +126,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [poolLists, provider, retryCount]);
+    }, [poolLists, provider]);
 
     // fetch all pending commits
     useEffect(() => {
