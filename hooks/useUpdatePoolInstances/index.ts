@@ -15,11 +15,12 @@ import { KnownPoolsInitialisationErrors } from '~/store/PoolInstancesSlice/types
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
+import { randomIntInRange } from '~/utils/helpers';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
 
-const MAX_RETRY_COUNT = 5;
+const MAX_RETRY_COUNT = 10;
 
 /**
  * Wrapper to update all pools information
@@ -87,7 +88,9 @@ export const useUpdatePoolInstances = (): void => {
                                         address: pool.address,
                                         provider,
                                     }),
-                                interval: 500, // half a second between retries
+                                // add randomness to retry delay
+                                // so two failing at the same time are unlikely to be retried at the exact same time
+                                interval: randomIntInRange(300, 1000),
                                 retryCheck: async () => {
                                     retryCount += 1;
 
