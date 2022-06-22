@@ -22,12 +22,30 @@ const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
     return (
+        <>
+            <div
+                className={classNames(
+                    'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
+                )}
+            >
+                <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+            </div>
+            {setShowOnboardModal && <HelpIcon setShowOnboardModal={setShowOnboardModal} />}
+        </>
+    );
+};
+
+const HelpIcon: React.FC<{
+    setShowOnboardModal: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
+    return (
         <div
-            className={classNames(
-                'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
-            )}
+            className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-tracer-500 lg:right-8 lg:bottom-8"
+            onClick={() => {
+                setShowOnboardModal(true);
+            }}
         >
-            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+            <RevisitOnboard />
         </div>
     );
 };
