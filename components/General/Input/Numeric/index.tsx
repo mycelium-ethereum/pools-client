@@ -61,7 +61,7 @@ export const Input = React.memo(
                 autoComplete="off"
                 autoCorrect="off"
                 // text-specific options
-                type="text"
+                type="number"
                 pattern={pattern}
                 placeholder={placeholder || '0.0'}
                 onKeyPress={onKeyPress}
