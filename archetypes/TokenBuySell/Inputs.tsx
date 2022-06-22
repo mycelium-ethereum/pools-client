@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { SideEnum } from '@tracer-protocol/pools-js';
+import { Pool, SideEnum } from '@tracer-protocol/pools-js';
 import { LogoTicker } from '~/components/General';
 import { Dropdown } from '~/components/General/Dropdown';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
@@ -7,6 +7,7 @@ import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { Market, SIDE_OPTIONS } from '~/context/SwapContext';
 import { SwapAction } from '~/context/SwapContext';
 import { getBaseAssetFromMarket } from '~/utils/poolNames';
+import { generatePoolTypeSummary } from '~/utils/pools';
 
 const marketToLeverage = (markets: Record<string, Market>) => {
     const leverageAmounts: string[] = [];
@@ -84,6 +85,7 @@ export const LeverageSelector: React.FC<LeverageSelectorProps> = ({ leverage, ma
     const LEVERAGE_OPTIONS = marketToLeverage(markets);
     const DEFAULT_OPTIONS = ['3', '10']; // Placeholder while waiting for correct options to load
     const SELECTOR_OPTIONS = LEVERAGE_OPTIONS && LEVERAGE_OPTIONS.length > 0 ? LEVERAGE_OPTIONS : DEFAULT_OPTIONS;
+    // TODO: disable deprecated pool options
     return (
         <TWButtonGroup
             fullWidth
@@ -107,6 +109,32 @@ export const LeverageSelector: React.FC<LeverageSelectorProps> = ({ leverage, ma
             onClick={(index) => {
                 swapDispatch({ type: 'setLeverage', value: index });
                 swapDispatch({ type: 'setPoolFromLeverage', value: index });
+            }}
+        />
+    );
+};
+
+export type PoolTypeDropdownProps = {
+    market: string;
+    markets: Record<string, Market>;
+    leverage: number;
+    swapDispatch: React.Dispatch<SwapAction>;
+};
+
+export const PoolTypeDropdown: React.FC<PoolTypeDropdownProps> = ({ market, markets, leverage, swapDispatch }) => {
+    const availablePools = markets?.[market]?.[leverage] as unknown as Pool[];
+    return (
+        <Dropdown
+            className="w-full"
+            placeHolder="Select Market"
+            size="lg"
+            options={availablePools.map((pool) => ({
+                key: pool.address,
+                text: generatePoolTypeSummary(pool),
+            }))}
+            value={generatePoolTypeSummary(availablePools[0])}
+            onSelect={(selectedMarket) => {
+                swapDispatch({ type: 'setSelectedPool', value: selectedMarket });
             }}
         />
     );

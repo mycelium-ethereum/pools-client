@@ -4,7 +4,7 @@ import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
 import ExchangeButtons from '~/archetypes/TokenBuySell/ExchangeButtons';
-import { LeverageSelector, MarketDropdown, SideSelector } from '~/archetypes/TokenBuySell/Inputs';
+import { LeverageSelector, MarketDropdown, PoolTypeDropdown, SideSelector } from '~/archetypes/TokenBuySell/Inputs';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { CommitActionSideMap } from '~/constants/commits';
@@ -14,6 +14,7 @@ import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
+import { PoolType } from '~/types/pools';
 
 const TokenBuySell: React.FC = () => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
@@ -97,6 +98,17 @@ const TokenBuySell: React.FC = () => {
                 ),
             },
             {
+                name: 'Pool type',
+                selector: (
+                    <PoolTypeDropdown
+                        market={market}
+                        markets={markets}
+                        leverage={leverage}
+                        swapDispatch={swapDispatch}
+                    />
+                ),
+            },
+            {
                 name: 'Token to spend',
                 selector: (
                     <AmountInput
@@ -161,7 +173,12 @@ const TokenBuySell: React.FC = () => {
                     {buyTableData.map((v, i) => {
                         if (
                             ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
-                            (v.name !== 'Token to receive' && v.name !== '')
+                            (v.name === 'Pool type' &&
+                                markets &&
+                                market &&
+                                leverage &&
+                                (markets?.[market]?.[leverage] as unknown as PoolType[]).length > 1) ||
+                            (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Pool type')
                         ) {
                             return (
                                 <TableRow key={`${v.name}-${i}`}>
