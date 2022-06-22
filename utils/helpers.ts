@@ -16,3 +16,5 @@ export const escapeRegExp = (text: string): string => {
 export const randomIntInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
+
+export const marketRegex = /([A-Za-z]*\/[A-Za-z]*)/g;

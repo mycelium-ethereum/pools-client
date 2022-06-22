@@ -188,7 +188,7 @@ export const PoolsTable = ({
                                         <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                             {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
                                         </div>
-                                        <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
+                                        <div className="text-lg font-bold normal-case">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
                                 <div className="px-10">

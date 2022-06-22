@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
 import { AggregateBalances, TradeStats } from '~/types/pools';
-import { BNFromString } from './helpers';
+import { BNFromString, marketRegex } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
 export const fetchTokenBalances: (
@@ -100,6 +100,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'LINK/USD': 'Chainlink',
     'AAVE/USD': 'AAVE',
     'WTI/USD': 'Oil',
+    'stETH/ETH': 'Staked ETH',
 };
 
 // export const tickerToName: (ticker: string) => string = (ticker) => {
@@ -118,7 +119,6 @@ export const formatPoolName = (
 } => {
     const leverageRegex = /([0-9]*)\-/g;
     const leverage = poolName.match(leverageRegex);
-    const marketRegex = /([A-Z]*\/[A-Z]*)/g;
     const market = poolName.match(marketRegex);
     return {
         leverage: leverage ? leverage[0] : '',
