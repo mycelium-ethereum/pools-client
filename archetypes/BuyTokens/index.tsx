@@ -7,7 +7,7 @@ import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
-import { PoolTypeTip } from '~/components/Tooltips';
+import { MarketTypeTip } from '~/components/Tooltips';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
@@ -101,8 +101,8 @@ const TokenBuySell: React.FC = () => {
                 ),
             },
             {
-                name: 'Pool type',
-                TooltipEl: PoolTypeTip,
+                name: 'Market type',
+                TooltipEl: MarketTypeTip,
                 selector: (
                     <PoolTypeDropdown
                         market={market}

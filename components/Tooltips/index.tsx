@@ -37,11 +37,15 @@ export const StakingTvlTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
-export const PoolTypeTip: React.FC = ({ children }) => {
+export const MarketTypeTip: React.FC = ({ children }) => {
     const Content = (
         <>
-            The new 12 hour pool provides a smoother index, which is less sensitive to sharp underlying price movements.
-            Read more <a href="#">here</a>.
+            Multiple markets found. You can further refine the market you participate in by choosing between, e.g., SMA
+            markets that smooth volatility and spot markets that track the underlying price at rebalance.
+            <br />
+            <a href="https://pools.docs.tracer.finance/" target="_blank" rel="noopener noreferrer">
+                Learn more
+            </a>
         </>
     );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
