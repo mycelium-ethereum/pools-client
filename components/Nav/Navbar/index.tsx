@@ -50,9 +50,7 @@ const HelpIcon: React.FC<{
     );
 };
 
-export const NavBarContent: React.FC<{
-    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
+export const NavBarContent: React.FC = () => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account, network } = useStore(selectWeb3Info, shallow);
