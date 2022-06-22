@@ -8,6 +8,7 @@ import TooltipSelector from '~/components/Tooltips/TooltipSelector';
 import { selectENSName } from '~/store/ENSSlice';
 import { useStore } from '~/store/main';
 import { selectOnboardActions } from '~/store/Web3Slice';
+import { truncateMiddleEthAddress } from '~/utils/helpers';
 import * as Styled from './styles';
 import { AccountDropdownButtonProps } from './types';
 import WalletIcon from '../WalletIcon';
@@ -41,13 +42,13 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
             preview={
                 <div className={'my-auto flex w-full items-center'}>
                     <WalletIcon />
-                    <Styled.Account>{accountParsed}</Styled.Account>
+                    <Styled.Account>{truncateMiddleEthAddress(accountParsed)}</Styled.Account>
                 </div>
             }
         >
             <Styled.CopyAccount>
                 <WalletIcon />
-                <Styled.Account>{accountParsed}</Styled.Account>
+                <Styled.Account>{truncateMiddleEthAddress(accountParsed)}</Styled.Account>
                 <TooltipSelector tooltip={{ content: <>Copy</> }}>
                     <Styled.CopyIcon
                         onClick={() => {

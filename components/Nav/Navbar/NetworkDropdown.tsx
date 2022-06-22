@@ -61,7 +61,7 @@ export default (({ className }) => {
                 value={NETWORKS.ARBITRUM_RINKEBY}
                 onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
             >
-                Arbitrum Rinkeby
+                Rinkeby
             </Option>
         </TWPopup>
     );
