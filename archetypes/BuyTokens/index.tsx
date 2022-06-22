@@ -15,6 +15,7 @@ import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import InfoIcon from '~/public/img/general/info.svg';
 import { useStore } from '~/store/main';
+import { Theme } from '~/store/ThemeSlice/themes';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { PoolType } from '~/types/pools';
 
@@ -355,4 +356,15 @@ const ConnectButtonStyled = styled(Button)`
 
 const StyledInfoIcon = styled(InfoIcon)`
     margin-left: 10px;
+
+    path {
+        fill: ${({ theme }) => {
+            switch (theme.theme) {
+                case Theme.Light:
+                    return '#111928';
+                default:
+                    '#fff';
+            }
+        }};
+    }
 `;
