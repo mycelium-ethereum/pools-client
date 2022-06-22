@@ -177,12 +177,12 @@ const TokenBuySell: React.FC = () => {
                     {buyTableData.map((v, i) => {
                         if (
                             ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
-                            (v.name === 'Pool type' &&
-                                markets &&
+                            (v.name === 'Market type' &&
                                 market &&
+                                markets &&
                                 leverage &&
                                 (markets?.[market]?.[leverage] as unknown as PoolType[]).length > 1) ||
-                            (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Pool type')
+                            (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Market type')
                         ) {
                             return (
                                 <TableRow key={`${v.name}-${i}`}>

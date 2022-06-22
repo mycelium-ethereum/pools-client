@@ -43,7 +43,12 @@ export const MarketTypeTip: React.FC = ({ children }) => {
             Multiple markets found. You can further refine the market you participate in by choosing between, e.g., SMA
             markets that smooth volatility and spot markets that track the underlying price at rebalance.
             <br />
-            <a href="https://pools.docs.tracer.finance/" target="_blank" rel="noopener noreferrer">
+            <a
+                href="https://pools.docs.tracer.finance/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-tracer-midblue transition-colors duration-300 hover:text-cool-gray-700"
+            >
                 Learn more
             </a>
         </>
