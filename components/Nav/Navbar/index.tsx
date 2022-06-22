@@ -28,7 +28,7 @@ const NavBar: React.FC<{
                     'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
                 )}
             >
-                <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+                <NavBarContent />
             </div>
             {setShowOnboardModal && <HelpIcon setShowOnboardModal={setShowOnboardModal} />}
         </>
