@@ -174,6 +174,7 @@ const TokenBuySell: React.FC = () => {
             <Table>
                 <tbody>
                     {/* Only show 'token to receive' and arrow row after user selection */}
+                    {/* Only show Market type row for markets that have multiple pools that match user selection */}
                     {buyTableData.map((v, i) => {
                         if (
                             ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
