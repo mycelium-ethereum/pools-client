@@ -98,17 +98,6 @@ export const NavBarContent: React.FC<{
                     </li>
                 </ul>
                 <div className="ml-auto flex">
-                    {setShowOnboardModal ? (
-                        <div
-                            className="my-auto cursor-pointer"
-                            onClick={() => {
-                                setShowOnboardModal(true);
-                            }}
-                        >
-                            <RevisitOnboard />
-                        </div>
-                    ) : null}
-
                     <VersionToggle />
 
                     <Show.LG display="flex">
