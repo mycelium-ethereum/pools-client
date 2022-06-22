@@ -1,6 +1,6 @@
 import React from 'react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
-import { TracerMintButton } from '~/archetypes/TokenBuySell/ExchangeButtons';
+import { TracerMintButton } from '~/archetypes/BuyTokens/ExchangeButtons';
 import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 

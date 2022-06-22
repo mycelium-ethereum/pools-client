@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
-import MintButton from '~/archetypes/TokenBuySell/MintButton';
+import MintButton from '~/archetypes/BuyTokens/MintButton';
 import { HiddenExpand } from '~/components/General';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TimeLeft from '~/components/TimeLeft';

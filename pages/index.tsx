@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import TokenBuySell from '~/archetypes/TokenBuySell';
+import TokenBuySell from '~/archetypes/BuyTokens';
 import Footer from '~/components/Footer';
 import SEO from '~/components/General/SEO';
 import NavBar from '~/components/Nav/Navbar';

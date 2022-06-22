@@ -37,6 +37,16 @@ export const StakingTvlTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
+export const PoolTypeTip: React.FC = ({ children }) => {
+    const Content = (
+        <>
+            The new 12 hour pool provides a smoother index, which is less sensitive to sharp underlying price movements.
+            Read more <a href="#">here</a>
+        </>
+    );
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const LockTip: React.FC = ({ children }) => {
     const Content = (
         <>

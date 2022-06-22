@@ -1,17 +1,19 @@
 import React, { useContext, useEffect, useMemo } from 'react';
 import styled from 'styled-components';
 import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
+import ExchangeButtons from '~/archetypes/BuyTokens/ExchangeButtons';
+import { LeverageSelector, MarketDropdown, PoolTypeDropdown, SideSelector } from '~/archetypes/BuyTokens/Inputs';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
-import ExchangeButtons from '~/archetypes/TokenBuySell/ExchangeButtons';
-import { LeverageSelector, MarketDropdown, PoolTypeDropdown, SideSelector } from '~/archetypes/TokenBuySell/Inputs';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
+import { PoolTypeTip } from '~/components/Tooltips';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
+import InfoIcon from '~/public/img/general/info.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { PoolType } from '~/types/pools';
@@ -99,6 +101,7 @@ const TokenBuySell: React.FC = () => {
             },
             {
                 name: 'Pool type',
+                TooltipEl: PoolTypeTip,
                 selector: (
                     <PoolTypeDropdown
                         market={market}
@@ -182,7 +185,14 @@ const TokenBuySell: React.FC = () => {
                         ) {
                             return (
                                 <TableRow key={`${v.name}-${i}`}>
-                                    <TableCellLeft>{v.name}</TableCellLeft>
+                                    <TableCellLeft>
+                                        {v.name}{' '}
+                                        {v.TooltipEl && (
+                                            <v.TooltipEl>
+                                                <StyledInfoIcon />
+                                            </v.TooltipEl>
+                                        )}
+                                    </TableCellLeft>
                                     <TableCellRight
                                         noPadding={
                                             (!!token && v.name === '') ||
@@ -281,6 +291,7 @@ const TableRow = styled.tr`
 
 const TableCellLeft = styled.td<{ noPadding?: boolean }>`
     display: flex;
+    align-items: center;
     padding-top: 16px;
     min-width: 160px;
     height: 100%;
@@ -340,4 +351,8 @@ const ConnectButtonStyled = styled(Button)`
     @media (min-width: 640px) {
         margin-bottom: 48px;
     }
+`;
+
+const StyledInfoIcon = styled(InfoIcon)`
+    margin-left: 10px;
 `;
