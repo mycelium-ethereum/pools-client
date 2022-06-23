@@ -22,19 +22,35 @@ const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
     return (
+        <>
+            <div
+                className={classNames(
+                    'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
+                )}
+            >
+                <NavBarContent />
+            </div>
+            {setShowOnboardModal && <HelpIcon setShowOnboardModal={setShowOnboardModal} />}
+        </>
+    );
+};
+
+const HelpIcon: React.FC<{
+    setShowOnboardModal: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
+    return (
         <div
-            className={classNames(
-                'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
-            )}
+            className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-tracer-500 lg:right-8 lg:bottom-8"
+            onClick={() => {
+                setShowOnboardModal(true);
+            }}
         >
-            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+            <RevisitOnboard />
         </div>
     );
 };
 
-export const NavBarContent: React.FC<{
-    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
+export const NavBarContent: React.FC = () => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account, network } = useStore(selectWeb3Info, shallow);
@@ -80,17 +96,6 @@ export const NavBarContent: React.FC<{
                     </li>
                 </ul>
                 <div className="ml-auto flex">
-                    {setShowOnboardModal ? (
-                        <div
-                            className="my-auto cursor-pointer"
-                            onClick={() => {
-                                setShowOnboardModal(true);
-                            }}
-                        >
-                            <RevisitOnboard />
-                        </div>
-                    ) : null}
-
                     <VersionToggle />
 
                     <Show.LG display="flex">
