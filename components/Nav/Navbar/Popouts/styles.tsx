@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Theme } from '~/store/ThemeSlice/themes';
 
 export const NavButton = styled.button<{ selected: boolean }>`
     display: flex;
@@ -90,12 +91,6 @@ export const SettingsPopout = styled(Popout)<{ isActive: boolean }>`
     }
 `;
 
-export const PopoutText = styled.span`
-    color: #1c64f2;
-    font-size: 16px;
-    line-height: 24px;
-`;
-
 export const ToggleSwitch = styled.button`
     position: relative;
     display: flex;
@@ -143,11 +138,17 @@ export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
     padding: 16px;
     width: 320px;
     height: 72px;
-    background: linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff;
     border: 1px solid rgba(28, 100, 242, 0.2);
     border-bottom: ${({ borderBottom }) => (borderBottom ? '1px solid rgba(28, 100, 242, 0.2)' : 'none')};
     overflow: hidden;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    line-height: 24px;
+    background: ${({ theme }) =>
+        theme.theme === Theme.Light
+            ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
+            : 'rgba(53, 53, 220, 0.9)'};
+    color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
 `;
 
 export const VersionSelector = styled(PopoutOption)`
@@ -188,13 +189,31 @@ export const LauncherRow = styled.div`
     align-items: center;
     justify-content: center;
     border: 1px solid #1c64f2;
-    background: linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     backdrop-filter: blur(10px);
     font-size: 16px;
     line-height: 24px;
     font-family: 'Aileron', sans-serif;
-    color: #1c64f2;
+
+    ${({ theme }) => {
+        switch (theme.theme) {
+            case Theme.Light:
+                return `
+                    background: linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff;
+                    color: #1c64f2;
+                `;
+            case Theme.Dark:
+                return `
+                    background: rgba(53, 53, 220, 0.9);
+                    color: #fff;
+                `;
+            default:
+                return `
+                    background: linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff;
+                    color: #1c64f2;
+                `;
+        }
+    }}
 `;
 
 export const AppRow = styled(LauncherRow)`
@@ -208,6 +227,11 @@ export const AppRowButton = styled.button`
     justify-content: center;
     width: 50%;
     height: 100px;
+    background-color: transparent;
+
+    &:hover {
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#ffffff')};
+    }
 `;
 
 export const TracerButton = styled(AppRowButton)`
@@ -227,13 +251,13 @@ export const PoolsButton = styled(AppRowButton)`
 `;
 
 export const GovernanceRow = styled(LauncherRow)`
-    padding: 16px 0;
+    padding: 16px 0 0;
     flex-direction: column;
     border-top: none;
     border-bottom: none;
 `;
 
-export const ButtonRow = styled(AppRowButton)`
+export const ButtonRow = styled.div`
     display: flex;
 `;
 
@@ -243,6 +267,13 @@ export const GovernanceButton = styled.button`
     flex-direction: column;
     height: max-content;
     margin: 16px 20px 0;
+    border-radius: 4px;
+
+    background-color: transparent;
+
+    &:hover {
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#ffffff')};
+    }
 
     > svg {
         width: auto;

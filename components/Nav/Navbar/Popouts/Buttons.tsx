@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import SettingsSVG from '/public/img/general/settings.svg';
 import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
 import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';

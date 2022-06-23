@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
 import { useStore } from '~/store/main';
 import { selectThemeSlice } from '~/store/ThemeSlice';
-import * as Styles from './styles';
+import { DarkModeSelector, Slider, SwitchOption, ToggleSwitch, VersionSelector } from './styles';
 
 const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const router = useRouter();
@@ -29,24 +29,24 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     };
 
     return (
-        <Styles.SettingsPopout isActive={isActive}>
-            <Styles.VersionSelector borderBottom>
-                <Styles.PopoutText>Version Selector</Styles.PopoutText>
-                <Styles.ToggleSwitch onClick={handleVersionSwitch}>
-                    <Styles.SwitchOption selected={!v2selected}>V1</Styles.SwitchOption>
-                    <Styles.SwitchOption selected={v2selected}>V2</Styles.SwitchOption>
-                    <Styles.Slider isSwitchedOn={v2selected} />
-                </Styles.ToggleSwitch>
-            </Styles.VersionSelector>
-            <Styles.DarkModeSelector>
-                <Styles.PopoutText>Dark Mode</Styles.PopoutText>
-                <Styles.ToggleSwitch onClick={toggleTheme}>
-                    <Styles.SwitchOption selected={!isDark}>Off</Styles.SwitchOption>
-                    <Styles.SwitchOption selected={isDark}>On</Styles.SwitchOption>
-                    <Styles.Slider isSwitchedOn={isDark} />
-                </Styles.ToggleSwitch>
-            </Styles.DarkModeSelector>
-        </Styles.SettingsPopout>
+        <SettingsPopout isActive={isActive}>
+            <VersionSelector borderBottom>
+                <span>Version Selector</span>
+                <ToggleSwitch onClick={handleVersionSwitch}>
+                    <SwitchOption selected={!v2selected}>V1</SwitchOption>
+                    <SwitchOption selected={v2selected}>V2</SwitchOption>
+                    <Slider isSwitchedOn={v2selected} />
+                </ToggleSwitch>
+            </VersionSelector>
+            <DarkModeSelector>
+                <span>Dark Mode</span>
+                <ToggleSwitch onClick={toggleTheme}>
+                    <SwitchOption selected={!isDark}>Off</SwitchOption>
+                    <SwitchOption selected={isDark}>On</SwitchOption>
+                    <Slider isSwitchedOn={isDark} />
+                </ToggleSwitch>
+            </DarkModeSelector>
+        </SettingsPopout>
     );
 };
 

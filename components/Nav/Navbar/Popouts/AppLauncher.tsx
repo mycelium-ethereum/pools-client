@@ -1,8 +1,6 @@
-import React, { useCallback, useState } from 'react';
-// import { useRouter } from 'next/router';
-// import shallow from 'zustand/shallow';
-// import { useStore } from '~/store/main';
-// import { selectThemeSlice } from '~/store/ThemeSlice';
+import React from 'react';
+import { useStore } from '~/store/main';
+import { selectIsDark } from '~/store/ThemeSlice';
 import TracerLogo from '/public/img/logos/tracer/tracer_logo.svg';
 import PoolsLogo from '/public/img/logos/tracer/tracer_perpetual_pools_stacked.svg';
 import DiscourseLogo from '/public/img/logos/launcher/discourse.svg';
@@ -25,8 +23,10 @@ import {
 } from './styles';
 
 const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
+    const isDark = useStore(selectIsDark);
+
     return (
-        <Launcher isActive={isActive}>
+        <Launcher isActive={isActive} className={isDark ? 'dark' : ''}>
             <AppRow>
                 <TracerButton>
                     <TracerLogo />
