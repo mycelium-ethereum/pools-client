@@ -1,23 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import SettingsSVG from '/public/img/general/settings.svg';
+import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
 import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
-import * as Styles from './styles';
-import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
+import { AppLaunchNavButton, Cube, CubeGrid, PopoutContainer, SettingsNavButton } from './styles';
 
 export const PopoutButtons: React.FC = () => {
     const [showSettingsPopout, setShowSettingsPopout] = useState(false);
     const [showLauncherPopout, setShowLauncherPopout] = useState(false);
-
-    // Close popout that is not currently open
-    useEffect(() => {
-        if (showLauncherPopout) {
-            setShowSettingsPopout(false);
-        }
-        if (showSettingsPopout) {
-            setShowLauncherPopout(false);
-        }
-    }, [showLauncherPopout, showSettingsPopout]);
 
     return (
         <>
@@ -43,12 +33,12 @@ export const SettingsButton: React.FC<{
     useOutsideClick(settingsContainerRef, handleClose);
 
     return (
-        <Styles.PopoutContainer ref={settingsContainerRef}>
-            <Styles.SettingsNavButton onClick={handleToggle} selected={showSettingsPopout}>
+        <PopoutContainer ref={settingsContainerRef}>
+            <SettingsNavButton onClick={handleToggle} selected={showSettingsPopout}>
                 <SettingsSVG alt="Settings icon" />
-            </Styles.SettingsNavButton>
+            </SettingsNavButton>
             <SettingsPopout isActive={showSettingsPopout} />
-        </Styles.PopoutContainer>
+        </PopoutContainer>
     );
 };
 
@@ -68,15 +58,15 @@ export const AppLaunchButton: React.FC<{
     useOutsideClick(launcherContainerRef, handleClose);
 
     return (
-        <Styles.PopoutContainer ref={launcherContainerRef}>
-            <Styles.AppLaunchNavButton onClick={handleToggle} selected={showLauncherPopout}>
-                <Styles.CubeGrid>
+        <PopoutContainer ref={launcherContainerRef}>
+            <AppLaunchNavButton onClick={handleToggle} selected={showLauncherPopout}>
+                <CubeGrid>
                     {Array.from({ length: 9 }).map((_, i) => (
-                        <Styles.Cube key={i} />
+                        <Cube key={i} />
                     ))}
-                </Styles.CubeGrid>
-            </Styles.AppLaunchNavButton>
+                </CubeGrid>
+            </AppLaunchNavButton>
             <AppLauncher isActive={showLauncherPopout} />
-        </Styles.PopoutContainer>
+        </PopoutContainer>
     );
 };
