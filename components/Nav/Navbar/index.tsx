@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
 import { Container } from '~/components/General/Container';
 import Show from '~/components/General/Show';
-import { AppLaunchButton, SettingsButton } from '~/components/Nav/Navbar/Popouts/Buttons';
+import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
@@ -18,20 +18,6 @@ import NetworkDropdown from './NetworkDropdown';
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
-    return (
-        <div
-            className={classNames(
-                'sticky top-0 left-0 z-50 h-[60px] w-full bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
-            )}
-        >
-            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
-        </div>
-    );
-};
-
-export const NavBarContent: React.FC<{
-    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account, network } = useStore(selectWeb3Info, shallow);
@@ -41,10 +27,11 @@ export const NavBarContent: React.FC<{
     const selectedStyles = 'font-bold';
 
     return (
-        <nav className={`h-full text-base`}>
+        <nav
+            className={`sticky top-0 left-0 z-50 h-[60px] bg-white bg-opacity-20 text-base text-tracer-650 backdrop-blur-md dark:bg-tracer-darkblue dark:bg-opacity-40 dark:text-white`}
+        >
             <Container className={'flex h-full justify-between'}>
                 <TracerNavLogo />
-
                 <div className="ml-auto flex items-center">
                     <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white xl:flex">
                         <li className={listItemStyles}>
@@ -88,11 +75,7 @@ export const NavBarContent: React.FC<{
                     <Show.MD display="flex">
                         <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
                     </Show.MD>
-                    <SettingsButton />
-                    <Show.LG display="flex">
-                        <AppLaunchButton />
-                    </Show.LG>
-
+                    <PopoutButtons />
                     <MobileMenu account={account ?? ''} network={network} />
                 </div>
             </Container>

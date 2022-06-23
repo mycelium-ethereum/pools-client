@@ -29,7 +29,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     };
 
     return (
-        <Styles.Popout isActive={isActive}>
+        <Styles.SettingsPopout isActive={isActive}>
             <Styles.VersionSelector borderBottom>
                 <Styles.PopoutText>Version Selector</Styles.PopoutText>
                 <Styles.ToggleSwitch onClick={handleVersionSwitch}>
@@ -46,7 +46,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                     <Styles.Slider isSwitchedOn={isDark} />
                 </Styles.ToggleSwitch>
             </Styles.DarkModeSelector>
-        </Styles.Popout>
+        </Styles.SettingsPopout>
     );
 };
 

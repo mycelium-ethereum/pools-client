@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export const useOutsideClick: (containerRef: React.RefObject<HTMLDivElement>, action: () => void) => void = (
+export const useOutsideClick: (containerRef: React.RefObject<any>, action: () => void) => void = (
     containerRef,
     action,
 ) => {
