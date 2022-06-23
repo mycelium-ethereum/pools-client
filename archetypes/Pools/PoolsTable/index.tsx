@@ -26,8 +26,8 @@ import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import { marketSymbolToAssetName } from '~/utils/poolNames';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
+import { marketSymbolToAssetName } from '~/utils/pools';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
