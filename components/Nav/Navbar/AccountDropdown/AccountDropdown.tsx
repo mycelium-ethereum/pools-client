@@ -69,7 +69,7 @@ const AccountDropdownButton = ({ account, ensName, logout }: AccountDropdownButt
                     rel="noopener noreferrer"
                 >
                     <Styled.ArbitrumLogo ticker={NETWORKS.ARBITRUM} />
-                    <div>View on Arbiscan</div>
+                    <div className="text-xs">View on Arbiscan</div>
                 </Styled.ViewOnArbiscanOption>
             </div>
             <Styled.Logout>

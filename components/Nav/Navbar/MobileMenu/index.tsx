@@ -10,7 +10,7 @@ import * as Styled from './styles';
 import AccountDropdown from '../AccountDropdown';
 import NetworkDropdown from '../NetworkDropdown';
 
-import ThemeSwitcher from '../ThemeSwitcher';
+// import ThemeSwitcher from '../ThemeSwitcher';
 
 export const MobileMenu = ({
     account,
@@ -126,7 +126,7 @@ export const MobileMenu = ({
                                             </a>
                                         </Styled.MobileLink>
                                         <div className="absolute left-0 right-0 bottom-4 mx-auto w-min">
-                                            <ThemeSwitcher />
+                                            {/* <ThemeSwitcher /> */}
                                         </div>
                                     </Styled.MenuContent>
                                     <Styled.MenuBackground className="bg-tracer-900 bg-mobile-nav-bg bg-no-repeat matrix:bg-black matrix:bg-opacity-50 matrix:bg-none matrix:backdrop-blur dark:bg-theme-background" />
