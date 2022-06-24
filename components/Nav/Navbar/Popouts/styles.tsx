@@ -28,7 +28,7 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
             case selected && !navMenuOpen:
                 return `
                     color: #ffffff;
-                    background: ##1c64f2;
+                    background: #1c64f2;
                     border: 1px solid #1c64f2;
 
                     &:focus {
@@ -51,7 +51,7 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
     margin-left: 16px;
 
     /* Only allow hover effect on desktop */
-    @media (pointer: coarse) and (any-pointer: fine) {
+    @media (pointer: fine) and (hover: hover) {
         &:hover {
             background-color: #1c64f2;
             color: #fff;
@@ -69,7 +69,7 @@ export const AppLaunchNavButton = styled(NavButton)<{ selected: boolean }>`
                 `;
                 case selected && !navMenuOpen:
                     return `
-                background-color: #1c64f2;
+                background-color: #ffffff;
                 `;
                 default:
                     return `

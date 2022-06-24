@@ -87,7 +87,7 @@ const NavBar: React.FC<{
     return (
         <>
             <nav
-                className={`sticky top-0 left-0 z-50 h-[60px] bg-white text-base backdrop-blur-sm transition-colors duration-300 dark:bg-[#00005E] dark:text-white ${
+                className={`sticky top-0 left-0 z-50 h-[60px] bg-white text-base backdrop-blur-sm transition-[background-color] duration-300 dark:bg-[#00005E] dark:text-white ${
                     navBackdrop ? activeStyles : inactiveStyles
                 }  ${isOpen ? 'text-white' : 'text-tracer-650'}`}
             >
