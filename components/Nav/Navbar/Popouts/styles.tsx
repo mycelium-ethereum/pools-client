@@ -6,34 +6,77 @@ export const Link = styled.a.attrs({
     rel: 'noopener noreferrer',
 })``;
 
-export const NavButton = styled.button<{ selected: boolean }>`
+export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolean }>`
     display: flex;
     height: 36px;
     width: 41px;
     align-items: center;
     justify-content: center;
     border-radius: 7px;
-    background: ${({ selected }) =>
-        selected
-            ? '#1c64f2'
-            : 'linear-gradient(309.78deg, rgba(26, 85, 245, 0.5) -96.53%, rgba(26, 85, 245, 0) 73.43%)'};
-    color: ${({ selected }) => (selected ? '#fff' : '#1c64f2')};
+    ${({ selected, navMenuOpen }) => {
+        switch (true) {
+            case selected && navMenuOpen:
+                return `
+                    color: #ffffff;
+                    border: 1px solid #ffffff;
+                    background: transparent;
+
+                    &:focus {
+                        border: 1px solid #ffffff;
+                    }
+                `;
+            case selected && !navMenuOpen:
+                return `
+                    color: #ffffff;
+                    background: ##1c64f2;
+                    border: 1px solid #1c64f2;
+
+                    &:focus {
+                        border: 1px solid #1c64f2;
+                    }
+                `;
+            default:
+                return `
+                    color: #1c64f2;
+                    border: 1px solid #1c64f2;
+                    background: linear-gradient(309.78deg, rgba(26, 85, 245, 0.5) -96.53%, rgba(26, 85, 245, 0) 73.43%);
+                    
+                    &:focus {
+                        border: 1px solid #1c64f2;
+                    }
+                `;
+        }
+    }}
     transition: background-color 0.3s ease-in-out;
     margin-left: 16px;
-    border: 1px solid #1c64f2;
-    &:hover {
-        background-color: #1c64f2;
-        color: #fff;
-    }
 
-    &:focus {
-        border: 1px solid #1c64f2;
+    /* Only allow hover effect on desktop */
+    @media (pointer: coarse) and (any-pointer: fine) {
+        &:hover {
+            background-color: #1c64f2;
+            color: #fff;
+        }
     }
 `;
 
 export const AppLaunchNavButton = styled(NavButton)<{ selected: boolean }>`
     > span > span {
-        background-color: ${({ selected }) => (selected ? '#fff' : '#1c64f2')};
+        ${({ selected, navMenuOpen }) => {
+            switch (true) {
+                case selected && navMenuOpen:
+                    return `
+                    background-color: #ffffff;
+                `;
+                case selected && !navMenuOpen:
+                    return `
+                background-color: #1c64f2;
+                `;
+                default:
+                    return `
+                background-color: #1c64f2;
+                `;
+            }
+        }}
     }
     &:hover span > span {
         background-color: #fff;
@@ -85,6 +128,24 @@ export const Popout = styled.div<{ isActive: boolean }>`
         transform: ${({ isActive }) => (isActive ? 'translate(0, 0)' : 'translate(16px, 16px)')};
         opacity: ${({ isActive }) => (isActive ? '1' : '0')};
     }
+`;
+
+export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px;
+    width: 320px;
+    height: 72px;
+    border: 1px solid rgba(28, 100, 242, 0.2);
+    border-bottom: ${({ borderBottom }) => (borderBottom ? '1px solid rgba(28, 100, 242, 0.2)' : 'none')};
+    overflow: hidden;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    background: ${({ theme }) =>
+        theme.theme === Theme.Light
+            ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
+            : 'rgba(53, 53, 220, 0.9)'};
+    color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
 `;
 
 export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
@@ -165,24 +226,6 @@ export const Slider = styled.span<{ isSwitchedOn: boolean }>`
     transition: left 0.3s ease;
 `;
 
-export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    width: 320px;
-    height: 72px;
-    border: 1px solid rgba(28, 100, 242, 0.2);
-    border-bottom: ${({ borderBottom }) => (borderBottom ? '1px solid rgba(28, 100, 242, 0.2)' : 'none')};
-    overflow: hidden;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    background: ${({ theme }) =>
-        theme.theme === Theme.Light
-            ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
-            : 'rgba(53, 53, 220, 0.9)'};
-    color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
-`;
-
 export const VersionSelector = styled(PopoutOption)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -195,6 +238,7 @@ export const DarkModeSelector = styled(PopoutOption)`
     border-bottom-right-radius: 4px;
 `;
 
+// App launcher styles
 export const Launcher = styled(Popout)<{ isActive: boolean }>`
     width: 281px;
     /* Active/inactive states */
@@ -215,7 +259,6 @@ export const Launcher = styled(Popout)<{ isActive: boolean }>`
     }
 `;
 
-// App launcher styles
 export const LauncherRow = styled.div`
     display: flex;
     align-items: center;
@@ -248,6 +291,21 @@ export const LauncherRow = styled.div`
     }}
 `;
 
+export const GradientBackground = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: opacity 0.3s ease;
+    background: ${({ theme }) =>
+        theme.theme === Theme.Light
+            ? 'linear-gradient(272.96deg, #1C64F2 -7%, rgba(26, 85, 245, 0) 150%)'
+            : 'linear-gradient(273.08deg, #1E1E90 15%, rgba(26, 85, 245, 0) 120%)'};
+    opacity: 0;
+    z-index: -1;
+`;
+
 export const AppRow = styled(LauncherRow)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -267,22 +325,36 @@ export const AppRow = styled(LauncherRow)`
 `;
 
 export const AppRowButton = styled(Link)`
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 50%;
     height: 100px;
+    overflow: hidden;
     background-color: transparent;
-    transition: background-color 0.3s ease;
+    transition: color 0.3s ease;
 
     &:hover {
-        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
-        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
+        color: #ffffff;
     }
 
-    > svg {
-        transition: all 0.3s ease;
+    &:hover > img {
+        opacity: 1;
+        transform: scale(1);
     }
+`;
+
+export const AppBackgroundImage = styled.img`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: all 0.5s ease;
+    transform: scale(1.1);
+    opacity: 0;
+    z-index: -1;
 `;
 
 export const GovernanceRow = styled(LauncherRow)`
@@ -297,6 +369,7 @@ export const ButtonRow = styled.div`
 `;
 
 export const GovernanceButton = styled(Link)`
+    position: relative;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -304,12 +377,16 @@ export const GovernanceButton = styled(Link)`
     margin: 8px 10px;
     padding: 8px 10px;
     border-radius: 4px;
-    background-color: transparent;
-    transition: all 0.3s ease;
+    overflow: hidden;
+    background: transparent;
+    transition: color 0.3s ease;
 
     &:hover {
-        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
-        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
+        color: #ffffff;
+    }
+
+    &:hover > div {
+        opacity: 1;
     }
 
     > svg {
@@ -320,13 +397,17 @@ export const GovernanceButton = styled(Link)`
 `;
 
 export const LinkRow = styled(LauncherRow)`
+    position: relative;
     padding: 16px;
     border-bottom: none;
-    transition: background-color 0.3s ease;
+    transition: color 0.3s ease;
 
     &:hover {
-        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
-        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
+        color: #ffffff;
+    }
+
+    &:hover > div {
+        opacity: 1;
     }
 
     > svg {
@@ -337,20 +418,33 @@ export const LinkRow = styled(LauncherRow)`
 `;
 
 export const SocialIconRow = styled(LauncherRow)`
-    padding: 16px;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
+    padding: 8px 0;
+
+    > a {
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+        padding: 12px;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+            color: #ffffff;
+        }
+
+        &:hover > div {
+            opacity: 1;
+        }
+    }
 
     > a svg {
         transition: all 0.3s ease;
-        &:hover {
-            color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#1c64f2')};
-        }
     }
 
     /* Twitter icon */
     > a:nth-child(1) {
-        margin-right: 23px;
+        margin-right: 11px;
     }
     > a:nth-child(1) svg {
         width: 18px;
@@ -359,7 +453,7 @@ export const SocialIconRow = styled(LauncherRow)`
 
     /* Discord icon */
     > a:nth-child(2) {
-        margin-right: 20px;
+        margin-right: 8px;
     }
     > a:nth-child(2) svg {
         width: 20px;

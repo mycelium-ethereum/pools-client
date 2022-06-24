@@ -1,9 +1,9 @@
 import React, { useState, useRef } from 'react';
-import SettingsSVG from '/public/img/general/settings.svg';
+import { LauncherToggle, SettingsToggle } from '~/components/Nav/Navbar/Buttons';
 import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
 import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
-import { AppLaunchNavButton, Cube, CubeGrid, PopoutContainer, SettingsNavButton } from './styles';
+import { PopoutContainer } from './styles';
 
 export const PopoutButtons: React.FC = () => {
     const [showSettingsPopout, setShowSettingsPopout] = useState(false);
@@ -34,9 +34,7 @@ export const SettingsButton: React.FC<{
 
     return (
         <PopoutContainer ref={settingsContainerRef}>
-            <SettingsNavButton onClick={handleToggle} selected={showSettingsPopout}>
-                <SettingsSVG alt="Settings icon" />
-            </SettingsNavButton>
+            <SettingsToggle onClick={handleToggle} isSelected={showSettingsPopout} />
             <SettingsPopout isActive={showSettingsPopout} />
         </PopoutContainer>
     );
@@ -59,13 +57,7 @@ export const AppLaunchButton: React.FC<{
 
     return (
         <PopoutContainer ref={launcherContainerRef}>
-            <AppLaunchNavButton onClick={handleToggle} selected={showLauncherPopout}>
-                <CubeGrid>
-                    {Array.from({ length: 9 }).map((_, i) => (
-                        <Cube key={i} />
-                    ))}
-                </CubeGrid>
-            </AppLaunchNavButton>
+            <LauncherToggle onClick={handleToggle} isSelected={showLauncherPopout} />
             <AppLauncher isActive={showLauncherPopout} />
         </PopoutContainer>
     );

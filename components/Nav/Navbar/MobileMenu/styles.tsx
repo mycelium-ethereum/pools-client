@@ -1,35 +1,36 @@
 import styled from 'styled-components';
-import { Container } from '~/components/General/Container';
+import { Theme } from '~/store/ThemeSlice/themes';
 
-export const Menu = styled.div`
-    width: 100vw;
-    position: relative;
-`;
+// export const Link = styled.a.attrs({
+//     target: '_blank',
+//     rel: 'noopener noreferrer',
+// })``;
 
-export const MenuContent = styled(Container)`
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-`;
-
-export const MenuBackground = styled.div`
+export const NavMenu = styled.menu<{ isOpen: boolean }>`
     position: absolute;
-    height: 100%;
-    width: 100%;
-    z-index: -1;
-    left: 0;
     top: 0;
-    background-position-y: -60px;
-    background-size: 100%;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    transition: height 0.5s ease;
+    height: ${({ isOpen }) => (isOpen ? '100vh' : '0vh')};
+    background-color: #1c64f2;
+    margin: 0;
+    z-index: 0;
 `;
 
-export const MobileLink = styled.div<{ selected: boolean }>`
+export const NavContainer = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    color: #fff;
-    background: ${({ selected }) => (selected ? 'rgba(0, 0, 0, 0.5)' : 'transparent')};
-    margin: 0.5rem 0;
-    padding: 0.5rem 1.25rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
+    height: 100vh;
+    padding: 92px 16px 28px;
+`;
+
+export const NavItem = styled.menu`
+    border: 0.5px solid;
+    width: 100%;
+    height: 2px;
+    border-image-source: linear-gradient(90deg, #3da8f5 50%, rgba(61, 168, 245, 0) 100.15%);
 `;

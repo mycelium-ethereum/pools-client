@@ -12,11 +12,13 @@ export const appButtonContent = [
     {
         link: 'https://tracer.finance',
         LogoImage: TracerSVG,
+        bgImage: '/img/launcher/tracer-bg.png',
         alt: 'Tracer logo',
     },
     {
         link: 'https://pools.tracer.finance',
         LogoImage: PoolsSVG,
+        bgImage: '/img/launcher/tracer-bg.png',
         alt: 'Tracer Perpetual Pools logo',
     },
 ];

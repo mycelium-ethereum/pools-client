@@ -17,6 +17,8 @@ import {
     Launcher,
     LinkRow,
     SocialIconRow,
+    GradientBackground,
+    AppBackgroundImage,
 } from './styles';
 
 const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
@@ -28,6 +30,7 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                 {appButtonContent.map((content, i) => (
                     <AppRowButton key={i} href={content.link}>
                         <content.LogoImage alt={content.alt} />
+                        <AppBackgroundImage src={content.bgImage} />
                     </AppRowButton>
                 ))}
             </AppRow>
@@ -38,6 +41,7 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         <GovernanceButton key={i} href={content.link}>
                             <content.LogoImage alt={content.alt} />
                             <span>{content.label}</span>
+                            <GradientBackground />
                         </GovernanceButton>
                     ))}
                 </ButtonRow>
@@ -47,6 +51,7 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                     <LinkRow>
                         <content.LogoImage alt={content.alt} />
                         <span>{content.label}</span>
+                        <GradientBackground />
                     </LinkRow>
                 </Link>
             ))}
@@ -54,6 +59,7 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                 {socialLinkContent.map((content, i) => (
                     <Link key={i} href={content.link}>
                         <content.LogoImage key={i} alt={content.alt} />
+                        <GradientBackground />
                     </Link>
                 ))}
             </SocialIconRow>
