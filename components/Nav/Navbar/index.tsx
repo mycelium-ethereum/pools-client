@@ -18,6 +18,36 @@ import NetworkDropdown from './NetworkDropdown';
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
+    return (
+        <>
+            <div
+                className={classNames(
+                    'relative bg-tracer-900 bg-mobile-nav-bg bg-cover bg-no-repeat matrix:bg-transparent matrix:bg-none dark:bg-theme-background xl:bg-nav-bg',
+                )}
+            >
+                <NavBarContent />
+            </div>
+            {setShowOnboardModal && <HelpIcon setShowOnboardModal={setShowOnboardModal} />}
+        </>
+    );
+};
+
+const HelpIcon: React.FC<{
+    setShowOnboardModal: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
+    return (
+        <div
+            className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-tracer-500 lg:right-8 lg:bottom-8"
+            onClick={() => {
+                setShowOnboardModal(true);
+            }}
+        >
+            <RevisitOnboard />
+        </div>
+    );
+};
+
+export const NavBarContent: React.FC = () => {
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
     const { account, network } = useStore(selectWeb3Info, shallow);
@@ -33,18 +63,9 @@ const NavBar: React.FC<{
         >
             <Container className={'flex h-full justify-between'}>
                 <TracerNavLogo />
-                <div className="ml-auto flex items-center">
+
+                <div className="ml-auto flex">
                     <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
-                        <li className={listItemStyles}>
-                            <Link href="/" passHref>
-                                <a
-                                    id="browse-pools"
-                                    className={classNames(linkStyles, route === '' ? selectedStyles : '')}
-                                >
-                                    Pools
-                                </a>
-                            </Link>
-                        </li>
                         <li className={listItemStyles}>
                             <Link href="/portfolio" passHref>
                                 <a className={classNames(linkStyles, route === 'portfolio' ? selectedStyles : '')}>
@@ -64,7 +85,7 @@ const NavBar: React.FC<{
                                 rel="noopener noreferrer"
                                 className={linkStyles}
                             >
-                                <span>Docs</span>
+                                <span>Documentation</span>
                             </a>
                         </li>
                     </ul>
