@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 
+export const Link = styled.a.attrs({
+    target: '_blank',
+    rel: 'noopener noreferrer',
+})``;
+
 export const NavButton = styled.button<{ selected: boolean }>`
     display: flex;
     height: 36px;
@@ -57,6 +62,9 @@ export const Cube = styled.span`
 
 export const PopoutContainer = styled.div`
     position: relative;
+    font-size: 16px;
+    line-height: 24px;
+    font-family: 'Aileron', sans-serif;
 `;
 
 export const Popout = styled.div<{ isActive: boolean }>`
@@ -70,15 +78,16 @@ export const Popout = styled.div<{ isActive: boolean }>`
     pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
 
     /* Animate rows on open */
-    > div {
-        transition-property: all;
+    > div,
+    > a {
+        transition-property: opacity, transform;
         transition-duration: 500ms;
         transform: ${({ isActive }) => (isActive ? 'translate(0, 0)' : 'translate(16px, 16px)')};
         opacity: ${({ isActive }) => (isActive ? '1' : '0')};
     }
 `;
 
-export const SettingsPopout = styled(Popout)<{ isActive: boolean }>`
+export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
     /* Active/inactive states */
     > div:nth-child(1) {
         transition-delay: ${({ isActive }) => (isActive ? '100ms' : '300ms')};
@@ -91,7 +100,12 @@ export const SettingsPopout = styled(Popout)<{ isActive: boolean }>`
     }
 `;
 
-export const ToggleSwitch = styled.button`
+export const PopoutText = styled.span`
+    font-size: 16px;
+    line-height: 24px;
+`;
+
+export const ToggleSwitch = styled(Link)`
     position: relative;
     display: flex;
     align-items: center;
@@ -112,7 +126,27 @@ export const SwitchOption = styled.span<{ selected: boolean }>`
     width: 68px;
     height: 40px;
     border-radius: 3px;
-    color: ${({ selected }) => (selected ? 'white' : '#1c64f2')};
+    ${({ theme, selected }) => {
+        switch (true) {
+            case selected && theme.theme === Theme.Light:
+                return `
+                    color: #ffffff;
+                `;
+            case selected && theme.theme === Theme.Dark:
+                return `
+                    color: #1c64f2;
+                `;
+            case theme.theme === Theme.Light:
+                return `
+                    color: #1c64f2;
+                `;
+            default:
+                return `
+                    color: #ffffff;
+                `;
+        }
+    }}
+
     transition: color 0.3s ease;
     z-index: 1;
 `;
@@ -127,7 +161,7 @@ export const Slider = styled.span<{ isSwitchedOn: boolean }>`
     height: 36px;
     border-radius: 3px;
     z-index: 0;
-    background-color: #1c64f2;
+    background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
     transition: left 0.3s ease;
 `;
 
@@ -142,8 +176,6 @@ export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
     border-bottom: ${({ borderBottom }) => (borderBottom ? '1px solid rgba(28, 100, 242, 0.2)' : 'none')};
     overflow: hidden;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    font-size: 16px;
-    line-height: 24px;
     background: ${({ theme }) =>
         theme.theme === Theme.Light
             ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
@@ -172,10 +204,10 @@ export const Launcher = styled(Popout)<{ isActive: boolean }>`
     > div:nth-child(2) {
         transition-delay: ${({ isActive }) => (isActive ? '200ms' : '400ms')};
     }
-    > div:nth-child(3) {
+    > a:nth-child(3) {
         transition-delay: 300ms;
     }
-    > div:nth-child(4) {
+    > a:nth-child(4) {
         transition-delay: ${({ isActive }) => (isActive ? '400ms' : '200ms')};
     }
     > div:nth-child(5) {
@@ -219,39 +251,42 @@ export const LauncherRow = styled.div`
 export const AppRow = styled(LauncherRow)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    overflow: hidden;
+
+    > a:nth-child(1) {
+        border-right: 1px solid #1c64f2;
+    }
+    > a:nth-child(1) svg {
+        width: 73px;
+        height: 17px;
+    }
+    > a:nth-child(2) svg {
+        width: 101px;
+        height: 30px;
+    }
 `;
 
-export const AppRowButton = styled.button`
+export const AppRowButton = styled(Link)`
     display: flex;
     align-items: center;
     justify-content: center;
     width: 50%;
     height: 100px;
     background-color: transparent;
+    transition: background-color 0.3s ease;
 
     &:hover {
-        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#ffffff')};
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
+        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
     }
-`;
-
-export const TracerButton = styled(AppRowButton)`
-    border-right: 1px solid #1c64f2;
 
     > svg {
-        width: 73px;
-        height: 17px;
-    }
-`;
-
-export const PoolsButton = styled(AppRowButton)`
-    > svg {
-        width: 101px;
-        height: 30px;
+        transition: all 0.3s ease;
     }
 `;
 
 export const GovernanceRow = styled(LauncherRow)`
-    padding: 16px 0 0;
+    padding: 16px 0 8px;
     flex-direction: column;
     border-top: none;
     border-bottom: none;
@@ -261,18 +296,20 @@ export const ButtonRow = styled.div`
     display: flex;
 `;
 
-export const GovernanceButton = styled.button`
+export const GovernanceButton = styled(Link)`
     display: flex;
     align-items: center;
     flex-direction: column;
     height: max-content;
-    margin: 16px 20px 0;
+    margin: 8px 10px;
+    padding: 8px 10px;
     border-radius: 4px;
-
     background-color: transparent;
+    transition: all 0.3s ease;
 
     &:hover {
-        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#ffffff')};
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
+        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
     }
 
     > svg {
@@ -285,6 +322,12 @@ export const GovernanceButton = styled.button`
 export const LinkRow = styled(LauncherRow)`
     padding: 16px;
     border-bottom: none;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#3535dc')};
+        color: ${({ theme }) => (theme.theme === Theme.Light ? '#ffffff' : '#1c64f2')};
+    }
 
     > svg {
         width: auto;
@@ -298,22 +341,33 @@ export const SocialIconRow = styled(LauncherRow)`
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 
+    > a svg {
+        transition: all 0.3s ease;
+        &:hover {
+            color: ${({ theme }) => (theme.theme === Theme.Light ? '#3535dc' : '#1c64f2')};
+        }
+    }
+
     /* Twitter icon */
-    > svg:nth-child(1) {
+    > a:nth-child(1) {
+        margin-right: 23px;
+    }
+    > a:nth-child(1) svg {
         width: 18px;
         height: 15px;
-        margin-right: 23px;
     }
 
     /* Discord icon */
-    > svg:nth-child(2) {
+    > a:nth-child(2) {
+        margin-right: 20px;
+    }
+    > a:nth-child(2) svg {
         width: 20px;
         height: 15px;
-        margin-right: 20px;
     }
 
     /* Mirror icon */
-    > svg:nth-child(3) {
+    > a:nth-child(3) svg {
         width: 24px;
         height: 14px;
     }

@@ -12,7 +12,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
-import MobileMenu from './MobileMenu';
+// import MobileMenu from './MobileMenu';
 import NetworkDropdown from './NetworkDropdown';
 
 const NavBar: React.FC<{
@@ -34,7 +34,7 @@ const NavBar: React.FC<{
             <Container className={'flex h-full justify-between'}>
                 <TracerNavLogo />
                 <div className="ml-auto flex items-center">
-                    <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white xl:flex">
+                    <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
                         <li className={listItemStyles}>
                             <Link href="/" passHref>
                                 <a
@@ -72,12 +72,10 @@ const NavBar: React.FC<{
                     {/* <VersionToggle /> */}
                     <Show.LG display="flex">
                         {!!network ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
-                    </Show.LG>
-                    <Show.MD display="flex">
                         <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
-                    </Show.MD>
+                    </Show.LG>
                     <PopoutButtons />
-                    <MobileMenu account={account ?? ''} network={network} />
+                    {/* <MobileMenu account={account ?? ''} network={network} /> */}
                 </div>
             </Container>
         </nav>

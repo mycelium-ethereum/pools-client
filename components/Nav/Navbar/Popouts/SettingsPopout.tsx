@@ -1,9 +1,16 @@
 import React, { useCallback, useState } from 'react';
 import { useRouter } from 'next/router';
 import shallow from 'zustand/shallow';
+import {
+    Slider,
+    VersionSelector,
+    ToggleSwitch,
+    SwitchOption,
+    DarkModeSelector,
+    StyledSettingsPopout,
+} from '~/components/Nav/Navbar/Popouts/styles';
 import { useStore } from '~/store/main';
 import { selectThemeSlice } from '~/store/ThemeSlice';
-import { DarkModeSelector, Slider, SwitchOption, ToggleSwitch, VersionSelector } from './styles';
 
 const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const router = useRouter();
@@ -29,7 +36,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     };
 
     return (
-        <SettingsPopout isActive={isActive}>
+        <StyledSettingsPopout isActive={isActive}>
             <VersionSelector borderBottom>
                 <span>Version Selector</span>
                 <ToggleSwitch onClick={handleVersionSwitch}>
@@ -46,7 +53,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                     <Slider isSwitchedOn={isDark} />
                 </ToggleSwitch>
             </DarkModeSelector>
-        </SettingsPopout>
+        </StyledSettingsPopout>
     );
 };
 

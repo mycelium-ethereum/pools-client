@@ -61,7 +61,7 @@ export const MobileMenu = ({
     }, []);
 
     return (
-        <div className={classNames(`relative my-auto ml-4 overflow-hidden xl:hidden`, className ?? '')}>
+        <div className={classNames(`relative my-auto ml-4 overflow-hidden lg:hidden`, className ?? '')}>
             <Hamburger open={open} handleOpen={handleOpen} />
             <Transition.Root show={open} as={Fragment}>
                 <Dialog as="div" className="fixed inset-0 top-full z-10 overflow-hidden" onClose={handleClose}>

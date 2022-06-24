@@ -1,25 +1,22 @@
 import React from 'react';
+import {
+    appButtonContent,
+    governanceContent,
+    linkContent,
+    socialLinkContent,
+} from '~/components/Nav/Navbar/Popouts/launcherContent';
 import { useStore } from '~/store/main';
 import { selectIsDark } from '~/store/ThemeSlice';
-import TracerLogo from '/public/img/logos/tracer/tracer_logo.svg';
-import PoolsLogo from '/public/img/logos/tracer/tracer_perpetual_pools_stacked.svg';
-import DiscourseLogo from '/public/img/logos/launcher/discourse.svg';
-import SnapshotLogo from '/public/img/logos/launcher/snapshot.svg';
-import GitbookLogo from '/public/img/logos/launcher/gitbook.svg';
-import GithubLogo from '/public/img/logos/launcher/github.svg';
-import TwitterLogo from '/public/img/logos/launcher/twitter.svg';
-import DiscordLogo from '/public/img/logos/launcher/discord.svg';
-import MediumLogo from '/public/img/logos/launcher/medium.svg';
 import {
+    Link,
     AppRow,
     ButtonRow,
+    AppRowButton,
     GovernanceButton,
     GovernanceRow,
     Launcher,
     LinkRow,
-    PoolsButton,
     SocialIconRow,
-    TracerButton,
 } from './styles';
 
 const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
@@ -28,38 +25,37 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     return (
         <Launcher isActive={isActive} className={isDark ? 'dark' : ''}>
             <AppRow>
-                <TracerButton>
-                    <TracerLogo />
-                </TracerButton>
-                <PoolsButton>
-                    <PoolsLogo />
-                </PoolsButton>
+                {appButtonContent.map((content, i) => (
+                    <AppRowButton key={i} href={content.link}>
+                        <content.LogoImage alt={content.alt} />
+                    </AppRowButton>
+                ))}
             </AppRow>
             <GovernanceRow>
                 <span>Governance</span>
                 <ButtonRow>
-                    <GovernanceButton>
-                        <DiscourseLogo />
-                        <span>Forum</span>
-                    </GovernanceButton>
-                    <GovernanceButton>
-                        <SnapshotLogo />
-                        <span>Voting</span>
-                    </GovernanceButton>
+                    {governanceContent.map((content, i) => (
+                        <GovernanceButton key={i} href={content.link}>
+                            <content.LogoImage alt={content.alt} />
+                            <span>{content.label}</span>
+                        </GovernanceButton>
+                    ))}
                 </ButtonRow>
             </GovernanceRow>
-            <LinkRow>
-                <GitbookLogo />
-                <span>Documentation</span>
-            </LinkRow>
-            <LinkRow>
-                <GithubLogo />
-                <span>Github</span>
-            </LinkRow>
+            {linkContent.map((content, i) => (
+                <Link key={i} href={content.link}>
+                    <LinkRow>
+                        <content.LogoImage alt={content.alt} />
+                        <span>{content.label}</span>
+                    </LinkRow>
+                </Link>
+            ))}
             <SocialIconRow>
-                <TwitterLogo />
-                <DiscordLogo />
-                <MediumLogo />
+                {socialLinkContent.map((content, i) => (
+                    <Link key={i} href={content.link}>
+                        <content.LogoImage key={i} alt={content.alt} />
+                    </Link>
+                ))}
             </SocialIconRow>
         </Launcher>
     );
