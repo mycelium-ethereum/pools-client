@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Icon from '@ant-design/icons';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
@@ -6,6 +6,7 @@ import { NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
 import TWPopup from '~/components/General/TWPopup';
 import { networkConfig } from '~/constants/networks';
+import { NavContext } from '~/context/NavContext';
 import Error from '~/public/img/notifications/error.svg';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
@@ -38,12 +39,14 @@ const Option = styled.option`
     }
 `;
 
-export default (({ className }) => {
+export default (({ buttonClasses, className }) => {
     const { provider, network } = useStore(selectWeb3Info, shallow);
-
+    const { navMenuOpen } = useContext(NavContext);
     return (
         <TWPopup
             className={className}
+            navMenuOpen={navMenuOpen}
+            buttonClasses={buttonClasses}
             preview={
                 <NetworkPreview
                     networkID={network?.toString() ?? '0'}
@@ -66,7 +69,7 @@ export default (({ className }) => {
         </TWPopup>
     );
 }) as React.FC<{
-    hide?: boolean;
+    buttonClasses?: string;
     className?: string;
 }>;
 
@@ -76,7 +79,7 @@ const NetworkPreview: React.FC<{
     supported: boolean;
 }> = ({ networkID, networkName, supported }) => {
     return (
-        <div className={'my-auto flex w-full items-center'}>
+        <div className={`my-auto flex w-full items-center`}>
             {supported ? (
                 <Logo className={'my-auto ml-0 mr-2 inline'} ticker={networkID as LogoTicker} />
             ) : (

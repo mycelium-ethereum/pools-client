@@ -11,6 +11,7 @@ export const NavMenu = styled.menu<{ isOpen: boolean }>`
     top: 0;
     left: 0;
     width: 100%;
+    padding: 0;
     overflow: hidden;
     transition: height 0.5s ease;
     height: ${({ isOpen }) => (isOpen ? '100vh' : '0vh')};
@@ -20,13 +21,27 @@ export const NavMenu = styled.menu<{ isOpen: boolean }>`
     font-family: 'Aileron';
 `;
 
-export const NavList = styled.ul`
-    position: absolute;
+export const NavList = styled.div`
+    position: static;
     top: 0;
-    left: 0;
+    left: 16px;
     width: 100%;
     height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: 92px 0px 28px;
+
+    @media only screen and (min-width: 768px) {
+        position: absolute;
+        width: calc(100% - 32px);
+
+        /* Hide selectors and dropdowns above 768px */
+        > div:nth-child(1),
+        > div:nth-child(3) {
+            display: none;
+        }
+    }
 `;
 
 export const NavItem = styled.li<{ selected: boolean }>`
@@ -45,6 +60,10 @@ export const NavItem = styled.li<{ selected: boolean }>`
         height: 1px;
         width: 100%;
         background: linear-gradient(90deg, #3da8f5 50%, rgba(61, 168, 245, 0) 100.15%);
+    }
+
+    &:last-of-type:after {
+        display: none;
     }
 
     &:hover:before {

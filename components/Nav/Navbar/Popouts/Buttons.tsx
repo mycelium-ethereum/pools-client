@@ -1,18 +1,30 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { LauncherToggle, SettingsToggle } from '~/components/Nav/Navbar/Buttons';
 import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
 import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
+import { NavContext } from '~/context/NavContext';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { PopoutContainer } from './styles';
 
 export const PopoutButtons: React.FC = () => {
     const [showSettingsPopout, setShowSettingsPopout] = useState(false);
     const [showLauncherPopout, setShowLauncherPopout] = useState(false);
+    const { navMenuOpen, setNavMenuOpen } = useContext(NavContext);
 
     return (
         <>
-            <SettingsButton showSettingsPopout={showSettingsPopout} setShowSettingsPopout={setShowSettingsPopout} />
-            <AppLaunchButton showLauncherPopout={showLauncherPopout} setShowLauncherPopout={setShowLauncherPopout} />
+            <SettingsButton
+                showSettingsPopout={showSettingsPopout}
+                setShowSettingsPopout={setShowSettingsPopout}
+                navMenuOpen={navMenuOpen}
+                setNavMenuOpen={setNavMenuOpen}
+            />
+            <AppLaunchButton
+                showLauncherPopout={showLauncherPopout}
+                setShowLauncherPopout={setShowLauncherPopout}
+                navMenuOpen={navMenuOpen}
+                setNavMenuOpen={setNavMenuOpen}
+            />
         </>
     );
 };
@@ -20,9 +32,12 @@ export const PopoutButtons: React.FC = () => {
 export const SettingsButton: React.FC<{
     showSettingsPopout: boolean;
     setShowSettingsPopout: (value: React.SetStateAction<boolean>) => void;
-}> = ({ showSettingsPopout, setShowSettingsPopout }) => {
+    navMenuOpen: boolean;
+    setNavMenuOpen: (value: React.SetStateAction<boolean>) => void;
+}> = ({ showSettingsPopout, setShowSettingsPopout, navMenuOpen, setNavMenuOpen }) => {
     const handleToggle = () => {
         setShowSettingsPopout(!showSettingsPopout);
+        setNavMenuOpen(false);
     };
 
     const handleClose = () => {
@@ -34,7 +49,7 @@ export const SettingsButton: React.FC<{
 
     return (
         <PopoutContainer ref={settingsContainerRef}>
-            <SettingsToggle onClick={handleToggle} isSelected={showSettingsPopout} />
+            <SettingsToggle onClick={handleToggle} isSelected={showSettingsPopout} navMenuOpen={navMenuOpen} />
             <SettingsPopout isActive={showSettingsPopout} />
         </PopoutContainer>
     );
@@ -43,9 +58,12 @@ export const SettingsButton: React.FC<{
 export const AppLaunchButton: React.FC<{
     showLauncherPopout: boolean;
     setShowLauncherPopout: (value: React.SetStateAction<boolean>) => void;
-}> = ({ showLauncherPopout, setShowLauncherPopout }) => {
+    navMenuOpen: boolean;
+    setNavMenuOpen: (value: React.SetStateAction<boolean>) => void;
+}> = ({ showLauncherPopout, setShowLauncherPopout, navMenuOpen, setNavMenuOpen }) => {
     const handleToggle = () => {
         setShowLauncherPopout(!showLauncherPopout);
+        setNavMenuOpen(false);
     };
 
     const handleClose = () => {
@@ -57,7 +75,7 @@ export const AppLaunchButton: React.FC<{
 
     return (
         <PopoutContainer ref={launcherContainerRef}>
-            <LauncherToggle onClick={handleToggle} isSelected={showLauncherPopout} />
+            <LauncherToggle onClick={handleToggle} isSelected={showLauncherPopout} navMenuOpen={navMenuOpen} />
             <AppLauncher isActive={showLauncherPopout} />
         </PopoutContainer>
     );

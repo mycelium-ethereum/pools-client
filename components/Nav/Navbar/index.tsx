@@ -1,13 +1,16 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import shallow from 'zustand/shallow';
 import { Container } from '~/components/General/Container';
+import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
-import { LauncherToggle, SettingsToggle } from '~/components/Nav/Navbar/Buttons';
+import { LauncherToggle } from '~/components/Nav/Navbar/Buttons';
+import HamburgerMenu from '~/components/Nav/Navbar/MobileMenu/HamburgerMenu';
 import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
+import { NavContext, NavContextProvider } from '~/context/NavContext';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
@@ -20,7 +23,17 @@ import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ setShowOnboardModal }) => {
-    const [isOpen, setIsOpen] = useState(false);
+    return (
+        <NavContextProvider>
+            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+        </NavContextProvider>
+    );
+};
+
+const NavBarContent: React.FC<{
+    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowOnboardModal }) => {
+    const { navMenuOpen, setNavMenuOpen, launcherMenuOpen, setLauncherMenuOpen } = useContext(NavContext);
     const [navBackdrop, setNavBackdrop] = useState<boolean>(true);
     const routes = useRouter().asPath.split('/');
     const route = routes[1];
@@ -48,28 +61,26 @@ const NavBar: React.FC<{
         };
     }, [handleScroll]);
 
-    const handleRoute = () => {
-        const root = document.getElementById('__next');
-        root?.classList.remove('overflow-hidden');
-        setIsOpen(false);
-    };
+    // const handleRoute = () => {
+    //     setNavMenuOpen(false);
+    //     setLauncherMenuOpen(false);
+    // };
 
     const handleOpen = useCallback(() => {
-        const root = document.getElementById('__next');
-        root?.classList.add('overflow-hidden');
-        setIsOpen(true);
+        setNavMenuOpen(true);
+        setLauncherMenuOpen(true);
     }, []);
 
     const handleClose = useCallback(() => {
-        const root = document.getElementById('__next');
-        root?.classList.remove('overflow-hidden');
-        setIsOpen(false);
+        setNavMenuOpen(false);
+        setLauncherMenuOpen(false);
     }, []);
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
         if (window.innerWidth > 1280) {
-            setIsOpen(false);
+            setNavMenuOpen(false);
+            setLauncherMenuOpen(false);
         }
     };
 
@@ -81,6 +92,15 @@ const NavBar: React.FC<{
         };
     }, []);
 
+    useEffect(() => {
+        const root = document.getElementById('__next');
+        if (navMenuOpen) {
+            root?.classList.add('overflow-hidden');
+        } else {
+            root?.classList.remove('overflow-hidden');
+        }
+    }, [navMenuOpen]);
+
     const activeStyles = 'bg-opacity-40 dark:bg-opacity-40';
     const inactiveStyles = 'dark:bg-opacity-0 bg-opacity-0';
 
@@ -89,7 +109,7 @@ const NavBar: React.FC<{
             <nav
                 className={`sticky top-0 left-0 z-50 h-[60px] bg-white text-base backdrop-blur-sm transition-[background-color] duration-300 dark:bg-[#00005E] dark:text-white ${
                     navBackdrop ? activeStyles : inactiveStyles
-                }  ${isOpen ? 'text-white' : 'text-tracer-650'}`}
+                }  ${navMenuOpen || launcherMenuOpen ? 'text-white' : 'text-tracer-650'}`}
             >
                 <Container className={'relative z-10 flex h-full justify-between'}>
                     <TracerNavLogo />
@@ -130,30 +150,35 @@ const NavBar: React.FC<{
                                 </a>
                             </li>
                         </ul>
-
-                        {/* <VersionToggle /> */}
-                        <Show.LG display="flex">
-                            {!!network ? <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" /> : null}
-                            <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
-                            <PopoutButtons />
-                        </Show.LG>
-                        <div className="flex lg:hidden">
-                            <SettingsToggle
-                                onClick={isOpen ? handleClose : handleOpen}
-                                isSelected={isOpen}
-                                navMenuOpen={isOpen}
-                            />
-                            <LauncherToggle
-                                onClick={isOpen ? handleClose : handleOpen}
-                                isSelected={isOpen}
-                                navMenuOpen={isOpen}
-                            />
+                        <div className="flex justify-end">
+                            <Show.MD display="flex">
+                                {!!network ? (
+                                    <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" />
+                                ) : null}
+                                <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
+                                <PopoutButtons />
+                            </Show.MD>
+                            <div className="flex xl:hidden">
+                                <Hide.MD display="flex">
+                                    <LauncherToggle
+                                        onClick={navMenuOpen ? handleClose : handleOpen}
+                                        isSelected={navMenuOpen}
+                                        navMenuOpen={navMenuOpen}
+                                    />
+                                </Hide.MD>
+                                <HamburgerMenu
+                                    onClick={navMenuOpen ? handleClose : handleOpen}
+                                    navMenuOpen={navMenuOpen}
+                                />
+                            </div>
                         </div>
                     </div>
                 </Container>
-                <MobileMenu account={account ?? ''} network={network} isOpen={isOpen} />
+                <MobileMenu account={account ?? ''} network={network} navMenuOpen={navMenuOpen} />
             </nav>
-            {!isOpen && setShowOnboardModal && <HelpIcon setShowOnboardModal={setShowOnboardModal} />}
+            {!navMenuOpen && !launcherMenuOpen && setShowOnboardModal && (
+                <HelpIcon setShowOnboardModal={setShowOnboardModal} />
+            )}
         </>
     );
 };

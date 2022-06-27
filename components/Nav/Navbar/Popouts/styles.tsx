@@ -12,81 +12,125 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
     width: 41px;
     align-items: center;
     justify-content: center;
-    border-radius: 7px;
-    ${({ selected, navMenuOpen }) => {
+    border-radius: 4px;
+    margin-left: 16px;
+    transition: all 0.3s ease;
+    ${({ theme, selected, navMenuOpen }) => {
         switch (true) {
             case selected && navMenuOpen:
                 return `
-                    color: #ffffff;
+                    border: 1px solid #1c64f2;
+                    background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
+                `;
+            case !selected && navMenuOpen:
+                return `
                     border: 1px solid #ffffff;
-                    background: transparent;
-
-                    &:focus {
-                        border: 1px solid #ffffff;
-                    }
+                    background-color: #1c64f2;
                 `;
             case selected && !navMenuOpen:
                 return `
-                    color: #ffffff;
-                    background: #1c64f2;
                     border: 1px solid #1c64f2;
-
-                    &:focus {
-                        border: 1px solid #1c64f2;
-                    }
+                    background-color: #1c64f2;
                 `;
             default:
                 return `
-                    color: #1c64f2;
                     border: 1px solid #1c64f2;
-                    background: linear-gradient(309.78deg, rgba(26, 85, 245, 0.5) -96.53%, rgba(26, 85, 245, 0) 73.43%);
-                    
-                    &:focus {
-                        border: 1px solid #1c64f2;
-                    }
+                    background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
                 `;
         }
     }}
-    transition: background-color 0.3s ease-in-out;
-    margin-left: 16px;
 
     /* Only allow hover effect on desktop */
-    @media (pointer: fine) and (hover: hover) {
-        &:hover {
-            background-color: #1c64f2;
-            color: #fff;
-        }
+    &:hover {
+        background-color: #1c64f2;
+        color: #fff;
     }
 `;
 
-export const AppLaunchNavButton = styled(NavButton)<{ selected: boolean }>`
+export const AppLaunchNavButton = styled(NavButton)`
     > span > span {
         ${({ selected, navMenuOpen }) => {
             switch (true) {
                 case selected && navMenuOpen:
                     return `
+                    background-color: #1c64f2;
+                `;
+                case !selected && navMenuOpen:
+                    return `
                     background-color: #ffffff;
                 `;
                 case selected && !navMenuOpen:
                     return `
-                background-color: #ffffff;
+                    background-color: #ffffff;
                 `;
                 default:
                     return `
-                background-color: #1c64f2;
+                    background-color: #1c64f2;
                 `;
             }
         }}
     }
-    &:hover span > span {
-        background-color: #fff;
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover span > span {
+            background-color: #fff;
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        ${({ selected, navMenuOpen }) => {
+            switch (true) {
+                case selected && navMenuOpen:
+                    return `
+                    border: 1px solid #ffffff;
+                    background-color: #ffffff;
+                `;
+                case !selected && navMenuOpen:
+                    return `
+                    border: 1px solid #1c64f2;
+                    background-color: #1c64f2;
+                `;
+                case selected && !navMenuOpen:
+                    return `
+                    border: 1px solid #ffffff;
+                    background-color: #ffffff;
+                `;
+                default:
+                    return `
+                    border: 1px solid #1c64f2;
+                    background-color: #ffffff;
+                    transition: all 0.3s ease 0.3s;
+                `;
+            }
+        }}
     }
 `;
 
 export const SettingsNavButton = styled(NavButton)`
-    > svg {
-        transition: color 0.3s ease;
-    }
+    ${({ theme, selected, navMenuOpen }) => {
+        switch (true) {
+            case selected && navMenuOpen:
+                return `
+                    background-color: #1c64f2;
+                `;
+            case !selected && navMenuOpen:
+                return `
+                    background-color: #1c64f2;
+                    border: 1px solid #ffffff;
+                `;
+            case selected && !navMenuOpen:
+                return `
+                    background-color: #1c64f2;
+                    color: #ffffff;
+                `;
+            default:
+                return `
+                    border: 1px solid #1c64f2;
+                    color: #1c64f2;
+                    background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
+                `;
+        }
+    }}
 `;
 
 export const CubeGrid = styled.span`
@@ -100,7 +144,7 @@ export const Cube = styled.span`
     height: 4px;
     width: 4px;
     background-color: #1c64f2;
-    transition: background-color 0.3s ease-in-out;
+    transition: background-color 0.3s ease;
 `;
 
 export const PopoutContainer = styled.div`
@@ -111,14 +155,16 @@ export const PopoutContainer = styled.div`
 `;
 
 export const Popout = styled.div<{ isActive: boolean }>`
-    position: absolute;
+    position: static;
     top: 50px;
     right: 0;
     z-index: 50;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     font-family: 'Aileron', sans-serif;
     pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
+    justify-content: space-between;
+    width: 100%;
 
     /* Animate rows on open */
     > div,
@@ -128,24 +174,49 @@ export const Popout = styled.div<{ isActive: boolean }>`
         transform: ${({ isActive }) => (isActive ? 'translate(0, 0)' : 'translate(16px, 16px)')};
         opacity: ${({ isActive }) => (isActive ? '1' : '0')};
     }
+
+    @media only screen and (min-width: 768px) {
+        position: absolute;
+        flex-direction: column;
+        justify-content: start;
+        width: auto;
+    }
 `;
 
 export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    padding: 16px;
-    width: 320px;
-    height: 72px;
-    border: 1px solid rgba(28, 100, 242, 0.2);
+    flex-direction: column;
+    width: 140px;
     border-bottom: ${({ borderBottom }) => (borderBottom ? '1px solid rgba(28, 100, 242, 0.2)' : 'none')};
-    overflow: hidden;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    background: ${({ theme }) =>
-        theme.theme === Theme.Light
-            ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
-            : 'rgba(53, 53, 220, 0.9)'};
-    color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
+    color: #ffffff;
+
+    > span {
+        display: block;
+        font-size: 16px;
+        line-height: 24px;
+        margin-bottom: 10px;
+
+        @media only screen and (min-width: 768px) {
+            margin-bottom: 0;
+        }
+    }
+
+    @media only screen and (min-width: 768px) {
+        align-items: center;
+        flex-direction: row;
+        height: 72px;
+        width: 320px;
+        padding: 16px;
+        color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
+        background: ${({ theme }) =>
+            theme.theme === Theme.Light
+                ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
+                : 'rgba(53, 53, 220, 0.9)'};
+        border: 1px solid rgba(28, 100, 242, 0.2);
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
 `;
 
 export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
@@ -161,20 +232,16 @@ export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
     }
 `;
 
-export const PopoutText = styled.span`
-    font-size: 16px;
-    line-height: 24px;
-`;
-
 export const ToggleSwitch = styled(Link)`
     position: relative;
     display: flex;
     align-items: center;
     width: 140px;
     height: 40px;
-    border: 1px solid rgba(28, 100, 242, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 4px;
-    &:focus {
+
+    @media only screen and (min-width: 768px) {
         border: 1px solid rgba(28, 100, 242, 0.2);
     }
 `;
@@ -187,17 +254,11 @@ export const SwitchOption = styled.span<{ selected: boolean }>`
     width: 68px;
     height: 40px;
     border-radius: 3px;
-    ${({ theme, selected }) => {
+    transition: color 0.3s ease;
+    z-index: 1;
+    ${({ selected }) => {
         switch (true) {
-            case selected && theme.theme === Theme.Light:
-                return `
-                    color: #ffffff;
-                `;
-            case selected && theme.theme === Theme.Dark:
-                return `
-                    color: #1c64f2;
-                `;
-            case theme.theme === Theme.Light:
+            case selected:
                 return `
                     color: #1c64f2;
                 `;
@@ -208,8 +269,28 @@ export const SwitchOption = styled.span<{ selected: boolean }>`
         }
     }}
 
-    transition: color 0.3s ease;
-    z-index: 1;
+    @media only screen and (min-width: 768px) {
+        ${({ theme, selected }) => {
+            switch (true) {
+                case selected && theme.theme === Theme.Light:
+                    return `
+                    color: #ffffff;
+                `;
+                case selected && theme.theme === Theme.Dark:
+                    return `
+                    color: #1c64f2;
+                `;
+                case theme.theme === Theme.Light:
+                    return `
+                    color: #1c64f2;
+                `;
+                default:
+                    return `
+                    color: #ffffff;
+                `;
+            }
+        }}
+    }
 `;
 
 export const Slider = styled.span<{ isSwitchedOn: boolean }>`
@@ -222,13 +303,22 @@ export const Slider = styled.span<{ isSwitchedOn: boolean }>`
     height: 36px;
     border-radius: 3px;
     z-index: 0;
-    background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
     transition: left 0.3s ease;
+    background-color: #ffffff;
+
+    @media only screen and (min-width: 768px) {
+        background-color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
+    }
 `;
 
 export const VersionSelector = styled(PopoutOption)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
+    margin-right: 32px;
+
+    @media only screen and (min-width: 768px) {
+        margin-right: 0;
+    }
 `;
 
 export const DarkModeSelector = styled(PopoutOption)`
@@ -300,7 +390,7 @@ export const GradientBackground = styled.div`
     transition: opacity 0.3s ease;
     background: ${({ theme }) =>
         theme.theme === Theme.Light
-            ? 'linear-gradient(272.96deg, #1C64F2 -7%, rgba(26, 85, 245, 0) 150%)'
+            ? 'linear-gradient(272.96deg, #9BC2FC -7%, rgba(26, 85, 245, 0) 150%)'
             : 'linear-gradient(273.08deg, #1E1E90 15%, rgba(26, 85, 245, 0) 120%)'};
     opacity: 0;
     z-index: -1;
@@ -381,10 +471,6 @@ export const GovernanceButton = styled(Link)`
     background: transparent;
     transition: color 0.3s ease;
 
-    &:hover {
-        color: #ffffff;
-    }
-
     &:hover > div {
         opacity: 1;
     }
@@ -401,10 +487,6 @@ export const LinkRow = styled(LauncherRow)`
     padding: 16px;
     border-bottom: none;
     transition: color 0.3s ease;
-
-    &:hover {
-        color: #ffffff;
-    }
 
     &:hover > div {
         opacity: 1;
@@ -428,10 +510,6 @@ export const SocialIconRow = styled(LauncherRow)`
         overflow: hidden;
         padding: 12px;
         transition: background-color 0.3s ease;
-
-        &:hover {
-            color: #ffffff;
-        }
 
         &:hover > div {
             opacity: 1;

@@ -4,9 +4,10 @@ import { AppLaunchNavButton, Cube, CubeGrid, SettingsNavButton } from '~/compone
 
 type ToggleButtonProps = {
     isSelected: boolean;
-    navMenuOpen?: boolean;
     onClick: () => void;
+    navMenuOpen: boolean;
 };
+
 export const SettingsToggle: React.FC<ToggleButtonProps> = ({ onClick, isSelected, navMenuOpen }) => {
     return (
         <SettingsNavButton onClick={onClick} selected={isSelected} navMenuOpen={navMenuOpen}>
