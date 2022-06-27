@@ -144,7 +144,6 @@ export const PoolTypeDropdown: React.FC<PoolTypeDropdownProps> = ({
             }))}
             value={_selectedPool ? generatePoolTypeSummary(_selectedPool) : ''}
             onSelect={(selectedMarket) => {
-                console.log('selecting market', selectedMarket);
                 swapDispatch({ type: 'setSelectedPool', value: selectedMarket });
             }}
         />
