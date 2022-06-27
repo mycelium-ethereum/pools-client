@@ -93,6 +93,7 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         type: 'SMA',
         updateInterval: 0,
         numPeriods: 0,
+        isLoading: true,
     },
 };
 

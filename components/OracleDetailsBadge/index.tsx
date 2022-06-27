@@ -24,6 +24,9 @@ const StyledBadge = styled.div`
 `;
 
 export const OracleDetailsBadge = ({ oracleDetails }: { oracleDetails: OracleDetails }): JSX.Element => {
+    if (oracleDetails.isLoading) {
+        return <StyledBadge>...</StyledBadge>;
+    }
     switch (oracleDetails.type) {
         case 'SMA':
             return (

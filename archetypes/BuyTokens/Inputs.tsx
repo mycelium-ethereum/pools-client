@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { Pool, SideEnum } from '@tracer-protocol/pools-js';
+import { SideEnum } from '@tracer-protocol/pools-js';
 import { LogoTicker } from '~/components/General';
 import { Dropdown } from '~/components/General/Dropdown';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { Market, SIDE_OPTIONS } from '~/context/SwapContext';
 import { SwapAction } from '~/context/SwapContext';
+import { PoolInfo } from '~/types/pools';
 import { getBaseAssetFromMarket } from '~/utils/poolNames';
 import { generatePoolTypeSummary } from '~/utils/pools';
 
@@ -118,22 +119,32 @@ export type PoolTypeDropdownProps = {
     market: string;
     markets: Record<string, Market>;
     leverage: number;
+    selectedPool?: string;
     swapDispatch: React.Dispatch<SwapAction>;
 };
 
-export const PoolTypeDropdown: React.FC<PoolTypeDropdownProps> = ({ market, markets, leverage, swapDispatch }) => {
-    const availablePools = markets?.[market]?.[leverage] as unknown as Pool[];
+export const PoolTypeDropdown: React.FC<PoolTypeDropdownProps> = ({
+    market,
+    markets,
+    leverage,
+    selectedPool,
+    swapDispatch,
+}) => {
+    const availablePools = markets?.[market]?.[leverage] as unknown as PoolInfo[];
+    const _selectedPool = availablePools.find((pool) => pool.poolInstance.address === selectedPool);
+
     return (
         <Dropdown
             className="w-full"
             placeHolder="Select Market"
             size="lg"
             options={availablePools.map((pool) => ({
-                key: pool.address,
+                key: pool.poolInstance.address,
                 text: generatePoolTypeSummary(pool),
             }))}
-            value={generatePoolTypeSummary(availablePools[0])}
+            value={_selectedPool ? generatePoolTypeSummary(_selectedPool) : ''}
             onSelect={(selectedMarket) => {
+                console.log('selecting market', selectedMarket);
                 swapDispatch({ type: 'setSelectedPool', value: selectedMarket });
             }}
         />

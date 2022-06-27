@@ -410,6 +410,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                                 type: 'SMA',
                                 numPeriods: numPeriods.toNumber(),
                                 updateInterval: updateInterval.toNumber(),
+                                isLoading: false,
                             };
                         }
                     });
@@ -422,6 +423,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                                 type: 'Spot',
                                 numPeriods: 0,
                                 updateInterval: 0,
+                                isLoading: false,
                             };
                         }
                     });

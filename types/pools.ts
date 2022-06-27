@@ -72,6 +72,7 @@ export type OracleDetails = {
     type: 'SMA' | 'Spot';
     numPeriods: number;
     updateInterval: number;
+    isLoading: boolean;
 };
 
 export type TradeStats = {

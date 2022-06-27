@@ -1,8 +1,9 @@
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { BalanceTypeEnum, KnownNetwork, Pool } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats } from '~/types/pools';
+import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
+import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
+import { formatSeconds } from './converters';
 import { BNFromString } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
@@ -126,26 +127,15 @@ export const formatPoolName = (
     };
 };
 
-export const generatePoolTypeSummary: (pool: Pool) => string = (pool) => {
-    const EIGHT_HOUR_DESC = '8hr SMA - 8hr Front Running Interval';
-    const EIGHT_HOUR_FR_INTERVAL = new BigNumber(60 * 60 * 8); // 8 hours
-    const EIGHT_HOUR_UPD_INTERVAL = new BigNumber(60 * 60); // 1 hour
+export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
+    const { oracleDetails } = pool;
+    const formattedOracleDetails =
+        pool.oracleDetails.type === 'SMA'
+            ? `${formatSeconds(oracleDetails.numPeriods * oracleDetails.updateInterval)} SMA`
+            : 'Spot';
 
-    const TWELVE_HOUR_DESC = 'Spot - 12hr Rebalance - 5min Front Running Interval';
-    const TWELVE_HOUR_FR_INTERVAL = new BigNumber(60 * 60 * 8); // 12 hours
-    const TWELVE_HOUR_UPD_INTERVAL = new BigNumber(60 * 5); // 5 minutes
+    const formattedRebalance = `${formatSeconds(pool.poolInstance.updateInterval.toNumber())} Rebalance`;
+    const formattedFRI = `${formatSeconds(pool.poolInstance.frontRunningInterval.toNumber())} Frontrunning Interval`;
 
-    const isEightHour =
-        pool.frontRunningInterval.eq(EIGHT_HOUR_FR_INTERVAL) && pool.updateInterval.eq(EIGHT_HOUR_UPD_INTERVAL);
-
-    const isTwelveHour =
-        pool.frontRunningInterval.eq(TWELVE_HOUR_FR_INTERVAL) && pool.updateInterval.eq(TWELVE_HOUR_UPD_INTERVAL);
-
-    if (isEightHour) {
-        return EIGHT_HOUR_DESC;
-    }
-    if (isTwelveHour) {
-        return TWELVE_HOUR_DESC;
-    }
-    return '';
-}
+    return `${formattedOracleDetails} - ${formattedRebalance} - ${formattedFRI}`;
+};

@@ -172,7 +172,7 @@ export const timeTill: (time: number) => {
 export const formatSeconds: (seconds: number) => string = (seconds) => {
     const { d, h, m, s } = extractTimeSegments(seconds);
 
-    return `${d ? `${d}d` : ''} ${h ? `${h}h` : ''} ${m ? `${m}m` : ''}  ${s ? `${s}s` : ''}`;
+    return `${d ? `${d}day ` : ''}${h ? `${h}h` : ''}${m ? `${m}m` : ''}${s ? `${s}s` : ''}`;
 };
 
 /**

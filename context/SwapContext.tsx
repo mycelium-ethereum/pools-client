@@ -1,9 +1,9 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
-import { CommitActionEnum, BalanceTypeEnum, SideEnum, Pool } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
-import { PoolType } from '~/types/pools';
+import { PoolType, PoolInfo } from '~/types/pools';
 import { getMarketInfoFromSymbol, getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
@@ -191,7 +191,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                     }
                     // markets[marketSymbol][leverage] = pool.poolInstance;
                     markets[marketSymbol][leverage] = markets[marketSymbol][leverage] || [];
-                    (markets[marketSymbol][leverage] as unknown as Pool[]).push(pool.poolInstance);
+                    (markets[marketSymbol][leverage] as unknown as PoolInfo[]).push(pool);
                 }
             });
             swapDispatch({
@@ -199,7 +199,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 markets,
             });
         }
-    }, [poolsInitialized]);
+    }, [poolsInitialized, pools]);
 
     // sets the market after pools have been initialised and the route set
     useEffect(() => {

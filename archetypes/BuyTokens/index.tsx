@@ -109,6 +109,7 @@ const TokenBuySell: React.FC = () => {
                         markets={markets}
                         leverage={leverage}
                         swapDispatch={swapDispatch}
+                        selectedPool={selectedPool}
                     />
                 ),
             },
