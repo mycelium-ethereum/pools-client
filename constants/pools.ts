@@ -89,6 +89,11 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         expectedFrontRunningShortTokenPrice: new BigNumber(0),
         expectedFrontRunningOraclePrice: new BigNumber(0),
     },
+    oracleDetails: {
+        type: 'SMA',
+        updateInterval: 0,
+        numPeriods: 0,
+    },
 };
 
 export interface PoolListMap {

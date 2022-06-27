@@ -8,7 +8,7 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
-import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
+import { OracleDetailsBadge, OracleDetailsBadgeContainer } from '~/components/OracleDetailsBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
@@ -347,10 +347,10 @@ const PoolRow: React.FC<
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
                     <div className="mb-1 flex font-bold">
-                        <PoolStatusBadgeContainer>
+                        <OracleDetailsBadgeContainer>
                             <div className="mr-2 text-lg">{pool.leverage}</div>
-                            <PoolStatusBadge status={pool.poolStatus} />
-                        </PoolStatusBadgeContainer>
+                            <OracleDetailsBadge oracleDetails={pool.oracleDetails} />
+                        </OracleDetailsBadgeContainer>
                     </div>
                     <div className="flex items-center">
                         {pool.collateralAsset}

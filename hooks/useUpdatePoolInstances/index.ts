@@ -36,6 +36,7 @@ export const useUpdatePoolInstances = (): void => {
         updatePoolCommitStats,
         updatePoolBalancerPrices,
         updateNextPoolStates,
+        updateOracleDetails,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
     const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
@@ -209,6 +210,7 @@ export const useUpdatePoolInstances = (): void => {
             updatePoolCommitStats(pools_, network);
             updateNextPoolStates(pools_, network);
             updatePoolBalancerPrices(pools_, network);
+            updateOracleDetails(pools_);
         }
     }, [network, poolsInitialized]);
 };
