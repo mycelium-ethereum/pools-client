@@ -13,7 +13,7 @@ import { InvalidAmount, WALLET_OPTIONS } from './types';
 import TokenSelect from '../TokenSelect';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {
+export const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -121,7 +121,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={settlementTokenBalance}
-                            tokenSymbol={pool.settlementToken.symbol}
+                            // tokenSymbol={pool.settlementToken.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}
                             isPoolToken={false}
@@ -132,7 +132,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={tokenBalance}
-                            tokenSymbol={token.symbol}
+                            // tokenSymbol={token.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}
                             isPoolToken={true}

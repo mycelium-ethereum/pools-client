@@ -7,12 +7,12 @@ import Button from '~/components/General/Button';
 import { SwapAction, SwapState } from '~/context/SwapContext';
 import { AggregateBalances } from '~/types/pools';
 
-type ExchangeButton = {
-    onClose: () => void;
+export type ExchangeButtonProps = {
+    onClose?: () => void;
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
     account?: string;
-    handleConnect: () => void;
+    handleConnect?: () => void;
     userBalances: UserBalances;
     approve?: (selectedPool: string, symbol: string) => void;
     pool: Pool;
@@ -27,7 +27,7 @@ type ExchangeButton = {
     commitType: CommitEnum;
 };
 
-type UserBalances = {
+export type UserBalances = {
     shortToken: TokenBalance;
     longToken: TokenBalance;
     settlementToken: TokenBalance;
@@ -52,7 +52,7 @@ const commitText: Record<CommitEnum, string> = {
     [CommitEnum.longBurn]: 'Long Burn',
 };
 
-const ExchangeButton: React.FC<ExchangeButton> = ({
+const ExchangeButton: React.FC<ExchangeButtonProps> = ({
     onClose,
     swapState,
     swapDispatch,
@@ -73,7 +73,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                 size="lg"
                 variant="primary"
                 onClick={(_e) => {
-                    handleConnect();
+                    handleConnect && handleConnect();
                 }}
             >
                 Connect Wallet
@@ -119,7 +119,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                     commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
-                            onClose();
+                            onClose && onClose();
                         },
                     });
                 }}

@@ -89,6 +89,12 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         expectedFrontRunningShortTokenPrice: new BigNumber(0),
         expectedFrontRunningOraclePrice: new BigNumber(0),
     },
+    oracleDetails: {
+        type: 'SMA',
+        updateInterval: 0,
+        numPeriods: 0,
+        isLoading: true,
+    },
 };
 
 export interface PoolListMap {
@@ -139,4 +145,6 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '15S-ETHMCAP/BTCMCAP+USDC': '15S-FLIPPEN',
     '5L-PUNK/ETH+wETH': '5L-PUNK/ETH',
     '5S-PUNK/ETH+wETH': '5S-PUNK/ETH',
+    '3S-BTC/USD+USDC-12h': '3S-BTC-12h',
+    '3L-BTC/USD+USDC-12h': '3L-BTC-12h',
 };

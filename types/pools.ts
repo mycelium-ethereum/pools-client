@@ -68,6 +68,13 @@ type TokenBalance = {
     balance: BigNumber;
 };
 
+export type OracleDetails = {
+    type: 'SMA' | 'Spot';
+    numPeriods: number;
+    updateInterval: number;
+    isLoading: boolean;
+};
+
 export type TradeStats = {
     avgLongEntryPriceWallet: BigNumber;
     avgShortEntryPriceWallet: BigNumber;
@@ -142,6 +149,7 @@ export type PoolInfo = {
         // settlementToken: BigNumber; // in some stable coin of our choosing
     };
     nextPoolState: NextPoolState;
+    oracleDetails: OracleDetails;
 };
 
 export type TradeStatsAPIResponse = {

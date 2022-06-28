@@ -2,7 +2,8 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats } from '~/types/pools';
+import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
+import { formatSeconds } from './converters';
 import { BNFromString } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
@@ -124,4 +125,17 @@ export const formatPoolName = (
         leverage: leverage ? leverage[0] : '',
         market: market ? market[0] : '',
     };
+};
+
+export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
+    const { oracleDetails } = pool;
+    const formattedOracleDetails =
+        pool.oracleDetails.type === 'SMA'
+            ? `${formatSeconds(oracleDetails.numPeriods * oracleDetails.updateInterval)} SMA`
+            : 'Spot';
+
+    const formattedRebalance = `${formatSeconds(pool.poolInstance.updateInterval.toNumber())} Rebalance`;
+    const formattedFRI = `${formatSeconds(pool.poolInstance.frontRunningInterval.toNumber())} Frontrunning Interval`;
+
+    return `${formattedOracleDetails} - ${formattedRebalance} - ${formattedFRI}`;
 };

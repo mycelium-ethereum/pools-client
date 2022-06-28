@@ -30,7 +30,7 @@ export default class MyDocument extends Document {
     }
     render() {
         return (
-            <Html lang="en">
+            <Html>
                 <Head>
                     <script src="/scripts/matomo.js" />
                     <script src="/scripts/theme.js" />

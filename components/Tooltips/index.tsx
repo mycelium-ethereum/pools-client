@@ -17,6 +17,16 @@ export const ComingSoonTip: React.FC = ({ children }) => {
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
+export const SelectMarketTip: React.FC = ({ children }) => {
+    const Content = <>Please select a market</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const UnavailableTip: React.FC = ({ children }) => {
+    const Content = <>Unavailable</>;
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
 export const RewardsEndedTip: React.FC = ({ children }) => {
     const Content = 'Staking rewards have ended for this pool.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
@@ -24,6 +34,25 @@ export const RewardsEndedTip: React.FC = ({ children }) => {
 
 export const StakingTvlTip: React.FC = ({ children }) => {
     const Content = 'Total value locked in the staking contract';
+    return <StyledTooltip title={Content}>{children}</StyledTooltip>;
+};
+
+export const MarketTypeTip: React.FC = ({ children }) => {
+    const Content = (
+        <>
+            Multiple markets found. You can further refine the market you participate in by choosing between, e.g., SMA
+            markets that smooth volatility and spot markets that track the underlying price at rebalance.
+            <br />
+            <a
+                href="https://pools.docs.tracer.finance/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-tracer-midblue transition-colors duration-300 hover:text-cool-gray-700"
+            >
+                Learn more
+            </a>
+        </>
+    );
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 

@@ -87,6 +87,7 @@ export default (({
                                 DISABLED,
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
+                                index === 0 ? 'rounded-l-md' : '',
                                 index === options.length - 1 ? 'rounded-r-md' : '',
                                 fullWidth ? FULL_WIDTH : '',
                             )}

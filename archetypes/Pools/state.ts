@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Upkeep } from '~/hooks/useUpkeeps';
 import { MarketFilterEnum, LeverageFilterEnum, CollateralFilterEnum, SortByEnum } from '~/types/filters';
-import { PoolStatus } from '~/types/pools';
+import { OracleDetails, PoolStatus } from '~/types/pools';
 
 export enum DeltaEnum {
     Percentile = 0,
@@ -64,6 +64,7 @@ export interface BrowseTableRowData {
     collateralAssetAddress: string;
 
     poolStatus: PoolStatus;
+    oracleDetails: OracleDetails;
     estimatedSkew: number;
 }
 

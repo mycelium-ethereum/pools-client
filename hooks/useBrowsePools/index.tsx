@@ -39,6 +39,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             poolValues.forEach((pool_) => {
                 const {
                     poolInstance: pool,
+                    oracleDetails,
                     poolStatus,
                     userBalances,
                     upkeepInfo,
@@ -147,6 +148,7 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     committer: committer.address,
                     collateralAsset: settlementToken.symbol,
                     collateralAssetAddress: settlementToken.address,
+                    oracleDetails,
                     poolStatus,
                 });
             });
