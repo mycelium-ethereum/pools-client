@@ -95,15 +95,10 @@ export const FarmStore: React.FC = ({ children }) => {
             const initialisedFarms: Farm[] = [];
 
             for (const farm of config.poolFarms) {
-                const { address, abi, pool, link, linkText, rewardsEnded, isBPTFarm, balancerPoolId } = farm;
+                const { address, abi, pool, link, linkText, rewardsEnded, isBPTFarm, balancerPoolId, name } = farm;
 
                 try {
                     const poolInfo = staticPoolInfo.find((poolInfo) => poolInfo.address === pool);
-
-                    if (!poolInfo) {
-                        console.error(`Failed find to ${pool.slice()} in poolList`, staticPoolInfo.slice());
-                        return;
-                    }
 
                     const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
 
@@ -139,11 +134,13 @@ export const FarmStore: React.FC = ({ children }) => {
 
                     const totalStaked = new BigNumber(ethers.utils.formatUnits(_totalStaked, stakingTokenDecimals));
 
+                    const poolAddress = poolInfo?.address || pool;
+
                     const poolDetails = {
-                        name: poolInfo.name || poolInfo.address,
-                        address: poolInfo.address,
+                        name: name || poolInfo?.name || poolInfo?.address || poolAddress,
+                        address: poolAddress,
                         status:
-                            network && deprecatedPools?.[network]?.[poolInfo.address]
+                            network && deprecatedPools?.[network]?.[poolAddress]
                                 ? PoolStatus.Deprecated
                                 : PoolStatus.Live,
                     };
@@ -155,15 +152,22 @@ export const FarmStore: React.FC = ({ children }) => {
                         stakingDecimalMultiplier,
                     );
 
-                    const stakingTokenPrice =
-                        isBPTFarm && balancerPoolId
-                            ? await fetchBPTPrice(poolInfo, balancerPoolId, provider, stakingTokenSupply)
-                            : await fetchPPTokenPrice(poolInfo, stakingTokenAddress, provider);
+                    let stakingTokenPrice = new BigNumber(0);
+                    let tvl = new BigNumber(0);
 
-                    const tvl = stakingTokenPrice.times(totalStaked);
+                    if (poolInfo) {
+                        stakingTokenPrice =
+                            isBPTFarm && balancerPoolId
+                                ? await fetchBPTPrice(poolInfo, balancerPoolId, provider, stakingTokenSupply)
+                                : await fetchPPTokenPrice(poolInfo, stakingTokenAddress, provider);
+
+                        tvl = stakingTokenPrice.times(totalStaked);
+                    }
 
                     initialisedFarms.push({
-                        name: isBPTFarm ? `${poolInfo.name} Balancer LP` : stakingTokenSymbol,
+                        name: isBPTFarm
+                            ? `${name || poolInfo?.name || poolAddress} Balancer LP`
+                            : name || stakingTokenSymbol,
                         address,
                         contract,
                         totalStaked,
