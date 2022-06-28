@@ -23,6 +23,8 @@ export const balancerConfig: Partial<Record<KnownNetwork, BalancerInfo>> = {
             '0x59B7867F6B127070378feeb328e2Ffe6AAb67525',
             // 3 WTI/USD
             '0xfE7b8F8FcA690AB0CD2B8D979ABEeaC94C06805D',
+            // 3 BTC/USD-12h
+            '0xc999678122cbf8a30cb72c53d4bdd72abd96af88',
         ],
         // wETH wBTC USDC pool
         wPool: '0x64541216bafffeec8ea535bb71fbc927831d0595',
