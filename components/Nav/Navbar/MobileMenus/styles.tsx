@@ -40,8 +40,8 @@ export const NavList = styled.div`
     }
 `;
 export const ScrollContainer = styled.div`
-    height: 408px;
-    @media only screen and (max-height: 600px) {
+    height: 484px;
+    @media only screen and (max-height: 700px) {
         overflow-y: auto;
         overflow-x: hidden;
     }

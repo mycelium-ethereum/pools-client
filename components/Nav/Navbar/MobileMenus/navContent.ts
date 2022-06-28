@@ -1,6 +1,10 @@
 export const menuContent = [
     {
         link: '/',
+        label: 'Buy',
+    },
+    {
+        link: '/pools',
         label: 'Pools',
     },
     {

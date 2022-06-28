@@ -140,8 +140,18 @@ const NavBarContent: React.FC<{
                             <li className={listItemStyles}>
                                 <Link href="/" passHref>
                                     <a
-                                        id="browse-pools"
+                                        id="buy-tokens"
                                         className={classNames(linkStyles, route === '' ? selectedStyles : '')}
+                                    >
+                                        Buy
+                                    </a>
+                                </Link>
+                            </li>
+                            <li className={listItemStyles}>
+                                <Link href="/pools" passHref>
+                                    <a
+                                        id="browse-pools"
+                                        className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
                                     >
                                         Pools
                                     </a>
