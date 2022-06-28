@@ -101,10 +101,8 @@ const NavBarContent: React.FC<{
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
-        if (window.innerWidth > 1280) {
-            setNavMenuOpen(false);
-        }
         if (window.innerWidth > 767) {
+            setNavMenuOpen(false);
             setLauncherMenuOpen(false);
         }
     };
@@ -139,7 +137,7 @@ const NavBarContent: React.FC<{
                 <Container className={'relative z-10 flex h-full justify-between'}>
                     <TracerNavLogo />
                     <div className="ml-auto flex items-center">
-                        <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white xl:flex">
+                        <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
                             <li className={listItemStyles}>
                                 <Link href="/" passHref>
                                     <a
@@ -183,20 +181,20 @@ const NavBarContent: React.FC<{
                                 <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
                                 <PopoutButtons />
                             </Show.MD>
-                            <div className="flex xl:hidden">
-                                <Hide.MD display="flex">
+                            <Hide.MD display="flex">
+                                <div className="flex">
                                     <LauncherToggle
                                         onClick={launcherMenuOpen ? handleLauncherClose : handleLauncherOpen}
                                         isSelected={launcherMenuOpen}
                                         navMenuOpen={navMenuOpen || launcherMenuOpen}
                                     />
-                                </Hide.MD>
+                                </div>
                                 <HamburgerMenu
                                     onClick={navMenuOpen ? handleMenuClose : handleMenuOpen}
                                     isSelected={navMenuOpen}
                                     navMenuOpen={navMenuOpen || launcherMenuOpen}
                                 />
-                            </div>
+                            </Hide.MD>
                         </div>
                     </div>
                 </Container>
