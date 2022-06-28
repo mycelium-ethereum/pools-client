@@ -10,6 +10,7 @@ import { LauncherToggle } from '~/components/Nav/Navbar/Buttons';
 import HamburgerMenu from '~/components/Nav/Navbar/MobileMenus/HamburgerMenu';
 import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
 import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
+import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
 import { useStore } from '~/store/main';
@@ -21,7 +22,6 @@ import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
 import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
-import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -69,7 +69,7 @@ const NavBarContent: React.FC<{
             setLauncherMenuOpen(false);
             setTimeout(() => {
                 setNavMenuOpen(true);
-            }, ANIMATION_DURATION * 2);
+            }, ANIMATION_DURATION * 1000 * 2);
         } else {
             setLauncherMenuOpen(false);
             setNavMenuOpen(true);
@@ -81,7 +81,7 @@ const NavBarContent: React.FC<{
             setNavMenuOpen(false);
             setTimeout(() => {
                 setLauncherMenuOpen(true);
-            }, ANIMATION_DURATION * 2);
+            }, ANIMATION_DURATION * 1000 * 2);
         } else {
             setNavMenuOpen(false);
             setLauncherMenuOpen(true);

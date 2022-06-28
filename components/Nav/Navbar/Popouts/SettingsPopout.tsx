@@ -33,7 +33,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         // Wait for toggle animation to complete before navigating to v1
         setTimeout(() => {
             open(getRoute(), '_self');
-        }, ANIMATION_DURATION * 2);
+        }, ANIMATION_DURATION * 1000 * 2);
     };
 
     return (
