@@ -35,7 +35,7 @@ export default (({ account, className }) => {
                     size="sm"
                     variant="transparent"
                     onClick={handleConnect}
-                    className={`mb-4 flex max-h-[36px] items-center rounded-[4px] bg-opacity-0 bg-dropdown-gradient px-3 hover:bg-tracer-650 hover:text-white md:mb-0 lg:rounded-[4px] ${
+                    className={`mb-4 flex h-[36px] max-h-[36px] items-center rounded-[4px] bg-opacity-0 bg-dropdown-gradient px-3 hover:bg-tracer-650 hover:text-white md:mb-0 lg:rounded-[4px] ${
                         navMenuOpen
                             ? 'border-tracer-midblue text-white md:border-white'
                             : 'border-tracer-midblue text-tracer-650 dark:text-white md:border-tracer-650'
