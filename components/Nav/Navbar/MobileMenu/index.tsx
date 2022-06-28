@@ -89,6 +89,13 @@ export const MobileMenu = ({
                                             )}
                                         </Hide.LG>
                                         <Styled.MobileLink selected={route === ''} onClick={() => handleRoute('/')}>
+                                            <img className="mr-2 inline" src={'/img/general/token.svg'} alt="Token" />
+                                            Buy
+                                        </Styled.MobileLink>
+                                        <Styled.MobileLink
+                                            selected={route === '/pools'}
+                                            onClick={() => handleRoute('/pools')}
+                                        >
                                             <img className="mr-2 inline" src={'/img/general/browse.svg'} alt="Pools" />
                                             Pools
                                         </Styled.MobileLink>
