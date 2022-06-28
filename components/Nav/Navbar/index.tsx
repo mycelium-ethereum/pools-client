@@ -67,7 +67,17 @@ export const NavBarContent: React.FC = () => {
                 <ul className="mr-auto ml-4 mb-0 hidden text-sm text-white xl:flex">
                     <li className={listItemStyles}>
                         <Link href="/" passHref>
-                            <a id="browse-pools" className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
+                            <a id="buy-tokens" className={classNames(linkStyles, route === '' ? selectedStyles : '')}>
+                                Buy
+                            </a>
+                        </Link>
+                    </li>
+                    <li className={listItemStyles}>
+                        <Link href="/pools" passHref>
+                            <a
+                                id="browse-pools"
+                                className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
+                            >
                                 Pools
                             </a>
                         </Link>

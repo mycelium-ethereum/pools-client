@@ -44,6 +44,7 @@ type FarmInfo = {
     linkText?: string;
     rewardsEnded?: boolean;
     isBPTFarm?: boolean;
+    name?: string; // so that farms belonging to imported pools have names
 };
 
 export type FarmConfig = {

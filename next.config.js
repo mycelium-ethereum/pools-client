@@ -22,7 +22,6 @@ module.exports = {
     async redirects() {
         return [
             { source: '/bridge', destination: 'https://bridge.arbitrum.io/', permanent: true },
-            { source: '/pools', destination: '/', permanent: true },
             { source: '/stakebpt', destination: '/stake', permanent: true },
             { source: '/privacy-policy', destination: 'https://tracer.finance/privacy-policy', permanent: true },
             {
