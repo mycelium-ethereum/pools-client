@@ -16,7 +16,7 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
     justify-content: center;
     border-radius: 4px;
     margin-left: 16px;
-    transition: all ${ANIMATION_DURATION} ease;
+    transition: all ${ANIMATION_DURATION}s ease;
 
     ${({ theme, selected, navMenuOpen }) => {
         switch (true) {
