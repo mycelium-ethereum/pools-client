@@ -62,11 +62,6 @@ const NavBarContent: React.FC<{
         };
     }, [handleScroll]);
 
-    // const handleRoute = () => {
-    //     setNavMenuOpen(false);
-    //     setLauncherMenuOpen(false);
-    // };
-
     const handleMenuOpen = () => {
         if (launcherMenuOpen) {
             setLauncherMenuOpen(false);
