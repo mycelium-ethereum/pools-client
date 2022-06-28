@@ -44,7 +44,7 @@ const NavBarContent: React.FC<{
 
     const listItemStyles = 'flex';
     const linkStyles =
-        'flex transition-all items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650';
+        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650 hover:text-tracer-midblue dark:hover:text-tracer-650';
     const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
