@@ -105,25 +105,25 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 pool: '0xa740b84Fd3547b9C445844c30A10Cde6dce3E08B',
                 abi: StakingRewards__factory.abi,
             },
-            {
-                address: '0x6d52d4C087DD8a167eCA0008fb4c69D99169DcE8', // 3-BTC/USD+USDC-12h Balancer LP
-                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
-                abi: StakingRewards__factory.abi,
-                isBPTFarm: true,
-                balancerPoolId: '0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
-                link: 'https://arbitrum.balancer.fi/#/pool/0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
-                name: '3-BTC/USD+USDC-12h',
-            },
-            {
-                address: '0x3004CC46432522B0AeA30d16aF769B1727aA0c26', // 3L-BTC/USD+USDC-12h
-                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
-                abi: StakingRewards__factory.abi,
-            },
-            {
-                address: '0x0896Fd59b574f536751c82B8Dd9fd9466af009aC', // 3S-BTC/USD+USDC-12h
-                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
-                abi: StakingRewards__factory.abi,
-            },
+            // {
+            //     address: '0x6d52d4C087DD8a167eCA0008fb4c69D99169DcE8', // 3-BTC/USD+USDC-12h Balancer LP
+            //     pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+            //     abi: StakingRewards__factory.abi,
+            //     isBPTFarm: true,
+            //     balancerPoolId: '0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
+            //     link: 'https://arbitrum.balancer.fi/#/pool/0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
+            //     name: '3-BTC/USD+USDC-12h',
+            // },
+            // {
+            //     address: '0x3004CC46432522B0AeA30d16aF769B1727aA0c26', // 3L-BTC/USD+USDC-12h
+            //     pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+            //     abi: StakingRewards__factory.abi,
+            // },
+            // {
+            //     address: '0x0896Fd59b574f536751c82B8Dd9fd9466af009aC', // 3S-BTC/USD+USDC-12h
+            //     pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+            //     abi: StakingRewards__factory.abi,
+            // },
             // deprecated
             {
                 address: '0xcD8c0662cf72512857e98646b5C8363782c137A7', // 3-BTC/USD-long-farm
