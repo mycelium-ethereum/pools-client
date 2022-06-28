@@ -8,6 +8,7 @@ import {
     SwitchOption,
     DarkModeSelector,
     StyledSettingsPopout,
+    ANIMATION_DURATION,
 } from '~/components/Nav/Navbar/Popouts/styles';
 import { useStore } from '~/store/main';
 import { selectThemeSlice } from '~/store/ThemeSlice';
@@ -32,7 +33,7 @@ const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         // Wait for toggle animation to complete before navigating to v1
         setTimeout(() => {
             open(getRoute(), '_self');
-        }, 600);
+        }, ANIMATION_DURATION * 2);
     };
 
     return (

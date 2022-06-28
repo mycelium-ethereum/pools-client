@@ -4,12 +4,20 @@ export enum Theme {
     Matrix = 'matrix',
 }
 
-const size = {
-    sm: '640px',
-    md: '768px',
-    lg: '1024px',
-    xl: '1280px',
-    '2xl': '1536px',
+export enum BreakpointEnum {
+    Mobile = 640,
+    Tablet = 768,
+    DesktopSml = 1024,
+    DesktopMd = 1280,
+    DesktopLg = 1536,
+};
+
+export const size = {
+    sm: `${BreakpointEnum.Mobile}px`,
+    md: `${BreakpointEnum.Tablet}px`,
+    lg: `${BreakpointEnum.DesktopSml}px`,
+    xl: `${BreakpointEnum.DesktopMd}px`,
+    '2xl': `${BreakpointEnum.DesktopLg}px`,
 };
 
 export type BaseTheme = {

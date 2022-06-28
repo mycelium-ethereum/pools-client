@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 
+export const ANIMATION_DURATION = 0.3;
+
 export const StyledLink = styled.a.attrs({
     target: '_blank',
     rel: 'noopener noreferrer',
@@ -14,7 +16,7 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
     justify-content: center;
     border-radius: 4px;
     margin-left: 16px;
-    transition: all 0.3s ease;
+    transition: all ${ANIMATION_DURATION} ease;
 
     ${({ theme, selected, navMenuOpen }) => {
         switch (true) {
@@ -99,7 +101,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                     return `
                     border: 1px solid #1c64f2;
                     background-color: transparent;
-                    transition: all 0.3s ease 0.3s;
+                    transition: all ${ANIMATION_DURATION}s ease ${ANIMATION_DURATION}s;
                 `;
             }
         }}
@@ -152,7 +154,7 @@ export const Cube = styled.span`
     height: 4px;
     width: 4px;
     background-color: #1c64f2;
-    transition: background-color 0.3s ease;
+    transition: background-color ${ANIMATION_DURATION}s ease;
 `;
 
 export const PopoutContainer = styled.div`
@@ -262,7 +264,7 @@ export const SwitchOption = styled.span<{ selected: boolean }>`
     width: 68px;
     height: 40px;
     border-radius: 3px;
-    transition: color 0.3s ease;
+    transition: color ${ANIMATION_DURATION}s ease;
     z-index: 1;
     ${({ selected }) => {
         switch (true) {
@@ -311,7 +313,7 @@ export const Slider = styled.span<{ isSwitchedOn: boolean }>`
     height: 36px;
     border-radius: 3px;
     z-index: 0;
-    transition: left 0.3s ease;
+    transition: left ${ANIMATION_DURATION}s ease;
     background-color: #ffffff;
 
     @media only screen and (min-width: 768px) {
@@ -398,7 +400,7 @@ export const GradientBackground = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    transition: opacity 0.3s ease;
+    transition: opacity ${ANIMATION_DURATION}s ease;
     background: ${({ theme }) =>
         theme.theme === Theme.Light
             ? 'linear-gradient(272.96deg, #9BC2FC -7%, rgba(26, 85, 245, 0) 150%)'
@@ -434,7 +436,7 @@ export const AppRowButton = styled(StyledLink)`
     height: 100px;
     overflow: hidden;
     background-color: transparent;
-    transition: color 0.3s ease;
+    transition: color ${ANIMATION_DURATION}s ease;
 
     &:hover {
         color: #ffffff;
@@ -480,7 +482,7 @@ export const GovernanceButton = styled(StyledLink)`
     border-radius: 4px;
     overflow: hidden;
     background: transparent;
-    transition: color 0.3s ease;
+    transition: color ${ANIMATION_DURATION}s ease;
 
     &:hover > div {
         opacity: 1;
@@ -497,7 +499,7 @@ export const LinkRow = styled(LauncherRow)`
     position: relative;
     padding: 16px;
     border-bottom: none;
-    transition: color 0.3s ease;
+    transition: color ${ANIMATION_DURATION}s ease;
 
     &:hover > div {
         opacity: 1;
@@ -520,7 +522,7 @@ export const SocialIconRow = styled(LauncherRow)`
         border-radius: 4px;
         overflow: hidden;
         padding: 12px;
-        transition: background-color 0.3s ease;
+        transition: background-color ${ANIMATION_DURATION}s ease;
 
         &:hover > div {
             opacity: 1;
@@ -528,7 +530,7 @@ export const SocialIconRow = styled(LauncherRow)`
     }
 
     > a svg {
-        transition: all 0.3s ease;
+        transition: all ${ANIMATION_DURATION}s ease;
     }
 
     /* Twitter icon */

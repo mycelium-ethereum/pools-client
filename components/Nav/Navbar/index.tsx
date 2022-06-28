@@ -13,6 +13,7 @@ import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
 import { useStore } from '~/store/main';
+import { BreakpointEnum } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
@@ -20,6 +21,7 @@ import AccountDropdown from './AccountDropdown';
 import MobileMenu from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
 import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
+import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 
 const NavBar: React.FC<{
     setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
@@ -37,7 +39,7 @@ const NavBarContent: React.FC<{
     const { navMenuOpen, setNavMenuOpen, launcherMenuOpen, setLauncherMenuOpen } = useContext(NavContext);
     const [navBackdrop, setNavBackdrop] = useState<boolean>(true);
     const routes = useRouter().asPath.split('/');
-    const route = routes[1];
+    const route = routes[routes.length - 1];
     const { account, network } = useStore(selectWeb3Info, shallow);
 
     const listItemStyles = 'flex';
@@ -67,7 +69,7 @@ const NavBarContent: React.FC<{
             setLauncherMenuOpen(false);
             setTimeout(() => {
                 setNavMenuOpen(true);
-            }, 550);
+            }, ANIMATION_DURATION * 2);
         } else {
             setLauncherMenuOpen(false);
             setNavMenuOpen(true);
@@ -79,7 +81,7 @@ const NavBarContent: React.FC<{
             setNavMenuOpen(false);
             setTimeout(() => {
                 setLauncherMenuOpen(true);
-            }, 550);
+            }, ANIMATION_DURATION * 2);
         } else {
             setNavMenuOpen(false);
             setLauncherMenuOpen(true);
@@ -96,8 +98,10 @@ const NavBarContent: React.FC<{
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
-        if (window.innerWidth > 767) {
+        if (window.innerWidth > BreakpointEnum.DesktopSml) {
             setNavMenuOpen(false);
+        }
+        if (window.innerWidth > BreakpointEnum.Tablet) {
             setLauncherMenuOpen(false);
         }
     };
@@ -176,20 +180,20 @@ const NavBarContent: React.FC<{
                                 <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
                                 <PopoutButtons />
                             </Show.MD>
-                            <Hide.MD display="flex">
-                                <div className="flex">
+                            <Hide.LG display="flex">
+                                <Hide.MD display="flex">
                                     <LauncherToggle
                                         onClick={launcherMenuOpen ? handleLauncherClose : handleLauncherOpen}
                                         isSelected={launcherMenuOpen}
                                         navMenuOpen={navMenuOpen || launcherMenuOpen}
                                     />
-                                </div>
+                                </Hide.MD>
                                 <HamburgerMenu
                                     onClick={navMenuOpen ? handleMenuClose : handleMenuOpen}
                                     isSelected={navMenuOpen}
                                     navMenuOpen={navMenuOpen || launcherMenuOpen}
                                 />
-                            </Hide.MD>
+                            </Hide.LG>
                         </div>
                     </div>
                 </Container>
