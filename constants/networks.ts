@@ -17,7 +17,7 @@ export const knownNetworkToSubgraphUrl: Partial<Record<KnownNetwork, string>> = 
 export const networkConfig: Record<KnownNetwork, Network> = {
     [NETWORKS.ARBITRUM_RINKEBY]: {
         id: NETWORKS.ARBITRUM_RINKEBY,
-        name: 'Arbitrum Rinkeby',
+        name: 'Rinkeby',
         logoTicker: NETWORKS.ARBITRUM,
         previewUrl: 'https://testnet.arbiscan.io',
         hex: '0x66EEB',
