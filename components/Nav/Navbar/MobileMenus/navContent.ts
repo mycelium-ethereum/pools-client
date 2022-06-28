@@ -13,6 +13,6 @@ export const menuContent = [
     },
     {
         link: 'https://pools.docs.tracer.finance/',
-        label: 'Stake',
+        label: 'Docs',
     },
 ];

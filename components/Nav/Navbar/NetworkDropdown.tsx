@@ -39,14 +39,13 @@ const Option = styled.option`
     }
 `;
 
-export default (({ buttonClasses, className }) => {
+export default (({ className }) => {
     const { provider, network } = useStore(selectWeb3Info, shallow);
     const { navMenuOpen } = useContext(NavContext);
     return (
         <TWPopup
             className={className}
             navMenuOpen={navMenuOpen}
-            buttonClasses={buttonClasses}
             preview={
                 <NetworkPreview
                     networkID={network?.toString() ?? '0'}
@@ -69,7 +68,6 @@ export default (({ buttonClasses, className }) => {
         </TWPopup>
     );
 }) as React.FC<{
-    buttonClasses?: string;
     className?: string;
 }>;
 

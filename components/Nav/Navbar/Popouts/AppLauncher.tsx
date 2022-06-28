@@ -8,7 +8,7 @@ import {
 import { useStore } from '~/store/main';
 import { selectIsDark } from '~/store/ThemeSlice';
 import {
-    Link,
+    StyledLink,
     AppRow,
     ButtonRow,
     AppRowButton,
@@ -47,20 +47,20 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                 </ButtonRow>
             </GovernanceRow>
             {linkContent.map((content, i) => (
-                <Link key={i} href={content.link}>
+                <StyledLink key={i} href={content.link}>
                     <LinkRow>
                         <content.LogoImage alt={content.alt} />
                         <span>{content.label}</span>
                         <GradientBackground />
                     </LinkRow>
-                </Link>
+                </StyledLink>
             ))}
             <SocialIconRow>
                 {socialLinkContent.map((content, i) => (
-                    <Link key={i} href={content.link}>
+                    <StyledLink key={i} href={content.link}>
                         <content.LogoImage key={i} alt={content.alt} />
                         <GradientBackground />
-                    </Link>
+                    </StyledLink>
                 ))}
             </SocialIconRow>
         </Launcher>

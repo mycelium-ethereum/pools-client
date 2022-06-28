@@ -16,7 +16,7 @@ import WalletIcon from '../WalletIcon';
 
 const ARBISCAN_URI = 'https://arbiscan.io';
 
-export default (({ account, buttonClasses, className }) => {
+export default (({ account, className }) => {
     const { resetOnboard, handleConnect } = useStore(selectOnboardActions, shallow);
     const ensName = useStore(selectENSName);
     const { navMenuOpen } = useContext(NavContext);
@@ -29,28 +29,26 @@ export default (({ account, buttonClasses, className }) => {
                     ensName={ensName}
                     logout={resetOnboard}
                     navMenuOpen={navMenuOpen}
-                    buttonClasses={buttonClasses}
                 />
             ) : (
                 <Button
                     size="sm"
                     variant="transparent"
                     onClick={handleConnect}
-                    className={`mb-4 flex items-center rounded-[7px] bg-opacity-0 px-3 py-2 hover:bg-tracer-650 hover:text-white md:mb-0 lg:min-h-[36px] lg:rounded-[4px] lg:border-tracer-650 ${
+                    className={`mb-4 flex max-h-[36px] items-center rounded-[4px] bg-opacity-0 bg-dropdown-gradient px-3 hover:bg-tracer-650 hover:text-white md:mb-0 lg:rounded-[4px] ${
                         navMenuOpen
-                            ? 'border-white text-white'
-                            : 'border-tracer-midblue text-tracer-650 dark:text-white'
+                            ? 'border-tracer-midblue text-white md:border-white'
+                            : 'border-tracer-midblue text-tracer-650 dark:text-white md:border-tracer-650'
                     }`}
                 >
                     Connect Wallet
-                    <img src="/img/general/wallet.svg" className="ml-2 h-[22px] w-[22px] md:hidden" />
+                    <img src="/img/general/wallet.svg" className="ml-2 h-5 w-5 md:hidden" />
                 </Button>
             )}
         </div>
     );
 }) as React.FC<{
     account: string;
-    buttonClasses?: string;
     className?: string;
 }>;
 

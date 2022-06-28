@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Theme } from '~/store/ThemeSlice/themes';
 
-export const Link = styled.a.attrs({
+export const StyledLink = styled.a.attrs({
     target: '_blank',
     rel: 'noopener noreferrer',
 })``;
@@ -15,6 +15,7 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
     border-radius: 4px;
     margin-left: 16px;
     transition: all 0.3s ease;
+
     ${({ theme, selected, navMenuOpen }) => {
         switch (true) {
             case selected && navMenuOpen:
@@ -39,12 +40,6 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
                 `;
         }
     }}
-
-    /* Only allow hover effect on desktop */
-    &:hover {
-        background-color: #1c64f2;
-        color: #fff;
-    }
 `;
 
 export const AppLaunchNavButton = styled(NavButton)`
@@ -71,7 +66,12 @@ export const AppLaunchNavButton = styled(NavButton)`
         }}
     }
 
+    /* Only allow hover effect on desktop */
     @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #1c64f2 !important;
+            color: #fff;
+        }
         &:hover span > span {
             background-color: #fff;
         }
@@ -87,7 +87,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                 `;
                 case !selected && navMenuOpen:
                     return `
-                    border: 1px solid #1c64f2;
+                    border: 1px solid #ffffff;
                     background-color: #1c64f2;
                 `;
                 case selected && !navMenuOpen:
@@ -98,7 +98,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                 default:
                     return `
                     border: 1px solid #1c64f2;
-                    background-color: #ffffff;
+                    background-color: transparent;
                     transition: all 0.3s ease 0.3s;
                 `;
             }
@@ -107,6 +107,14 @@ export const AppLaunchNavButton = styled(NavButton)`
 `;
 
 export const SettingsNavButton = styled(NavButton)`
+    /* Only allow hover effect on desktop */
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: #1c64f2 !important;
+            color: #fff;
+        }
+    }
+
     ${({ theme, selected, navMenuOpen }) => {
         switch (true) {
             case selected && navMenuOpen:
@@ -232,7 +240,7 @@ export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
     }
 `;
 
-export const ToggleSwitch = styled(Link)`
+export const ToggleSwitch = styled.button`
     position: relative;
     display: flex;
     align-items: center;
@@ -314,8 +322,11 @@ export const Slider = styled.span<{ isSwitchedOn: boolean }>`
 export const VersionSelector = styled(PopoutOption)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
-    margin-right: 32px;
+    margin-right: 6px;
 
+    @media only screen and (min-width: 375px) {
+        margin-right: 32px;
+    }
     @media only screen and (min-width: 768px) {
         margin-right: 0;
     }
@@ -414,7 +425,7 @@ export const AppRow = styled(LauncherRow)`
     }
 `;
 
-export const AppRowButton = styled(Link)`
+export const AppRowButton = styled(StyledLink)`
     position: relative;
     display: flex;
     align-items: center;
@@ -458,7 +469,7 @@ export const ButtonRow = styled.div`
     display: flex;
 `;
 
-export const GovernanceButton = styled(Link)`
+export const GovernanceButton = styled(StyledLink)`
     position: relative;
     display: flex;
     align-items: center;

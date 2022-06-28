@@ -9,10 +9,10 @@ const useValues = () => {
     const [navMenuOpen, setNavMenuOpen] = useState<boolean>(false);
 
     return {
-        launcherMenuOpen,
-        setLauncherMenuOpen,
         navMenuOpen,
         setNavMenuOpen,
+        launcherMenuOpen,
+        setLauncherMenuOpen,
     };
 };
 

@@ -7,7 +7,8 @@ import { Container } from '~/components/General/Container';
 import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
 import { LauncherToggle } from '~/components/Nav/Navbar/Buttons';
-import HamburgerMenu from '~/components/Nav/Navbar/MobileMenu/HamburgerMenu';
+import HamburgerMenu from '~/components/Nav/Navbar/MobileMenus/HamburgerMenu';
+import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
 import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
@@ -16,7 +17,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
-import MobileMenu from './MobileMenu';
+import MobileMenu from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
 import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
 
@@ -66,13 +67,35 @@ const NavBarContent: React.FC<{
     //     setLauncherMenuOpen(false);
     // };
 
-    const handleOpen = useCallback(() => {
-        setNavMenuOpen(true);
-        setLauncherMenuOpen(true);
+    const handleMenuOpen = () => {
+        if (launcherMenuOpen) {
+            setLauncherMenuOpen(false);
+            setTimeout(() => {
+                setNavMenuOpen(true);
+            }, 550);
+        } else {
+            setLauncherMenuOpen(false);
+            setNavMenuOpen(true);
+        }
+    };
+
+    const handleLauncherOpen = () => {
+        if (navMenuOpen) {
+            setNavMenuOpen(false);
+            setTimeout(() => {
+                setLauncherMenuOpen(true);
+            }, 550);
+        } else {
+            setNavMenuOpen(false);
+            setLauncherMenuOpen(true);
+        }
+    };
+
+    const handleMenuClose = useCallback(() => {
+        setNavMenuOpen(false);
     }, []);
 
-    const handleClose = useCallback(() => {
-        setNavMenuOpen(false);
+    const handleLauncherClose = useCallback(() => {
         setLauncherMenuOpen(false);
     }, []);
 
@@ -80,6 +103,8 @@ const NavBarContent: React.FC<{
     const handleResize = () => {
         if (window.innerWidth > 1280) {
             setNavMenuOpen(false);
+        }
+        if (window.innerWidth > 767) {
             setLauncherMenuOpen(false);
         }
     };
@@ -94,12 +119,12 @@ const NavBarContent: React.FC<{
 
     useEffect(() => {
         const root = document.getElementById('__next');
-        if (navMenuOpen) {
+        if (navMenuOpen || launcherMenuOpen) {
             root?.classList.add('overflow-hidden');
         } else {
             root?.classList.remove('overflow-hidden');
         }
-    }, [navMenuOpen]);
+    }, [navMenuOpen, launcherMenuOpen]);
 
     const activeStyles = 'bg-opacity-40 dark:bg-opacity-40';
     const inactiveStyles = 'dark:bg-opacity-0 bg-opacity-0';
@@ -161,20 +186,22 @@ const NavBarContent: React.FC<{
                             <div className="flex xl:hidden">
                                 <Hide.MD display="flex">
                                     <LauncherToggle
-                                        onClick={navMenuOpen ? handleClose : handleOpen}
-                                        isSelected={navMenuOpen}
-                                        navMenuOpen={navMenuOpen}
+                                        onClick={launcherMenuOpen ? handleLauncherClose : handleLauncherOpen}
+                                        isSelected={launcherMenuOpen}
+                                        navMenuOpen={navMenuOpen || launcherMenuOpen}
                                     />
                                 </Hide.MD>
                                 <HamburgerMenu
-                                    onClick={navMenuOpen ? handleClose : handleOpen}
-                                    navMenuOpen={navMenuOpen}
+                                    onClick={navMenuOpen ? handleMenuClose : handleMenuOpen}
+                                    isSelected={navMenuOpen}
+                                    navMenuOpen={navMenuOpen || launcherMenuOpen}
                                 />
                             </div>
                         </div>
                     </div>
                 </Container>
                 <MobileMenu account={account ?? ''} network={network} navMenuOpen={navMenuOpen} />
+                <LauncherMenu launcherMenuOpen={launcherMenuOpen} />
             </nav>
             {!navMenuOpen && !launcherMenuOpen && setShowOnboardModal && (
                 <HelpIcon setShowOnboardModal={setShowOnboardModal} />

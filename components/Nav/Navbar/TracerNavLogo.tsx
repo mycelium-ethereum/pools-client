@@ -7,7 +7,7 @@ const TracerNavLogo: React.FC = () => {
         <Link href="/" passHref>
             <a className="flex items-center">
                 <button className="cursor-pointer">
-                    <PoolsLogo className="h-auto w-[202px]" alt="tracer-logo" />
+                    <PoolsLogo className="h-auto w-full max-w-[202px]" alt="tracer-logo" />
                 </button>
             </a>
         </Link>
