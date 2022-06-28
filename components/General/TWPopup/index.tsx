@@ -49,4 +49,5 @@ export default (({ preview, className, buttonClasses, navMenuOpen, children }) =
 const Arrow = styled(DownOutlined)`
     z-index: 11;
     vertical-align: 0;
+    transition: transform 0.2s ease;
 `;
