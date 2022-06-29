@@ -33,7 +33,7 @@ const MobileMenu = ({
                         {!!network ? <NetworkDropdown className="relative whitespace-nowrap" /> : null}
                         <ul>
                             {menuContent.map((item) => (
-                                <NavItem key={item.link} paddingLevel={2} selected={path === item.link}>
+                                <NavItem key={item.link} paddingLevel={2} selected={path === item.link} linkPadding>
                                     <Link href={item.link} passHref>
                                         <a onClick={handleMenuClose}>{item.label}</a>
                                     </Link>

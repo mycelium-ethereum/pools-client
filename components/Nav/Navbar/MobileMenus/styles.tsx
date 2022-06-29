@@ -54,12 +54,33 @@ export enum PaddingLevelEnum {
     three = 3,
 }
 
-export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
+export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; linkPadding?: boolean }>`
     position: relative;
     width: 100%;
     font-weight: ${({ selected }) => (selected ? '700' : '300')};
     font-size: 32px;
     line-height: 40px;
+
+    ${({ paddingLevel, linkPadding }) => {
+        switch (true) {
+            case paddingLevel === PaddingLevelEnum.one && !linkPadding:
+                return `
+                    padding: 8px 0;
+                `;
+            case paddingLevel === PaddingLevelEnum.two && !linkPadding:
+                return `
+                    padding: 12px 0;
+                `;
+            case paddingLevel === PaddingLevelEnum.three && !linkPadding:
+                return `
+                    padding: 26px 0;
+                `;
+            default:
+                return `
+                    padding: 0;
+                `;
+        }
+    }}
 
     &:after {
         content: '';
@@ -90,7 +111,6 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
 
     > a {
         display: flex;
-
         ${({ paddingLevel }) => {
             switch (paddingLevel) {
                 case PaddingLevelEnum.one:
@@ -107,7 +127,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
                 `;
                 default:
                     return `
-                    padding: 16px 0;
+                    padding: 12px 0;
                 `;
             }
         }}
@@ -115,6 +135,9 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
 `;
 
 export const SocialItem = styled(NavItem)`
+    &:first-of-type {
+        margin-top: 16px;
+    }
     > a {
         display: flex;
         align-items: center;
