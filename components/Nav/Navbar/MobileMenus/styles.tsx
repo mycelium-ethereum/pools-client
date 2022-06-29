@@ -13,9 +13,22 @@ export const NavMenu = styled.menu<{ isOpen: boolean }>`
     margin: 0;
     z-index: 49;
     font-family: 'Aileron';
+
+    > div:first-of-type {
+        z-index: 1;
+    }
+`;
+
+export const MeshBackground = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
     background-image: url('/img/launcher/mesh.png'), linear-gradient(#1c64f2, #1c64f2);
     background-size: cover;
     background-position: right;
+    z-index: 0;
 `;
 
 export const NavList = styled.div`
@@ -51,6 +64,10 @@ export const ScrollContainer = styled.div`
 `;
 
 export const LauncherScrollContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
     @media only screen and (max-height: 650px) {
         overflow-y: auto;
         overflow-x: hidden;

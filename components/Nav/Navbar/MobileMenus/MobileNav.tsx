@@ -5,7 +5,7 @@ import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { Container } from '~/components/General/Container';
 import AccountDropdown from '~/components/Nav/Navbar/AccountDropdown';
 import { menuContent } from '~/components/Nav/Navbar/MobileMenus/navContent';
-import { NavItem, NavMenu, NavList, ScrollContainer } from '~/components/Nav/Navbar/MobileMenus/styles';
+import { NavItem, NavMenu, NavList, ScrollContainer, MeshBackground } from '~/components/Nav/Navbar/MobileMenus/styles';
 import NetworkDropdown from '~/components/Nav/Navbar/NetworkDropdown';
 import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
 
@@ -44,6 +44,7 @@ const MobileMenu = ({
                     <SettingsPopout isActive={true} />
                 </NavList>
             </Container>
+            <MeshBackground />
         </NavMenu>
     );
 };

@@ -9,6 +9,7 @@ import {
     SocialIconRow,
     SocialItem,
     LauncherScrollContainer,
+    MeshBackground,
 } from '~/components/Nav/Navbar/MobileMenus/styles';
 
 const LauncherMenu = ({ launcherMenuOpen }: { launcherMenuOpen: boolean }): JSX.Element => {
@@ -48,6 +49,7 @@ const LauncherMenu = ({ launcherMenuOpen }: { launcherMenuOpen: boolean }): JSX.
                     </LauncherScrollContainer>
                 </NavList>
             </Container>
+            <MeshBackground />
         </NavMenu>
     );
 };
