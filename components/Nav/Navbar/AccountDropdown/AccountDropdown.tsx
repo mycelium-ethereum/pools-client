@@ -1,5 +1,6 @@
 import React, { useContext, useMemo } from 'react';
 import { ethers } from 'ethers';
+import { isAddress } from 'ethers/lib/utils';
 import shallow from 'zustand/shallow';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
@@ -60,6 +61,7 @@ const AccountDropdownButton = ({
     buttonClasses,
 }: AccountDropdownButtonProps) => {
     const accountParsed = useMemo(() => ensName || account || 'Account', [account, ensName]);
+
     return (
         <TWPopup
             buttonClasses={buttonClasses}
@@ -67,13 +69,17 @@ const AccountDropdownButton = ({
             preview={
                 <div className={'my-auto flex w-full items-center'}>
                     <WalletIcon />
-                    <Styled.Account>{truncateMiddleEthAddress(accountParsed)}</Styled.Account>
+                    <Styled.Account>
+                        {isAddress(accountParsed) ? truncateMiddleEthAddress(accountParsed) : accountParsed}
+                    </Styled.Account>
                 </div>
             }
         >
             <Styled.CopyAccount>
                 <WalletIcon />
-                <Styled.Account>{truncateMiddleEthAddress(accountParsed)}</Styled.Account>
+                <Styled.Account>
+                    {isAddress(accountParsed) ? truncateMiddleEthAddress(accountParsed) : accountParsed}
+                </Styled.Account>
                 <TooltipSelector tooltip={{ content: <>Copy</> }}>
                     <Styled.CopyIcon
                         onClick={() => {
