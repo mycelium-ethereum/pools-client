@@ -3,6 +3,7 @@ import { CommitActionEnum } from '@tracer-protocol/pools-js';
 import { TracerMintButton } from '~/archetypes/BuyTokens/ExchangeButtons';
 import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
+import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
 
 const MintButton: React.FC<ExchangeButtonProps> = ({
     swapState,
@@ -53,7 +54,7 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
                 }}
             >
                 <span className="mr-2 inline-block">Mint on</span>
-                <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
+                <TracerSVG className="w-[90px]" alt="Tracer logo" />
             </TracerMintButton>
         );
     }

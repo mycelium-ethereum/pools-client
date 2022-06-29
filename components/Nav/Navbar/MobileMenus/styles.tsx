@@ -57,6 +57,7 @@ export const NavList = styled.div`
 `;
 export const ScrollContainer = styled.div`
     height: 424px;
+
     @media only screen and (max-height: 700px) {
         overflow-y: auto;
         overflow-x: hidden;
@@ -68,6 +69,7 @@ export const LauncherScrollContainer = styled.div`
     flex-direction: column;
     justify-content: space-between;
     height: 100%;
+
     @media only screen and (max-height: 650px) {
         overflow-y: auto;
         overflow-x: hidden;
@@ -184,6 +186,7 @@ export const SocialIconRow = styled.div`
     display: flex;
     align-items: center;
     margin-top: 16px;
+    color: #ffffff;
 
     svg {
         margin-right: 56px;

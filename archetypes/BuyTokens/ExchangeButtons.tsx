@@ -2,14 +2,15 @@ import React, { useState, useMemo } from 'react';
 import { Transition } from '@headlessui/react';
 import styled from 'styled-components';
 import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import MintButton from '~/archetypes/BuyTokens/MintButton';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
-import MintButton from '~/archetypes/BuyTokens/MintButton';
 import { HiddenExpand } from '~/components/General';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TimeLeft from '~/components/TimeLeft';
 import { useBigNumber } from '~/context/SwapContext';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
+import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
 
@@ -110,7 +111,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                                 disabled={!isValidAmount}
                             >
                                 <span className="mr-2 inline-block">Mint on</span>
-                                <img className="w-[90px]" alt="tracer-logo" src={'/img/logos/tracer/tracer_logo.svg'} />
+                                <TracerSVG className="w-[90px]" alt="Tracer logo" />
                             </TracerMintButton>
                         )}
                         <MintButton
