@@ -3,11 +3,14 @@ import { DownOutlined } from '@ant-design/icons';
 import { Popover, Transition } from '@headlessui/react';
 import styled from 'styled-components';
 
-const DEFAULT =
-    'inline-flex justify-center w-full rounded-md border-white border shadow-sm px-4 py-2 bg-white bg-opacity-20 text-sm font-medium text-white whitespace-nowrap hover:bg-blue-900 focus:outline-none focus:border-solid';
-
 // const DropdownPopup
-export default (({ preview, className, buttonClasses, children }) => {
+export default (({ preview, className, buttonClasses, navMenuOpen, children }) => {
+    const DEFAULT = `bg-dropdown-gradient flex items-center h-[36px] md:justify-center mb-4 md:mb-0 w-full rounded-[4px] border shadow-sm px-3 md:px-4 dark:hover:bg-tracer-650 text-sm font-medium dark:text-white whitespace-nowrap hover:bg-tracer-650 hover:text-white transition-colors duration-300 focus:outline-none focus:border-solid ${
+        navMenuOpen
+            ? 'text-white border-tracer-midblue md:border-white'
+            : 'text-tracer-650 border-tracer-650 delay-300 lg:delay-[unset]'
+    }`;
+
     return (
         <Popover as="div" className={className ?? ''}>
             {({ open }) => (
@@ -39,11 +42,12 @@ export default (({ preview, className, buttonClasses, children }) => {
 }) as React.FC<{
     preview: React.ReactNode;
     buttonClasses?: string;
+    navMenuOpen?: boolean;
     className?: string;
 }>;
 
 const Arrow = styled(DownOutlined)`
-    transition: all 200ms ease-in-out;
     z-index: 11;
     vertical-align: 0;
+    transition: transform 0.2s ease;
 `;

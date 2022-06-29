@@ -13,7 +13,9 @@ export const ArbitrumLogo = styled(Logo)`
 
 export const ViewOnArbiscanOption = styled.a`
     display: flex;
+    align-items: center;
     padding: 0.5rem 1rem;
+    white-space: nowrap;
     &:hover {
         background: ${({ theme }) => theme.button.hover};
     }
@@ -60,9 +62,10 @@ export const CopyIcon = styled(CopyOutlined)`
 `;
 
 export const Account = styled.div`
+    display: flex;
+    align-items: center;
     padding: 0 0.5rem;
-    align-self: center;
-
+    font-size: 0.75rem; /* 14px */
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
