@@ -230,6 +230,7 @@ export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
 `;
 
 export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
+    padding-top: 16px;
     /* Active/inactive states */
     > div:nth-child(1) {
         transition-delay: ${({ isActive }) => (isActive ? '100ms' : '300ms')};
@@ -239,6 +240,10 @@ export const StyledSettingsPopout = styled(Popout)<{ isActive: boolean }>`
     }
     > div:nth-child(3) {
         transition-delay: ${({ isActive }) => (isActive ? '300ms' : '100ms')};
+    }
+
+    @media only screen and (min-width: 1024px) {
+        padding-top: 0px;
     }
 `;
 

@@ -13,10 +13,12 @@ const MobileMenu = ({
     account,
     network,
     navMenuOpen,
+    handleMenuClose,
 }: {
     account: string;
     network: KnownNetwork | undefined;
     navMenuOpen: boolean;
+    handleMenuClose: () => void;
 }): JSX.Element => {
     const path = useRouter().pathname;
 
@@ -30,12 +32,12 @@ const MobileMenu = ({
                         </div>
                         {!!network ? <NetworkDropdown className="relative whitespace-nowrap" /> : null}
                         <ul>
-                            {menuContent.map((item, index) => (
-                                <Link key={index} href={item.link}>
-                                    <NavItem paddingLevel={2} selected={path === item.link}>
-                                        {item.label}
-                                    </NavItem>
-                                </Link>
+                            {menuContent.map((item) => (
+                                <NavItem key={item.link} paddingLevel={2} selected={path === item.link}>
+                                    <Link href={item.link} passHref>
+                                        <a onClick={handleMenuClose}>{item.label}</a>
+                                    </Link>
+                                </NavItem>
                             ))}
                         </ul>
                     </ScrollContainer>

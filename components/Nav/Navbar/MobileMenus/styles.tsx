@@ -1,17 +1,18 @@
 import styled from 'styled-components';
 
 export const NavMenu = styled.menu<{ isOpen: boolean }>`
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
+    display: flex;
     width: 100%;
     padding: 0;
     overflow: hidden;
     transition: height 0.5s ease;
-    height: ${({ isOpen }) => (isOpen ? '100vh' : '0vh')};
+    height: ${({ isOpen }) => (isOpen ? '100%' : '0%')};
     background-color: #1c64f2;
     margin: 0;
-    z-index: 0;
+    z-index: 49;
     font-family: 'Aileron';
 `;
 
@@ -20,7 +21,7 @@ export const NavList = styled.div`
     top: 0;
     left: 16px;
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 60px);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -40,7 +41,7 @@ export const NavList = styled.div`
     }
 `;
 export const ScrollContainer = styled.div`
-    height: 484px;
+    height: 424px;
     @media only screen and (max-height: 700px) {
         overflow-y: auto;
         overflow-x: hidden;
@@ -57,29 +58,8 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
     position: relative;
     width: 100%;
     font-weight: ${({ selected }) => (selected ? '700' : '300')};
-    font-size: 40px;
-    line-height: 44px;
-
-    ${({ paddingLevel }) => {
-        switch (paddingLevel) {
-            case PaddingLevelEnum.one:
-                return `
-                    padding: 8px 0;
-                `;
-            case PaddingLevelEnum.two:
-                return `
-                    padding: 16px 0;
-                `;
-            case PaddingLevelEnum.three:
-                return `
-                    padding: 26px 0;
-                `;
-            default:
-                return `
-                    padding: 16px 0;
-                `;
-        }
-    }}
+    font-size: 32px;
+    line-height: 40px;
 
     &:after {
         content: '';
@@ -90,10 +70,6 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
         width: 100%;
         background: linear-gradient(90deg, #3da8f5 50%, rgba(61, 168, 245, 0) 100.15%);
     }
-
-    /* &:last-of-type:after {
-        display: none;
-    } */
 
     &:hover:before {
         opacity: 1;
@@ -110,6 +86,31 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number }>`
         z-index: -1;
         transition: opacity 0.3s ease;
         opacity: 0;
+    }
+
+    > a {
+        display: flex;
+
+        ${({ paddingLevel }) => {
+            switch (paddingLevel) {
+                case PaddingLevelEnum.one:
+                    return `
+                    padding: 8px 0;
+                `;
+                case PaddingLevelEnum.two:
+                    return `
+                    padding: 12px 0;
+                `;
+                case PaddingLevelEnum.three:
+                    return `
+                    padding: 26px 0;
+                `;
+                default:
+                    return `
+                    padding: 16px 0;
+                `;
+            }
+        }}
     }
 `;
 

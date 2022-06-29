@@ -48,7 +48,7 @@ const NavBarContent: React.FC<{
     const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
-        if ((!!scrollContainer && scrollContainer.scrollTop >= 1) || window.innerWidth < 1024) {
+        if ((!!scrollContainer && scrollContainer.scrollTop >= 1) || window.innerWidth < BreakpointEnum.desktopSml) {
             setNavBackdrop(true);
         } else {
             setNavBackdrop(false);
@@ -69,7 +69,7 @@ const NavBarContent: React.FC<{
             setLauncherMenuOpen(false);
             setTimeout(() => {
                 setNavMenuOpen(true);
-            }, ANIMATION_DURATION * 1000 * 2);
+            }, ANIMATION_DURATION * 1000 * 2); // Double animation time in milliseconds
         } else {
             setLauncherMenuOpen(false);
             setNavMenuOpen(true);
@@ -123,13 +123,15 @@ const NavBarContent: React.FC<{
         }
     }, [navMenuOpen, launcherMenuOpen]);
 
-    const activeStyles = 'bg-opacity-40 dark:bg-opacity-40';
+    const activeStyles = `${
+        navMenuOpen || launcherMenuOpen ? 'bg-opacity-0' : 'bg-opacity-40 dark:bg-opacity-40 bg-white dark:bg-[#00005E]'
+    }`;
     const inactiveStyles = 'dark:bg-opacity-0 bg-opacity-0';
 
     return (
         <>
             <nav
-                className={`sticky top-0 left-0 z-50 h-[60px] bg-white text-base backdrop-blur-sm transition-[background-color] duration-300 dark:bg-[#00005E] dark:text-white ${
+                className={`sticky top-0 left-0 z-50 h-[60px] text-base backdrop-blur-sm transition-[background-color] duration-300  dark:text-white ${
                     navBackdrop ? activeStyles : inactiveStyles
                 }  ${navMenuOpen || launcherMenuOpen ? 'text-white' : 'text-tracer-650'}`}
             >
@@ -177,6 +179,7 @@ const NavBarContent: React.FC<{
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={linkStyles}
+                                    onClick={handleMenuClose}
                                 >
                                     <span>Docs</span>
                                 </a>
@@ -207,9 +210,14 @@ const NavBarContent: React.FC<{
                         </div>
                     </div>
                 </Container>
-                <MobileMenu account={account ?? ''} network={network} navMenuOpen={navMenuOpen} />
-                <LauncherMenu launcherMenuOpen={launcherMenuOpen} />
             </nav>
+            <MobileMenu
+                account={account ?? ''}
+                network={network}
+                navMenuOpen={navMenuOpen}
+                handleMenuClose={handleMenuClose}
+            />
+            <LauncherMenu launcherMenuOpen={launcherMenuOpen} />
             {!navMenuOpen && !launcherMenuOpen && setShowOnboardModal && (
                 <HelpIcon setShowOnboardModal={setShowOnboardModal} />
             )}
