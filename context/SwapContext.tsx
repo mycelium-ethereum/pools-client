@@ -1,6 +1,7 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
+import { IdcardFilled } from '@ant-design/icons';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType, PoolInfo } from '~/types/pools';
@@ -134,8 +135,17 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 leverage = !Number.isNaN(state.leverage) ? state.leverage : 3;
                 // set the side to long if its not already
                 side = !Number.isNaN(state.side) ? state.side : SideEnum.long;
-                pool = state.markets?.[action.market]?.[leverage][0]?.poolInstance.address;
-                console.debug(`Setting pool: ${pool?.slice()}`);
+
+                // ensure the leverage we are using exists for this market
+                // if not, fall back to the first available leverage amount
+                if (!state.markets?.[action.market]?.[leverage]?.length) {
+                    const firstAvailableLeverage = Object.keys(state.markets?.[action.market] || {})[0];
+                    leverage = Number(firstAvailableLeverage || 3);
+                }
+
+                pool = state.markets?.[action.market]?.[leverage]?.[0]?.poolInstance?.address;
+
+                console.log(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
                     market: action.market,
