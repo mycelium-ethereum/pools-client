@@ -31,7 +31,7 @@ export default (({ preview, className, buttonClasses, navMenuOpen, children }) =
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="focus:outline-none absolute left-0 z-20 w-full origin-top-right -translate-y-2 rounded-[4px] bg-theme-background text-black shadow-lg ring-1 ring-black ring-opacity-5 dark:text-white md:translate-y-2">
+                        <Popover.Panel className="focus:outline-none absolute left-0 z-20 mt-2 w-full origin-top-right rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
                             {children}
                         </Popover.Panel>
                     </Transition>
