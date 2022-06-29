@@ -1,7 +1,6 @@
 import React, { useContext, useReducer, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
-import { IdcardFilled } from '@ant-design/icons';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
 import { PoolType, PoolInfo } from '~/types/pools';
