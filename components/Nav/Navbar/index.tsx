@@ -48,7 +48,7 @@ const NavBarContent: React.FC<{
     const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
-        if ((!!scrollContainer && scrollContainer.scrollTop >= 1) || window.innerWidth < BreakpointEnum.desktopSml) {
+        if ((!!scrollContainer && scrollContainer.scrollTop >= 1) || window.innerWidth < BreakpointEnum.DesktopSml) {
             setNavBackdrop(true);
         } else {
             setNavBackdrop(false);
