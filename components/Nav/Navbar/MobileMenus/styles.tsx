@@ -10,10 +10,12 @@ export const NavMenu = styled.menu<{ isOpen: boolean }>`
     overflow: hidden;
     transition: height 0.5s ease;
     height: ${({ isOpen }) => (isOpen ? '100%' : '0%')};
-    background-color: #1c64f2;
     margin: 0;
     z-index: 49;
     font-family: 'Aileron';
+    background-image: url('/img/launcher/mesh.png'), linear-gradient(#1c64f2, #1c64f2);
+    background-size: cover;
+    background-position: right;
 `;
 
 export const NavList = styled.div`
