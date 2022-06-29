@@ -68,6 +68,7 @@ export const toApproxCurrency: (num_: BigNumber | number, precision?: number) =>
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: precision ?? 2,
+        maximumFractionDigits: precision ?? 2,
     });
 };
 
@@ -82,6 +83,7 @@ export const toApproxLocaleString: (num_: BigNumber | number, precision?: number
     }
     return num.toLocaleString('en-us', {
         minimumFractionDigits: precision ?? 2,
+        maximumFractionDigits: precision ?? 2,
     });
 };
 
@@ -194,11 +196,11 @@ export const formatDate: (
         hideDate: false,
         hideTime: false,
     },
-) => {
-    const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
-    const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
-    return { timeString, dateString };
-};
+    ) => {
+        const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
+        const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
+        return { timeString, dateString };
+    };
 
 /**
  * Checks if a number is an arbitrarily small number. Returns is an approximated value instead
