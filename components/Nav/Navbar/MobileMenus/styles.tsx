@@ -48,6 +48,13 @@ export const ScrollContainer = styled.div`
     }
 `;
 
+export const LauncherScrollContainer = styled.div`
+    @media only screen and (max-height: 650px) {
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+`;
+
 export enum PaddingLevelEnum {
     one = 1,
     two = 2,
@@ -60,6 +67,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
     font-weight: ${({ selected }) => (selected ? '700' : '300')};
     font-size: 32px;
     line-height: 40px;
+    color: #ffffff;
 
     ${({ paddingLevel, linkPadding }) => {
         switch (true) {
@@ -111,6 +119,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
 
     > a {
         display: flex;
+
         ${({ paddingLevel }) => {
             switch (paddingLevel) {
                 case PaddingLevelEnum.one:
