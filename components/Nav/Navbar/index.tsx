@@ -19,7 +19,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
-import MobileMenu from './MobileMenus/MobileNav';
+import MobileNav from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
 import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
 
@@ -150,12 +150,12 @@ const NavBarContent: React.FC<{
                                 </Link>
                             </li>
                             <li className={listItemStyles}>
-                                <Link href="/pools" passHref>
+                                <Link href="/trade" passHref>
                                     <a
                                         id="browse-pools"
-                                        className={classNames(linkStyles, route === 'pools' ? selectedStyles : '')}
+                                        className={classNames(linkStyles, route === 'trade' ? selectedStyles : '')}
                                     >
-                                        Pools
+                                        Trade
                                     </a>
                                 </Link>
                             </li>
@@ -211,7 +211,7 @@ const NavBarContent: React.FC<{
                     </div>
                 </Container>
             </nav>
-            <MobileMenu
+            <MobileNav
                 account={account ?? ''}
                 network={network}
                 navMenuOpen={navMenuOpen}

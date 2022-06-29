@@ -34,10 +34,16 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolMintCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeMint,
+        },
     },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
+        tooltip: {
+            optionKey: TooltipKeys.TradeBurn,
+        },
     },
     {
         key: CommitActionEnum.flip,
@@ -48,6 +54,9 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeFlip,
+        },
     },
 ];
 
@@ -100,7 +109,7 @@ export default styled((({ onClose, className }) => {
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    New Commit
+                    Open a Trade
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>
@@ -110,6 +119,7 @@ export default styled((({ onClose, className }) => {
                     value={commitAction ?? CommitActionEnum.mint}
                     size={'lg'}
                     color={'tracer'}
+                    fullWidth={true}
                     onClick={(val) => {
                         if (swapDispatch) {
                             swapDispatch({ type: 'setAmount', value: '' });

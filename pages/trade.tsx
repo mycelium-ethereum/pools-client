@@ -15,7 +15,7 @@ export default (() => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     useEffect(() => {
-        router.prefetch('/');
+        router.prefetch('/trade');
     }, []);
 
     return (

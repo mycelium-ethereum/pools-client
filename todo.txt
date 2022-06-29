@@ -1,0 +1,6 @@
+
+    Navigation bar item should be called “Trade”
+
+    URL should be /trade
+
+
