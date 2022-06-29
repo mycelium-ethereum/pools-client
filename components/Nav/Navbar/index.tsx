@@ -39,7 +39,7 @@ const NavBarContent: React.FC<{
     const { navMenuOpen, setNavMenuOpen, launcherMenuOpen, setLauncherMenuOpen } = useContext(NavContext);
     const [navBackdrop, setNavBackdrop] = useState<boolean>(true);
     const routes = useRouter().asPath.split('/');
-    const route = routes[routes.length - 1];
+    const route = routes[routes.length - 2];
     const { account, network } = useStore(selectWeb3Info, shallow);
 
     const listItemStyles = 'flex';
