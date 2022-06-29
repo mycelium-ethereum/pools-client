@@ -14,7 +14,7 @@ interface ContextProps {
 
 // the key here is the leverage amount
 // this allows access through Markets[selectedMarket][selectedLeverage]
-export type Market = Record<string, PoolType>[];
+export type Market = Record<string, PoolInfo>[];
 
 export type SwapState = {
     amount: string;
@@ -104,7 +104,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setSide':
                 return { ...state, side: action.value };
             case 'setPoolFromLeverage':
-                pool = state.markets?.[state.market]?.[action.value][0]?.address;
+                pool = state.markets?.[state.market]?.[action.value][0]?.poolInstance.address;
                 console.debug(`Setting pool from leverage: ${pool?.slice()}`);
                 return {
                     ...state,
@@ -134,7 +134,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 leverage = !Number.isNaN(state.leverage) ? state.leverage : 3;
                 // set the side to long if its not already
                 side = !Number.isNaN(state.side) ? state.side : SideEnum.long;
-                pool = state.markets?.[action.market]?.[leverage][0]?.address;
+                pool = state.markets?.[action.market]?.[leverage][0]?.poolInstance.address;
                 console.debug(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
@@ -187,7 +187,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 // hopefully valid pool name
                 if (marketSymbol) {
                     if (!markets[marketSymbol]) {
-                        markets[marketSymbol] = {} as Record<string, PoolType>[];
+                        markets[marketSymbol] = {} as Record<string, PoolInfo>[];
                     }
                     // markets[marketSymbol][leverage] = pool.poolInstance;
                     markets[marketSymbol][leverage] = markets[marketSymbol][leverage] || [];

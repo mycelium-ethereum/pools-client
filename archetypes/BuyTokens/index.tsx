@@ -17,9 +17,9 @@ import InfoIcon from '~/public/img/general/info.svg';
 import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
-import { PoolType } from '~/types/pools';
+import { PoolInfo } from '~/types/pools';
 
-const TokenBuySell: React.FC = () => {
+const BuyTokens: React.FC = () => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { amount, leverage, market, markets, selectedPool, side, commitAction, balanceType, invalidAmount } =
         swapState || {};
@@ -183,7 +183,7 @@ const TokenBuySell: React.FC = () => {
                                 market &&
                                 markets &&
                                 leverage &&
-                                (markets?.[market]?.[leverage] as unknown as PoolType[]).length > 1) ||
+                                (markets?.[market]?.[leverage] as unknown as PoolInfo[])?.length > 1) ||
                             (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Market type')
                         ) {
                             return (
@@ -244,7 +244,7 @@ const TokenBuySell: React.FC = () => {
     );
 };
 
-export default TokenBuySell;
+export default BuyTokens;
 
 const FormBackdrop = styled.section`
     background: var(--background);
