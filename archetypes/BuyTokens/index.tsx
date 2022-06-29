@@ -183,7 +183,7 @@ const BuyTokens: React.FC = () => {
                                 market &&
                                 markets &&
                                 leverage &&
-                                (markets?.[market]?.[leverage] as unknown as PoolInfo[]).length > 1) ||
+                                (markets?.[market]?.[leverage] as unknown as PoolInfo[])?.length > 1) ||
                             (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Market type')
                         ) {
                             return (
