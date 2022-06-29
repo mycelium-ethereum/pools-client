@@ -86,7 +86,7 @@ export const LeverageSelector: React.FC<LeverageSelectorProps> = ({ leverage, ma
     const LEVERAGE_OPTIONS = marketToLeverage(markets);
     const DEFAULT_OPTIONS = ['3', '10']; // Placeholder while waiting for correct options to load
     const SELECTOR_OPTIONS = LEVERAGE_OPTIONS && LEVERAGE_OPTIONS.length > 0 ? LEVERAGE_OPTIONS : DEFAULT_OPTIONS;
-    // TODO: disable deprecated pool options
+
     return (
         <TWButtonGroup
             fullWidth
