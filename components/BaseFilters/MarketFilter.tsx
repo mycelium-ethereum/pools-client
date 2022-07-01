@@ -30,7 +30,6 @@ export const MarketFilter = ({
             } else {
                 setOptions([]);
             }
-            onMarketSelect(MarketFilterEnum.All);
         } else {
             setOptions([]);
             onMarketSelect(MarketFilterEnum.All);

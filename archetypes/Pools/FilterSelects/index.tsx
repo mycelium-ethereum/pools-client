@@ -58,6 +58,12 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const onRebalanceFocus = (option: number) =>
         dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
 
+    const onResetClick = () => {
+        onMarketSelect(MarketFilterEnum.All);
+        onLeverageFilterSelect(LeverageFilterEnum.All);
+        onCollateralFilterSelect(CollateralFilterEnum.All);
+    };
+
     useEffect(() => {
         if (network) {
             onMarketSelect(MarketFilterEnum.All);
@@ -80,7 +86,10 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
             >
                 <BaseFilters.Content>
                     <div>
-                        <BaseFilters.Heading>Market</BaseFilters.Heading>
+                        <BaseFilters.HeadingContainer>
+                            <BaseFilters.Heading>Market</BaseFilters.Heading>
+                            <BaseFilters.ResetButton onClick={onResetClick}>Reset</BaseFilters.ResetButton>
+                        </BaseFilters.HeadingContainer>
                         <BaseFilters.MarketFilter
                             marketFilter={state.marketFilter}
                             onMarketSelect={onMarketSelect}
@@ -97,7 +106,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             />
                         </BaseFilters.DropdownContainer>
                         <BaseFilters.DropdownContainer>
-                            <BaseFilters.Text>Power Leverage</BaseFilters.Text>
+                            <BaseFilters.Text>Leverage</BaseFilters.Text>
                             <BaseFilters.LeverageFilter
                                 leverageFilter={state.leverageFilter}
                                 onSelect={onLeverageFilterSelect}
