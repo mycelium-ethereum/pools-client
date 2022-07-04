@@ -20,7 +20,6 @@ export default (({ preview, className, buttonClasses, navMenuOpen, children }) =
                         {preview}
                         <Arrow className="ml-1 self-center" style={{ transform: open ? 'rotate(180deg)' : '' }} />
                     </Popover.Button>
-
                     {/* Menu */}
                     <Transition
                         as={Fragment}
