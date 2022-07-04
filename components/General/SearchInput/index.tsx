@@ -37,7 +37,7 @@ export const SearchIconWrap = styled.div`
     pointer-events: none;
 `;
 
-const SearchIcon = styled(SearchOutlined)`
+export const SearchIcon = styled(SearchOutlined)`
     height: 1.25rem;
     width: 1.25rem;
 

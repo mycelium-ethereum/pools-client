@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
+import { SearchOutlined } from '@ant-design/icons';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
@@ -146,7 +147,10 @@ export const Browse: React.FC = () => {
                 </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
                 {groupedSortedFilteredTokens.length === 0 && !isLoading && (
-                    <Styles.NoResults>No results found for '{escapeRegExp(state.search)}'</Styles.NoResults>
+                    <Styles.NoResults>
+                        <SearchOutlined aria-hidden="true" />
+                        No results found for '{escapeRegExp(state.search)}'
+                    </Styles.NoResults>
                 )}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];

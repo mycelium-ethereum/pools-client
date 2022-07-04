@@ -100,4 +100,21 @@ export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
 export const NoResults = styled.div`
     padding: 60px 0px 80px;
     text-align: center;
+    color: #9ca3af;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    margin: 0 auto;
+    font-size: 24px;
+    line-height: 32px;
+
+    > span svg {
+        height: 48px;
+        width: 48px;
+        margin-bottom: 8px;
+    }
+    > span svg path {
+        fill: #6b7280;
+    }
 `;
