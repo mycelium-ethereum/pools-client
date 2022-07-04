@@ -19,9 +19,9 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
-            <SEO {...seoContent.buyTokens} />
-            <NavBar setShowOnboardModal={setShowOnboardModal} />
             <SwapStore>
+                <SEO {...seoContent['/']} />
+                <NavBar setShowOnboardModal={setShowOnboardModal} />
                 <TokenBuySell />
             </SwapStore>
             <OnboardTradeModal
