@@ -4,8 +4,8 @@ export const menuContent = [
         label: 'Buy',
     },
     {
-        link: '/pools',
-        label: 'Pools',
+        link: '/trade',
+        label: 'Trade',
     },
     {
         link: '/portfolio',

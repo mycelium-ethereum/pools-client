@@ -34,10 +34,16 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolMintCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeMint,
+        },
     },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
+        tooltip: {
+            optionKey: TooltipKeys.TradeBurn,
+        },
     },
     {
         key: CommitActionEnum.flip,
@@ -48,6 +54,9 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeFlip,
+        },
     },
 ];
 
@@ -95,12 +104,29 @@ export default styled((({ onClose, className }) => {
         return getTradeOptions(poolStatus);
     }, [poolStatus]);
 
+    const generateTitle = () => {
+        switch (commitAction) {
+            case CommitActionEnum.mint:
+                `Open a Trade`;
+                break;
+            case CommitActionEnum.burn:
+                `Close a Trade`;
+                break;
+            case CommitActionEnum.flip:
+                `Reverse a Trade`;
+                break;
+            default:
+                `Open a Trade`;
+                break;
+        }
+    };
+
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    New Commit
+                    {generateTitle()}
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>
@@ -110,6 +136,7 @@ export default styled((({ onClose, className }) => {
                     value={commitAction ?? CommitActionEnum.mint}
                     size={'lg'}
                     color={'tracer'}
+                    fullWidth={true}
                     onClick={(val) => {
                         if (swapDispatch) {
                             swapDispatch({ type: 'setAmount', value: '' });

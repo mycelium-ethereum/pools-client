@@ -36,7 +36,7 @@ export const TotalMintCosts: React.FC<
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
-                    <Section label="Commit amount" showSectionDetails>
+                    <Section label="Cost of position" showSectionDetails>
                         <Styles.Transparent>{toApproxCurrency(amount)}</Styles.Transparent>
                     </Section>
                     <Section label="Gas fee" showSectionDetails>
@@ -135,15 +135,12 @@ export const ExpectedExposure: React.FC<
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
-                    <Section
-                        label={`Commit amount (${baseAsset}) at ${toApproxCurrency(oraclePrice)} USD/${baseAsset}`}
-                        showSectionDetails
-                    >
+                    <Section label={`Market value at ${toApproxCurrency(oraclePrice)} USD`} showSectionDetails>
                         <Styles.Transparent>
                             {commitAmount.toFixed(3)} {baseAsset}
                         </Styles.Transparent>
                     </Section>
-                    <Section label="Pool power leverage" showSectionDetails>
+                    <Section label="Leverage" showSectionDetails>
                         <Styles.Transparent>{poolLeverage}</Styles.Transparent>
                     </Section>
                 </Styles.SectionDetails>

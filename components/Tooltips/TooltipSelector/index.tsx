@@ -9,6 +9,10 @@ import {
     DeprecatedPoolMintCommitTooltip,
     DeprecatedPoolFlipCommitTooltip,
     PortfolioFlipTooltip,
+    TradeMintTooltip,
+    TradeBurnTooltip,
+    TradeFlipTooltip,
+    EscrowButtonTooltip,
 } from '../';
 
 export enum TooltipKeys {
@@ -20,6 +24,10 @@ export enum TooltipKeys {
     DeprecatedPoolMintCommit = 'deprecated-pool-mint-commit',
     DeprecatedPoolFlipCommit = 'deprecated-pool-flip-commit',
     PortfolioFlip = 'portfolio-flip',
+    TradeMint = 'trade-mint',
+    TradeBurn = 'trade-burn',
+    TradeFlip = 'trade-flip',
+    EscrowButton = 'escrow-btn',
 }
 
 export type TooltipSelectorProps = {
@@ -52,6 +60,18 @@ const TooltipSelector: React.FC<{ tooltip: TooltipSelectorProps }> = ({ tooltip,
 
         case TooltipKeys.PortfolioFlip:
             return <PortfolioFlipTooltip>{children}</PortfolioFlipTooltip>;
+
+        case TooltipKeys.TradeMint:
+            return <TradeMintTooltip>{children}</TradeMintTooltip>;
+
+        case TooltipKeys.TradeBurn:
+            return <TradeBurnTooltip>{children}</TradeBurnTooltip>;
+
+        case TooltipKeys.TradeFlip:
+            return <TradeFlipTooltip>{children}</TradeFlipTooltip>;
+
+        case TooltipKeys.EscrowButton:
+            return <EscrowButtonTooltip>{children}</EscrowButtonTooltip>;
 
         default:
             return <StyledTooltip title={tooltip.content}>{children}</StyledTooltip>;

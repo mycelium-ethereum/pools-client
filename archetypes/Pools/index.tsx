@@ -131,7 +131,7 @@ export const Browse: React.FC = () => {
                     <div>
                         <PageTable.Heading>
                             <NetworkHintContainer>
-                                Pools
+                                Trade
                                 <NetworkHint />
                             </NetworkHintContainer>
                         </PageTable.Heading>
@@ -146,7 +146,7 @@ export const Browse: React.FC = () => {
                     <FilterSelects state={state} dispatch={dispatch} />
                 </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
-                {groupedSortedFilteredTokens.length === 0 && !isLoading && (
+                {filteredTokens.length === 0 && !isLoading && (
                     <Styles.NoResults>
                         <SearchOutlined aria-hidden="true" />
                         No results found for '{escapeRegExp(state.search)}'
@@ -179,13 +179,13 @@ export const Browse: React.FC = () => {
                             size="sm"
                             onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
                         >
-                            Display Alternative Pool
+                            Display Alternative Market
                         </Styles.Button>
                         <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
                             <Styles.DisabledButtonWrap>
                                 <Styles.DummyButton />
                                 <Styles.Button variant="primary" size="sm" disabled>
-                                    Deploy New Pool
+                                    Deploy New Market
                                 </Styles.Button>
                             </Styles.DisabledButtonWrap>
                         </TooltipSelector>
