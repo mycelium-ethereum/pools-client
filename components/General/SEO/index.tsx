@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-// import { Analytics, AnalyticsBrowser } from '@segment/analytics-next';
-// import { useStore } from '~/store/main';
-// import { selectAccount } from '~/store/Web3Slice';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -15,8 +12,6 @@ export type SEOProps = {
 };
 
 const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
-    // const account = useStore(selectAccount);
-    // const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
     const router = useRouter();
     const pathname = router.pathname;
     const metaDescription = description || process.env.siteDescription;
@@ -25,19 +20,6 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
 
-    // const sendPageAnalytics = () => {
-    //     analytics && analytics.page();
-    // };
-
-    // const sendIdentifyAnalytics = () => {
-    //     if (analytics && account) {
-    //         const id = analytics?.user().anonymousId();
-    //         analytics.identify(id, {
-    //             address: account,
-    //         });
-    //     }
-    // };
-
     useEffect(() => {
         // Load usersnap
         (window as any).onUsersnapCXLoad = function (api: any) {
@@ -45,28 +27,7 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
             api.init();
             api.show(USERSNAP_API_KEY);
         };
-
-        // Segment Analytics
-        // const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || '';
-
-        // if (!writeKey) {
-        //     console.warn('Segment.io write key not set');
-        // } else {
-        //     const loadAnalytics = async () => {
-        //         const [response] = await AnalyticsBrowser.load({ writeKey });
-        //         setAnalytics(response);
-        //     };
-        //     loadAnalytics();
-        // }
     }, []);
-
-    // useEffect(() => {
-    //     sendIdentifyAnalytics();
-    // }, [account]);
-
-    // useEffect(() => {
-    //     sendPageAnalytics();
-    // }, [analytics, router.asPath]);
 
     return (
         <Head>
