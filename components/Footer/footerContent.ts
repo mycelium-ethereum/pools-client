@@ -62,5 +62,4 @@ export const footerLinkContent = [
         label: 'Security Audits',
         href: 'https://docs.tracer.finance/security/audits-and-security',
     },
-
 ];

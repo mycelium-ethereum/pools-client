@@ -15,13 +15,14 @@ const Footer: React.FC<{
         setCopyrightYear();
     }, []);
 
-    const linkStyles = 'ml-0 lg:mb-0 xl:ml-10 last:mb-0 text-sm leading-[21px] whitespace-nowrap';
+    const transitionStyles = `transition-colors duration-300 hover:text-tracer-midblue dark:hover:text-tracer-650`;
+    const linkStyles = `ml-0 lg:mb-0 xl:ml-10 last:mb-0 text-sm leading-[21px] whitespace-nowrap ${transitionStyles}`;
 
     return (
         <footer>
             <Container className={'mt-auto'}>
                 <hr className="border-t-[0.5px] border-tracer-650 dark:border-white" />
-                <div className="flex flex-col-reverse justify-between py-6 font-aileron text-tracer-650 hover:text-tracer-midblue dark:text-white dark:hover:text-tracer-650 md:px-0 xl:flex-row">
+                <div className="flex flex-col-reverse justify-between py-6 font-aileron text-tracer-650 dark:text-white md:px-0 xl:flex-row">
                     <div className="flex flex-col-reverse items-center justify-between xl:justify-start xs:flex-row">
                         <span className="whitespace-nowrap text-sm leading-[21px]">
                             &copy; <span ref={yearRef} /> Tracer DAO
@@ -36,7 +37,10 @@ const Footer: React.FC<{
                                     rel="noreferrer"
                                     aria-label={`${item.alt} link`}
                                 >
-                                    <item.logo alt={`${item.alt} icon`} className={item.className} />
+                                    <item.logo
+                                        alt={`${item.alt} icon`}
+                                        className={`${item.className} ${transitionStyles}`}
+                                    />
                                 </a>
                             ))}
                         </div>
