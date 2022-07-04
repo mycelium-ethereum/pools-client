@@ -15,13 +15,13 @@ export default (() => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     useEffect(() => {
-        router.prefetch('/');
+        router.prefetch('/trade');
     }, []);
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <SwapStore>
-                <SEO {...seoContent['/pools']} />
+                <SEO {...seoContent['/trade']} />
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
                 <Browse />
             </SwapStore>

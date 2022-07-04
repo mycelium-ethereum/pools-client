@@ -1,6 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import { SwapAction } from '~/context/SwapContext';
+import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 
 export type InvalidAmount = {
     isInvalid: boolean;
@@ -27,5 +28,8 @@ export const WALLET_OPTIONS = [
     {
         key: BalanceTypeEnum.escrow,
         text: 'Escrow',
+        tooltip: {
+            optionKey: TooltipKeys.EscrowButton,
+        },
     },
 ];

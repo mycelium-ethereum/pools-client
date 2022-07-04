@@ -4,8 +4,8 @@ export const seoContent = {
         description: 'Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world.',
         image: '/img/opengraph/main.jpg',
     },
-    '/pools': {
-        title: 'Pools',
+    '/trade': {
+        title: 'Trade',
         description: 'Mint and Burn your Pool Tokens.',
         image: '/img/opengraph/main.jpg',
     },

@@ -50,6 +50,9 @@ type Option = {
     key: number;
     text: string | React.ReactNode;
     color?: '';
+    tooltip?: {
+        optionKey: TooltipKeys;
+    };
     disabled?: {
         optionKey: TooltipKeys;
     };
@@ -85,6 +88,24 @@ export default (({
                             onClick={() => onClick(option.key)}
                             className={classNames(
                                 DISABLED,
+                                buttonClass,
+                                BORDER_COLORS[borderColor],
+                                index === 0 ? 'rounded-l-md' : '',
+                                index === options.length - 1 ? 'rounded-r-md' : '',
+                                fullWidth ? FULL_WIDTH : '',
+                            )}
+                        >
+                            {option.text}
+                        </button>
+                    </TooltipSelector>
+                ) : option.tooltip ? (
+                    <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.tooltip.optionKey }}>
+                        {option.text === 'Flip' && <NewCallOut>NEW</NewCallOut>}
+                        <button
+                            type="button"
+                            onClick={() => onClick(option.key)}
+                            className={classNames(
+                                value === option.key ? SELECTED[color] : UNSELECTED[color],
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
                                 index === 0 ? 'rounded-l-md' : '',
