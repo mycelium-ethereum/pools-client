@@ -104,12 +104,29 @@ export default styled((({ onClose, className }) => {
         return getTradeOptions(poolStatus);
     }, [poolStatus]);
 
+    const generateTitle = () => {
+        switch (commitAction) {
+            case CommitActionEnum.mint:
+                `Open a Trade`;
+                break;
+            case CommitActionEnum.burn:
+                `Close a Trade`;
+                break;
+            case CommitActionEnum.flip:
+                `Reverse a Trade`;
+                break;
+            default:
+                `Open a Trade`;
+                break;
+        }
+    };
+
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    Open a Trade
+                    {generateTitle()}
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>
