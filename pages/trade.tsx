@@ -21,7 +21,7 @@ export default (() => {
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
             <SwapStore>
-                <SEO {...seoContent['/pools']} />
+                <SEO {...seoContent['/trade']} />
                 <NavBar setShowOnboardModal={setShowOnboardModal} />
                 <Browse />
             </SwapStore>
