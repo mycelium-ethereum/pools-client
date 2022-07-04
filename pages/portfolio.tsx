@@ -30,9 +30,9 @@ export default (() => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`} ref={ref}>
-            <SEO {...seoContent.portfolio} />
-            <NavBar />
             <SwapStore>
+                <SEO {...seoContent['/portfolio']} />
+                <NavBar />
                 <FarmStore>
                     <Portfolio />
                 </FarmStore>
