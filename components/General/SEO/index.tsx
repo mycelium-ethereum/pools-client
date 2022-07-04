@@ -38,22 +38,6 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
         }
     };
 
-    // WHEN a user logs in with their web3 login,
-
-    // THEN the identify call is made
-
-    // THEN the Wallet Address is provided as a Trait
-
-    // THEN all common are included in the payload
-
-    // WHEN a user views a page that can only be viewed while logged in,
-
-    // THEN the identify call is made
-
-    // THEN the Wallet Address is provided as a Trait
-
-    // THEN all common are included in the payload
-
     useEffect(() => {
         // Load usersnap
         (window as any).onUsersnapCXLoad = function (api: any) {
