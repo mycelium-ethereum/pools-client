@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { Analytics, AnalyticsBrowser } from '@segment/analytics-next';
+import { useStore } from '~/store/main';
+import { selectAccount } from '~/store/Web3Slice';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
@@ -13,6 +15,7 @@ export type SEOProps = {
 };
 
 const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
+    const account = useStore(selectAccount);
     const [analytics, setAnalytics] = useState<Analytics | undefined>(undefined);
     const router = useRouter();
     const pathname = router.pathname;
@@ -21,6 +24,35 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const siteURL = process.env.siteUrl;
     const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
+
+    const sendPageAnalytics = async () => {
+        analytics && analytics.page();
+    };
+
+    const sendIdentifyAnalytics = async () => {
+        if (analytics && account) {
+            const id = analytics?.user().anonymousId();
+            analytics.identify(id, {
+                address: account,
+            });
+        }
+    };
+
+    // WHEN a user logs in with their web3 login,
+
+    // THEN the identify call is made
+
+    // THEN the Wallet Address is provided as a Trait
+
+    // THEN all common are included in the payload
+
+    // WHEN a user views a page that can only be viewed while logged in,
+
+    // THEN the identify call is made
+
+    // THEN the Wallet Address is provided as a Trait
+
+    // THEN all common are included in the payload
 
     useEffect(() => {
         // Load usersnap
@@ -45,7 +77,11 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     }, []);
 
     useEffect(() => {
-        analytics && analytics.page();
+        sendIdentifyAnalytics();
+    }, [account]);
+
+    useEffect(() => {
+        sendPageAnalytics();
     }, [analytics, router.asPath]);
 
     return (

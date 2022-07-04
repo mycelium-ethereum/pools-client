@@ -51,11 +51,11 @@ export const socialIconContent = [
     {
         link: 'https://discord.com/invite/tracerdao',
         logo: DiscordSVG,
-        label: 'Discord',
+        alt: 'Discord',
     },
     {
         link: 'https://tracerdao.medium.com/',
         logo: MediumSVG,
-        label: 'Medium',
+        alt: 'Medium',
     },
 ];
