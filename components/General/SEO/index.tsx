@@ -25,11 +25,11 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
 
-    const sendPageAnalytics = async () => {
+    const sendPageAnalytics = () => {
         analytics && analytics.page();
     };
 
-    const sendIdentifyAnalytics = async () => {
+    const sendIdentifyAnalytics = () => {
         if (analytics && account) {
             const id = analytics?.user().anonymousId();
             analytics.identify(id, {
