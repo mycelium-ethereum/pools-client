@@ -31,11 +31,9 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
 
     const sendIdentifyAnalytics = () => {
         if (analytics && account) {
-            const id = analytics?.user().anonymousId();
-            id &&
-                analytics.identify(id, {
-                    address: account,
-                });
+            analytics.identify(account, {
+                address: account,
+            });
         }
     };
 
