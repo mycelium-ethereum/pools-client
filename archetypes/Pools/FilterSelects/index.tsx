@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
 import BaseFilters from '~/components/BaseFilters';
+import { Logo, LogoTicker } from '~/components/General/Logo';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import * as Styles from './styles';
 import { BrowseAction, BrowseState, DeltaEnum, RebalanceEnum } from '../state';
+import { findTicker } from '~/components/BaseFilters/MarketFilter';
 
 interface FilterSelectsProps {
     state: BrowseState;
@@ -58,17 +60,17 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
     const onRebalanceFocus = (option: number) =>
         dispatch({ type: 'setRebalanceFocus', focus: option as RebalanceEnum });
 
-    const onResetClick = () => {
+    const onResetFilters = () => {
         onMarketSelect(MarketFilterEnum.All);
-        onLeverageFilterSelect(LeverageFilterEnum.All);
         onCollateralFilterSelect(CollateralFilterEnum.All);
+        onLeverageFilterSelect(LeverageFilterEnum.All);
     };
 
     useEffect(() => {
         if (network) {
             onMarketSelect(MarketFilterEnum.All);
-            onLeverageFilterSelect(LeverageFilterEnum.All);
             onCollateralFilterSelect(CollateralFilterEnum.All);
+            onLeverageFilterSelect(LeverageFilterEnum.All);
         }
     }, [network]);
 
@@ -79,17 +81,27 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                 preview={
                     <BaseFilters.Preview>
                         <BaseFilters.FilterIcon />
-                        Filter Results
+                        {state.marketFilter === MarketFilterEnum.All &&
+                            state.leverageFilter === LeverageFilterEnum.All &&
+                            state.collateralFilter === CollateralFilterEnum.All &&
+                            `Filter Results`}
+                        {state.marketFilter !== MarketFilterEnum.All && (
+                            <>
+                                <Logo ticker={findTicker(state.marketFilter) as LogoTicker} className="mr-2 inline" />
+                                {state.marketFilter}
+                            </>
+                        )}
+                        {state.collateralFilter !== CollateralFilterEnum.All && `, `}
+                        {state.collateralFilter !== CollateralFilterEnum.All && `${state.collateralFilter}`}
+                        {state.leverageFilter !== LeverageFilterEnum.All && `, `}
+                        {state.leverageFilter !== LeverageFilterEnum.All && `${state.leverageFilter}x`}
                     </BaseFilters.Preview>
                 }
                 buttonClasses="action-button"
             >
                 <BaseFilters.Content>
                     <div>
-                        <BaseFilters.HeadingContainer>
-                            <BaseFilters.Heading>Market</BaseFilters.Heading>
-                            <BaseFilters.ResetButton onClick={onResetClick}>Reset</BaseFilters.ResetButton>
-                        </BaseFilters.HeadingContainer>
+                        <BaseFilters.Heading>Market</BaseFilters.Heading>
                         <BaseFilters.MarketFilter
                             marketFilter={state.marketFilter}
                             onMarketSelect={onMarketSelect}
@@ -136,6 +148,7 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({ state, dispatch }) => {
                             fullWidth
                         />
                     </BaseFilters.DropdownContainer>
+                    <BaseFilters.ResetButton onClick={onResetFilters}>Reset Filter</BaseFilters.ResetButton>
                 </BaseFilters.Content>
             </BaseFilters.FilterPopup>
         </BaseFilters.Container>

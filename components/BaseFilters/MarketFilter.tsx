@@ -5,7 +5,7 @@ import { MarketFilterProps } from './types';
 import { LogoTicker } from '../General';
 import { Dropdown } from './';
 
-const findTicker = (v: MarketFilterEnum): string => {
+export const findTicker = (v: MarketFilterEnum): string => {
     if (v === 'All') {
         return '';
     }
