@@ -96,3 +96,8 @@ export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
         }
     }};
 `;
+
+export const NoResults = styled.div`
+    padding: 60px 0px 80px;
+    text-align: center;
+`;
