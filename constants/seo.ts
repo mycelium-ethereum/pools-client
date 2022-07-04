@@ -1,3 +1,5 @@
+export type PagePath = '/' | '/pools' | '/portfolio' | '/stake'
+
 export const seoContent = {
     '/': {
         title: 'Buy Pool Tokens',
