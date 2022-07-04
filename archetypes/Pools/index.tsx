@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
+import { SearchOutlined } from '@ant-design/icons';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
@@ -12,6 +13,7 @@ import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filter
 import { marketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
 import { getMarketLeverage } from '~/utils/poolNames';
+import { marketSymbolToAssetName } from '~/utils/poolNames';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
@@ -57,8 +59,10 @@ export const Browse: React.FC = () => {
     const searchFilter = useCallback(
         (pool: BrowseTableRowData): boolean => {
             const searchString = escapeRegExp(state.search.toLowerCase());
+            const marketName = marketSymbolToAssetName[pool.marketSymbol];
             return Boolean(
-                pool.name.toLowerCase().match(searchString) ||
+                marketName.toLowerCase().match(searchString) ||
+                    pool.name.toLowerCase().match(searchString) ||
                     pool.shortToken.symbol.toLowerCase().match(searchString) ||
                     pool.longToken.symbol.toLowerCase().match(searchString) ||
                     pool.marketSymbol.toLowerCase().match(searchString),
@@ -142,6 +146,12 @@ export const Browse: React.FC = () => {
                     <FilterSelects state={state} dispatch={dispatch} />
                 </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
+                {groupedSortedFilteredTokens.length === 0 && !isLoading && (
+                    <Styles.NoResults>
+                        <SearchOutlined aria-hidden="true" />
+                        No results found for '{escapeRegExp(state.search)}'
+                    </Styles.NoResults>
+                )}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {
                     const dataRows = groupedSortedFilteredTokens[key as any] as BrowseTableRowData[];
                     // sum of grouped pool volume
