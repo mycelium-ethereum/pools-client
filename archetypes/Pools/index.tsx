@@ -146,7 +146,7 @@ export const Browse: React.FC = () => {
                     <FilterSelects state={state} dispatch={dispatch} />
                 </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
-                {groupedSortedFilteredTokens.length === 0 && !isLoading && (
+                {filteredTokens.length === 0 && !isLoading && (
                     <Styles.NoResults>
                         <SearchOutlined aria-hidden="true" />
                         No results found for '{escapeRegExp(state.search)}'
