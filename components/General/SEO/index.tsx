@@ -32,9 +32,10 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const sendIdentifyAnalytics = () => {
         if (analytics && account) {
             const id = analytics?.user().anonymousId();
-            analytics.identify(id, {
-                address: account,
-            });
+            id &&
+                analytics.identify(id, {
+                    address: account,
+                });
         }
     };
 
@@ -62,7 +63,7 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
 
     useEffect(() => {
         sendIdentifyAnalytics();
-    }, [account]);
+    }, [analytics, account]);
 
     useEffect(() => {
         sendPageAnalytics();
