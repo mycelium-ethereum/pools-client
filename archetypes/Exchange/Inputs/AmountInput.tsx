@@ -12,24 +12,37 @@ import { AmountProps } from './types';
 const Available: React.FC<{
     amountBN: BigNumber;
     balance: BigNumber;
+    escrowBalance?: BigNumber;
     isPoolToken: boolean;
-}> = ({ amountBN, balance, isPoolToken }) => {
+}> = ({ amountBN, balance, escrowBalance, isPoolToken }) => {
     const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
 
     return (
         <>
-            {`Available: `}
             {isPoolToken ? (
                 <>
                     {`${balance.toFixed(3)} `}
                     {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(3)}`}</span> : null}
+                    {` tokens available`}
+                    {escrowBalance && escrowBalance.gt(0) ? (
+                        <>
+                            <br />
+                            <span className="opacity-80">{`${escrowBalance.toFixed(3)} in escrow`}</span>
+                        </>
+                    ) : null}
                 </>
             ) : (
                 <>
-                    {`${toApproxCurrency(balance)} `}
+                    {`${toApproxCurrency(balance)} available `}
                     {amountBN.gt(0) ? (
                         <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
                     ) : null}
+                    {/* {escrowBalance && escrowBalance.gt(0) ? (
+                        <>
+                            <br />
+                            <span className="opacity-80">{` ${toApproxCurrency(balanceAfter)} in escrow`}</span>
+                        </>
+                    ) : null} */}
                 </>
             )}
         </>
@@ -43,6 +56,7 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
+    escrowBalance,
     tokenSymbol,
     isPoolToken,
     decimalPlaces = 8,
@@ -84,7 +98,12 @@ const AmountInput: React.FC<AmountProps> = ({
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
-                    <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
+                    <Available
+                        balance={balance}
+                        escrowBalance={escrowBalance}
+                        amountBN={amountBN}
+                        isPoolToken={isPoolToken}
+                    />
                 )}
             </Styles.Subtext>
         </>
