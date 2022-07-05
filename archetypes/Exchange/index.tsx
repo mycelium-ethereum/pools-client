@@ -107,17 +107,13 @@ export default styled((({ onClose, className }) => {
     const generateTitle = () => {
         switch (commitAction) {
             case CommitActionEnum.mint:
-                `Open a Trade`;
-                break;
+                return `Open a Trade`;
             case CommitActionEnum.burn:
-                `Close a Trade`;
-                break;
+                return `Close a Trade`;
             case CommitActionEnum.flip:
-                `Reverse a Trade`;
-                break;
+                return `Reverse a Trade`;
             default:
-                `Open a Trade`;
-                break;
+                return `Open a Trade`;
         }
     };
 
