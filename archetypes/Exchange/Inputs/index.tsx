@@ -16,7 +16,7 @@ import TokenSelect from '../TokenSelect';
 export const isInvalidAmount: (
     amount: BigNumber,
     balance: BigNumber,
-    commitAction: CommitActionEnum,
+    commitAction?: CommitActionEnum,
 ) => InvalidAmount = (amount, balance, commitAction) => {
     if (amount.eq(0)) {
         return {
@@ -27,9 +27,13 @@ export const isInvalidAmount: (
 
     if (amount.gt(balance)) {
         return {
-            message: `Not enough funds! ${
-                commitAction === CommitActionEnum.mint ? toApproxCurrency(balance) : `${balance.toFixed(3)} tokens`
-            } available`,
+            message: commitAction
+                ? `Not enough funds! ${
+                      (commitAction as CommitActionEnum) === CommitActionEnum.mint
+                          ? toApproxCurrency(balance)
+                          : `${balance.toFixed(3)} tokens`
+                  } available`
+                : undefined,
             isInvalid: true,
         };
     }
