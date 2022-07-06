@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { TWModal } from '~/components/General/TWModal';
@@ -11,6 +11,8 @@ import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructExplorerLink } from '~/utils/blockExplorers';
 import { formatAddress } from '~/utils/converters';
 import { getPriceFeedUrl } from '~/utils/poolNames';
+import { swapDefaults, SwapContext } from '~/context/SwapContext';
+import { usePool } from '~/hooks/usePool';
 
 type Details = {
     name: string;
@@ -34,8 +36,14 @@ export const PoolDetails = ({
     poolDetails: Details;
     network: KnownNetwork | undefined;
 }): JSX.Element => {
+    const { swapState = swapDefaults } = useContext(SwapContext);
+    const { selectedPool } = swapState || {};
     const { name, address, marketSymbol, leverage, keeper, committer, collateralAsset, collateralAssetAddress } =
         poolDetails;
+
+    const { poolInstance: pool } = usePool(selectedPool);
+
+    console.log(pool);
 
     const poolDetailsData = useMemo(
         () => [
@@ -73,15 +81,25 @@ export const PoolDetails = ({
         [network, keeper, committer, leverage, name, collateralAsset],
     );
 
+    const poolParametersData = useMemo(
+        () => [
+            { name: 'SMA Periods', value: name },
+            { name: 'Front-Running Interval', value: name },
+            { name: 'Mint Fee', value: name },
+            { name: 'Burn Fee', value: name },
+            { name: 'Deployer', value: name },
+        ],
+        [network, keeper, committer, leverage, name, collateralAsset],
+    );
+
     return (
         <TWModal open={open} onClose={onClose} className="py-10 px-5 sm:p-10">
-            <ModalHeader>
-                <div className="title">Pool Details</div>
-                <div className="close" onClick={onClose}>
+            <ModalHeaderContainer>
+                <ModalHeader>Pool Details</ModalHeader>
+                <button aria-label="close-button" onClick={onClose}>
                     <Close />
-                </div>
-            </ModalHeader>
-            <br />
+                </button>
+            </ModalHeaderContainer>
 
             <Table showDivider={false}>
                 <tbody>
@@ -104,20 +122,44 @@ export const PoolDetails = ({
                     ))}
                 </tbody>
             </Table>
+            <br />
+            <ModalHeader>Parameters</ModalHeader>
+            <Table showDivider={false}>
+                <tbody>
+                    {poolParametersData.map((v, i) => (
+                        <TableRow key={`${v.name}-${i}`} lined>
+                            <TableRowCell className="px-2">
+                                <CellContent>
+                                    <div className="name">{v.name}</div>
+                                    <div className="info">
+                                        {v.value}
+                                        {v.href ? (
+                                            <a href={v.href} target="_blank" rel="noopener noreferrer">
+                                                <FollowLinkIcon />
+                                            </a>
+                                        ) : null}
+                                    </div>
+                                </CellContent>
+                            </TableRowCell>
+                        </TableRow>
+                    ))}
+                </tbody>
+            </Table>
         </TWModal>
     );
 };
 
-const ModalHeader = styled((props: any) => <div className={props.className}>{props.children}</div>)`
+const ModalHeader = styled.h1`
+    font-size: 24px;
+    margin-bottom: 10px;
+    font-weight: 600;
+`;
+
+const ModalHeaderContainer = styled((props: any) => <div className={props.className}>{props.children}</div>)`
     display: flex;
     justify-content: space-between;
 
-    .title {
-        font-size: 24px;
-        margin-bottom: -17px;
-    }
-
-    .close {
+    button[aria-label='close-button'] {
         width: 12px;
         height: 12px;
 
