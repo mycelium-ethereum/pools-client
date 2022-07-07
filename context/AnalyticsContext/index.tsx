@@ -12,8 +12,7 @@ import { selectAccount, selectNetwork } from '~/store/Web3Slice';
 const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || '';
 const POOLS_VERSION = 2;
 
-// Helper function
-
+// Helper functions
 const convertBNToFloat = (bn: BigNumber) => {
     return parseFloat(BigNumber.max(bn).toString());
 };
@@ -146,6 +145,7 @@ const useValues = () => {
                 network: networkName,
                 tokenName: tokenName,
                 version: POOLS_VERSION,
+                walletAddress: account,
             });
     };
 
