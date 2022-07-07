@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
-const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
 
 export type SEOProps = {
     title: string;
@@ -19,15 +18,6 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
     const siteURL = process.env.siteUrl;
     const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
-
-    useEffect(() => {
-        // Load usersnap
-        (window as any).onUsersnapCXLoad = function (api: any) {
-            (window as any).Usersnap = api;
-            api.init();
-            api.show(USERSNAP_API_KEY);
-        };
-    }, []);
 
     return (
         <Head>

@@ -4,6 +4,8 @@ import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
+import { UserSnap } from '~/components/UserSnap';
+import { AnalyticsProvider } from '~/context/AnalyticsContext';
 
 export const Layout: React.FC = ({ children }) => {
     const [showOnboardModal, setShowOnboardModal] = useState(false);
@@ -11,8 +13,9 @@ export const Layout: React.FC = ({ children }) => {
 
     return (
         <div className={`page relative matrix:bg-matrix-bg`}>
+            <UserSnap />
             <NavBar />
-            {children}
+            <AnalyticsProvider>{children}</AnalyticsProvider>
             <UnsupportedNetworkPopup />
             <OnboardTradeModal
                 onboardStep={onboardStep}

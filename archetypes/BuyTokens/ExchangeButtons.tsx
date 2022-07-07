@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useContext } from 'react';
 import { Transition } from '@headlessui/react';
 import styled from 'styled-components';
 import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
-import MintButton from '~/archetypes/BuyTokens/MintButton';
+import MintButton, { MintSourceEnum } from '~/archetypes/BuyTokens/MintButton';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { HiddenExpand } from '~/components/General';
@@ -13,6 +13,7 @@ import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
+import { AnalyticsContext } from '~/context/AnalyticsContext';
 
 export type EXButtonsProps = {
     amount: string;
@@ -43,6 +44,8 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     commitType,
 }) => {
     const [mintButtonClicked, setMintButtonClicked] = useState(false);
+    // Required for tracking trade actions
+    const { trackBuyAction } = useContext(AnalyticsContext);
 
     const handleClick = () => {
         setMintButtonClicked(true);
@@ -123,6 +126,9 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                             amountBN={amountBN}
                             commit={commit}
                             commitType={commitType}
+                            token={token}
+                            isLong={isLong}
+                            trackBuyAction={trackBuyAction}
                         />
                     </MintButtonContainer>
                 </BuyButtonContainer>
@@ -141,7 +147,19 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                         )}
                     </BuyText>
                     <BalancerBuyButton
-                        onClick={() => open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank')}
+                        onClick={() => {
+                            trackBuyAction(
+                                side,
+                                leverage,
+                                token.name,
+                                pool.settlementToken.symbol,
+                                expectedAmount,
+                                amountBN,
+                                userBalances.settlementToken.balance,
+                                MintSourceEnum.balancer,
+                            );
+                            open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank');
+                        }}
                         isValidOnBalancer={isValidOnBalancer}
                         isValidAmount={isValidAmount}
                         disabled={!isValidOnBalancer || !isValidAmount}

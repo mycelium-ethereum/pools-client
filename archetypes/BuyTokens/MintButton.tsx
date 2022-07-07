@@ -1,11 +1,33 @@
-import React from 'react';
-import { CommitActionEnum } from '@tracer-protocol/pools-js';
+import React, { useMemo } from 'react';
+import BigNumber from 'bignumber.js';
+import { CommitActionEnum, PoolToken, SideEnum } from '@tracer-protocol/pools-js';
 import { TracerMintButton } from '~/archetypes/BuyTokens/ExchangeButtons';
 import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
+import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 
-const MintButton: React.FC<ExchangeButtonProps> = ({
+export enum MintSourceEnum {
+    tracer = 'Tracer',
+    balancer = 'Balancer',
+}
+
+type MintButtonProps = {
+    token: PoolToken;
+    isLong: boolean;
+    trackBuyAction: (
+        side: SideEnum,
+        leverage: number,
+        tokenToBuy: string,
+        tokenToSpend: string,
+        tokenBuyAmount: BigNumber,
+        tokenSpendAmount: BigNumber,
+        balance: BigNumber,
+        source: MintSourceEnum,
+    ) => void;
+} & ExchangeButtonProps;
+
+const MintButton: React.FC<MintButtonProps> = ({
     swapState,
     swapDispatch,
     userBalances,
@@ -14,8 +36,17 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
     amountBN,
     commit,
     commitType,
+    token,
+    isLong,
+    trackBuyAction,
 }) => {
-    const { selectedPool, invalidAmount, commitAction, balanceType } = swapState;
+    const { selectedPool, side, leverage, invalidAmount, commitAction, balanceType } = swapState;
+    const nextTokenPrice = useMemo(
+        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
+        [isLong, pool.longToken, pool.shortToken],
+    );
+
+    const expectedAmount = calcNumTokens(amountBN, nextTokenPrice);
 
     if (
         (!userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
@@ -51,6 +82,17 @@ const MintButton: React.FC<ExchangeButtonProps> = ({
                             swapDispatch?.({ type: 'setAmount', value: '' });
                         },
                     });
+
+                    trackBuyAction(
+                        side,
+                        leverage,
+                        token.name,
+                        pool.settlementToken.symbol,
+                        expectedAmount,
+                        amountBN,
+                        userBalances.settlementToken.balance,
+                        MintSourceEnum.tracer,
+                    );
                 }}
             >
                 <span className="mr-2 inline-block">Mint on</span>
