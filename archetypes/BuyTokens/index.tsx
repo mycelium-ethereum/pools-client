@@ -7,6 +7,7 @@ import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
+import { Container } from '~/components/General/Container';
 import { MarketTypeTip } from '~/components/Tooltips';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
@@ -18,7 +19,6 @@ import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { PoolInfo } from '~/types/pools';
-import { Container } from '~/components/General/Container';
 
 const BuyTokens: React.FC = () => {
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
