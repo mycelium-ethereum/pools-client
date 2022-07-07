@@ -9,7 +9,7 @@ import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectAccount, selectNetwork } from '~/store/Web3Slice';
 
-const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY || '';
+const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV || '';
 const POOLS_VERSION = 2;
 
 // Helper functions
