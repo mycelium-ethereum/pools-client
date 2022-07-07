@@ -164,7 +164,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
     }
 `;
 
-export const SocialItem = styled(NavItem)`
+export const SocialItem = styled(NavItem)<{ fullWidthSVG?: boolean }>`
     &:first-of-type {
         margin-top: 16px;
     }
@@ -172,8 +172,13 @@ export const SocialItem = styled(NavItem)`
         display: flex;
         align-items: center;
         > svg {
-            width: 22px;
-            margin-right: 16px;
+            ${({ fullWidthSVG }) =>
+                fullWidthSVG
+                    ? `width: 158px;
+                        height: 30px;
+                        margin-right: 0;`
+                    : `width: 22px;
+                        margin-right: 16px;`};
         }
     }
     > a span {

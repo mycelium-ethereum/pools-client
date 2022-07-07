@@ -4,6 +4,7 @@ import DiscourseSVG from '/public/img/logos/launcher/discourse.svg';
 import GitbookSVG from '/public/img/logos/launcher/gitbook.svg';
 import TwitterSVG from '/public/img/logos/launcher/twitter.svg';
 import DiscordSVG from '/public/img/logos/launcher/discord.svg';
+import TracerBlogSVG from '/public/img/logos/tracer/tracer-blog.svg';
 
 export const menuContent = [
     {
@@ -38,6 +39,10 @@ export const socialLinkContent = [
         link: 'https://docs.tracer.finance/tracer-docs-portal/readme',
         logo: GitbookSVG,
         label: 'User Documentation',
+    },
+    {
+        link: 'https://tracer.finance/radar',
+        logo: TracerBlogSVG,
     },
 ];
 

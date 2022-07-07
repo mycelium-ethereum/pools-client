@@ -29,11 +29,21 @@ const LauncherMenu = ({ launcherMenuOpen }: { launcherMenuOpen: boolean }): JSX.
                         </ul>
                         <div>
                             <ul>
-                                {socialLinkContent.map((item) => (
-                                    <SocialItem key={item.label} paddingLevel={1}>
+                                {socialLinkContent.map((item, i) => (
+                                    <SocialItem
+                                        key={item.label}
+                                        paddingLevel={1}
+                                        fullWidthSVG={i === socialLinkContent.length - 1}
+                                    >
                                         <a href={item.link} rel="noopener noreferrer" target="_blank">
-                                            <item.logo />
-                                            <span>{item.label}</span>
+                                            {item.label ? (
+                                                <>
+                                                    <item.logo />
+                                                    <span>{item.label}</span>
+                                                </>
+                                            ) : (
+                                                <item.logo />
+                                            )}
                                         </a>
                                     </SocialItem>
                                 ))}
