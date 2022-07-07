@@ -57,25 +57,29 @@ const useValues = () => {
         balance: BigNumber,
         source: MintSourceEnum,
     ) => {
-        const sideAsText = getSideAsText(side);
-        const balanceAsFloat = convertBNToFloat(balance);
-        const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
-        const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
+        try {
+            const sideAsText = getSideAsText(side);
+            const balanceAsFloat = convertBNToFloat(balance);
+            const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
+            const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
 
-        account &&
-            analytics?.track('Buy', {
-                leverage: leverage,
-                network: networkName,
-                tokenToBuy: tokenToBuy,
-                tokenToSpend: tokenToSpend,
-                tokenBuyAmount: tokenBuyAmountAsFloat,
-                tokenSpendAmount: tokenSpendAmountAsFloat,
-                userBalance: balanceAsFloat,
-                side: sideAsText,
-                source: source,
-                version: POOLS_VERSION,
-                walletAddress: account,
-            });
+            account &&
+                analytics?.track('Buy', {
+                    leverage: leverage,
+                    network: networkName,
+                    tokenToBuy: tokenToBuy,
+                    tokenToSpend: tokenToSpend,
+                    tokenBuyAmount: tokenBuyAmountAsFloat,
+                    tokenSpendAmount: tokenSpendAmountAsFloat,
+                    userBalance: balanceAsFloat,
+                    side: sideAsText,
+                    source: source,
+                    version: POOLS_VERSION,
+                    walletAddress: account,
+                });
+        } catch (err) {
+            console.error('Failed to send Buy action to Segment', err);
+        }
     };
 
     const getCommitActionAsText = (commitType: CommitActionEnum) => {
@@ -111,50 +115,62 @@ const useValues = () => {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
     ) => {
-        const leverageAsNumber = parseInt(tokenToBuy.slice(0, 1));
-        const balanceAsFloat = convertBNToFloat(balance);
-        const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
-        const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
-        const commitAction = getCommitActionAsText(commitType);
-        const source = getBalanceTypeAsText(balanceType);
+        try {
+            const leverageAsNumber = parseInt(tokenToBuy.slice(0, 1));
+            const balanceAsFloat = convertBNToFloat(balance);
+            const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
+            const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
+            const commitAction = getCommitActionAsText(commitType);
+            const source = getBalanceTypeAsText(balanceType);
 
-        account &&
-            analytics?.track('Trade', {
-                action: commitAction,
-                leverage: leverageAsNumber,
-                network: networkName,
-                tokenToBuy: tokenToBuy,
-                tokenToSpend: tokenToSpend,
-                tokenBuyAmount: tokenBuyAmountAsFloat,
-                tokenSpendAmount: tokenSpendAmountAsFloat,
-                userBalance: balanceAsFloat,
-                source: source,
-                version: POOLS_VERSION,
-                walletAddress: account,
-            });
+            account &&
+                analytics?.track('Trade', {
+                    action: commitAction,
+                    leverage: leverageAsNumber,
+                    network: networkName,
+                    tokenToBuy: tokenToBuy,
+                    tokenToSpend: tokenToSpend,
+                    tokenBuyAmount: tokenBuyAmountAsFloat,
+                    tokenSpendAmount: tokenSpendAmountAsFloat,
+                    userBalance: balanceAsFloat,
+                    source: source,
+                    version: POOLS_VERSION,
+                    walletAddress: account,
+                });
+        } catch (err) {
+            console.error('Failed to send Trade action to Segment', err);
+        }
     };
 
     const trackStakeAction = (stakeAction: StakeActionEnum, tokenName: string, amount: string, balance: BigNumber) => {
-        const userBalance = convertBNToFloat(balance);
+        try {
+            const userBalance = convertBNToFloat(balance);
 
-        account &&
-            analytics?.track('Stake', {
-                action: stakeAction,
-                amount: amount,
-                balance: userBalance,
-                network: networkName,
-                tokenName: tokenName,
-                version: POOLS_VERSION,
-                walletAddress: account,
-            });
+            account &&
+                analytics?.track('Stake', {
+                    action: stakeAction,
+                    amount: amount,
+                    balance: userBalance,
+                    network: networkName,
+                    tokenName: tokenName,
+                    version: POOLS_VERSION,
+                    walletAddress: account,
+                });
+        } catch (err) {
+            console.error('Failed to send Stake action to Segment', err);
+        }
     };
 
     const identifyUser = () => {
-        account &&
-            analytics?.identify(account, {
-                network: networkName,
-                version: POOLS_VERSION,
-            });
+        try {
+            account &&
+                analytics?.identify(account, {
+                    network: networkName,
+                    version: POOLS_VERSION,
+                });
+        } catch (err) {
+            console.error('Failed to send Identify action to Segment', err);
+        }
     };
 
     useEffect(() => {
