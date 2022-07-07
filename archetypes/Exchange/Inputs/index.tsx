@@ -141,7 +141,6 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={settlementTokenBalance}
-                            // escrowBalance={tokenBalance}
                             // tokenSymbol={pool.settlementToken.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}

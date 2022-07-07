@@ -37,12 +37,6 @@ const Available: React.FC<{
                     {amountBN.gt(0) ? (
                         <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
                     ) : null}
-                    {/* {escrowBalance && escrowBalance.gt(0) ? (
-                        <>
-                            <br />
-                            <span className="opacity-80">{` ${toApproxCurrency(balanceAfter)} in escrow`}</span>
-                        </>
-                    ) : null} */}
                 </>
             )}
         </>
