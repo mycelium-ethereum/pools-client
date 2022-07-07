@@ -79,6 +79,7 @@ export const useUpdatePoolInstances = (): void => {
                 if (!poolLists.length) {
                     return setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                 }
+
                 try {
                     const initialisedPools = await Promise.all(
                         poolLists.map(async (pool) => {

@@ -62,6 +62,7 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         shortToken: new BigNumber(0),
     },
     nextPoolState: {
+        isLoaded: false,
         currentSkew: new BigNumber(0),
         currentLongBalance: new BigNumber(0),
         currentLongSupply: new BigNumber(0),

@@ -99,6 +99,7 @@ export type TradeStats = {
 };
 
 export type NextPoolState = {
+    isLoaded: boolean;
     currentSkew: BigNumber;
     currentLongBalance: BigNumber;
     currentLongSupply: BigNumber;

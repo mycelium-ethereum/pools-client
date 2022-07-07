@@ -299,7 +299,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             }
             fetchNextPoolState({ network, pool: pool_ })
                 .then((nextPoolState) => {
-                    get().setNextPoolState(pool_, nextPoolState);
+                    get().setNextPoolState(pool_, { ...nextPoolState, isLoaded: true });
                 })
                 .catch((err) => {
                     console.error('Failed to fetch next pool state', err);

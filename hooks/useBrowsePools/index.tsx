@@ -64,19 +64,22 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                 const leverageBN = new BigNumber(leverage);
 
                 const {
-                    expectedLongBalance,
-                    expectedShortBalance,
-                    newLongTokenPrice,
-                    newShortTokenPrice,
-                    expectedSkew,
-                } = pool.getNextPoolState();
-
-                const {
                     totalNetFrontRunningPendingShort,
                     expectedFrontRunningShortBalance,
                     totalNetFrontRunningPendingLong,
                     expectedFrontRunningLongBalance,
+                    expectedLongBalance,
+                    expectedShortBalance,
+                    expectedLongTokenPrice,
+                    expectedShortTokenPrice,
+                    expectedSkew,
                 } = nextPoolState;
+
+                // const currentLongPrice = currentLongBalance.div(currentLongSupply.gt(0) ? currentLongSupply : 1);
+                // const currentShortPrice = currentShortBalance.div(currentShortSupply.gt(0) ? currentShortSupply : 1);
+
+                console.log('CURRENT LONG PRICE', pool.getLongTokenPrice().toNumber());
+                console.log('CURRENT SHORT PRICE', pool.getShortTokenPrice().toNumber());
 
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
@@ -103,7 +106,10 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     estimatedSkew: nextPoolState.expectedFrontRunningSkew.toNumber(),
 
                     tvl: tvl,
-                    nextTVL: expectedLongBalance.plus(expectedShortBalance).toNumber(),
+                    nextTVL: formatBN(
+                        expectedLongBalance.plus(expectedShortBalance),
+                        settlementToken.decimals,
+                    ).toNumber(),
                     oneDayVolume: poolCommitStats.oneDayVolume,
 
                     shortToken: {
@@ -111,9 +117,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         symbol: shortToken.symbol,
                         effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: pool.getShortTokenPrice().toNumber(),
-                        nextTCRPrice: newShortTokenPrice.toNumber(),
+                        nextTCRPrice: expectedShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
-                        nextTvl: expectedShortBalance.toNumber(),
+                        nextTvl: formatBN(expectedShortBalance, settlementToken.decimals).toNumber(),
                         balancerPrice: balancerPrices.shortToken.toNumber(),
                         userHoldings: userBalances.shortToken.balance
                             .plus(userBalances.aggregateBalances.shortTokens)
@@ -127,9 +133,9 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                         symbol: longToken.symbol,
                         effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
                         lastTCRPrice: pool.getLongTokenPrice().toNumber(),
-                        nextTCRPrice: newLongTokenPrice.toNumber(),
+                        nextTCRPrice: expectedLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),
-                        nextTvl: expectedLongBalance.toNumber(),
+                        nextTvl: formatBN(expectedLongBalance, settlementToken.decimals).toNumber(),
                         balancerPrice: balancerPrices.longToken.toNumber(),
                         userHoldings: userBalances.longToken.balance
                             .plus(userBalances.aggregateBalances.longTokens)

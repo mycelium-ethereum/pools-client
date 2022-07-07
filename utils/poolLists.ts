@@ -38,13 +38,13 @@ const get = async (uri: string): Promise<PoolList | undefined> => {
     try {
         const [protocol] = uri.split('://');
         console.log('Fetching pools from', uri);
-        if (protocol === 'https') {
-            const data = await fetch(uri).then((res) => res.json());
-            return data;
-        } else {
-            console.error('Unhandled PoolList protocol', uri);
-            throw new Error('Unhandled PoolList protocol');
-        }
+        // if (protocol === 'https') {
+        const data = await fetch(uri).then((res) => res.json());
+        return data;
+        // } else {
+        // console.error('Unhandled PoolList protocol', uri);
+        // throw new Error('Unhandled PoolList protocol');
+        // }
     } catch (error) {
         console.error('Failed to load PoolList', uri, error);
         throw error;
