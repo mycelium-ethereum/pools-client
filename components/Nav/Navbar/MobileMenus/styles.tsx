@@ -188,19 +188,13 @@ export const SocialIconRow = styled.div`
     margin-top: 16px;
     color: #ffffff;
 
-    svg {
-        margin-right: 56px;
-    }
     > a svg:nth-child(1) {
         width: 37px;
         height: 37px;
+        margin-right: 56px;
     }
     > a svg:nth-child(2) {
         width: 31px;
         height: 23px;
-    }
-    > a svg:nth-child(3) {
-        width: 37px;
-        height: 22px;
     }
 `;

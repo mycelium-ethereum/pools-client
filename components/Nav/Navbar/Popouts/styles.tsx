@@ -175,6 +175,7 @@ export const Popout = styled.div<{ isActive: boolean }>`
     pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
     justify-content: space-between;
     width: 100%;
+    z-index: ${({ isActive }) => (isActive ? '51' : '50')};
 
     /* Animate rows on open */
     > div,
@@ -362,7 +363,10 @@ export const Launcher = styled(Popout)<{ isActive: boolean }>`
     > a:nth-child(4) {
         transition-delay: ${({ isActive }) => (isActive ? '400ms' : '200ms')};
     }
-    > div:nth-child(5) {
+    > a:nth-child(5) {
+        transition-delay: ${({ isActive }) => (isActive ? '400ms' : '200ms')};
+    }
+    > div:nth-child(6) {
         transition-delay: ${({ isActive }) => (isActive ? '500ms' : '100ms')};
     }
 `;
@@ -500,7 +504,7 @@ export const GovernanceButton = styled(StyledLink)`
     }
 `;
 
-export const LinkRow = styled(LauncherRow)`
+export const LinkRow = styled(LauncherRow)<{ fullWidthSVG?: boolean }>`
     position: relative;
     padding: 16px;
     border-bottom: none;
@@ -511,9 +515,14 @@ export const LinkRow = styled(LauncherRow)`
     }
 
     > svg {
-        width: auto;
-        height: 17px;
-        margin-right: 20px;
+        ${({ fullWidthSVG }) =>
+            fullWidthSVG
+                ? `width: 124px;
+                    height: 24px;
+                    margin-right: 0;`
+                : `width: auto;
+                    height: 17px;
+                    margin-right: 20px;`};
     }
 `;
 
