@@ -9,12 +9,22 @@ import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectAccount, selectNetwork } from '~/store/Web3Slice';
 
-const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV || '';
 const POOLS_VERSION = 2;
 
 // Helper functions
 const convertBNToFloat = (bn: BigNumber) => {
     return parseFloat(BigNumber.max(bn).toString());
+};
+
+const getWriteKey = () => {
+    switch (process.env.NODE_ENV) {
+        case 'production':
+            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
+        case 'development':
+            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
+        default:
+            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
+    }
 };
 
 const useValues = () => {
@@ -211,6 +221,7 @@ const useValues = () => {
     };
 
     useEffect(() => {
+        const writeKey = getWriteKey();
         if (!writeKey) {
             console.warn('Segment.io write key not set');
         } else {
