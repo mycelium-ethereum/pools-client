@@ -16,14 +16,23 @@ const convertBNToFloat = (bn: BigNumber) => {
     return parseFloat(BigNumber.max(bn).toString());
 };
 
+// const getWriteKey = () => {
+//     switch (process.env.NODE_ENV) {
+//         case 'production':
+//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
+//         case 'development':
+//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
+//         default:
+//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
+//     }
+// };
+
 const getWriteKey = () => {
-    switch (process.env.NODE_ENV) {
-        case 'production':
-            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
-        case 'development':
-            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
-        default:
-            return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
+    const url = window.location.href;
+    if (url.includes(process.env.siteUrl as string)) {
+        return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
+    } else {
+        return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
     }
 };
 
