@@ -56,15 +56,17 @@ const useValues = () => {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
         source: MintSourceEnum,
+        isPreCommit: boolean,
     ) => {
         try {
+            const actionStage = isPreCommit ? 'preCommitBuy' : 'postCommitBuy';
             const sideAsText = getSideAsText(side);
             const balanceAsFloat = convertBNToFloat(balance);
             const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
 
             account &&
-                analytics?.track('preCommitBuy', {
+                analytics?.track(actionStage, {
                     leverage: leverage,
                     network: networkName,
                     tokenToBuy: tokenToBuy,
@@ -114,7 +116,10 @@ const useValues = () => {
         tokenBuyAmount: BigNumber,
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
+        isPreCommit: boolean,
     ) => {
+        const actionStage = isPreCommit ? 'preCommitTrade' : 'postCommitTrade';
+
         try {
             const leverageAsNumber = parseInt(tokenToBuy.slice(0, 1));
             const balanceAsFloat = convertBNToFloat(balance);
@@ -124,7 +129,7 @@ const useValues = () => {
             const source = getBalanceTypeAsText(balanceType);
 
             account &&
-                analytics?.track('preCommitTrade', {
+                analytics?.track(actionStage, {
                     action: commitAction,
                     leverage: leverageAsNumber,
                     network: networkName,
@@ -142,12 +147,20 @@ const useValues = () => {
         }
     };
 
-    const trackStakeAction = (stakeAction: StakeActionEnum, tokenName: string, amount: string, balance: BigNumber) => {
+    const trackStakeAction = (
+        stakeAction: StakeActionEnum,
+        tokenName: string,
+        amount: string,
+        balance: BigNumber,
+        isPreCommit: boolean,
+    ) => {
+        const actionStage = isPreCommit ? 'preCommitStake' : 'postCommitStake';
+
         try {
             const userBalance = convertBNToFloat(balance);
 
             account &&
-                analytics?.track('preCommitStake', {
+                analytics?.track(actionStage, {
                     action: stakeAction,
                     amount: amount,
                     balance: userBalance,
@@ -177,11 +190,14 @@ const useValues = () => {
         if (!writeKey) {
             console.warn('Segment.io write key not set');
         } else {
-            const loadAnalytics = async () => {
-                const [response] = await AnalyticsBrowser.load({ writeKey });
-                setAnalytics(response);
-            };
-            loadAnalytics();
+            const currentUrl = window.location.href;
+            if (currentUrl && !currentUrl.includes(process.env.siteUrl as string)) {
+                const loadAnalytics = async () => {
+                    const [response] = await AnalyticsBrowser.load({ writeKey });
+                    setAnalytics(response);
+                };
+                loadAnalytics();
+            }
         }
     }, []);
 

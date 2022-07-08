@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
+import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
@@ -12,9 +13,10 @@ import { selectAccount, selectProvider } from '~/store/Web3Slice';
 import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
+import { toApproxCurrency } from '~/utils/converters';
 import { generalMarketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
-import FarmsTable from '../FarmsTable';
+import FarmsTable, { StakeActionEnum } from '../FarmsTable';
 import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
 import { stakeReducer, StakeAction, StakeState, FarmTableRowData } from '../state';
@@ -51,6 +53,10 @@ export const StakeGeneric = ({
     const account = useStore(selectAccount);
     const provider = useStore(selectProvider);
     const handleTransaction = useStore(selectHandleTransaction);
+
+    // For analytics tracking
+    const { trackStakeAction } = useContext(AnalyticsContext);
+    const stakingTokenPrice = useMemo(() => farm.stakingTokenPrice || new BigNumber(1), [farm]);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
         const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
@@ -277,6 +283,13 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+                        trackStakeAction(
+                            StakeActionEnum.stake,
+                            farm.name,
+                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
+                            farm.stakingTokenBalance,
+                            true,
+                        );
                     },
                 },
             });
@@ -309,6 +322,13 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+                        trackStakeAction(
+                            StakeActionEnum.unstake,
+                            farm.name,
+                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
+                            farm.stakingTokenBalance,
+                            true,
+                        );
                     },
                 },
             });
@@ -336,6 +356,13 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+                        trackStakeAction(
+                            StakeActionEnum.claim,
+                            farm.name,
+                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
+                            farm.stakingTokenBalance,
+                            true,
+                        );
                     },
                 },
             });

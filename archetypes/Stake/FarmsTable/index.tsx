@@ -194,6 +194,7 @@ const PoolRow: React.FC<{
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
+                            true,
                         );
                     }}
                 >
@@ -211,6 +212,7 @@ const PoolRow: React.FC<{
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
+                            true,
                         );
                     }}
                 >
@@ -228,6 +230,7 @@ const PoolRow: React.FC<{
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
+                            true,
                         );
                     }}
                 >

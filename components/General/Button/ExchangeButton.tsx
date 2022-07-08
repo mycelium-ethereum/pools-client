@@ -132,6 +132,16 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                     commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
+                            trackTradeAction(
+                                commitAction,
+                                balanceType,
+                                token.name,
+                                pool.settlementToken.symbol,
+                                expectedAmount,
+                                amountBN,
+                                userBalances.settlementToken.balance,
+                                false,
+                            );
                             onClose && onClose();
                         },
                     });
@@ -144,6 +154,7 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                         expectedAmount,
                         amountBN,
                         userBalances.settlementToken.balance,
+                        true,
                     );
                 }}
             >
