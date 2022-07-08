@@ -68,6 +68,9 @@ const useValues = () => {
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
             const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
             const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
                 analytics?.track(actionStage, {
@@ -80,6 +83,7 @@ const useValues = () => {
                     tokenBuyAmount: tokenBuyAmountAsFloat,
                     tokenSpendAmount: tokenSpendAmountAsFloat,
                     userBalance: balanceAsFloat,
+                    ...balanceAttr,
                     side: sideAsText,
                     source: source,
                     version: POOLS_VERSION,
@@ -137,6 +141,9 @@ const useValues = () => {
             const source = getBalanceTypeAsText(balanceType);
             const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
             const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
                 analytics?.track(actionStage, {
@@ -149,7 +156,7 @@ const useValues = () => {
                     tokenToSpend: tokenToSpend,
                     tokenBuyAmount: tokenBuyAmountAsFloat,
                     tokenSpendAmount: tokenSpendAmountAsFloat,
-                    userBalance: balanceAsFloat,
+                    ...balanceAttr,
                     source: source,
                     version: POOLS_VERSION,
                     walletAddress: account,
@@ -170,14 +177,17 @@ const useValues = () => {
         const actionStage = isPreCommit ? 'preCommitStake' : 'postCommitStake';
 
         try {
-            const userBalance = convertBNToFloat(balance);
+            const balanceAsFloat = convertBNToFloat(balance);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
                 analytics?.track(actionStage, {
                     action: stakeAction,
                     amount: amount,
                     amountUSD: amountUSD,
-                    balance: userBalance,
+                    ...balanceAttr,
                     network: networkName,
                     tokenName: tokenName,
                     version: POOLS_VERSION,
