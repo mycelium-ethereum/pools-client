@@ -56,7 +56,6 @@ export const StakeGeneric = ({
 
     // For analytics tracking
     const { trackStakeAction } = useContext(AnalyticsContext);
-    const stakingTokenPrice = useMemo(() => farm.stakingTokenPrice || new BigNumber(1), [farm]);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
         const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
@@ -259,6 +258,7 @@ export const StakeGeneric = ({
 
     const stake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
+        const stakingTokenPrice = farm.stakingTokenPrice || new BigNumber(1);
         const { contract, stakingTokenDecimals } = farm;
         const signer = provider?.getSigner();
         if (!signer) {
@@ -298,6 +298,7 @@ export const StakeGeneric = ({
 
     const unstake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
+        const stakingTokenPrice = farm.stakingTokenPrice || new BigNumber(1);
         const { contract, stakingTokenDecimals } = farm;
         const signer = provider?.getSigner();
         if (!signer) {
@@ -337,6 +338,7 @@ export const StakeGeneric = ({
 
     const claim = (farmAddress: string) => {
         const farm = farms[farmAddress];
+        const stakingTokenPrice = farm.stakingTokenPrice || new BigNumber(1);
         const { contract } = farm;
         const signer = provider?.getSigner();
         if (!signer) {

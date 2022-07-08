@@ -157,6 +157,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                                 amountBN,
                                 userBalances.settlementToken.balance,
                                 MintSourceEnum.balancer,
+                                true,
                             );
                             open(constructBalancerLink(token?.address, NETWORKS.ARBITRUM, true), '_blank');
                         }}
