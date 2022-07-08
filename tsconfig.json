@@ -41,5 +41,5 @@
         "next.config.js",
         "node_modules/@tracer-protocol/perpetual-pools-contracts"
     ],
-    "exclude": ["public/static/*"]
+    "exclude": ["public/static/*", ".next"]
 }

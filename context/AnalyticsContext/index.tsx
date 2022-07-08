@@ -56,6 +56,8 @@ const useValues = () => {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
         source: MintSourceEnum,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
         isPreCommit: boolean,
     ) => {
         try {
@@ -64,11 +66,15 @@ const useValues = () => {
             const balanceAsFloat = convertBNToFloat(balance);
             const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
+            const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
+            const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
 
             account &&
                 analytics?.track(actionStage, {
                     leverage: leverage,
                     network: networkName,
+                    poolBalanceLong: poolBalanceLongAsFloat,
+                    poolBalanceShort: poolBalanceShortAsFloat,
                     tokenToBuy: tokenToBuy,
                     tokenToSpend: tokenToSpend,
                     tokenBuyAmount: tokenBuyAmountAsFloat,
@@ -116,6 +122,8 @@ const useValues = () => {
         tokenBuyAmount: BigNumber,
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
         isPreCommit: boolean,
     ) => {
         const actionStage = isPreCommit ? 'preCommitTrade' : 'postCommitTrade';
@@ -127,12 +135,16 @@ const useValues = () => {
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
             const commitAction = getCommitActionAsText(commitType);
             const source = getBalanceTypeAsText(balanceType);
+            const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
+            const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
 
             account &&
                 analytics?.track(actionStage, {
                     action: commitAction,
                     leverage: leverageAsNumber,
                     network: networkName,
+                    poolBalanceLong: poolBalanceLongAsFloat,
+                    poolBalanceShort: poolBalanceShortAsFloat,
                     tokenToBuy: tokenToBuy,
                     tokenToSpend: tokenToSpend,
                     tokenBuyAmount: tokenBuyAmountAsFloat,
@@ -151,6 +163,7 @@ const useValues = () => {
         stakeAction: StakeActionEnum,
         tokenName: string,
         amount: string,
+        amountUSD: string,
         balance: BigNumber,
         isPreCommit: boolean,
     ) => {
@@ -163,6 +176,7 @@ const useValues = () => {
                 analytics?.track(actionStage, {
                     action: stakeAction,
                     amount: amount,
+                    amountUSD: amountUSD,
                     balance: userBalance,
                     network: networkName,
                     tokenName: tokenName,

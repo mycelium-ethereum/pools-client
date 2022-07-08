@@ -24,6 +24,8 @@ type MintButtonProps = {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
         source: MintSourceEnum,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
         isPreCommit: boolean,
     ) => void;
 } & ExchangeButtonProps;
@@ -90,6 +92,8 @@ const MintButton: React.FC<MintButtonProps> = ({
                                 amountBN,
                                 userBalances.settlementToken.balance,
                                 MintSourceEnum.tracer,
+                                pool.longToken.supply,
+                                pool.shortToken.supply,
                                 false,
                             );
                         },
@@ -104,6 +108,8 @@ const MintButton: React.FC<MintButtonProps> = ({
                         amountBN,
                         userBalances.settlementToken.balance,
                         MintSourceEnum.tracer,
+                        pool.longToken.supply,
+                        pool.shortToken.supply,
                         true,
                     );
                 }}

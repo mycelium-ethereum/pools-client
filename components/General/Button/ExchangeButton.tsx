@@ -140,6 +140,8 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                                 expectedAmount,
                                 amountBN,
                                 userBalances.settlementToken.balance,
+                                pool.longToken.supply,
+                                pool.shortToken.supply,
                                 false,
                             );
                             onClose && onClose();
@@ -154,6 +156,8 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                         expectedAmount,
                         amountBN,
                         userBalances.settlementToken.balance,
+                        pool.longToken.supply,
+                        pool.shortToken.supply,
                         true,
                     );
                 }}
