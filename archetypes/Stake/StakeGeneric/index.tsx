@@ -288,7 +288,7 @@ export const StakeGeneric = ({
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
-                            true,
+                            false,
                         );
                     },
                 },
@@ -328,7 +328,7 @@ export const StakeGeneric = ({
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
-                            true,
+                            false,
                         );
                     },
                 },
@@ -363,7 +363,7 @@ export const StakeGeneric = ({
                             farm.name,
                             toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
                             farm.stakingTokenBalance,
-                            true,
+                            false,
                         );
                     },
                 },
