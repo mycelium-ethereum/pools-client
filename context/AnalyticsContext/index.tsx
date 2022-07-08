@@ -64,7 +64,7 @@ const useValues = () => {
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
 
             account &&
-                analytics?.track('Buy', {
+                analytics?.track('preCommitBuy', {
                     leverage: leverage,
                     network: networkName,
                     tokenToBuy: tokenToBuy,
@@ -124,7 +124,7 @@ const useValues = () => {
             const source = getBalanceTypeAsText(balanceType);
 
             account &&
-                analytics?.track('Trade', {
+                analytics?.track('preCommitTrade', {
                     action: commitAction,
                     leverage: leverageAsNumber,
                     network: networkName,
@@ -147,7 +147,7 @@ const useValues = () => {
             const userBalance = convertBNToFloat(balance);
 
             account &&
-                analytics?.track('Stake', {
+                analytics?.track('preCommitStake', {
                     action: stakeAction,
                     amount: amount,
                     balance: userBalance,
