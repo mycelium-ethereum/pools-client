@@ -21,21 +21,16 @@ import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
 import MobileNav from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
-import HelpIconSVG from '/public/img/general/onboard-revisit.svg';
 
-const NavBar: React.FC<{
-    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
+const NavBar: React.FC = () => {
     return (
         <NavContextProvider>
-            <NavBarContent setShowOnboardModal={setShowOnboardModal} />
+            <NavBarContent />
         </NavContextProvider>
     );
 };
 
-const NavBarContent: React.FC<{
-    setShowOnboardModal?: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
+const NavBarContent: React.FC = () => {
     const { navMenuOpen, setNavMenuOpen, launcherMenuOpen, setLauncherMenuOpen } = useContext(NavContext);
     const [navBackdrop, setNavBackdrop] = useState<boolean>(true);
     const routes = useRouter().asPath.split('/');
@@ -136,7 +131,7 @@ const NavBarContent: React.FC<{
                 }  ${navMenuOpen || launcherMenuOpen ? 'text-white' : 'text-tracer-650'}`}
             >
                 <Container className={'relative z-10 flex h-full justify-between'}>
-                    <TracerNavLogo />
+                    <TracerNavLogo onClick={handleMenuClose} />
                     <div className="ml-auto flex items-center">
                         <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
                             <li className={listItemStyles}>
@@ -218,25 +213,7 @@ const NavBarContent: React.FC<{
                 handleMenuClose={handleMenuClose}
             />
             <LauncherMenu launcherMenuOpen={launcherMenuOpen} />
-            {!navMenuOpen && !launcherMenuOpen && setShowOnboardModal && (
-                <HelpIcon setShowOnboardModal={setShowOnboardModal} />
-            )}
         </>
-    );
-};
-
-const HelpIcon: React.FC<{
-    setShowOnboardModal: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setShowOnboardModal }) => {
-    return (
-        <div
-            className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-tracer-500 lg:right-8 lg:bottom-8"
-            onClick={() => {
-                setShowOnboardModal(true);
-            }}
-        >
-            <HelpIconSVG />
-        </div>
     );
 };
 
