@@ -75,12 +75,6 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     expectedSkew,
                 } = nextPoolState;
 
-                // const currentLongPrice = currentLongBalance.div(currentLongSupply.gt(0) ? currentLongSupply : 1);
-                // const currentShortPrice = currentShortBalance.div(currentShortSupply.gt(0) ? currentShortSupply : 1);
-
-                console.log('CURRENT LONG PRICE', pool.getLongTokenPrice().toNumber());
-                console.log('CURRENT SHORT PRICE', pool.getShortTokenPrice().toNumber());
-
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
                 const defaultUpkeep = {
@@ -115,7 +109,11 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     shortToken: {
                         address: shortToken.address,
                         symbol: shortToken.symbol,
-                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveShortGain(
+                            expectedShortBalance,
+                            expectedLongBalance,
+                            leverageBN,
+                        ).toNumber(),
                         lastTCRPrice: pool.getShortTokenPrice().toNumber(),
                         nextTCRPrice: expectedShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
@@ -131,7 +129,11 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     longToken: {
                         address: longToken.address,
                         symbol: longToken.symbol,
-                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveLongGain(
+                            expectedShortBalance,
+                            expectedLongBalance,
+                            leverageBN,
+                        ).toNumber(),
                         lastTCRPrice: pool.getLongTokenPrice().toNumber(),
                         nextTCRPrice: expectedLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),

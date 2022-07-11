@@ -294,7 +294,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     updateNextPoolStates: (pools_, network) => {
         pools_.forEach((pool_) => {
             if (!network || !get().pools[pool_]) {
-                get().setTradeStats(pool_, DEFAULT_POOLSTATE.userBalances.tradeStats);
+                get().setNextPoolState(pool_, DEFAULT_POOLSTATE.nextPoolState);
                 return;
             }
             fetchNextPoolState({ network, pool: pool_ })

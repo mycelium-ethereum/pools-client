@@ -16,7 +16,7 @@ export const usePoolWatcher = (): void => {
     const { network, account } = useStore(selectWeb3Info, shallow);
     const { addCommit, removeCommits } = useStore(selectUserCommitActions, shallow);
     const { setPoolIsWaiting, setPoolExpectedExecution } = useStore(selectPoolInstanceActions, shallow);
-    const { handlePoolUpkeep } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const { handlePoolUpkeep, updateNextPoolStates } = useStore(selectPoolInstanceUpdateActions, shallow);
     const poolLists = useAllPoolLists();
 
     useEffect(() => {
@@ -36,6 +36,7 @@ export const usePoolWatcher = (): void => {
                 watcher.initializePoolWatchers().then(() => {
                     watcher.on(EVENT_NAMES.COMMIT, (commitInfo) => {
                         console.debug('Received commit', commitInfo);
+                        updateNextPoolStates([commitInfo.poolAddress], network);
                         if (commitInfo.user.toLowerCase() === account?.toLowerCase()) {
                             addCommit({
                                 pool: commitInfo.poolAddress,
