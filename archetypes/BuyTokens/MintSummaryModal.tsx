@@ -41,7 +41,7 @@ type MSModalProps = {
     };
     token: PoolToken;
     isLong: boolean;
-    handleCloseModal: () => void;
+    onClose: () => void;
     isSummaryOpen: boolean;
 };
 
@@ -56,7 +56,7 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
     userBalances,
     token,
     isLong,
-    handleCloseModal,
+    onClose,
     isSummaryOpen,
 }) => {
     const { commit, approve } = usePoolInstanceActions();
@@ -93,8 +93,8 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
     }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
 
     return (
-        <TWModal open={isSummaryOpen} onClose={handleCloseModal}>
-            <Close onClick={handleCloseModal} className="close" />
+        <TWModal open={isSummaryOpen} onClose={onClose}>
+            <Close onClick={onClose} className="close" />
             <Title>Mint Summary</Title>
             <Summary
                 pool={pool}

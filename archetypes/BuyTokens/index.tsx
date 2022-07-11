@@ -240,7 +240,7 @@ const BuyTokens: React.FC = () => {
                             amountBN={amountBN}
                             commitType={commitType}
                             isInvalid={invalidAmount.isInvalid}
-                            handleOpenModal={handleOpenModal}
+                            onButtonClick={handleOpenModal}
                         />
                     ) : null}
                     {!account && (
@@ -269,7 +269,7 @@ const BuyTokens: React.FC = () => {
                 userBalances={userBalances}
                 token={token}
                 isLong={isLong}
-                handleCloseModal={handleCloseModal}
+                onClose={handleCloseModal}
                 isSummaryOpen={isSummaryOpen}
             />
         </>

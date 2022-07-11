@@ -27,7 +27,7 @@ export type EXButtonsProps = {
     market: string;
     poolTokens: BrowseTableRowData[];
     isInvalid: boolean;
-    handleOpenModal: () => void;
+    onButtonClick: () => void;
 } & ExchangeButtonProps;
 
 export const ExchangeButtons: React.FC<EXButtonsProps> = ({
@@ -43,7 +43,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     swapState,
     account,
     userBalances,
-    handleOpenModal,
+    onButtonClick,
 }) => {
     const { selectedPool } = swapState;
     // Required for tracking trade actions
@@ -105,7 +105,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                     <MintButtonContainer isValidAmount={isValidAmount} account={account}>
                         {userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
                         !userBalances.settlementToken.approvedAmount.eq(0) ? (
-                            <TracerMintButton onClick={handleOpenModal} disabled={!isValidAmount}>
+                            <TracerMintButton onClick={onButtonClick} disabled={!isValidAmount}>
                                 <span className="mr-2 inline-block">Mint on</span>
                                 <TracerSVG className="w-[90px]" alt="Tracer logo" />
                             </TracerMintButton>
