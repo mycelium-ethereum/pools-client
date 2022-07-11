@@ -54,7 +54,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
 
-    const escrowTokenBalance = useMemo(() => {
+    const otherBalance = useMemo(() => {
         switch (balanceType) {
             case BalanceTypeEnum.wallet:
                 return isLong ? userBalances.aggregateBalances.longTokens : userBalances.aggregateBalances.shortTokens;
@@ -152,7 +152,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={tokenBalance}
-                            escrowBalance={escrowTokenBalance}
+                            otherBalance={otherBalance}
                             // tokenSymbol={token.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}

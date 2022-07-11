@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
-import { SwapAction } from '~/context/SwapContext';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
+import { SwapAction } from '~/context/SwapContext';
 
 export type InvalidAmount = {
     isInvalid: boolean;
@@ -15,8 +15,9 @@ export type AmountProps = {
     selectedPool: string | undefined;
     swapDispatch: React.Dispatch<SwapAction>;
     balance: BigNumber;
-    escrowBalance?: BigNumber;
+    otherBalance?: BigNumber;
     tokenSymbol?: string;
+    balanceType: BalanceTypeEnum;
     isPoolToken: boolean;
     decimalPlaces?: number;
 };
