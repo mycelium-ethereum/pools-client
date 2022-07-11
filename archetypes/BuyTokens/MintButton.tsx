@@ -26,7 +26,7 @@ type MintButtonProps = {
         poolBalanceShort: BigNumber,
         isPreCommit: boolean,
     ) => void;
-    handleCloseModal: () => void;
+    handleModalClose: () => void;
 } & ExchangeButtonProps;
 
 const MintButton: React.FC<MintButtonProps> = ({
@@ -40,7 +40,7 @@ const MintButton: React.FC<MintButtonProps> = ({
     token,
     isLong,
     trackBuyAction,
-    handleCloseModal,
+    handleModalClose,
 }) => {
     const { selectedPool, side, leverage, invalidAmount, balanceType } = swapState;
     const nextTokenPrice = useMemo(
@@ -60,7 +60,7 @@ const MintButton: React.FC<MintButtonProps> = ({
                 commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                     onSuccess: () => {
                         swapDispatch?.({ type: 'setAmount', value: '' });
-                        handleCloseModal();
+                        handleModalClose();
                         trackBuyAction(
                             side,
                             leverage,

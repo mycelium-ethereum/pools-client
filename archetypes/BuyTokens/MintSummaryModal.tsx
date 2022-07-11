@@ -118,7 +118,7 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
                 token={token}
                 isLong={isLong}
                 trackBuyAction={trackBuyAction}
-                handleCloseModal={handleCloseModal}
+                handleModalClose={onClose}
             />
         </TWModal>
     );
