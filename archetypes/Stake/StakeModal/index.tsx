@@ -99,6 +99,7 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                             />
                             <Max
                                 className="m-auto"
+                                disabled={!isApproved}
                                 onClick={(_e) =>
                                     dispatch({
                                         type: 'setAmount',
@@ -125,7 +126,9 @@ const StakeModal: React.FC<StakeModalProps> = ({ state, dispatch, onStake, onApp
                         )}
                     </div>
                 ) : (
-                    <>{state.stakeModalState !== 'claim' ? 'Token approval required to stake' : ''}</>
+                    <div className="mt-2 text-red-500">
+                        {state.stakeModalState !== 'claim' ? 'Token approval required to stake' : ''}
+                    </div>
                 )}
                 {isApproved ? (
                     <Button

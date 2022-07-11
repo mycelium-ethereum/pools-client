@@ -131,7 +131,7 @@ const NavBarContent: React.FC = () => {
                 }  ${navMenuOpen || launcherMenuOpen ? 'text-white' : 'text-tracer-650'}`}
             >
                 <Container className={'relative z-10 flex h-full justify-between'}>
-                    <TracerNavLogo />
+                    <TracerNavLogo onClick={handleMenuClose} />
                     <div className="ml-auto flex items-center">
                         <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
                             <li className={listItemStyles}>
