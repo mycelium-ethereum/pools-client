@@ -9,8 +9,8 @@ import { networkConfig } from '~/constants/networks';
 import { useStore } from '~/store/main';
 import { selectAccount, selectNetwork } from '~/store/Web3Slice';
 
-const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV || '';
 const POOLS_VERSION = 2;
+const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY;
 
 // Helper functions
 const convertBNToFloat = (bn: BigNumber) => {
@@ -56,22 +56,34 @@ const useValues = () => {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
         source: MintSourceEnum,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
+        isPreCommit: boolean,
     ) => {
         try {
+            const actionStage = isPreCommit ? 'preCommitBuy' : 'postCommitBuy';
             const sideAsText = getSideAsText(side);
             const balanceAsFloat = convertBNToFloat(balance);
             const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
+            const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
+            const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
-                analytics?.track('preCommitBuy', {
+                analytics?.track(actionStage, {
                     leverage: leverage,
                     network: networkName,
+                    poolBalanceLong: poolBalanceLongAsFloat,
+                    poolBalanceShort: poolBalanceShortAsFloat,
                     tokenToBuy: tokenToBuy,
                     tokenToSpend: tokenToSpend,
                     tokenBuyAmount: tokenBuyAmountAsFloat,
                     tokenSpendAmount: tokenSpendAmountAsFloat,
                     userBalance: balanceAsFloat,
+                    ...balanceAttr,
                     side: sideAsText,
                     source: source,
                     version: POOLS_VERSION,
@@ -114,7 +126,12 @@ const useValues = () => {
         tokenBuyAmount: BigNumber,
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
+        isPreCommit: boolean,
     ) => {
+        const actionStage = isPreCommit ? 'preCommitTrade' : 'postCommitTrade';
+
         try {
             const leverageAsNumber = parseInt(tokenToBuy.slice(0, 1));
             const balanceAsFloat = convertBNToFloat(balance);
@@ -122,17 +139,24 @@ const useValues = () => {
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
             const commitAction = getCommitActionAsText(commitType);
             const source = getBalanceTypeAsText(balanceType);
+            const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
+            const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
-                analytics?.track('preCommitTrade', {
+                analytics?.track(actionStage, {
                     action: commitAction,
                     leverage: leverageAsNumber,
                     network: networkName,
+                    poolBalanceLong: poolBalanceLongAsFloat,
+                    poolBalanceShort: poolBalanceShortAsFloat,
                     tokenToBuy: tokenToBuy,
                     tokenToSpend: tokenToSpend,
                     tokenBuyAmount: tokenBuyAmountAsFloat,
                     tokenSpendAmount: tokenSpendAmountAsFloat,
-                    userBalance: balanceAsFloat,
+                    ...balanceAttr,
                     source: source,
                     version: POOLS_VERSION,
                     walletAddress: account,
@@ -142,15 +166,28 @@ const useValues = () => {
         }
     };
 
-    const trackStakeAction = (stakeAction: StakeActionEnum, tokenName: string, amount: string, balance: BigNumber) => {
+    const trackStakeAction = (
+        stakeAction: StakeActionEnum,
+        tokenName: string,
+        amount: string,
+        amountUSD: string,
+        balance: BigNumber,
+        isPreCommit: boolean,
+    ) => {
+        const actionStage = isPreCommit ? 'preCommitStake' : 'postCommitStake';
+
         try {
-            const userBalance = convertBNToFloat(balance);
+            const balanceAsFloat = convertBNToFloat(balance);
+            const balanceAttr = isPreCommit
+                ? { preCommitBalance: balanceAsFloat }
+                : { postCommitBalance: balanceAsFloat };
 
             account &&
-                analytics?.track('preCommitStake', {
+                analytics?.track(actionStage, {
                     action: stakeAction,
                     amount: amount,
-                    balance: userBalance,
+                    amountUSD: amountUSD,
+                    ...balanceAttr,
                     network: networkName,
                     tokenName: tokenName,
                     version: POOLS_VERSION,
@@ -177,11 +214,14 @@ const useValues = () => {
         if (!writeKey) {
             console.warn('Segment.io write key not set');
         } else {
-            const loadAnalytics = async () => {
-                const [response] = await AnalyticsBrowser.load({ writeKey });
-                setAnalytics(response);
-            };
-            loadAnalytics();
+            const currentUrl = window.location.href;
+            if (currentUrl && !currentUrl.includes(process.env.siteUrl as string)) {
+                const loadAnalytics = async () => {
+                    const [response] = await AnalyticsBrowser.load({ writeKey });
+                    setAnalytics(response);
+                };
+                loadAnalytics();
+            }
         }
     }, []);
 

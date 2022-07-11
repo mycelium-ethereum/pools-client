@@ -22,6 +22,9 @@ type MintButtonProps = {
         tokenSpendAmount: BigNumber,
         balance: BigNumber,
         source: MintSourceEnum,
+        poolBalanceLong: BigNumber,
+        poolBalanceShort: BigNumber,
+        isPreCommit: boolean,
     ) => void;
     handleCloseModal: () => void;
 } & ExchangeButtonProps;
@@ -58,6 +61,19 @@ const MintButton: React.FC<MintButtonProps> = ({
                     onSuccess: () => {
                         swapDispatch?.({ type: 'setAmount', value: '' });
                         handleCloseModal();
+                        trackBuyAction(
+                            side,
+                            leverage,
+                            token.name,
+                            pool.settlementToken.symbol,
+                            expectedAmount,
+                            amountBN,
+                            userBalances.settlementToken.balance,
+                            MintSourceEnum.tracer,
+                            pool.longToken.supply,
+                            pool.shortToken.supply,
+                            false,
+                        );
                     },
                 });
 
@@ -70,6 +86,9 @@ const MintButton: React.FC<MintButtonProps> = ({
                     amountBN,
                     userBalances.settlementToken.balance,
                     MintSourceEnum.tracer,
+                    pool.longToken.supply,
+                    pool.shortToken.supply,
+                    true,
                 );
             }}
         >
