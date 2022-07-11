@@ -17,7 +17,7 @@ export type AmountProps = {
     balance: BigNumber;
     otherBalance?: BigNumber;
     tokenSymbol?: string;
-    balanceType: BalanceTypeEnum;
+    balanceType?: BalanceTypeEnum | undefined;
     isPoolToken: boolean;
     decimalPlaces?: number;
 };

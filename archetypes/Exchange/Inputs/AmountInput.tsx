@@ -14,7 +14,7 @@ const Available: React.FC<{
     amountBN: BigNumber;
     balance: BigNumber;
     otherBalance?: BigNumber;
-    balanceType: BalanceTypeEnum;
+    balanceType: BalanceTypeEnum | undefined;
     isPoolToken: boolean;
 }> = ({ amountBN, balance, otherBalance, balanceType, isPoolToken }) => {
     const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
