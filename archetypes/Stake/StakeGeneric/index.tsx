@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer, useRef } from 'react';
+import React, { useContext, useEffect, useReducer, useRef } from 'react';
 import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { SideEnum } from '@tracer-protocol/pools-js';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
 import { MAX_SOL_UINT } from '~/constants/general';
+import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useStore } from '~/store/main';
 import { selectHandleTransaction } from '~/store/TransactionSlice';
 import { TransactionType } from '~/store/TransactionSlice/types';
@@ -12,9 +13,10 @@ import { selectAccount, selectProvider } from '~/store/Web3Slice';
 import { SideFilterEnum, LeverageFilterEnum, MarketFilterEnum, StakeSortByEnum } from '~/types/filters';
 import { Farm } from '~/types/staking';
 
+import { toApproxCurrency } from '~/utils/converters';
 import { generalMarketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
-import FarmsTable from '../FarmsTable';
+import FarmsTable, { StakeActionEnum } from '../FarmsTable';
 import FilterBar from '../FilterSelects';
 import StakeModal from '../StakeModal';
 import { stakeReducer, StakeAction, StakeState, FarmTableRowData } from '../state';
@@ -51,6 +53,9 @@ export const StakeGeneric = ({
     const account = useStore(selectAccount);
     const provider = useStore(selectProvider);
     const handleTransaction = useStore(selectHandleTransaction);
+
+    // For analytics tracking
+    const { trackStakeAction } = useContext(AnalyticsContext);
 
     const farmTableRows: FarmTableRowData[] = Object.values(farms).map((farm) => {
         const filterFields = getFilterFieldsFromPoolTokenFarm(farm);
@@ -253,19 +258,33 @@ export const StakeGeneric = ({
 
     const stake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
+        const stakingTokenPrice = farm.stakingTokenPrice || new BigNumber(1);
         const { contract, stakingTokenDecimals } = farm;
+        const tokenAmount = amount.times(10 ** stakingTokenDecimals);
+
         const signer = provider?.getSigner();
         if (!signer) {
             console.error('Failed to stake: No signer');
             return;
         }
+
         const signingContract = contract.connect(signer);
-        console.debug(`staking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
+        console.debug(`staking ${tokenAmount.toString()} in contract at ${farmAddress}`);
+
+        // Analytics tracking pre-commit
+        trackStakeAction(
+            StakeActionEnum.stake,
+            farm.name,
+            amount.toFixed(),
+            toApproxCurrency(stakingTokenPrice.times(amount.toFixed())),
+            farm.stakingTokenBalance,
+            true,
+        );
 
         if (handleTransaction) {
             handleTransaction({
                 callMethod: signingContract.stake,
-                params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
+                params: [tokenAmount.toFixed()],
                 type: TransactionType.FARM_STAKE_WITHDRAW,
                 injectedProps: {
                     farmName: farm.name,
@@ -277,6 +296,16 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+
+                        // Analytics tracking post-commit
+                        trackStakeAction(
+                            StakeActionEnum.stake,
+                            farm.name,
+                            amount.toFixed(),
+                            toApproxCurrency(stakingTokenPrice.times(amount.toFixed())),
+                            farm.stakingTokenBalance,
+                            false,
+                        );
                     },
                 },
             });
@@ -285,19 +314,32 @@ export const StakeGeneric = ({
 
     const unstake = (farmAddress: string, amount: BigNumber) => {
         const farm = farms[farmAddress];
+        const stakingTokenPrice = farm.stakingTokenPrice || new BigNumber(1);
         const { contract, stakingTokenDecimals } = farm;
+        const tokenAmount = amount.times(10 ** stakingTokenDecimals);
+
         const signer = provider?.getSigner();
         if (!signer) {
             console.error('Failed to unstake: No signer');
             return;
         }
+
         const signingContract = contract.connect(signer);
-        console.debug(`unstaking ${amount.times(10 ** stakingTokenDecimals).toString()} in contract at ${farmAddress}`);
+        console.debug(`unstaking ${tokenAmount.toString()} in contract at ${farmAddress}`);
+
+        trackStakeAction(
+            StakeActionEnum.unstake,
+            farm.name,
+            amount.toFixed(),
+            toApproxCurrency(stakingTokenPrice.times(amount.toFixed())),
+            farm.stakingTokenBalance,
+            true,
+        );
 
         if (handleTransaction) {
             handleTransaction({
                 callMethod: signingContract.withdraw,
-                params: [amount.times(10 ** stakingTokenDecimals).toFixed()],
+                params: [tokenAmount.toFixed()],
                 type: TransactionType.FARM_STAKE_WITHDRAW,
                 injectedProps: {
                     farmName: farm.name,
@@ -309,6 +351,14 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+                        trackStakeAction(
+                            StakeActionEnum.unstake,
+                            farm.name,
+                            amount.toFixed(),
+                            toApproxCurrency(stakingTokenPrice.times(amount.toFixed())),
+                            farm.stakingTokenBalance,
+                            false,
+                        );
                     },
                 },
             });
@@ -318,12 +368,24 @@ export const StakeGeneric = ({
     const claim = (farmAddress: string) => {
         const farm = farms[farmAddress];
         const { contract } = farm;
+
         const signer = provider?.getSigner();
         if (!signer) {
             console.error('Failed to unstake: No signer');
             return;
         }
+
         const signingContract = contract.connect(signer);
+
+        trackStakeAction(
+            StakeActionEnum.claim,
+            farm.name,
+            '0', // Claim does not have a staking token amount associated with it
+            '0',
+            farm.stakingTokenBalance,
+            true,
+        );
+
         if (handleTransaction) {
             handleTransaction({
                 callMethod: signingContract.getReward,
@@ -336,6 +398,14 @@ export const StakeGeneric = ({
                         dispatch({
                             type: 'reset',
                         });
+                        trackStakeAction(
+                            StakeActionEnum.claim,
+                            farm.name,
+                            '0', // Claim does not have a staking token amount associated with it
+                            '0',
+                            farm.stakingTokenBalance,
+                            false,
+                        );
                     },
                 },
             });

@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
@@ -7,7 +7,6 @@ import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip, StakingTvlTip } from '~/components/Tooltips';
-import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { toApproxCurrency } from '~/utils/converters';
 import { getBaseAsset } from '~/utils/poolNames';
 import { FarmTableRowData } from '../state';
@@ -124,9 +123,6 @@ const PoolRow: React.FC<{
         return aprDenominator.gt(0) ? aprNumerator.div(aprDenominator) : new BigNumber(0);
     }, [stakingTokenPrice, farm.totalStaked, farm.rewardsPerYear, rewardsTokenPrice]);
 
-    // For analytics tracking
-    const { trackStakeAction } = useContext(AnalyticsContext);
-
     return (
         <TableRow key={farm.farm} lined>
             <TableRowCell>
@@ -189,12 +185,6 @@ const PoolRow: React.FC<{
                     variant="primary-light"
                     onClick={() => {
                         onClickStake(farm.farm);
-                        trackStakeAction(
-                            StakeActionEnum.stake,
-                            farm.name,
-                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
-                            farm.stakingTokenBalance,
-                        );
                     }}
                 >
                     STAKE
@@ -206,12 +196,6 @@ const PoolRow: React.FC<{
                     variant="primary-light"
                     onClick={() => {
                         onClickUnstake(farm.farm);
-                        trackStakeAction(
-                            StakeActionEnum.unstake,
-                            farm.name,
-                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
-                            farm.stakingTokenBalance,
-                        );
                     }}
                 >
                     UNSTAKE
@@ -223,12 +207,6 @@ const PoolRow: React.FC<{
                     variant="primary-light"
                     onClick={() => {
                         onClickClaim(farm.farm);
-                        trackStakeAction(
-                            StakeActionEnum.claim,
-                            farm.name,
-                            toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance)),
-                            farm.stakingTokenBalance,
-                        );
                     }}
                 >
                     CLAIM
