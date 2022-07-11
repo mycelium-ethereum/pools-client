@@ -8,7 +8,13 @@ import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
 import { PoolStatus } from '~/types/pools';
 import { getBalancerPrices } from '~/utils/balancer';
-import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
+import {
+    buildDefaultNextPoolState,
+    fetchAggregateBalance,
+    fetchTokenApprovals,
+    fetchTokenBalances,
+    fetchTradeStats,
+} from '~/utils/pools';
 import { fetchPoolCommitStats, fetchNextPoolState } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
@@ -38,7 +44,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 },
                 poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                 balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
-                nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
+                nextPoolState: buildDefaultNextPoolState(pool),
                 oracleDetails: DEFAULT_POOLSTATE.oracleDetails,
             };
         });
@@ -63,7 +69,7 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     },
                     poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                     balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
-                    nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
+                    nextPoolState: buildDefaultNextPoolState(pool),
                     oracleDetails: DEFAULT_POOLSTATE.oracleDetails,
                 };
             });
@@ -293,16 +299,18 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     },
     updateNextPoolStates: (pools_, network) => {
         pools_.forEach((pool_) => {
-            if (!network || !get().pools[pool_]) {
+            const poolInfo = get().pools[pool_];
+
+            if (!network || !poolInfo) {
                 get().setNextPoolState(pool_, DEFAULT_POOLSTATE.nextPoolState);
                 return;
             }
             fetchNextPoolState({ network, pool: pool_ })
                 .then((nextPoolState) => {
-                    get().setNextPoolState(pool_, { ...nextPoolState, isLoaded: true });
+                    get().setNextPoolState(pool_, { ...nextPoolState });
                 })
-                .catch((err) => {
-                    console.error('Failed to fetch next pool state', err);
+                .catch(() => {
+                    get().setNextPoolState(pool_, buildDefaultNextPoolState(poolInfo.poolInstance));
                 });
         });
     },

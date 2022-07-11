@@ -99,23 +99,27 @@ export type TradeStats = {
 };
 
 export type NextPoolState = {
-    isLoaded: boolean;
     currentSkew: BigNumber;
     currentLongBalance: BigNumber;
     currentLongSupply: BigNumber;
     currentShortBalance: BigNumber;
     currentShortSupply: BigNumber;
+    currentLongTokenPrice: BigNumber;
+    currentShortTokenPrice: BigNumber;
+    currentPendingLongTokenBurn: BigNumber;
+    currentPendingShortTokenBurn: BigNumber;
     expectedSkew: BigNumber;
     expectedLongBalance: BigNumber;
     expectedLongSupply: BigNumber;
     expectedShortBalance: BigNumber;
     expectedShortSupply: BigNumber;
-    totalNetPendingLong: BigNumber;
-    totalNetPendingShort: BigNumber;
     expectedLongTokenPrice: BigNumber;
     expectedShortTokenPrice: BigNumber;
+    expectedPendingLongTokenBurn: BigNumber;
+    expectedPendingShortTokenBurn: BigNumber;
     lastOraclePrice: BigNumber;
     expectedOraclePrice: BigNumber;
+    // front running
     expectedFrontRunningSkew: BigNumber;
     expectedFrontRunningLongBalance: BigNumber;
     expectedFrontRunningLongSupply: BigNumber;
@@ -125,6 +129,8 @@ export type NextPoolState = {
     totalNetFrontRunningPendingShort: BigNumber;
     expectedFrontRunningLongTokenPrice: BigNumber;
     expectedFrontRunningShortTokenPrice: BigNumber;
+    expectedFrontRunningPendingLongTokenBurn: BigNumber;
+    expectedFrontRunningPendingShortTokenBurn: BigNumber;
     expectedFrontRunningOraclePrice: BigNumber;
 };
 
@@ -182,15 +188,21 @@ export type NextPoolStateAPIResponse = {
     currentLongSupply: string;
     currentShortBalance: string;
     currentShortSupply: string;
+    currentLongTokenPrice: string;
+    currentShortTokenPrice: string;
+    currentPendingLongTokenBurn: string;
+    currentPendingShortTokenBurn: string;
     expectedSkew: string;
     expectedLongBalance: string;
     expectedLongSupply: string;
     expectedShortBalance: string;
     expectedShortSupply: string;
-    totalNetPendingLong: string;
-    totalNetPendingShort: string;
     expectedLongTokenPrice: string;
     expectedShortTokenPrice: string;
+    expectedPendingLongTokenBurn: string;
+    expectedPendingShortTokenBurn: string;
+    totalNetPendingLong: string;
+    totalNetPendingShort: string;
     lastOraclePrice: string;
     expectedOraclePrice: string;
     expectedFrontRunningSkew: string;
@@ -202,6 +214,8 @@ export type NextPoolStateAPIResponse = {
     totalNetFrontRunningPendingShort: string;
     expectedFrontRunningLongTokenPrice: string;
     expectedFrontRunningShortTokenPrice: string;
+    expectedFrontRunningPendingLongTokenBurn: string;
+    expectedFrontRunningPendingShortTokenBurn: string;
     expectedFrontRunningOraclePrice: string;
 };
 
