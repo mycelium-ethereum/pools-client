@@ -4,7 +4,7 @@ import DiscourseSVG from '/public/img/logos/launcher/discourse.svg';
 import GitbookSVG from '/public/img/logos/launcher/gitbook.svg';
 import TwitterSVG from '/public/img/logos/launcher/twitter.svg';
 import DiscordSVG from '/public/img/logos/launcher/discord.svg';
-import MediumSVG from '/public/img/logos/launcher/medium.svg';
+import TracerBlogSVG from '/public/img/logos/tracer/tracer-blog.svg';
 
 export const menuContent = [
     {
@@ -40,6 +40,10 @@ export const socialLinkContent = [
         logo: GitbookSVG,
         label: 'User Documentation',
     },
+    {
+        link: 'https://tracer.finance/radar',
+        logo: TracerBlogSVG,
+    },
 ];
 
 export const socialIconContent = [
@@ -52,10 +56,5 @@ export const socialIconContent = [
         link: 'https://discord.com/invite/tracerdao',
         logo: DiscordSVG,
         alt: 'Discord',
-    },
-    {
-        link: 'https://tracerdao.medium.com/',
-        logo: MediumSVG,
-        alt: 'Medium',
     },
 ];

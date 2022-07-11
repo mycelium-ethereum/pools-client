@@ -70,7 +70,7 @@ export const LauncherScrollContainer = styled.div`
     justify-content: space-between;
     height: 100%;
 
-    @media only screen and (max-height: 650px) {
+    @media only screen and (max-height: 700px) {
         overflow-y: auto;
         overflow-x: hidden;
     }
@@ -164,7 +164,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
     }
 `;
 
-export const SocialItem = styled(NavItem)`
+export const SocialItem = styled(NavItem)<{ fullWidthSVG?: boolean }>`
     &:first-of-type {
         margin-top: 16px;
     }
@@ -172,8 +172,13 @@ export const SocialItem = styled(NavItem)`
         display: flex;
         align-items: center;
         > svg {
-            width: 22px;
-            margin-right: 16px;
+            ${({ fullWidthSVG }) =>
+                fullWidthSVG
+                    ? `width: 158px;
+                        height: 30px;
+                        margin-right: 0;`
+                    : `width: 22px;
+                        margin-right: 16px;`};
         }
     }
     > a span {
@@ -188,19 +193,13 @@ export const SocialIconRow = styled.div`
     margin-top: 16px;
     color: #ffffff;
 
-    svg {
-        margin-right: 56px;
-    }
     > a svg:nth-child(1) {
         width: 37px;
         height: 37px;
+        margin-right: 56px;
     }
     > a svg:nth-child(2) {
         width: 31px;
         height: 23px;
-    }
-    > a svg:nth-child(3) {
-        width: 37px;
-        height: 22px;
     }
 `;

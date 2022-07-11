@@ -48,9 +48,15 @@ const AppLauncher: React.FC<{ isActive: boolean }> = ({ isActive }) => {
             </GovernanceRow>
             {linkContent.map((content, i) => (
                 <StyledLink key={i} href={content.link}>
-                    <LinkRow>
-                        <content.LogoImage alt={content.alt} />
-                        <span>{content.label}</span>
+                    <LinkRow fullWidthSVG={i === linkContent.length - 1}>
+                        {content.label ? (
+                            <>
+                                <content.LogoImage alt={content.alt} />
+                                <span>{content.label}</span>
+                            </>
+                        ) : (
+                            <content.LogoImage alt={content.alt} />
+                        )}
                         <GradientBackground />
                     </LinkRow>
                 </StyledLink>
