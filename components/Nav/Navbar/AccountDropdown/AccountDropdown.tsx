@@ -39,7 +39,7 @@ export default (({ account, className }) => {
                     className={`mb-4 flex h-[36px] max-h-[36px] items-center rounded-[4px] bg-opacity-0 bg-dropdown-gradient px-3 transition-colors duration-300 hover:bg-tracer-650 hover:text-white md:mb-0 lg:rounded-[4px] ${
                         navMenuOpen
                             ? 'border-tracer-midblue text-white md:border-white'
-                            : 'border-tracer-midblue text-tracer-650 dark:text-white md:border-tracer-650'
+                            : 'border-tracer-midblue dark:text-white md:border-tracer-650 xs:text-tracer-650'
                     }`}
                 >
                     Connect Wallet

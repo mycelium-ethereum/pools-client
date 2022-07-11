@@ -8,25 +8,43 @@ import Max from '~/components/General/Max';
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { AmountProps } from './types';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 
 const Available: React.FC<{
     amountBN: BigNumber;
     balance: BigNumber;
+    otherBalance?: BigNumber;
+    balanceType: BalanceTypeEnum | undefined;
     isPoolToken: boolean;
-}> = ({ amountBN, balance, isPoolToken }) => {
+}> = ({ amountBN, balance, otherBalance, balanceType, isPoolToken }) => {
     const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
+
+    const tokenSource = () => {
+        switch (balanceType) {
+            case BalanceTypeEnum.escrow:
+                return 'escrow';
+            default:
+                return 'wallet';
+        }
+    };
 
     return (
         <>
-            {`Available: `}
             {isPoolToken ? (
                 <>
                     {`${balance.toFixed(3)} `}
                     {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(3)}`}</span> : null}
+                    {` tokens available`}
+                    {otherBalance && otherBalance.gt(0) ? (
+                        <>
+                            <br />
+                            <span className="opacity-80">{`${otherBalance.toFixed(3)} in ${tokenSource()}`}</span>
+                        </>
+                    ) : null}
                 </>
             ) : (
                 <>
-                    {`${toApproxCurrency(balance)} `}
+                    {`${toApproxCurrency(balance)} available `}
                     {amountBN.gt(0) ? (
                         <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
                     ) : null}
@@ -43,8 +61,10 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
+    otherBalance,
     tokenSymbol,
     isPoolToken,
+    balanceType,
     decimalPlaces = 8,
 }) => {
     return (
@@ -84,7 +104,13 @@ const AmountInput: React.FC<AmountProps> = ({
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
-                    <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
+                    <Available
+                        balance={balance}
+                        otherBalance={otherBalance}
+                        amountBN={amountBN}
+                        balanceType={balanceType}
+                        isPoolToken={isPoolToken}
+                    />
                 )}
             </Styles.Subtext>
         </>
