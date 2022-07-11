@@ -63,7 +63,7 @@ export interface PoolListUris {
  *
  * Pools store types
  */
-type TokenBalance = {
+export type TokenBalance = {
     approvedAmount: BigNumber;
     balance: BigNumber;
 };

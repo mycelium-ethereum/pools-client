@@ -1,19 +1,21 @@
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useMemo, useContext } from 'react';
 import { Transition } from '@headlessui/react';
 import styled from 'styled-components';
 import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
-import MintButton, { MintSourceEnum } from '~/archetypes/BuyTokens/MintButton';
+import { MintSourceEnum } from '~/archetypes/BuyTokens/MintButton';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { HiddenExpand } from '~/components/General';
+import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TimeLeft from '~/components/TimeLeft';
+import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useBigNumber } from '~/context/SwapContext';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
-import { AnalyticsContext } from '~/context/AnalyticsContext';
+import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 
 export type EXButtonsProps = {
     amount: string;
@@ -25,6 +27,7 @@ export type EXButtonsProps = {
     market: string;
     poolTokens: BrowseTableRowData[];
     isInvalid: boolean;
+    handleOpenModal: () => void;
 } & ExchangeButtonProps;
 
 export const ExchangeButtons: React.FC<EXButtonsProps> = ({
@@ -38,20 +41,15 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     poolTokens,
     isInvalid,
     swapState,
-    swapDispatch,
     account,
     userBalances,
-    commitType,
+    handleOpenModal,
 }) => {
-    const [mintButtonClicked, setMintButtonClicked] = useState(false);
+    const { selectedPool } = swapState;
     // Required for tracking trade actions
     const { trackBuyAction } = useContext(AnalyticsContext);
 
-    const handleClick = () => {
-        setMintButtonClicked(true);
-    };
-
-    const { commit, approve } = usePoolInstanceActions();
+    const { approve } = usePoolInstanceActions();
     const amountBN = useBigNumber(amount);
 
     const tokenPrice = useMemo(
@@ -82,13 +80,11 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     const isValidOnBalancer = isFinite(expectedBalancerAmount.toNumber());
     const isValidAmount = parseFloat(amount) > 0 && amount.length > 0;
     const sideIndicator = side === SideEnum.long ? 'L' : 'S';
-    const timeLeft = useMemo(
-        () => poolTokens.filter((poolToken) => poolToken.address === token?.pool)[0]?.expectedExecution,
-        [poolTokens, token],
-    );
+
+    const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
 
     return (
-        <StyledHiddenExpand defaultHeight={0} open={!isInvalid && !!timeLeft && account !== undefined}>
+        <StyledHiddenExpand defaultHeight={0} open={!isInvalid && !!receiveIn && account !== undefined}>
             <Transition
                 show={!isInvalid}
                 enter="transition-opacity duration-50 delay-100"
@@ -103,33 +99,31 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                         Mint <b>{`${expectedAmount.toNumber().toFixed(3)}`}</b> tokens at{' '}
                         <b>{toApproxCurrency(tokenPrice, 3)}</b> in{' '}
                         <b>
-                            <TimeLeft targetTime={timeLeft} />
+                            <TimeLeft targetTime={receiveIn} />
                         </b>
                     </BuyText>
                     <MintButtonContainer isValidAmount={isValidAmount} account={account}>
-                        {userBalances.settlementToken.approvedAmount.eq(0) && (
-                            <TracerMintButton
-                                hidden={mintButtonClicked}
-                                onClick={handleClick}
-                                disabled={!isValidAmount}
-                            >
+                        {userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
+                        !userBalances.settlementToken.approvedAmount.eq(0) ? (
+                            <TracerMintButton onClick={handleOpenModal} disabled={!isValidAmount}>
                                 <span className="mr-2 inline-block">Mint on</span>
                                 <TracerSVG className="w-[90px]" alt="Tracer logo" />
                             </TracerMintButton>
+                        ) : (
+                            <Button
+                                size="lg"
+                                variant="primary"
+                                disabled={!selectedPool}
+                                onClick={(_e) => {
+                                    if (!approve) {
+                                        return;
+                                    }
+                                    approve(selectedPool ?? '', pool.settlementToken.symbol);
+                                }}
+                            >
+                                Unlock {pool.settlementToken.symbol}
+                            </Button>
                         )}
-                        <MintButton
-                            swapState={swapState}
-                            swapDispatch={swapDispatch}
-                            userBalances={userBalances}
-                            approve={approve}
-                            pool={pool}
-                            amountBN={amountBN}
-                            commit={commit}
-                            commitType={commitType}
-                            token={token}
-                            isLong={isLong}
-                            trackBuyAction={trackBuyAction}
-                        />
                     </MintButtonContainer>
                 </BuyButtonContainer>
                 <BuyButtonContainer>
@@ -214,8 +208,8 @@ const MintButtonContainer = styled.div<{
     }
 `;
 
-export const TracerMintButton = styled.button`
-    position: absolute;
+export const TracerMintButton = styled.button<{ absolute?: boolean }>`
+    position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
     left: 0;
     top: 0;
     display: flex;

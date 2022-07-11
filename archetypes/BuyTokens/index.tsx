@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useMemo } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButtons from '~/archetypes/BuyTokens/ExchangeButtons';
 import { LeverageSelector, MarketDropdown, PoolTypeDropdown, SideSelector } from '~/archetypes/BuyTokens/Inputs';
+import MintSummaryModal from '~/archetypes/BuyTokens/MintSummaryModal';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
@@ -21,6 +22,7 @@ import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { PoolInfo } from '~/types/pools';
 
 const BuyTokens: React.FC = () => {
+    const [isSummaryOpen, setSummaryOpen] = useState(false);
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { amount, leverage, market, markets, selectedPool, side, commitAction, balanceType, invalidAmount } =
         swapState || {};
@@ -167,83 +169,110 @@ const BuyTokens: React.FC = () => {
         ],
     );
 
+    const handleOpenModal = () => {
+        setSummaryOpen(true);
+    };
+
+    const handleCloseModal = () => {
+        setSummaryOpen(false);
+    };
+
     return (
-        <Container>
-            <FormBackdrop>
-                <Header>
-                    <H1>Get Leveraged Tokens</H1>
-                </Header>
-                <Divider />
-                <Table>
-                    <tbody>
-                        {/* Only show 'token to receive' and arrow row after user selection */}
-                        {/* Only show Market type row for markets that have multiple pools that match user selection */}
-                        {buyTableData.map((v, i) => {
-                            if (
-                                ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
-                                (v.name === 'Market type' &&
-                                    market &&
-                                    markets &&
-                                    leverage &&
-                                    (markets?.[market]?.[leverage] as unknown as PoolInfo[])?.length > 1) ||
-                                (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Market type')
-                            ) {
-                                return (
-                                    <TableRow key={`${v.name}-${i}`}>
-                                        <TableCellLeft>
-                                            {v.name}{' '}
-                                            {v.TooltipEl && (
-                                                <v.TooltipEl>
-                                                    <StyledInfoIcon />
-                                                </v.TooltipEl>
-                                            )}
-                                        </TableCellLeft>
-                                        <TableCellRight
-                                            noPadding={
-                                                (!!token && v.name === '') ||
-                                                (!!token && !!token.symbol && v.name === 'Token to spend')
-                                            }
-                                        >
-                                            {v.selector}
-                                        </TableCellRight>
-                                    </TableRow>
-                                );
-                            }
-                        })}
-                    </tbody>
-                </Table>
-                {account && poolTokens.length && token && token.symbol ? (
-                    <ExchangeButtons
-                        account={account}
-                        amount={amount}
-                        pool={pool}
-                        token={token}
-                        isLong={isLong}
-                        side={side}
-                        leverage={leverage}
-                        market={market}
-                        poolTokens={poolTokens}
-                        swapState={swapState}
-                        swapDispatch={swapDispatch}
-                        userBalances={userBalances}
-                        amountBN={amountBN}
-                        commitType={commitType}
-                        isInvalid={invalidAmount.isInvalid}
-                    />
-                ) : null}
-                {!account && (
-                    <ConnectButtonStyled
-                        size="lg"
-                        variant="primary"
-                        onClick={(_e) => {
-                            handleConnect();
-                        }}
-                    >
-                        Connect Wallet
-                    </ConnectButtonStyled>
-                )}
-            </FormBackdrop>
-        </Container>
+        <>
+            <Container>
+                <FormBackdrop>
+                    <Header>
+                        <H1>Get Leveraged Tokens</H1>
+                    </Header>
+                    <Divider />
+                    <Table>
+                        <tbody>
+                            {/* Only show 'token to receive' and arrow row after user selection */}
+                            {/* Only show Market type row for markets that have multiple pools that match user selection */}
+                            {buyTableData.map((v, i) => {
+                                if (
+                                    ((v.name === 'Token to receive' || v.name === '') && token && token.symbol) ||
+                                    (v.name === 'Market type' &&
+                                        market &&
+                                        markets &&
+                                        leverage &&
+                                        (markets?.[market]?.[leverage] as unknown as PoolInfo[])?.length > 1) ||
+                                    (v.name !== 'Token to receive' && v.name !== '' && v.name !== 'Market type')
+                                ) {
+                                    return (
+                                        <TableRow key={`${v.name}-${i}`}>
+                                            <TableCellLeft>
+                                                {v.name}{' '}
+                                                {v.TooltipEl && (
+                                                    <v.TooltipEl>
+                                                        <StyledInfoIcon />
+                                                    </v.TooltipEl>
+                                                )}
+                                            </TableCellLeft>
+                                            <TableCellRight
+                                                noPadding={
+                                                    (!!token && v.name === '') ||
+                                                    (!!token && !!token.symbol && v.name === 'Token to spend')
+                                                }
+                                            >
+                                                {v.selector}
+                                            </TableCellRight>
+                                        </TableRow>
+                                    );
+                                }
+                            })}
+                        </tbody>
+                    </Table>
+                    {account && poolTokens.length && token && token.symbol ? (
+                        <ExchangeButtons
+                            account={account}
+                            amount={amount}
+                            pool={pool}
+                            token={token}
+                            isLong={isLong}
+                            side={side}
+                            leverage={leverage}
+                            market={market}
+                            poolTokens={poolTokens}
+                            swapState={swapState}
+                            swapDispatch={swapDispatch}
+                            userBalances={userBalances}
+                            amountBN={amountBN}
+                            commitType={commitType}
+                            isInvalid={invalidAmount.isInvalid}
+                            handleOpenModal={handleOpenModal}
+                        />
+                    ) : null}
+                    {!account && (
+                        <ConnectButtonStyled
+                            size="lg"
+                            variant="primary"
+                            onClick={(_e) => {
+                                handleConnect();
+                            }}
+                        >
+                            Connect Wallet
+                        </ConnectButtonStyled>
+                    )}
+                </FormBackdrop>
+            </Container>
+            <MintSummaryModal
+                isOpen={true}
+                amount={amount}
+                selectedPool={selectedPool}
+                side={side}
+                invalidAmount={invalidAmount}
+                commitType={commitType}
+                commitAction={commitAction}
+                swapState={swapState}
+                swapDispatch={swapDispatch}
+                userBalances={userBalances}
+                token={token}
+                isLong={isLong}
+                handleCloseModal={handleCloseModal}
+                isSummaryOpen={isSummaryOpen}
+            />
+        </>
     );
 };
 
