@@ -10,30 +10,11 @@ import { useStore } from '~/store/main';
 import { selectAccount, selectNetwork } from '~/store/Web3Slice';
 
 const POOLS_VERSION = 2;
+const writeKey = process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY;
 
 // Helper functions
 const convertBNToFloat = (bn: BigNumber) => {
     return parseFloat(BigNumber.max(bn).toString());
-};
-
-// const getWriteKey = () => {
-//     switch (process.env.NODE_ENV) {
-//         case 'production':
-//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
-//         case 'development':
-//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
-//         default:
-//             return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
-//     }
-// };
-
-const getWriteKey = () => {
-    const url = window.location.href;
-    if (url.includes(process.env.siteUrl as string)) {
-        return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_PROD;
-    } else {
-        return process.env.NEXT_PUBLIC_SEGMENT_WRITE_KEY_DEV;
-    }
 };
 
 const useValues = () => {
@@ -230,7 +211,6 @@ const useValues = () => {
     };
 
     useEffect(() => {
-        const writeKey = getWriteKey();
         if (!writeKey) {
             console.warn('Segment.io write key not set');
         } else {
