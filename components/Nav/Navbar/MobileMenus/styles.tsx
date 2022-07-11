@@ -70,7 +70,7 @@ export const LauncherScrollContainer = styled.div`
     justify-content: space-between;
     height: 100%;
 
-    @media only screen and (max-height: 650px) {
+    @media only screen and (max-height: 700px) {
         overflow-y: auto;
         overflow-x: hidden;
     }
