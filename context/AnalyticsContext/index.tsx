@@ -214,14 +214,11 @@ const useValues = () => {
         if (!writeKey) {
             console.warn('Segment.io write key not set');
         } else {
-            const currentUrl = window.location.href;
-            if (currentUrl && !currentUrl.includes(process.env.siteUrl as string)) {
-                const loadAnalytics = async () => {
-                    const [response] = await AnalyticsBrowser.load({ writeKey });
-                    setAnalytics(response);
-                };
-                loadAnalytics();
-            }
+            const loadAnalytics = async () => {
+                const [response] = await AnalyticsBrowser.load({ writeKey });
+                setAnalytics(response);
+            };
+            loadAnalytics();
         }
     }, []);
 
