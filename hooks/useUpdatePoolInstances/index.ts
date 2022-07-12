@@ -79,6 +79,7 @@ export const useUpdatePoolInstances = (): void => {
                 if (!poolLists.length) {
                     return setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                 }
+
                 try {
                     const initialisedPools = await Promise.all(
                         poolLists.map(async (pool) => {
@@ -208,8 +209,8 @@ export const useUpdatePoolInstances = (): void => {
         if (poolsInitialized) {
             const pools_ = Object.values(pools).map((pool) => pool.poolInstance.address);
             updatePoolCommitStats(pools_, network);
-            updateNextPoolStates(pools_, network);
             updatePoolBalancerPrices(pools_, network);
+            updateNextPoolStates(pools_, network);
             updateOracleDetails(pools_);
         }
     }, [network, poolsInitialized]);
