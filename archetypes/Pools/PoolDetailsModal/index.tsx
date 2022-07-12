@@ -14,6 +14,7 @@ import { constructExplorerLink } from '~/utils/blockExplorers';
 import { formatAddress, formatSeconds } from '~/utils/converters';
 import { getPriceFeedUrl } from '~/utils/poolNames';
 import { formatFees } from '~/utils/converters';
+import { generateOracleTypeSummary } from '~/utils/pools';
 
 type Details = {
     name: string;
@@ -50,7 +51,8 @@ export const PoolDetails = ({
         oracleDetails,
     } = poolDetails;
 
-    const { poolInstance: pool } = usePool(address);
+    const poolInfo = usePool(address);
+    const { poolInstance: pool } = poolInfo;
 
     const poolDetailsData = useMemo(
         () => [
@@ -90,14 +92,20 @@ export const PoolDetails = ({
 
     const poolParametersData = useMemo(
         () => [
-            { name: 'SMA Periods', value: oracleDetails?.numPeriods ? oracleDetails?.numPeriods : 0 },
-            {
-                name: 'SMA Total Length',
-                value:
-                    oracleDetails?.updateInterval && oracleDetails?.numPeriods
-                        ? formatSeconds(oracleDetails?.updateInterval * oracleDetails?.numPeriods)
-                        : 0,
-            },
+            { name: 'Oracle type', value: generateOracleTypeSummary(poolInfo) },
+            ...(oracleDetails?.type === 'SMA'
+                ? [
+                      { name: 'SMA Periods', value: oracleDetails?.numPeriods ? oracleDetails?.numPeriods : 0 },
+                      {
+                          name: 'SMA Total Length',
+                          value:
+                              oracleDetails?.updateInterval && oracleDetails?.numPeriods
+                                  ? formatSeconds(oracleDetails?.updateInterval * oracleDetails?.numPeriods)
+                                  : 0,
+                      },
+                  ]
+                : []),
+            ,
             {
                 name: 'Rebalance Frequency',
                 value: pool?.oracle.updateInterval ? formatSeconds(pool?.oracle.updateInterval) : 0,
@@ -166,6 +174,14 @@ const ModalHeader = styled.h1`
     font-size: 24px;
     margin-bottom: 10px;
     font-weight: 600;
+    color: ${({ theme }) => {
+        switch (theme.theme) {
+            case Theme.Light:
+                return '#374151';
+            default:
+                return '#fff';
+        }
+    }};
 `;
 
 const ModalHeaderContainer = styled((props: any) => <div className={props.className}>{props.children}</div>)`
@@ -191,7 +207,7 @@ const FollowLinkIcon = styled(FollowLink)`
                 case Theme.Light:
                     return '#374151';
                 default:
-                    '#fff';
+                    return '#fff';
             }
         }};
     }
