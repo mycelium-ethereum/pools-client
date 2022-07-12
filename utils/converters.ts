@@ -288,4 +288,5 @@ export const convertShortDate: (entryDate: number) => string = (entryDate) => {
 };
 
 export const formatBN = (n: BigNumber, decimals: number): BigNumber => n.div(10 ** decimals);
-export const formatAddress = (addr: string): string => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
+export const formatFees = (n: BigNumber): string => `${n.multipliedBy(100).toFixed()}%`;
+export const formatAddress = (addr: string): string => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)} `;

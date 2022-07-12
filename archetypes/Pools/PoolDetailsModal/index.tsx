@@ -1,18 +1,19 @@
-import React, { useContext, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { TWModal } from '~/components/General/TWModal';
 import { Table, TableRow, TableRowCell } from '~/components/General/TWTable';
+import { usePool } from '~/hooks/usePool';
 import { Theme } from '~/store/ThemeSlice/themes';
 
 import FollowLink from '/public/img/general/follow-link.svg';
 import Close from '/public/img/general/close.svg';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { OracleDetails } from '~/types/pools';
 import { constructExplorerLink } from '~/utils/blockExplorers';
-import { formatAddress } from '~/utils/converters';
+import { formatAddress, formatSeconds } from '~/utils/converters';
 import { getPriceFeedUrl } from '~/utils/poolNames';
-import { swapDefaults, SwapContext } from '~/context/SwapContext';
-import { usePool } from '~/hooks/usePool';
+import { formatFees } from '~/utils/converters';
 
 type Details = {
     name: string;
@@ -23,6 +24,7 @@ type Details = {
     committer: string;
     collateralAsset: string;
     collateralAssetAddress: string;
+    oracleDetails: OracleDetails;
 };
 
 export const PoolDetails = ({
@@ -36,14 +38,19 @@ export const PoolDetails = ({
     poolDetails: Details;
     network: KnownNetwork | undefined;
 }): JSX.Element => {
-    const { swapState = swapDefaults } = useContext(SwapContext);
-    const { selectedPool } = swapState || {};
-    const { name, address, marketSymbol, leverage, keeper, committer, collateralAsset, collateralAssetAddress } =
-        poolDetails;
+    const {
+        name,
+        address,
+        marketSymbol,
+        leverage,
+        keeper,
+        committer,
+        collateralAsset,
+        collateralAssetAddress,
+        oracleDetails,
+    } = poolDetails;
 
-    const { poolInstance: pool } = usePool(selectedPool);
-
-    console.log(pool);
+    const { poolInstance: pool } = usePool(address);
 
     const poolDetailsData = useMemo(
         () => [
@@ -83,13 +90,17 @@ export const PoolDetails = ({
 
     const poolParametersData = useMemo(
         () => [
-            { name: 'SMA Periods', value: name },
-            { name: 'Front-Running Interval', value: name },
-            { name: 'Mint Fee', value: name },
-            { name: 'Burn Fee', value: name },
-            { name: 'Deployer', value: name },
+            { name: 'SMA Periods', value: oracleDetails?.numPeriods },
+            {
+                name: 'SMA Total Length',
+                value: formatSeconds(oracleDetails?.updateInterval * oracleDetails?.numPeriods),
+            },
+            { name: 'Rebalance Frequency', value: formatSeconds(pool?.oracle.updateInterval) },
+            { name: 'Front-Running Interval', value: formatSeconds(pool?.frontRunningInterval.toNumber()) },
+            { name: 'Mint Fee', value: formatFees(pool.committer.mintingFee) },
+            { name: 'Burn Fee', value: formatFees(pool.committer.burningFee) },
         ],
-        [network, keeper, committer, leverage, name, collateralAsset],
+        [pool, oracleDetails],
     );
 
     return (
