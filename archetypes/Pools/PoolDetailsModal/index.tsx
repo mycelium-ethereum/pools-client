@@ -90,15 +90,24 @@ export const PoolDetails = ({
 
     const poolParametersData = useMemo(
         () => [
-            { name: 'SMA Periods', value: oracleDetails?.numPeriods },
+            { name: 'SMA Periods', value: oracleDetails?.numPeriods ? oracleDetails?.numPeriods : 0 },
             {
                 name: 'SMA Total Length',
-                value: formatSeconds(oracleDetails?.updateInterval * oracleDetails?.numPeriods),
+                value:
+                    oracleDetails?.updateInterval && oracleDetails?.numPeriods
+                        ? formatSeconds(oracleDetails?.updateInterval * oracleDetails?.numPeriods)
+                        : 0,
             },
-            { name: 'Rebalance Frequency', value: formatSeconds(pool?.oracle.updateInterval) },
-            { name: 'Front-Running Interval', value: formatSeconds(pool?.frontRunningInterval.toNumber()) },
-            { name: 'Mint Fee', value: formatFees(pool.committer.mintingFee) },
-            { name: 'Burn Fee', value: formatFees(pool.committer.burningFee) },
+            {
+                name: 'Rebalance Frequency',
+                value: pool?.oracle.updateInterval ? formatSeconds(pool?.oracle.updateInterval) : 0,
+            },
+            {
+                name: 'Front-Running Interval',
+                value: pool?.frontRunningInterval ? formatSeconds(pool?.frontRunningInterval.toNumber()) : 0,
+            },
+            { name: 'Mint Fee', value: pool.committer.mintingFee ? formatFees(pool.committer.mintingFee) : 0 },
+            { name: 'Burn Fee', value: pool.committer.burningFee ? formatFees(pool.committer.burningFee) : 0 },
         ],
         [pool, oracleDetails],
     );
