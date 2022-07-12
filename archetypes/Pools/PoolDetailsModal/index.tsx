@@ -154,16 +154,22 @@ export const PoolDetails = ({
             <ModalHeader>Parameters</ModalHeader>
             <Table showDivider={false}>
                 <tbody>
-                    {poolParametersData.map((v, i) => (
-                        <TableRow key={`${v.name}-${i}`} lined>
-                            <TableRowCell className="px-2">
-                                <CellContent>
-                                    <div className="name">{v.name}</div>
-                                    <div className="info">{v.value}</div>
-                                </CellContent>
-                            </TableRowCell>
-                        </TableRow>
-                    ))}
+                    {poolParametersData.map((v, i) => {
+                        return (
+                            <>
+                                {v ? (
+                                    <TableRow key={`${v.name}-${i}`} lined>
+                                        <TableRowCell className="px-2">
+                                            <CellContent>
+                                                <div className="name">{v.name}</div>
+                                                <div className="info">{v.value}</div>
+                                            </CellContent>
+                                        </TableRowCell>
+                                    </TableRow>
+                                ) : null}
+                            </>
+                        );
+                    })}
                 </tbody>
             </Table>
         </TWModal>
