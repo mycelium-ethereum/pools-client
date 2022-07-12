@@ -16,7 +16,7 @@ export const PoolName = styled.span`
     font-weight: bold;
     font-size: 18px;
     line-height: 150%;
-    margin-left: 1rem;
+    margin: 0rem 1rem;
     white-space: nowrap;
 `;
 
@@ -61,6 +61,10 @@ const MARKET_COLORS: Record<
     LINK: {
         backgroundColor: 'rgba(55, 91, 210, 0.3)',
         borderColor: 'rgb(55, 91, 210)',
+    },
+    WTI: {
+        backgroundColor: 'rgba(65, 102, 139, 0.3)',
+        borderColor: 'rgb(95, 102, 139)',
     },
 };
 

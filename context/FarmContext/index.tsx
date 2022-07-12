@@ -5,6 +5,7 @@ import shallow from 'zustand/shallow';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 
+import { deprecatedPools } from '~/constants/deprecatedPools';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
@@ -12,10 +13,12 @@ import { useAllPoolLists } from '~/hooks/useAllPoolLists';
 import { useStore } from '~/store/main';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { Network } from '~/types/networks';
+import { PoolStatus } from '~/types/pools';
 import { Farm, FarmConfig } from '~/types/staking';
 import { StakingRewards } from '~/types/staking/typechain';
 import { UniswapV2Router02__factory, UniswapV2Router02 } from '~/types/uniswapV2Router';
-import { fetchTokenPrice } from '~/utils/farms';
+import { fetchBPTPrice } from '~/utils/balancer';
+import { fetchPPTokenPrice } from '~/utils/farms';
 
 type RewardsTokenUSDPrices = Record<string, BigNumber>;
 type FarmsLookup = { [address: string]: Farm };
@@ -89,102 +92,121 @@ export const FarmStore: React.FC = ({ children }) => {
                 setFarms({});
             }
 
-            Promise.all(
-                config.poolFarms.map(async ({ address, abi, pool, link, linkText, rewardsEnded }) => {
-                    try {
-                        const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
+            const initialisedFarms: Farm[] = [];
 
-                        const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
-                            await Promise.all([
-                                contract.balanceOf(account),
-                                contract.stakingToken(),
-                                contract.earned(account),
-                                contract.getRewardForDuration(),
-                                contract.rewardsToken(),
-                            ]);
+            for (const farm of config.poolFarms) {
+                const { address, abi, pool, link, linkText, rewardsEnded, isBPTFarm, balancerPoolId, name } = farm;
 
-                        const stakingToken = ERC20__factory.connect(stakingTokenAddress, provider);
-                        const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, provider);
+                try {
+                    const poolInfo = staticPoolInfo.find((poolInfo) => poolInfo.address === pool);
 
-                        const [
-                            stakingTokenName,
-                            stakingTokenDecimals,
-                            stakingTokenBalance,
-                            stakingTokenAllowance,
-                            _totalStaked,
-                            rewardsTokenDecimals,
-                            _stakingTokenSupply,
-                        ] = await Promise.all([
-                            stakingToken.name(),
-                            stakingToken.decimals(),
-                            stakingToken.balanceOf(account),
-                            stakingToken.allowance(account, address),
-                            contract.totalSupply(),
-                            rewardsToken.decimals(),
-                            stakingToken.totalSupply(),
+                    const contract = new ethers.Contract(address, abi, provider) as StakingRewards;
+
+                    const [myStaked, stakingTokenAddress, myRewards, rewardsPerWeek, rewardsTokenAddress] =
+                        await Promise.all([
+                            contract.balanceOf(account),
+                            contract.stakingToken(),
+                            contract.earned(account),
+                            contract.getRewardForDuration(),
+                            contract.rewardsToken(),
                         ]);
 
-                        const totalStaked = new BigNumber(ethers.utils.formatUnits(_totalStaked, stakingTokenDecimals));
+                    const stakingToken = ERC20__factory.connect(stakingTokenAddress, provider);
+                    const rewardsToken = ERC20__factory.connect(rewardsTokenAddress, provider);
 
-                        const poolInfo = staticPoolInfo.find((poolInfo) => poolInfo.address === pool);
-                        if (!poolInfo) {
-                            console.error(`Failed find to ${pool.slice()} in poolList`, staticPoolInfo.slice());
-                            return;
-                        }
-                        const poolDetails = {
-                            poolTokenPrice: await fetchTokenPrice(poolInfo, stakingTokenAddress, provider),
-                        };
+                    const [
+                        stakingTokenSymbol,
+                        stakingTokenDecimals,
+                        stakingTokenBalance,
+                        stakingTokenAllowance,
+                        _totalStaked,
+                        rewardsTokenDecimals,
+                        _stakingTokenSupply,
+                    ] = await Promise.all([
+                        stakingToken.symbol(),
+                        stakingToken.decimals(),
+                        stakingToken.balanceOf(account),
+                        stakingToken.allowance(account, address),
+                        contract.totalSupply(),
+                        rewardsToken.decimals(),
+                        stakingToken.totalSupply(),
+                    ]);
 
-                        const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
-                        const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
-                        // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
-                        const stakingTokenSupply = new BigNumber(_stakingTokenSupply.toString()).div(
+                    const totalStaked = new BigNumber(ethers.utils.formatUnits(_totalStaked, stakingTokenDecimals));
+
+                    const poolAddress = poolInfo?.address || pool;
+
+                    const poolDetails = {
+                        name: name || poolInfo?.name || poolInfo?.address || poolAddress,
+                        address: poolAddress,
+                        status:
+                            network && deprecatedPools?.[network]?.[poolAddress]
+                                ? PoolStatus.Deprecated
+                                : PoolStatus.Live,
+                    };
+
+                    const stakingDecimalMultiplier = 10 ** stakingTokenDecimals;
+                    const rewardsDecimalMultiplier = 10 ** rewardsTokenDecimals;
+                    // totalEmittedTokensPerYear x priceOfRewardsTokens) / (totalSupply x priceOfStakingTokens
+                    const stakingTokenSupply = new BigNumber(_stakingTokenSupply.toString()).div(
+                        stakingDecimalMultiplier,
+                    );
+
+                    let stakingTokenPrice = new BigNumber(0);
+                    let tvl = new BigNumber(0);
+
+                    if (poolInfo) {
+                        stakingTokenPrice =
+                            isBPTFarm && balancerPoolId
+                                ? await fetchBPTPrice(poolInfo, balancerPoolId, provider, stakingTokenSupply)
+                                : await fetchPPTokenPrice(poolInfo, stakingTokenAddress, provider);
+
+                        tvl = stakingTokenPrice.times(totalStaked);
+                    }
+
+                    initialisedFarms.push({
+                        name: isBPTFarm
+                            ? `${name || poolInfo?.name || poolAddress} Balancer LP`
+                            : name || stakingTokenSymbol,
+                        address,
+                        contract,
+                        totalStaked,
+                        stakingToken: stakingToken,
+                        stakingTokenSymbol,
+                        stakingTokenDecimals,
+                        stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
                             stakingDecimalMultiplier,
-                        );
-
-                        const tvl = poolDetails.poolTokenPrice.times(totalStaked);
-
-                        return {
-                            name: stakingTokenName,
-                            address,
-                            contract,
-                            totalStaked,
-                            stakingToken: stakingToken,
-                            stakingTokenDecimals,
-                            stakingTokenBalance: new BigNumber(stakingTokenBalance.toString()).div(
-                                stakingDecimalMultiplier,
-                            ),
-                            stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
-                                stakingDecimalMultiplier,
-                            ),
-                            stakingTokenSupply,
-                            myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
-                            myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
-                            rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
-                                .div(rewardsDecimalMultiplier)
-                                .times(52),
-                            poolDetails,
-                            tvl,
-                            link,
-                            linkText,
-                            rewardsEnded: Boolean(rewardsEnded),
-                            rewardsTokenAddress,
-                        };
-                    } catch (error) {
-                        console.error('Failed fetching farm with address: ', address, error);
-                        return;
-                    }
-                }),
-            ).then((farms_) => {
-                const farms: FarmsLookup = {};
-                farms_.forEach((farm: Farm | undefined) => {
-                    if (farm) {
-                        farms[farm.address] = farm;
-                    }
-                });
-                setFarms(farms);
-                setFetchingFarms(false);
+                        ),
+                        stakingTokenAllowance: new BigNumber(stakingTokenAllowance.toString()).div(
+                            stakingDecimalMultiplier,
+                        ),
+                        stakingTokenSupply,
+                        stakingTokenPrice,
+                        myStaked: new BigNumber(myStaked.toString()).div(stakingDecimalMultiplier),
+                        myRewards: new BigNumber(myRewards.toString()).div(rewardsDecimalMultiplier),
+                        rewardsPerYear: new BigNumber(rewardsPerWeek.toString())
+                            .div(rewardsDecimalMultiplier)
+                            .times(52),
+                        poolDetails,
+                        tvl,
+                        link,
+                        linkText,
+                        rewardsEnded: Boolean(rewardsEnded),
+                        rewardsTokenAddress,
+                        isBPTFarm: Boolean(isBPTFarm),
+                    });
+                } catch (error) {
+                    console.error('Failed fetching farm with address: ', address, error);
+                }
+            }
+            const farms: FarmsLookup = {};
+            initialisedFarms.forEach((farm: Farm | undefined) => {
+                if (farm) {
+                    farms[farm.address] = farm;
+                }
             });
+            setFarms(farms);
+            setFetchingFarms(false);
         }
     };
 

@@ -32,7 +32,7 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
                         continue;
                     }
 
-                    const { poolInstance } = pools[commit.pool];
+                    const { poolInstance, poolStatus } = pools[commit.pool];
 
                     const { shortToken, longToken, settlementToken, frontRunningInterval, lastUpdate, updateInterval } =
                         poolInstance;
@@ -108,6 +108,7 @@ export const useQueuedCommits = (): LoadingRows<QueuedCommit> => {
 
                     parsedCommits.push({
                         ...commit,
+                        poolStatus,
                         tokenIn,
                         tokenOut,
                         settlementTokenSymbol: settlementToken.symbol,

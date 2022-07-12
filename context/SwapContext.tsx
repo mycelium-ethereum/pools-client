@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import BigNumber from 'bignumber.js';
 import { CommitActionEnum, BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import { Children } from '~/types/general';
-import { PoolType } from '~/types/pools';
+import { PoolType, PoolInfo } from '~/types/pools';
 import { getMarketInfoFromSymbol, getMarketSymbol } from '~/utils/poolNames';
 import { usePools } from '../hooks/usePools';
 
@@ -14,7 +14,7 @@ interface ContextProps {
 
 // the key here is the leverage amount
 // this allows access through Markets[selectedMarket][selectedLeverage]
-type Market = Record<string, PoolType>;
+export type Market = Record<string, PoolInfo>[];
 
 export type SwapState = {
     amount: string;
@@ -52,29 +52,6 @@ export type SwapAction =
     | { type: 'setInvalidAmount'; value: { message?: string; isInvalid: boolean } }
     | { type: 'setSide'; value: SideEnum }
     | { type: 'reset' };
-
-export const LEVERAGE_OPTIONS = (market: string): { leverage: number; disabled: boolean }[] => [
-    {
-        leverage: 1,
-        disabled: market === 'TOKE/USD' || market === 'LINK/USD' || market === 'AAVE/USD',
-    },
-    {
-        leverage: 2,
-        disabled: true,
-    },
-    {
-        leverage: 3,
-        disabled: false,
-    },
-    {
-        leverage: 5,
-        disabled: true,
-    },
-    {
-        leverage: 10,
-        disabled: true,
-    },
-];
 
 export const SIDE_OPTIONS = [
     {
@@ -127,7 +104,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setSide':
                 return { ...state, side: action.value };
             case 'setPoolFromLeverage':
-                pool = state.markets?.[state.market]?.[action.value]?.address;
+                pool = state.markets?.[state.market]?.[action.value][0]?.poolInstance.address;
                 console.debug(`Setting pool from leverage: ${pool?.slice()}`);
                 return {
                     ...state,
@@ -154,11 +131,20 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
             case 'setPoolFromMarket':
                 console.debug(`Setting market: ${action.market}`);
                 // set leverage if its not already
-                leverage = !Number.isNaN(state.leverage) ? state.leverage : 1;
+                leverage = !Number.isNaN(state.leverage) ? state.leverage : 3;
                 // set the side to long if its not already
                 side = !Number.isNaN(state.side) ? state.side : SideEnum.long;
-                pool = state.markets?.[action.market]?.[leverage]?.address;
-                console.debug(`Setting pool: ${pool?.slice()}`);
+
+                // ensure the leverage we are using exists for this market
+                // if not, fall back to the first available leverage amount
+                if (!state.markets?.[action.market]?.[leverage]?.length) {
+                    const firstAvailableLeverage = Object.keys(state.markets?.[action.market] || {})[0];
+                    leverage = Number(firstAvailableLeverage || 3);
+                }
+
+                pool = state.markets?.[action.market]?.[leverage]?.[0]?.poolInstance?.address;
+
+                console.log(`Setting pool: ${pool?.slice()}`);
                 return {
                     ...state,
                     market: action.market,
@@ -210,9 +196,11 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 // hopefully valid pool name
                 if (marketSymbol) {
                     if (!markets[marketSymbol]) {
-                        markets[marketSymbol] = {};
+                        markets[marketSymbol] = {} as Record<string, PoolInfo>[];
                     }
-                    markets[marketSymbol][leverage] = pool.poolInstance;
+                    // markets[marketSymbol][leverage] = pool.poolInstance;
+                    markets[marketSymbol][leverage] = markets[marketSymbol][leverage] || [];
+                    (markets[marketSymbol][leverage] as unknown as PoolInfo[]).push(pool);
                 }
             });
             swapDispatch({
@@ -220,7 +208,7 @@ export const SwapStore: React.FC<Children> = ({ children }: Children) => {
                 markets,
             });
         }
-    }, [poolsInitialized]);
+    }, [poolsInitialized, pools]);
 
     // sets the market after pools have been initialised and the route set
     useEffect(() => {

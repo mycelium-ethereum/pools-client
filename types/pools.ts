@@ -68,6 +68,13 @@ type TokenBalance = {
     balance: BigNumber;
 };
 
+export type OracleDetails = {
+    type: 'SMA' | 'Spot';
+    numPeriods: number;
+    updateInterval: number;
+    isLoading: boolean;
+};
+
 export type TradeStats = {
     avgLongEntryPriceWallet: BigNumber;
     avgShortEntryPriceWallet: BigNumber;
@@ -91,8 +98,45 @@ export type TradeStats = {
     totalShortMints: number;
 };
 
+export type NextPoolState = {
+    currentSkew: BigNumber;
+    currentLongBalance: BigNumber;
+    currentLongSupply: BigNumber;
+    currentShortBalance: BigNumber;
+    currentShortSupply: BigNumber;
+    currentLongTokenPrice: BigNumber;
+    currentShortTokenPrice: BigNumber;
+    currentPendingLongTokenBurn: BigNumber;
+    currentPendingShortTokenBurn: BigNumber;
+    expectedSkew: BigNumber;
+    expectedLongBalance: BigNumber;
+    expectedLongSupply: BigNumber;
+    expectedShortBalance: BigNumber;
+    expectedShortSupply: BigNumber;
+    expectedLongTokenPrice: BigNumber;
+    expectedShortTokenPrice: BigNumber;
+    expectedPendingLongTokenBurn: BigNumber;
+    expectedPendingShortTokenBurn: BigNumber;
+    lastOraclePrice: BigNumber;
+    expectedOraclePrice: BigNumber;
+    // front running
+    expectedFrontRunningSkew: BigNumber;
+    expectedFrontRunningLongBalance: BigNumber;
+    expectedFrontRunningLongSupply: BigNumber;
+    expectedFrontRunningShortBalance: BigNumber;
+    expectedFrontRunningShortSupply: BigNumber;
+    totalNetFrontRunningPendingLong: BigNumber;
+    totalNetFrontRunningPendingShort: BigNumber;
+    expectedFrontRunningLongTokenPrice: BigNumber;
+    expectedFrontRunningShortTokenPrice: BigNumber;
+    expectedFrontRunningPendingLongTokenBurn: BigNumber;
+    expectedFrontRunningPendingShortTokenBurn: BigNumber;
+    expectedFrontRunningOraclePrice: BigNumber;
+};
+
 export type PoolInfo = {
     poolInstance: Pool;
+    poolStatus: PoolStatus;
     userBalances: {
         shortToken: TokenBalance;
         longToken: TokenBalance;
@@ -111,6 +155,8 @@ export type PoolInfo = {
         // TODO
         // settlementToken: BigNumber; // in some stable coin of our choosing
     };
+    nextPoolState: NextPoolState;
+    oracleDetails: OracleDetails;
 };
 
 export type TradeStatsAPIResponse = {
@@ -134,6 +180,43 @@ export type TradeStatsAPIResponse = {
     totalLongMints: number;
     totalShortBurns: number;
     totalShortMints: number;
+};
+
+export type NextPoolStateAPIResponse = {
+    currentSkew: string;
+    currentLongBalance: string;
+    currentLongSupply: string;
+    currentShortBalance: string;
+    currentShortSupply: string;
+    currentLongTokenPrice: string;
+    currentShortTokenPrice: string;
+    currentPendingLongTokenBurn: string;
+    currentPendingShortTokenBurn: string;
+    expectedSkew: string;
+    expectedLongBalance: string;
+    expectedLongSupply: string;
+    expectedShortBalance: string;
+    expectedShortSupply: string;
+    expectedLongTokenPrice: string;
+    expectedShortTokenPrice: string;
+    expectedPendingLongTokenBurn: string;
+    expectedPendingShortTokenBurn: string;
+    totalNetPendingLong: string;
+    totalNetPendingShort: string;
+    lastOraclePrice: string;
+    expectedOraclePrice: string;
+    expectedFrontRunningSkew: string;
+    expectedFrontRunningLongBalance: string;
+    expectedFrontRunningLongSupply: string;
+    expectedFrontRunningShortBalance: string;
+    expectedFrontRunningShortSupply: string;
+    totalNetFrontRunningPendingLong: string;
+    totalNetFrontRunningPendingShort: string;
+    expectedFrontRunningLongTokenPrice: string;
+    expectedFrontRunningShortTokenPrice: string;
+    expectedFrontRunningPendingLongTokenBurn: string;
+    expectedFrontRunningPendingShortTokenBurn: string;
+    expectedFrontRunningOraclePrice: string;
 };
 
 export type PoolCommitStatsAPIResponse = {
@@ -162,3 +245,8 @@ export type PoolCommitStatsAPIResponse = {
 export type PoolCommitStats = {
     oneDayVolume: BigNumber;
 };
+
+export enum PoolStatus {
+    Live,
+    Deprecated,
+}

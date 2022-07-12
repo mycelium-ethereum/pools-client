@@ -28,6 +28,9 @@ import TOKE_L from '~/public/img/logos/currencies/toke_long.svg';
 import TOKE_S from '~/public/img/logos/currencies/toke_short.svg';
 import USD from '~/public/img/logos/currencies/usd.svg';
 import USDC from '~/public/img/logos/currencies/usdc.svg';
+import WTI from '~/public/img/logos/currencies/wti.svg';
+import WTI_L from '~/public/img/logos/currencies/wti_long.svg';
+import WTI_S from '~/public/img/logos/currencies/wti_short.svg';
 import { classNames } from '~/utils/helpers';
 import { getBaseAsset } from '~/utils/poolNames';
 
@@ -62,12 +65,14 @@ export type LogoTicker =
     | 'TOKE_L'
     | 'LINK_L'
     | 'AAVE_L'
+    | 'WTI_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
     | 'TOKE_S'
     | 'LINK_S'
     | 'AAVE_S'
+    | 'WTI_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
@@ -78,6 +83,7 @@ export type LogoTicker =
     | 'SUSHI'
     | 'BALANCER'
     | 'BASE'
+    | 'WTI'
     | typeof NETWORKS.ARBITRUM
     | typeof NETWORKS.ARBITRUM_RINKEBY
     | 'DEFAULT';
@@ -90,6 +96,7 @@ const logos: Record<LogoTicker, any> = {
     USD: USD,
     FRAX: FRAX,
     AAVE: AAVE,
+    WTI: WTI,
     DEFAULT: PPUSD,
     AAVE_L: AAVE_L,
     AAVE_S: AAVE_S,
@@ -103,6 +110,8 @@ const logos: Record<LogoTicker, any> = {
     BTC_S: BTC_S,
     TOKE_S: TOKE_S,
     LINK_S: LINK_S,
+    WTI_S: WTI_S,
+    WTI_L: WTI_L,
     EUR: EUR,
     ETH: ETH,
     WETH: ETH,

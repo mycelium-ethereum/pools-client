@@ -1,19 +1,19 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import { DeltaEnum } from '~/archetypes/Pools/state';
 import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
-import UpOrDown from '~/components/UpOrDown';
+import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
+import { OverviewAsset } from '~/types/portfolio';
+import { UnclaimedPoolTokenRowProps } from '~/types/unclaimedTokens';
 import { Market, SettlementToken } from '../Market';
 import { OverviewTableRowCell, ActionsCell, ActionsButton } from '../OverviewTable/styles';
-import { OverviewAsset, ClaimablePoolTokenRowProps } from '../state';
 import { TokensNotional } from '../Tokens';
 
-export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { settlementTokenSymbol: string }> = ({
+export const UnclaimedPoolTokenRow = ({
     balance,
     leveragedNotionalValue,
-    entryPrice,
     currentTokenPrice,
     onClickCommitAction,
     symbol,
@@ -22,7 +22,10 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
     side,
     poolAddress,
     settlementTokenSymbol,
-}) => {
+    poolStatus,
+}: UnclaimedPoolTokenRowProps): JSX.Element => {
+    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
+
     return (
         <TableRow>
             <OverviewTableRowCell>
@@ -36,20 +39,6 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
-                <TokensNotional amount={balance} price={entryPrice} settlementTokenSymbol={settlementTokenSymbol} />
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
-                <div>
-                    <UpOrDown
-                        oldValue={balance.times(entryPrice)}
-                        newValue={balance.times(currentTokenPrice)}
-                        deltaDenotation={DeltaEnum.Numeric}
-                        currency={settlementTokenSymbol}
-                        showCurrencyTicker={true}
-                    />
-                </div>
-            </OverviewTableRowCell>
-            <OverviewTableRowCell>
                 <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
@@ -60,13 +49,22 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
                 >
                     Burn
                 </ActionsButton>
-                <ActionsButton
-                    size="xs"
-                    variant="primary-light"
-                    onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                <TooltipSelector
+                    tooltip={{
+                        key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
+                    }}
                 >
-                    Flip
-                </ActionsButton>
+                    <div>
+                        <ActionsButton
+                            size="xs"
+                            variant="primary-light"
+                            disabled={poolIsDeprecated}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
+                        >
+                            Flip
+                        </ActionsButton>
+                    </div>
+                </TooltipSelector>
                 <Actions
                     token={{
                         address,
@@ -83,7 +81,7 @@ export const ClaimablePoolTokenRow: React.FC<ClaimablePoolTokenRowProps & { sett
     );
 };
 
-export const ClaimableQuoteTokenRow: React.FC<OverviewAsset> = ({ symbol, balance, address, decimals }) => (
+export const UnclaimedQuoteTokenRow = ({ symbol, balance, address, decimals }: OverviewAsset): JSX.Element => (
     <TableRow>
         <OverviewTableRowCell>
             <SettlementToken tokenSymbol={symbol} />
@@ -92,12 +90,6 @@ export const ClaimableQuoteTokenRow: React.FC<OverviewAsset> = ({ symbol, balanc
             <div>
                 {balance.toFixed(2)} {symbol}
             </div>
-        </OverviewTableRowCell>
-        <OverviewTableRowCell>
-            <div>-</div>
-        </OverviewTableRowCell>
-        <OverviewTableRowCell>
-            <div>-</div>
         </OverviewTableRowCell>
         <OverviewTableRowCell>
             <div>-</div>

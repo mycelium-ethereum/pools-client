@@ -6,6 +6,7 @@ import { usePools } from '~/hooks/usePools';
 import { useStore } from '~/store/main';
 import { selectNetwork } from '~/store/Web3Slice';
 import { LoadingRows } from '~/types/hooks';
+import { formatBN } from '~/utils/converters';
 import { getMarketSymbol } from '~/utils/poolNames';
 import { useUpkeeps } from '../useUpkeeps';
 
@@ -36,7 +37,16 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
             const poolValues = Object.values(pools);
             const rows: BrowseTableRowData[] = [];
             poolValues.forEach((pool_) => {
-                const { poolInstance: pool, userBalances, upkeepInfo, poolCommitStats, balancerPrices } = pool_;
+                const {
+                    poolInstance: pool,
+                    oracleDetails,
+                    poolStatus,
+                    userBalances,
+                    upkeepInfo,
+                    poolCommitStats,
+                    balancerPrices,
+                    nextPoolState,
+                } = pool_;
                 const {
                     address,
                     lastUpdate,
@@ -54,12 +64,16 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                 const leverageBN = new BigNumber(leverage);
 
                 const {
+                    totalNetFrontRunningPendingShort,
+                    expectedFrontRunningShortBalance,
+                    totalNetFrontRunningPendingLong,
+                    expectedFrontRunningLongBalance,
                     expectedLongBalance,
                     expectedShortBalance,
-                    newLongTokenPrice,
-                    newShortTokenPrice,
+                    expectedLongTokenPrice,
+                    expectedShortTokenPrice,
                     expectedSkew,
-                } = pool.getNextPoolState();
+                } = nextPoolState;
 
                 const tvl = shortBalance.plus(longBalance).toNumber();
 
@@ -82,32 +96,55 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
 
                     skew: calcSkew(shortBalance, longBalance).toNumber(),
                     nextSkew: expectedSkew.toNumber(),
+                    // estimatedSkew with all pending commits
+                    estimatedSkew: nextPoolState.expectedFrontRunningSkew.toNumber(),
 
                     tvl: tvl,
-                    nextTVL: expectedLongBalance.plus(expectedShortBalance).toNumber(),
+                    nextTVL: formatBN(
+                        expectedLongBalance.plus(expectedShortBalance),
+                        settlementToken.decimals,
+                    ).toNumber(),
                     oneDayVolume: poolCommitStats.oneDayVolume,
 
                     shortToken: {
                         address: shortToken.address,
                         symbol: shortToken.symbol,
-                        effectiveGain: calcEffectiveShortGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveShortGain(
+                            expectedShortBalance,
+                            expectedLongBalance,
+                            leverageBN,
+                        ).toNumber(),
                         lastTCRPrice: pool.getShortTokenPrice().toNumber(),
-                        nextTCRPrice: newShortTokenPrice.toNumber(),
+                        nextTCRPrice: expectedShortTokenPrice.toNumber(),
                         tvl: shortBalance.toNumber(),
-                        nextTvl: expectedShortBalance.toNumber(),
+                        nextTvl: formatBN(expectedShortBalance, settlementToken.decimals).toNumber(),
                         balancerPrice: balancerPrices.shortToken.toNumber(),
-                        userHoldings: userBalances.shortToken.balance.toNumber(),
+                        userHoldings: userBalances.shortToken.balance
+                            .plus(userBalances.aggregateBalances.shortTokens)
+                            .toNumber(),
+                        pendingTvl: formatBN(totalNetFrontRunningPendingShort, settlementToken.decimals).toNumber(),
+                        estimatedTvl: formatBN(expectedFrontRunningShortBalance, settlementToken.decimals).toNumber(),
+                        poolStatus,
                     },
                     longToken: {
                         address: longToken.address,
                         symbol: longToken.symbol,
-                        effectiveGain: calcEffectiveLongGain(shortBalance, longBalance, leverageBN).toNumber(),
+                        effectiveGain: calcEffectiveLongGain(
+                            expectedShortBalance,
+                            expectedLongBalance,
+                            leverageBN,
+                        ).toNumber(),
                         lastTCRPrice: pool.getLongTokenPrice().toNumber(),
-                        nextTCRPrice: newLongTokenPrice.toNumber(),
+                        nextTCRPrice: expectedLongTokenPrice.toNumber(),
                         tvl: longBalance.toNumber(),
-                        nextTvl: expectedLongBalance.toNumber(),
+                        nextTvl: formatBN(expectedLongBalance, settlementToken.decimals).toNumber(),
                         balancerPrice: balancerPrices.longToken.toNumber(),
-                        userHoldings: userBalances.longToken.balance.toNumber(),
+                        userHoldings: userBalances.longToken.balance
+                            .plus(userBalances.aggregateBalances.longTokens)
+                            .toNumber(),
+                        pendingTvl: formatBN(totalNetFrontRunningPendingLong, settlementToken.decimals).toNumber(),
+                        estimatedTvl: formatBN(expectedFrontRunningLongBalance, settlementToken.decimals).toNumber(),
+                        poolStatus,
                     },
                     isWaitingForUpkeep: upkeepInfo.isWaitingForUpkeep,
                     expectedExecution: upkeepInfo.expectedExecution,
@@ -119,6 +156,8 @@ export const useBrowsePools = (): LoadingRows<BrowseTableRowData> => {
                     committer: committer.address,
                     collateralAsset: settlementToken.symbol,
                     collateralAssetAddress: settlementToken.address,
+                    oracleDetails,
+                    poolStatus,
                 });
             });
 

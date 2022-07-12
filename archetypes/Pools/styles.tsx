@@ -63,21 +63,58 @@ export const AltPoolActions = styled.div`
     }
 `;
 
+export const DisabledButtonWrap = styled.div`
+    cursor: not-allowed;
+    opacity: 0.5;
+    position: relative;
+    @media ${({ theme }) => theme.device.sm} {
+        margin-left: 1.25rem;
+    }
+`;
+
+export const DummyButton = styled.div`
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    cursor: not-allowed;
+`;
+
 export const Button = styled(UnstyledButton)<{ disabled?: boolean }>`
     @media ${({ theme }) => theme.device.sm} {
         max-width: 220px;
     }
 
-    ${({ disabled, theme }) => {
+    ${({ disabled }) => {
         if (disabled) {
             return `
-                cursor: not-allowed; 
-                opacity: 0.5; 
-
-                @media ${theme.device.sm} {
-                    margin-left: 1.25rem; 
-                }
+                cursor: not-allowed;
+                pointer-events: none;
+                z-index: -1;
             `;
         }
     }};
+`;
+
+export const NoResults = styled.div`
+    padding: 60px 0px 80px;
+    text-align: center;
+    color: #9ca3af;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 200px;
+    margin: 0 auto;
+    font-size: 24px;
+    line-height: 32px;
+
+    > span svg {
+        height: 48px;
+        width: 48px;
+        margin-bottom: 8px;
+    }
+    > span svg path {
+        fill: #6b7280;
+    }
 `;

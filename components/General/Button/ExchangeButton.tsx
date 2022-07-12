@@ -1,18 +1,20 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { BigNumber } from 'bignumber.js';
 import styled from 'styled-components';
-import { CommitActionEnum, BalanceTypeEnum, CommitEnum } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, BalanceTypeEnum, CommitEnum, SideEnum } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
+import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import Button from '~/components/General/Button';
+import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { SwapAction, SwapState } from '~/context/SwapContext';
 import { AggregateBalances } from '~/types/pools';
 
-type ExchangeButton = {
-    onClose: () => void;
+export type ExchangeButtonProps = {
+    onClose?: () => void;
     swapState: SwapState;
     swapDispatch: React.Dispatch<SwapAction>;
     account?: string;
-    handleConnect: () => void;
+    handleConnect?: () => void;
     userBalances: UserBalances;
     approve?: (selectedPool: string, symbol: string) => void;
     pool: Pool;
@@ -27,7 +29,7 @@ type ExchangeButton = {
     commitType: CommitEnum;
 };
 
-type UserBalances = {
+export type UserBalances = {
     shortToken: TokenBalance;
     longToken: TokenBalance;
     settlementToken: TokenBalance;
@@ -52,7 +54,7 @@ const commitText: Record<CommitEnum, string> = {
     [CommitEnum.longBurn]: 'Long Burn',
 };
 
-const ExchangeButton: React.FC<ExchangeButton> = ({
+const ExchangeButton: React.FC<ExchangeButtonProps> = ({
     onClose,
     swapState,
     swapDispatch,
@@ -65,7 +67,18 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
     commit,
     commitType,
 }) => {
-    const { selectedPool, invalidAmount, commitAction, balanceType } = swapState;
+    // Required for tracking trade actions
+    const { trackTradeAction } = useContext(AnalyticsContext);
+    const { selectedPool, side, invalidAmount, commitAction, balanceType } = swapState;
+    const isLong = side === SideEnum.long;
+    const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+
+    const nextTokenPrice = useMemo(
+        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
+        [isLong, pool.longToken, pool.shortToken],
+    );
+
+    const expectedAmount = calcNumTokens(amountBN, nextTokenPrice);
 
     if (!account) {
         return (
@@ -73,7 +86,7 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                 size="lg"
                 variant="primary"
                 onClick={(_e) => {
-                    handleConnect();
+                    handleConnect && handleConnect();
                 }}
             >
                 Connect Wallet
@@ -119,9 +132,34 @@ const ExchangeButton: React.FC<ExchangeButton> = ({
                     commit(selectedPool ?? '', commitType, balanceType, amountBN, {
                         onSuccess: () => {
                             swapDispatch?.({ type: 'setAmount', value: '' });
-                            onClose();
+                            trackTradeAction(
+                                commitAction,
+                                balanceType,
+                                token.name,
+                                pool.settlementToken.symbol,
+                                expectedAmount,
+                                amountBN,
+                                userBalances.settlementToken.balance,
+                                pool.longToken.supply,
+                                pool.shortToken.supply,
+                                false,
+                            );
+                            onClose && onClose();
                         },
                     });
+
+                    trackTradeAction(
+                        commitAction,
+                        balanceType,
+                        token.name,
+                        pool.settlementToken.symbol,
+                        expectedAmount,
+                        amountBN,
+                        userBalances.settlementToken.balance,
+                        pool.longToken.supply,
+                        pool.shortToken.supply,
+                        true,
+                    );
                 }}
             >
                 Commit {commitText[commitType]}

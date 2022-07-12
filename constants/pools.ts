@@ -2,10 +2,13 @@ import { BigNumber } from 'bignumber.js';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { NETWORKS } from '@tracer-protocol/pools-js';
 import Pool from '@tracer-protocol/pools-js/entities/pool';
-import { PoolInfo } from '~/types/pools';
+import { PoolInfo, PoolStatus } from '~/types/pools';
+
+const TRACER_API = process.env.NEXT_PUBLIC_TRACER_API;
 
 export const DEFAULT_POOLSTATE: PoolInfo = {
     poolInstance: Pool.CreateDefault(),
+    poolStatus: PoolStatus.Live,
     userBalances: {
         shortToken: {
             approvedAmount: new BigNumber(0),
@@ -58,6 +61,46 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
         longToken: new BigNumber(0),
         shortToken: new BigNumber(0),
     },
+    nextPoolState: {
+        currentSkew: new BigNumber(0),
+        currentLongBalance: new BigNumber(0),
+        currentLongSupply: new BigNumber(0),
+        currentShortBalance: new BigNumber(0),
+        currentShortSupply: new BigNumber(0),
+        currentLongTokenPrice: new BigNumber(1),
+        currentShortTokenPrice: new BigNumber(1),
+        currentPendingLongTokenBurn: new BigNumber(0),
+        currentPendingShortTokenBurn: new BigNumber(0),
+        expectedSkew: new BigNumber(0),
+        expectedLongBalance: new BigNumber(0),
+        expectedLongSupply: new BigNumber(0),
+        expectedShortBalance: new BigNumber(0),
+        expectedShortSupply: new BigNumber(0),
+        expectedLongTokenPrice: new BigNumber(1),
+        expectedShortTokenPrice: new BigNumber(1),
+        expectedPendingLongTokenBurn: new BigNumber(0),
+        expectedPendingShortTokenBurn: new BigNumber(0),
+        lastOraclePrice: new BigNumber(0),
+        expectedOraclePrice: new BigNumber(0),
+        expectedFrontRunningSkew: new BigNumber(0),
+        expectedFrontRunningLongBalance: new BigNumber(0),
+        expectedFrontRunningLongSupply: new BigNumber(0),
+        expectedFrontRunningShortBalance: new BigNumber(0),
+        expectedFrontRunningShortSupply: new BigNumber(0),
+        totalNetFrontRunningPendingLong: new BigNumber(0),
+        totalNetFrontRunningPendingShort: new BigNumber(0),
+        expectedFrontRunningLongTokenPrice: new BigNumber(0),
+        expectedFrontRunningShortTokenPrice: new BigNumber(0),
+        expectedFrontRunningPendingLongTokenBurn: new BigNumber(0),
+        expectedFrontRunningPendingShortTokenBurn: new BigNumber(0),
+        expectedFrontRunningOraclePrice: new BigNumber(0),
+    },
+    oracleDetails: {
+        type: 'SMA',
+        updateInterval: 0,
+        numPeriods: 0,
+        isLoading: true,
+    },
 };
 
 export interface PoolListMap {
@@ -76,13 +119,13 @@ type TokenListMapByNetwork = Partial<Record<KnownNetwork, PoolListMap>>;
 export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
-            verified: 'https://api.tracer.finance/poolsv2/poolList?network=42161',
+            verified: `${TRACER_API}/poolsv2/poolList?network=42161&list=verified`,
         },
         External: [],
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
-            verified: 'https://api.tracer.finance/poolsv2/poolList?network=421611',
+            verified: `${TRACER_API}/poolsv2/poolList?network=421611&list=verified`,
         },
         External: [],
     },
@@ -98,6 +141,8 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '3S-BTC/USD+USDC': '3S-BTC+USDC',
     '3L-XAU/USD+USDC': '3L-XAU+USDC',
     '3S-XAU/USD+USDC': '3S-XAU+USDC',
+    '3L-WTI/USD+USDC': '3L-WTI+USDC',
+    '3S-WTI/USD+USDC': '3S-WTI+USDC',
     '3L-ETH/USD+gOHM': '3L-ETH+gOHM',
     '3S-ETH/USD+gOHM': '3S-ETH+gOHM',
     '3L-(AVAX+BNB+SOL)/USD+USDC': '3L-ethkilla',
@@ -106,4 +151,6 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '15S-ETHMCAP/BTCMCAP+USDC': '15S-FLIPPEN',
     '5L-PUNK/ETH+wETH': '5L-PUNK/ETH',
     '5S-PUNK/ETH+wETH': '5S-PUNK/ETH',
+    '3S-BTC/USD+USDC-12h': '3S-BTC-12h',
+    '3L-BTC/USD+USDC-12h': '3L-BTC-12h',
 };

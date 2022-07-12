@@ -17,12 +17,10 @@ export const useUpdateWeb3Store: () => void = () => {
                 await onboard.walletSelect(savedWallet);
                 await onboard.walletCheck();
             })();
+        } else {
+            // set default provider if we need to
+            setDefaultProvider();
         }
-    }, []);
-
-    // set default provider if we need to
-    useEffect(() => {
-        setDefaultProvider();
     }, []);
 
     // change theme

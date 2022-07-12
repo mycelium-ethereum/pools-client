@@ -1,12 +1,13 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats } from '~/types/pools';
+import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats, NextPoolState, OracleDetails } from '~/types/pools';
 
 export enum KnownPoolsInitialisationErrors {
     ProviderNotReady = 'Provider not ready',
     NetworkNotSupported = 'Network not supported',
     NoPools = 'No pools found',
+    ExceededMaxRetryCount = 'Exceeded max retry count',
 }
 
 export interface IPoolsInstancesSlice {
@@ -15,8 +16,8 @@ export interface IPoolsInstancesSlice {
     poolsInitialized: boolean;
     poolsInitializationError: any | undefined;
 
-    setPool: (pool: Pool) => void;
-    setMultiplePools: (pool: Pool[]) => void;
+    setPool: (pool: Pool, network: string) => void;
+    setMultiplePools: (pool: Pool[], network: string) => void;
     resetPools: () => void;
     setPoolsInitialized: (initialized: boolean) => void;
     setPoolsInitializationError: (error: any) => void;
@@ -31,10 +32,12 @@ export interface IPoolsInstancesSlice {
     ) => void;
     setAggregateBalances: (pool: string, aggregateBalances: AggregateBalances) => void;
     setTradeStats: (pool: string, aggregateBalances: TradeStats) => void;
+    setNextPoolState: (pool: string, nextPoolState: NextPoolState) => void;
     setPoolCommitStats: (pool: string, commitStats: PoolCommitStats) => void;
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
+    setOracleDetails: (pool: string, oracleDetails: OracleDetails) => void;
 
     handlePoolUpkeep: (
         pool: string,
@@ -53,12 +56,14 @@ export interface IPoolsInstancesSlice {
         account: string | undefined,
     ) => void;
     updateTradeStats: (pools: string[], network: KnownNetwork | undefined, account: string | undefined) => void;
+    updateNextPoolStates: (pools: string[], network: KnownNetwork | undefined) => void;
     updatePoolCommitStats: (pools: string[], network: KnownNetwork | undefined) => void;
     updateTokenApprovals: (
         pools: string[],
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
+    updateOracleDetails: (pools: string[]) => void;
     updatePoolBalances: (pool: string, provider: ethers.providers.JsonRpcProvider | undefined) => void;
     updatePoolBalancerPrices: (pool: string[], network: KnownNetwork | undefined) => void;
     simulateUpdateAvgEntryPrices: (pool: string) => void;

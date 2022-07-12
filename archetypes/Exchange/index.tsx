@@ -6,6 +6,7 @@ import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
+import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { CommitActionSideMap } from '~/constants/commits';
 import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
@@ -17,23 +18,45 @@ import CloseIcon from '~/public/img/general/close.svg';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
+import { PoolStatus } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
 import Gas from './Gas';
 import Inputs from './Inputs';
 import Summary from './Summary';
 
-const TRADE_OPTIONS = [
+const getTradeOptions = (poolStatus: PoolStatus) => [
     {
         key: CommitActionEnum.mint,
         text: 'Mint',
+        disabled:
+            poolStatus === PoolStatus.Deprecated
+                ? {
+                      optionKey: TooltipKeys.DeprecatedPoolMintCommit,
+                  }
+                : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeMint,
+        },
     },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
+        tooltip: {
+            optionKey: TooltipKeys.TradeBurn,
+        },
     },
     {
         key: CommitActionEnum.flip,
         text: 'Flip',
+        disabled:
+            poolStatus === PoolStatus.Deprecated
+                ? {
+                      optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
+                  }
+                : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeFlip,
+        },
     },
 ];
 
@@ -46,7 +69,7 @@ export default styled((({ onClose, className }) => {
 
     const { swapState = swapDefaults, swapDispatch = noDispatch } = useContext(SwapContext);
     const { selectedPool, amount, commitAction, side, invalidAmount } = swapState || {};
-    const { poolInstance: pool, userBalances } = usePool(selectedPool);
+    const { poolInstance: pool, userBalances, poolStatus } = usePool(selectedPool);
     const { commit, approve, commitGasFee } = usePoolInstanceActions();
 
     const ethPrice = useBalancerETHPrice();
@@ -74,12 +97,32 @@ export default styled((({ onClose, className }) => {
         }
     }, [selectedPool, commitType, amountBN, ethPrice, gasPrice]);
 
+    const TRADE_OPTIONS = useMemo(() => {
+        if (poolStatus === PoolStatus.Deprecated) {
+            swapDispatch({ type: 'setCommitAction', value: CommitActionEnum.burn });
+        }
+        return getTradeOptions(poolStatus);
+    }, [poolStatus]);
+
+    const generateTitle = () => {
+        switch (commitAction) {
+            case CommitActionEnum.mint:
+                return `Open a Trade`;
+            case CommitActionEnum.burn:
+                return `Close a Trade`;
+            case CommitActionEnum.flip:
+                return `Reverse a Trade`;
+            default:
+                return `Open a Trade`;
+        }
+    };
+
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    New Commit
+                    {generateTitle()}
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>
@@ -89,6 +132,7 @@ export default styled((({ onClose, className }) => {
                     value={commitAction ?? CommitActionEnum.mint}
                     size={'lg'}
                     color={'tracer'}
+                    fullWidth={true}
                     onClick={(val) => {
                         if (swapDispatch) {
                             swapDispatch({ type: 'setAmount', value: '' });

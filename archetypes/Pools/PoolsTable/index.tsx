@@ -1,6 +1,5 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import BigNumber from 'bignumber.js';
-import { LinkOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
 import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
@@ -8,11 +7,13 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
+import { OracleDetailsBadge, OracleDetailsBadgeContainer } from '~/components/OracleDetailsBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
 import { StyledTooltip } from '~/components/Tooltips';
 import { default as UpOrDown } from '~/components/UpOrDown';
 
+import Clock from '~/public/img/general/clock.svg';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
@@ -20,9 +21,11 @@ import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
+import { marketSymbolToAssetName } from '~/utils/poolNames';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
@@ -39,8 +42,28 @@ const EffectiveLeverageTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 
+const SpotPriceTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The price of the tracked asset before subjecting it to any Data Manipulations.">
+        {children}
+    </StyledTooltip>
+);
+const TracerTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The current token price on Tracer. Please note that the price may change as minting the token is not immediate.">
+        {children}
+    </StyledTooltip>
+);
+
+const IndexPriceTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The value used for settling this market.">{children}</StyledTooltip>
+);
+const BalancerTip: React.FC = ({ children }) => (
+    <StyledTooltip title="The current token price on Balancer. You can buy the Pool Token immediately at this price (slippage may impact final pricing)">
+        {children}
+    </StyledTooltip>
+);
+
 const CommittmentTip: React.FC = ({ children }) => (
-    <StyledTooltip title="You must commit your mint or burn before the end of this countdown to have your order filled at the upcoming rebalance.">
+    <StyledTooltip title="By opening a position now on Tracer, you will receive the tokens later. You can open a position immediately by trading on Balancer.">
         {children}
     </StyledTooltip>
 );
@@ -49,10 +72,62 @@ const NoBalancerPoolTip: React.FC<{ market: string }> = ({ children, market }) =
     <StyledTooltip title={`There are no Balancer pools for the ${market} market yet.`}>{children}</StyledTooltip>
 );
 
+const TradeOnBalancerTip: React.FC = ({ children }) => (
+    <StyledTooltip title={`Trade instantly on Balancer`}>{children}</StyledTooltip>
+);
+
+const EstimatedTVLTip: React.FC<{
+    estimatedTvl: number;
+    currentTvl: number;
+}> = ({ children, estimatedTvl, currentTvl }) => (
+    <StyledTooltip
+        title={
+            <>
+                <strong>After all pending commits</strong>
+                <div>Estimated TVL: {toApproxCurrency(estimatedTvl)}</div>
+                <div>
+                    Change: {estimatedTvl > currentTvl ? '+' : ''}
+                    {toApproxCurrency(estimatedTvl - currentTvl)}
+                </div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const EstimatedSkewTip: React.FC<{
+    estimatedSkew: number;
+    currentSkew: number;
+}> = ({ children, estimatedSkew, currentSkew }) => (
+    <StyledTooltip
+        title={
+            <>
+                <strong>After all pending commits</strong>
+                <div>Estimated Skew: {estimatedSkew.toFixed(3)}</div>
+                <div>
+                    Change: {estimatedSkew > currentSkew ? '+' : ''}
+                    {(estimatedSkew - currentSkew).toFixed(3)}
+                </div>
+            </>
+        }
+    >
+        {children}
+    </StyledTooltip>
+);
+
+const ClockIcon = styled(Clock)`
+    margin-left: 5px;
+    width: 16px;
+    &:hover {
+        cursor: pointer;
+    }
+`;
+
 const InfoIcon = styled(Info)`
     margin-left: 15px;
 
-    :hover {
+    &:hover {
         cursor: pointer;
     }
 
@@ -105,19 +180,26 @@ export const PoolsTable = ({
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
                                 <div className="flex pr-10">
-                                    <Logo
-                                        className="my-auto mr-3 inline"
-                                        size="lg"
-                                        ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
-                                    />
+                                    <div className="flex">
+                                        <Logo
+                                            className="my-auto mr-3"
+                                            size="lg"
+                                            ticker={getBaseAssetFromMarket(rows[0].marketSymbol) as LogoTicker}
+                                        />
+                                    </div>
                                     <div className="my-auto">
+                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                            {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
+                                        </div>
                                         <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
                                 <div className="px-10">
-                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                        SPOT PRICE
-                                    </div>
+                                    <SpotPriceTip>
+                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
+                                            SPOT PRICE
+                                        </div>
+                                    </SpotPriceTip>
                                     <div className="font-bold">
                                         {marketSpotPrices[rows[0].marketSymbol]
                                             ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
@@ -162,7 +244,7 @@ export const PoolsTable = ({
                         </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
-                            {'INDEX PRICE (USD)'}
+                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">{'TVL (USD)'}</TableHeaderCell>
                         <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
@@ -212,11 +294,15 @@ export const PoolsTable = ({
                             <div className="capitalize text-cool-gray-400">{'Losses'}</div>
                         </TableHeaderCell>
                         <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                            <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
+                            <TracerTip>
+                                <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
+                            </TracerTip>
                         </TableHeaderCell>
                         {showNextRebalance ? (
                             <TableHeaderCell className="text-cool-gray-400" size="sm-x">
-                                <div className="capitalize text-cool-gray-400">{'Balancer'}</div>
+                                <BalancerTip>
+                                    <div className="capitalize text-cool-gray-400">{'Balancer'}</div>
+                                </BalancerTip>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
@@ -263,7 +349,12 @@ const PoolRow: React.FC<
             <TableRow lined>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
-                    <div className="font-bold">{pool.leverage}</div>
+                    <div className="mb-1 flex font-bold">
+                        <OracleDetailsBadgeContainer>
+                            <div className="mr-2 text-lg">{pool.leverage}</div>
+                            <OracleDetailsBadge oracleDetails={pool.oracleDetails} />
+                        </OracleDetailsBadgeContainer>
+                    </div>
                     <div className="flex items-center">
                         {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
@@ -339,7 +430,14 @@ const PoolRow: React.FC<
                     <ShortBalance />
                     {showNextRebalance ? (
                         <>
-                            <div>{pool.skew.toFixed(3)}</div>
+                            <div className="flex">
+                                {pool.nextSkew.toFixed(3)}
+                                {pool.poolStatus === PoolStatus.Live ? (
+                                    <EstimatedSkewTip estimatedSkew={pool.estimatedSkew} currentSkew={pool.skew}>
+                                        <ClockIcon />
+                                    </EstimatedSkewTip>
+                                ) : null}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.skew}
@@ -493,6 +591,11 @@ const TokenRows: React.FC<
                                 tokenMetricSide={side}
                                 showNextRebalance={showNextRebalance}
                             />
+                            {tokenInfo.poolStatus === PoolStatus.Live ? (
+                                <EstimatedTVLTip estimatedTvl={tokenInfo.estimatedTvl} currentTvl={tokenInfo.tvl}>
+                                    <ClockIcon />
+                                </EstimatedTVLTip>
+                            ) : null}
                         </div>
                     </>
                 ) : (
@@ -551,15 +654,20 @@ const TokenRows: React.FC<
             {showNextRebalance ? (
                 <TableRowCell size={'sm'} className={styles}>
                     {tokenInfo.balancerPrice ? (
-                        <>
+                        <div className="flex items-center">
                             {toApproxCurrency(tokenInfo.balancerPrice, 3)}
-                            <LinkOutlined
-                                className="ml-1 align-middle"
-                                onClick={() => {
-                                    open(constructBalancerLink(tokenInfo.address, NETWORKS.ARBITRUM, true), 'blank');
-                                }}
-                            />
-                        </>
+                            <TradeOnBalancerTip>
+                                <LinkIcon
+                                    className="ml-2 inline-block"
+                                    onClick={() => {
+                                        open(
+                                            constructBalancerLink(tokenInfo.address, NETWORKS.ARBITRUM, true),
+                                            'blank',
+                                        );
+                                    }}
+                                />
+                            </TradeOnBalancerTip>
+                        </div>
                     ) : (
                         <>
                             <NoBalancerPoolTip market={poolTicker}>-</NoBalancerPoolTip>
@@ -590,11 +698,11 @@ const TokenRows: React.FC<
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
                         >
-                            COMMIT
+                            TRADE
                         </Button>
                         <Actions
                             token={{
-                                address: poolAddress,
+                                address: tokenInfo.address,
                                 decimals: decimals,
                                 symbol: tokenInfo.symbol,
                             }}

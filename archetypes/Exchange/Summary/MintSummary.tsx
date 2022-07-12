@@ -40,7 +40,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({
                 settlementTokenSymbol={pool.settlementTokenSymbol}
             />
             <ExpectedExposure
-                label={'Expected equivalent exposure'}
+                label={'Expected notional value'}
                 baseAsset={baseAsset}
                 oraclePrice={pool.oraclePrice}
                 commitAmount={commitAmount}
