@@ -433,7 +433,7 @@ const PoolRow: React.FC<
                             <div className="flex">
                                 {pool.nextSkew.toFixed(3)}
                                 {pool.poolStatus === PoolStatus.Live ? (
-                                    <EstimatedSkewTip estimatedSkew={pool.estimatedSkew} currentSkew={pool.nextSkew}>
+                                    <EstimatedSkewTip estimatedSkew={pool.estimatedSkew} currentSkew={pool.skew}>
                                         <ClockIcon />
                                     </EstimatedSkewTip>
                                 ) : null}
@@ -592,7 +592,7 @@ const TokenRows: React.FC<
                                 showNextRebalance={showNextRebalance}
                             />
                             {tokenInfo.poolStatus === PoolStatus.Live ? (
-                                <EstimatedTVLTip estimatedTvl={tokenInfo.estimatedTvl} currentTvl={tokenInfo.nextTvl}>
+                                <EstimatedTVLTip estimatedTvl={tokenInfo.estimatedTvl} currentTvl={tokenInfo.tvl}>
                                     <ClockIcon />
                                 </EstimatedTVLTip>
                             ) : null}
