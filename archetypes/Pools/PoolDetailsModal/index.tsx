@@ -142,14 +142,7 @@ export const PoolDetails = ({
                             <TableRowCell className="px-2">
                                 <CellContent>
                                     <div className="name">{v.name}</div>
-                                    <div className="info">
-                                        {v.value}
-                                        {v.href ? (
-                                            <a href={v.href} target="_blank" rel="noopener noreferrer">
-                                                <FollowLinkIcon />
-                                            </a>
-                                        ) : null}
-                                    </div>
+                                    <div className="info">{v.value}</div>
                                 </CellContent>
                             </TableRowCell>
                         </TableRow>
