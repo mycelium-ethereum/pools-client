@@ -108,7 +108,7 @@ export const PoolDetails = ({
             ,
             {
                 name: 'Rebalance Frequency',
-                value: pool?.oracle.updateInterval ? formatSeconds(pool?.oracle.updateInterval) : 0,
+                value: pool?.updateInterval ? formatSeconds(pool?.updateInterval.toNumber()) : 0,
             },
             {
                 name: 'Front-Running Interval',
