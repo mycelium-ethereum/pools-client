@@ -106,8 +106,8 @@ export const PoolDetails = ({
                 name: 'Front-Running Interval',
                 value: pool?.frontRunningInterval ? formatSeconds(pool?.frontRunningInterval.toNumber()) : 0,
             },
-            { name: 'Mint Fee', value: pool.committer.mintingFee ? formatFees(pool.committer.mintingFee) : 0 },
-            { name: 'Burn Fee', value: pool.committer.burningFee ? formatFees(pool.committer.burningFee) : 0 },
+            { name: 'Mint Fee', value: pool.committer.mintingFee ? formatFees(pool.committer.mintingFee) : '0%' },
+            { name: 'Burn Fee', value: pool.committer.burningFee ? formatFees(pool.committer.burningFee) : '0%' },
         ],
         [pool, oracleDetails],
     );
