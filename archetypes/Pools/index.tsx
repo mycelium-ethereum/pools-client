@@ -20,6 +20,7 @@ import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
 import { browseReducer, BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnum } from './state';
 import * as Styles from './styles';
+import AddAltPoolFromURL from '~/archetypes/Pools/AddAltPoolFromURL';
 
 export const Browse: React.FC = () => {
     const account = useStore(selectAccount);
@@ -146,7 +147,7 @@ export const Browse: React.FC = () => {
                     <FilterSelects state={state} dispatch={dispatch} />
                 </PageTable.Header>
                 {isLoading ? <Styles.Loading /> : null}
-                {filteredTokens.length === 0 && !isLoading && (
+                {filteredTokens.length === 0 && !isLoading && state.search && (
                     <Styles.NoResults>
                         <SearchOutlined aria-hidden="true" />
                         No results found for '{escapeRegExp(state.search)}'
@@ -202,6 +203,7 @@ export const Browse: React.FC = () => {
                     sortedFilteredTokens={filteredTokens}
                 />
             )}
+            <AddAltPoolFromURL sortedFilteredTokens={filteredTokens} />
         </>
     );
 };
