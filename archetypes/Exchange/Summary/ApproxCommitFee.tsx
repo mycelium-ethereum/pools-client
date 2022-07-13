@@ -5,7 +5,7 @@ import { Transparent } from './styles';
 
 export const ApproxCommitFee = ({ amount, fee }: { amount: BigNumber; fee: BigNumber }): JSX.Element => {
     const getFee = () => {
-        if (amount.toNumber() === 0) {
+        if (amount.toNumber() === 0 || fee.toNumber() === 0) {
             return 0;
         } else if (fee.lt(0.001)) {
             return '< $0.001';
