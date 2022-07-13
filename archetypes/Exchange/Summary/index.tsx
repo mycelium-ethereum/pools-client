@@ -52,6 +52,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             gasFee={gasFee}
                             isLong={isLong}
                             mintingFee={mintingFee}
+                            burningFee={burningFee}
                             annualFeePercent={new BigNumber(2)}
                         />
                     )}
@@ -79,6 +80,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             gasFee={gasFee}
                             mintingFee={mintingFee}
                             burningFee={burningFee}
+                            annualFeePercent={new BigNumber(2)}
                         />
                     )}
                 </Transition>

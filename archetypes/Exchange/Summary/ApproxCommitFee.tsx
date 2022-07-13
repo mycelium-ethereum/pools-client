@@ -13,7 +13,7 @@ export const ApproxCommitFee = ({ amount, fee }: { amount: BigNumber; fee: BigNu
             return toApproxCurrency(fee);
         }
     };
-    return <Transparent>{getFee()}</Transparent>;
+    return <Transparent inline>{getFee()}</Transparent>;
 };
 
 export default ApproxCommitFee;

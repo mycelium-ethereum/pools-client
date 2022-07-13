@@ -26,6 +26,7 @@ export type FlipSummaryProps = {
     pool: SummaryProps['pool'];
     mintingFee: BigNumber;
     burningFee: BigNumber;
+    annualFeePercent: BigNumber;
 } & SharedProps;
 
 export type MintSummaryProps = {
@@ -37,6 +38,7 @@ export type MintSummaryProps = {
         settlementTokenSymbol: string;
     };
     mintingFee: BigNumber;
+    burningFee: BigNumber;
     annualFeePercent: BigNumber;
 } & SharedProps;
 

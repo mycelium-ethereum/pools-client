@@ -14,6 +14,7 @@ const MintSummary: React.FC<MintSummaryProps> = ({
     gasFee,
     isLong,
     mintingFee,
+    burningFee,
     annualFeePercent,
 }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
@@ -49,7 +50,12 @@ const MintSummary: React.FC<MintSummaryProps> = ({
                 showTransactionDetails={showTransactionDetails}
                 isLong={isLong}
             />
-            <LifetimeCosts annualFeePercent={annualFeePercent} showTransactionDetails={showTransactionDetails} />
+            <LifetimeCosts
+                amount={amount}
+                annualFeePercent={annualFeePercent}
+                burningFee={burningFee}
+                showTransactionDetails={showTransactionDetails}
+            />
             <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
             </Styles.ShowDetailsButton>

@@ -285,23 +285,35 @@ export const ReceiveToken: React.FC<{
 
 // Display the fees to come (burn fee and annual protocol fee)
 export const LifetimeCosts = ({
+    amount,
     annualFeePercent,
+    burningFee,
     showTransactionDetails,
 }: {
+    amount: BigNumber;
     annualFeePercent: BigNumber; // decimal percentage
+    burningFee: BigNumber;
 } & BaseSection): JSX.Element => (
     <>
         <Section label="Lifetime Fees" className="header">
-            <Styles.SumText>{`${annualFeePercent.toFixed(2)}%`}</Styles.SumText>
+            <Styles.SumText>{`${annualFeePercent}% pa`}</Styles.SumText>
         </Section>
         {showTransactionDetails && (
-            <Styles.SectionDetails>
-                <Section label="DAO Management Fee" showSectionDetails>
-                    <Styles.Transparent>
-                        <span>{`${annualFeePercent.toFixed(2)}%`}</span>
-                    </Styles.Transparent>
-                </Section>
-            </Styles.SectionDetails>
+            <>
+                <Styles.SectionDetails>
+                    <Section label="DAO Management Fee" showSectionDetails>
+                        <Styles.Transparent>
+                            <span>{`${annualFeePercent}% pa`}</span>
+                        </Styles.Transparent>
+                    </Section>
+                </Styles.SectionDetails>
+                <Styles.SectionDetails>
+                    <Section label="Burn Fee" showSectionDetails>
+                        <ApproxCommitFee amount={amount} fee={burningFee} />
+                        <Styles.Transparent inline>{` on burn`}</Styles.Transparent>
+                    </Section>
+                </Styles.SectionDetails>
+            </>
         )}
     </>
 );

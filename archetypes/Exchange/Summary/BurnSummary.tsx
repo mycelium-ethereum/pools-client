@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
-import { ExpectedFees, ExpectedTokenValue } from './Sections';
+import { ExpectedBurnFees, ExpectedTokenValue } from './Sections';
 import { ShowDetailsButton } from './styles';
 import { BurnSummaryProps } from './types';
 
-export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice, pool, gasFee }) => {
+export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice, pool, gasFee, burningFee }) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
     return (
         <>
@@ -14,11 +14,11 @@ export const BurnSummary: React.FC<BurnSummaryProps> = ({ amount, nextTokenPrice
                 settlementTokenSymbol={pool.settlementTokenSymbol}
                 showTransactionDetails={showTransactionDetails}
             />
-            <ExpectedFees
+            <ExpectedBurnFees
                 amount={amount}
                 gasFee={gasFee}
                 showTransactionDetails={showTransactionDetails}
-                poolTransactionFee={burningFee}
+                burningFee={burningFee}
             />
 
             <ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
