@@ -34,10 +34,16 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolMintCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeMint,
+        },
     },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
+        tooltip: {
+            optionKey: TooltipKeys.TradeBurn,
+        },
     },
     {
         key: CommitActionEnum.flip,
@@ -48,6 +54,9 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
                       optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
                   }
                 : undefined,
+        tooltip: {
+            optionKey: TooltipKeys.TradeFlip,
+        },
     },
 ];
 
@@ -95,12 +104,25 @@ export default styled((({ onClose, className }) => {
         return getTradeOptions(poolStatus);
     }, [poolStatus]);
 
+    const generateTitle = () => {
+        switch (commitAction) {
+            case CommitActionEnum.mint:
+                return `Open a Trade`;
+            case CommitActionEnum.burn:
+                return `Close a Trade`;
+            case CommitActionEnum.flip:
+                return `Reverse a Trade`;
+            default:
+                return `Open a Trade`;
+        }
+    };
+
     return (
         <div className={className}>
             <Close onClick={onClose} className="close" />
             <Title>
                 <NetworkHintContainer>
-                    New Commit
+                    {generateTitle()}
                     <NetworkHint />
                 </NetworkHintContainer>
             </Title>
@@ -110,6 +132,7 @@ export default styled((({ onClose, className }) => {
                     value={commitAction ?? CommitActionEnum.mint}
                     size={'lg'}
                     color={'tracer'}
+                    fullWidth={true}
                     onClick={(val) => {
                         if (swapDispatch) {
                             swapDispatch({ type: 'setAmount', value: '' });

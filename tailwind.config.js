@@ -10,6 +10,10 @@ module.exports = {
 
     theme: {
         themeVariants: ['dark', 'matrix'],
+        backgroundImage: {
+            'dropdown-gradient':
+                'linear-gradient(44.71deg, rgba(28, 100, 242, 0.5) -529.33%, rgba(28, 100, 242, 0) 115.83%)',
+        },
         container: {
             center: true,
             padding: {
@@ -70,6 +74,7 @@ module.exports = {
                 },
             },
             screens: {
+                xs: '375px',
                 '3xl': '1800px',
             },
             backgroundImage: {

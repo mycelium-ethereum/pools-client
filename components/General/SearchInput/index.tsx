@@ -37,7 +37,7 @@ export const SearchIconWrap = styled.div`
     pointer-events: none;
 `;
 
-const SearchIcon = styled(SearchOutlined)`
+export const SearchIcon = styled(SearchOutlined)`
     height: 1.25rem;
     width: 1.25rem;
 
@@ -76,7 +76,6 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
                     ref={ref}
                     type="text"
                     name="email"
-                    id="email"
                     autoComplete="off"
                     value={value}
                     placeholder={placeholder}

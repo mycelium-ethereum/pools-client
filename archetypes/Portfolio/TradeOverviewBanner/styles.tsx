@@ -79,13 +79,24 @@ export const Currency = styled.div`
         content: '$';
         font-size: 20px;
         font-weight: 700;
+
         @media ${({ theme }) => theme.device.sm} {
             margin-right: 5px;
         }
-
         @media ${({ theme }) => theme.device.md} {
             font-size: 32px;
         }
+    }
+`;
+
+export const Decimals = styled.div`
+    display: inline-block;
+    font-size: 16px;
+    @media ${({ theme }) => theme.device.sm} {
+        font-size: 24px;
+    }
+    @media ${({ theme }) => theme.device.lg} {
+        font-size: 32px;
     }
 `;
 
@@ -106,10 +117,12 @@ export const Value = styled.div`
 
     @media ${({ theme }) => theme.device.sm} {
         font-size: 40px;
+        line-height: 40px;
     }
 
     @media ${({ theme }) => theme.device.lg} {
-        font-size: 80px;
+        font-size: 66px;
+        line-height: 66px;
     }
 `;
 

@@ -10,6 +10,7 @@ export type SummaryProps = {
     commitAction: CommitActionEnum;
     receiveIn: number;
     gasFee: BigNumber;
+    showTokenImage?: boolean;
 };
 
 type SharedProps = {

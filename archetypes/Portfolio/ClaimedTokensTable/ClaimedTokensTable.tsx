@@ -1,6 +1,9 @@
 import React from 'react';
+import shallow from 'zustand/shallow';
 import NoTableEntries from '~/components/General/NoTableEntries';
 import { Table, TableHeader, TableHeaderCell } from '~/components/General/TWTable';
+import { useStore } from '~/store/main';
+import { selectWeb3Info } from '~/store/Web3Slice';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { ClaimedTokenRow } from './ClaimedTokenRow';
 
@@ -11,13 +14,14 @@ export const ClaimedTokensTable = ({
 }: {
     rows: ClaimedTokenRowProps[];
 } & ClaimedRowActions): JSX.Element => {
+    const { network } = useStore(selectWeb3Info, shallow);
+
     return (
         <>
             <Table fullHeight={false}>
                 <TableHeader>
                     <tr>
                         <TableHeaderCell>Token</TableHeaderCell>
-                        <TableHeaderCell className="whitespace-nowrap">Status</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Value</TableHeaderCell>
                         <TableHeaderCell className="whitespace-nowrap">Leveraged Value</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
@@ -31,6 +35,7 @@ export const ClaimedTokensTable = ({
                             <ClaimedTokenRow
                                 {...token}
                                 key={token.address}
+                                network={network}
                                 poolStatus={token.poolStatus}
                                 onClickCommitAction={onClickCommitAction}
                                 onClickStake={onClickStake}

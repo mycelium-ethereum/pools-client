@@ -2,19 +2,19 @@ import BigNumber from 'bignumber.js';
 import { renderHook } from '@testing-library/react-hooks';
 import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { selectUserPendingCommitAmounts } from '~/store/PendingCommitSlice';
-import { selectAccount } from '~/store/Web3Slice';
+import * as Web3Slice from '~/store/Web3Slice';
 import useFarmBalances from '../useFarmBalances';
 import usePools from '../usePools';
 import usePortfolioOverview from './';
 
 jest.mock('~/store/PendingCommitSlice');
 
-jest.mock('~/store/Web3Slice');
 jest.mock('../usePools');
 jest.mock('../useFarmBalances');
 
 beforeEach(() => {
-    (selectAccount as jest.Mock).mockReturnValue(MOCK_ACCOUNT);
+    // @ts-ignore
+    Web3Slice.selectAccount = jest.fn().mockReturnValue(MOCK_ACCOUNT);
     (usePools as jest.Mock).mockReturnValue({
         pools: [
             {
@@ -127,7 +127,7 @@ describe('usePortfolioOverview hook', () => {
         // all long tokens value increase by 10%
         expect(result.current.totalPortfolioValue.toNumber()).toBe(236.5);
 
-        expect(selectAccount as jest.Mock).toHaveBeenCalledTimes(1);
+        expect(Web3Slice.selectAccount as jest.Mock).toHaveBeenCalledTimes(1);
     }),
         it('handles partially staked', () => {
             const stakedLongTokens = 5;
@@ -267,7 +267,8 @@ describe('usePortfolioOverview hook', () => {
             expect(result.current.totalPortfolioValue.toNumber()).toBe(236.5);
         });
     it('handles disconnected account', () => {
-        (selectAccount as jest.Mock).mockReturnValue(undefined);
+        // @ts-ignore
+        Web3Slice.selectAccount = jest.fn().mockReturnValue(undefined);
         const { result } = renderHook(() => usePortfolioOverview());
 
         // portfolio value should remain the same

@@ -116,8 +116,8 @@ export const Heading = styled.h3`
     margin-bottom: 0.25rem;
     font-weight: 500;
     color: ${({ theme }) => theme.fontColor.primary};
+    font-size: 12px;
 `;
-
 export const Text = styled.div`
     margin-bottom: 0.7rem;
     font-weight: 500;
@@ -141,6 +141,13 @@ export const ArrowIcon = styled(ArrowDownIcon)<{ isGreen?: boolean }>`
     transform: ${({ isGreen }) => (isGreen ? 'rotateX(180deg)' : '0')};
 `;
 
+export const ResetButton = styled.button`
+    &:hover {
+        color: inherit;
+        text-decoration: underline;
+    }
+`;
+
 export const BaseFilters = {
     Container,
     FilterPopup,
@@ -153,6 +160,7 @@ export const BaseFilters = {
     Preview,
     Heading,
     FilterIcon,
+    ResetButton,
     CollateralFilter,
     MarketFilter,
     LeverageFilter,

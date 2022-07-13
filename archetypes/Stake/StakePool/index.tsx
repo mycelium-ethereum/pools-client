@@ -7,16 +7,13 @@ export default (() => {
     const { farms, refreshFarm, fetchingFarms, rewardsTokenUSDPrices } = useFarms();
 
     return (
-        <>
-            <StakeGeneric
-                title="Stake Tracer Pool Tokens"
-                subTitle="Stake Tracer Pool Tokens and earn rewards."
-                tokenType="Tracer Pool"
-                refreshFarm={refreshFarm}
-                farms={farms}
-                fetchingFarms={fetchingFarms}
-                rewardsTokenUSDPrices={rewardsTokenUSDPrices}
-            />
-        </>
+        <StakeGeneric
+            title="Stake Tokens"
+            subTitle="Stake Tokens and earn rewards."
+            refreshFarm={refreshFarm}
+            farms={farms}
+            fetchingFarms={fetchingFarms}
+            rewardsTokenUSDPrices={rewardsTokenUSDPrices}
+        />
     );
 }) as React.FC;

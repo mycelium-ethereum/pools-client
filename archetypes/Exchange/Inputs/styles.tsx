@@ -41,8 +41,5 @@ export const Subtext = styled.p<{ showContent: boolean; isAmountValid?: boolean 
     color: ${({ isAmountValid, theme }) => (isAmountValid ? '#ef4444' : theme.fontColor.primary)};
     font-size: 15px;
     opacity: 0.7;
-
-    @media (min-width: 640px) {
-        margin-top: 0.5rem;
-    }
+    margin-top: 0.5rem;
 `;
