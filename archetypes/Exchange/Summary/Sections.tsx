@@ -291,7 +291,7 @@ export const LifetimeCosts = ({
     showTransactionDetails,
 }: {
     amount: BigNumber;
-    annualFeePercent: BigNumber; // decimal percentage
+    annualFeePercent: string; // decimal percentage
     burningFee: BigNumber;
 } & BaseSection): JSX.Element => (
     <>
