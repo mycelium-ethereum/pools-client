@@ -52,6 +52,7 @@ export const useUpdatePoolInstances = (): void => {
     const [isFetchingPools, setIsFetchingPools] = useState(false);
     const [importCheck, setImportCheck] = useState(false);
 
+    // Check for URL parameter "show" to allow importing one or more custom Pools before initialization
     useEffect(() => {
         if (poolLists.length && !hasSetPools.current) {
             const handleImport = (address: string) => {
