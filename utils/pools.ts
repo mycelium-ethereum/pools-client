@@ -128,6 +128,16 @@ export const formatPoolName = (
     };
 };
 
+export const getFullAnnualFee: (updateInterval: BigNumber, poolFee: BigNumber) => string = (
+    updateInterval,
+    poolFee,
+) => {
+    const leapYearInSeconds = 60 * 60 * 24 * 365.2454;
+    const annualFee = poolFee.div(new BigNumber(updateInterval)).multipliedBy(leapYearInSeconds);
+    const formattedAnnualFee = annualFee.multipliedBy(100).toFixed(2);
+    return formattedAnnualFee;
+};
+
 export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
     const { oracleDetails } = pool;
     const formattedOracleDetails =

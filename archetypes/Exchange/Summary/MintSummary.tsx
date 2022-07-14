@@ -1,12 +1,22 @@
 import React, { useState } from 'react';
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import { getBaseAsset } from '~/utils/poolNames';
-import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts } from './Sections';
+import { ExpectedExposure, ExpectedTokensMinted, TotalMintCosts, LifetimeCosts } from './Sections';
 import * as Styles from './styles';
 import { MintSummaryProps } from './types';
 import { calcExposure, calcNumTokens } from './utils';
 
-const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token, pool, gasFee, isLong }) => {
+const MintSummary: React.FC<MintSummaryProps> = ({
+    amount,
+    nextTokenPrice,
+    token,
+    pool,
+    gasFee,
+    isLong,
+    mintingFee,
+    burningFee,
+    annualFeePercent,
+}) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const poolPowerLeverage = pool.leverage;
@@ -17,7 +27,12 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token
     const commitAmount = calcNumTokens(amount, pool.oraclePrice).toNumber();
     return (
         <>
-            <TotalMintCosts amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />
+            <TotalMintCosts
+                amount={amount}
+                gasFee={gasFee}
+                showTransactionDetails={showTransactionDetails}
+                mintingFee={mintingFee}
+            />
             <ExpectedTokensMinted
                 showTransactionDetails={showTransactionDetails}
                 expectedTokensMinted={expectedAmount.toNumber()}
@@ -34,6 +49,12 @@ const MintSummary: React.FC<MintSummaryProps> = ({ amount, nextTokenPrice, token
                 expectedExposure={equivalentExposure}
                 showTransactionDetails={showTransactionDetails}
                 isLong={isLong}
+            />
+            <LifetimeCosts
+                amount={amount}
+                annualFeePercent={annualFeePercent}
+                burningFee={burningFee}
+                showTransactionDetails={showTransactionDetails}
             />
             <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
