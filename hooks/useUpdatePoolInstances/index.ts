@@ -18,10 +18,10 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { randomIntInRange } from '~/utils/helpers';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
-import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 
 const MAX_RETRY_COUNT = 10;
 
@@ -55,7 +55,7 @@ export const useUpdatePoolInstances = (): void => {
 
     // Check for URL parameter "show" to allow importing one or more custom Pools before initialization
     useEffect(() => {
-        if (poolLists.length && !hasSetPools.current) {
+        if (poolLists.length && !hasSetPools.current && !importCheck) {
             const handleImport = (address: string) => {
                 const isDuplicatePool = poolLists.some((v: StaticPoolInfo) => v.address === address);
 
@@ -63,9 +63,9 @@ export const useUpdatePoolInstances = (): void => {
                     console.debug('Importing', address);
                     importPool(network as KnownNetwork, address);
                 } else if (isDuplicatePool) {
-                    console.error('Duplicate pool or duplicate import:', address);
+                    console.debug('Duplicate pool or duplicate import:', address);
                 } else {
-                    console.error('Invalid address:', address);
+                    console.warn('Invalid address:', address);
                 }
             };
 
@@ -73,16 +73,24 @@ export const useUpdatePoolInstances = (): void => {
             const queryString = window?.location?.search;
             const urlParams = new URLSearchParams(queryString);
             const poolAddresses = urlParams?.getAll('show');
+            const localStoragePoolAddresses = localStorage.getItem('importedPools');
 
-            if (poolAddresses) {
-                console.debug(
-                    `Found ${poolAddresses.length} pool${poolAddresses.length > 1 ? 's' : ''} to import:`,
-                    poolAddresses,
-                );
-                poolAddresses.forEach((address) => {
+            if (poolAddresses || localStoragePoolAddresses) {
+                let addresses: string[] = [];
+                if (localStoragePoolAddresses) {
+                    const parsedImportedPools = JSON.parse(localStoragePoolAddresses);
+                    const concatArr = [...poolAddresses, ...parsedImportedPools];
+                    // Exclude duplicate values between both localStorage and URL imported Pool addresses
+                    addresses = [...new Set(concatArr)];
+                } else {
+                    addresses = poolAddresses;
+                }
+
+                console.debug(`Found ${addresses.length} pool${addresses.length > 1 ? 's' : ''} to import:`, addresses);
+                addresses.forEach((address) => {
                     handleImport(address);
                 });
-                saveImportedPoolsToLocalStorage(poolAddresses);
+                saveImportedPoolsToLocalStorage(addresses);
                 setImportCheck(true);
             }
         }
