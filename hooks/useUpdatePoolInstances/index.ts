@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { isAddress } from 'ethers/lib/utils';
 import shallow from 'zustand/shallow';
-import { Pool, attemptPromiseRecursively } from '@tracer-protocol/pools-js';
+import { Pool, attemptPromiseRecursively, StaticPoolInfo, KnownNetwork } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -12,6 +13,7 @@ import {
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
 import { KnownPoolsInitialisationErrors } from '~/store/PoolInstancesSlice/types';
+import { selectImportPool } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
@@ -38,7 +40,8 @@ export const useUpdatePoolInstances = (): void => {
         updateNextPoolStates,
         updateOracleDetails,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
-    const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
+    const importPool = useStore(selectImportPool);
+    const { addMultipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
@@ -47,6 +50,40 @@ export const useUpdatePoolInstances = (): void => {
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
     const [isFetchingPools, setIsFetchingPools] = useState(false);
+    const [importCheck, setImportCheck] = useState(false);
+
+    useEffect(() => {
+        if (poolLists.length && !hasSetPools.current) {
+            const handleImport = (address: string) => {
+                const isDuplicatePool = poolLists.some((v: StaticPoolInfo) => v.address === address);
+
+                if (!isDuplicatePool && isAddress(address)) {
+                    console.debug('Importing', address);
+                    importPool(network as KnownNetwork, address);
+                } else if (isDuplicatePool) {
+                    console.error('Duplicate pool or duplicate import:', address);
+                } else {
+                    console.error('Invalid address:', address);
+                }
+            };
+
+            // Check if there are any pools to import from URL
+            const queryString = window?.location?.search;
+            const urlParams = new URLSearchParams(queryString);
+            const poolAddresses = urlParams?.getAll('show');
+
+            if (poolAddresses) {
+                console.debug(
+                    `Found ${poolAddresses.length} pool${poolAddresses.length > 1 ? 's' : ''} to import:`,
+                    poolAddresses,
+                );
+                poolAddresses.forEach((address) => {
+                    handleImport(address);
+                });
+                setImportCheck(true);
+            }
+        }
+    }, [poolLists]);
 
     // if the pools from the factory change, re-init them
     useEffect(() => {
@@ -63,6 +100,9 @@ export const useUpdatePoolInstances = (): void => {
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
         } else if (!network || !isSupportedNetwork(network)) {
             console.debug(`Skipped pools initialisation, network: ${network} not supported`);
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
+        } else if (!importCheck) {
+            console.debug(`Import check not complete, skipping pools initialisation`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
         } else {
             // all is good
@@ -158,7 +198,7 @@ export const useUpdatePoolInstances = (): void => {
                     })
                         .then((pendingCommits) => {
                             if (mounted) {
-                                addMutlipleCommits(
+                                addMultipleCommits(
                                     pendingCommits.map((commit) => ({
                                         pool: pool.poolInstance.address,
                                         id: commit.commitID,
