@@ -6,6 +6,7 @@ import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats, NextPoolState
 export enum KnownPoolsInitialisationErrors {
     ProviderNotReady = 'Provider not ready',
     NetworkNotSupported = 'Network not supported',
+    ImportCheckNotComplete = 'Import check not complete',
     NoPools = 'No pools found',
     ExceededMaxRetryCount = 'Exceeded max retry count',
 }
