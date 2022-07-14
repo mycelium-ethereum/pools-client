@@ -69,10 +69,18 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
             <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
 
             {/* Analytics scripts */}
-            <script
-                async
-                src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
-            />
+            <script>
+                {`
+                    window.onUsersnapCXLoad = function(api) {
+                        api.init();
+                    }
+                    var script = document.createElement('script');
+                    script.defer = 1;
+                    script.src = 'https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad';
+                    document.getElementsByTagName('head')[0].appendChild(script);
+                `}
+            </script>
+
             <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
 
             <title>{metaTitle}</title>
