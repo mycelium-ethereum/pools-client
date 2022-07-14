@@ -183,3 +183,19 @@ export const buildDefaultNextPoolState = (pool: Pool): NextPoolState => {
         expectedFrontRunningOraclePrice: pool.oraclePrice,
     };
 };
+
+export const saveImportedPoolsToLocalStorage: (customPools: string[]) => void = (customPools) => {
+    const importedPools = localStorage.getItem('importedPools');
+    if (!importedPools) {
+        // create new localStorage variable to store imported pools
+        localStorage.setItem('importedPools', JSON.stringify(customPools));
+    } else {
+        const parsedImportedPools = JSON.parse(importedPools);
+        customPools.forEach((pool) => {
+            if (!parsedImportedPools.includes(pool)) {
+                parsedImportedPools.push(pool);
+            }
+        });
+        localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+    }
+};

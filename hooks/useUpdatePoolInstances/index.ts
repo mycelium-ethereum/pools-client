@@ -21,6 +21,7 @@ import { randomIntInRange } from '~/utils/helpers';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 
 const MAX_RETRY_COUNT = 10;
 
@@ -81,6 +82,7 @@ export const useUpdatePoolInstances = (): void => {
                 poolAddresses.forEach((address) => {
                     handleImport(address);
                 });
+                saveImportedPoolsToLocalStorage(poolAddresses);
                 setImportCheck(true);
             }
         }
