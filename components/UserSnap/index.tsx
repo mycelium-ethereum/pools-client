@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_API_KEY;
+const USERSNAP_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
 
 export const UserSnap: React.FC = () => {
     useEffect(() => {

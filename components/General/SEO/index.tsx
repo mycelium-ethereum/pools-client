@@ -2,8 +2,6 @@ import React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-const USERSNAP_GLOBAL_API_KEY = process.env.NEXT_PUBLIC_USERSNAP_GLOBAL_API_KEY;
-
 export type SEOProps = {
     title: string;
     image?: string;
@@ -69,10 +67,6 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
             <link rel="stylesheet" href="https://use.typekit.net/klm0viv.css" />
 
             {/* Analytics scripts */}
-            <script
-                async
-                src={`https://widget.usersnap.com/global/load/${USERSNAP_GLOBAL_API_KEY}?onload=onUsersnapCXLoad`}
-            />
             <script defer data-domain="pools.tracer.finance" src="https://plausible.io/js/plausible.js" />
 
             <title>{metaTitle}</title>
