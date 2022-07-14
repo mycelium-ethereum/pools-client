@@ -51,7 +51,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                     >
                         <div
                             className={classNames(
-                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-10 text-left align-middle shadow-xl transition-all sm:my-8',
+                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-4 text-left align-middle shadow-xl transition-all sm:my-8 sm:p-10',
                                 SIZES[size],
                                 className,
                             )}

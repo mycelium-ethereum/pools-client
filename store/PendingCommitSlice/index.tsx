@@ -40,7 +40,7 @@ export const createPendingCommitSlice: StateSlice<IPendingCommitSlice> = (set) =
             }
         });
     },
-    addMutlipleCommits: (commits) => {
+    addMultipleCommits: (commits) => {
         console.debug('Adding multiple commits', commits);
         // immer set
         set((state) => {
@@ -123,10 +123,10 @@ export const selectAddCommit: (state: StoreState) => IPendingCommitSlice['addCom
 
 export const selectUserCommitActions: (state: StoreState) => {
     addCommit: IPendingCommitSlice['addCommit'];
-    addMutlipleCommits: IPendingCommitSlice['addMutlipleCommits'];
+    addMultipleCommits: IPendingCommitSlice['addMultipleCommits'];
     removeCommits: IPendingCommitSlice['removeCommits'];
 } = (state) => ({
     addCommit: state.pendingCommitSlice.addCommit,
-    addMutlipleCommits: state.pendingCommitSlice.addMutlipleCommits,
+    addMultipleCommits: state.pendingCommitSlice.addMultipleCommits,
     removeCommits: state.pendingCommitSlice.removeCommits,
 });

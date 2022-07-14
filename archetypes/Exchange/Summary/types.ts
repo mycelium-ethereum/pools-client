@@ -10,6 +10,7 @@ export type SummaryProps = {
     commitAction: CommitActionEnum;
     receiveIn: number;
     gasFee: BigNumber;
+    showTokenImage?: boolean;
 };
 
 type SharedProps = {
@@ -23,6 +24,9 @@ type SharedProps = {
 export type FlipSummaryProps = {
     isLong: SummaryProps['isLong'];
     pool: SummaryProps['pool'];
+    mintingFee: BigNumber;
+    burningFee: BigNumber;
+    annualFeePercent: string;
 } & SharedProps;
 
 export type MintSummaryProps = {
@@ -33,12 +37,16 @@ export type MintSummaryProps = {
         leverage: number;
         settlementTokenSymbol: string;
     };
+    mintingFee: BigNumber;
+    burningFee: BigNumber;
+    annualFeePercent: string;
 } & SharedProps;
 
 export type BurnSummaryProps = {
     pool: {
         settlementTokenSymbol: string;
     };
+    burningFee: BigNumber;
 } & SharedProps;
 
 export type BaseSection = {

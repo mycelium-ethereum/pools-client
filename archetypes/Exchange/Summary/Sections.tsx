@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { calcNotionalValue } from '@tracer-protocol/pools-js';
 import { Logo, Section, tokenSymbolToLogoTicker } from '~/components/General';
 import { toApproxCurrency } from '~/utils/converters';
-import ApproxCommitGasFee from './ApproxCommitGasFee';
+import ApproxCommitFee from './ApproxCommitFee';
 import * as Styles from './styles';
 import { BaseSection } from './types';
 import { calcNumTokens } from './utils';
@@ -24,11 +24,12 @@ export const TotalMintCosts: React.FC<
     {
         amount: BigNumber;
         gasFee: BigNumber;
+        mintingFee: BigNumber;
     } & BaseSection
-> = ({ amount, gasFee, showTransactionDetails }) => {
+> = ({ amount, gasFee, mintingFee, showTransactionDetails }) => {
     // TODO amount will not always be a USD value if the settlement asset is not
     //  a stable coin. Need to make sure settlement asset gets converted
-    const totalCost = amount.plus(gasFee);
+    const totalCost = amount.plus(gasFee).plus(mintingFee);
     return (
         <>
             <Section label="Total costs" className="header">
@@ -39,8 +40,11 @@ export const TotalMintCosts: React.FC<
                     <Section label="Cost of position" showSectionDetails>
                         <Styles.Transparent>{toApproxCurrency(amount)}</Styles.Transparent>
                     </Section>
+                    <Section label="Mint fee" showSectionDetails>
+                        <ApproxCommitFee amount={amount} fee={mintingFee} />
+                    </Section>
                     <Section label="Gas fee" showSectionDetails>
-                        <ApproxCommitGasFee amount={amount} gasFee={gasFee} />
+                        <ApproxCommitFee amount={amount} fee={gasFee} />
                     </Section>
                 </Styles.SectionDetails>
             )}
@@ -150,12 +154,13 @@ export const ExpectedExposure: React.FC<
 };
 
 // (BurnSummary and FlipSummary)
-export const ExpectedFees: React.FC<
+export const ExpectedBurnFees: React.FC<
     {
         amount: BigNumber;
         gasFee: BigNumber;
+        burningFee: BigNumber;
     } & BaseSection
-> = ({ amount, gasFee, showTransactionDetails }) => {
+> = ({ amount, burningFee, gasFee, showTransactionDetails }) => {
     // TODO add protocol fee to totalFee
     const totalFee = gasFee.toNumber();
     return (
@@ -165,14 +170,52 @@ export const ExpectedFees: React.FC<
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
-                    {/*<Section label="Protocol Fee" showSectionDetails>
-                        <Styles.Transparent>
-                            {`${amount.div(tokenPrice ?? 1).toFixed(3)}`} tokens
-                        </Styles.Transparent>
-                        </Section>*/}
+                    <Section label="Burn fee" showSectionDetails>
+                        <div>
+                            <ApproxCommitFee amount={amount} fee={burningFee} />
+                        </div>
+                    </Section>
                     <Section label="Gas fee" showSectionDetails>
                         <div>
-                            <ApproxCommitGasFee amount={amount} gasFee={gasFee} />
+                            <ApproxCommitFee amount={amount} fee={gasFee} />
+                        </div>
+                    </Section>
+                </Styles.SectionDetails>
+            )}
+        </>
+    );
+};
+
+export const ExpectedFlipFees: React.FC<
+    {
+        amount: BigNumber;
+        gasFee: BigNumber;
+        burningFee: BigNumber;
+        mintingFee: BigNumber;
+    } & BaseSection
+> = ({ amount, gasFee, burningFee, mintingFee, showTransactionDetails }) => {
+    // TODO add protocol fee to totalFee
+    const totalFee = gasFee.toNumber();
+    return (
+        <>
+            <Section label="Expected fees" className="header">
+                <Styles.SumText>{`${toApproxCurrency(totalFee, 3)} USD`}</Styles.SumText>
+            </Section>
+            {showTransactionDetails && (
+                <Styles.SectionDetails>
+                    <Section label="Burning fee" showSectionDetails>
+                        <div>
+                            <ApproxCommitFee amount={amount} fee={burningFee} />
+                        </div>
+                    </Section>
+                    <Section label="Minting fee" showSectionDetails>
+                        <div>
+                            <ApproxCommitFee amount={amount} fee={mintingFee} />
+                        </div>
+                    </Section>
+                    <Section label="Gas fee" showSectionDetails>
+                        <div>
+                            <ApproxCommitFee amount={amount} fee={gasFee} />
                         </div>
                     </Section>
                 </Styles.SectionDetails>
@@ -238,4 +281,39 @@ export const ReceiveToken: React.FC<{
             {tokenSymbol}
         </Styles.SumText>
     </Section>
+);
+
+// Display the fees to come (burn fee and annual protocol fee)
+export const LifetimeCosts = ({
+    amount,
+    annualFeePercent,
+    burningFee,
+    showTransactionDetails,
+}: {
+    amount: BigNumber;
+    annualFeePercent: string; // decimal percentage
+    burningFee: BigNumber;
+} & BaseSection): JSX.Element => (
+    <>
+        <Section label="Lifetime Fees" className="header">
+            <Styles.SumText>{`${annualFeePercent}% pa`}</Styles.SumText>
+        </Section>
+        {showTransactionDetails && (
+            <>
+                <Styles.SectionDetails>
+                    <Section label="DAO Management Fee" showSectionDetails>
+                        <Styles.Transparent>
+                            <span>{`${annualFeePercent}% pa`}</span>
+                        </Styles.Transparent>
+                    </Section>
+                </Styles.SectionDetails>
+                <Styles.SectionDetails>
+                    <Section label="Burn Fee" showSectionDetails>
+                        <ApproxCommitFee amount={amount} fee={burningFee} />
+                        <Styles.Transparent inline>{` on burn`}</Styles.Transparent>
+                    </Section>
+                </Styles.SectionDetails>
+            </>
+        )}
+    </>
 );

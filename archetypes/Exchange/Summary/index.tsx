@@ -2,18 +2,26 @@ import React, { useMemo } from 'react';
 import { Transition } from '@headlessui/react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
+import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
+import { getFullAnnualFee } from '~/utils/pools';
 import BurnSummary from './BurnSummary';
 import FlipSummary from './FlipSummary';
 import MintSummary from './MintSummary';
 import * as Styles from './styles';
 import { SummaryProps } from './types';
 
-export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee }) => {
+export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction, gasFee, showTokenImage }) => {
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
     const nextTokenPrice = useMemo(
         () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
         [isLong],
     );
+
+    const annualFeePercent = useMemo(() => getFullAnnualFee(pool.updateInterval, pool.fee), [pool]);
+
+    const mintingFee = pool.committer.mintingFee.times(amount);
+    const burningFee = pool.committer.burningFee.times(amount);
+
     return (
         <Styles.HiddenExpand defaultHeight={0} open={!!pool.name} showBorder={!!pool.name}>
             <Styles.Wrapper>
@@ -26,6 +34,12 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                 >
+                    {showTokenImage && token ? (
+                        <div className="mb-4 flex items-center">
+                            <Logo className="mr-2 inline" size="md" ticker={tokenSymbolToLogoTicker(token?.symbol)} />
+                            <span className="font-bold">{token?.symbol}</span>
+                        </div>
+                    ) : null}
                     {commitAction === CommitActionEnum.mint && (
                         <MintSummary
                             amount={amount}
@@ -39,6 +53,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             }}
                             gasFee={gasFee}
                             isLong={isLong}
+                            mintingFee={mintingFee}
+                            burningFee={burningFee}
+                            annualFeePercent={annualFeePercent}
                         />
                     )}
 
@@ -48,6 +65,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             nextTokenPrice={nextTokenPrice}
                             gasFee={gasFee}
                             token={token}
+                            burningFee={burningFee}
                             pool={{
                                 settlementTokenSymbol: pool.settlementToken.symbol,
                             }}
@@ -62,6 +80,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             isLong={isLong}
                             pool={pool}
                             gasFee={gasFee}
+                            mintingFee={mintingFee}
+                            burningFee={burningFee}
+                            annualFeePercent={annualFeePercent}
                         />
                     )}
                 </Transition>

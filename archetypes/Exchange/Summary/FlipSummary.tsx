@@ -3,11 +3,20 @@ import { calcNotionalValue } from '@tracer-protocol/pools-js';
 
 import ArrowDown from '~/public/img/general/caret-down-white.svg';
 import { getBaseAsset } from '~/utils/poolNames';
-import { ExpectedExposure, ExpectedFees, ExpectedFlipAmounts, ReceiveToken } from './Sections';
+import { ExpectedExposure, ExpectedFlipFees, ExpectedFlipAmounts, LifetimeCosts, ReceiveToken } from './Sections';
 import * as Styles from './styles';
 import { FlipSummaryProps } from './types';
 
-const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTokenPrice, gasFee }) => {
+const FlipSummary: React.FC<FlipSummaryProps> = ({
+    pool,
+    isLong,
+    amount,
+    nextTokenPrice,
+    gasFee,
+    mintingFee,
+    burningFee,
+    annualFeePercent,
+}) => {
     const [showTransactionDetails, setShowTransactionDetails] = useState(false);
 
     const flippedToken = useMemo(
@@ -39,7 +48,13 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
                 settlementTokenSymbol={pool.settlementToken.symbol}
                 isLong={isLong}
             />
-            <ExpectedFees amount={amount} gasFee={gasFee} showTransactionDetails={showTransactionDetails} />
+            <ExpectedFlipFees
+                amount={amount}
+                gasFee={gasFee}
+                mintingFee={mintingFee}
+                burningFee={burningFee}
+                showTransactionDetails={showTransactionDetails}
+            />
             <ExpectedExposure
                 label="Expected Exposure"
                 expectedExposure={flippedEquivalentExposure}
@@ -49,6 +64,12 @@ const FlipSummary: React.FC<FlipSummaryProps> = ({ pool, isLong, amount, nextTok
                 poolLeverage={pool.leverage}
                 showTransactionDetails={showTransactionDetails}
                 isLong={!isLong}
+            />
+            <LifetimeCosts
+                amount={amount}
+                annualFeePercent={annualFeePercent}
+                burningFee={burningFee}
+                showTransactionDetails={showTransactionDetails}
             />
             <Styles.ShowDetailsButton onClick={() => setShowTransactionDetails(!showTransactionDetails)}>
                 <ArrowDown className={`${showTransactionDetails ? 'open' : ''}`} />
