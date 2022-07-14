@@ -136,9 +136,9 @@ export const Browse: React.FC = () => {
                             </NetworkHintContainer>
                         </PageTable.Heading>
                         <PageTable.SubHeading>
-                            Unlocking Perpetual Pools v2 - take part in the Tracer Voyage to experience the true power
-                            of DeFi.{' '}
-                            <PageTable.Link href="https://tracer.finance/radar/the-tracer-voyage/">
+                            Bullish? Bearish? Bring it. No margins, no liquidations, no minimum spend. Open a leveraged
+                            perpetual position by depositing into the of the markets below.{' '}
+                            <PageTable.Link href="https://www.tracer.finance/radar/tracer-perpetual-pools-eli5/">
                                 Learn More.
                             </PageTable.Link>
                         </PageTable.SubHeading>
