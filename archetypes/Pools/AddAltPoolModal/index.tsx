@@ -10,6 +10,7 @@ import { isAddress } from '~/utils/rpcMethods';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
     const importPool = useStore(selectImportPool);
@@ -39,6 +40,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
             setImportMsg(pool.exists);
         } else if (isValidAddress) {
             importPool(network as KnownNetwork, userInput);
+            saveImportedPoolsToLocalStorage([userInput]);
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);
