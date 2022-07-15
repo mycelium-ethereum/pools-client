@@ -138,6 +138,18 @@ export const getFullAnnualFee: (updateInterval: BigNumber, poolFee: BigNumber) =
     return formattedAnnualFee;
 };
 
+
+export const generateOracleTypeSummary: (pool: PoolInfo) => string = (pool) => {
+    const { oracleDetails, poolInstance } = pool;
+    const isSMA = pool.oracleDetails.type === 'SMA';
+    const formattedOracleDetails = isSMA
+        ? `${formatSeconds(oracleDetails.numPeriods * oracleDetails.updateInterval)} SMA`
+        : 'Spot Price';
+    const formattedUpdateInterval = `${formatSeconds(poolInstance?.oracle.updateInterval)} updates`;
+
+    return isSMA ? `${formattedOracleDetails} - ${formattedUpdateInterval}` : `${formattedOracleDetails}`;
+};
+
 export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
     const { oracleDetails } = pool;
     const formattedOracleDetails =
@@ -148,7 +160,7 @@ export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
     const formattedRebalance = `${formatSeconds(pool.poolInstance.updateInterval.toNumber())} Rebalance`;
     const formattedFRI = `${formatSeconds(pool.poolInstance.frontRunningInterval.toNumber())} Frontrunning Interval`;
 
-    return `${formattedOracleDetails} - ${formattedRebalance} - ${formattedFRI}`;
+    return `${formattedOracleDetails} - ${formattedRebalance} - ${formattedFRI} `;
 };
 
 export const buildDefaultNextPoolState = (pool: Pool): NextPoolState => {
