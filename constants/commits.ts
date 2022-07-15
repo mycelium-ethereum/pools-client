@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import { CommitActionEnum, CommitEnum, SideEnum } from '@tracer-protocol/pools-js/types';
+import { CommitActionEnum, CommitEnum, SideEnum } from '@tracer-protocol/pools-js';
 
 export const CommitTypeMap = {
     LongBurn: CommitEnum.longBurn,

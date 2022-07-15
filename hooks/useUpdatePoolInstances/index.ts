@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { isAddress } from 'ethers/lib/utils';
 import shallow from 'zustand/shallow';
-import { Pool, attemptPromiseRecursively, StaticPoolInfo, KnownNetwork } from '@tracer-protocol/pools-js';
+import { Pool, attemptPromiseRecursively, KnownNetwork, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -113,8 +113,8 @@ export const useUpdatePoolInstances = (): void => {
             console.debug(`Skipped pools initialisation, network: ${network} not supported`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
         } else if (!importCheck) {
-            console.debug(`Import check not complete, skipping pools initialisation`);
-            setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);
+            console.debug(`Import check not complete`);
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.ImportCheckNotComplete);
         } else {
             // all is good
             const fetchAndSetPools = async () => {
@@ -193,7 +193,7 @@ export const useUpdatePoolInstances = (): void => {
         return () => {
             mounted = false;
         };
-    }, [poolLists, provider]);
+    }, [poolLists, provider, importCheck]);
 
     // fetch all pending commits
     useEffect(() => {

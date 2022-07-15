@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
+import { UserSnap } from '~/components/General/Usersnap';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
-import { UserSnap } from '~/components/UserSnap';
 import { AnalyticsProvider } from '~/context/AnalyticsContext';
 
 export const Layout: React.FC = ({ children }) => {
