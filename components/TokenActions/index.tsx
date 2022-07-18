@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Popover } from 'react-tiny-popover';
 import shallow from 'zustand/shallow';
@@ -7,6 +7,7 @@ import { Logo, LogoTicker } from '~/components/General';
 import CloseIcon from '~/public/img/general/close.svg';
 import More from '~/public/img/general/more.svg';
 import { useStore } from '~/store/main';
+import { selectRemovePool } from '~/store/PoolsSlice';
 import { selectProvider } from '~/store/Web3Slice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -14,7 +15,6 @@ import { constructBalancerLink } from '~/utils/balancer';
 import { openBlockExplorer } from '~/utils/blockExplorers';
 import { removeImportedPoolFromUi } from '~/utils/pools';
 import { watchAsset } from '~/utils/rpcMethods';
-import { selectRemovePool } from '~/store/PoolsSlice';
 
 export const TokenActions = ({
     poolAddress,

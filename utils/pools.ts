@@ -2,8 +2,6 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork, Pool } from '@tracer-protocol/pools-js';
-import { useStore } from '~/store/main';
-import { selectRemovePool } from '~/store/PoolsSlice';
 import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
 import { NextPoolState } from '~/types/pools';
 import { formatSeconds } from './converters';
