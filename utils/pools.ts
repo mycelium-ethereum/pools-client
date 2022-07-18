@@ -5,7 +5,7 @@ import { BalanceTypeEnum, KnownNetwork, Pool } from '@tracer-protocol/pools-js';
 import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
 import { NextPoolState } from '~/types/pools';
 import { formatSeconds } from './converters';
-import { BNFromString } from './helpers';
+import { BNFromString, marketRegex } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
 export const fetchTokenBalances: (
@@ -102,6 +102,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'LINK/USD': 'Chainlink',
     'AAVE/USD': 'AAVE',
     'WTI/USD': 'Oil',
+    'stETH/ETH': 'Staked ETH',
 };
 
 // export const tickerToName: (ticker: string) => string = (ticker) => {
@@ -120,7 +121,6 @@ export const formatPoolName = (
 } => {
     const leverageRegex = /([0-9]*)\-/g;
     const leverage = poolName.match(leverageRegex);
-    const marketRegex = /([A-Z]*\/[A-Z]*)/g;
     const market = poolName.match(marketRegex);
     return {
         leverage: leverage ? leverage[0] : '',
@@ -137,7 +137,6 @@ export const getFullAnnualFee: (updateInterval: BigNumber, poolFee: BigNumber) =
     const formattedAnnualFee = annualFee.multipliedBy(100).toFixed(2);
     return formattedAnnualFee;
 };
-
 
 export const generateOracleTypeSummary: (pool: PoolInfo) => string = (pool) => {
     const { oracleDetails, poolInstance } = pool;
