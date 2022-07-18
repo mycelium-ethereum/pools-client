@@ -571,8 +571,8 @@ const TokenRows: React.FC<
     pastUpkeepTokenInfo,
     poolTicker,
 }) => {
-    const getImported = useStore(selectImportedPools);
-    const isImportedPool = useMemo(() => getImported.some((v) => v.address === poolAddress), [poolAddress]);
+    const importedPools = useStore(selectImportedPools);
+    const isImportedPool = useMemo(() => importedPools.some((v) => v.address === poolAddress), [poolAddress]);
 
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 

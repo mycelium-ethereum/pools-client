@@ -2,6 +2,8 @@ import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { BalanceTypeEnum, KnownNetwork, Pool } from '@tracer-protocol/pools-js';
+import { useStore } from '~/store/main';
+import { selectRemovePool } from '~/store/PoolsSlice';
 import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
 import { NextPoolState } from '~/types/pools';
 import { formatSeconds } from './converters';
@@ -138,7 +140,6 @@ export const getFullAnnualFee: (updateInterval: BigNumber, poolFee: BigNumber) =
     return formattedAnnualFee;
 };
 
-
 export const generateOracleTypeSummary: (pool: PoolInfo) => string = (pool) => {
     const { oracleDetails, poolInstance } = pool;
     const isSMA = pool.oracleDetails.type === 'SMA';
@@ -219,5 +220,32 @@ export const saveImportedPoolsToLocalStorage: (customPools: string[]) => void = 
             }
         });
         localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+    }
+};
+
+export const removeImportedPoolFromUi: (
+    network: KnownNetwork,
+    poolAddress: string,
+    removePool: (network: KnownNetwork, pool: string) => void,
+) => void = (network, poolAddress, removePool) => {
+    try {
+        if (poolAddress) {
+            // Check for imported Pool in localStorage
+            const localStoragePoolAddresses = localStorage.getItem('importedPools');
+            const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
+            const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
+            if (poolIndex !== -1) {
+                parsedImportedPools.splice(poolIndex, 1);
+                localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+            }
+
+            // Remove URL parameters without reloading
+            window.history.pushState({}, document.title, window.location.pathname);
+
+            // Remove imported Pool from store
+            removePool(network, poolAddress);
+        }
+    } catch (err) {
+        console.error('Failed to send Buy action to Segment', err);
     }
 };

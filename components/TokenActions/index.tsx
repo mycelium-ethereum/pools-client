@@ -7,13 +7,14 @@ import { Logo, LogoTicker } from '~/components/General';
 import CloseIcon from '~/public/img/general/close.svg';
 import More from '~/public/img/general/more.svg';
 import { useStore } from '~/store/main';
-import { selectRemovePool } from '~/store/PoolsSlice';
 import { selectProvider } from '~/store/Web3Slice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructBalancerLink } from '~/utils/balancer';
 import { openBlockExplorer } from '~/utils/blockExplorers';
+import { removeImportedPoolFromUi } from '~/utils/pools';
 import { watchAsset } from '~/utils/rpcMethods';
+import { selectRemovePool } from '~/store/PoolsSlice';
 
 export const TokenActions = ({
     poolAddress,
@@ -45,25 +46,6 @@ export const TokenActions = ({
     const provider = useStore(selectProvider);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const buttonStyles = 'flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover w-full';
-
-    const removeImportedPoolFromUi = useCallback((): void => {
-        if (poolAddress) {
-            // Check for imported Pool in localStorage
-            const localStoragePoolAddresses = localStorage.getItem('importedPools');
-            const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
-            const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
-            if (poolIndex !== -1) {
-                parsedImportedPools.splice(poolIndex, 1);
-                localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
-            }
-
-            // Remove URL parameters without reloading
-            window.history.pushState({}, document.title, window.location.pathname);
-
-            // Remove imported Pool from store
-            removePool(network as KnownNetwork, poolAddress);
-        }
-    }, [poolAddress]);
 
     return (
         <Popover
@@ -122,8 +104,13 @@ export const TokenActions = ({
                                   </button>
                               ))
                             : null}
-                        {isImported ? (
-                            <button className={buttonStyles} onClick={removeImportedPoolFromUi}>
+                        {isImported && poolAddress ? (
+                            <button
+                                className={buttonStyles}
+                                onClick={() =>
+                                    removeImportedPoolFromUi(network as KnownNetwork, poolAddress, removePool)
+                                }
+                            >
                                 <CloseIcon className="ml-[1px] mr-2 h-4 w-4" />
                                 Remove Pool from view
                             </button>
