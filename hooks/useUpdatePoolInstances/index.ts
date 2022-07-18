@@ -73,7 +73,14 @@ export const useUpdatePoolInstances = (): void => {
         const poolAddresses = urlParams?.getAll('show');
         // Check if there are any pools to import from localStorage
         const localStoragePoolAddresses = localStorage.getItem('importedPools');
-        const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
+        let parsedImportedPools: any;
+        if (localStoragePoolAddresses) {
+            try {
+                parsedImportedPools = JSON.parse(localStoragePoolAddresses);
+            } catch (err) {
+                parsedImportedPools = [];
+            }
+        }
 
         if (poolLists.length && !hasSetPools.current && !importCheck) {
             if (poolAddresses || localStoragePoolAddresses) {

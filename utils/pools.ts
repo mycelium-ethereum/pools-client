@@ -244,6 +244,7 @@ export const removeImportedPoolFromUi: (
             removePool(network, poolAddress);
         }
     } catch (err) {
-        console.error('Failed to send Buy action to Segment', err);
+        localStorage.setItem('importedPools', JSON.stringify([]));
+        console.error('Failed to remove custom Pool', err);
     }
 };
