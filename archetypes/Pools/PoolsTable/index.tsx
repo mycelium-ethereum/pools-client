@@ -18,6 +18,7 @@ import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
 import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
+import { selectImportedPools } from '~/store/PoolsSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -570,6 +571,9 @@ const TokenRows: React.FC<
     pastUpkeepTokenInfo,
     poolTicker,
 }) => {
+    const getImported = useStore(selectImportedPools);
+    const isImportedPool = useMemo(() => getImported.some((v) => v.address === poolAddress), [poolAddress]);
+
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
     return (
@@ -701,6 +705,7 @@ const TokenRows: React.FC<
                             TRADE
                         </Button>
                         <Actions
+                            poolAddress={poolAddress}
                             token={{
                                 address: tokenInfo.address,
                                 decimals: decimals,
@@ -710,6 +715,7 @@ const TokenRows: React.FC<
                                 type: BlockExplorerAddressType.token,
                                 target: poolAddress,
                             }}
+                            isImported={isImportedPool}
                         />
                     </div>
                 ) : null}
