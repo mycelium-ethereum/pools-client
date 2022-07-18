@@ -18,6 +18,8 @@ export const randomIntInRange = (min: number, max: number): number => {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
+export const marketRegex = /([A-Za-z]*\/[A-Za-z]*)/g;
+
 const defaultTruncateLength = 10;
 
 /**
@@ -41,4 +43,4 @@ export const truncateMiddleEthAddress = (address: string, truncateLength?: numbe
     const trailingCharsNum = strLength - leadingCharsNum - 3;
 
     return `${address.slice(0, leadingCharsNum)}...${address.slice(-trailingCharsNum)}`;
-}
+};

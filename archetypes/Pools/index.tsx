@@ -13,7 +13,7 @@ import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filter
 import { marketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
 import { getMarketLeverage } from '~/utils/poolNames';
-import { marketSymbolToAssetName } from '~/utils/poolNames';
+import { marketSymbolToAssetName } from '~/utils/pools';
 import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';

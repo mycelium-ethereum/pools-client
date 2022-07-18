@@ -10,6 +10,7 @@ export enum MarketFilterEnum {
     EUR = 'Euro',
     AAVE = 'Aave',
     WTI = 'Oil',
+    stETH = 'Staked ETH',
 }
 
 export enum CollateralFilterEnum {
