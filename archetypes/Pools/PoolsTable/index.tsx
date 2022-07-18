@@ -498,6 +498,7 @@ const PoolRow: React.FC<
                     decimals={pool.decimals}
                     settlementTokenSymbol={pool.settlementTokenSymbol}
                     poolTicker={pool.name}
+                    isImportedPool={isImportedPool}
                 />
             </TableRow>
             <TableRow lined isImported={isImportedPool}>
