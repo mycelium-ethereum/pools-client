@@ -1,8 +1,10 @@
 import { ethers, BigNumber as EthersBigNumber } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { PoolCommitter__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
-import { BalanceTypeEnum, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats } from '~/types/pools';
+import { BalanceTypeEnum, KnownNetwork, Pool } from '@tracer-protocol/pools-js';
+import { AggregateBalances, TradeStats, PoolInfo } from '~/types/pools';
+import { NextPoolState } from '~/types/pools';
+import { formatSeconds } from './converters';
 import { BNFromString, marketRegex } from './helpers';
 import { fetchTradeStats as _fetchTradeStats, fetchNextPoolState as _fetchNextPoolState } from './tracerAPI';
 
@@ -123,5 +125,82 @@ export const formatPoolName = (
     return {
         leverage: leverage ? leverage[0] : '',
         market: market ? market[0] : '',
+    };
+};
+
+export const getFullAnnualFee: (updateInterval: BigNumber, poolFee: BigNumber) => string = (
+    updateInterval,
+    poolFee,
+) => {
+    const leapYearInSeconds = 60 * 60 * 24 * 365.2454;
+    const annualFee = poolFee.div(new BigNumber(updateInterval)).multipliedBy(leapYearInSeconds);
+    const formattedAnnualFee = annualFee.multipliedBy(100).toFixed(2);
+    return formattedAnnualFee;
+};
+
+export const generateOracleTypeSummary: (pool: PoolInfo) => string = (pool) => {
+    const { oracleDetails, poolInstance } = pool;
+    const isSMA = pool.oracleDetails.type === 'SMA';
+    const formattedOracleDetails = isSMA
+        ? `${formatSeconds(oracleDetails.numPeriods * oracleDetails.updateInterval)} SMA`
+        : 'Spot Price';
+    const formattedUpdateInterval = `${formatSeconds(poolInstance?.oracle.updateInterval)} updates`;
+
+    return isSMA ? `${formattedOracleDetails} - ${formattedUpdateInterval}` : `${formattedOracleDetails}`;
+};
+
+export const generatePoolTypeSummary: (pool: PoolInfo) => string = (pool) => {
+    const { oracleDetails } = pool;
+    const formattedOracleDetails =
+        pool.oracleDetails.type === 'SMA'
+            ? `${formatSeconds(oracleDetails.numPeriods * oracleDetails.updateInterval)} SMA`
+            : 'Spot';
+
+    const formattedRebalance = `${formatSeconds(pool.poolInstance.updateInterval.toNumber())} Rebalance`;
+    const formattedFRI = `${formatSeconds(pool.poolInstance.frontRunningInterval.toNumber())} Frontrunning Interval`;
+
+    return `${formattedOracleDetails} - ${formattedRebalance} - ${formattedFRI} `;
+};
+
+export const buildDefaultNextPoolState = (pool: Pool): NextPoolState => {
+    const decimals = pool.settlementToken.decimals;
+    const decimalFactor = new BigNumber(10).pow(decimals);
+
+    return {
+        // current
+        currentSkew: pool.getSkew(),
+        currentLongBalance: pool.longBalance.times(decimalFactor),
+        currentLongSupply: pool.longToken.supply.times(decimalFactor),
+        currentShortBalance: pool.shortBalance.times(decimalFactor),
+        currentShortSupply: pool.shortToken.supply.times(decimalFactor),
+        currentLongTokenPrice: pool.getLongTokenPrice(),
+        currentShortTokenPrice: pool.getShortTokenPrice(),
+        currentPendingLongTokenBurn: new BigNumber(0),
+        currentPendingShortTokenBurn: new BigNumber(0),
+        // next rebalance
+        expectedSkew: pool.getSkew(),
+        expectedLongBalance: pool.longBalance.times(decimalFactor),
+        expectedLongSupply: pool.longToken.supply.times(decimalFactor),
+        expectedShortBalance: pool.shortBalance.times(decimalFactor),
+        expectedShortSupply: pool.shortToken.supply.times(decimalFactor),
+        expectedPendingLongTokenBurn: new BigNumber(0),
+        expectedPendingShortTokenBurn: new BigNumber(0),
+        expectedLongTokenPrice: pool.getLongTokenPrice(),
+        expectedShortTokenPrice: pool.getShortTokenPrice(),
+        lastOraclePrice: pool.oraclePrice,
+        expectedOraclePrice: pool.oraclePrice,
+        // end of front running interval
+        expectedFrontRunningSkew: pool.getSkew(),
+        expectedFrontRunningLongBalance: pool.longBalance.times(decimalFactor),
+        expectedFrontRunningLongSupply: pool.longToken.supply.times(decimalFactor),
+        expectedFrontRunningShortBalance: pool.shortBalance.times(decimalFactor),
+        expectedFrontRunningShortSupply: pool.shortToken.supply.times(decimalFactor),
+        expectedFrontRunningPendingLongTokenBurn: new BigNumber(0),
+        expectedFrontRunningPendingShortTokenBurn: new BigNumber(0),
+        totalNetFrontRunningPendingLong: new BigNumber(0),
+        totalNetFrontRunningPendingShort: new BigNumber(0),
+        expectedFrontRunningLongTokenPrice: pool.getLongTokenPrice(),
+        expectedFrontRunningShortTokenPrice: pool.getShortTokenPrice(),
+        expectedFrontRunningOraclePrice: pool.oraclePrice,
     };
 };

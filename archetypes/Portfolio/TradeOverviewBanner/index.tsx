@@ -35,7 +35,10 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                     </Styles.Header>
                     <Styles.BannerContent>
                         <Styles.Value>
-                            <Styles.Currency>{toApproxLocaleString(totalPortfolioValue)}</Styles.Currency>
+                            <Styles.Currency>
+                                {toApproxLocaleString(totalPortfolioValue).slice(0, -3)}
+                                <Styles.Decimals>{toApproxLocaleString(totalPortfolioValue).slice(-3)}</Styles.Decimals>
+                            </Styles.Currency>
                         </Styles.Value>
                     </Styles.BannerContent>
                 </Styles.Banner>

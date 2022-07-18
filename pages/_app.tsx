@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AppProps } from 'next/app';
 import 'antd/dist/antd.css';
 import '../styles/index.css';
+import { Layout } from '~/components/General/Layout';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import StoreUpdater from '~/components/StoreUpdater';
 import { StyledThemeProvider } from '~/context/ThemeContext';
@@ -15,7 +16,9 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
         <div>
             <StoreUpdater />
             <StyledThemeProvider>
-                <Component {...pageProps} />
+                <Layout>
+                    <Component {...pageProps} />
+                </Layout>
                 <ToastContainerWithStyles />
             </StyledThemeProvider>
         </div>

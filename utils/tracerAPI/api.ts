@@ -210,7 +210,12 @@ export const fetchNextPoolState: (params: { network: KnownNetwork; pool: string 
     const route = `${TRACER_API}/poolsv2/nextPoolState?network=${network ?? NETWORKS.ARBITRUM}&poolAddress=${pool}`;
 
     const fetchedNextPoolState: NextPoolState = await fetch(route)
-        .then((res) => res.json())
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error('Error fetching next pool state');
+            }
+            return res.json();
+        })
         .then((nextPoolState: NextPoolStateAPIResponse) => {
             return {
                 currentSkew: new BigNumber(nextPoolState.currentSkew),
@@ -218,15 +223,21 @@ export const fetchNextPoolState: (params: { network: KnownNetwork; pool: string 
                 currentLongSupply: new BigNumber(nextPoolState.currentLongSupply),
                 currentShortBalance: new BigNumber(nextPoolState.currentShortBalance),
                 currentShortSupply: new BigNumber(nextPoolState.currentShortSupply),
+                currentLongTokenPrice: new BigNumber(nextPoolState.currentLongTokenPrice),
+                currentShortTokenPrice: new BigNumber(nextPoolState.currentShortTokenPrice),
+                currentPendingLongTokenBurn: new BigNumber(nextPoolState.currentPendingLongTokenBurn),
+                currentPendingShortTokenBurn: new BigNumber(nextPoolState.currentPendingShortTokenBurn),
                 expectedSkew: new BigNumber(nextPoolState.expectedSkew),
                 expectedLongBalance: new BigNumber(nextPoolState.expectedLongBalance),
                 expectedLongSupply: new BigNumber(nextPoolState.expectedLongSupply),
                 expectedShortBalance: new BigNumber(nextPoolState.expectedShortBalance),
                 expectedShortSupply: new BigNumber(nextPoolState.expectedShortSupply),
-                totalNetPendingLong: new BigNumber(nextPoolState.totalNetPendingLong),
-                totalNetPendingShort: new BigNumber(nextPoolState.totalNetPendingShort),
                 expectedLongTokenPrice: new BigNumber(nextPoolState.expectedLongTokenPrice),
                 expectedShortTokenPrice: new BigNumber(nextPoolState.expectedShortTokenPrice),
+                expectedPendingLongTokenBurn: new BigNumber(nextPoolState.expectedPendingLongTokenBurn),
+                expectedPendingShortTokenBurn: new BigNumber(nextPoolState.expectedPendingShortTokenBurn),
+                totalNetPendingLong: new BigNumber(nextPoolState.totalNetPendingLong),
+                totalNetPendingShort: new BigNumber(nextPoolState.totalNetPendingShort),
                 lastOraclePrice: new BigNumber(nextPoolState.lastOraclePrice),
                 expectedOraclePrice: new BigNumber(nextPoolState.expectedOraclePrice),
                 expectedFrontRunningSkew: new BigNumber(nextPoolState.expectedFrontRunningSkew),
@@ -238,38 +249,13 @@ export const fetchNextPoolState: (params: { network: KnownNetwork; pool: string 
                 totalNetFrontRunningPendingShort: new BigNumber(nextPoolState.totalNetFrontRunningPendingShort),
                 expectedFrontRunningLongTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningLongTokenPrice),
                 expectedFrontRunningShortTokenPrice: new BigNumber(nextPoolState.expectedFrontRunningShortTokenPrice),
+                expectedFrontRunningPendingLongTokenBurn: new BigNumber(
+                    nextPoolState.expectedFrontRunningPendingLongTokenBurn,
+                ),
+                expectedFrontRunningPendingShortTokenBurn: new BigNumber(
+                    nextPoolState.expectedFrontRunningPendingShortTokenBurn,
+                ),
                 expectedFrontRunningOraclePrice: new BigNumber(nextPoolState.expectedFrontRunningOraclePrice),
-            };
-        })
-        .catch((err) => {
-            console.error('Failed to fetch average entry prices', err);
-            return {
-                currentSkew: new BigNumber(0),
-                currentLongBalance: new BigNumber(0),
-                currentLongSupply: new BigNumber(0),
-                currentShortBalance: new BigNumber(0),
-                currentShortSupply: new BigNumber(0),
-                expectedSkew: new BigNumber(0),
-                expectedLongBalance: new BigNumber(0),
-                expectedLongSupply: new BigNumber(0),
-                expectedShortBalance: new BigNumber(0),
-                expectedShortSupply: new BigNumber(0),
-                totalNetPendingLong: new BigNumber(0),
-                totalNetPendingShort: new BigNumber(0),
-                expectedLongTokenPrice: new BigNumber(0),
-                expectedShortTokenPrice: new BigNumber(0),
-                lastOraclePrice: new BigNumber(0),
-                expectedOraclePrice: new BigNumber(0),
-                expectedFrontRunningSkew: new BigNumber(0),
-                expectedFrontRunningLongBalance: new BigNumber(0),
-                expectedFrontRunningLongSupply: new BigNumber(0),
-                expectedFrontRunningShortBalance: new BigNumber(0),
-                expectedFrontRunningShortSupply: new BigNumber(0),
-                totalNetFrontRunningPendingLong: new BigNumber(0),
-                totalNetFrontRunningPendingShort: new BigNumber(0),
-                expectedFrontRunningLongTokenPrice: new BigNumber(0),
-                expectedFrontRunningShortTokenPrice: new BigNumber(0),
-                expectedFrontRunningOraclePrice: new BigNumber(0),
             };
         });
     return fetchedNextPoolState;

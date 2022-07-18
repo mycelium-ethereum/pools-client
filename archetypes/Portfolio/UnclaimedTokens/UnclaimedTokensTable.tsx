@@ -86,8 +86,6 @@ const PoolRow = ({
                     <Styles.PoolRowButtons>
                         <Styles.ClaimButton marketTicker={marketTicker} onClick={() => claim(poolAddress)}>
                             CLAIM ALL
-                            <Styles.ClaimButtonLogo size="sm" ticker={marketTicker} />
-                            {poolName}
                         </Styles.ClaimButton>
                     </Styles.PoolRowButtons>
                 </Styles.PoolRowButtonCell>

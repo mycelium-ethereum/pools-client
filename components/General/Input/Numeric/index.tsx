@@ -22,6 +22,7 @@ export const Input = React.memo(
         className = defaultClassName,
         characterBlacklist = defaultCharacterBlacklist,
         pattern = defaultPattern,
+        disabled,
         ...rest
     }: {
         value: string | number;
@@ -30,6 +31,7 @@ export const Input = React.memo(
         fontSize?: string;
         align?: 'right' | 'left';
         characterBlacklist?: Record<string, boolean>;
+        disabled?: boolean;
     } & Omit<React.HTMLProps<HTMLInputElement>, 'ref' | 'onChange' | 'as'>) => {
         const onKeyPress = useCallback(
             (e: any) => {
@@ -44,14 +46,16 @@ export const Input = React.memo(
         return (
             <input
                 {...rest}
+                disabled={disabled}
                 value={value}
                 onChange={(event) => {
                     const { value } = event.target;
-                    const decimals = value.toString().split('.')[1];
+                    const strWithoutLeadingsZeroes = value.replace(/^[0]+/g, '0');
+                    const decimals = strWithoutLeadingsZeroes.toString().split('.')[1];
                     // limit the amount of decimals
                     if (!decimals || decimals?.length <= maxDecimals) {
                         // replace commas with periods
-                        onUserInput(value.replace(/,/g, '.'));
+                        onUserInput(strWithoutLeadingsZeroes.replace(/,/g, '.'));
                     }
                 }}
                 // universal input options
@@ -70,6 +74,7 @@ export const Input = React.memo(
                 spellCheck="false"
                 className={classNames(
                     'outline-none placeholder-low-emphesis focus:placeholder-primary relative flex-auto overflow-hidden overflow-ellipsis border-none focus:border',
+                    disabled ? 'cursor-not-allowed' : 'cursor-text',
                     className,
                 )}
             />

@@ -1,15 +1,22 @@
+export type PagePath = '/' | '/trade' | '/portfolio' | '/stake'
+
 export const seoContent = {
-    pools: {
-        title: 'Pools',
+    '/': {
+        title: 'Buy Pool Tokens',
+        description: 'Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world.',
+        image: '/img/opengraph/main.jpg',
+    },
+    '/trade': {
+        title: 'Trade',
         description: 'Mint and Burn your Pool Tokens.',
         image: '/img/opengraph/main.jpg',
     },
-    portfolio: {
+    '/portfolio': {
         title: 'Portfolio',
         description: 'Track your portfolio performance.',
         image: '/img/opengraph/portfolio.jpg',
     },
-    stake: {
+    '/stake': {
         title: 'Stake',
         description: 'Stake your Pool Tokens to earn TCR rewards.',
         image: '/img/opengraph/stake.jpg',

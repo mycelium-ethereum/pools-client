@@ -1,9 +1,9 @@
 /bridge https://bridge.arbitrum.io/
-/pools /
+/pools /trade
 /stakepooltoken /stake
 /stakebpt /stake
 /portfolio/commits /portfolio
 /portfolio/history /portfolio
-/privacy-policy	https://tracer.finance/privacy-policy
+/privacy-policy https://tracer.finance/privacy-policy
 /terms-of-use https://tracer.finance/privacy-policy#terms-of-use
 /disclaimer https://tracer.finance/privacy-policy#interfaces-disclaimer

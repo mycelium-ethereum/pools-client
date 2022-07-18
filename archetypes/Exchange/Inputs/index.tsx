@@ -13,7 +13,11 @@ import { InvalidAmount, WALLET_OPTIONS } from './types';
 import TokenSelect from '../TokenSelect';
 
 /* HELPER FUNCTIONS */
-const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount = (amount, balance) => {
+export const isInvalidAmount: (
+    amount: BigNumber,
+    balance: BigNumber,
+    commitAction?: CommitActionEnum,
+) => InvalidAmount = (amount, balance, commitAction) => {
     if (amount.eq(0)) {
         return {
             message: undefined,
@@ -23,7 +27,13 @@ const isInvalidAmount: (amount: BigNumber, balance: BigNumber) => InvalidAmount 
 
     if (amount.gt(balance)) {
         return {
-            message: undefined,
+            message: commitAction
+                ? `Not enough funds! ${
+                      (commitAction as CommitActionEnum) === CommitActionEnum.mint
+                          ? toApproxCurrency(balance)
+                          : `${balance.toFixed(3)} tokens`
+                  } available`
+                : undefined,
             isInvalid: true,
         };
     }
@@ -43,6 +53,16 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
 
     const isLong = side === SideEnum.long;
     const token = useMemo(() => (isLong ? pool.longToken : pool.shortToken), [isLong, pool.longToken, pool.shortToken]);
+
+    const otherBalance = useMemo(() => {
+        switch (balanceType) {
+            case BalanceTypeEnum.wallet:
+                return isLong ? userBalances.aggregateBalances.longTokens : userBalances.aggregateBalances.shortTokens;
+            default:
+                return isLong ? userBalances.longToken.balance : userBalances.shortToken.balance;
+        }
+    }, [isLong, balanceType, userBalances.aggregateBalances.longTokens, userBalances.aggregateBalances.shortTokens]);
+
     const tokenBalance = useMemo(() => {
         switch (balanceType) {
             case BalanceTypeEnum.escrow:
@@ -87,7 +107,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                 currentBalance = tokenBalance;
             }
 
-            const invalidAmount = isInvalidAmount(amountBN, currentBalance);
+            const invalidAmount = isInvalidAmount(amountBN, currentBalance, commitAction);
 
             swapDispatch({
                 type: 'setInvalidAmount',
@@ -121,7 +141,9 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={settlementTokenBalance}
-                            tokenSymbol={pool.settlementToken.symbol}
+                            otherBalance={otherBalance}
+                            balanceType={balanceType}
+                            // tokenSymbol={pool.settlementToken.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}
                             isPoolToken={false}
@@ -132,7 +154,9 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                             amount={amount}
                             amountBN={amountBN}
                             balance={tokenBalance}
-                            tokenSymbol={token.symbol}
+                            otherBalance={otherBalance}
+                            balanceType={balanceType}
+                            // tokenSymbol={token.symbol}
                             swapDispatch={swapDispatch}
                             selectedPool={selectedPool}
                             isPoolToken={true}

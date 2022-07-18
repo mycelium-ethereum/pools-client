@@ -68,6 +68,7 @@ export const toApproxCurrency: (num_: BigNumber | number, precision?: number) =>
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: precision ?? 2,
+        maximumFractionDigits: precision ?? 2,
     });
 };
 
@@ -82,6 +83,7 @@ export const toApproxLocaleString: (num_: BigNumber | number, precision?: number
     }
     return num.toLocaleString('en-us', {
         minimumFractionDigits: precision ?? 2,
+        maximumFractionDigits: precision ?? 2,
     });
 };
 
@@ -133,6 +135,32 @@ export const timeAgo: (current: number, previous: number) => string = (current, 
  *
  * @param time as timestamp value in seconds
  */
+export const extractTimeSegments: (time: number) => {
+    d: number;
+    h: number;
+    m: number;
+    s: number;
+} = (time) => {
+    if (time > 0) {
+        return {
+            d: Math.floor(time / (60 * 60 * 24)),
+            h: Math.floor((time / (60 * 60)) % 24),
+            m: Math.floor((time / 60) % 60),
+            s: Math.floor(time % 60),
+        };
+    }
+    return {
+        d: 0,
+        h: 0,
+        m: 0,
+        s: 0,
+    };
+};
+
+/**
+ *
+ * @param time as timestamp value in seconds
+ */
 export const timeTill: (time: number) => {
     d?: number;
     h?: number;
@@ -140,17 +168,13 @@ export const timeTill: (time: number) => {
     s: number;
 } = (time) => {
     const difference = time - Date.now() / 1000;
-    if (difference > 0) {
-        return {
-            d: Math.floor(difference / (60 * 60 * 24)),
-            h: Math.floor((difference / (60 * 60)) % 24),
-            m: Math.floor((difference / 60) % 60),
-            s: Math.floor(difference % 60),
-        };
-    }
-    return {
-        s: 0,
-    };
+    return extractTimeSegments(difference);
+};
+
+export const formatSeconds: (seconds: number) => string = (seconds) => {
+    const { d, h, m, s } = extractTimeSegments(seconds);
+
+    return `${d ? `${d}day ` : ''}${h ? `${h}h` : ''}${m ? `${m}m` : ''}${s ? `${s}s` : ''}`;
 };
 
 /**
@@ -172,11 +196,11 @@ export const formatDate: (
         hideDate: false,
         hideTime: false,
     },
-) => {
-    const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
-    const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
-    return { timeString, dateString };
-};
+    ) => {
+        const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
+        const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
+        return { timeString, dateString };
+    };
 
 /**
  * Checks if a number is an arbitrarily small number. Returns is an approximated value instead
@@ -264,4 +288,5 @@ export const convertShortDate: (entryDate: number) => string = (entryDate) => {
 };
 
 export const formatBN = (n: BigNumber, decimals: number): BigNumber => n.div(10 ** decimals);
-export const formatAddress = (addr: string): string => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)}`;
+export const formatFees = (n: BigNumber): string => `${n.multipliedBy(100).toFixed()}%`;
+export const formatAddress = (addr: string): string => `${addr?.slice(0, 4)}...${addr?.slice(40, 42)} `;

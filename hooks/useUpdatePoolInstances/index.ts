@@ -36,8 +36,9 @@ export const useUpdatePoolInstances = (): void => {
         updatePoolCommitStats,
         updatePoolBalancerPrices,
         updateNextPoolStates,
+        updateOracleDetails,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
-    const { addMutlipleCommits } = useStore(selectUserCommitActions, shallow);
+    const { addMultipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
     const pools = useStore(selectPoolInstances);
@@ -78,6 +79,7 @@ export const useUpdatePoolInstances = (): void => {
                 if (!poolLists.length) {
                     return setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
                 }
+
                 try {
                     const initialisedPools = await Promise.all(
                         poolLists.map(async (pool) => {
@@ -156,7 +158,7 @@ export const useUpdatePoolInstances = (): void => {
                     })
                         .then((pendingCommits) => {
                             if (mounted) {
-                                addMutlipleCommits(
+                                addMultipleCommits(
                                     pendingCommits.map((commit) => ({
                                         pool: pool.poolInstance.address,
                                         id: commit.commitID,
@@ -207,8 +209,9 @@ export const useUpdatePoolInstances = (): void => {
         if (poolsInitialized) {
             const pools_ = Object.values(pools).map((pool) => pool.poolInstance.address);
             updatePoolCommitStats(pools_, network);
-            updateNextPoolStates(pools_, network);
             updatePoolBalancerPrices(pools_, network);
+            updateNextPoolStates(pools_, network);
+            updateOracleDetails(pools_);
         }
     }, [network, poolsInitialized]);
 };

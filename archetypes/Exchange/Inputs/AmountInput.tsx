@@ -1,30 +1,51 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
+import { Currency } from '~/components/General/Currency';
 import { InnerInputText } from '~/components/General/Input';
+import { LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
 import Max from '~/components/General/Max';
 
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { AmountProps } from './types';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 
 const Available: React.FC<{
     amountBN: BigNumber;
     balance: BigNumber;
+    otherBalance?: BigNumber;
+    balanceType: BalanceTypeEnum | undefined;
     isPoolToken: boolean;
-}> = ({ amountBN, balance, isPoolToken }) => {
+}> = ({ amountBN, balance, otherBalance, balanceType, isPoolToken }) => {
     const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
+
+    const tokenSource = () => {
+        console.log(balanceType);
+        switch (balanceType) {
+            case BalanceTypeEnum.escrow:
+                return 'wallet';
+            default:
+                return 'escrow';
+        }
+    };
 
     return (
         <>
-            {`Available: `}
             {isPoolToken ? (
                 <>
                     {`${balance.toFixed(3)} `}
                     {amountBN.gt(0) ? <span className="opacity-80">{`>>> ${balanceAfter.toFixed(3)}`}</span> : null}
+                    {` tokens available`}
+                    {otherBalance && otherBalance.gt(0) ? (
+                        <>
+                            <br />
+                            <span className="opacity-80">{`${otherBalance.toFixed(3)} in ${tokenSource()}`}</span>
+                        </>
+                    ) : null}
                 </>
             ) : (
                 <>
-                    {`${toApproxCurrency(balance)} `}
+                    {`${toApproxCurrency(balance)} available `}
                     {amountBN.gt(0) ? (
                         <span className="opacity-80">{`>>> ${toApproxCurrency(balanceAfter)}`}</span>
                     ) : null}
@@ -41,25 +62,31 @@ const AmountInput: React.FC<AmountProps> = ({
     amountBN,
     swapDispatch,
     balance,
-    // tokenSymbol,
+    otherBalance,
+    tokenSymbol,
     isPoolToken,
+    balanceType,
+    decimalPlaces = 8,
 }) => {
     return (
         <>
             <Styles.InputContainerStyled variation={invalidAmount.isInvalid ? 'error' : undefined}>
                 <Styles.InputStyled
                     value={amount}
+                    step="0.01"
+                    maxDecimals={decimalPlaces}
+                    pattern="[1-9]\d*"
                     onUserInput={(val) => {
                         swapDispatch({ type: 'setAmount', value: val || '' });
                     }}
                 />
                 <InnerInputText>
-                    {/*{tokenSymbol ? (*/}
-                    {/*    <Currency*/}
-                    {/*        ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}*/}
-                    {/*        label={tokenSymbol}*/}
-                    {/*    />*/}
-                    {/*) : null}*/}
+                    {tokenSymbol ? (
+                        <Currency
+                            ticker={isPoolToken ? tokenSymbolToLogoTicker(tokenSymbol) : (tokenSymbol as LogoTicker)}
+                            label={tokenSymbol}
+                        />
+                    ) : null}
                     <Max
                         className="m-auto"
                         onClick={(_e) =>
@@ -78,7 +105,13 @@ const AmountInput: React.FC<AmountProps> = ({
                 {invalidAmount.isInvalid && invalidAmount.message ? (
                     invalidAmount.message
                 ) : (
-                    <Available balance={balance} amountBN={amountBN} isPoolToken={isPoolToken} />
+                    <Available
+                        balance={balance}
+                        otherBalance={otherBalance}
+                        amountBN={amountBN}
+                        balanceType={balanceType}
+                        isPoolToken={isPoolToken}
+                    />
                 )}
             </Styles.Subtext>
         </>

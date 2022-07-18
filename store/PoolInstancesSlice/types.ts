@@ -1,11 +1,12 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { Pool, KnownNetwork } from '@tracer-protocol/pools-js';
-import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats, NextPoolState } from '~/types/pools';
+import { AggregateBalances, TradeStats, PoolInfo, PoolCommitStats, NextPoolState, OracleDetails } from '~/types/pools';
 
 export enum KnownPoolsInitialisationErrors {
     ProviderNotReady = 'Provider not ready',
     NetworkNotSupported = 'Network not supported',
+    ImportCheckNotComplete = 'Import check not complete',
     NoPools = 'No pools found',
     ExceededMaxRetryCount = 'Exceeded max retry count',
 }
@@ -37,6 +38,7 @@ export interface IPoolsInstancesSlice {
     setPoolIsWaiting: (pool: string, isWaitingForUpkeep: boolean) => void;
     setPoolExpectedExecution: (pool: string) => void;
     setTokenApproved: (pool: string, token: 'settlementToken' | 'shortToken' | 'longToken', value: BigNumber) => void;
+    setOracleDetails: (pool: string, oracleDetails: OracleDetails) => void;
 
     handlePoolUpkeep: (
         pool: string,
@@ -62,6 +64,7 @@ export interface IPoolsInstancesSlice {
         provider: ethers.providers.JsonRpcProvider | undefined,
         account: string | undefined,
     ) => void;
+    updateOracleDetails: (pools: string[]) => void;
     updatePoolBalances: (pool: string, provider: ethers.providers.JsonRpcProvider | undefined) => void;
     updatePoolBalancerPrices: (pool: string[], network: KnownNetwork | undefined) => void;
     simulateUpdateAvgEntryPrices: (pool: string) => void;

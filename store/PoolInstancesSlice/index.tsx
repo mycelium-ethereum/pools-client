@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { SMAOracle__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { getExpectedExecutionTimestamp } from '@tracer-protocol/pools-js';
 import { balancerConfig } from '~/constants/balancer';
 import { deprecatedPools } from '~/constants/deprecatedPools';
@@ -7,7 +8,13 @@ import { DEFAULT_POOLSTATE } from '~/constants/pools';
 import { StateSlice } from '~/store/types';
 import { PoolStatus } from '~/types/pools';
 import { getBalancerPrices } from '~/utils/balancer';
-import { fetchAggregateBalance, fetchTokenApprovals, fetchTokenBalances, fetchTradeStats } from '~/utils/pools';
+import {
+    buildDefaultNextPoolState,
+    fetchAggregateBalance,
+    fetchTokenApprovals,
+    fetchTokenBalances,
+    fetchTradeStats,
+} from '~/utils/pools';
 import { fetchPoolCommitStats, fetchNextPoolState } from '~/utils/tracerAPI';
 import { IPoolsInstancesSlice } from './types';
 import { StoreState } from '..';
@@ -37,7 +44,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 },
                 poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                 balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
-                nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
+                nextPoolState: buildDefaultNextPoolState(pool),
+                oracleDetails: DEFAULT_POOLSTATE.oracleDetails,
             };
         });
     },
@@ -61,7 +69,8 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                     },
                     poolCommitStats: DEFAULT_POOLSTATE.poolCommitStats,
                     balancerPrices: DEFAULT_POOLSTATE.balancerPrices,
-                    nextPoolState: DEFAULT_POOLSTATE.nextPoolState,
+                    nextPoolState: buildDefaultNextPoolState(pool),
+                    oracleDetails: DEFAULT_POOLSTATE.oracleDetails,
                 };
             });
         });
@@ -95,6 +104,14 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
             state.pools[pool].userBalances.shortToken.approvedAmount = approvals.shortTokenAmount;
             state.pools[pool].userBalances.longToken.approvedAmount = approvals.longTokenAmount;
             state.pools[pool].userBalances.settlementToken.approvedAmount = approvals.settlementTokenAmount;
+        });
+    },
+    setOracleDetails: (pool, oracleDetails) => {
+        if (!get().pools[pool]) {
+            return;
+        }
+        set((state) => {
+            state.pools[pool].oracleDetails = oracleDetails;
         });
     },
     setAggregateBalances: (pool, aggregateBalances) => {
@@ -282,16 +299,18 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
     },
     updateNextPoolStates: (pools_, network) => {
         pools_.forEach((pool_) => {
-            if (!network || !get().pools[pool_]) {
-                get().setTradeStats(pool_, DEFAULT_POOLSTATE.userBalances.tradeStats);
+            const poolInfo = get().pools[pool_];
+
+            if (!network || !poolInfo) {
+                get().setNextPoolState(pool_, DEFAULT_POOLSTATE.nextPoolState);
                 return;
             }
             fetchNextPoolState({ network, pool: pool_ })
                 .then((nextPoolState) => {
-                    get().setNextPoolState(pool_, nextPoolState);
+                    get().setNextPoolState(pool_, { ...nextPoolState });
                 })
-                .catch((err) => {
-                    console.error('Failed to fetch next pool state', err);
+                .catch(() => {
+                    get().setNextPoolState(pool_, buildDefaultNextPoolState(poolInfo.poolInstance));
                 });
         });
     },
@@ -375,6 +394,50 @@ export const createPoolsInstancesSlice: StateSlice<IPoolsInstancesSlice> = (set,
                 });
         });
     },
+    updateOracleDetails(pools_) {
+        pools_.forEach((pool_) => {
+            const pool = get().pools[pool_];
+
+            if (!pool || !pool.poolInstance._contract) {
+                return;
+            }
+
+            pool.poolInstance._contract
+                .oracleWrapper()
+                .then((oracleAddress) => {
+                    if (!pool.poolInstance.provider) {
+                        throw new Error('cannot get oracle details, pool instance provider not available');
+                    }
+                    const oracle = SMAOracle__factory.connect(oracleAddress, pool.poolInstance.provider);
+                    return Promise.all([oracle.numPeriods(), oracle.updateInterval()]);
+                })
+                .then(([numPeriods, updateInterval]) => {
+                    set((state) => {
+                        if (state.pools[pool_]) {
+                            state.pools[pool_].oracleDetails = {
+                                type: 'SMA',
+                                numPeriods: numPeriods.toNumber(),
+                                updateInterval: updateInterval.toNumber(),
+                                isLoading: false,
+                            };
+                        }
+                    });
+                })
+                .catch(() => {
+                    // if error reading sma parameters, assume its a spot oracle
+                    set((state) => {
+                        if (state.pools[pool_]) {
+                            state.pools[pool_].oracleDetails = {
+                                type: 'Spot',
+                                numPeriods: 0,
+                                updateInterval: 0,
+                                isLoading: false,
+                            };
+                        }
+                    });
+                });
+        });
+    },
     simulateUpdateAvgEntryPrices: (pool_) => {
         set((state) => {
             const pool = state.pools[pool_];
@@ -442,6 +505,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updatePoolTokenBalances: IPoolsInstancesSlice['updatePoolTokenBalances'];
     updateSettlementTokenBalances: IPoolsInstancesSlice['updateSettlementTokenBalances'];
     updateTokenApprovals: IPoolsInstancesSlice['updateTokenApprovals'];
+    updateOracleDetails: IPoolsInstancesSlice['updateOracleDetails'];
     updateTradeStats: IPoolsInstancesSlice['updateTradeStats'];
     updateNextPoolStates: IPoolsInstancesSlice['updateNextPoolStates'];
     updatePoolCommitStats: IPoolsInstancesSlice['updatePoolCommitStats'];
@@ -453,6 +517,7 @@ export const selectPoolInstanceUpdateActions: (state: StoreState) => {
     updatePoolTokenBalances: state.poolsInstancesSlice.updatePoolTokenBalances,
     updateSettlementTokenBalances: state.poolsInstancesSlice.updateSettlementTokenBalances,
     updateTokenApprovals: state.poolsInstancesSlice.updateTokenApprovals,
+    updateOracleDetails: state.poolsInstancesSlice.updateOracleDetails,
     updateTradeStats: state.poolsInstancesSlice.updateTradeStats,
     updateNextPoolStates: state.poolsInstancesSlice.updateNextPoolStates,
     updatePoolCommitStats: state.poolsInstancesSlice.updatePoolCommitStats,

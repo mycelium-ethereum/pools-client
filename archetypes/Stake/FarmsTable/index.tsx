@@ -7,10 +7,16 @@ import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip, StakingTvlTip } from '~/components/Tooltips';
-import { getBaseAsset } from '~/utils/poolNames';
 import { toApproxCurrency } from '~/utils/converters';
+import { getBaseAsset } from '~/utils/poolNames';
 import { FarmTableRowData } from '../state';
 import Close from '/public/img/general/close.svg';
+
+export enum StakeActionEnum {
+    stake = 'Stake',
+    unstake = 'Unstake',
+    claim = 'Claim',
+}
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);
@@ -174,28 +180,34 @@ const PoolRow: React.FC<{
             <TableRowCell>
                 <Button
                     disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
-                    className="mx-1 w-[78px] font-bold uppercase "
+                    className="mx-1 w-[78px] font-bold uppercase"
                     size="xs"
                     variant="primary-light"
-                    onClick={() => onClickStake(farm.farm)}
+                    onClick={() => {
+                        onClickStake(farm.farm);
+                    }}
                 >
                     STAKE
                 </Button>
                 <Button
                     disabled={farm.myStaked.eq(0)}
-                    className="mx-1 w-[96px] font-bold uppercase "
+                    className="mx-1 w-[96px] font-bold uppercase"
                     size="xs"
                     variant="primary-light"
-                    onClick={() => onClickUnstake(farm.farm)}
+                    onClick={() => {
+                        onClickUnstake(farm.farm);
+                    }}
                 >
                     UNSTAKE
                 </Button>
                 <Button
                     disabled={farm.myRewards.eq(0)}
-                    className="mx-1 w-[76px] font-bold uppercase "
+                    className="mx-1 w-[76px] font-bold uppercase"
                     size="xs"
                     variant="primary-light"
-                    onClick={() => onClickClaim(farm.farm)}
+                    onClick={() => {
+                        onClickClaim(farm.farm);
+                    }}
                 >
                     CLAIM
                 </Button>
