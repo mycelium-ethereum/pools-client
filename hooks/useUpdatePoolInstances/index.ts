@@ -93,7 +93,12 @@ export const useUpdatePoolInstances = (): void => {
                     addresses = poolAddresses;
                 }
 
-                console.debug(`Found ${addresses.length} pool${addresses.length > 0 ? 's' : ''} to import:`, addresses);
+                console.debug(
+                    `Found ${addresses.length} pool${
+                        addresses.length > 0 && addresses.length !== 1 ? 's' : ''
+                    } to import:`,
+                    addresses,
+                );
                 addresses.forEach((address) => {
                     handleImport(address);
                 });
