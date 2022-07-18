@@ -345,9 +345,12 @@ const PoolRow: React.FC<
         onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
+    const importedPools = useStore(selectImportedPools);
+    const isImportedPool = useMemo(() => importedPools.some((v) => v.address === pool.address), [pool]);
+
     return (
         <>
-            <TableRow lined>
+            <TableRow lined isImported={isImportedPool}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
                     <div className="mb-1 flex font-bold">
@@ -497,7 +500,7 @@ const PoolRow: React.FC<
                     poolTicker={pool.name}
                 />
             </TableRow>
-            <TableRow lined>
+            <TableRow lined isImported={isImportedPool}>
                 <TokenRows
                     side={SideEnum.short}
                     onClickMintBurn={onClickMintBurn}
@@ -518,6 +521,7 @@ const PoolRow: React.FC<
                     decimals={pool.decimals}
                     settlementTokenSymbol={pool.settlementTokenSymbol}
                     poolTicker={pool.name}
+                    isImportedPool={isImportedPool}
                 />
             </TableRow>
         </>
@@ -555,6 +559,7 @@ const TokenRows: React.FC<
             tokenBalance: number;
         };
         poolTicker: string;
+        isImportedPool: boolean;
     } & TProps
 > = ({
     side,
@@ -570,10 +575,8 @@ const TokenRows: React.FC<
     antecedentUpkeepTokenInfo,
     pastUpkeepTokenInfo,
     poolTicker,
+    isImportedPool,
 }) => {
-    const importedPools = useStore(selectImportedPools);
-    const isImportedPool = useMemo(() => importedPools.some((v) => v.address === poolAddress), [poolAddress]);
-
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
     return (

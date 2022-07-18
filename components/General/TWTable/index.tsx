@@ -78,7 +78,29 @@ TableHeaderCell.defaultProps = {
     twAlign: 'top',
 };
 
-export const TableRow = styled.tr<{ lined?: boolean }>`
+export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
+    position: relative;
+    & > td:first-of-type:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 5px;
+        height: 100%;
+        background-color: ${({ isImported }) => (isImported ? '#FFC700' : 'transparent')};
+    }
+
+    background: ${({ theme, isImported }) => {
+        switch (true) {
+            case theme.theme === Theme.Dark && isImported:
+                return '#111928 !important';
+            case theme.theme === Theme.Light && isImported:
+                return '#ffffff !important';
+            default:
+                return `inherit`;
+        }
+    }};
+
     &:nth-child(even) {
         background: ${({ theme }) => theme.background.primary};
     }
