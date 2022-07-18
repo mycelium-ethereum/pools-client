@@ -54,7 +54,7 @@ export const useUpdatePoolInstances = (): void => {
     const [importCheck, setImportCheck] = useState(false);
 
     const handleImport = (address: string) => {
-        const isDuplicatePool = poolLists.some((v: StaticPoolInfo) => v.address === address);
+        const isDuplicatePool = poolLists.some((v: StaticPoolInfo) => v.address.toLowerCase() === address.toLowerCase());
 
         if (!isDuplicatePool && isAddress(address)) {
             console.debug('Importing', address);
