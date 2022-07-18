@@ -22,7 +22,7 @@ export const TokenActions = ({
     otherActions,
     isImported,
 }: {
-    poolAddress: string;
+    poolAddress?: string;
     token: {
         address: string;
         symbol: string;
@@ -47,20 +47,22 @@ export const TokenActions = ({
     const buttonStyles = 'flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover w-full';
 
     const removeImportedPoolFromUi = useCallback((): void => {
-        // Check for imported Pool in localStorage
-        const localStoragePoolAddresses = localStorage.getItem('importedPools');
-        const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
-        const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
-        if (poolIndex !== -1) {
-            parsedImportedPools.splice(poolIndex, 1);
-            localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+        if (poolAddress) {
+            // Check for imported Pool in localStorage
+            const localStoragePoolAddresses = localStorage.getItem('importedPools');
+            const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
+            const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
+            if (poolIndex !== -1) {
+                parsedImportedPools.splice(poolIndex, 1);
+                localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+            }
+
+            // Remove URL parameters without reloading
+            window.history.pushState({}, document.title, window.location.pathname);
+
+            // Remove imported Pool from store
+            removePool(network as KnownNetwork, poolAddress);
         }
-
-        // Remove URL parameters without reloading
-        window.history.pushState({}, document.title, window.location.pathname);
-
-        // Remove imported Pool from store
-        removePool(network as KnownNetwork, poolAddress);
     }, [poolAddress]);
 
     return (
