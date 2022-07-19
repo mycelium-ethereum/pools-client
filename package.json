@@ -4,6 +4,7 @@
     "private": true,
     "type": "esnext",
     "dependencies": {
+        "@0xsequence/multicall": "^0.40.2",
         "@ant-design/icons": "^4.6.2",
         "@dhmk/zustand-lens": "^1.0.0",
         "@headlessui/react": "^1.4.1",
