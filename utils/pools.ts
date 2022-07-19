@@ -232,12 +232,12 @@ export const removeImportedPoolFromUi: (
     try {
         if (poolAddress) {
             // Check for imported Pool in localStorage
-            const localStoragePoolAddresses = localStorage.getItem('importedPools');
+            const localStoragePoolAddresses = localStorage.getItem(`importedPools${network}`);
             const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
             const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
             if (poolIndex !== -1) {
                 parsedImportedPools.splice(poolIndex, 1);
-                localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+                localStorage.setItem(`importedPools${network}`, JSON.stringify(parsedImportedPools));
             }
 
             // Remove URL parameters without reloading
@@ -247,7 +247,7 @@ export const removeImportedPoolFromUi: (
             removePool(network, poolAddress);
         }
     } catch (err) {
-        localStorage.setItem('importedPools', JSON.stringify([]));
+        localStorage.setItem(`importedPools${network}`, JSON.stringify([]));
         console.error('Failed to remove custom Pool', err);
     }
 };
