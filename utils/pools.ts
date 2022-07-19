@@ -224,7 +224,7 @@ export const saveImportedPoolsToLocalStorage: (network: KnownNetwork, customPool
     }
 };
 
-export const removeImportedPoolFromUi: (
+export const removeImportedPool: (
     network: KnownNetwork,
     poolAddress: string,
     removePool: (network: KnownNetwork, pool: string) => void,
