@@ -40,7 +40,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
             setImportMsg(pool.exists);
         } else if (isValidAddress) {
             importPool(network as KnownNetwork, userInput);
-            saveImportedPoolsToLocalStorage([userInput]);
+            saveImportedPoolsToLocalStorage(network, [userInput]);
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);

@@ -205,11 +205,14 @@ export const buildDefaultNextPoolState = (pool: Pool): NextPoolState => {
     };
 };
 
-export const saveImportedPoolsToLocalStorage: (customPools: string[]) => void = (customPools) => {
-    const importedPools = localStorage.getItem('importedPools');
+export const saveImportedPoolsToLocalStorage: (network: KnownNetwork, customPools: string[]) => void = (
+    network,
+    customPools,
+) => {
+    const importedPools = localStorage.getItem(`importedPools${network}`);
     if (!importedPools) {
         // create new localStorage variable to store imported pools
-        localStorage.setItem('importedPools', JSON.stringify(customPools));
+        localStorage.setItem(`importedPools${network}`, JSON.stringify(customPools));
     } else {
         const parsedImportedPools = JSON.parse(importedPools);
         customPools.forEach((pool) => {
@@ -217,6 +220,6 @@ export const saveImportedPoolsToLocalStorage: (customPools: string[]) => void = 
                 parsedImportedPools.push(pool);
             }
         });
-        localStorage.setItem('importedPools', JSON.stringify(parsedImportedPools));
+        localStorage.setItem(`importedPools${network}`, JSON.stringify(parsedImportedPools));
     }
 };
