@@ -57,7 +57,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     const { expectedLongTokenPrice, expectedShortTokenPrice } = nextPoolState || {};
     const tokenPrice = useMemo(
         () => (isLong ? expectedLongTokenPrice : expectedShortTokenPrice),
-        [isLong, pool.longToken, pool.shortToken, nextPoolState],
+        [isLong, nextPoolState],
     );
 
     const balancerPrice = useMemo(

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import BigNumber from 'bignumber.js';
 import { PoolToken, SideEnum } from '@tracer-protocol/pools-js';
 import { TracerMintButton } from '~/archetypes/BuyTokens/ExchangeButtons';
@@ -12,7 +12,7 @@ export enum MintSourceEnum {
 
 type MintButtonProps = {
     token: PoolToken;
-    nextTokenPrice: BigNumber;
+    tokenPrice: BigNumber;
     trackBuyAction: (
         side: SideEnum,
         leverage: number,
@@ -38,12 +38,12 @@ const MintButton: React.FC<MintButtonProps> = ({
     commit,
     commitType,
     token,
-    nextTokenPrice,
+    tokenPrice,
     trackBuyAction,
     handleModalClose,
 }) => {
     const { selectedPool, side, leverage, invalidAmount, balanceType } = swapState;
-    const expectedAmount = calcNumTokens(amountBN, nextTokenPrice);
+    const expectedAmount = calcNumTokens(amountBN, tokenPrice);
 
     return (
         <TracerMintButton
