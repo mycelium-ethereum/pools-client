@@ -12,7 +12,7 @@ export enum MintSourceEnum {
 
 type MintButtonProps = {
     token: PoolToken;
-    isLong: boolean;
+    nextTokenPrice: BigNumber;
     trackBuyAction: (
         side: SideEnum,
         leverage: number,
@@ -38,15 +38,11 @@ const MintButton: React.FC<MintButtonProps> = ({
     commit,
     commitType,
     token,
-    isLong,
+    nextTokenPrice,
     trackBuyAction,
     handleModalClose,
 }) => {
     const { selectedPool, side, leverage, invalidAmount, balanceType } = swapState;
-    const nextTokenPrice = useMemo(
-        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
-        [isLong, pool.longToken, pool.shortToken],
-    );
     const expectedAmount = calcNumTokens(amountBN, nextTokenPrice);
 
     return (

@@ -11,11 +11,12 @@ import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton'
 import TimeLeft from '~/components/TimeLeft';
 import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useBigNumber } from '~/context/SwapContext';
+import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
+import usePools from '~/hooks/usePools';
 import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
-import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 
 export type EXButtonsProps = {
     amount: string;
@@ -45,16 +46,18 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     userBalances,
     onButtonClick,
 }) => {
-    const { selectedPool } = swapState;
+    const { pools } = usePools();
+    const { approve } = usePoolInstanceActions();
     // Required for tracking trade actions
     const { trackBuyAction } = useContext(AnalyticsContext);
-
-    const { approve } = usePoolInstanceActions();
     const amountBN = useBigNumber(amount);
 
+    const { selectedPool } = swapState;
+    const { nextPoolState } = pools[selectedPool as string] || {};
+    const { expectedLongTokenPrice, expectedShortTokenPrice } = nextPoolState || {};
     const tokenPrice = useMemo(
-        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
-        [isLong, pool.longToken, pool.shortToken],
+        () => (isLong ? expectedLongTokenPrice : expectedShortTokenPrice),
+        [isLong, pool.longToken, pool.shortToken, nextPoolState],
     );
 
     const balancerPrice = useMemo(
@@ -67,12 +70,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
         [isLong, token, poolTokens, pool.longToken, pool.shortToken],
     );
 
-    const nextTokenPrice = useMemo(
-        () => (isLong ? pool.getNextLongTokenPrice() : pool.getNextShortTokenPrice()),
-        [isLong, pool.longToken, pool.shortToken],
-    );
-
-    const expectedAmount = calcNumTokens(amountBN, nextTokenPrice);
+    const expectedAmount = calcNumTokens(amountBN, tokenPrice);
     const expectedBalancerAmount = !isNaN(balancerPrice)
         ? calcNumTokens(amountBN, useBigNumber(balancerPrice.toString()))
         : useBigNumber('0');
