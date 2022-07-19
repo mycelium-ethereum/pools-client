@@ -81,9 +81,8 @@ export const useUpdatePoolInstances = (): void => {
             if (poolAddresses || localStoragePoolAddresses) {
                 let addresses: string[] = [];
                 if (localStoragePoolAddresses) {
-                    const concatArr = [...poolAddresses, ...parsedImportedPools];
                     // Exclude duplicate values between both localStorage and URL imported Pool addresses
-                    addresses = [...new Set(concatArr)];
+                    addresses = [...new Set([...poolAddresses, ...parsedImportedPools])];
                 } else {
                     addresses = poolAddresses;
                 }
