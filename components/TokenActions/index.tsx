@@ -13,7 +13,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructBalancerLink } from '~/utils/balancer';
 import { openBlockExplorer } from '~/utils/blockExplorers';
-import { removeImportedPoolFromUi } from '~/utils/pools';
+import { removeImportedPool } from '~/utils/pools';
 import { watchAsset } from '~/utils/rpcMethods';
 
 export const TokenActions = ({
@@ -107,9 +107,7 @@ export const TokenActions = ({
                         {isImported && poolAddress ? (
                             <button
                                 className={buttonStyles}
-                                onClick={() =>
-                                    removeImportedPoolFromUi(network as KnownNetwork, poolAddress, removePool)
-                                }
+                                onClick={() => removeImportedPool(network as KnownNetwork, poolAddress, removePool)}
                             >
                                 <CloseIcon className="ml-[1px] mr-2 h-4 w-4" />
                                 Remove Pool from view
