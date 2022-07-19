@@ -74,13 +74,14 @@ export const useUpdatePoolInstances = (): void => {
         const urlParams = new URLSearchParams(queryString);
         const poolAddresses = urlParams?.getAll('show');
         // Check if there are any pools to import from localStorage
-        const localStoragePoolAddresses = localStorage.getItem('importedPools');
+        const localStoragePoolAddresses = localStorage.getItem(`importedPools${network}`);
         let parsedImportedPools: any;
         if (localStoragePoolAddresses) {
             try {
                 parsedImportedPools = JSON.parse(localStoragePoolAddresses);
             } catch (err) {
                 parsedImportedPools = [];
+                localStorage.setItem(`importedPools${network}`, JSON.stringify([]));
             }
         }
 
@@ -95,8 +96,7 @@ export const useUpdatePoolInstances = (): void => {
                 }
 
                 console.debug(
-                    `Found ${addresses.length} pool${
-                        addresses.length > 0 && addresses.length !== 1 ? 's' : ''
+                    `Found ${addresses.length} pool${addresses.length > 0 && addresses.length !== 1 ? 's' : ''
                     } to import:`,
                     addresses,
                 );
