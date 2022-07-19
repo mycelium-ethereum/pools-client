@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { isAddress } from 'ethers/lib/utils';
 import shallow from 'zustand/shallow';
-import { Pool, attemptPromiseRecursively } from '@tracer-protocol/pools-js';
+import { Pool, attemptPromiseRecursively, StaticPoolInfo, KnownNetwork } from '@tracer-protocol/pools-js';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -12,10 +13,12 @@ import {
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
 import { KnownPoolsInitialisationErrors } from '~/store/PoolInstancesSlice/types';
+import { selectImportPool } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { randomIntInRange } from '~/utils/helpers';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
@@ -38,6 +41,7 @@ export const useUpdatePoolInstances = (): void => {
         updateNextPoolStates,
         updateOracleDetails,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const importPool = useStore(selectImportPool);
     const { addMultipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
     const poolLists = useAllPoolLists();
@@ -47,6 +51,61 @@ export const useUpdatePoolInstances = (): void => {
     // ref to assist in the ensuring that the pools are not getting set twice
     const hasSetPools = useRef(false);
     const [isFetchingPools, setIsFetchingPools] = useState(false);
+    const [importCheck, setImportCheck] = useState(false);
+
+    const handleImport = (address: string) => {
+        const isDuplicatePool = poolLists.some(
+            (v: StaticPoolInfo) => v.address.toLowerCase() === address.toLowerCase(),
+        );
+
+        if (!isDuplicatePool && isAddress(address)) {
+            console.debug('Importing', address);
+            importPool(network as KnownNetwork, address);
+        } else if (isDuplicatePool) {
+            console.debug('Duplicate pool or duplicate import:', address);
+        } else {
+            console.warn('Invalid address:', address);
+        }
+    };
+
+    const checkForImportedPools = () => {
+        // Check if there are any pools to import from URL
+        const queryString = window?.location?.search;
+        const urlParams = new URLSearchParams(queryString);
+        const poolAddresses = urlParams?.getAll('show');
+        // Check if there are any pools to import from localStorage
+        const localStoragePoolAddresses = localStorage.getItem(`importedPools${network}`);
+        const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
+
+        if (poolLists.length && !hasSetPools.current && !importCheck) {
+            if (poolAddresses || localStoragePoolAddresses) {
+                let addresses: string[] = [];
+                if (localStoragePoolAddresses) {
+                    // Exclude duplicate values between both localStorage and URL imported Pool addresses
+                    addresses = [...new Set([...poolAddresses, ...parsedImportedPools])];
+                } else {
+                    addresses = poolAddresses;
+                }
+
+                console.debug(`Found ${addresses.length} pool${addresses.length > 0 ? 's' : ''} to import:`, addresses);
+                addresses.forEach((address) => {
+                    handleImport(address);
+                });
+                saveImportedPoolsToLocalStorage(network as KnownNetwork, addresses);
+            }
+            setImportCheck(true);
+        } else if (
+            (!poolAddresses || poolAddresses.length === 0) &&
+            (!parsedImportedPools || parsedImportedPools.length === 0)
+        ) {
+            setImportCheck(true);
+        }
+    };
+
+    // Check for URL parameter "show" to allow importing one or more custom Pools before initialization
+    useEffect(() => {
+        checkForImportedPools();
+    }, [poolLists]);
 
     // if the pools from the factory change, re-init them
     useEffect(() => {
@@ -56,11 +115,13 @@ export const useUpdatePoolInstances = (): void => {
             console.debug('Skipped pools initialisation, already fetching pools');
         } else if (!provider) {
             console.debug('Skipped pools initialisation, provider not ready');
-            resetPools();
             setPoolsInitializationError(KnownPoolsInitialisationErrors.ProviderNotReady);
         } else if (!poolLists.length) {
             console.debug('Skipped pools initialisation, poolList is empty');
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NoPools);
+        } else if (!importCheck) {
+            console.debug(`Import check not complete, skipping pools initialisation`);
+            setPoolsInitializationError(KnownPoolsInitialisationErrors.ImportCheckNotComplete);
         } else if (!network || !isSupportedNetwork(network)) {
             console.debug(`Skipped pools initialisation, network: ${network} not supported`);
             setPoolsInitializationError(KnownPoolsInitialisationErrors.NetworkNotSupported);

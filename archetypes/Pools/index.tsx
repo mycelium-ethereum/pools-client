@@ -61,7 +61,7 @@ export const Browse: React.FC = () => {
             const searchString = escapeRegExp(state.search.toLowerCase());
             const marketName = marketSymbolToAssetName[pool.marketSymbol];
             return Boolean(
-                marketName.toLowerCase().match(searchString) ||
+                marketName?.toLowerCase().match(searchString) ||
                     pool.name.toLowerCase().match(searchString) ||
                     pool.shortToken.symbol.toLowerCase().match(searchString) ||
                     pool.longToken.symbol.toLowerCase().match(searchString) ||
