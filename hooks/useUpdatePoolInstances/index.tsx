@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
 import { isAddress } from 'ethers/lib/utils';
+import { toast } from 'react-toastify';
 import shallow from 'zustand/shallow';
 import { Pool, attemptPromiseRecursively, StaticPoolInfo, KnownNetwork } from '@tracer-protocol/pools-js';
+import { Notification } from '~/components/General/Notification';
 import { useStore } from '~/store/main';
 import { selectUserCommitActions } from '~/store/PendingCommitSlice';
 import {
@@ -24,6 +26,7 @@ import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
 
 const MAX_RETRY_COUNT = 10;
+const AUTO_DISMISS = 5000; // 5 seconds
 
 /**
  * Wrapper to update all pools information
@@ -173,6 +176,19 @@ export const useUpdatePoolInstances = (): void => {
                             }).catch((error) => {
                                 console.debug(
                                     `Abandoning loading of ${pool.name || pool.address}, retry limit reached: ${error}`,
+                                );
+
+                                toast(
+                                    <Notification title="Error Adding Pool">
+                                        <span className="ml-2 block text-sm">
+                                            Error adding {pool.name ?? pool.address} to interface
+                                        </span>
+                                    </Notification>,
+                                    {
+                                        type: 'error',
+                                        // autoClose: AUTO_DISMISS,
+                                        autoClose: false,
+                                    },
                                 );
 
                                 return null;
