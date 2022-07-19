@@ -76,6 +76,9 @@ export type LogoTicker =
     | 'ETH'
     | 'EUR'
     | 'WETH'
+    | 'stETH'
+    | 'stETH_L'
+    | 'stETH_S'
     | 'BTC'
     | 'TOKE'
     | 'LINK'
@@ -114,6 +117,9 @@ const logos: Record<LogoTicker, any> = {
     WTI_L: WTI_L,
     EUR: EUR,
     ETH: ETH,
+    stETH: ETH,
+    stETH_L: ETH,
+    stETH_S: ETH,
     WETH: ETH,
     BTC: BTC,
     TOKE: TOKE,

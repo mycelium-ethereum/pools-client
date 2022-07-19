@@ -54,7 +54,9 @@ export const useUpdatePoolInstances = (): void => {
     const [importCheck, setImportCheck] = useState(false);
 
     const handleImport = (address: string) => {
-        const isDuplicatePool = poolLists.some((v: StaticPoolInfo) => v.address === address);
+        const isDuplicatePool = poolLists.some(
+            (v: StaticPoolInfo) => v.address.toLowerCase() === address.toLowerCase(),
+        );
 
         if (!isDuplicatePool && isAddress(address)) {
             console.debug('Importing', address);
@@ -86,9 +88,8 @@ export const useUpdatePoolInstances = (): void => {
             if (poolAddresses || localStoragePoolAddresses) {
                 let addresses: string[] = [];
                 if (localStoragePoolAddresses) {
-                    const concatArr = [...poolAddresses, ...parsedImportedPools];
                     // Exclude duplicate values between both localStorage and URL imported Pool addresses
-                    addresses = [...new Set(concatArr)];
+                    addresses = [...new Set([...poolAddresses, ...parsedImportedPools])];
                 } else {
                     addresses = poolAddresses;
                 }
@@ -102,7 +103,7 @@ export const useUpdatePoolInstances = (): void => {
                 addresses.forEach((address) => {
                     handleImport(address);
                 });
-                saveImportedPoolsToLocalStorage(addresses);
+                saveImportedPoolsToLocalStorage(network as KnownNetwork, addresses);
             }
             setImportCheck(true);
         } else if (

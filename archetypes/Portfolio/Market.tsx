@@ -3,7 +3,8 @@ import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import { toApproxCurrency } from '~/utils/converters';
-import { getMarketInfoFromSymbol, getSimplifiedTokenName, marketSymbolToAssetName } from '~/utils/poolNames';
+import { getMarketInfoFromSymbol, getSimplifiedTokenName } from '~/utils/poolNames';
+import { marketSymbolToAssetName } from '~/utils/pools';
 import { InnerCellSubText } from './styles';
 
 const MarketContainer = styled.div`

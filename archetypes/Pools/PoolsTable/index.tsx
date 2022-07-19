@@ -26,8 +26,8 @@ import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import { marketSymbolToAssetName } from '~/utils/poolNames';
 import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
+import { marketSymbolToAssetName } from '~/utils/pools';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
@@ -192,7 +192,7 @@ export const PoolsTable = ({
                                         <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
                                             {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
                                         </div>
-                                        <div className="text-lg font-bold">{rows[0].marketSymbol}</div>
+                                        <div className="text-lg font-bold normal-case">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
                                 <div className="px-10">

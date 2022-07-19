@@ -1,3 +1,4 @@
+import { marketRegex } from './helpers';
 import { KnownShortenedPoolTokenSymbols } from '../constants';
 
 /**
@@ -25,22 +26,11 @@ export const splitMarketTicker: (market: string) => {
     return { underlying, base };
 };
 
-export const marketSymbolToAssetName: Record<string, string> = {
-    'ETH/USD': 'Ethereum',
-    'EUR/USD': 'Euro',
-    'BTC/USD': 'Bitcoin',
-    'TOKE/USD': 'Tokemak',
-    'LINK/USD': 'Chainlink',
-    'AAVE/USD': 'AAVE',
-    'WTI/USD': 'Oil',
-};
-
 // given a pool symbol or token symbol, get the marketSymbol
 export const getMarketSymbol = (poolSymbol?: string): string => {
     if (!poolSymbol) {
         return '';
     }
-    const marketRegex = /([A-Z]*\/[A-Z]*)/g;
     const market = poolSymbol.match(marketRegex);
     return market ? market[0] : '';
 };
