@@ -186,8 +186,7 @@ export const useUpdatePoolInstances = (): void => {
                                     </Notification>,
                                     {
                                         type: 'error',
-                                        // autoClose: AUTO_DISMISS,
-                                        autoClose: false,
+                                        autoClose: AUTO_DISMISS,
                                     },
                                 );
 
