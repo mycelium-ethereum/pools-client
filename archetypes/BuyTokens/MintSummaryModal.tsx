@@ -16,6 +16,7 @@ import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import CloseIcon from '~/public/img/general/close.svg';
 import { AggregateBalances, TokenBalance, TradeStats } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
+import usePools from '~/hooks/usePools';
 
 const DEFAULT_GAS_FEE = new BigNumber(0);
 
@@ -59,12 +60,20 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
     onClose,
     isSummaryOpen,
 }) => {
+    const { pools } = usePools();
     const { commit, approve } = usePoolInstanceActions();
     const { trackBuyAction } = useContext(AnalyticsContext);
+    const { commitGasFee } = usePoolInstanceActions();
     const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, BigNumber>>>({});
     const gasPrice = useGasPrice();
     const ethPrice = useBalancerETHPrice();
-    const { commitGasFee } = usePoolInstanceActions();
+
+    const { nextPoolState } = pools[selectedPool as string] || {};
+    const { expectedLongTokenPrice, expectedShortTokenPrice } = nextPoolState || {};
+    const tokenPrice = useMemo(
+        () => (isLong ? expectedLongTokenPrice : expectedShortTokenPrice),
+        [isLong, nextPoolState],
+    );
 
     const amountBN = useBigNumber(amount);
     const commitType = CommitActionSideMap[commitAction][side];
@@ -99,7 +108,7 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
             <Summary
                 pool={pool}
                 showBreakdown={!invalidAmount.isInvalid}
-                isLong={side === SideEnum.long}
+                isLong={isLong}
                 amount={amountBN}
                 receiveIn={receiveIn}
                 commitAction={commitAction}
@@ -116,9 +125,9 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
                 commit={commit}
                 commitType={commitType}
                 token={token}
-                isLong={isLong}
                 trackBuyAction={trackBuyAction}
                 handleModalClose={onClose}
+                tokenPrice={tokenPrice}
             />
         </TWModal>
     );
