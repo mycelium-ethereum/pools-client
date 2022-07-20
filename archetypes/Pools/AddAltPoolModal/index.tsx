@@ -22,6 +22,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
     const [userInput, setUserInput] = useState<string>('');
     const [importMsg, setImportMsg] = useState<string>('');
     const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
+    const [isMarketAvailable, setIsMarketAvailable] = useState<boolean>(false);
 
     const poolLists = useMemo(() => getPoolsList(network as KnownNetwork), [network]);
 
@@ -55,6 +56,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         const isAvailable =
             ((poolLists?.TracerUnverified.pools || []).filter((v) => v.address === userInput) as StaticPoolInfo[]).length > 0; // Check if Pool exists in list of unverified
         if (!isAvailable && isValidAddress) {
+            setIsMarketAvailable(false);
             setImportMsg(pool.doesnotexist);
         } else if (!userInput) {
             setImportMsg('');
@@ -81,7 +83,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
                 <Styles.Message>{importMsg}</Styles.Message>
             </HiddenExpand>
 
-            <Button onClick={handleImport} variant="primary" size="lg" disabled={!isValidAddress}>
+            <Button onClick={handleImport} variant="primary" size="lg" disabled={!isValidAddress || !isMarketAvailable}>
                 Import
             </Button>
         </TWModal>

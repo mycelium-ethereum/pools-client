@@ -15,12 +15,12 @@ import {
     selectPoolsInitialized,
 } from '~/store/PoolInstancesSlice';
 import { KnownPoolsInitialisationErrors } from '~/store/PoolInstancesSlice/types';
-import { selectImportPool } from '~/store/PoolsSlice';
+import { selectImportPool, selectRemovePool } from '~/store/PoolsSlice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { V2_SUPPORTED_NETWORKS } from '~/types/networks';
 import { randomIntInRange } from '~/utils/helpers';
-import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
+import { removeImportedPool, saveImportedPoolsToLocalStorage } from '~/utils/pools';
 import { isSupportedNetwork } from '~/utils/supportedNetworks';
 import { fetchPendingCommits } from '~/utils/tracerAPI';
 import { useAllPoolLists } from '../useAllPoolLists';
@@ -44,6 +44,7 @@ export const useUpdatePoolInstances = (): void => {
         updateNextPoolStates,
         updateOracleDetails,
     } = useStore(selectPoolInstanceUpdateActions, shallow);
+    const removePool = useStore(selectRemovePool);
     const importPool = useStore(selectImportPool);
     const { addMultipleCommits } = useStore(selectUserCommitActions, shallow);
     const { provider, account, network } = useStore(selectWeb3Info, shallow);
@@ -99,7 +100,8 @@ export const useUpdatePoolInstances = (): void => {
                 }
 
                 console.debug(
-                    `Found ${addresses.length} pool${addresses.length > 0 && addresses.length !== 1 ? 's' : ''
+                    `Found ${addresses.length} pool${
+                        addresses.length > 0 && addresses.length !== 1 ? 's' : ''
                     } to import:`,
                     addresses,
                 );
@@ -201,6 +203,9 @@ export const useUpdatePoolInstances = (): void => {
                                         autoClose: AUTO_DISMISS,
                                     },
                                 );
+
+                                // Removes imported Pool from localStorage to prevent it loading on refresh
+                                removeImportedPool(network as KnownNetwork, pool.address, removePool);
 
                                 return null;
                             });
