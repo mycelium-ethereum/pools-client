@@ -53,7 +53,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
 
     useEffect(() => {
         const isAvailable =
-            (poolLists?.TracerUnverified.pools.filter((v) => v.address === userInput) as StaticPoolInfo[]).length > 0; // Check if Pool exists in list of unverified
+            ((poolLists?.TracerUnverified.pools || []).filter((v) => v.address === userInput) as StaticPoolInfo[]).length > 0; // Check if Pool exists in list of unverified
         if (!isAvailable && isValidAddress) {
             setImportMsg(pool.doesnotexist);
         } else if (!userInput) {
