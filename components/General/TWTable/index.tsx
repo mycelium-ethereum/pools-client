@@ -78,18 +78,25 @@ TableHeaderCell.defaultProps = {
     twAlign: 'top',
 };
 
-export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
-    position: relative;
-    & > td:first-of-type:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 5px;
-        height: 100%;
-        background-color: ${({ isImported }) => (isImported ? '#FFC700' : 'transparent')};
+export const ImportedIndicator = styled.div<{ isImported?: boolean }>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    margin-bottom: 6px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 700;
+    border-radius: 3px;
+    padding: 1px 5px;
+    background-color: #ffc700;
+    color: black;
+    font-size: 10px;
+    &:before {
+        content: 'IMPORTED';
     }
+`;
 
+export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
     background: ${({ theme, isImported }) => {
         switch (true) {
             case theme.theme === Theme.Dark && isImported:
