@@ -112,8 +112,10 @@ export const useUpdatePoolInstances = (): void => {
             }
             setImportCheck(true);
         } else if (
-            (!poolAddresses || poolAddresses.length === 0) &&
-            (!parsedImportedPools || parsedImportedPools.length === 0)
+            !poolAddresses ||
+            poolAddresses.length === 0 ||
+            !parsedImportedPools ||
+            parsedImportedPools.length === 0
         ) {
             setImportCheck(true);
         }

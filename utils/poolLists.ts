@@ -5,8 +5,8 @@ import { PoolList, PoolLists, PoolListUris } from '~/types/poolLists';
 export const flattenAllPoolLists = (poolLists: PoolLists | undefined): StaticPoolInfo[] =>
     poolLists
         ? poolLists.All.map((pool) => pool.pools)
-              .flat(1)
-              .concat(poolLists.Imported.pools)
+            .flat(1)
+            .concat(poolLists.Imported.pools)
         : [];
 
 /**
@@ -71,6 +71,14 @@ const isStaticPoolInfo = (pool: any): pool is StaticPoolInfo => {
     return pool && pool.address && typeof pool.address === 'string';
 };
 
+const determineValidTracerList = (list: PoolList, name: string): PoolList => {
+    return (!(list instanceof Error) || !list) && isPoolList(list)
+        ? list
+        : {
+            name: name,
+            pools: [],
+        };
+};
 /**
  * Fetch all pool list json and return mapped to URI
  */
@@ -80,21 +88,8 @@ export const getAllPoolLists = async (network: KnownNetwork): Promise<PoolLists>
     const tracerUnverifiedList: PoolList = await get(uris_.TracerUnverified).catch((e) => e);
     const externalLists: PoolList[] = await Promise.all(uris_.External.map((uri) => get(uri).catch((e) => e)));
 
-    const validTracerList: PoolList =
-        (!(tracerList instanceof Error) || !tracerList) && isPoolList(tracerList)
-            ? tracerList
-            : {
-                  name: 'Tracer',
-                  pools: [],
-              };
-
-    const validTracerUnverifiedList: PoolList =
-        (!(tracerUnverifiedList instanceof Error) || !tracerUnverifiedList) && isPoolList(tracerUnverifiedList)
-            ? tracerUnverifiedList
-            : {
-                  name: 'TracerUnverified',
-                  pools: [],
-              };
+    const validTracerList = determineValidTracerList(tracerList, 'Tracer');
+    const validTracerUnverifiedList = determineValidTracerList(tracerUnverifiedList, 'TracerUnverified');
 
     const validExternalLists = externalLists.filter((list) => (!(list instanceof Error) || !list) && isPoolList(list));
     const importedList = {
