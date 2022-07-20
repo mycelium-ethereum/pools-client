@@ -223,3 +223,31 @@ export const saveImportedPoolsToLocalStorage: (network: KnownNetwork, customPool
         localStorage.setItem(`importedPools${network}`, JSON.stringify(parsedImportedPools));
     }
 };
+
+export const removeImportedPool: (
+    network: KnownNetwork,
+    poolAddress: string,
+    removePool: (network: KnownNetwork, pool: string) => void,
+) => void = (network, poolAddress, removePool) => {
+    try {
+        if (poolAddress) {
+            // Check for imported Pool in localStorage
+            const localStoragePoolAddresses = localStorage.getItem(`importedPools${network}`);
+            const parsedImportedPools = localStoragePoolAddresses && JSON.parse(localStoragePoolAddresses);
+            const poolIndex = parsedImportedPools?.findIndex((pool: string) => pool === poolAddress);
+            if (poolIndex !== -1) {
+                parsedImportedPools.splice(poolIndex, 1);
+                localStorage.setItem(`importedPools${network}`, JSON.stringify(parsedImportedPools));
+            }
+
+            // Remove URL parameters without reloading
+            window.history.pushState({}, document.title, window.location.pathname);
+
+            // Remove imported Pool from store
+            removePool(network, poolAddress);
+        }
+    } catch (err) {
+        localStorage.setItem(`importedPools${network}`, JSON.stringify([]));
+        console.error('Failed to remove custom Pool', err);
+    }
+};

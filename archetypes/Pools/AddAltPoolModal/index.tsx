@@ -16,7 +16,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
     // const [poolList, setPoolList] = useState<Partial<Record<KnownNetwork, PoolLists>>>([]);
     const importPool = useStore(selectImportPool);
     const getPoolsList = useStore(selectGetPools);
-    const getImported = useStore(selectImportedPools);
+    const importedPools = useStore(selectImportedPools);
     const network = useStore(selectNetwork);
 
     const [userInput, setUserInput] = useState<string>('');
@@ -38,7 +38,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
 
     const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
-        const isDuplicateImport = getImported.some((v) => v.address === userInput);
+        const isDuplicateImport = importedPools.some((v) => v.address === userInput);
 
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);
