@@ -6,15 +6,15 @@ import { TWModal } from '~/components/General/TWModal';
 import { useStore } from '~/store/main';
 import { selectImportPool, selectImportedPools } from '~/store/PoolsSlice';
 import { selectNetwork } from '~/store/Web3Slice';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 import { isAddress } from '~/utils/rpcMethods';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
-import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
     const importPool = useStore(selectImportPool);
-    const getImported = useStore(selectImportedPools);
+    const importedPools = useStore(selectImportedPools);
     const network = useStore(selectNetwork);
 
     const [userInput, setUserInput] = useState<string>('');
@@ -34,7 +34,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
 
     const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
-        const isDuplicateImport = getImported.some((v) => v.address === userInput);
+        const isDuplicateImport = importedPools.some((v) => v.address === userInput);
 
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);

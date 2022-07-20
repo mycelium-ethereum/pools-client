@@ -4,20 +4,26 @@ import { Popover } from 'react-tiny-popover';
 import shallow from 'zustand/shallow';
 import { KnownNetwork, NETWORKS } from '@tracer-protocol/pools-js';
 import { Logo, LogoTicker } from '~/components/General';
+import CloseIcon from '~/public/img/general/close.svg';
 import More from '~/public/img/general/more.svg';
 import { useStore } from '~/store/main';
+import { selectRemovePool } from '~/store/PoolsSlice';
 import { selectProvider } from '~/store/Web3Slice';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { constructBalancerLink } from '~/utils/balancer';
 import { openBlockExplorer } from '~/utils/blockExplorers';
+import { removeImportedPool } from '~/utils/pools';
 import { watchAsset } from '~/utils/rpcMethods';
 
 export const TokenActions = ({
+    poolAddress,
     token,
     arbiscanTarget,
     otherActions,
+    isImported,
 }: {
+    poolAddress?: string;
     token: {
         address: string;
         symbol: string;
@@ -33,11 +39,14 @@ export const TokenActions = ({
         logo: LogoTicker;
         text: string;
     }[];
+    isImported?: boolean;
 }): JSX.Element => {
+    const removePool = useStore(selectRemovePool);
     const { network } = useStore(selectWeb3Info, shallow);
     const provider = useStore(selectProvider);
     const [isOpen, setIsOpen] = useState<boolean>(false);
     const buttonStyles = 'flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover w-full';
+
     return (
         <Popover
             isOpen={isOpen}
@@ -95,6 +104,15 @@ export const TokenActions = ({
                                   </button>
                               ))
                             : null}
+                        {isImported && poolAddress ? (
+                            <button
+                                className={buttonStyles}
+                                onClick={() => removeImportedPool(network as KnownNetwork, poolAddress, removePool)}
+                            >
+                                <CloseIcon className="ml-[1px] mr-2 h-4 w-4" />
+                                Remove Pool from view
+                            </button>
+                        ) : null}
                     </div>
                 </div>
             }

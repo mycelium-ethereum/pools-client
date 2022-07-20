@@ -9,9 +9,17 @@ export const createPoolsSlice: StateSlice<IPoolsSlice> = (set, get) => ({
     setPoolLists: (network, lists) => {
         set((state) => void (state.poolLists[network] = lists));
     },
-    importPool: (network, pool) => {
+    importPool: (network, poolAddress) => {
         if (get().poolLists[network]) {
-            set((state) => void state.poolLists[network]?.Imported.pools.push({ address: pool }));
+            set((state) => void state.poolLists[network]?.Imported.pools.push({ address: poolAddress }));
+        }
+    },
+    removePool: (network, poolAddress) => {
+        if (get().poolLists[network]) {
+            const poolIndex = get().poolLists[network]?.Imported.pools.findIndex((v) => v.address === poolAddress);
+            if (typeof poolIndex === 'number' && poolIndex >= 0) {
+                set((state) => void state.poolLists[network]?.Imported.pools.splice(poolIndex, 1));
+            }
         }
     },
     fetchPoolLists: async (network) => {
@@ -31,5 +39,7 @@ export const selectImportedPools: (state: StoreState) => StaticPoolInfo[] = (sta
     state.web3Slice.network ? state.poolsSlice.poolLists[state.web3Slice.network]?.Imported?.pools ?? [] : [];
 export const selectFetchPools: (state: StoreState) => IPoolsSlice['fetchPoolLists'] = (state) =>
     state.poolsSlice.fetchPoolLists;
+export const selectRemovePool: (state: StoreState) => IPoolsSlice['removePool'] = (state) =>
+    state.poolsSlice.removePool;
 export const selectImportPool: (state: StoreState) => IPoolsSlice['importPool'] = (state) =>
     state.poolsSlice.importPool;
