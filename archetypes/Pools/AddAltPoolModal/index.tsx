@@ -67,6 +67,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
         } else if (!isValidAddress) {
             setImportMsg(pool.notValid);
         } else {
+            setIsMarketAvailable(true);
             setImportMsg(pool.warning);
         }
     }, [userInput, isValidAddress]);
