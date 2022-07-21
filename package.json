@@ -39,7 +39,7 @@
         "test:cypress-visible": "start-server-and-test dev http://localhost:3002 cypress:open",
         "dev": "next dev -p 3002",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 3002",
         "export": "next export ",
         "lint": "eslint '*/**/*.{ts,tsx}'",
         "lint:fix": "eslint '*/**/*.{ts,tsx,js}' --fix",
