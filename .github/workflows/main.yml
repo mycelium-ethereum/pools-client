@@ -3,6 +3,14 @@ on:
     pull_request:
         branches:
             - release-v2
+env:
+    NEXT_PUBLIC_MAINNET_L1_RPC: ${{secrets.NEXT_PUBLIC_MAINNET_L1_RPC}}
+    NEXT_PUBLIC_MAINNET_RPC: ${{secrets.NEXT_PUBLIC_MAINNET_RPC}}
+    NEXT_PUBLIC_MAINNET_WSS_RPC: ${{secrets.NEXT_PUBLIC_MAINNET_WSS_RPC}}
+    NEXT_PUBLIC_TESTNET_RPC: ${{secrets.NEXT_PUBLIC_TESTNET_RPC}}
+    NEXT_PUBLIC_TESTNET_WSS_RPC: ${{secrets.NEXT_PUBLIC_TESTNET_WSS_RPC}}
+    NEXT_PUBLIC_TRACER_API: ${{secrets.NEXT_PUBLIC_TRACER_API}}
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -12,3 +20,8 @@ jobs:
               run: yarn
             - name: Run tests
               run: yarn test:jest --coverage
+            - name: Run Cypress
+              uses: cypress-io/github-action@v4
+              with:
+                  build: npm run build
+                  start: npm start

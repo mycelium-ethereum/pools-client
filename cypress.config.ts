@@ -6,7 +6,6 @@ export default defineConfig({
     viewportHeight: 1080,
     pageLoadTimeout: 20000,
     e2e: {
-        // baseUrl: 'http://localhost:3002',
         video: false,
         supportFile: './cypress/support/index.js',
         specPattern: './cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',

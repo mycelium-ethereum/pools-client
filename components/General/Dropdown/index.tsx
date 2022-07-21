@@ -143,7 +143,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
                 leaveTo="transform opacity-0 scale-95"
             >
                 <Menu.Items className="focus:outline-none absolute right-0 z-20 mt-2 w-full min-w-[120px] origin-top-right rounded-md bg-theme-button-bg shadow-lg ring-1 ring-black ring-opacity-5">
-                    <div className="py-1">
+                    <div className="dropdown-options py-1">
                         {options.map((option) => (
                             <Menu.Item key={option.key} disabled={option.disabled}>
                                 {({ active }) =>
