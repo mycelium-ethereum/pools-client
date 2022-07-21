@@ -40,7 +40,7 @@ export const MarketDropdown: React.FC<MarketDropdownProps> = ({ market, markets,
 
     return (
         <Dropdown
-            className="w-full"
+            className="market-dropdown w-full"
             placeHolder="Select Market"
             placeHolderIcon={getBaseAssetFromMarket(market) as LogoTicker}
             size="lg"

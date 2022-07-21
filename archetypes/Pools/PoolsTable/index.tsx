@@ -709,7 +709,7 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            className="mx-1 my-auto ml-auto w-[70px] uppercase"
+                            className="trade-btn mx-1 my-auto ml-auto w-[70px] uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
