@@ -12,12 +12,12 @@ describe('Testing Buy page (/)', () => {
     });
 });
 
-// describe('Testing Trade page (/trade)', () => {
-//     before(() => {
-//         cy.visit('http://localhost:3002/trade');
-//     });
-//     it('Trade table should be accessible after load', () => {
-//         cy.get('.trade-btn:first', { timeout: MAX_WAIT }); // waits to check if market dropdown exists
-//         cy.get('.trade-btn:first').click({ force: true }); // open Trade modal
-//     });
-// });
+describe('Testing Trade page (/trade)', () => {
+    before(() => {
+        cy.visit('http://localhost:3002/trade');
+    });
+    it('Trade table should be accessible after load', () => {
+        cy.get('.trade-btn:first', { timeout: MAX_WAIT }); // waits to check if market dropdown exists
+        cy.get('.trade-btn:first').click({ force: true }); // open Trade modal
+    });
+});
