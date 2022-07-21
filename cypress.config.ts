@@ -9,8 +9,5 @@ export default defineConfig({
         video: false,
         supportFile: './cypress/support/index.js',
         specPattern: './cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
-        setupNodeEvents(on, config) {
-            // implement node event listeners here
-        },
     },
 });
