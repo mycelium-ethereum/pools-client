@@ -5,8 +5,8 @@ import { PoolList, PoolLists, PoolListUris } from '~/types/poolLists';
 export const flattenAllPoolLists = (poolLists: PoolLists | undefined): StaticPoolInfo[] =>
     poolLists
         ? poolLists.All.map((pool) => pool.pools)
-              .flat(1)
-              .concat(poolLists.Imported.pools)
+            .flat(1)
+            .concat(poolLists.Imported.pools)
         : [];
 
 /**
@@ -18,19 +18,22 @@ const uris = (network: KnownNetwork): PoolListUris => {
     if (!uris) {
         return {
             All: [],
-            Tracer: '',
             External: [],
+            Tracer: '',
+            TracerUnverified: '',
         };
     }
     const { Tracer, External } = uris;
 
     const tracerList = Tracer.verified;
+    const tracerUnverifiedList = Tracer.unverified;
     const All = [tracerList, ...External];
 
     return {
         All,
         External,
         Tracer: tracerList,
+        TracerUnverified: tracerUnverifiedList,
     };
 };
 
@@ -68,21 +71,25 @@ const isStaticPoolInfo = (pool: any): pool is StaticPoolInfo => {
     return pool && pool.address && typeof pool.address === 'string';
 };
 
+const determineValidTracerList = (list: PoolList, name: string): PoolList => {
+    return (!(list instanceof Error) || !list) && isPoolList(list)
+        ? list
+        : {
+            name: name,
+            pools: [],
+        };
+};
 /**
  * Fetch all pool list json and return mapped to URI
  */
 export const getAllPoolLists = async (network: KnownNetwork): Promise<PoolLists> => {
     const uris_ = uris(network);
     const tracerList: PoolList = await get(uris_.Tracer).catch((e) => e);
+    const tracerUnverifiedList: PoolList = await get(uris_.TracerUnverified).catch((e) => e);
     const externalLists: PoolList[] = await Promise.all(uris_.External.map((uri) => get(uri).catch((e) => e)));
 
-    const validTracerList: PoolList =
-        (!(tracerList instanceof Error) || !tracerList) && isPoolList(tracerList)
-            ? tracerList
-            : {
-                  name: 'Tracer',
-                  pools: [],
-              };
+    const validTracerList = determineValidTracerList(tracerList, 'Tracer');
+    const validTracerUnverifiedList = determineValidTracerList(tracerUnverifiedList, 'TracerUnverified');
 
     const validExternalLists = externalLists.filter((list) => (!(list instanceof Error) || !list) && isPoolList(list));
     const importedList = {
@@ -99,6 +106,7 @@ export const getAllPoolLists = async (network: KnownNetwork): Promise<PoolLists>
         All: allLists,
         External: validExternalLists,
         Tracer: validTracerList,
+        TracerUnverified: validTracerUnverifiedList,
         Imported: importedList,
     };
 };
