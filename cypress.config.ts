@@ -1,10 +1,10 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-    retries: 2,
+    retries: 3,
     viewportWidth: 1920,
     viewportHeight: 1080,
-    pageLoadTimeout: 20000,
+    pageLoadTimeout: 40000,
     e2e: {
         video: false,
         supportFile: './cypress/support/index.js',
