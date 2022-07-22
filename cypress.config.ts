@@ -1,7 +1,10 @@
 import { defineConfig } from 'cypress';
 
 export default defineConfig({
-    retries: 3,
+    retries: {
+        runMode: 2,
+        openMode: 0,
+    },
     viewportWidth: 1920,
     viewportHeight: 1080,
     pageLoadTimeout: 40000,
