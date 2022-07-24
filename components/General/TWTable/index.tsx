@@ -78,7 +78,36 @@ TableHeaderCell.defaultProps = {
     twAlign: 'top',
 };
 
-export const TableRow = styled.tr<{ lined?: boolean }>`
+export const ImportedIndicator = styled.div<{ isImported?: boolean }>`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: max-content;
+    margin-bottom: 6px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 700;
+    border-radius: 3px;
+    padding: 1px 5px;
+    background-color: #ffc700;
+    color: black;
+    font-size: 10px;
+    &:before {
+        content: 'IMPORTED';
+    }
+`;
+
+export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
+    background: ${({ theme, isImported }) => {
+        switch (true) {
+            case theme.theme === Theme.Dark && isImported:
+                return '#111928 !important';
+            case theme.theme === Theme.Light && isImported:
+                return '#ffffff !important';
+            default:
+                return `inherit`;
+        }
+    }};
+
     &:nth-child(even) {
         background: ${({ theme }) => theme.background.primary};
     }

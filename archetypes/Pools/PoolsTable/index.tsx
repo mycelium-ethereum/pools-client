@@ -6,7 +6,14 @@ import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js'
 
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
-import { Table, TableHeader, TableRow, TableHeaderCell, TableRowCell } from '~/components/General/TWTable';
+import {
+    Table,
+    TableHeader,
+    TableRow,
+    TableHeaderCell,
+    TableRowCell,
+    ImportedIndicator,
+} from '~/components/General/TWTable';
 import { OracleDetailsBadge, OracleDetailsBadgeContainer } from '~/components/OracleDetailsBadge';
 import TimeLeft from '~/components/TimeLeft';
 import Actions from '~/components/TokenActions';
@@ -18,6 +25,7 @@ import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
 import { useStore } from '~/store/main';
 import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
+import { selectImportedPools } from '~/store/PoolsSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
@@ -344,11 +352,15 @@ const PoolRow: React.FC<
         onClickShowPoolDetailsModal: (pool: BrowseTableRowData) => void;
     } & TProps
 > = ({ pool, account, onClickMintBurn, showNextRebalance, deltaDenotation, onClickShowPoolDetailsModal }) => {
+    const importedPools = useStore(selectImportedPools);
+    const isImportedPool = useMemo(() => importedPools.some((v) => v.address === pool.address), [pool]);
+
     return (
         <>
-            <TableRow lined>
+            <TableRow lined isImported={isImportedPool}>
                 {/** Pool rows */}
                 <TableRowCell rowSpan={2}>
+                    {isImportedPool ? <ImportedIndicator /> : null}
                     <div className="mb-1 flex font-bold">
                         <OracleDetailsBadgeContainer>
                             <div className="mr-2 text-lg">{pool.leverage}</div>
@@ -494,9 +506,10 @@ const PoolRow: React.FC<
                     decimals={pool.decimals}
                     settlementTokenSymbol={pool.settlementTokenSymbol}
                     poolTicker={pool.name}
+                    isImportedPool={isImportedPool}
                 />
             </TableRow>
-            <TableRow lined>
+            <TableRow lined isImported={isImportedPool}>
                 <TokenRows
                     side={SideEnum.short}
                     onClickMintBurn={onClickMintBurn}
@@ -517,6 +530,7 @@ const PoolRow: React.FC<
                     decimals={pool.decimals}
                     settlementTokenSymbol={pool.settlementTokenSymbol}
                     poolTicker={pool.name}
+                    isImportedPool={isImportedPool}
                 />
             </TableRow>
         </>
@@ -554,6 +568,7 @@ const TokenRows: React.FC<
             tokenBalance: number;
         };
         poolTicker: string;
+        isImportedPool: boolean;
     } & TProps
 > = ({
     side,
@@ -569,6 +584,7 @@ const TokenRows: React.FC<
     antecedentUpkeepTokenInfo,
     pastUpkeepTokenInfo,
     poolTicker,
+    isImportedPool,
 }) => {
     const styles = side === SideEnum.long ? longStyles : shortStyles;
 
@@ -701,6 +717,7 @@ const TokenRows: React.FC<
                             TRADE
                         </Button>
                         <Actions
+                            poolAddress={poolAddress}
                             token={{
                                 address: tokenInfo.address,
                                 decimals: decimals,
@@ -710,6 +727,7 @@ const TokenRows: React.FC<
                                 type: BlockExplorerAddressType.token,
                                 target: poolAddress,
                             }}
+                            isImported={isImportedPool}
                         />
                     </div>
                 ) : null}

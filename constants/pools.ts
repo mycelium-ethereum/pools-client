@@ -106,6 +106,7 @@ export const DEFAULT_POOLSTATE: PoolInfo = {
 export interface PoolListMap {
     Tracer: {
         verified: string;
+        unverified: string;
         factoryDeployed?: string;
     };
     External: string[];
@@ -120,12 +121,14 @@ export const POOL_LIST_MAP: TokenListMapByNetwork = {
     [NETWORKS.ARBITRUM]: {
         Tracer: {
             verified: `${TRACER_API}/poolsv2/poolList?network=42161&list=verified`,
+            unverified: `${TRACER_API}/poolsv2/poolList?network=42161&list=unverified`,
         },
         External: [],
     },
     [NETWORKS.ARBITRUM_RINKEBY]: {
         Tracer: {
             verified: `${TRACER_API}/poolsv2/poolList?network=421611&list=verified`,
+            unverified: `${TRACER_API}/poolsv2/poolList?network=421611&list=unverified`,
         },
         External: [],
     },

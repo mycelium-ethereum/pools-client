@@ -1,24 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import { KnownNetwork } from '@tracer-protocol/pools-js';
+import React, { useEffect, useMemo, useState } from 'react';
+import { KnownNetwork, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import Button from '~/components/General/Button';
 import { HiddenExpand } from '~/components/General/Dropdown';
 import { TWModal } from '~/components/General/TWModal';
 import { useStore } from '~/store/main';
-import { selectImportPool, selectImportedPools } from '~/store/PoolsSlice';
+import { selectImportPool, selectImportedPools, selectGetPools } from '~/store/PoolsSlice';
 import { selectNetwork } from '~/store/Web3Slice';
+import { saveImportedPoolsToLocalStorage } from '~/utils/pools';
 import { isAddress } from '~/utils/rpcMethods';
 import { messages as pool } from './messages';
 import * as Styles from './styles';
 import { BrowseTableRowData } from '../state';
 
 export default (({ open, onClose, sortedFilteredTokens }) => {
+    // const [poolList, setPoolList] = useState<Partial<Record<KnownNetwork, PoolLists>>>([]);
     const importPool = useStore(selectImportPool);
-    const getImported = useStore(selectImportedPools);
+    const getPoolsList = useStore(selectGetPools);
+    const importedPools = useStore(selectImportedPools);
     const network = useStore(selectNetwork);
 
     const [userInput, setUserInput] = useState<string>('');
     const [importMsg, setImportMsg] = useState<string>('');
     const [isValidAddress, setIsValidAddress] = useState<boolean>(false);
+    const [isMarketAvailable, setIsMarketAvailable] = useState<boolean>(false);
+
+    const poolLists = useMemo(() => getPoolsList(network as KnownNetwork), [network]);
 
     const handleCloseModal = () => {
         onClose();
@@ -33,12 +39,13 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
 
     const handleImport = () => {
         const isDuplicatePool = sortedFilteredTokens.some((v: BrowseTableRowData) => v.address === userInput);
-        const isDuplicateImport = getImported.some((v) => v.address === userInput);
+        const isDuplicateImport = importedPools.some((v) => v.address === userInput);
 
         if (isDuplicatePool || isDuplicateImport) {
             setImportMsg(pool.exists);
-        } else if (isValidAddress) {
+        } else if (poolLists) {
             importPool(network as KnownNetwork, userInput);
+            saveImportedPoolsToLocalStorage(network as KnownNetwork, [userInput]);
             handleCloseModal();
         } else {
             setImportMsg(pool.notValid);
@@ -46,12 +53,24 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
     };
 
     useEffect(() => {
-        if (isValidAddress) {
-            setImportMsg(pool.warning);
-        } else {
+        const isAvailable =
+            (
+                (poolLists?.TracerUnverified.pools || []).filter(
+                    (v) => v.address.toLowerCase() === userInput.toLowerCase(),
+                ) as StaticPoolInfo[]
+            ).length > 0; // Check if Pool exists in list of unverified
+        if (!isAvailable && isValidAddress) {
+            setIsMarketAvailable(false);
+            setImportMsg(pool.doesnotexist);
+        } else if (!userInput) {
             setImportMsg('');
+        } else if (!isValidAddress) {
+            setImportMsg(pool.notValid);
+        } else {
+            setIsMarketAvailable(true);
+            setImportMsg(pool.warning);
         }
-    }, [isValidAddress]);
+    }, [userInput, isValidAddress]);
 
     return (
         <TWModal open={open} onClose={onClose} className="px-7 pt-9 pb-9 sm:px-16 sm:pb-20 sm:pt-7 md:max-w-[500px]">
@@ -69,7 +88,7 @@ export default (({ open, onClose, sortedFilteredTokens }) => {
                 <Styles.Message>{importMsg}</Styles.Message>
             </HiddenExpand>
 
-            <Button onClick={handleImport} variant="primary" size="lg">
+            <Button onClick={handleImport} variant="primary" size="lg" disabled={!isValidAddress || !isMarketAvailable}>
                 Import
             </Button>
         </TWModal>

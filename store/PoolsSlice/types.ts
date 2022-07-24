@@ -7,5 +7,9 @@ export interface IPoolsSlice {
 
     importPool: (network: KnownNetwork, pool: string) => void;
 
+    removePool: (network: KnownNetwork, pool: string) => void;
+
     fetchPoolLists: (network: KnownNetwork) => Promise<void>;
+
+    getExistingPoolLists: (network: KnownNetwork) => PoolLists | undefined;
 }
