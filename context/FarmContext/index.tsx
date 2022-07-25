@@ -88,12 +88,7 @@ export const FarmStore: React.FC = ({ children }) => {
             setFetchingFarms(true);
             setFarms({});
         }
-        const stakingRewardsLookup = await getStakingRewardsInfo(
-            config.poolFarms,
-            staticPoolInfo,
-            account,
-            multicallProvider,
-        );
+        const stakingRewardsLookup = await getStakingRewardsInfo(config.poolFarms, account, multicallProvider);
         const tokenCallsLookup = await getTokenCallsInfo(
             stakingRewardsLookup,
             config.poolFarms,

@@ -34,7 +34,6 @@ export type StakingRewardsInfo = {
 // Get staking rewards info using multicall + transform results into hashtable
 export const getStakingRewardsInfo = async (
     farmInfo: FarmConfig['poolFarms'],
-    staticPoolInfo: StaticPoolInfo[],
     account: string,
     multicallProvider: providers.MulticallProvider,
 ): Promise<Record<string, StakingRewardsInfo>> => {
@@ -42,9 +41,7 @@ export const getStakingRewardsInfo = async (
     const numberOfCalls = 6;
 
     for (const farm of farmInfo) {
-        const { address, abi, pool } = farm;
-
-        const poolInfo = staticPoolInfo.find((poolInfo) => poolInfo.address === pool);
+        const { address, abi } = farm;
 
         const contract = new ethers.Contract(address, abi, multicallProvider) as StakingRewards;
         const calls: FixedLengthArray<typeof numberOfCalls, Promise<ethers.BigNumber | string | number>> = [
