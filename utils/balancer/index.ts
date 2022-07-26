@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers';
 import { ERC20__factory, AggregatorV3Interface__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { calcBptTokenSpotPrice, KnownNetwork, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { balancerConfig as _balancerConfig, BALANCER_VAULT_ADDRESS } from '~/constants/balancer';
@@ -130,7 +131,7 @@ export const constructBalancerLink: (token: string | undefined, network: KnownNe
 export const fetchBPTPrice = async (
     pool: StaticPoolInfo,
     balancerPoolId: string,
-    provider: ethers.providers.JsonRpcProvider,
+    provider: ethers.providers.JsonRpcProvider | MulticallProvider,
     BPTSupply: BigNumber,
 ): Promise<BigNumber> => {
     const tokenLookup = await getBalancerPoolTokens(pool, balancerPoolId, provider);
@@ -149,7 +150,7 @@ export const fetchBPTPrice = async (
 const getBalancerPoolTokens = async (
     pool: StaticPoolInfo,
     balancerPoolId: string,
-    provider: ethers.providers.JsonRpcProvider,
+    provider: ethers.providers.JsonRpcProvider | MulticallProvider,
 ): Promise<Record<string, BalancerPoolAsset>> => {
     const network = provider.network.chainId?.toString() as KnownNetwork;
 

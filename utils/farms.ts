@@ -1,12 +1,13 @@
 import { ethers } from 'ethers';
 import BigNumber from 'bignumber.js';
+import { MulticallProvider } from '@0xsequence/multicall/dist/declarations/src/providers';
 import { LeveragedPool__factory, ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { StaticPoolInfo } from '@tracer-protocol/pools-js/entities/pool';
 
 export const fetchPPTokenPrice: (
     poolInfo: StaticPoolInfo,
     tokenAddress: string,
-    provider: ethers.providers.JsonRpcProvider | undefined,
+    provider: ethers.providers.JsonRpcProvider | undefined | MulticallProvider,
 ) => Promise<BigNumber> = async (poolInfo, tokenAddress, provider) => {
     if (!provider || !poolInfo) {
         return new BigNumber(1);

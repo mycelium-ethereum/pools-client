@@ -29,6 +29,7 @@ module.exports = {
         // 'plugin:import/recommended',
     ],
     rules: {
+        'prettier/prettier': ['error', { endOfLine: 'auto' }],
         curly: 2, // enforce brace style for control statements
         'default-case': 2, // require default in switch
         'default-case-last': 2,

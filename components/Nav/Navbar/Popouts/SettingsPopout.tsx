@@ -1,5 +1,4 @@
-import React, { useCallback, useState } from 'react';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import shallow from 'zustand/shallow';
 import {
     Slider,
@@ -14,25 +13,15 @@ import { useStore } from '~/store/main';
 import { selectThemeSlice } from '~/store/ThemeSlice';
 
 const SettingsPopout: React.FC<{ isActive: boolean }> = ({ isActive }) => {
-    const router = useRouter();
     const [v2selected, setV2Selected] = useState(true);
     const { isDark, toggleTheme } = useStore(selectThemeSlice, shallow);
-    const basePath = 'https://poolsv1.tracer.finance';
-
-    const getRoute = useCallback(() => {
-        if (router.route === '/') {
-            return `${basePath}/pools`;
-        } else {
-            // assumes that the destination base path appropriately handles redirects
-            return `${basePath}${router.route}`;
-        }
-    }, [router.route]);
+    const v1url = 'https://poolsv1.tracer.finance';
 
     const handleVersionSwitch = () => {
         setV2Selected(!v2selected);
         // Wait for toggle animation to complete before navigating to v1
         setTimeout(() => {
-            open(getRoute(), '_self');
+            open(v1url, '_self');
         }, ANIMATION_DURATION * 1000 * 2);
     };
 

@@ -17,6 +17,7 @@ export interface PoolLists {
     All: PoolList[];
     External: PoolList[];
     Tracer: PoolList;
+    TracerUnverified: PoolList;
     Imported: PoolList;
 }
 
@@ -24,4 +25,5 @@ export interface PoolListUris {
     All: string[];
     External: string[];
     Tracer: string;
+    TracerUnverified: string;
 }
