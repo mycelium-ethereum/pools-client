@@ -1,4 +1,5 @@
 import { ethers } from 'ethers';
+import { providers } from '@0xsequence/multicall';
 import Onboard from '@tracer-protocol/onboard';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { DEFAULT_WSS_RPC, DEFAULT_NETWORK } from '~/constants/networks';
@@ -13,7 +14,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
     provider: undefined,
     wallet: undefined,
     isReady: false,
-
+    multicallProvider: undefined,
     onboard: Onboard({
         ...onboardConfig,
         darkMode: true, // get().theme === Theme.Dark,
@@ -37,7 +38,7 @@ export const createWeb3Slice: StateSlice<IWeb3Slice> = (set, get) => ({
                         console.debug('Setting injected wallet provider', provider_);
                         set({ wallet });
                         // usingDefaultProvider.current = false;
-                        set({ provider: provider_ });
+                        set({ provider: provider_, multicallProvider: new providers.MulticallProvider(provider_) });
                         if (provider_?.network.chainId) {
                             set({ network: provider_.network.chainId.toString() as KnownNetwork });
                         }
@@ -129,12 +130,16 @@ export const selectOnboardActions: (state: StoreState) => {
 
 export const selectWeb3Info: (state: StoreState) => {
     provider: IWeb3Slice['provider'];
+    multicallProvider: IWeb3Slice['multicallProvider'];
     network: IWeb3Slice['network'];
     account: IWeb3Slice['account'];
     signer?: ethers.providers.JsonRpcSigner;
-} = (state) => ({
-    provider: state.web3Slice.provider ?? state.web3Slice.defaultProvider,
-    network: state.web3Slice.network,
-    account: state.web3Slice.account,
-    signer: state.web3Slice.provider?.getSigner(),
-});
+} = (state) => {
+    return {
+        provider: state.web3Slice.provider ?? state.web3Slice.defaultProvider,
+        multicallProvider: state.web3Slice.multicallProvider,
+        network: state.web3Slice.network,
+        account: state.web3Slice.account,
+        signer: state.web3Slice.provider?.getSigner(),
+    };
+};
