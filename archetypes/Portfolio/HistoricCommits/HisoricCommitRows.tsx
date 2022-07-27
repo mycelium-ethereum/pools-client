@@ -1,5 +1,6 @@
 import React from 'react';
-import { NETWORKS } from '@tracer-protocol/pools-js';
+import BigNumber from 'bignumber.js';
+import { CommitEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
 import { CommitTypeName } from '~/constants/commits';
@@ -25,7 +26,8 @@ export const HistoricCommitRow = ({
     timeString,
     dateString,
     txnHashOut,
-    fee,
+    mintingFee,
+    burningFee,
 }: HistoricCommitRowProps): JSX.Element => (
     <TableRow key={`${txnHashIn}`} lined>
         <OverviewTableRowCell>{CommitTypeName[commitType]}</OverviewTableRowCell>
@@ -51,7 +53,7 @@ export const HistoricCommitRow = ({
         <OverviewTableRowCell>
             <TokenSymbol tokenSymbol={tokenOutSymbol} isLong={tokenOutIsLong} />
         </OverviewTableRowCell>
-        <OverviewTableRowCell>{!fee.eq(0) ? `${fee.times(100).toFixed(2)}%` : '-'}</OverviewTableRowCell>
+        <OverviewTableRowCell>{feeDisplay(commitType, mintingFee, burningFee)}</OverviewTableRowCell>
         <OverviewTableRowCell>
             <div>{timeString}</div>
             <div className="text-cool-gray-500">{dateString}</div>
@@ -85,3 +87,21 @@ export const HistoricCommitRow = ({
         </OverviewTableRowCell>
     </TableRow>
 );
+
+const feeDisplay = (commitType: CommitEnum, mintingFee: BigNumber, burningFee: BigNumber): string => {
+    switch (commitType) {
+        case CommitEnum.longBurnShortMint:
+        case CommitEnum.shortBurnLongMint:
+            return `${burningFee.eq(0) ? `-` : `${burningFee.times(100).toFixed(2)}%`} / ${
+                mintingFee.eq(0) ? `-` : `${mintingFee.times(100).toFixed(2)}%`
+            }`;
+        case CommitEnum.longMint:
+        case CommitEnum.shortMint:
+            return mintingFee.eq(0) ? `-` : `${mintingFee.times(100).toFixed(2)}%`;
+        case CommitEnum.longBurn:
+        case CommitEnum.shortBurn:
+            return burningFee.eq(0) ? `-` : `${burningFee.times(100).toFixed(2)}%`;
+        default:
+            return '-';
+    }
+};

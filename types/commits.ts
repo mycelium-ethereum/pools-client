@@ -63,6 +63,8 @@ export type TradeHistoryResult = {
     priceIn: string;
     priceOut: string;
     fee: string;
+    mintingFee: string;
+    burningFee: string;
     tokenOutAddress: string;
     tokenOutSymbol: string;
     tokenOutName: string;
@@ -80,6 +82,8 @@ export type TradeHistory = {
     timeString: string;
     commitType: CommitEnum;
     fee: BigNumber;
+    mintingFee: BigNumber;
+    burningFee: BigNumber;
     txnHashIn: string;
     txnHashOut: string;
     settlementToken: StaticTokenInfo;
