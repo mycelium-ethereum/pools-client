@@ -40,12 +40,12 @@ const LivePoolBadge = styled.div`
     border-color: #1c64f2;
 `;
 
-export const PoolStatusBadge = ({ status }: { status: PoolStatus }): JSX.Element => {
+export const PoolStatusBadge = ({ status, text }: { status: PoolStatus; text?: string }): JSX.Element => {
     switch (status) {
         case PoolStatus.Deprecated:
-            return <DeprecatedPoolBadge>Deprecated</DeprecatedPoolBadge>;
+            return <DeprecatedPoolBadge>{text || 'Deprecated'}</DeprecatedPoolBadge>;
         case PoolStatus.Live:
         default:
-            return <LivePoolBadge>Live</LivePoolBadge>;
+            return <LivePoolBadge>{text || 'Live'}</LivePoolBadge>;
     }
 };
