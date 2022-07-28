@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { PoolStatus } from '~/types/pools';
 import BigNumber from 'bignumber.js';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
@@ -156,7 +157,10 @@ const PoolRow: React.FC<{
                         )}
                     </div>
                     <div className="self-center">
-                        <PoolStatusBadge status={farm.poolDetails.status} />
+                        <PoolStatusBadge
+                            status={farm.rewardsEnded ? PoolStatus.Deprecated : PoolStatus.Live}
+                            text={farm.rewardsEnded ? 'Ended' : 'Active'}
+                        />
                     </div>
                 </PoolStatusBadgeContainer>
             </TableRowCell>
