@@ -1,0 +1,20 @@
+name: 'Run Cypress tests'
+on: [deployment_status]
+jobs:
+    e2e:
+        if: github.event.deployment_status.state == 'success'
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Run Cypress
+              uses: cypress-io/github-action@v4
+              env:
+                  CYPRESS_BASE_URL: ${{ github.event.deployment_status.target_url }}
+                  CYPRESS_RETRIES: 2
+            - uses: actions/upload-artifact@v2
+              if: failure()
+              with:
+                  retention-days: 1
+                  path: |
+                      cypress/videos
