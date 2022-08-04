@@ -219,7 +219,7 @@ export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
         height: 72px;
         width: 320px;
         padding: 16px;
-        color: ${({ theme }) => console.log(theme) || (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
+        color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
         background: ${({ theme }) =>
             theme.theme === Theme.Light
                 ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
