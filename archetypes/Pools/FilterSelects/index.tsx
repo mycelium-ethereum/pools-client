@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import BaseFilters from '~/components/BaseFilters';
+import { findTicker } from '~/components/BaseFilters/MarketFilter';
 import { Logo, LogoTicker } from '~/components/General/Logo';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
 import { useStore } from '~/store/main';
@@ -7,7 +8,6 @@ import { selectNetwork } from '~/store/Web3Slice';
 import { CollateralFilterEnum, LeverageFilterEnum, MarketFilterEnum } from '~/types/filters';
 import * as Styles from './styles';
 import { BrowseAction, BrowseState, DeltaEnum, RebalanceEnum } from '../state';
-import { findTicker } from '~/components/BaseFilters/MarketFilter';
 
 interface FilterSelectsProps {
     state: BrowseState;

@@ -196,11 +196,11 @@ export const formatDate: (
         hideDate: false,
         hideTime: false,
     },
-    ) => {
-        const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
-        const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
-        return { timeString, dateString };
-    };
+) => {
+    const dateString = !hideDate ? `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ` : '';
+    const timeString = !hideTime ? `${date.getHours()}:${date.getMinutes()}` : '';
+    return { timeString, dateString };
+};
 
 /**
  * Checks if a number is an arbitrarily small number. Returns is an approximated value instead

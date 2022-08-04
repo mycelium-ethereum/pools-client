@@ -149,7 +149,7 @@ export const Browse: React.FC = () => {
                 {filteredTokens.length === 0 && !isLoading && state.search && (
                     <Styles.NoResults>
                         <SearchOutlined aria-hidden="true" />
-                        No results found for '{escapeRegExp(state.search)}'
+                        No results found for `&apos`{escapeRegExp(state.search)}`&apos`
                     </Styles.NoResults>
                 )}
                 {Object.keys(groupedSortedFilteredTokens).map((key, index) => {

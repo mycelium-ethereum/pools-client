@@ -12,8 +12,8 @@ import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { OracleDetails } from '~/types/pools';
 import { constructExplorerLink } from '~/utils/blockExplorers';
 import { formatAddress, formatSeconds } from '~/utils/converters';
-import { getPriceFeedUrl } from '~/utils/poolNames';
 import { formatFees } from '~/utils/converters';
+import { getPriceFeedUrl } from '~/utils/poolNames';
 import { generateOracleTypeSummary } from '~/utils/pools';
 
 type Details = {

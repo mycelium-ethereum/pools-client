@@ -1,5 +1,6 @@
 import React from 'react';
 import BigNumber from 'bignumber.js';
+import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import { Currency } from '~/components/General/Currency';
 import { InnerInputText } from '~/components/General/Input';
 import { LogoTicker, tokenSymbolToLogoTicker } from '~/components/General/Logo';
@@ -8,7 +9,6 @@ import Max from '~/components/General/Max';
 import { toApproxCurrency } from '~/utils/converters';
 import * as Styles from './styles';
 import { AmountProps } from './types';
-import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 
 const Available: React.FC<{
     amountBN: BigNumber;

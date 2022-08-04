@@ -5,8 +5,8 @@ import { PoolList, PoolLists, PoolListUris } from '~/types/poolLists';
 export const flattenAllPoolLists = (poolLists: PoolLists | undefined): StaticPoolInfo[] =>
     poolLists
         ? poolLists.All.map((pool) => pool.pools)
-            .flat(1)
-            .concat(poolLists.Imported.pools)
+              .flat(1)
+              .concat(poolLists.Imported.pools)
         : [];
 
 /**
@@ -75,9 +75,9 @@ const determineValidTracerList = (list: PoolList, name: string): PoolList => {
     return (!(list instanceof Error) || !list) && isPoolList(list)
         ? list
         : {
-            name: name,
-            pools: [],
-        };
+              name: name,
+              pools: [],
+          };
 };
 /**
  * Fetch all pool list json and return mapped to URI

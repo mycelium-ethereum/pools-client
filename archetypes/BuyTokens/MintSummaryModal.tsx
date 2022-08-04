@@ -13,10 +13,10 @@ import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { useGasPrice } from '~/hooks/useGasPrice';
 import { usePool } from '~/hooks/usePool';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
+import usePools from '~/hooks/usePools';
 import CloseIcon from '~/public/img/general/close.svg';
 import { AggregateBalances, TokenBalance, TradeStats } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
-import usePools from '~/hooks/usePools';
 
 const DEFAULT_GAS_FEE = new BigNumber(0);
 

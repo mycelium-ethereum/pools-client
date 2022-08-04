@@ -1,4 +1,4 @@
-export type PagePath = '/' | '/trade' | '/portfolio' | '/stake'
+export type PagePath = '/' | '/trade' | '/portfolio' | '/stake';
 
 export const seoContent = {
     '/': {

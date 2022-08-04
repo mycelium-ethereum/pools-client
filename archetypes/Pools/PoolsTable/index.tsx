@@ -344,7 +344,6 @@ export const PoolsTable = ({
 
 export default PoolsTable;
 
-const calcPercentage: (value: number, total: number) => number = (value, total) => (value / total) * 100;
 const PoolRow: React.FC<
     {
         pool: BrowseTableRowData;
