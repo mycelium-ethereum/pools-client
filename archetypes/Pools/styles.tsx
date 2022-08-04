@@ -15,11 +15,11 @@ export const DataRow = styled.div`
     border-color: ${({ theme }) => theme.border.primary};
     background-color: ${({ theme }) => theme.background.primary};
     @media ${({ theme }) => theme.device.sm} {
-        border-radius: 1rem;
+        border-radius: 0.25rem;
     }
     @media ${({ theme }) => theme.device.md} {
         padding: 2rem 1rem;
-        border-radius: 1.5rem;
+        border-radius: 0.25rem;
     }
 `;
 

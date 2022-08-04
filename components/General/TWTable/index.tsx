@@ -70,7 +70,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     transform: translate3d(0, 0, 0) perspective(999px);
 
     vertical-align: ${(props) => props.twAlign};
-    background: ${({ theme }) => theme.background.secondary};
+    background: ${({ theme }) => theme.background.primary};
 
     padding: ${({ size }) => HEADER_CELL_SIZES[size as Size]};
 `;
@@ -122,7 +122,7 @@ export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
             }
             switch (theme.theme) {
                 case Theme.Dark:
-                    return '#1F2A37';
+                    return theme.background.primary;
                 case Theme.Matrix:
                     return '#003b00';
                 case Theme.Light:

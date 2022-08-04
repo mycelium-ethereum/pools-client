@@ -245,7 +245,7 @@ export const PoolsTable = ({
                         </TableHeaderCell>
                     </TableRow>
                     <TableRow className="h-5" />
-                    <TableRow>
+                    <TableRow className="border-none">
                         {/* Pools  Cols */}
                         <TableHeaderCell className="w-1/12 dark:bg-theme-background 2xl:whitespace-nowrap">
                             Leverage / Collateral
@@ -438,8 +438,6 @@ const PoolRow: React.FC<
                     rowSpan={2}
                     className={classNames('relative z-[1] bg-opacity-0', !showNextRebalance ? 'w-1/6' : '')}
                 >
-                    <LongBalance width={calcPercentage(pool.longToken.tvl, pool.tvl)} />
-                    <ShortBalance />
                     {showNextRebalance ? (
                         <>
                             <div className="flex">
@@ -537,17 +535,9 @@ const PoolRow: React.FC<
     );
 };
 
-const LongBalance: React.FC<{ width: number }> = ({ width }) => (
-    <div
-        style={{ width: `${width}%` }}
-        className={`absolute left-0 top-0 z-[-1] h-full bg-green-50 matrix:bg-dark-green dark:bg-dark-green`}
-    />
-);
-const ShortBalance = () => (
-    <div className={`absolute left-0 top-0 z-[-2] h-full w-full bg-red-50 matrix:bg-dark-red dark:bg-dark-red`} />
-);
-
-const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
+// const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
+// const longStyles = 'linear-gradient(90deg, rgba(140, 198, 63, 0.2) 0%, rgba(140, 198, 63, 0) 73%);';
+const longStyles = 'bg-gradient-to-r from-tracer-500';
 const shortStyles = 'bg-red-50 dark:bg-dark-red matrix:bg-dark-red';
 
 const TokenRows: React.FC<
@@ -593,7 +583,7 @@ const TokenRows: React.FC<
             <TableRowCell size={'sm'} className={classNames(styles)}>
                 {side === SideEnum.long ? 'Long' : 'Short'}
             </TableRowCell>
-            <TableRowCell size={'sm'} className={classNames(styles)}>
+            <TableRowCell size={'sm'}>
                 {showNextRebalance ? (
                     <>
                         <div className="flex">
@@ -631,7 +621,7 @@ const TokenRows: React.FC<
                     </>
                 )}
             </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
+            <TableRowCell size={'sm'}>
                 <div
                     className={
                         tokenInfo.effectiveGain > leverage
@@ -644,10 +634,8 @@ const TokenRows: React.FC<
                     {tokenInfo.effectiveGain.toFixed(3)}
                 </div>
             </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
-                {leverage}
-            </TableRowCell>
-            <TableRowCell size={'sm'} className={styles}>
+            <TableRowCell size={'sm'}>{leverage}</TableRowCell>
+            <TableRowCell size={'sm'}>
                 {showNextRebalance ? (
                     toApproxCurrency(tokenInfo.nextTCRPrice, 3)
                 ) : (
@@ -668,7 +656,7 @@ const TokenRows: React.FC<
                 )}
             </TableRowCell>
             {showNextRebalance ? (
-                <TableRowCell size={'sm'} className={styles}>
+                <TableRowCell size={'sm'}>
                     {tokenInfo.balancerPrice ? (
                         <div className="flex items-center">
                             {toApproxCurrency(tokenInfo.balancerPrice, 3)}
@@ -692,7 +680,7 @@ const TokenRows: React.FC<
                 </TableRowCell>
             ) : null}
             {showNextRebalance && !!account ? (
-                <TableRowCell size={'sm'} className={styles}>
+                <TableRowCell size={'sm'}>
                     <div className="flex">
                         <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="my-auto mr-1" />
                         {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
@@ -705,7 +693,7 @@ const TokenRows: React.FC<
                     </div>
                 </TableRowCell>
             ) : null}
-            <TableRowCell size={'sm'} className={styles}>
+            <TableRowCell size={'sm'}>
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button

@@ -53,6 +53,7 @@ module.exports = {
                     800: '#1F2A37',
                     900: '#111928',
                 },
+                'long-side-green': '0',
                 'dark-green': '#032018',
                 'dark-red': '#230F0F',
                 red: {
