@@ -280,8 +280,9 @@ export default BuyTokens;
 
 const FormBackdrop = styled.section`
     background: var(--background);
-    border-radius: 20px;
-    box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.1);
+    border-width: 1px;
+    border-color: ${({ theme }) => theme.border.primary};
+    border-radius: 0.25rem;
     width: 100%;
     font-family: 'Inter';
     padding: 16px;

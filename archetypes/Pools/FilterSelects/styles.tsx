@@ -6,7 +6,7 @@ export const DenotationOptions = styled.div`
 `;
 
 export const ArrowIcon = styled(ArrowDownIcon)<{ isGreen?: boolean }>`
-    color: ${({ isGreen }) => (isGreen ? '#059669' : '#dc2626')};
+    color: ${({ isGreen }) => (isGreen ? '#059669' : '#FF5621')};
     width: 1rem;
     transform: ${({ isGreen }) => (isGreen ? 'rotateX(180deg)' : '0')};
 `;

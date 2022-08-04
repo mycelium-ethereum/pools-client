@@ -75,7 +75,7 @@ export const UpOrDown = styled(
     }
 
     &.red {
-        color: rgb(220, 38, 38);
+        color: #ff5621;
     }
 `;
 

@@ -11,9 +11,9 @@ export const DataRow = styled.div`
     padding: 1rem;
     margin-bottom: 2.5rem;
     border-radius: 0.25rem;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border-width: 0.0625rem;
+    border-color: ${({ theme }) => theme.border.primary};
     background-color: ${({ theme }) => theme.background.primary};
-
     @media ${({ theme }) => theme.device.sm} {
         border-radius: 1rem;
     }

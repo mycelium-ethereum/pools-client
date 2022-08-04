@@ -119,7 +119,9 @@ const NavBarContent: React.FC = () => {
     }, [navMenuOpen, launcherMenuOpen]);
 
     const activeStyles = `${
-        navMenuOpen || launcherMenuOpen ? 'bg-opacity-0' : 'bg-opacity-40 dark:bg-opacity-40 bg-white dark:bg-[#00005E]'
+        navMenuOpen || launcherMenuOpen
+            ? 'bg-opacity-0'
+            : 'bg-opacity-40 dark:bg-opacity-40 bg-white dark:bg-tracer-800'
     }`;
     const inactiveStyles = 'dark:bg-opacity-0 bg-opacity-0';
 

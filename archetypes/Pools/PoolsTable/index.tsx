@@ -181,9 +181,9 @@ export const PoolsTable = ({
         <>
             <Table>
                 <TableHeader className="align-baseline">
-                    <tr>
+                    <TableRow>
                         <TableHeaderCell
-                            className="rounded-xl bg-cool-gray-50 dark:bg-theme-background-secondary"
+                            className="rounded-xl border-none bg-cool-gray-50 pt-0 dark:bg-theme-background"
                             colSpan={13}
                         >
                             <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
@@ -243,11 +243,11 @@ export const PoolsTable = ({
                                 </div>
                             </div>
                         </TableHeaderCell>
-                    </tr>
-                    <tr className="h-5" />
-                    <tr>
+                    </TableRow>
+                    <TableRow className="h-5" />
+                    <TableRow>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12 2xl:whitespace-nowrap">
+                        <TableHeaderCell className="w-1/12 dark:bg-theme-background 2xl:whitespace-nowrap">
                             Leverage / Collateral
                         </TableHeaderCell>
                         <TableHeaderCell className="w-1/12 whitespace-nowrap">
@@ -268,7 +268,7 @@ export const PoolsTable = ({
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
-                        <TableHeaderCell className="w-16 border-l-2 border-theme-background" size="sm">
+                        <TableHeaderCell className="w-16" size="sm">
                             {'Side'}
                         </TableHeaderCell>
                         <TableHeaderCell size="sm" className={'w-2/12 whitespace-nowrap'}>
@@ -288,13 +288,13 @@ export const PoolsTable = ({
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
-                    </tr>
-                    <tr>
+                    </TableRow>
+                    <TableRow>
                         {/* Pools  Cols */}
                         <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
 
                         {/* Token Cols */}
-                        <TableHeaderCell className="border-l-2 border-theme-background" size="sm-x" colSpan={2} />
+                        <TableHeaderCell className="" size="sm-x" colSpan={2} />
                         <TableHeaderCell size="sm-x">
                             <div className="capitalize text-cool-gray-400">{'Gains'}</div>
                         </TableHeaderCell>
@@ -314,7 +314,7 @@ export const PoolsTable = ({
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell colSpan={showNextRebalance && !!account ? 2 : 1} />
-                    </tr>
+                    </TableRow>
                 </TableHeader>
                 <tbody>
                     {rows.map((pool) => {
@@ -590,7 +590,7 @@ const TokenRows: React.FC<
 
     return (
         <>
-            <TableRowCell size={'sm'} className={classNames(styles, 'border-l-2 border-theme-background')}>
+            <TableRowCell size={'sm'} className={classNames(styles)}>
                 {side === SideEnum.long ? 'Long' : 'Short'}
             </TableRowCell>
             <TableRowCell size={'sm'} className={classNames(styles)}>

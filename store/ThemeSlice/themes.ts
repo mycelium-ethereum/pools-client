@@ -10,7 +10,7 @@ export enum BreakpointEnum {
     DesktopSml = 1024,
     DesktopMd = 1280,
     DesktopLg = 1536,
-};
+}
 
 export const size = {
     sm: `${BreakpointEnum.Mobile}px`,

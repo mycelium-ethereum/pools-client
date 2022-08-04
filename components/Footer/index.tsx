@@ -20,7 +20,7 @@ const Footer: React.FC<{
 
     return (
         <footer>
-            <Container className={'mt-auto'}>
+            <Container className="mt-auto">
                 <hr className="border-t-[0.5px] border-tracer-650 dark:border-white" />
                 <div className="flex flex-col-reverse justify-between py-6 font-aileron text-tracer-650 dark:text-white md:px-0 xl:flex-row">
                     <div className="flex flex-col-reverse items-center justify-between xl:justify-start xs:flex-row">

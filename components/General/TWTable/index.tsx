@@ -70,6 +70,8 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     transform: translate3d(0, 0, 0) perspective(999px);
 
     vertical-align: ${(props) => props.twAlign};
+    background: ${({ theme }) => theme.background.secondary};
+
     padding: ${({ size }) => HEADER_CELL_SIZES[size as Size]};
 `;
 
@@ -107,6 +109,8 @@ export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
                 return `inherit`;
         }
     }};
+
+    border-bottom: 1px solid ${({ theme }) => theme.border.primary};
 
     &:nth-child(even) {
         background: ${({ theme }) => theme.background.primary};

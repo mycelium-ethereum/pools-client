@@ -39,7 +39,7 @@ export const Color = styled.span<{ variant?: string }>`
             case 'green':
                 return '#05cb3a';
             case 'red':
-                return '#f15025';
+                return '#FF5621';
             default:
                 return '#8383eb';
         }

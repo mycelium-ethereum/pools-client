@@ -83,7 +83,7 @@ body > div:first-child {
 
 .ask,
 .red {
-    color: #f15025;
+    color: #FF5621;
 }
 
 /* Scroll bar stuff */
@@ -148,7 +148,7 @@ body > div:first-child {
 .page {
     @apply flex min-h-screen flex-col;
     position: relative;
-    background: var(--background-secondary);
+    background: var(--background);
     z-index: 1;
 }
 
@@ -219,20 +219,20 @@ html {
 
 html.theme-dark {
     /* cool-gray-900 */
-    --background: #111928;
+    --background: #000A00;
 
-    --background-secondary: #1b2436;
+    --background-secondary: #011400;
 
     --background-faded: linear-gradient(
         180deg,
-        #1b2436,
-        #1b2436 calc(100% - 900px),
-        #111928 calc(100% - 800px),
-        #111928
+        #373737,
+        #373737 calc(100% - 900px),
+        #000A00 calc(100% - 800px),
+        #000A00
     );
 
     /* cool-gray-900 */
-    --background-nav-secondary: #111928;
+    --background-nav-secondary: #000A00;
 
     /* gray-50 */
     --text: #fafafa;
@@ -241,17 +241,17 @@ html.theme-dark {
     --text-secondary: #e5e7eb;
 
     /* cool-gray-500*/
-    --border: #6b7280;
-    --border-secondary: #374151;
+    --border: #098200;
+    --border-secondary: #098200;
 
     /* tracer-100*/
-    --primary: #dedeff;
+    --primary: #098200;
 
     /* cool-gray-800 */
-    --button-bg: #1f2a37;
+    --button-bg: #000A00;
 
     /* cool-gray-700 */
-    --button-bg-hover: #374151;
+    --button-bg-hover: #011501;
 }
 
 html.theme-matrix {

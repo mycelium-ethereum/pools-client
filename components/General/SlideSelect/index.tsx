@@ -12,7 +12,7 @@ const BGSlider = styled.div<{ selected: number; width: number; numChildren: numb
     top: 0;
     left: 0;
     margin-left: ${(props) => calcPosition(props.numChildren, props.selected)}%;
-    border-radius: ${(props) => getBorder(props.numChildren, props.selected)}}; 
+    border-radius: ${(props) => getBorder(props.numChildren, props.selected)}};
 `;
 
 const getBorder: (numChildren: number, selected: number) => string = (numChildren, selected) => {

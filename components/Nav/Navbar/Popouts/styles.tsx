@@ -22,22 +22,22 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
         switch (true) {
             case selected && navMenuOpen:
                 return `
-                    border: 1px solid #1c64f2;
+                    border: 1px solid ${theme.colors.primary};
                     background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
                 `;
             case !selected && navMenuOpen:
                 return `
                     border: 1px solid #ffffff;
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                 `;
             case selected && !navMenuOpen:
                 return `
-                    border: 1px solid #1c64f2;
-                    background-color: #1c64f2;
+                    border: 1px solid ${theme.colors.primary};
+                    background-color: ${theme.colors.primary};
                 `;
             default:
                 return `
-                    border: 1px solid #1c64f2;
+                    border: 1px solid ${theme.colors.primary};
                     background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
                 `;
         }
@@ -46,11 +46,11 @@ export const NavButton = styled.button<{ selected: boolean; navMenuOpen?: boolea
 
 export const AppLaunchNavButton = styled(NavButton)`
     > span > span {
-        ${({ selected, navMenuOpen }) => {
+        ${({ theme, selected, navMenuOpen }) => {
             switch (true) {
                 case selected && navMenuOpen:
                     return `
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                 `;
                 case !selected && navMenuOpen:
                     return `
@@ -62,7 +62,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                 `;
                 default:
                     return `
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                 `;
             }
         }}
@@ -71,7 +71,7 @@ export const AppLaunchNavButton = styled(NavButton)`
     /* Only allow hover effect on desktop */
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            background-color: #1c64f2 !important;
+            background-color: ${({ theme }) => theme.colors.primary} !important;
             color: #fff;
         }
         &:hover span > span {
@@ -80,7 +80,7 @@ export const AppLaunchNavButton = styled(NavButton)`
     }
 
     @media only screen and (max-width: 768px) {
-        ${({ selected, navMenuOpen }) => {
+        ${({ theme, selected, navMenuOpen }) => {
             switch (true) {
                 case selected && navMenuOpen:
                     return `
@@ -90,7 +90,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                 case !selected && navMenuOpen:
                     return `
                     border: 1px solid #ffffff;
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                 `;
                 case selected && !navMenuOpen:
                     return `
@@ -99,7 +99,7 @@ export const AppLaunchNavButton = styled(NavButton)`
                 `;
                 default:
                     return `
-                    border: 1px solid #1c64f2;
+                    border: 1px solid ${theme.colors.primary};
                     background-color: transparent;
                     transition: all ${ANIMATION_DURATION}s ease ${ANIMATION_DURATION}s;
                 `;
@@ -112,7 +112,7 @@ export const SettingsNavButton = styled(NavButton)`
     /* Only allow hover effect on desktop */
     @media (hover: hover) and (pointer: fine) {
         &:hover {
-            background-color: #1c64f2 !important;
+            background-color: ${({ theme }) => theme.colors.primary} !important;
             color: #fff;
         }
     }
@@ -121,22 +121,22 @@ export const SettingsNavButton = styled(NavButton)`
         switch (true) {
             case selected && navMenuOpen:
                 return `
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                 `;
             case !selected && navMenuOpen:
                 return `
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                     border: 1px solid #ffffff;
                 `;
             case selected && !navMenuOpen:
                 return `
-                    background-color: #1c64f2;
+                    background-color: ${theme.colors.primary};
                     color: #ffffff;
                 `;
             default:
                 return `
-                    border: 1px solid #1c64f2;
-                    color: #1c64f2;
+                    border: 1px solid ${theme.colors.primary};
+                    color: ${theme.colors.primary};
                     background-color: ${theme.theme === Theme.Light ? '#ffffff' : 'transparent'}
                 `;
         }
@@ -153,7 +153,7 @@ export const CubeGrid = styled.span`
 export const Cube = styled.span`
     height: 4px;
     width: 4px;
-    background-color: #1c64f2;
+    background-color: ${({ theme }) => theme.colors.primary};
     transition: background-color ${ANIMATION_DURATION}s ease;
 `;
 
@@ -219,11 +219,11 @@ export const PopoutOption = styled.div<{ borderBottom?: boolean }>`
         height: 72px;
         width: 320px;
         padding: 16px;
-        color: ${({ theme }) => (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
+        color: ${({ theme }) => console.log(theme) || (theme.theme === Theme.Light ? '#1c64f2' : '#ffffff')};
         background: ${({ theme }) =>
             theme.theme === Theme.Light
                 ? 'linear-gradient(97.74deg, rgba(28, 100, 242, 0.1) -59.53%, rgba(28, 100, 242, 0) 74.27%), #ffffff'
-                : 'rgba(53, 53, 220, 0.9)'};
+                : 'tracer-800'};
         border: 1px solid rgba(28, 100, 242, 0.2);
         box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
         overflow: hidden;

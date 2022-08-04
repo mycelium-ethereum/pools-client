@@ -185,8 +185,8 @@ const BuyButtonContainer = styled.div`
     align-items: center;
     margin-top: 8px;
     width: 100%;
-    background: var(--background-secondary);
-    border-radius: 8px;
+    background: var(--background);
+    border-radius: 0.25rem;
     padding: 16px;
     color: var(--text);
     @media (min-width: 640px) {
@@ -220,8 +220,8 @@ export const TracerMintButton = styled.button<{ absolute?: boolean }>`
     padding: 13px 25px;
     width: 100%;
     height: 100%;
-    background: #3535dc;
-    border-radius: 7px;
+    background: ${({ theme }) => theme.colors.primary};
+    border-radius: 0.25rem;
     color: white;
     font-family: 'Inter';
     font-weight: 400;
@@ -242,7 +242,7 @@ const BalancerBuyButton = styled.button<{
     width: 220px;
     height: 56px;
     background: #16bdca;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     color: white;
     font-family: 'Inter';
     font-weight: 400;
