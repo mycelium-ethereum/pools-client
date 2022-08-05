@@ -18,7 +18,7 @@ export const DataRow = styled.div`
         border-radius: 0.25rem;
     }
     @media ${({ theme }) => theme.device.md} {
-        padding: 2rem 1rem;
+        padding: 1rem;
         border-radius: 0.25rem;
     }
 `;

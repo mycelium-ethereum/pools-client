@@ -181,12 +181,12 @@ export const PoolsTable = ({
         <>
             <Table>
                 <TableHeader className="align-baseline">
-                    <TableRow>
+                    <TableRow className="border-none">
                         <TableHeaderCell
-                            className="rounded-xl border-none bg-cool-gray-50 pt-0 dark:bg-theme-background"
-                            colSpan={13}
+                            className="rounded-xl bg-cool-gray-50 py-0 dark:bg-theme-background"
+                            colSpan={14}
                         >
-                            <div className="flex justify-between divide-x-[3px] divide-cool-gray-200 text-base dark:divide-cool-gray-900">
+                            <div className="flex justify-between text-base">
                                 <div className="flex pr-10">
                                     <div className="flex">
                                         <Logo
@@ -196,105 +196,102 @@ export const PoolsTable = ({
                                         />
                                     </div>
                                     <div className="my-auto">
-                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                            {marketSymbolToAssetName[rows[0].marketSymbol] || 'MARKET TICKER'}
-                                        </div>
                                         <div className="text-lg font-bold normal-case">{rows[0].marketSymbol}</div>
                                     </div>
                                 </div>
-                                <div className="px-10">
-                                    <SpotPriceTip>
-                                        <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                            SPOT PRICE
+                                <div className="flex">
+                                    <div className="px-10">
+                                        <div className="font-bold">
+                                            {marketSpotPrices[rows[0].marketSymbol]
+                                                ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
+                                                : '-'}
                                         </div>
-                                    </SpotPriceTip>
-                                    <div className="font-bold">
-                                        {marketSpotPrices[rows[0].marketSymbol]
-                                            ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
-                                            : '-'}
+                                        <SpotPriceTip>
+                                            <div className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
+                                                SPOT PRICE
+                                            </div>
+                                        </SpotPriceTip>
                                     </div>
-                                </div>
-                                <div className="px-10">
-                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                        ORACLE
+                                    <div className="px-10">
+                                        <div className="font-bold">{toApproxCurrency(oneDayVolume)}</div>
+                                        <div className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
+                                            24H Volume
+                                        </div>
                                     </div>
-                                    <a
-                                        href={getPriceFeedUrl(rows[0].marketSymbol)}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="flex items-center"
-                                    >
-                                        <img className="mr-2" src={'/img/general/chainlink.svg'} alt="Chainlink" />
-                                        <div className="mr-2 font-bold normal-case">Chainlink</div>
-                                        <LinkIcon alt="Link" />
-                                    </a>
-                                </div>
-                                <div className="px-10">
-                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                        24H Volume
+                                    <div className="px-10">
+                                        <div className="font-bold">{rows.length}</div>
+                                        <div className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
+                                            NUMBER OF POOLS
+                                        </div>
                                     </div>
-                                    <div className="font-bold">{toApproxCurrency(oneDayVolume)}</div>
-                                </div>
-                                <div className="px-10">
-                                    <div className="font-semibold text-cool-gray-500 dark:text-cool-gray-400">
-                                        NUMBER OF POOLS
-                                    </div>
-                                    <div className="font-bold">{rows.length}</div>
                                 </div>
                             </div>
                         </TableHeaderCell>
                     </TableRow>
                     <TableRow className="h-5" />
-                    <TableRow className="border-none">
+                    <TableRow>
                         {/* Pools  Cols */}
-                        <TableHeaderCell className="w-1/12 dark:bg-theme-background 2xl:whitespace-nowrap">
-                            Leverage / Collateral
+                        <TableHeaderCell
+                            noPaddingBottom
+                            className="w-1/12 pb-0 dark:bg-theme-background 2xl:whitespace-nowrap"
+                        >
+                            Leverage
                         </TableHeaderCell>
-                        <TableHeaderCell className="w-1/12 whitespace-nowrap">
+                        <TableHeaderCell
+                            noPaddingBottom
+                            className="w-1/12 dark:bg-theme-background 2xl:whitespace-nowrap"
+                        >
+                            Collateral
+                        </TableHeaderCell>
+                        <TableHeaderCell noPaddingBottom className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
                             <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
-                        <TableHeaderCell className="w-1/12 whitespace-nowrap">{'TVL (USD)'}</TableHeaderCell>
-                        <TableHeaderCell className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
+                        <TableHeaderCell noPaddingBottom className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
                                 <div>{'Skew'}</div>
                             </SkewTip>
                         </TableHeaderCell>
                         {showNextRebalance ? (
-                            <TableHeaderCell className="w-2/12">
+                            <TableHeaderCell noPaddingBottom className="w-2/12">
                                 <CommittmentTip>
-                                    <div>{'Tokens in'}</div>
+                                    <div>{'Trade Wait Time'}</div>
                                 </CommittmentTip>
                             </TableHeaderCell>
                         ) : null}
                         {/* Token Cols */}
-                        <TableHeaderCell className="w-16" size="sm">
+                        <TableHeaderCell noPaddingBottom className="w-16" size="sm">
                             {'Side'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" className={'w-2/12 whitespace-nowrap'}>
+                        <TableHeaderCell noPaddingBottom size="sm" className={'w-2/12 whitespace-nowrap'}>
                             {'TVL (USD)'}
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" colSpan={2} className={'w-[12%] whitespace-nowrap'}>
+                        <TableHeaderCell noPaddingBottom size="sm" colSpan={2} className={'w-[12%] whitespace-nowrap'}>
                             <EffectiveLeverageTip>
                                 <div>{'Effective Leverage'}</div>
                             </EffectiveLeverageTip>
                         </TableHeaderCell>
-                        <TableHeaderCell size="sm" colSpan={showNextRebalance ? 2 : 1} className={'whitespace-nowrap'}>
+                        <TableHeaderCell
+                            noPaddingBottom
+                            size="sm"
+                            colSpan={showNextRebalance ? 2 : 1}
+                            className={'whitespace-nowrap'}
+                        >
                             {'Token Price (USD)'}
                         </TableHeaderCell>
                         {showNextRebalance && !!account ? (
-                            <TableHeaderCell size="sm">
+                            <TableHeaderCell noPaddingBottom size="sm">
                                 <div className="whitespace-nowrap capitalize">{'MY HOLDINGS'}</div>
                             </TableHeaderCell>
                         ) : null}
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </TableRow>
-                    <TableRow>
+                    <TableRow className="border-none">
                         {/* Pools  Cols */}
                         <TableHeaderCell colSpan={showNextRebalance ? 5 : 4} />
 
                         {/* Token Cols */}
-                        <TableHeaderCell className="" size="sm-x" colSpan={2} />
+                        <TableHeaderCell size="sm" colSpan={2} />
                         <TableHeaderCell size="sm-x">
                             <div className="capitalize text-cool-gray-400">{'Gains'}</div>
                         </TableHeaderCell>
@@ -366,6 +363,8 @@ const PoolRow: React.FC<
                             <OracleDetailsBadge oracleDetails={pool.oracleDetails} />
                         </OracleDetailsBadgeContainer>
                     </div>
+                </TableRowCell>
+                <TableRowCell rowSpan={2}>
                     <div className="flex items-center">
                         {pool.collateralAsset}
                         <InfoIcon onClick={() => onClickShowPoolDetailsModal(pool)} />
@@ -396,37 +395,6 @@ const PoolRow: React.FC<
                                     deltaDenotation={deltaDenotation}
                                     poolTicker={pool.name}
                                     tooltipMetric={UpOrDownTipMetric.IndexPrice}
-                                    showNextRebalance={showNextRebalance}
-                                />
-                            </div>
-                        </>
-                    )}
-                </TableRowCell>
-                <TableRowCell rowSpan={2}>
-                    {showNextRebalance ? (
-                        <>
-                            <div>{toApproxCurrency(pool.nextTVL)}</div>
-                            <div className="mt-1">
-                                <UpOrDownWithTooltip
-                                    oldValue={pool.tvl}
-                                    newValue={pool.nextTVL}
-                                    deltaDenotation={deltaDenotation}
-                                    poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.TVL}
-                                    showNextRebalance={showNextRebalance}
-                                />
-                            </div>
-                        </>
-                    ) : (
-                        <>
-                            <div>{toApproxCurrency(pool.pastUpkeep.tvl)}</div>
-                            <div className="mt-1">
-                                <UpOrDownWithTooltip
-                                    oldValue={pool.antecedentUpkeep.tvl}
-                                    newValue={pool.pastUpkeep.tvl}
-                                    deltaDenotation={deltaDenotation}
-                                    poolTicker={pool.name}
-                                    tooltipMetric={UpOrDownTipMetric.TVL}
                                     showNextRebalance={showNextRebalance}
                                 />
                             </div>
@@ -536,8 +504,8 @@ const PoolRow: React.FC<
 
 // const longStyles = 'bg-green-50 dark:bg-dark-green matrix:bg-dark-green';
 // const longStyles = 'linear-gradient(90deg, rgba(140, 198, 63, 0.2) 0%, rgba(140, 198, 63, 0) 73%);';
-const longStyles = 'bg-gradient-to-r from-tracer-500';
-const shortStyles = 'bg-red-50 dark:bg-dark-red matrix:bg-dark-red';
+const longStyles = 'bg-gradient-to-r from-long-gradient-start';
+const shortStyles = 'bg-gradient-to-r from-short-gradient-start';
 
 const TokenRows: React.FC<
     {
@@ -575,12 +543,13 @@ const TokenRows: React.FC<
     poolTicker,
     isImportedPool,
 }) => {
-    const styles = side === SideEnum.long ? longStyles : shortStyles;
+    const isLong = side === SideEnum.long;
+    const styles = isLong ? longStyles : shortStyles;
 
     return (
         <>
-            <TableRowCell size={'sm'} className={classNames(styles)}>
-                {side === SideEnum.long ? 'Long' : 'Short'}
+            <TableRowCell size={'sm'} className={classNames(styles, isLong ? 'text-up-green' : 'text-down-red')}>
+                {isLong ? 'Long' : 'Short'}
             </TableRowCell>
             <TableRowCell size={'sm'}>
                 {showNextRebalance ? (

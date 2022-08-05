@@ -59,6 +59,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
 }))<{
     size?: Size;
     twAlign?: Align;
+    noPaddingBottom?: boolean;
 }>`
     font-size: 0.75rem; /* 12px */
     line-height: 1rem; /* 16px */
@@ -73,6 +74,7 @@ export const TableHeaderCell = styled.th.attrs((props) => ({
     background: ${({ theme }) => theme.background.primary};
 
     padding: ${({ size }) => HEADER_CELL_SIZES[size as Size]};
+    ${({ noPaddingBottom }) => (noPaddingBottom ? `padding-bottom: 0px !important` : '')}
 `;
 
 TableHeaderCell.defaultProps = {
@@ -110,7 +112,7 @@ export const TableRow = styled.tr<{ lined?: boolean; isImported?: boolean }>`
         }
     }};
 
-    border-bottom: 1px solid ${({ theme }) => theme.border.primary};
+    border-top: 1px solid ${({ theme }) => theme.border.primary};
 
     &:nth-child(even) {
         background: ${({ theme }) => theme.background.primary};

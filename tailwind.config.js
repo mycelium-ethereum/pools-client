@@ -10,10 +10,10 @@ module.exports = {
 
     theme: {
         themeVariants: ['dark', 'matrix'],
-        backgroundImage: {
-            'dropdown-gradient':
-                'linear-gradient(44.71deg, rgba(28, 100, 242, 0.5) -529.33%, rgba(28, 100, 242, 0) 115.83%)',
-        },
+        // backgroundImage: {
+        //     'dropdown-gradient':
+        //         'linear-gradient(44.71deg, rgba(28, 100, 242, 0.5) -529.33%, rgba(28, 100, 242, 0) 115.83%)',
+        // },
         container: {
             center: true,
             padding: {
@@ -50,10 +50,13 @@ module.exports = {
                     500: '#6B7280',
                     600: '#6B7280',
                     700: '#374151',
-                    800: '#1F2A37',
+                    800: '#8CC63F33',
                     900: '#111928',
                 },
-                'long-side-green': '0',
+                'up-green': '#4FE021',
+                'down-red': '#FF5621',
+                'long-gradient-start': '#8CC63F33',
+                'short-gradient-start': '#ED454A33',
                 'dark-green': '#032018',
                 'dark-red': '#230F0F',
                 red: {

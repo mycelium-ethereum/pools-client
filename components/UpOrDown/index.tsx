@@ -30,7 +30,7 @@ export const UpOrDown = styled(
         );
         const approxValue = Math.abs(parseFloat(value.toFixed(3)));
         return (
-            <div className={`${className} ${approxValue === 0 ? '' : value > 0 ? 'green' : 'red'}`}>
+            <div className={`${className} ${approxValue === 0 ? '' : value > 0 ? 'text-down-red' : 'text-up-green'}`}>
                 <IconBox>
                     {approxValue === 0 ? (
                         <Equal className="icon" />
@@ -71,11 +71,11 @@ export const UpOrDown = styled(
     color: #6b7280;
 
     &.green {
-        color: rgb(22 163 74);
+        color: ${({ theme }) => console.log(theme) || theme.colors['up-green']};
     }
 
     &.red {
-        color: #ff5621;
+        color: ${({ theme }) => theme.colors['down-red']};
     }
 `;
 

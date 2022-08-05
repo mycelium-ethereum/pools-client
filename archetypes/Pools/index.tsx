@@ -160,7 +160,7 @@ export const Browse: React.FC = () => {
                         new BigNumber(0),
                     );
                     return (
-                        <Styles.DataRow key={index}>
+                        <Styles.DataRow key={index} className="pb-0">
                             <PoolsTable
                                 rows={dataRows}
                                 deltaDenotation={state.deltaDenotation}

@@ -10,7 +10,6 @@ export const OracleDetailsBadgeContainer = styled.div`
 `;
 
 const StyledBadge = styled.div`
-    background: #3535dc;
     color: #fff;
     font-size: 13px;
     padding: 0.25rem 0.5rem;
@@ -18,19 +17,18 @@ const StyledBadge = styled.div`
     line-height: 150%;
     border-radius: 3px;
     font-weight: 700;
-    background: #1c64f2;
     color: #fff;
     border-color: #1c64f2;
 `;
 
 export const OracleDetailsBadge = ({ oracleDetails }: { oracleDetails: OracleDetails }): JSX.Element => {
     if (oracleDetails.isLoading) {
-        return <StyledBadge>...</StyledBadge>;
+        return <StyledBadge className="bg-theme-background-primary">...</StyledBadge>;
     }
     switch (oracleDetails.type) {
         case 'SMA':
             return (
-                <StyledBadge>
+                <StyledBadge className="bg-theme-background-primary">
                     {oracleDetails.updateInterval * oracleDetails.numPeriods
                         ? formatSeconds(oracleDetails.updateInterval * oracleDetails.numPeriods)
                         : ''}{' '}
@@ -39,6 +37,6 @@ export const OracleDetailsBadge = ({ oracleDetails }: { oracleDetails: OracleDet
             );
         case 'Spot':
         default:
-            return <StyledBadge>Spot Price</StyledBadge>;
+            return <StyledBadge className="bg-theme-background-primary">Spot Price</StyledBadge>;
     }
 };
