@@ -3,14 +3,11 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import shallow from 'zustand/shallow';
+import SlimButton from '~/components/General/Button/SlimButton';
 import { Container } from '~/components/General/Container';
 import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
-import { LauncherToggle } from '~/components/Nav/Navbar/Buttons';
-import HamburgerMenu from '~/components/Nav/Navbar/MobileMenus/HamburgerMenu';
 import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
-import { PopoutButtons } from '~/components/Nav/Navbar/Popouts/Buttons';
-import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
 import { useStore } from '~/store/main';
@@ -37,9 +34,9 @@ const NavBarContent: React.FC = () => {
     const route = routes[routes.length - 2];
     const { account, network } = useStore(selectWeb3Info, shallow);
 
-    const listItemStyles = 'flex';
+    const listItemStyles = 'flex hover:opacity-80';
     const linkStyles =
-        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650 hover:text-tracer-midblue dark:hover:text-tracer-650';
+        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650 hover:text-tracer-midblue';
     const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
@@ -59,36 +56,8 @@ const NavBarContent: React.FC = () => {
         };
     }, [handleScroll]);
 
-    const handleMenuOpen = () => {
-        if (launcherMenuOpen) {
-            setLauncherMenuOpen(false);
-            setTimeout(() => {
-                setNavMenuOpen(true);
-            }, ANIMATION_DURATION * 1000 * 2); // Double animation time in milliseconds
-        } else {
-            setLauncherMenuOpen(false);
-            setNavMenuOpen(true);
-        }
-    };
-
-    const handleLauncherOpen = () => {
-        if (navMenuOpen) {
-            setNavMenuOpen(false);
-            setTimeout(() => {
-                setLauncherMenuOpen(true);
-            }, ANIMATION_DURATION * 1000 * 2);
-        } else {
-            setNavMenuOpen(false);
-            setLauncherMenuOpen(true);
-        }
-    };
-
     const handleMenuClose = useCallback(() => {
         setNavMenuOpen(false);
-    }, []);
-
-    const handleLauncherClose = useCallback(() => {
-        setLauncherMenuOpen(false);
     }, []);
 
     // Close nav after hitting desktop breakpoint
@@ -187,23 +156,14 @@ const NavBarContent: React.FC = () => {
                                 {!!network ? (
                                     <NetworkDropdown className="relative my-auto ml-4 whitespace-nowrap" />
                                 ) : null}
-                                <AccountDropdown account={account ?? ''} className="my-auto ml-4" />
-                                <PopoutButtons />
-                            </Show.MD>
-                            <Hide.LG display="flex">
-                                <Hide.MD display="flex">
-                                    <LauncherToggle
-                                        onClick={launcherMenuOpen ? handleLauncherClose : handleLauncherOpen}
-                                        isSelected={launcherMenuOpen}
-                                        navMenuOpen={navMenuOpen || launcherMenuOpen}
-                                    />
-                                </Hide.MD>
-                                <HamburgerMenu
-                                    onClick={navMenuOpen ? handleMenuClose : handleMenuOpen}
-                                    isSelected={navMenuOpen}
-                                    navMenuOpen={navMenuOpen || launcherMenuOpen}
+                                <AccountDropdown
+                                    account={account ?? ''}
+                                    className="dark:bg-theme-button-gradient-bg my-auto ml-4"
                                 />
-                            </Hide.LG>
+                                <SlimButton content={<>Switch to Perpetual Swaps</>} />
+                                {/* switch to perpetual pools */}
+                            </Show.MD>
+                            <Hide.LG display="flex">{/* switch to perpetual pools */}</Hide.LG>
                         </div>
                     </div>
                 </Container>

@@ -12,7 +12,7 @@ export const NavMenu = styled.menu<{ isOpen: boolean }>`
     height: ${({ isOpen }) => (isOpen ? '100%' : '0%')};
     margin: 0;
     z-index: 49;
-    font-family: 'Aileron';
+    font-family: 'Inter';
 
     > div:first-of-type {
         z-index: 1;

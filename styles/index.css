@@ -242,7 +242,7 @@ html.theme-dark {
 
     /* cool-gray-500*/
     --border: #098200;
-    --border-secondary: #098200;
+    --border-secondary: #003000;
 
     /* tracer-100*/
     --primary: #098200;
@@ -252,6 +252,9 @@ html.theme-dark {
 
     /* cool-gray-700 */
     --button-bg-hover: #011400;
+
+    --button-gradient-bg: linear-gradient(83.12deg, rgba(9, 130, 0, 0.5) -208.54%, rgba(9, 130, 0, 0) 159.09%);
+    --button-gradient-bg-hover: linear-gradient(83.12deg, rgba(9, 130, 0, 0.5) -208.54%, rgba(9, 130, 0, 0) 159.09%);
 }
 
 html.theme-matrix {
@@ -326,6 +329,11 @@ html.theme-matrix {
         rgba(17, 25, 40, 0) 114.84%
     );
     background-size: 800px 104px;
+}
+
+
+.theme-dark .gradient-button {
+    background: var(--button-gradient-bg);
 }
 
 .height-delay {

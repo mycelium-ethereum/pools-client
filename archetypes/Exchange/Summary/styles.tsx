@@ -51,14 +51,14 @@ export const SumText = styled.span<{ setColor?: string }>`
     font-size: 14px;
     font-weight: 600;
 
-    ${({ setColor }) => {
+    ${({ setColor, theme }) => {
         if (setColor === 'green') {
             return `
-                color: #10b981;
+                color: ${theme.colors['up-green']};
             `;
         } else if (setColor === 'red') {
             return `
-                color: #ef4444;
+                color: ${theme.colors['down-red']};
             `;
         }
     }}

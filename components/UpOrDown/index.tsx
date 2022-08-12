@@ -71,7 +71,7 @@ export const UpOrDown = styled(
     color: #6b7280;
 
     &.green {
-        color: ${({ theme }) => console.log(theme) || theme.colors['up-green']};
+        color: ${({ theme }) => theme.colors['up-green']};
     }
 
     &.red {

@@ -13,9 +13,9 @@ module.exports = {
     },
 
     env: {
-        siteTitle: 'Tracer Perpetual Pools',
+        siteTitle: 'Mycelium Perpetual Pools',
         siteDescription: '',
-        siteUrl: 'https://pools.tracer.finance',
+        siteUrl: 'https://pools.mycelium.xyz',
         siteImagePreviewUrl: 'img/opengraph/main.png',
     },
 

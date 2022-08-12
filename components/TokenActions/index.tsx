@@ -45,7 +45,7 @@ export const TokenActions = ({
     const { network } = useStore(selectWeb3Info, shallow);
     const provider = useStore(selectProvider);
     const [isOpen, setIsOpen] = useState<boolean>(false);
-    const buttonStyles = 'flex cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover w-full';
+    const buttonStyles = 'flex text-cursor-pointer items-center p-2 text-sm hover:bg-theme-button-bg-hover w-full';
 
     return (
         <Popover
@@ -55,7 +55,12 @@ export const TokenActions = ({
             onClickOutside={() => setIsOpen(false)}
             content={
                 <div onClick={() => setIsOpen(!isOpen)}>
-                    <div className="focus:outline-none z-10 mt-2 w-[180px] origin-top-right divide-y divide-theme-border overflow-hidden rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
+                    <div
+                        className="focus:outline-none divide z-10 mt-2 w-[180px] origin-top-right
+                        divide-y divide-theme-border overflow-hidden rounded-lg
+                        bg-theme-background shadow-lg ring-1 ring-black
+                        ring-opacity-5"
+                    >
                         <button className={buttonStyles} onClick={() => watchAsset(provider, token)}>
                             <PlusOutlined className="relative ml-1 mr-[11px] inline h-[12px]" />
                             Add token to wallet
@@ -117,7 +122,7 @@ export const TokenActions = ({
                 </div>
             }
         >
-            <div className={'cursor-pointer p-2'} onClick={() => setIsOpen(!isOpen)}>
+            <div className={'cursor-pointer p-2 text-tracer-500'} onClick={() => setIsOpen(!isOpen)}>
                 <More
                     className="transition"
                     style={{

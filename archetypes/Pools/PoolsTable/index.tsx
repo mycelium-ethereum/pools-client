@@ -33,8 +33,7 @@ import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { calcPercentageDifference, toApproxCurrency } from '~/utils/converters';
 import { classNames } from '~/utils/helpers';
-import { getPriceFeedUrl, getBaseAssetFromMarket } from '~/utils/poolNames';
-import { marketSymbolToAssetName } from '~/utils/pools';
+import { getBaseAssetFromMarket } from '~/utils/poolNames';
 import PoolDetailsModal from '../PoolDetailsModal';
 import { BrowseTableRowData, DeltaEnum } from '../state';
 
@@ -593,9 +592,9 @@ const TokenRows: React.FC<
                 <div
                     className={
                         tokenInfo.effectiveGain > leverage
-                            ? 'text-green-600'
+                            ? 'text-up-green'
                             : tokenInfo.effectiveGain < leverage
-                            ? 'text-red-600'
+                            ? 'text-down-red'
                             : ''
                     }
                 >
@@ -665,7 +664,7 @@ const TokenRows: React.FC<
                 {showNextRebalance ? (
                     <div className="flex">
                         <Button
-                            className="mx-1 my-auto ml-auto w-[70px] uppercase"
+                            className="gradient-button mx-1 my-auto ml-auto w-[70px] uppercase"
                             size="xs"
                             variant="primary-light"
                             onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}

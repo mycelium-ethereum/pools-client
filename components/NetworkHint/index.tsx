@@ -11,7 +11,7 @@ export const NetworkHintContainer = styled.div`
 
 const StyledNetworkHint = styled.div`
     position: absolute;
-    background: #3535dc;
+    background: ${({ theme }) => theme.border.primary};
     color: #fff;
     font-size: 13px;
     padding: 0.25rem;

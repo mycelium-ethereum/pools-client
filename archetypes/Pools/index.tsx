@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import BigNumber from 'bignumber.js';
 import { SearchOutlined } from '@ant-design/icons';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import SlimButton from '~/components/General/Button/SlimButton';
 import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
-import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { useStore } from '~/store/main';
@@ -174,21 +174,10 @@ export const Browse: React.FC = () => {
                 <Styles.AltPoolRow>
                     <Styles.AltPoolTitle>Don’t see the pool you’re after?</Styles.AltPoolTitle>
                     <Styles.AltPoolActions>
-                        <Styles.Button
-                            variant="primary"
-                            size="sm"
+                        <SlimButton
+                            content={<>Display Alternative Market</>}
                             onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
-                        >
-                            Display Alternative Market
-                        </Styles.Button>
-                        <TooltipSelector tooltip={{ key: TooltipKeys.ComingSoon }}>
-                            <Styles.DisabledButtonWrap>
-                                <Styles.DummyButton />
-                                <Styles.Button variant="primary" size="sm" disabled>
-                                    Deploy New Market
-                                </Styles.Button>
-                            </Styles.DisabledButtonWrap>
-                        </TooltipSelector>
+                        />
                     </Styles.AltPoolActions>
                 </Styles.AltPoolRow>
             </PageTable.Container>

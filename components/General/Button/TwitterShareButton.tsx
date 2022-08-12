@@ -12,7 +12,7 @@ const TwitterShareButton: React.FC<{ url: string; text: string; className?: stri
     return (
         <a href={`https://twitter.com/intent/tweet?url=${url}&text=${text}`} target="_blank" rel="noopener noreferrer">
             <button
-                className={`group flex h-[39px] max-h-[39px] w-[97px] max-w-[97px] items-center justify-center rounded-xl border border-tracer-darkblue text-sm font-semibold text-black transition-colors duration-300 hover:bg-tracer-darkblue hover:text-white dark:border-white dark:text-white dark:hover:bg-white dark:hover:text-tracer-darkblue ${
+                className={`group flex h-[39px] max-h-[39px] w-[97px] max-w-[97px] items-center justify-center rounded-xl border border-tracer-darkblue text-sm font-semibold text-black transition-colors duration-300 hover:bg-tracer-darkblue hover:text-white dark:border-white dark:text-white dark:hover:bg-white ${
                     className ?? ''
                 }`}
             >

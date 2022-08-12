@@ -133,7 +133,7 @@ export const ExpectedExposure: React.FC<
     return (
         <>
             <Section label={label} className="header">
-                <Styles.SumText setColor={`${isLong ? 'green' : 'red'}`}>
+                <Styles.SumText className={isLong ? 'text-up-green' : 'text-down-red'}>
                     {expectedExposure.toFixed(3)} {baseAsset}
                 </Styles.SumText>
             </Section>

@@ -38,12 +38,14 @@ export const LogoutButton = styled.button`
     font-weight: 500;
     font-size: 0.875rem; /* 14px */
     line-height: 1.25rem; /* 20px */
-    background-color: #2563eb;
+    background-color: ${({ theme }) => theme.background.primary};
     color: #fff;
-    border-radius: 0.75rem; /* 12px */
+    border-radius: 0.25rem; /* 12px */
+    border-color: ${({ theme }) => theme.border.primary};
+    border-width: 1px;
 
     &:hover {
-        background-color: #60a5fa;
+        background-color: ${({ theme }) => theme.background.secondary};
     }
 `;
 

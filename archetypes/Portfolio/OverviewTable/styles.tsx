@@ -8,8 +8,9 @@ import { Theme } from '~/store/ThemeSlice/themes';
 
 export const Container = styled.div`
     position: relative;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    border-radius: 0.25rem;
+    border-width: 1px;
+    border-color: ${({ theme }) => theme.border.primary};
     background: ${({ theme }) => theme.background.primary};
 `;
 
@@ -146,8 +147,8 @@ export const RowCount = styled.div`
     width: 46px;
     height: 44px;
     background: rgba(61, 168, 245, 0.1);
-    color: #3da8f5;
-    border: 1px solid #3da8f5;
+    color: ${({ theme }) => theme.border.primary};
+    border: 1px solid ${({ theme }) => theme.border.primary};
     box-sizing: border-box;
     border-radius: 7px;
 `;

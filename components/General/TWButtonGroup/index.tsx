@@ -14,7 +14,7 @@ const SELECTED = {
 const UNSELECTED = {
     tracer: 'bg-tracer-50 hover:tracer-100 dark:bg-theme-button-bg dark:hover:bg-theme-button-bg-hover matrix:bg-theme-button-bg matrix:hover:bg-theme-button-bg-hover text-theme-text',
     default: 'bg-theme-button-bg hover:bg-theme-button-bg-hover text-theme-text',
-    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg text-cool-gray-400 dark:text-cool-gray-800 focus:border-transparent',
+    greyed: 'bg-cool-gray-100 dark:bg-cool-gray-600 matrix:bg-theme-button-bg text-cool-gray-400 dark:text-tracer-900 focus:border-transparent',
 };
 
 const BORDER_COLORS = {
@@ -100,7 +100,6 @@ export default (({
                     </TooltipSelector>
                 ) : option.tooltip ? (
                     <TooltipSelector key={`twbg-${option.key}`} tooltip={{ key: option.tooltip.optionKey }}>
-                        {option.text === 'Flip' && <NewCallOut>NEW</NewCallOut>}
                         <button
                             type="button"
                             onClick={() => onClick(option.key)}
@@ -118,7 +117,6 @@ export default (({
                     </TooltipSelector>
                 ) : (
                     <React.Fragment key={`twbg-${option.key}`}>
-                        {option.text === 'Flip' && <NewCallOut>NEW</NewCallOut>}
                         <button
                             type="button"
                             onClick={() => onClick(option.key)}
@@ -154,21 +152,4 @@ const Container = styled.span<{ fullWidth?: boolean }>`
     display: inline-flex;
     white-space: nowrap;
     width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
-`;
-
-const NewCallOut = styled.span`
-    position: absolute;
-    background-color: #5555e9;
-    top: -0.8em;
-    right: 0;
-    z-index: 11;
-    color: #fff;
-    font-weight: 700;
-    font-size: 10px;
-    border-radius: 4px;
-    width: 41px;
-    height: 17px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 `;

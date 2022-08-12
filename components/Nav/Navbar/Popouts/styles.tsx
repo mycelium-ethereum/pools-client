@@ -161,7 +161,7 @@ export const PopoutContainer = styled.div`
     position: relative;
     font-size: 16px;
     line-height: 24px;
-    font-family: 'Aileron', sans-serif;
+    font-family: 'Inter', sans-serif;
 `;
 
 export const Popout = styled.div<{ isActive: boolean }>`
@@ -171,7 +171,7 @@ export const Popout = styled.div<{ isActive: boolean }>`
     z-index: 50;
     display: flex;
     flex-direction: row;
-    font-family: 'Aileron', sans-serif;
+    font-family: 'Inter', sans-serif;
     pointer-events: ${({ isActive }) => (isActive ? 'all' : 'none')};
     justify-content: space-between;
     width: 100%;
@@ -380,7 +380,7 @@ export const LauncherRow = styled.div`
     backdrop-filter: blur(10px);
     font-size: 16px;
     line-height: 24px;
-    font-family: 'Aileron', sans-serif;
+    font-family: 'Inter', sans-serif;
 
     ${({ theme }) => {
         switch (theme.theme) {

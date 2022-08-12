@@ -15,8 +15,8 @@ const Footer: React.FC<{
         setCopyrightYear();
     }, []);
 
-    const transitionStyles = `transition-colors duration-300 hover:text-tracer-midblue dark:hover:text-tracer-650`;
-    const linkStyles = `ml-0 lg:mb-0 xl:ml-10 last:mb-0 text-sm leading-[21px] whitespace-nowrap ${transitionStyles}`;
+    const transitionStyles = `transition-colors duration-300 hover:text-tracer-midblue`;
+    const linkStyles = `dark:hover:opacity-80 ml-0 lg:mb-0 xl:ml-10 last:mb-0 text-sm leading-[21px] whitespace-nowrap ${transitionStyles}`;
 
     return (
         <footer>

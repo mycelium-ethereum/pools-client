@@ -9,13 +9,13 @@ import TracerBlogSVG from '/public/img/logos/tracer/tracer-blog.svg';
 export const menuContent = [
     {
         link: 'https://tracer.finance',
-        logo: '/img/logos/tracer/products/main.svg',
-        alt: 'Tracer',
+        logo: '/img/logos/mycelium/logo_MYC_small.svg',
+        alt: 'Mycelium',
     },
     {
         link: '/',
         logo: '/img/logos/tracer/products/perpetual-pools.svg',
-        alt: 'Tracer Perpetual Pools',
+        alt: 'Mycelium Perpetual Pools',
     },
 ];
 

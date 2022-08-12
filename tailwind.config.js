@@ -78,6 +78,8 @@ module.exports = {
                     border: 'var(--border)',
                     ['button-bg']: 'var(--button-bg)',
                     ['button-bg-hover']: 'var(--button-bg-hover)',
+                    ['button-bg-gradient']: 'var(--button-gradient-bg)',
+                    ['button-bg-gradient-hover']: 'var(--button-gradient-bg-hover)',
                 },
             },
             screens: {

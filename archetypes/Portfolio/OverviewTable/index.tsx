@@ -59,7 +59,7 @@ export const OverviewTable: React.FC<Props> = ({
                     </Styles.Actions>
                     <Styles.IconContainer>
                         {isLoading ? (
-                            <Loading />
+                            <Loading className="text-tracer-500" />
                         ) : (
                             <Styles.DropdownArrow open={open} onClick={() => setOpen(!open)}>
                                 <DropdownArrowImage />
