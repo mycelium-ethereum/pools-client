@@ -15,9 +15,9 @@ export const Container = styled.div`
 
 export const Banner = styled.div`
     padding: 1.25rem;
-    border-radius: 0.75rem;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    background: ${({ theme }) => theme.background.primary};
+    border-radius: 0.25rem;
+    border: 1px solid ${({ theme }) => theme.border.primary};
+    background: ${({ theme }) => theme.background.primary};b
     justify-content: space-between;
     gap: 20px;
     display: flex;

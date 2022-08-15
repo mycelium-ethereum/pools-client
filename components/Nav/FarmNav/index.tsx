@@ -37,7 +37,7 @@ const Item = styled.div`
     padding: 0.375rem 0.75rem;
     color: ${({ theme }) => theme.fontColor.primary};
     cursor: pointer;
-    border-radius: 0.75rem;
+    border-radius: 0.25rem;
     transition: all cubic-bezier(0.4, 0, 0.2, 1) 150ms;
     &:hover {
         background: ${({ theme }) => theme.background.secondary};
