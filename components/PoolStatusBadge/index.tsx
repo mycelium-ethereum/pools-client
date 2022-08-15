@@ -11,7 +11,7 @@ export const PoolStatusBadgeContainer = styled.div`
 `;
 
 const sharedBadgeStyles = `
-    background: #3535dc;
+    background: #098200;
     color: #fff;
     font-size: 13px;
     padding: 0.25rem 0.5rem;
@@ -28,16 +28,16 @@ const DeprecatedPoolBadge = styled.div`
             case Theme.Light:
                 return `background: #FFF1E2; color: #FF5621; border-color: #FF931E`;
             default:
-                return `background: ${theme.primary}; color: #fff; border-color: #fff`;
+                return `background: ${theme.colors.primary}; color: #fff; border-color: #fff`;
         }
     }};
 `;
 
 const LivePoolBadge = styled.div`
     ${sharedBadgeStyles}
-    background: #1c64f2;
+    background: ${({ theme }) => theme.colors.primary};
     color: #fff;
-    border-color: #1c64f2;
+    border-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const PoolStatusBadge = ({ status, text }: { status: PoolStatus; text?: string }): JSX.Element => {

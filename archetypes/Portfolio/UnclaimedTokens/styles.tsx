@@ -56,7 +56,7 @@ const MARKET_COLORS: Record<
     },
     BTC: {
         backgroundColor: 'rgba(247, 147, 26, 0.3)',
-        borderColor: 'rgb(95, 102, 139)',
+        borderColor: 'rgb(247, 147, 26)',
     },
     LINK: {
         backgroundColor: 'rgba(55, 91, 210, 0.3)',
@@ -71,8 +71,11 @@ const MARKET_COLORS: Record<
 export const PoolTableRow = styled.tr<{
     marketTicker: string;
 }>`
-    background: ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.backgroundColor ?? 'auto'};
-    border-bottom: 1px solid ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.borderColor ?? 'auto'};
+    background: ${({ marketTicker, theme }) =>
+        MARKET_COLORS[marketTicker]?.backgroundColor
+            ? `linear-gradient(to bottom, ${MARKET_COLORS[marketTicker]?.backgroundColor}, ${theme.background.primary})`
+            : 'auto'};
+    border-top: 1px solid ${({ marketTicker }) => MARKET_COLORS[marketTicker]?.borderColor ?? 'auto'};
     td > {
         padding: 0.5rem 1rem;
     }

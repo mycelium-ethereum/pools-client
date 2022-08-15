@@ -53,7 +53,12 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
             <meta name="theme-color" content="#0000B0" />
 
             {/* Favicon */}
-            <link rel="shortcut icon" type="image/svg" href="/favicon.svg" />
+            <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />
+            <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png" />
+            <link rel="icon" type="image/png" sizes="16x16" href="img/favicon/favicon-16x16.png" />
+            <link rel="manifest" href="img/favicon/site.webmanifest" />
+            <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5" />
+            <link rel="shortcut icon" href="img/favicon/favicon.ico" />
 
             {/* Google Fonts */}
             <link rel="preconnect" href="https://fonts.googleapis.com" />

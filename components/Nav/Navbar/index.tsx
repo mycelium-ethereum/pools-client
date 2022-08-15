@@ -10,6 +10,7 @@ import Show from '~/components/General/Show';
 import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
+import MyceliumLogo from '~/public/img/logos/mycelium/logo_MYC_small.svg';
 import { useStore } from '~/store/main';
 import { BreakpointEnum } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
@@ -160,8 +161,17 @@ const NavBarContent: React.FC = () => {
                                     account={account ?? ''}
                                     className="dark:bg-theme-button-gradient-bg my-auto ml-4"
                                 />
-                                <SlimButton content={<>Switch to Perpetual Swaps</>} />
-                                {/* switch to perpetual pools */}
+                                <SlimButton
+                                    gradient
+                                    onClick={() => window.open('https://swaps.mycelium.xyz/', '_blank', 'noopener')}
+                                    content={
+                                        <>
+                                            Switch to
+                                            <MyceliumLogo className="mx-1 w-[20px]" alt="Mycelium logo" />
+                                            Perpetual Swaps
+                                        </>
+                                    }
+                                />
                             </Show.MD>
                             <Hide.LG display="flex">{/* switch to perpetual pools */}</Hide.LG>
                         </div>
