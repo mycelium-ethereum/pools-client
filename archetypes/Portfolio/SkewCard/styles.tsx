@@ -1,15 +1,15 @@
 import styled from 'styled-components';
 import { Logo as UnstyledLogo } from '~/components/General';
-import CTABackground from '~/public/img/cta-bg.svg';
 
 export const Container = styled.div`
     overflow: hidden;
     position: relative;
-    border-top-left-radius: 0.75rem;
-    border-top-right-radius: 0.75rem;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    border: 1px solid ${({ theme }) => theme.border.primary};
 `;
 
-export const Background = styled(CTABackground)`
+export const Background = styled.div`
     position: absolute;
     right: 0;
     bottom: 0;

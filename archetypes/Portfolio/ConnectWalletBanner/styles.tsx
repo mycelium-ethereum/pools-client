@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import CTABackground from '~/public/img/cta-bg.svg';
 
 export const Container = styled.div`
     overflow: hidden;
@@ -10,9 +9,10 @@ export const Container = styled.div`
     justify-content: center;
     display: flex;
     align-items: center;
+    border: 1px solid ${({ theme }) => theme.border.primary};
 `;
 
-export const Background = styled(CTABackground)`
+export const Background = styled.div`
     position: absolute;
     right: 0;
     bottom: 0;
@@ -39,8 +39,7 @@ export const Title = styled.div`
 
 export const Button = styled.button`
     display: flex;
-    background-color: #2563eb;
-    color: #ffffff;
+    color: ${({ theme }) => theme.colors.primary};
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,4 +47,5 @@ export const Button = styled.button`
     height: 3rem;
     border-radius: 0.5rem;
     cursor: pointer;
+    border: 1px solid ${({ theme }) => theme.border.primary};
 `;

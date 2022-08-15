@@ -3,18 +3,18 @@ import { Theme } from '~/store/ThemeSlice/themes';
 
 export const GuideCard = styled.div<{ roundedTop?: boolean }>`
     padding: 1.5rem 1rem;
-    border-top-left-radius: ${({ roundedTop }) => (roundedTop ? 0.75 : 0)}rem;
-    border-top-right-radius: ${({ roundedTop }) => (roundedTop ? 0.75 : 0)}rem;
-    border-bottom-left-radius: 0.75rem;
-    border-bottom-right-radius: 0.75rem;
+    border-top-left-radius: ${({ roundedTop }) => (roundedTop ? 0.25 : 0)}rem;
+    border-top-right-radius: ${({ roundedTop }) => (roundedTop ? 0.25 : 0)}rem;
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     background-color: ${({ theme }) => {
         switch (theme.theme) {
             case Theme.Light:
-                return '#f0f0ff';
+                return theme.background.primary;
             default:
-                return '#111928';
+                return theme.background.primary;
         }
     }};
 `;
@@ -35,7 +35,7 @@ export const Badge = styled.div`
     line-height: 1.25rem;
     width: min-content;
     border-radius: 0.25rem;
-    background-color: #00007a;
+    background-color: ${({ theme }) => theme.colors.primary};
 `;
 
 export const Link = styled.a.attrs({
@@ -43,7 +43,6 @@ export const Link = styled.a.attrs({
     rel: 'noreferrer',
 })`
     text-decoration: underline;
-    color: #3da8f5;
     margin-top: 0.75rem;
     display: block;
 `;

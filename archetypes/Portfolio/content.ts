@@ -1,8 +1,9 @@
 export const emptyStateHelpCardContent = [
     {
         badge: 'Article',
-        title: 'The Tracer Vision',
-        content: 'Learn more about how Tracer is building the future of derivatives and see why Bankless are bullish.',
+        title: 'The Mycelium Vision',
+        content:
+            'Learn more about how Mycelium is building the future of derivatives and see why Bankless are bullish.',
         href: 'https://tracer.finance/radar/future-of-derivatives/',
         linkText: 'Read article',
     },
