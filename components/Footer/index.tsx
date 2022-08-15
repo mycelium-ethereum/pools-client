@@ -25,7 +25,7 @@ const Footer: React.FC<{
                 <div className="flex flex-col-reverse justify-between py-6 font-aileron text-tracer-650 dark:text-white md:px-0 xl:flex-row">
                     <div className="flex flex-col-reverse items-center justify-between xl:justify-start xs:flex-row">
                         <span className="whitespace-nowrap text-sm leading-[21px]">
-                            &copy; <span ref={yearRef} /> Tracer DAO
+                            &copy; <span ref={yearRef} /> Mycelium
                         </span>
                         <div className="mb-4 flex items-center xs:ml-10 xs:mb-0">
                             {footerSocialContent.map((item) => (

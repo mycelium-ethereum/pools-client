@@ -160,7 +160,11 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                         disabled={!isValidOnBalancer || !isValidAmount}
                     >
                         <span className="mr-2 inline-block">Take me to</span>
-                        <img className="w-[105px]" alt="tracer-logo" src={'/img/logos/balancer/balancer_logo.svg'} />
+                        <img
+                            className="w-[100px] text-theme-primary"
+                            alt="tracer-logo"
+                            src={'/img/logos/balancer/balancer_logo.svg'}
+                        />
                     </BalancerBuyButton>
                 </BuyButtonContainer>
             </Transition>
@@ -241,9 +245,9 @@ const BalancerBuyButton = styled.button<{
     padding: 13px 11px;
     width: 220px;
     height: 56px;
-    background: #16bdca;
     border-radius: 0.25rem;
-    color: white;
+    border: 1px solid ${({ theme }) => theme.border.primary};
+    color: #ffffff;
     font-family: 'Inter';
     font-weight: 400;
     font-size: 16px;
