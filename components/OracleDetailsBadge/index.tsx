@@ -23,12 +23,12 @@ const StyledBadge = styled.div`
 
 export const OracleDetailsBadge = ({ oracleDetails }: { oracleDetails: OracleDetails }): JSX.Element => {
     if (oracleDetails.isLoading) {
-        return <StyledBadge className="bg-theme-tracer-500">...</StyledBadge>;
+        return <StyledBadge className="bg-theme-primary">...</StyledBadge>;
     }
     switch (oracleDetails.type) {
         case 'SMA':
             return (
-                <StyledBadge className="bg-theme-tracer-500">
+                <StyledBadge className="bg-theme-primary">
                     {oracleDetails.updateInterval * oracleDetails.numPeriods
                         ? formatSeconds(oracleDetails.updateInterval * oracleDetails.numPeriods)
                         : ''}{' '}
@@ -37,6 +37,6 @@ export const OracleDetailsBadge = ({ oracleDetails }: { oracleDetails: OracleDet
             );
         case 'Spot':
         default:
-            return <StyledBadge className="bg-theme-tracer-500">Spot Price</StyledBadge>;
+            return <StyledBadge className="bg-theme-primary">Spot Price</StyledBadge>;
     }
 };

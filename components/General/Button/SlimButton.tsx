@@ -5,6 +5,7 @@ import Button from '~/components/General/Button';
 type ToggleButtonProps = {
     content: React.ReactNode;
     gradient?: boolean;
+    disabled?: boolean;
     onClick: () => void;
 };
 
@@ -14,10 +15,11 @@ const SlimButtonStyled = styled(Button)`
     border-color: ${({ theme }) => theme.colors.primary};
 `;
 
-const SlimButton: React.FC<ToggleButtonProps> = ({ content, gradient, onClick }) => {
+const SlimButton: React.FC<ToggleButtonProps> = ({ content, gradient, onClick, disabled }) => {
     return (
         <div className="relative my-auto ml-4 inline-block text-left dark:border-theme-border">
             <SlimButtonStyled
+                disabled={disabled}
                 onClick={onClick}
                 className={` ${gradient ? 'gradient-button' : ''} bg-dropdown-gradient focus:outline-none mb-4
                 flex h-[36px] w-full items-center whitespace-nowrap rounded-[4px] text-sm font-medium

@@ -370,7 +370,7 @@ const TokenReceiveBox = styled.div`
     padding: 0px 20px;
     color: var(--text-secondary);
     border: 1px solid var(--border);
-    border-radius: 7px;
+    border-radius: 0.25rem;
     margin-bottom: 20px;
     user-select: none;
     @media (min-width: 640px) {

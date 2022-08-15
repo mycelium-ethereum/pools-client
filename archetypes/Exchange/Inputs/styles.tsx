@@ -18,7 +18,7 @@ export const Wrapper = styled.div<{ hasMargin?: boolean }>`
 export const InputContainerStyled = styled(InputContainer)`
     width: 100%;
     border-color: ${({ theme }) => theme.border.primary};
-    border-radius: 7px;
+    border-radius: 0.25rem;
 `;
 
 export const Label = styled.p`

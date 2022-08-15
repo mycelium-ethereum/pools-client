@@ -10,7 +10,7 @@ export const TokenSelectBox = styled.div`
     background: ${({ theme }) => theme.background.secondary};
     height: 220px;
     box-shadow: 0px 20px 25px rgba(0, 0, 0, 0.1), 0px 10px 10px rgba(0, 0, 0, 0.04);
-    border-radius: 7px;
+    border-radius: 0.25rem;
     overflow: hidden;
 `;
 
@@ -38,7 +38,7 @@ export const TokenLogo = styled(Logo)`
 
 export const SearchWrap = styled(InputWrapper)`
     opacity: 0.8;
-    border-radius: 7px;
+    border-radius: 0.25rem;
 `;
 
 export const TokenSearch = styled(InnerSearchInput)<{
@@ -126,7 +126,7 @@ export const TokenSelectHead = styled.thead`
     background-color: ${({ theme }) => theme.border.secondary};
     padding: 1rem;
     text-align: center;
-    border-radius: 7px;
+    border-radius: 0.25rem;
 `;
 
 export const HeaderCell = styled.th`

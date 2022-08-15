@@ -1,5 +1,6 @@
 import React from 'react';
 import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import SlimButton from '~/components/General/Button/SlimButton';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import TimeLeft from '~/components/TimeLeft';
@@ -58,27 +59,21 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
             <ActionsCell>
                 <PortfolioStakeTooltip>
                     <div>
-                        <ActionsButton
-                            size="xs"
-                            variant="primary-light"
+                        <SlimButton
                             // will never be disabled if it gets included as a row it will always be either to stake or to unstake
                             onClick={() => onClickStake(address, shouldStake ? 'stake' : 'unstake')}
-                        >
-                            {shouldStake ? 'Stake' : 'Unstake'}
-                        </ActionsButton>
+                            content={<>{shouldStake ? 'STAKE' : 'STAKE'}</>}
+                        />
                     </div>
                 </PortfolioStakeTooltip>
                 {network === NETWORKS.ARBITRUM && (
                     <PortfolioSellTooltip>
                         <div>
-                            <ActionsButton
-                                size="xs"
-                                variant="primary-light"
+                            <SlimButton
                                 disabled={!balance.toNumber()}
                                 onClick={() => open(constructBalancerLink(address, NETWORKS.ARBITRUM, false), '_blank')}
-                            >
-                                Sell
-                            </ActionsButton>
+                                content={<>SELL</>}
+                            />
                         </div>
                     </PortfolioSellTooltip>
                 )}
@@ -90,14 +85,11 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                     }
                 >
                     <div>
-                        <ActionsButton
-                            size="xs"
-                            variant="primary-light"
+                        <SlimButton
                             disabled={!balance.toNumber()}
                             onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn)}
-                        >
-                            Burn
-                        </ActionsButton>
+                            content={<>BURN</>}
+                        />
                     </div>
                 </StyledTooltip>
                 <TooltipSelector
@@ -106,14 +98,11 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                     }}
                 >
                     <div>
-                        <ActionsButton
-                            size="xs"
-                            variant="primary-light"
+                        <SlimButton
                             disabled={poolIsDeprecated || !balance.toNumber()}
                             onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip)}
-                        >
-                            Flip
-                        </ActionsButton>
+                            content={<>FLIP</>}
+                        />
                     </div>
                 </TooltipSelector>
                 <Actions

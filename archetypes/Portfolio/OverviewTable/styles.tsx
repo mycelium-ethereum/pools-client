@@ -150,7 +150,7 @@ export const RowCount = styled.div`
     color: ${({ theme }) => theme.colors.primary};
     border: 1px solid ${({ theme }) => theme.colors.primary};
     box-sizing: border-box;
-    border-radius: 7px;
+    border-radius: 0.25rem;
 `;
 
 export const IconContainer = styled.div`
