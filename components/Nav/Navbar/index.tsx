@@ -8,6 +8,7 @@ import { Container } from '~/components/General/Container';
 import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
 import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
+import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
 import MyceliumLogo from '~/public/img/logos/mycelium/logo_MYC_small.svg';
@@ -17,6 +18,7 @@ import { selectWeb3Info } from '~/store/Web3Slice';
 
 import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
+import HamburgerMenu from './MobileMenus/HamburgerMenu';
 import MobileNav from './MobileMenus/MobileNav';
 import NetworkDropdown from './NetworkDropdown';
 
@@ -37,7 +39,7 @@ const NavBarContent: React.FC = () => {
 
     const listItemStyles = 'flex hover:opacity-80';
     const linkStyles =
-        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650 hover:text-tracer-midblue';
+        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650';
     const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
@@ -60,6 +62,18 @@ const NavBarContent: React.FC = () => {
     const handleMenuClose = useCallback(() => {
         setNavMenuOpen(false);
     }, []);
+
+    const handleMenuOpen = () => {
+        if (launcherMenuOpen) {
+            setLauncherMenuOpen(false);
+            setTimeout(() => {
+                setNavMenuOpen(true);
+            }, ANIMATION_DURATION * 1000 * 2); // Double animation time in milliseconds
+        } else {
+            setLauncherMenuOpen(false);
+            setNavMenuOpen(true);
+        }
+    };
 
     // Close nav after hitting desktop breakpoint
     const handleResize = () => {
@@ -89,9 +103,7 @@ const NavBarContent: React.FC = () => {
     }, [navMenuOpen, launcherMenuOpen]);
 
     const activeStyles = `${
-        navMenuOpen || launcherMenuOpen
-            ? 'bg-opacity-0'
-            : 'bg-opacity-40 dark:bg-opacity-40 bg-white dark:bg-tracer-800'
+        navMenuOpen || launcherMenuOpen ? 'bg-opacity-0' : 'bg-opacity-40 dark:bg-opacity-40 dark:bg-tracer-800'
     }`;
     const inactiveStyles = 'dark:bg-opacity-0 bg-opacity-0';
 
@@ -175,7 +187,13 @@ const NavBarContent: React.FC = () => {
                                     }
                                 />
                             </Show.MD>
-                            <Hide.LG display="flex">{/* switch to perpetual pools */}</Hide.LG>
+                            <Hide.LG display="flex">
+                                <HamburgerMenu
+                                    onClick={navMenuOpen ? handleMenuClose : handleMenuOpen}
+                                    isSelected={navMenuOpen}
+                                    navMenuOpen={navMenuOpen || launcherMenuOpen}
+                                />
+                            </Hide.LG>
                         </div>
                     </div>
                 </Container>

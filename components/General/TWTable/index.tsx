@@ -22,7 +22,7 @@ export const Table: React.FC<{ showDivider?: boolean; fullHeight?: boolean; clas
         <TableWrapper className={className} fullHeight={fullHeight}>
             <div className="h-full overflow-x-auto">
                 <div className="inline-block min-w-full align-middle">
-                    <div className={`${showDivider ? 'border-b border-theme-border sm:rounded-lg' : ''}`}>
+                    <div className={`${showDivider ? 'border-b border-theme-border sm:rounded' : ''}`}>
                         <table className={`min-w-full ${showDivider ? 'divide-y divide-theme-border' : ''}`}>
                             {children}
                         </table>

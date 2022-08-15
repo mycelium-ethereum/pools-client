@@ -145,7 +145,7 @@ export const Browse: React.FC = () => {
                     </div>
                     <FilterSelects state={state} dispatch={dispatch} />
                 </PageTable.Header>
-                {isLoading ? <Styles.Loading /> : null}
+                {isLoading ? <Styles.Loading className="text-theme-border" /> : null}
                 {filteredTokens.length === 0 && !isLoading && state.search && (
                     <Styles.NoResults>
                         <SearchOutlined aria-hidden="true" />

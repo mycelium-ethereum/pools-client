@@ -15,7 +15,7 @@ const Footer: React.FC<{
         setCopyrightYear();
     }, []);
 
-    const transitionStyles = `transition-colors duration-300 hover:text-tracer-midblue`;
+    const transitionStyles = `transition-colors duration-300`;
     const linkStyles = `dark:hover:opacity-80 ml-0 lg:mb-0 xl:ml-10 last:mb-0 text-sm leading-[21px] whitespace-nowrap ${transitionStyles}`;
 
     return (
@@ -48,7 +48,13 @@ const Footer: React.FC<{
                     <div className="mb-8 flex flex-col items-center justify-between md:mb-10 xl:mb-0 xl:items-center xl:justify-start xs:flex-row xs:items-start">
                         <div className="mb-4 grid min-w-[290px] grid-cols-2 items-center gap-y-4 gap-x-12 md:grid-cols-3 xl:flex xl:gap-0 xs:mb-0 xs:w-max">
                             {footerLinkContent.map((item) => (
-                                <a key={item.label} href={item.href} target="_blank" rel="noopener noreferrer">
+                                <a
+                                    key={item.label}
+                                    href={item.href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-color-inherit"
+                                >
                                     <div className={linkStyles}>{item.label}</div>
                                 </a>
                             ))}

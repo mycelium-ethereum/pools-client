@@ -39,7 +39,7 @@ export const HistoricCommitsTable = ({
             {loading ? (
                 <tr>
                     <FullSpanCell>
-                        <Loading className="mx-auto my-8 w-10 text-tracer-500" />
+                        <Loading className="mx-auto my-8 w-10 text-theme-border" />
                     </FullSpanCell>
                 </tr>
             ) : (

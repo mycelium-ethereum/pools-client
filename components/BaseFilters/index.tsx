@@ -68,7 +68,8 @@ export const Content = styled.div`
     flex-direction: column;
     border-radius: 7px;
     gap: 20px;
-    background-color: ${({ theme }) => theme.background.secondary};
+    border: 1px solid ${({ theme }) => theme.border.primary};
+    background-color: ${({ theme }) => theme.background};
     box-shadow: ${({ theme }) => {
         switch (theme.theme) {
             case Theme.Light:

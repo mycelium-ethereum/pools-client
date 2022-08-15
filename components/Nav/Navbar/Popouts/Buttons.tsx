@@ -1,7 +1,6 @@
 import React, { useState, useRef, useContext } from 'react';
 import { LauncherToggle, SettingsToggle } from '~/components/Nav/Navbar/Buttons';
 import AppLauncher from '~/components/Nav/Navbar/Popouts/AppLauncher';
-import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
 import { NavContext } from '~/context/NavContext';
 import { useOutsideClick } from '~/hooks/useOutsideClick';
 import { PopoutContainer } from './styles';
@@ -50,7 +49,6 @@ export const SettingsButton: React.FC<{
     return (
         <PopoutContainer ref={settingsContainerRef}>
             <SettingsToggle onClick={handleToggle} isSelected={showSettingsPopout} navMenuOpen={navMenuOpen} />
-            <SettingsPopout isActive={showSettingsPopout} />
         </PopoutContainer>
     );
 };

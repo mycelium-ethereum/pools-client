@@ -57,7 +57,7 @@ export const TokenActions = ({
                 <div onClick={() => setIsOpen(!isOpen)}>
                     <div
                         className="focus:outline-none divide z-10 mt-2 w-[180px] origin-top-right
-                        divide-y divide-theme-border overflow-hidden rounded-lg
+                        divide-y divide-theme-border overflow-hidden rounded
                         bg-theme-background shadow-lg ring-1 ring-black
                         ring-opacity-5"
                     >

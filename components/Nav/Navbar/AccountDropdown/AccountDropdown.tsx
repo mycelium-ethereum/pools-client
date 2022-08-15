@@ -38,8 +38,8 @@ export default (({ account, className }) => {
                     onClick={handleConnect}
                     className={`gradient-button bg-dropdown-gradient mb-4 flex h-[36px] max-h-[36px] items-center rounded-[4px] bg-opacity-0 px-3 transition-colors duration-300 hover:text-white md:mb-0 lg:rounded-[4px] ${
                         navMenuOpen
-                            ? 'border-tracer-midblue text-white md:border-white'
-                            : 'border-tracer-midblue dark:text-white md:border-tracer-650 xs:text-tracer-650'
+                            ? 'border-theme-border text-white md:border-white'
+                            : 'border-theme-border dark:text-white md:border-tracer-650 xs:text-tracer-650'
                     }`}
                 >
                     Connect Wallet

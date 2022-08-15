@@ -28,19 +28,19 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                             </a>
                         </div>
                         <div className="my-8 text-center text-sm font-bold">Want to learn more?</div>
-                        <ProgressIndicator totalSteps={2} currentStep={1} />
                         <div className="flex flex-col-reverse sm:flex-row">
                             <Button
                                 variant="primary-light"
-                                className="mr-5 mt-3 sm:mt-0"
+                                className="mr-5 mt-3 text-theme-primary sm:mt-0"
                                 onClick={() => setShowOnboardModal()}
                             >
                                 {`No thanks, I'd like to get started`}
                             </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Sure, show me around!
                             </Button>
                         </div>
+                        <ProgressIndicator totalSteps={2} currentStep={1} />
                     </>
                 );
             case 2:
@@ -57,7 +57,6 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                             </a>
                             .
                         </div>
-                        <ProgressIndicator totalSteps={2} currentStep={2} />
                         <div className="flex">
                             <Button
                                 variant="primary-light"
@@ -70,6 +69,7 @@ const OnboardStakeModal: React.FC<OnboardModalProps> = ({
                                 Done
                             </Button>
                         </div>
+                        <ProgressIndicator totalSteps={2} currentStep={2} />
                     </>
                 );
             default:

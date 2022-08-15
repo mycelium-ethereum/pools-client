@@ -4,7 +4,7 @@ import { ProgressIndicatorProps } from './types';
 
 const StepsContainer = styled.div`
     display: flex;
-    margin: 2rem 0;
+    margin-top: 2rem;
     justify-content: center;
     align-items: center;
 `;
@@ -13,17 +13,20 @@ const Step = styled.div`
     margin-right: 0.75rem;
     border-radius: 9999px;
 
-    width: 0.75rem;
-    height: 0.75rem;
-
-    background-color: #8383eb;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border-color: ${({ theme }) => theme.colors.primary};
+    border-width: 2px;
+    background-color: inherit;
 
     &.current-step {
-        width: 1.25rem;
-        height: 1.25rem;
-        border-width: 4px;
-        border-color: #a6a6f2;
-        background-color: #2a2ac7;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        box-shadow: 0px 0px 10px rgba(28, 100, 242, 0.8);
+        background-color: ${({ theme }) => theme.colors.primary};
+        border: 2px solid ${({ theme }) => theme.colors.primary};
     }
 `;
 

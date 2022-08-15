@@ -16,7 +16,7 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
             case 1:
                 return (
                     <>
-                        <Styles.Heading>Welcome to Tracer&#39;s Perpetual Pools</Styles.Heading>
+                        <Styles.Heading>Welcome to Mycelium&#39;s Perpetual Pools</Styles.Heading>
 
                         <Styles.Content>
                             <Styles.Text>
@@ -31,11 +31,10 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             </Styles.Text>
                         </Styles.Content>
 
-                        <ProgressIndicator totalSteps={5} currentStep={1} />
-
-                        <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                        <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep + 1)}>
                             Show me around!
                         </Button>
+                        <ProgressIndicator totalSteps={5} currentStep={1} />
                     </>
                 );
             case 2:
@@ -51,15 +50,19 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             </Styles.Text>
                             <Styles.Text>Reminder: It takes 7 days to withdraw to Ethereum.</Styles.Text>
                         </Styles.Content>
-                        <ProgressIndicator totalSteps={5} currentStep={2} />
                         <Styles.ButtonContainer>
-                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
+                            <Button
+                                className="text-theme-primary"
+                                variant="primary-light"
+                                onClick={() => setOnboardStep(onboardStep - 1)}
+                            >
                                 Previous
                             </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
                         </Styles.ButtonContainer>
+                        <ProgressIndicator totalSteps={5} currentStep={2} />
                     </>
                 );
             case 3:
@@ -80,15 +83,19 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             </Styles.Text>
                         </Styles.Content>
 
-                        <ProgressIndicator totalSteps={5} currentStep={3} />
                         <Styles.ButtonContainer>
-                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
+                            <Button
+                                className="text-theme-primary"
+                                variant="primary-light"
+                                onClick={() => setOnboardStep(onboardStep - 1)}
+                            >
                                 Previous
                             </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
                         </Styles.ButtonContainer>
+                        <ProgressIndicator totalSteps={5} currentStep={3} />
                     </>
                 );
             case 4:
@@ -98,21 +105,24 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
 
                         <Styles.Content>
                             <Styles.Text>
-                                All of your tokens in the one place. See holdings and order history in the Portfolio,
-                                and check PnL.
+                                All of your tokens in the one place. See holdings and order history in the Portfolio..
                             </Styles.Text>
                             <Styles.Text>Remember to claim if you want to move assets to a wallet.</Styles.Text>
                         </Styles.Content>
 
-                        <ProgressIndicator totalSteps={5} currentStep={4} />
                         <Styles.ButtonContainer>
-                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
+                            <Button
+                                className="text-theme-primary"
+                                variant="primary-light"
+                                onClick={() => setOnboardStep(onboardStep - 1)}
+                            >
                                 Previous
                             </Button>
-                            <Button variant="primary" onClick={() => setOnboardStep(onboardStep + 1)}>
+                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep + 1)}>
                                 Next
                             </Button>
                         </Styles.ButtonContainer>
+                        <ProgressIndicator totalSteps={5} currentStep={4} />
                     </>
                 );
             case 5:
@@ -136,15 +146,19 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                             </Styles.Text>
                         </Styles.Content>
 
-                        <ProgressIndicator totalSteps={5} currentStep={5} />
                         <Styles.ButtonContainer>
-                            <Button variant="primary-light" onClick={() => setOnboardStep(onboardStep - 1)}>
+                            <Button
+                                className="text-theme-primary"
+                                variant="primary-light"
+                                onClick={() => setOnboardStep(onboardStep - 1)}
+                            >
                                 Previous
                             </Button>
-                            <Button variant="primary" onClick={() => setShowOnboardModal()}>
+                            <Button variant="primary-light" onClick={() => setShowOnboardModal()}>
                                 Done
                             </Button>
                         </Styles.ButtonContainer>
+                        <ProgressIndicator totalSteps={5} currentStep={5} />
                     </>
                 );
             default:

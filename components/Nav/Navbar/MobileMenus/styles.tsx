@@ -25,7 +25,8 @@ export const MeshBackground = styled.div`
     left: 0;
     width: 100%;
     height: 100vh;
-    background-image: url('/img/launcher/mesh.png'), linear-gradient(#1c64f2, #1c64f2);
+    background-image: url('/img/background_mesh.svg'),
+        linear-gradient(${({ theme }) => theme.background.primary}, ${({ theme }) => theme.background.primary});
     background-size: cover;
     background-position: right;
     z-index: 0;
@@ -118,7 +119,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
         bottom: 0px;
         height: 1px;
         width: 100%;
-        background: linear-gradient(90deg, #3da8f5 50%, rgba(61, 168, 245, 0) 100.15%);
+        background: var(--border);
     }
 
     &:hover:before {
@@ -132,7 +133,7 @@ export const NavItem = styled.li<{ selected?: boolean; paddingLevel: number; lin
         height: 100%;
         width: 150%;
         transform: translateX(-50%);
-        background: #3da8f5;
+        background: ${({ theme }) => theme.colors.primary};
         z-index: -1;
         transition: opacity 0.3s ease;
         opacity: 0;

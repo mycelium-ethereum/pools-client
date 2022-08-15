@@ -7,7 +7,6 @@ import AccountDropdown from '~/components/Nav/Navbar/AccountDropdown';
 import { menuContent } from '~/components/Nav/Navbar/MobileMenus/navContent';
 import { NavItem, NavMenu, NavList, ScrollContainer, MeshBackground } from '~/components/Nav/Navbar/MobileMenus/styles';
 import NetworkDropdown from '~/components/Nav/Navbar/NetworkDropdown';
-import SettingsPopout from '~/components/Nav/Navbar/Popouts/SettingsPopout';
 
 const MobileMenu = ({
     account,
@@ -41,7 +40,6 @@ const MobileMenu = ({
                             ))}
                         </ul>
                     </ScrollContainer>
-                    <SettingsPopout isActive={true} />
                 </NavList>
             </Container>
             <MeshBackground />

@@ -32,7 +32,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+                        <Dialog.Overlay className="fixed inset-0 bg-gray-800 bg-opacity-75 transition-opacity" />
                     </Transition.Child>
 
                     {/* This element is to trick the browser into centering the modal contents. */}
@@ -51,7 +51,7 @@ export const TWModal: React.FC<TWModalProps> = ({ open, onClose, size = 'default
                     >
                         <div
                             className={classNames(
-                                'my-4 inline-block w-full transform overflow-hidden rounded-lg bg-theme-background p-4 text-left align-middle shadow-xl transition-all sm:my-8 sm:p-10',
+                                'my-4 inline-block w-full transform overflow-hidden rounded bg-theme-background p-4 text-left align-middle shadow-xl transition-all sm:my-8 sm:p-10',
                                 SIZES[size],
                                 className,
                             )}

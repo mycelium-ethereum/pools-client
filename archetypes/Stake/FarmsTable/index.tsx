@@ -55,7 +55,11 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                     })}
                 </tbody>
             </Table>
-            {fetchingFarms ? <Loading className="mx-auto my-8 w-10 text-tracer-500" /> : null}
+            {fetchingFarms ? (
+                <div className="text-theme-primary">
+                    <Loading className="mx-auto my-8 w-10 text-theme-border" />
+                </div>
+            ) : null}
             <TWModal open={showModal} onClose={() => setShowModal(false)}>
                 <div className="flex justify-between">
                     <div className="text-2xl">Rebalance Rate</div>

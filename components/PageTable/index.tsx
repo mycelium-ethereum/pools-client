@@ -34,7 +34,7 @@ export const Link = styled.a.attrs({
     rel: 'noreferrer',
 })`
     text-decoration: underline;
-    color: #3da8f5;
+    color: inherit;
 `;
 
 export const Container = styled(UnstyledContainer)`

@@ -7,7 +7,7 @@ import styled from 'styled-components';
 export default (({ preview, className, buttonClasses, navMenuOpen, children }) => {
     const DEFAULT = `bg-dropdown-gradient gradient-button flex items-center h-[36px] md:justify-center mb-4 md:mb-0 w-full rounded-[4px] border shadow-sm px-3 md:px-4 dark:hover:bg-theme-background text-sm font-medium dark:text-white whitespace-nowrap hover:bg-tracer-650 hover:text-white transition-colors duration-300 focus:outline-none focus:border-solid ${
         navMenuOpen
-            ? 'text-white border-tracer-midblue md:border-white'
+            ? 'text-white border-theme-primary'
             : 'text-tracer-650 border-theme-primary delay-300 lg:delay-[unset]'
     }`;
 
@@ -30,7 +30,7 @@ export default (({ preview, className, buttonClasses, navMenuOpen, children }) =
                         leaveFrom="transform opacity-100 scale-100"
                         leaveTo="transform opacity-0 scale-95"
                     >
-                        <Popover.Panel className="focus:outline-none absolute left-0 z-20 mt-2 w-full origin-top-right rounded-lg bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
+                        <Popover.Panel className="focus:outline-none absolute left-0 z-20 mt-2 w-full origin-top-right rounded bg-theme-background shadow-lg ring-1 ring-black ring-opacity-5">
                             {children}
                         </Popover.Panel>
                     </Transition>
