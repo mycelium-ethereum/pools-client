@@ -16,7 +16,7 @@ export const Select: React.FC<SelectProps> = ({ value, options, placeholder, onS
             <select
                 id="selectMe"
                 ref={select}
-                className="focus:outline-none inline-flex w-full appearance-none justify-between rounded-md border border-theme-border bg-theme-button-bg px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-theme-button-bg-hover focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                className="focus:outline-none inline-flex w-full appearance-none justify-between rounded border border-theme-border bg-theme-button-bg px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-theme-button-bg-hover focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                 value={value}
                 placeholder={placeholder}
                 onChange={(ev) => onSelect(ev.target.value)}

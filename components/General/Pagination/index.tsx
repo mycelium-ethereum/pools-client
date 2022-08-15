@@ -14,7 +14,7 @@ const MorePages: React.FC = () => (
 const pageOption =
     'text-theme-text hover:opacity-80 relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium focus:border-theme-border disabled:cursor-not-allowed';
 const mobilePageOption =
-    'relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium rounded-md text-theme-text hover:bg-gray-50';
+    'relative inline-flex items-center px-4 py-2 border border-theme-border text-sm font-medium rounded text-theme-text hover:bg-gray-50';
 const selected = 'border-tracer-500 dark:border-transparent dark:bg-tracer-500 z-10';
 const unselected = 'darK:bg-transparent';
 
@@ -138,7 +138,7 @@ export default (({ onLeft, onRight, onDirect, numPages, selectedPage }) => {
             </div>
             <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
                 <div>
-                    <nav className="relative z-0 inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                    <nav className="relative z-0 inline-flex -space-x-px rounded shadow-sm" aria-label="Pagination">
                         <button
                             className={classNames(pageOption, 'rounded-l')}
                             disabled={isFirstPage}

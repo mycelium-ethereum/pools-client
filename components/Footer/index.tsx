@@ -67,7 +67,7 @@ const HelpIcon: React.FC<{
     return (
         <button
             className="xs:ml-10"
-            // className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-md bg-tracer-500 lg:right-8 lg:bottom-8"
+            // className="fixed bottom-5 right-5 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded bg-tracer-500 lg:right-8 lg:bottom-8"
             onClick={() => {
                 setShowOnboardModal(true);
             }}

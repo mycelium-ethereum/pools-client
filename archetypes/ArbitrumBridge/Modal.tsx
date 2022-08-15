@@ -134,12 +134,12 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                             <label htmlFor="price" className="block pb-1 text-base font-medium text-gray-700">
                                 Collateral
                             </label>
-                            <div className="relative mt-1 rounded-md bg-gray-100 shadow-sm">
+                            <div className="relative mt-1 rounded bg-gray-100 shadow-sm">
                                 <input
                                     type="number"
                                     name="collateral"
                                     id="collateral"
-                                    className={`block w-full rounded-md border-2 p-4 sm:text-sm ${
+                                    className={`block w-full rounded border-2 p-4 sm:text-sm ${
                                         collateralErrorMsg ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     placeholder="$4,000"
@@ -172,12 +172,12 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                             <label htmlFor="price" className="block pb-1 text-base font-medium text-gray-700">
                                 Gas
                             </label>
-                            <div className="relative mt-1 rounded-md bg-gray-100 shadow-sm">
+                            <div className="relative mt-1 rounded bg-gray-100 shadow-sm">
                                 <input
                                     type="number"
                                     name="gas"
                                     id="gas"
-                                    className={`block w-full rounded-md border-2 p-4 sm:text-sm ${
+                                    className={`block w-full rounded border-2 p-4 sm:text-sm ${
                                         gasErrorMsg ? 'border-red-500' : 'border-gray-300'
                                     }`}
                                     placeholder={props.ETHBalance + ' ETH'}
@@ -222,7 +222,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         type="button"
                         onClick={() => handleClickConnect()}
                         disabled={!isConnectBtnEnabled()}
-                        className="inline-flex w-full justify-center rounded-md border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
+                        className="inline-flex w-full justify-center rounded border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
                         Ok, {`let's`} connect
                     </button>
@@ -230,7 +230,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                         type="button"
                         onClick={() => handleApproveUSDC()}
                         disabled={false}
-                        className="inline-flex w-full justify-center rounded-md border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
+                        className="inline-flex w-full justify-center rounded border bg-blue-800 px-4 py-2 text-base font-medium text-white shadow-sm active:bg-blue-600 disabled:cursor-not-allowed disabled:bg-indigo-400"
                     >
                         Approve USDC
                     </button>

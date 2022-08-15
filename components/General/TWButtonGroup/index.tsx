@@ -25,7 +25,7 @@ const BORDER_COLORS = {
 
 const BORDERS = {
     rounded: 'first:rounded-l-full last:rounded-r-full',
-    default: 'first:rounded-l-md last:rounded-r-md',
+    default: 'first:rounded-l last:rounded-r',
 };
 
 const SIZE = {
@@ -90,8 +90,8 @@ export default (({
                                 DISABLED,
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
-                                index === 0 ? 'rounded-l-md' : '',
-                                index === options.length - 1 ? 'rounded-r-md' : '',
+                                index === 0 ? 'rounded-l' : '',
+                                index === options.length - 1 ? 'rounded-r' : '',
                                 fullWidth ? FULL_WIDTH : '',
                             )}
                         >
@@ -107,8 +107,8 @@ export default (({
                                 value === option.key ? SELECTED[color] : UNSELECTED[color],
                                 buttonClass,
                                 BORDER_COLORS[borderColor],
-                                index === 0 ? 'rounded-l-md' : '',
-                                index === options.length - 1 ? 'rounded-r-md' : '',
+                                index === 0 ? 'rounded-l' : '',
+                                index === options.length - 1 ? 'rounded-r' : '',
                                 fullWidth ? FULL_WIDTH : '',
                             )}
                         >

@@ -230,8 +230,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="from" className="mb-2 block">
                                 From
                             </label>
-                            <div className="relative mt-1 rounded-md shadow-sm">
-                                <div className="block w-full rounded-md border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
+                            <div className="relative mt-1 rounded shadow-sm">
+                                <div className="block w-full rounded border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
                                     {fromNetwork?.logoTicker ? (
                                         <Logo
                                             className="my-0 mr-2 inline"
@@ -260,8 +260,8 @@ export const MultiBridge: React.FC<MultiBridgeProps> = (props) => {
                             <label htmlFor="to" className="mb-2 block">
                                 To
                             </label>
-                            <div className="relative mt-1 rounded-md shadow-sm">
-                                <div className="block w-full rounded-md border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
+                            <div className="relative mt-1 rounded shadow-sm">
+                                <div className="block w-full rounded border-2 border-theme-border bg-theme-button-bg p-4 text-theme-text sm:text-sm">
                                     {toNetwork?.logoTicker ? (
                                         <Logo
                                             className="my-0 mr-2 inline"
