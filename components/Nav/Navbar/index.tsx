@@ -105,7 +105,7 @@ const NavBarContent: React.FC = () => {
                 <Container className={'relative z-10 flex h-full justify-between'}>
                     <TracerNavLogo onClick={handleMenuClose} />
                     <div className="ml-auto flex items-center">
-                        <ul className="mr-auto ml-4 mb-0 hidden font-aileron text-sm text-white lg:flex">
+                        <ul className="mr-auto ml-4 mb-0 hidden font-inter text-sm text-white lg:flex">
                             <li className={listItemStyles}>
                                 <Link href="/" passHref>
                                     <a
@@ -163,7 +163,9 @@ const NavBarContent: React.FC = () => {
                                 />
                                 <SlimButton
                                     gradient
-                                    onClick={() => window.open('https://swaps.mycelium.xyz/', '_blank', 'noopener')}
+                                    onClick={() => {
+                                        window.location.assign('https://swaps.mycelium.xyz/');
+                                    }}
                                     content={
                                         <>
                                             Switch to

@@ -146,9 +146,9 @@ export const RowCount = styled.div`
     text-align: center;
     width: 46px;
     height: 44px;
-    background: rgba(61, 168, 245, 0.1);
-    color: ${({ theme }) => theme.border.primary};
-    border: 1px solid ${({ theme }) => theme.border.primary};
+    background-color: ${({ theme }) => theme.background.secondary};
+    color: ${({ theme }) => theme.colors.primary};
+    border: 1px solid ${({ theme }) => theme.colors.primary};
     box-sizing: border-box;
     border-radius: 7px;
 `;

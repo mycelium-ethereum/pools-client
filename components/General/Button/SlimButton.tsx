@@ -11,7 +11,7 @@ type ToggleButtonProps = {
 const SlimButtonStyled = styled(Button)`
     border-radius: 0.25rem;
     border-width: 1px;
-    border-color: ${({ theme }) => theme.border.primary};
+    border-color: ${({ theme }) => theme.colors.primary};
 `;
 
 const SlimButton: React.FC<ToggleButtonProps> = ({ content, gradient, onClick }) => {

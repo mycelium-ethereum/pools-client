@@ -10,7 +10,7 @@
         "@headlessui/react": "^1.4.1",
         "@heroicons/react": "^1.0.5",
         "@segment/analytics-next": "^1.39.2",
-        "@tracer-protocol/onboard": "^2.2.4",
+        "@tracer-protocol/onboard": "^3.0.0",
         "@tracer-protocol/perpetual-pools-contracts": "^1.2.3",
         "@tracer-protocol/perpetual-pools-v2-pool-watcher": "^0.0.13",
         "@tracer-protocol/pools-js": "^3.1.14",

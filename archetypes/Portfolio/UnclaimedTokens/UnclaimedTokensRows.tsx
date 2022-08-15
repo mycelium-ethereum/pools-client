@@ -54,7 +54,7 @@ export const UnclaimedPoolTokenRow = ({
                 >
                     <div>
                         <SlimButton
-                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn, true)}
+                            onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.flip, true)}
                             content={<>Flip</>}
                         />
                     </div>
