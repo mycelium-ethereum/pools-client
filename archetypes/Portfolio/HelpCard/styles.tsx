@@ -8,6 +8,7 @@ export const GuideCard = styled.div<{ roundedTop?: boolean }>`
     border-bottom-left-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid ${({ theme }) => theme.border.primary};
 
     background-color: ${({ theme }) => {
         switch (theme.theme) {
