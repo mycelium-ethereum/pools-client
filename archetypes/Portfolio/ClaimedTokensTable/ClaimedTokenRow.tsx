@@ -12,7 +12,7 @@ import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
 import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
 import { Market } from '../Market';
-import { ActionsButton, ActionsCell } from '../OverviewTable/styles';
+import { ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
 import { TokensNotional } from '../Tokens';
 
