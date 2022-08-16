@@ -50,7 +50,7 @@ const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
             <meta name="twitter:image" content={imagePreview} />
 
             {/* Android Chrome tab theme colour */}
-            <meta name="theme-color" content="#0000B0" />
+            <meta name="theme-color" content="#003000" />
 
             {/* Favicon */}
             <link rel="apple-touch-icon" sizes="180x180" href="img/favicon/apple-touch-icon.png" />

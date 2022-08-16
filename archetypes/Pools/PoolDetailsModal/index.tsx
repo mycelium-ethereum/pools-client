@@ -156,9 +156,9 @@ export const PoolDetails = ({
                 <tbody>
                     {poolParametersData.map((v, i) => {
                         return (
-                            <>
+                            <span key={`parameter-${i}-${v?.name || 'unnamed'}`}>
                                 {v ? (
-                                    <TableRow key={`${v.name}-${i}`} lined>
+                                    <TableRow lined>
                                         <TableRowCell className="px-2">
                                             <CellContent>
                                                 <div className="name">{v.name}</div>
@@ -167,7 +167,7 @@ export const PoolDetails = ({
                                         </TableRowCell>
                                     </TableRow>
                                 ) : null}
-                            </>
+                            </span>
                         );
                     })}
                 </tbody>

@@ -31,7 +31,7 @@ const LauncherMenu = ({ launcherMenuOpen }: { launcherMenuOpen: boolean }): JSX.
                             <ul>
                                 {socialLinkContent.map((item, i) => (
                                     <SocialItem
-                                        key={item.label}
+                                        key={`social-item-${i}-${item.label}`}
                                         paddingLevel={1}
                                         fullWidthSVG={i === socialLinkContent.length - 1}
                                     >

@@ -12,7 +12,7 @@ export const Layout: React.FC = ({ children }) => {
     const [onboardStep, setOnboardStep] = useState<number>(1);
 
     return (
-        <div className={`page relative matrix:bg-matrix-bg`}>
+        <div className={`page matrix:bg-matrix-bg dark:bg-mesh-bg`}>
             <UserSnap />
             <NavBar />
             <AnalyticsProvider>{children}</AnalyticsProvider>

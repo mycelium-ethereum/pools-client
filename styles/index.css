@@ -150,6 +150,7 @@ body > div:first-child {
     position: relative;
     background: var(--background);
     z-index: 1;
+    background-repeat: no-repeat;
 }
 
 .page::before {
@@ -236,7 +237,6 @@ html.theme-dark {
 
     /* gray-50 */
     --text: #fafafa;
-
     /* cool-gray-200 */
     --text-secondary: #e5e7eb;
 

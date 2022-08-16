@@ -8,8 +8,8 @@ import { Container } from '~/components/General/Container';
 import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
 import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
+import NavLogo from '~/components/Nav/Navbar/NavLogo';
 import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
-import TracerNavLogo from '~/components/Nav/Navbar/TracerNavLogo';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
 import MyceliumLogo from '~/public/img/logos/mycelium/logo_MYC_small.svg';
 import { useStore } from '~/store/main';
@@ -115,7 +115,7 @@ const NavBarContent: React.FC = () => {
                 }  ${navMenuOpen || launcherMenuOpen ? 'text-white' : 'text-tracer-650'}`}
             >
                 <Container className={'relative z-10 flex h-full justify-between'}>
-                    <TracerNavLogo onClick={handleMenuClose} />
+                    <NavLogo onClick={handleMenuClose} />
                     <div className="ml-auto flex items-center">
                         <ul className="mr-auto ml-4 mb-0 hidden font-inter text-sm text-white lg:flex">
                             <li className={listItemStyles}>
