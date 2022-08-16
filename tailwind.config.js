@@ -90,6 +90,7 @@ module.exports = {
                 'mobile-nav-bg': "url('/img/mobile-nav-bg.svg')",
                 'nav-bg': "url('/img/nav-bg.svg')",
                 'matrix-bg': "url('/img/matrix.gif')",
+                'mesh-bg': "url('/img/background_mesh.svg')",
             },
             fontFamily: {
                 aileron: ["'aileron'", 'sans-serif'],
