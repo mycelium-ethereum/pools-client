@@ -28,7 +28,7 @@ const DeprecatedPoolBadge = styled.div`
             case Theme.Light:
                 return `background: #FFF1E2; color: #FF5621; border-color: #FF931E`;
             default:
-                return `background: ${theme.colors.primary}; color: #fff; border-color: #fff`;
+                return `background: #FF5621; color: #fff;`;
         }
     }};
 `;

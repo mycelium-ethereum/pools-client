@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import shallow from 'zustand/shallow';
 import { ERC20__factory } from '@tracer-protocol/perpetual-pools-contracts/types';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
+import { ARB_MYC_TOKEN_ADDRESS, ARB_TCR_TOKEN_ADDRESS } from '~/constants/general';
 import { networkConfig as networkConfig_ } from '~/constants/networks';
 import { TCR_DECIMALS, USDC_DECIMALS } from '~/constants/pools';
 import { farmConfig } from '~/constants/staking';
@@ -133,6 +134,12 @@ export const FarmStore: React.FC = ({ children }) => {
 
         setRewardsTokenUSDPrices((previousValue) => ({
             ...previousValue,
+            // if we are fetching the TCR price, also set the MYC token price to the same value
+            ...(address === ARB_TCR_TOKEN_ADDRESS
+                ? {
+                      [ARB_MYC_TOKEN_ADDRESS]: formattedUSDCPrice,
+                  }
+                : {}),
             // we can cast here because we exit early if it's not set
             [address as string]: formattedUSDCPrice,
         }));
