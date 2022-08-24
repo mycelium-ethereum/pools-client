@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-import { PoolStatus } from '~/types/pools';
 import BigNumber from 'bignumber.js';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
@@ -8,6 +7,8 @@ import { TWModal } from '~/components/General/TWModal';
 import { Table, TableHeader, TableHeaderCell, TableRow, TableRowCell } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
 import { RewardsEndedTip, StakingTvlTip } from '~/components/Tooltips';
+import { ARB_MYC_TOKEN_ADDRESS, ARB_TCR_TOKEN_ADDRESS } from '~/constants/general';
+import { PoolStatus } from '~/types/pools';
 import { toApproxCurrency } from '~/utils/converters';
 import { getBaseAsset } from '~/utils/poolNames';
 import { FarmTableRowData } from '../state';
@@ -18,6 +19,11 @@ export enum StakeActionEnum {
     unstake = 'Unstake',
     claim = 'Claim',
 }
+
+const rewardsTokenSymbolByAddress: Record<string, string> = {
+    [ARB_MYC_TOKEN_ADDRESS]: 'MYC',
+    [ARB_TCR_TOKEN_ADDRESS]: 'TCR',
+};
 
 export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFarms, rewardsTokenUSDPrices }) => {
     const [showModal, setShowModal] = useState(false);
@@ -36,7 +42,7 @@ export default (({ rows, onClickStake, onClickUnstake, onClickClaim, fetchingFar
                         </TableHeaderCell>
                         <TableHeaderCell>My Staked (TOKENS/USD)</TableHeaderCell>
                         <TableHeaderCell>My Holdings (TOKENS/USD)</TableHeaderCell>
-                        <TableHeaderCell>My Rewards (TCR)</TableHeaderCell>
+                        <TableHeaderCell>My Rewards</TableHeaderCell>
                         <TableHeaderCell>{/* Empty header for buttons column */}</TableHeaderCell>
                     </tr>
                 </TableHeader>
@@ -162,8 +168,12 @@ const PoolRow: React.FC<{
                     </div>
                     <div className="self-center">
                         <PoolStatusBadge
-                            status={farm.rewardsEnded ? PoolStatus.Deprecated : PoolStatus.Live}
-                            text={farm.rewardsEnded ? 'Ended' : 'Active'}
+                            status={
+                                farm.rewardsTokenAddress === ARB_MYC_TOKEN_ADDRESS
+                                    ? PoolStatus.Live
+                                    : PoolStatus.Deprecated
+                            }
+                            text={farm.rewardsTokenAddress === ARB_MYC_TOKEN_ADDRESS ? 'Active' : 'Ended'}
                         />
                     </div>
                 </PoolStatusBadgeContainer>
@@ -183,7 +193,9 @@ const PoolRow: React.FC<{
                 <div className="opacity-50">{toApproxCurrency(stakingTokenPrice.times(farm.stakingTokenBalance))}</div>
             </TableRowCell>
             <TableRowCell>
-                <span>{farm.myRewards.toFixed(6)}</span>
+                <span>
+                    {farm.myRewards.toFixed(6)} {rewardsTokenSymbolByAddress[farm.rewardsTokenAddress]}
+                </span>
             </TableRowCell>
             <TableRowCell>
                 <Button

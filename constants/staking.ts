@@ -50,9 +50,9 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
     },
     [NETWORKS.ARBITRUM]: {
         poolFarms: [
-            // active
+            // active (paid in MYC)
             {
-                address: '0x93116d661DaCaA8Ff65Cb5420Ef61425322AEA7f', // 3-BTC/USD+USDC Balancer LP
+                address: '0x574375868F76F49a9EeEb6A5720b984298C216BE', // 3-BTC/USD+USDC Balancer LP
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
@@ -60,17 +60,17 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 link: 'https://arbitrum.balancer.fi/#/pool/0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
             },
             {
-                address: '0x04Ff29F8F379B2AA7d79BA66Ce76649334D83e48', // 3L-BTC/USD+USDC
+                address: '0x5fD3fa0204aE9fd974F19430D8eA6bbbC7deb3d6', // 3L-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x16c457fC0F5d5981574ED2BaeD81c625BD91b633', // 3S-BTC/USD+USDC
+                address: '0x10260CF26c68dF40017D5E488dc633F1642f2A38', // 3S-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x906c81a761d60AcaCAe85165d67031E9F7E3CEa9', // 3-ETH/USD+USDC Balancer LP
+                address: '0x2F09D08167AD714D48dE65fA8C75Fe19388f87c9', // 3-ETH/USD+USDC Balancer LP
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
@@ -78,17 +78,17 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 link: 'https://arbitrum.balancer.fi/#/pool/0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
             },
             {
-                address: '0x111278bf2CC2Fd862183CF34896c60DbbEA0706F', // 3L-ETH/USD+USDC
+                address: '0xa9234dE71cB19B3217457fC2A3DF14BcA4837fa8', // 3L-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x489dA242a948d1978673FEF8836740c11732eC0B', // 3S-ETH/USD+USDC
+                address: '0xe01b6Ba1e64ACE0298F2E55152c7153b015b3D1c', // 3S-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
             },
             {
-                address: '0x6d52d4C087DD8a167eCA0008fb4c69D99169DcE8', // 3-BTC/USD+USDC-12h Balancer LP
+                address: '0x9c2e161d00ABF3e7fdFd50197B778C681117c45D', // 3-BTC/USD+USDC-12h Balancer LP
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
@@ -97,34 +97,77 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 name: '3-BTC/USD+USDC-12h',
             },
             {
+                address: '0xb22E2234d1fD6F9Cd5800039710668Eb602300d4', // 3L-BTC/USD+USDC-12h
+                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x681E1B823292743F0A3dC1cE1e572c16225a1c23', // 3S-BTC/USD+USDC-12h
+                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+                abi: StakingRewards__factory.abi,
+            },
+            // ended (paid in TCR)
+            {
+                address: '0x93116d661DaCaA8Ff65Cb5420Ef61425322AEA7f', // 3-BTC/USD+USDC Balancer LP
+                pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
+                abi: StakingRewards__factory.abi,
+                isBPTFarm: true,
+                rewardsEnded: true,
+                balancerPoolId: '0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
+            },
+            {
+                address: '0x04Ff29F8F379B2AA7d79BA66Ce76649334D83e48', // 3L-BTC/USD+USDC
+                pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
+                rewardsEnded: true,
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x16c457fC0F5d5981574ED2BaeD81c625BD91b633', // 3S-BTC/USD+USDC
+                pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
+                rewardsEnded: true,
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x906c81a761d60AcaCAe85165d67031E9F7E3CEa9', // 3-ETH/USD+USDC Balancer LP
+                pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
+                abi: StakingRewards__factory.abi,
+                isBPTFarm: true,
+                rewardsEnded: true,
+                balancerPoolId: '0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
+                link: 'https://arbitrum.balancer.fi/#/pool/0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
+            },
+            {
+                address: '0x111278bf2CC2Fd862183CF34896c60DbbEA0706F', // 3L-ETH/USD+USDC
+                pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
+                rewardsEnded: true,
+                abi: StakingRewards__factory.abi,
+            },
+            {
+                address: '0x489dA242a948d1978673FEF8836740c11732eC0B', // 3S-ETH/USD+USDC
+                pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
+                abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
+            },
+            {
+                address: '0x6d52d4C087DD8a167eCA0008fb4c69D99169DcE8', // 3-BTC/USD+USDC-12h Balancer LP
+                pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
+                abi: StakingRewards__factory.abi,
+                isBPTFarm: true,
+                rewardsEnded: true,
+                balancerPoolId: '0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
+                link: 'https://arbitrum.balancer.fi/#/pool/0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
+                name: '3-BTC/USD+USDC-12h',
+            },
+            {
                 address: '0x3004CC46432522B0AeA30d16aF769B1727aA0c26', // 3L-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x0896Fd59b574f536751c82B8Dd9fd9466af009aC', // 3S-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
-                abi: StakingRewards__factory.abi,
-            },
-            // rewards ended
-            {
-                address: '0x19B08bce18417150fAEC2b4951dad924f8D131A1', // 3-WTI/USD+USDC Balancer LP
-                pool: '0xa740b84Fd3547b9C445844c30A10Cde6dce3E08B',
-                abi: StakingRewards__factory.abi,
-                isBPTFarm: true,
-                rewardsEnded: true,
-                balancerPoolId: '0xfe7b8f8fca690ab0cd2b8d979abeeac94c06805d00010000000000000000009c',
-                link: 'https://arbitrum.balancer.fi/#/pool/0xfe7b8f8fca690ab0cd2b8d979abeeac94c06805d00010000000000000000009c',
-            },
-            {
-                address: '0x38B90a6268b1a20F7A7319D533bc9d31678Cd7d8', // 3L-WTI/USD+USDC
-                pool: '0xa740b84Fd3547b9C445844c30A10Cde6dce3E08B',
-                abi: StakingRewards__factory.abi,
-                rewardsEnded: true,
-            },
-            {
-                address: '0x0dC23d133cAB52be60C905C24F21925dE6e67aA2', // 3S-WTI/USD+USDC
-                pool: '0xa740b84Fd3547b9C445844c30A10Cde6dce3E08B',
                 abi: StakingRewards__factory.abi,
                 rewardsEnded: true,
             },
