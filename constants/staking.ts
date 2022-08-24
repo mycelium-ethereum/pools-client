@@ -106,23 +106,26 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
             },
-            // active (paid in TCR)
+            // ended (paid in TCR)
             {
                 address: '0x93116d661DaCaA8Ff65Cb5420Ef61425322AEA7f', // 3-BTC/USD+USDC Balancer LP
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
+                rewardsEnded: true,
                 balancerPoolId: '0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
                 link: 'https://arbitrum.balancer.fi/#/pool/0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
             },
             {
                 address: '0x04Ff29F8F379B2AA7d79BA66Ce76649334D83e48', // 3L-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
+                rewardsEnded: true,
                 abi: StakingRewards__factory.abi,
             },
             {
                 address: '0x16c457fC0F5d5981574ED2BaeD81c625BD91b633', // 3S-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
+                rewardsEnded: true,
                 abi: StakingRewards__factory.abi,
             },
             {
@@ -130,24 +133,28 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
+                rewardsEnded: true,
                 balancerPoolId: '0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
                 link: 'https://arbitrum.balancer.fi/#/pool/0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
             },
             {
                 address: '0x111278bf2CC2Fd862183CF34896c60DbbEA0706F', // 3L-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
+                rewardsEnded: true,
                 abi: StakingRewards__factory.abi,
             },
             {
                 address: '0x489dA242a948d1978673FEF8836740c11732eC0B', // 3S-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x6d52d4C087DD8a167eCA0008fb4c69D99169DcE8', // 3-BTC/USD+USDC-12h Balancer LP
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
                 isBPTFarm: true,
+                rewardsEnded: true,
                 balancerPoolId: '0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
                 link: 'https://arbitrum.balancer.fi/#/pool/0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
                 name: '3-BTC/USD+USDC-12h',
@@ -156,11 +163,13 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 address: '0x3004CC46432522B0AeA30d16aF769B1727aA0c26', // 3L-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x0896Fd59b574f536751c82B8Dd9fd9466af009aC', // 3S-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
         ],
         sushiRouterAddress: '0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506',
