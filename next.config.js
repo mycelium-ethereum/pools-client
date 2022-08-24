@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const path = require('path');
 
+const BASE_PATH = 'https://pools.mycelium.xyz';
+
 module.exports = {
     cssModules: true,
     // // optional
@@ -13,35 +15,35 @@ module.exports = {
     },
 
     env: {
-        siteTitle: 'Tracer Perpetual Pools',
+        siteTitle: 'Mycelium Perpetual Pools',
         siteDescription: '',
-        siteUrl: 'https://pools.tracer.finance',
+        siteUrl: BASE_PATH,
         siteImagePreviewUrl: 'img/opengraph/main.png',
     },
 
     async redirects() {
         return [
-            { source: '/pools', destination: '/trade', permanent: true },
+            // Redirect all pages to new pools.mycelium.xyz URL
+            { source: '/', destination: BASE_PATH, permanent: true },
+            { source: '/trade', destination: `${BASE_PATH}/trade`, permanent: true },
+            { source: '/portfolio', destination: `${BASE_PATH}/portfolio`, permanent: true },
+            { source: '/stake', destination: `${BASE_PATH}/stake`, permanent: true },
+            { source: '/pools', destination: `${BASE_PATH}/trade`, permanent: true },
             { source: '/bridge', destination: 'https://bridge.arbitrum.io/', permanent: true },
-            { source: '/stakebpt', destination: '/stake', permanent: true },
-            { source: '/privacy-policy', destination: 'https://tracer.finance/privacy-policy', permanent: true },
+            { source: '/stakebpt', destination: `${BASE_PATH}/stake`, permanent: true },
+            { source: '/privacy-policy', destination: 'https://mycelium.xyz/privacy-policy', permanent: true },
             {
                 source: '/terms-of-use',
-                destination: 'https://tracer.finance/privacy-policy#terms-of-use',
+                destination: 'https://mycelium.xyz/terms-of-use',
                 permanent: true,
             },
             {
                 source: '/disclaimer',
-                destination: 'https://tracer.finance/privacy-policy#interfaces-disclaimer',
+                destination: 'https://mycelium.xyz/privacy-policy',
                 permanent: true,
             },
-            { source: '/portfolio/history', destination: '/portfolio', permanent: true },
-            { source: '/portfolio/commits', destination: '/portfolio', permanent: true },
-            {
-                source: '/disclaimer',
-                destination: 'https://tracer.finance/privacy-policy#interfaces-disclaimer',
-                permanent: true,
-            },
+            { source: '/portfolio/history', destination: `${BASE_PATH}/portfolio`, permanent: true },
+            { source: '/portfolio/commits', destination: `${BASE_PATH}/portfolio`, permanent: true },
         ];
     },
 
