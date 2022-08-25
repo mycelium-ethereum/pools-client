@@ -184,18 +184,18 @@ export const transactionMap: Record<
     FARM_CLAIM: {
         pending: () => [
             <>
-                <Notification title="Claiming TCR" />
+                <Notification title="Claiming Rewards" />
             </>,
         ],
         success: () => ({
-            render: <Notification title="TCR Claimed" />,
+            render: <Notification title="Rewards Claimed" />,
             type: 'success',
             isLoading: false,
             closeButton: true,
         }),
         error: ({ error }) =>
             knownTransactionErrors(error) ?? {
-                render: <Notification title="Claim TCR Failed" />,
+                render: <Notification title="Claim Rewards Failed" />,
                 type: 'error',
             },
     },

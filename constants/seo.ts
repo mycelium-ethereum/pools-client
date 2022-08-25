@@ -18,7 +18,7 @@ export const seoContent = {
     },
     '/stake': {
         title: 'Stake',
-        description: 'Stake your Pool Tokens to earn TCR rewards.',
+        description: 'Stake your Pool Tokens to earn MYC rewards.',
         image: '/img/opengraph/stake.jpg',
     },
 };
