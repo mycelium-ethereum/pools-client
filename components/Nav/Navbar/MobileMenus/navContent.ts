@@ -16,7 +16,7 @@ export const menuContent = [
         label: 'Stake',
     },
     {
-        link: 'https://pools.docs.tracer.finance/',
+        link: 'https://pools.docs.mycelium.xyz',
         label: 'Docs',
     },
 ];

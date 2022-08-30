@@ -154,7 +154,7 @@ const NavBarContent: React.FC = () => {
                             </li>
                             <li className={listItemStyles}>
                                 <a
-                                    href="https://pools.docs.tracer.finance"
+                                    href="https://pools.docs.mycelium.xyz"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className={linkStyles}
