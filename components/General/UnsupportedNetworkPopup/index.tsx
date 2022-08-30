@@ -42,7 +42,7 @@ const UnsupportedNetwork: React.FC = () => {
                             <br />
                             <span>New to Arbitrum? </span>
                             <a
-                                href="https://pools.docs.tracer.finance/tutorials/tutorials/arbitrum-one"
+                                href="https://pools.docs.mycelium.xyz/tutorials/tutorials/arbitrum-one"
                                 target="_blank"
                                 rel="noreferrer noopner"
                                 className="mt-3 cursor-pointer text-tracer-400 underline hover:opacity-80"

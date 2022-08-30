@@ -15,7 +15,7 @@ const FeeNote: React.FC<FeeNoteProps> = ({ poolName, isMint, receiveIn }) => {
             <TimeLeft targetTime={receiveIn} />. To learn more, visit{' '}
             <a
                 className="text-theme-primary underline"
-                href="https://pools.docs.tracer.finance/advanced-topics/upkeep-and-autoclaim#payment"
+                href="https://pools.docs.mycelium.xyz/advanced-topics/mechanism/upkeep-and-autoclaim#payment"
                 target="_blank"
                 rel="noreferrer"
             >

@@ -44,7 +44,7 @@ export const MarketTypeTip: React.FC = ({ children }) => {
             markets that smooth volatility and spot markets that track the underlying price at rebalance.
             <br />
             <a
-                href="https://pools.docs.tracer.finance/"
+                href="https://pools.docs.mycelium.xyz/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-tracer-midblue transition-colors duration-300 hover:text-cool-gray-700"
@@ -63,7 +63,7 @@ export const LockTip: React.FC = ({ children }) => {
             <a
                 onClick={() =>
                     window.open(
-                        'https://pools.docs.tracer.finance/faq#what-is-the-front-running-interval',
+                        'https://pools.docs.mycelium.xyz/faq#what-is-the-front-running-interval',
                         '_blank',
                         'noopener',
                     )
@@ -82,7 +82,7 @@ export const PowerLeverageTip: React.FC = ({ children }) => {
             A new type of leverage used by Perpetual Pools to amplify returns.{' '}
             <a
                 onClick={() =>
-                    window.open('https://pools.docs.tracer.finance/advanced-topics/mechanism#v2', '_blank', 'noopener')
+                    window.open('https://pools.docs.mycelium.xyz/advanced-topics/mechanism#v2', '_blank', 'noopener')
                 }
             >
                 Learn more.

@@ -133,16 +133,16 @@ const OnboardTradeModal: React.FC<OnboardModalProps> = ({
                         <Styles.Content>
                             <Styles.Text>
                                 Browse the{' '}
-                                <Styles.Link href="https://pools.docs.tracer.finance/perpetual-pools/readme">
+                                <Styles.Link href="https://pools.docs.mycelium.xyz/perpetual-pools/readme">
                                     user documentation
                                 </Styles.Link>
                                 .
                                 <br />
-                                Check out <Styles.Link href="https://tracer.finance/radar/">Radar</Styles.Link>,
+                                {/* Check out <Styles.Link href="https://tracer.finance/radar/">Radar</Styles.Link>,
                                 Tracer&#39;s Blog.
-                                <br />
+                                <br /> */}
                                 Join the community on{' '}
-                                <Styles.Link href="https://discord.gg/TracerDAO">Discord</Styles.Link>.
+                                <Styles.Link href="https://discord.gg/mycelium-xyz">Discord</Styles.Link>.
                             </Styles.Text>
                         </Styles.Content>
 
