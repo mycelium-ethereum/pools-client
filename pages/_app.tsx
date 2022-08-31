@@ -10,7 +10,7 @@ import { Layout } from '~/components/General/Layout';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import StoreUpdater from '~/components/StoreUpdater';
 import { StyledThemeProvider } from '~/context/ThemeContext';
-import { Banner, BannerTitle, BannerContent } from '~/components/Banner/Banner';
+// import { Banner, BannerTitle, BannerContent } from '~/components/Banner/Banner';
 
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     return (
