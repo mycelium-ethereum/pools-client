@@ -18,13 +18,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
             <StoreUpdater />
             <StyledThemeProvider>
                 <Layout>
-                    <div style={{display: "flex", justifyContent: "center", margin: "16px"}}>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '16px' }}>
                         <Banner>
-                            <BannerTitle>
-                                ARBITRUM NITRO UPGRADE IN PROGRESS 
-                            </BannerTitle>
+                            <BannerTitle>ARBITRUM NITRO UPGRADE IN PROGRESS</BannerTitle>
                             <BannerContent>
-                                The Arbitrum Network is expected to have 2-4 hours of downtime as it makes it's upgrade to Nitro. Trades may not go through during this period.
+                                The Arbitrum Network is expected to have 2-4 hours of downtime as it makes it's upgrade
+                                to Nitro. Trades may not go through during this period.
                             </BannerContent>
                         </Banner>
                     </div>

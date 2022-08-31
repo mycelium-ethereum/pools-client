@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const Banner = styled.div`
     background-color: #e3b505;
@@ -14,10 +14,10 @@ export const BannerTitle = styled.h2`
     font-weight: bold;
     text-align: center;
     margin: 4px;
-`
+`;
 
 export const BannerContent = styled.div`
     font-size: 1em;
     text-align: center;
     margin: 4px;
-`
+`;
