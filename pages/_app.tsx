@@ -10,6 +10,7 @@ import { Layout } from '~/components/General/Layout';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';
 import StoreUpdater from '~/components/StoreUpdater';
 import { StyledThemeProvider } from '~/context/ThemeContext';
+import { Banner, BannerTitle, BannerContent } from '~/components/Banner/Banner';
 
 const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
     return (
@@ -17,6 +18,15 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
             <StoreUpdater />
             <StyledThemeProvider>
                 <Layout>
+                    <div style={{ display: 'flex', justifyContent: 'center', margin: '16px' }}>
+                        <Banner>
+                            <BannerTitle>ARBITRUM NITRO UPGRADE IN PROGRESS</BannerTitle>
+                            <BannerContent>
+                                The Arbitrum Network is expected to have 2-4 hours of downtime as it makes its upgrade
+                                to Nitro. Trades may not go through during this period.
+                            </BannerContent>
+                        </Banner>
+                    </div>
                     <Component {...pageProps} />
                 </Layout>
                 <ToastContainerWithStyles />
