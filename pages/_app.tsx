@@ -18,7 +18,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
             <StoreUpdater />
             <StyledThemeProvider>
                 <Layout>
-                    <div style={{ display: 'flex', justifyContent: 'center', margin: '16px' }}>
+                    {/* <div style={{ display: 'flex', justifyContent: 'center', margin: '16px' }}>
                         <Banner>
                             <BannerTitle>ARBITRUM NITRO UPGRADE IN PROGRESS</BannerTitle>
                             <BannerContent>
@@ -26,7 +26,7 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
                                 to Nitro. Trades may not go through during this period.
                             </BannerContent>
                         </Banner>
-                    </div>
+                    </div> */}
                     <Component {...pageProps} />
                 </Layout>
                 <ToastContainerWithStyles />
