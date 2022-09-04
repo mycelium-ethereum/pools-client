@@ -16,7 +16,7 @@ module.exports = {
         siteTitle: 'Mycelium Perpetual Pools',
         siteDescription: '',
         siteUrl: 'https://pools.mycelium.xyz',
-        siteImagePreviewUrl: 'img/opengraph/main.png',
+        siteImagePreviewUrl: 'img/opengraph/preview.png',
     },
 
     async redirects() {
