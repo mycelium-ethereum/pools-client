@@ -13,7 +13,7 @@ const SEO: React.FC<SEOProps> = ({ title, description }) => {
     const metaDescription = description || process.env.siteDescription;
     const keywords = process.env.siteKeywords;
     const siteURL = process.env.siteUrl;
-    const imagePreview = process.env.siteImagePreviewUrl};
+    const imagePreview = process.env.siteImagePreviewUrl;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
 
     return (
