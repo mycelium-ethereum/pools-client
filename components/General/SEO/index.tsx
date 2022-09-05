@@ -4,17 +4,16 @@ import { useRouter } from 'next/router';
 
 export type SEOProps = {
     title: string;
-    image?: string;
     description?: string;
 };
 
-const SEO: React.FC<SEOProps> = ({ title, image, description }) => {
+const SEO: React.FC<SEOProps> = ({ title, description }) => {
     const router = useRouter();
     const pathname = router.pathname;
     const metaDescription = description || process.env.siteDescription;
     const keywords = process.env.siteKeywords;
     const siteURL = process.env.siteUrl;
-    const imagePreview = image || `${siteURL}/${process.env.siteImagePreviewUrl}`;
+    const imagePreview = process.env.siteImagePreviewUrl;
     const metaTitle = title ? `${title} | ${process.env.siteTitle}` : process.env.siteTitle;
 
     return (
