@@ -19,7 +19,7 @@ const FeeNote: React.FC<FeeNoteProps> = ({ poolName, isMint, receiveIn }) => {
                 target="_blank"
                 rel="noreferrer"
             >
-                Tracer Documentation
+                Mycelium Documentation
             </a>
             .
         </HiddenExpand>

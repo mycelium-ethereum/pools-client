@@ -80,7 +80,8 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 <StyledTooltip
                     title={
                         <>
-                            Burn the Pool Token on Tracer and receive it in <TimeLeft targetTime={expectedExecution} />.
+                            Burn the Pool Token on Mycelium and receive it in{' '}
+                            <TimeLeft targetTime={expectedExecution} />.
                         </>
                     }
                 >

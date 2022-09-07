@@ -113,8 +113,8 @@ const ExchangeButton: React.FC<ExchangeButtonProps> = ({
                     Unlock {pool.settlementToken.symbol}
                 </Button>
                 <Text>
-                    Unlock {pool.settlementToken.symbol} to start investing with Tracer. This is a one-time transaction
-                    for each pool.
+                    Unlock {pool.settlementToken.symbol} to start investing with Mycelium. This is a one-time
+                    transaction for each pool.
                 </Text>
             </>
         );
