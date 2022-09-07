@@ -55,7 +55,7 @@ const SpotPriceTip: React.FC = ({ children }) => (
     </StyledTooltip>
 );
 const TracerTip: React.FC = ({ children }) => (
-    <StyledTooltip title="The current token price on Tracer. Please note that the price may change as minting the token is not immediate.">
+    <StyledTooltip title="The current token price on Mycelium. Please note that the price may change as minting the token is not immediate.">
         {children}
     </StyledTooltip>
 );
@@ -70,7 +70,7 @@ const BalancerTip: React.FC = ({ children }) => (
 );
 
 const CommittmentTip: React.FC = ({ children }) => (
-    <StyledTooltip title="By opening a position now on Tracer, you will receive the tokens later. You can open a position immediately by trading on Balancer.">
+    <StyledTooltip title="By opening a position now on Mycelium, you will receive the tokens later. You can open a position immediately by trading on Balancer.">
         {children}
     </StyledTooltip>
 );

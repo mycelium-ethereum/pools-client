@@ -3,7 +3,7 @@ export type PagePath = '/' | '/trade' | '/portfolio' | '/stake';
 export const seoContent = {
     '/': {
         title: 'Buy Pool Tokens',
-        description: 'Build and trade with Tracer Perpetuals and gain leveraged exposure to any market in the world.',
+        description: 'Build and trade with Mycelium Perpetuals and gain leveraged exposure to any market in the world.',
     },
     '/trade': {
         title: 'Trade',

@@ -119,7 +119,7 @@ export const ArbitrumBridgeModal: React.FC<ArbitrumBridgeModalProps> = (props) =
                 </div>
                 <div className="my-2">
                     <p className="text-sm text-gray-500">
-                        Tracer runs on Arbitrum mainnet. Bridge funds to Arbitrum Mainnet to get started.
+                        Mycelium runs on Arbitrum mainnet. Bridge funds to Arbitrum Mainnet to get started.
                     </p>
                 </div>
 

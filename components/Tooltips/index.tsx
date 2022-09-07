@@ -131,17 +131,17 @@ export const PortfolioFlipTooltip: React.FC = ({ children }) => {
 };
 
 export const TradeMintTooltip: React.FC = ({ children }) => {
-    const Content = 'Open a leveraged position on Tracer.';
+    const Content = 'Open a leveraged position on Mycelium.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
 export const TradeBurnTooltip: React.FC = ({ children }) => {
-    const Content = 'Close a leveraged position on Tracer.';
+    const Content = 'Close a leveraged position on Mycelium.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
 export const TradeFlipTooltip: React.FC = ({ children }) => {
-    const Content = 'Reverse the direction of your existing leveraged position on Tracer.';
+    const Content = 'Reverse the direction of your existing leveraged position on Mycelium.';
     return <StyledTooltip title={Content}>{children}</StyledTooltip>;
 };
 
