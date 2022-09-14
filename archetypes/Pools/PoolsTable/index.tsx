@@ -299,7 +299,7 @@ export const PoolsTable = ({
                         </TableHeaderCell>
                         <TableHeaderCell className="text-cool-gray-400" size="sm-x">
                             <TracerTip>
-                                <div className="capitalize text-cool-gray-400">{'Tracer'}</div>
+                                <div className="capitalize text-cool-gray-400">{'Mycelium'}</div>
                             </TracerTip>
                         </TableHeaderCell>
                         {showNextRebalance ? (
