@@ -63,11 +63,13 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 address: '0x5fD3fa0204aE9fd974F19430D8eA6bbbC7deb3d6', // 3L-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x10260CF26c68dF40017D5E488dc633F1642f2A38', // 3S-BTC/USD+USDC
                 pool: '0x3aca4F1B1791D00eBBAE01d65E9739c9C886F33C',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x2F09D08167AD714D48dE65fA8C75Fe19388f87c9', // 3-ETH/USD+USDC Balancer LP
@@ -81,11 +83,13 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 address: '0xa9234dE71cB19B3217457fC2A3DF14BcA4837fa8', // 3L-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0xe01b6Ba1e64ACE0298F2E55152c7153b015b3D1c', // 3S-ETH/USD+USDC
                 pool: '0x8F4af5A3b58EA60e66690f30335Ed8586E46AcEb',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x9c2e161d00ABF3e7fdFd50197B778C681117c45D', // 3-BTC/USD+USDC-12h Balancer LP
@@ -100,11 +104,13 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 address: '0xb22E2234d1fD6F9Cd5800039710668Eb602300d4', // 3L-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             {
                 address: '0x681E1B823292743F0A3dC1cE1e572c16225a1c23', // 3S-BTC/USD+USDC-12h
                 pool: '0x2bfb8aeE6EB2dcCd694f8eCB4C31FdeBfC22b55a',
                 abi: StakingRewards__factory.abi,
+                rewardsEnded: true,
             },
             // ended (paid in TCR)
             {
