@@ -604,11 +604,11 @@ const TokenRows: React.FC<
             <TableRowCell size={'sm'}>{leverage}</TableRowCell>
             <TableRowCell size={'sm'}>
                 {showNextRebalance ? (
-                    toApproxCurrency(tokenInfo.nextTCRPrice, 3)
+                    toApproxCurrency(tokenInfo.nextTCRPrice, 5)
                 ) : (
                     <>
                         <div className="flex">
-                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice, 3)}</div>
+                            <div className="mr-1">{toApproxCurrency(pastUpkeepTokenInfo.tokenPrice, 5)}</div>
                             <UpOrDownWithTooltip
                                 oldValue={antecedentUpkeepTokenInfo.tokenPrice}
                                 newValue={pastUpkeepTokenInfo.tokenPrice}
@@ -626,7 +626,7 @@ const TokenRows: React.FC<
                 <TableRowCell size={'sm'}>
                     {tokenInfo.balancerPrice ? (
                         <div className="flex items-center">
-                            {toApproxCurrency(tokenInfo.balancerPrice, 3)}
+                            {toApproxCurrency(tokenInfo.balancerPrice, 5)}
                             <TradeOnBalancerTip>
                                 <LinkIcon
                                     className="ml-2 inline-block"
@@ -650,13 +650,13 @@ const TokenRows: React.FC<
                 <TableRowCell size={'sm'}>
                     <div className="flex">
                         <Logo size="xs" ticker={tokenSymbolToLogoTicker(tokenInfo.symbol)} className="my-auto mr-1" />
-                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(3)}
+                        {tokenInfo.userHoldings === 0 ? '-' : tokenInfo.userHoldings.toFixed(5)}
                     </div>
                     <div className="flex">
                         <Logo size="xs" ticker={settlementTokenSymbol as LogoTicker} className="my-auto mr-1" />
                         {tokenInfo.userHoldings === 0
                             ? '-'
-                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 3)}
+                            : toApproxCurrency(tokenInfo.userHoldings * tokenInfo.nextTCRPrice, 5)}
                     </div>
                 </TableRowCell>
             ) : null}
@@ -760,7 +760,7 @@ const UpOrDownWithTooltip: React.FC<{
                     : calcPercentageDifference(newValue, oldValue),
             [deltaDenotation, oldValue, newValue],
         );
-        const approxValue = Math.abs(parseFloat(value.toFixed(3)));
+        const approxValue = Math.abs(parseFloat(value.toFixed(5)));
         return (
             <UpOrDownWithTooltipTip
                 metric={tooltipMetric}

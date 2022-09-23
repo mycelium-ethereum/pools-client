@@ -14,7 +14,7 @@ export const ExpectedTokenPrice: React.FC<{
 }> = ({ tokenPrice, settlementTokenSymbol }) => (
     <div>
         <Styles.Transparent>
-            {` at ${toApproxCurrency(tokenPrice ?? 1, 3)} ${settlementTokenSymbol}/token`}
+            {` at ${toApproxCurrency(tokenPrice ?? 1, 5)} ${settlementTokenSymbol}/token`}
         </Styles.Transparent>
     </div>
 );
@@ -64,14 +64,14 @@ export const ExpectedTokensMinted: React.FC<
     <>
         <Section label="Expected tokens minted" className="header">
             <Styles.SumText>
-                {expectedTokensMinted > 0 ? expectedTokensMinted.toFixed(3) : ''} {tokenSymbol}
+                {expectedTokensMinted > 0 ? expectedTokensMinted.toFixed(5) : ''} {tokenSymbol}
             </Styles.SumText>
         </Section>
         {showTransactionDetails && (
             <Styles.SectionDetails>
                 <Section label="Expected amount" showSectionDetails>
                     <Styles.Transparent>
-                        <span>{`${expectedTokensMinted.toFixed(3)}`} tokens</span>
+                        <span>{`${expectedTokensMinted.toFixed(5)}`} tokens</span>
                     </Styles.Transparent>
                 </Section>
                 <Section label="Expected price" showSectionDetails>
@@ -134,14 +134,14 @@ export const ExpectedExposure: React.FC<
         <>
             <Section label={label} className="header">
                 <Styles.SumText className={isLong ? 'text-up-green' : 'text-down-red'}>
-                    {expectedExposure.toFixed(3)} {baseAsset}
+                    {expectedExposure.toFixed(5)} {baseAsset}
                 </Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
                     <Section label={`Market value at ${toApproxCurrency(oraclePrice)} USD`} showSectionDetails>
                         <Styles.Transparent>
-                            {commitAmount.toFixed(3)} {baseAsset}
+                            {commitAmount.toFixed(5)} {baseAsset}
                         </Styles.Transparent>
                     </Section>
                     <Section label="Leverage" showSectionDetails>
@@ -166,7 +166,7 @@ export const ExpectedBurnFees: React.FC<
     return (
         <>
             <Section label="Expected fees" className="header">
-                <Styles.SumText>{`${toApproxCurrency(totalFee, 3)} USD`}</Styles.SumText>
+                <Styles.SumText>{`${toApproxCurrency(totalFee, 5)} USD`}</Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>
@@ -199,7 +199,7 @@ export const ExpectedFlipFees: React.FC<
     return (
         <>
             <Section label="Expected fees" className="header">
-                <Styles.SumText>{`${toApproxCurrency(totalFee, 3)} USD`}</Styles.SumText>
+                <Styles.SumText>{`${toApproxCurrency(totalFee, 5)} USD`}</Styles.SumText>
             </Section>
             {showTransactionDetails && (
                 <Styles.SectionDetails>

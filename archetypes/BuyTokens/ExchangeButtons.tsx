@@ -95,7 +95,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                 <BuyButtonContainer>
                     <BuyText>
                         Mint <b>{`${expectedAmount.toNumber().toFixed(3)}`}</b> tokens at{' '}
-                        <b>{toApproxCurrency(tokenPrice, 3)}</b> in{' '}
+                        <b>{toApproxCurrency(tokenPrice, 5)}</b> in{' '}
                         <b>
                             <TimeLeft targetTime={receiveIn} />
                         </b>
@@ -129,7 +129,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                         {isValidOnBalancer ? (
                             <>
                                 Buy <b>{expectedBalancerAmount?.toNumber().toFixed(3)}</b> tokens at{' '}
-                                <b>${balancerPrice && parseFloat(balancerPrice.toString()).toFixed(3)}</b> instantly
+                                <b>${balancerPrice && parseFloat(balancerPrice.toString()).toFixed(5)}</b> instantly
                             </>
                         ) : (
                             <>

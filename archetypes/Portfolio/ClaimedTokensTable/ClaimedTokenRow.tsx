@@ -54,7 +54,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 />
             </OverviewTableRowCell>
             <OverviewTableRowCell>
-                <div>{`${leveragedNotionalValue.toFixed(3)} ${settlementTokenSymbol}`}</div>
+                <div>{`${leveragedNotionalValue.toFixed(5)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
                 <PortfolioStakeTooltip>
