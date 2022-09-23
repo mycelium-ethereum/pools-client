@@ -85,7 +85,7 @@ const TokenSelect: React.FC<{
                                     <Styles.TokenSelectCell hasBalance={token.escrowBalance.toNumber() > 0}>
                                         {token.escrowBalance.toNumber() > 0 ? (
                                             <>
-                                                {token.escrowBalance?.toFixed(3)}
+                                                {token.escrowBalance?.toFixed(5)}
                                                 <span>Tokens</span>
                                             </>
                                         ) : (
@@ -95,7 +95,7 @@ const TokenSelect: React.FC<{
                                     <Styles.TokenSelectCell hasBalance={token.balance.toNumber() > 0}>
                                         {token.balance.toNumber() > 0 ? (
                                             <>
-                                                {token.balance.toNumber().toFixed(3)}
+                                                {token.balance.toNumber().toFixed(5)}
                                                 <span>Tokens</span>
                                             </>
                                         ) : (

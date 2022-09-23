@@ -30,9 +30,9 @@ export const TokensNotional = ({
     settlementTokenSymbol: string;
 }): JSX.Element => (
     <>
-        <div>{`${amount.times(price).toFixed(3)} ${settlementTokenSymbol}`}</div>
+        <div>{`${amount.times(price).toFixed(5)} ${settlementTokenSymbol}`}</div>
         <InnerCellSubText>
-            {`${amount.toFixed(3)} tokens at ${price.toFixed(2)} ${settlementTokenSymbol}/token`}
+            {`${amount.toFixed(5)} tokens at ${price.toFixed(5)} ${settlementTokenSymbol}/token`}
         </InnerCellSubText>
     </>
 );

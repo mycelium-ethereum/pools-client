@@ -31,7 +31,7 @@ export const isInvalidAmount: (
                 ? `Not enough funds! ${
                       (commitAction as CommitActionEnum) === CommitActionEnum.mint
                           ? toApproxCurrency(balance)
-                          : `${balance.toFixed(3)} tokens`
+                          : `${balance.toFixed(5)} tokens`
                   } available`
                 : undefined,
             isInvalid: true,
@@ -129,7 +129,7 @@ export default (({ pool, userBalances, swapState, swapDispatch }) => {
                     }}
                 />
                 <Styles.Subtext showContent={!!pool.address}>
-                    Expected Price: {toApproxCurrency(tokenPrice, 3)}
+                    Expected Price: {toApproxCurrency(tokenPrice, 5)}
                 </Styles.Subtext>
             </Styles.Wrapper>
             <Styles.Container>
