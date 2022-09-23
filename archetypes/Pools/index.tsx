@@ -137,7 +137,7 @@ export const Browse: React.FC = () => {
                         </PageTable.Heading>
                         <PageTable.SubHeading>
                             Bullish? Bearish? Bring it. No margins, no liquidations, no minimum spend. Open a leveraged
-                            perpetual position by depositing into the of the markets below.{' '}
+                            perpetual position by depositing into one of the markets below.{' '}
                             <PageTable.Link href="https://www.tracer.finance/radar/tracer-perpetual-pools-eli5/">
                                 Learn More.
                             </PageTable.Link>
