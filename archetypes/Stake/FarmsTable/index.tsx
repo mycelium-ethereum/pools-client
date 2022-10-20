@@ -168,12 +168,8 @@ const PoolRow: React.FC<{
                     </div>
                     <div className="self-center">
                         <PoolStatusBadge
-                            status={
-                                farm.rewardsTokenAddress === ARB_MYC_TOKEN_ADDRESS
-                                    ? PoolStatus.Live
-                                    : PoolStatus.Deprecated
-                            }
-                            text={farm.rewardsTokenAddress === ARB_MYC_TOKEN_ADDRESS ? 'Active' : 'Ended'}
+                            status={farm.rewardsEnded ? PoolStatus.Deprecated : PoolStatus.Live}
+                            text={farm.rewardsEnded ? 'Ended' : 'Active'}
                         />
                     </div>
                 </PoolStatusBadgeContainer>
