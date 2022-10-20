@@ -58,6 +58,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 isBPTFarm: true,
                 balancerPoolId: '0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
                 link: 'https://arbitrum.balancer.fi/#/pool/0x045c5480131eef51aa1a74f34e62e7de23136f2400010000000000000000009a',
+                rewardsEnded: true,
             },
             {
                 address: '0x5fD3fa0204aE9fd974F19430D8eA6bbbC7deb3d6', // 3L-BTC/USD+USDC
@@ -78,6 +79,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 isBPTFarm: true,
                 balancerPoolId: '0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
                 link: 'https://arbitrum.balancer.fi/#/pool/0x59b7867f6b127070378feeb328e2ffe6aab6752500010000000000000000009b',
+                rewardsEnded: true,
             },
             {
                 address: '0xa9234dE71cB19B3217457fC2A3DF14BcA4837fa8', // 3L-ETH/USD+USDC
@@ -98,6 +100,7 @@ export const farmConfig: Record<KnownNetwork, FarmConfig> = {
                 isBPTFarm: true,
                 balancerPoolId: '0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
                 link: 'https://arbitrum.balancer.fi/#/pool/0xc999678122cbf8a30cb72c53d4bdd72abd96af880001000000000000000000b4',
+                rewardsEnded: true,
                 name: '3-BTC/USD+USDC-12h',
             },
             {
