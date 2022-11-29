@@ -1,0 +1,42 @@
+name: Actions
+on:
+  push:
+    branches:
+          - ipfs-backup-workflow
+jobs:
+    build_lint_export:
+        name: Run build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Install dependencies
+              run: yarn install
+            - name: Run lint 
+              run: yarn run lint
+            - name: Build app
+              run: yarn build
+            - name: Export app 
+              run: yarn export 
+            - name: Get commit info
+              id: commit
+              shell: bash
+              run: |
+                echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+                echo "::set-output name=sha_hash::$(git rev-parse HEAD)"
+            - name: Upload to ipfs
+              uses: aquiladev/ipfs-action@v0.2.1
+              id: upload
+              with:
+                path: ./out
+                service: pinata
+                pinataKey: ${{ secrets.PINATA_KEY }}
+                pinataSecret: ${{ secrets.PINATA_SECRET }}
+                pinataPinName: ${{ steps.commit.outputs.branch }}-${{ steps.commit.outputs.sha_hash }}
+            - name: Echo IPFS hash
+              run: |
+                echo ${{ steps.upload.outputs.hash }} >> ipfs-deploy.txt
+            - name: Persist IPFS hash
+              uses: actions/upload-artifact@v3
+              with:
+                name: ipfs-deploy
+                path: ipfs-deploy.txt

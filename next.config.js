@@ -4,6 +4,7 @@ const path = require('path');
 const BASE_PATH = 'https://pools.mycelium.xyz';
 
 module.exports = {
+    assetPrefix: './', // fixes ipfs import
     cssModules: true,
     // // optional
     modifyVars: { '@primary-color': '#0000bd' },
