@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
 import { UserSnap } from '~/components/General/Usersnap';
+import { GeoblockModal } from '~/components/GeoblockModal';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
 import { AnalyticsProvider } from '~/context/AnalyticsContext';
@@ -17,6 +18,7 @@ export const Layout: React.FC = ({ children }) => {
             <NavBar />
             <AnalyticsProvider>{children}</AnalyticsProvider>
             <UnsupportedNetworkPopup />
+            <GeoblockModal />
             <OnboardTradeModal
                 onboardStep={onboardStep}
                 setOnboardStep={setOnboardStep}
