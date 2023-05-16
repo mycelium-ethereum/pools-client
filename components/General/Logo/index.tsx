@@ -4,6 +4,9 @@ import { NETWORKS } from '@tracer-protocol/pools-js';
 import AAVE from '~/public/img/logos/currencies/aave.svg';
 import AAVE_L from '~/public/img/logos/currencies/aave_long.svg';
 import AAVE_S from '~/public/img/logos/currencies/aave_short.svg';
+import TRUFLATION from '~/public/img/logos/currencies/truflation.svg';
+import TRUFLATION_L from '~/public/img/logos/currencies/truflation_long.svg';
+import TRUFLATION_S from '~/public/img/logos/currencies/truflation_short.svg';
 import Arbitrum from '~/public/img/logos/currencies/arbitrum.svg';
 import BALANCER from '~/public/img/logos/currencies/balancer.svg';
 import BASE from '~/public/img/logos/currencies/base.svg';
@@ -66,6 +69,7 @@ export type LogoTicker =
     | 'LINK_L'
     | 'AAVE_L'
     | 'WTI_L'
+    | 'TRUFLATION_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
@@ -73,6 +77,7 @@ export type LogoTicker =
     | 'LINK_S'
     | 'AAVE_S'
     | 'WTI_S'
+    | 'TRUFLATION_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
@@ -87,6 +92,7 @@ export type LogoTicker =
     | 'BALANCER'
     | 'BASE'
     | 'WTI'
+    | 'TRUFLATION'
     | typeof NETWORKS.ARBITRUM
     | typeof NETWORKS.ARBITRUM_RINKEBY
     | 'DEFAULT';
@@ -115,6 +121,9 @@ const logos: Record<LogoTicker, any> = {
     LINK_S: LINK_S,
     WTI_S: WTI_S,
     WTI_L: WTI_L,
+    TRUFLATION: TRUFLATION,
+    TRUFLATION_L: TRUFLATION_L,
+    TRUFLATION_S: TRUFLATION_S,
     EUR: EUR,
     ETH: ETH,
     stETH: ETH,

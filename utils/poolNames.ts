@@ -32,6 +32,7 @@ export const getMarketSymbol = (poolSymbol?: string): string => {
         return '';
     }
     const market = poolSymbol.match(marketRegex);
+    console.log(market);
     return market ? market[0] : '';
 };
 

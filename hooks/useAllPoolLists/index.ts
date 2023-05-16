@@ -18,6 +18,7 @@ export const useAllPoolLists = (): StaticPoolInfo[] => {
     useEffect(() => {
         if (!!poolLists) {
             console.count('Flattening pools list');
+            console.log(poolLists);
             ref.current = flattenAllPoolLists(poolLists);
             forceUpdate();
         }

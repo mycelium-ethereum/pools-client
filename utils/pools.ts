@@ -102,6 +102,7 @@ export const marketSymbolToAssetName: Record<string, string> = {
     'LINK/USD': 'Chainlink',
     'AAVE/USD': 'AAVE',
     'WTI/USD': 'Oil',
+    'TRUFLATION/USD': 'TruFlation USD',
     'stETH/ETH': 'Staked ETH',
 };
 
