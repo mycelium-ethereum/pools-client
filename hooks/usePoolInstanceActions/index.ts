@@ -46,6 +46,23 @@ interface PoolInstanceActions {
 const committerInterface = new ethers.utils.Interface(PoolCommitter__factory.abi);
 
 export const usePoolInstanceActions = (): PoolInstanceActions => {
+    
+    const shortCommitParams = encodeCommitParams(
+        false,
+        false,
+        CommitEnum.shortMint,
+        ethers.utils.parseUnits(5000, 18)
+    );
+    const longCommitParams = encodeCommitParams(
+        false,
+        false,
+        CommitEnum.shortMint,
+        ethers.utils.parseUnits(5000, 18)
+    );
+
+    console.log(`Short commit: ${shortCommitParams}`)
+    console.log(`Long commit: ${longCommitParams}`)
+
     const { setTokenApproved } = useStore(selectPoolInstanceActions, shallow);
     const { updatePoolTokenBalances, updateSettlementTokenBalances, simulateUpdateAvgEntryPrices } = useStore(
         selectPoolInstanceUpdateActions,
