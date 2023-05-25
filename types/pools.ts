@@ -34,10 +34,6 @@ export type AggregateBalances = {
     settlementTokens: BigNumber;
 };
 
-type LocalPoolInfo = {
-    valueType: 'percentile' | 'dollar';
-};
-
 /*
  * PoolList interface. Every poolsList must conform to this
  *  structure
@@ -46,7 +42,7 @@ export interface PoolList {
     name: string;
     timestamp: string;
     // readonly version: Version;
-    pools: (StaticPoolInfo & LocalPoolInfo)[];
+    pools: StaticPoolInfo[];
     keywords?: string[];
     logoURI?: string;
 }
