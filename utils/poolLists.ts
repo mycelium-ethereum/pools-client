@@ -2,7 +2,6 @@ import { KnownNetwork, StaticPoolInfo } from '@tracer-protocol/pools-js';
 import { POOL_LIST_MAP } from '~/constants/pools';
 import { PoolList, PoolLists, PoolListUris } from '~/types/poolLists';
 
-
 export const flattenAllPoolLists = (poolLists: PoolLists | undefined): StaticPoolInfo[] =>
     poolLists
         ? poolLists.All.map((pool) => pool.pools)
@@ -95,26 +94,7 @@ export const getAllPoolLists = async (network: KnownNetwork): Promise<PoolLists>
     const validExternalLists = externalLists.filter((list) => (!(list instanceof Error) || !list) && isPoolList(list));
     const importedList = {
         name: 'Imported',
-        pools: [{
-            address: "0xa740b84Fd3547b9C445844c30A10Cde6dce3E08B",
-            committer: {
-                address: '0x6431A00DaAA6dcC7c9a56C122E6Ac9Ae09437703'
-            },
-            frontRunningInterval: 3600,
-            keeper: "0x051afD0b39ACF4Cc52c76a479aD802d0B82A8249",
-            leverage: 1,
-            longToken: {
-                name: '1-LONG-TRUFLATION/USD+USDC', symbol: '1L-TRUFLATION/USD+USDC', address: '0x771d294b9AacEf20dd0ce6838752014657EF64D1', decimals: 18
-            },
-            name: "1-TRUFLATION/USD+USDC",
-            settlementToken: {
-                name: 'USD Coin (Arb1)', symbol: 'USDC', address: '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8', decimals: 6
-            },
-            shortToken: {
-                name: '1-SHORT-TRUFLATION/USD+USDC', symbol: '1S-TRUFLATION/USD+USDC', address: '0x1d1483A3eeA59C9b740Be8B885EfFac47e285f29', decimals: 18
-            },
-            updateInterval: 86400
-        }],
+        pools: [],
     };
 
     const allLists = [validTracerList, importedList, ...validExternalLists];

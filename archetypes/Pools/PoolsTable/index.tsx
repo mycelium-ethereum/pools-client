@@ -150,6 +150,11 @@ const InfoIcon = styled(Info)`
     }
 `;
 
+// Note: hacky
+const percentilePools = {
+    '0xDDC2b61C1CC309B97B16704F785D27Ae35c6335b': true,
+};
+
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
     showNextRebalance: boolean;
@@ -244,7 +249,9 @@ export const PoolsTable = ({
                         </TableHeaderCell>
                         <TableHeaderCell noPaddingBottom className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
-                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
+                            <IndexPriceTip>
+                                {percentilePools[rows[0].address] ? 'INDEX VALUE' : 'INDEX PRICE (USD)'}
+                            </IndexPriceTip>
                         </TableHeaderCell>
                         <TableHeaderCell noPaddingBottom className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
@@ -372,7 +379,11 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
                         <>
-                            <div>{toApproxCurrency(pool.oraclePrice)}</div>
+                            <div>
+                                {percentilePools[pool.address]
+                                    ? `${pool.oraclePrice.toFixed(2)} %`
+                                    : toApproxCurrency(pool.oraclePrice)}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.lastPrice}
