@@ -19,6 +19,8 @@ export const marketFilter: (poolName: string, marketFilterState: MarketFilterEnu
             return poolName.replace(/.\-/g, '').split('/')[0] === 'BTC';
         case MarketFilterEnum.WTI:
             return poolName.replace(/.\-/g, '').split('/')[0] === 'WTI';
+        case MarketFilterEnum.TRUFLATION:
+            return poolName.replace(/.\-/g, '').split('/')[0] === 'TRUFLATION';
         // case MarketFilterEnum.AAVE:
         // return poolName.replace(/.\-/g, '').split('/')[0] === 'AAVE';
         default:

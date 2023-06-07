@@ -150,6 +150,11 @@ const InfoIcon = styled(Info)`
     }
 `;
 
+// Note: hacky
+const percentilePools: Record<string, boolean> = {
+    '0xDDC2b61C1CC309B97B16704F785D27Ae35c6335b': true,
+};
+
 type TProps = {
     onClickMintBurn: (pool: string, side: SideEnum, commitAction: CommitActionEnum) => void;
     showNextRebalance: boolean;
@@ -175,6 +180,8 @@ export const PoolsTable = ({
         setShowModalPoolDetails(true);
         setPoolDetails(data);
     }, []);
+
+    const isPercentilePool = percentilePools[rows[0].address];
 
     return (
         <>
@@ -202,12 +209,14 @@ export const PoolsTable = ({
                                     <div className="px-10">
                                         <div className="font-bold">
                                             {marketSpotPrices[rows[0].marketSymbol]
-                                                ? toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
+                                                ? isPercentilePool
+                                                    ? `${marketSpotPrices[rows[0].marketSymbol].toFixed(2)} %`
+                                                    : toApproxCurrency(marketSpotPrices[rows[0].marketSymbol])
                                                 : '-'}
                                         </div>
                                         <SpotPriceTip>
                                             <div className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
-                                                SPOT PRICE
+                                                {isPercentilePool ? 'SPOT RATE' : 'SPOT PRICE'}
                                             </div>
                                         </SpotPriceTip>
                                     </div>
@@ -244,7 +253,7 @@ export const PoolsTable = ({
                         </TableHeaderCell>
                         <TableHeaderCell noPaddingBottom className="w-1/12 whitespace-nowrap">
                             {/* TODO: do something else when we have a pool using a non-USDC underlying feed */}
-                            <IndexPriceTip>{'INDEX PRICE (USD)'}</IndexPriceTip>
+                            <IndexPriceTip>{isPercentilePool ? 'INDEX RATE' : 'INDEX PRICE (USD)'}</IndexPriceTip>
                         </TableHeaderCell>
                         <TableHeaderCell noPaddingBottom className={showNextRebalance ? 'w-1/12' : 'w-3/12'}>
                             <SkewTip>
@@ -372,7 +381,11 @@ const PoolRow: React.FC<
                 <TableRowCell rowSpan={2}>
                     {showNextRebalance ? (
                         <>
-                            <div>{toApproxCurrency(pool.oraclePrice)}</div>
+                            <div>
+                                {percentilePools[pool.address]
+                                    ? `${pool.oraclePrice.toFixed(2)} %`
+                                    : toApproxCurrency(pool.oraclePrice)}
+                            </div>
                             <div className="mt-1">
                                 <UpOrDownWithTooltip
                                     oldValue={pool.lastPrice}

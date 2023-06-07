@@ -15,8 +15,8 @@ module.exports = {
     env: {
         siteTitle: 'Mycelium Perpetual Pools',
         siteDescription: '',
-        siteUrl: 'https://pools.mycelium.xyz',
-        siteImagePreviewUrl: '/img/opengraph/preview.png',
+        // siteUrl: BASE_PATH,
+        siteImagePreviewUrl: 'img/opengraph/main.png',
     },
 
     async redirects() {

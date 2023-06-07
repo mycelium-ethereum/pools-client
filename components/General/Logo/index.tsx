@@ -26,6 +26,9 @@ import SUSHI from '~/public/img/logos/currencies/sushi.svg';
 import TOKE from '~/public/img/logos/currencies/toke.svg';
 import TOKE_L from '~/public/img/logos/currencies/toke_long.svg';
 import TOKE_S from '~/public/img/logos/currencies/toke_short.svg';
+import TRUFLATION from '~/public/img/logos/currencies/truflation.svg';
+import TRUFLATION_L from '~/public/img/logos/currencies/truflation_long.svg';
+import TRUFLATION_S from '~/public/img/logos/currencies/truflation_short.svg';
 import USD from '~/public/img/logos/currencies/usd.svg';
 import USDC from '~/public/img/logos/currencies/usdc.svg';
 import WTI from '~/public/img/logos/currencies/wti.svg';
@@ -66,6 +69,7 @@ export type LogoTicker =
     | 'LINK_L'
     | 'AAVE_L'
     | 'WTI_L'
+    | 'TRUFLATION_L'
     | 'ETH_S'
     | 'EUR_S'
     | 'BTC_S'
@@ -73,6 +77,7 @@ export type LogoTicker =
     | 'LINK_S'
     | 'AAVE_S'
     | 'WTI_S'
+    | 'TRUFLATION_S'
     | 'ETH'
     | 'EUR'
     | 'WETH'
@@ -87,6 +92,7 @@ export type LogoTicker =
     | 'BALANCER'
     | 'BASE'
     | 'WTI'
+    | 'TRUFLATION'
     | typeof NETWORKS.ARBITRUM
     | typeof NETWORKS.ARBITRUM_RINKEBY
     | 'DEFAULT';
@@ -115,6 +121,9 @@ const logos: Record<LogoTicker, any> = {
     LINK_S: LINK_S,
     WTI_S: WTI_S,
     WTI_L: WTI_L,
+    TRUFLATION: TRUFLATION,
+    TRUFLATION_L: TRUFLATION_L,
+    TRUFLATION_S: TRUFLATION_S,
     EUR: EUR,
     ETH: ETH,
     stETH: ETH,

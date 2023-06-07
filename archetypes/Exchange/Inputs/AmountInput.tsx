@@ -20,7 +20,6 @@ const Available: React.FC<{
     const balanceAfter = BigNumber.max(amountBN.eq(0) ? balance : balance.minus(amountBN), 0);
 
     const tokenSource = () => {
-        console.log(balanceType);
         switch (balanceType) {
             case BalanceTypeEnum.escrow:
                 return 'wallet';

@@ -59,6 +59,10 @@ export const networkConfig: Record<KnownNetwork, Network> = {
                 feedAddress: '0x594b919AD828e693B935705c3F816221729E7AE8',
                 decimals: 8,
             },
+            'TRUFLATION/USD': {
+                feedAddress: '0xF0ffC609da91d1931314BA5d17F1786db985D801',
+                decimals: 18,
+            },
         },
     },
     [NETWORKS.MAINNET]: {
