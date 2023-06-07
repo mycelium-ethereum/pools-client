@@ -107,7 +107,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                             <TracerMintButton onClick={onButtonClick} disabled={!isValidAmount}>
                                 <span className="mr-2 inline-block">Mint on</span>
                                 <MyceliumSVG className="w-[22px]" alt="Mycelium logo" />
-                                <span className="ml-1 inline-block">Mycelium</span>
+                                <span className="font-medium ml-1 inline-block">Mycelium</span>
                             </TracerMintButton>
                         ) : (
                             <Button
