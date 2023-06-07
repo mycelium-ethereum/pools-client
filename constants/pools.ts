@@ -156,6 +156,6 @@ export const KnownShortenedPoolTokenSymbols: Record<string, string> = {
     '5S-PUNK/ETH+wETH': '5S-PUNK/ETH',
     '3S-BTC/USD+USDC-12h': '3S-BTC-12h',
     '3L-BTC/USD+USDC-12h': '3L-BTC-12h',
-    '1L-TRUFLATION/USD+USDC': '1L-TRUFLATE',
-    '1S-TRUFLATION/USD+USDC': '1S-TRUFLATE',
+    '1L-TRUFLATION/USD+USDC': '1L-INFL8ION',
+    '1S-TRUFLATION/USD+USDC': '1S-INFL8ION',
 };
