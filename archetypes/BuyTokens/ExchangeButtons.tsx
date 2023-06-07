@@ -14,7 +14,8 @@ import { useBigNumber } from '~/context/SwapContext';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import usePools from '~/hooks/usePools';
-import TracerSVG from '~/public/img/logos/tracer/tracer_logo.svg';
+import MyceliumSVG from '~/public/img/logos/mycelium/logo_MYC_small.svg';
+
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
 
@@ -105,7 +106,8 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                         !userBalances.settlementToken.approvedAmount.eq(0) ? (
                             <TracerMintButton onClick={onButtonClick} disabled={!isValidAmount}>
                                 <span className="mr-2 inline-block">Mint on</span>
-                                <TracerSVG className="w-[90px]" alt="Tracer logo" />
+                                <MyceliumSVG className="w-[22px]" alt="Mycelium logo" />
+                                <span className="ml-1 inline-block">Mycelium</span>
                             </TracerMintButton>
                         ) : (
                             <Button
