@@ -9,7 +9,13 @@ import {
 } from '~/types/filters';
 
 export const MARKET_FILTERS: Partial<Record<KnownNetwork, MarketFilterEnum[]>> = {
-    [NETWORKS.ARBITRUM]: [MarketFilterEnum.All, MarketFilterEnum.ETH, MarketFilterEnum.BTC, MarketFilterEnum.WTI],
+    [NETWORKS.ARBITRUM]: [
+        MarketFilterEnum.All,
+        MarketFilterEnum.ETH,
+        MarketFilterEnum.BTC,
+        MarketFilterEnum.WTI,
+        MarketFilterEnum.TRUFLATION,
+    ],
     [NETWORKS.ARBITRUM_RINKEBY]: [MarketFilterEnum.All, MarketFilterEnum.ETH, MarketFilterEnum.BTC],
 };
 

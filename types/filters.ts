@@ -10,6 +10,7 @@ export enum MarketFilterEnum {
     EUR = 'Euro',
     AAVE = 'Aave',
     WTI = 'Oil',
+    TRUFLATION = 'Inflation',
     stETH = 'Staked ETH',
 }
 
