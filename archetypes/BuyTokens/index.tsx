@@ -169,9 +169,9 @@ const BuyTokens: React.FC = () => {
         ],
     );
 
-    const handleModalOpen = () => {
-        setSummaryOpen(true);
-    };
+    // const handleModalOpen = () => {
+    //     setSummaryOpen(true);
+    // };
 
     const handleModalClose = () => {
         setSummaryOpen(false);
@@ -240,7 +240,7 @@ const BuyTokens: React.FC = () => {
                             amountBN={amountBN}
                             commitType={commitType}
                             isInvalid={invalidAmount.isInvalid}
-                            onButtonClick={handleModalOpen}
+                            // onButtonClick={handleModalOpen}
                         />
                     ) : null}
                     {!account && (

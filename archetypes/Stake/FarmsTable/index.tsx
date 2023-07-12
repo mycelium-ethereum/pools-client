@@ -123,7 +123,7 @@ const PoolRow: React.FC<{
     onClickStake: (farmAddress: string) => void;
     onClickUnstake: (farmAddress: string) => void;
     onClickClaim: (farmAddress: string) => void;
-}> = ({ farm, onClickStake, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
+}> = ({ farm, onClickUnstake, onClickClaim, rewardsTokenUSDPrices }) => {
     const stakingTokenPrice = useMemo(() => farm.stakingTokenPrice || new BigNumber(1), [farm]);
 
     const rewardsTokenPrice = rewardsTokenUSDPrices[farm.rewardsTokenAddress] || new BigNumber(0);

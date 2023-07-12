@@ -11,7 +11,6 @@ import TimeLeft from '~/components/TimeLeft';
 import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useBigNumber } from '~/context/SwapContext';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
-import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import usePools from '~/hooks/usePools';
 
 import { constructBalancerLink } from '~/utils/balancer';
@@ -27,7 +26,6 @@ export type EXButtonsProps = {
     market: string;
     poolTokens: BrowseTableRowData[];
     isInvalid: boolean;
-    onButtonClick: () => void;
 } & ExchangeButtonProps;
 
 export const ExchangeButtons: React.FC<EXButtonsProps> = ({
@@ -43,10 +41,9 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     swapState,
     account,
     userBalances,
-    onButtonClick,
 }) => {
     const { pools } = usePools();
-    const { approve } = usePoolInstanceActions();
+    // const { approve } = usePoolInstanceActions();
     // Required for tracking trade actions
     const { trackBuyAction } = useContext(AnalyticsContext);
     const amountBN = useBigNumber(amount);
@@ -199,19 +196,19 @@ const BuyButtonContainer = styled.div`
     }
 `;
 
-const MintButtonContainer = styled.div<{
-    isValidAmount: boolean;
-    account?: string;
-}>`
-    position: relative;
-    width: 220px;
-    height: 56px;
-    opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
-    cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
-    button {
-        pointer-events: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'auto' : 'none')};
-    }
-`;
+// const MintButtonContainer = styled.div<{
+//     isValidAmount: boolean;
+//     account?: string;
+// }>`
+//     position: relative;
+//     width: 220px;
+//     height: 56px;
+//     opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
+//     cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
+//     button {
+//         pointer-events: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'auto' : 'none')};
+//     }
+// `;
 
 export const TracerMintButton = styled.button<{ absolute?: boolean }>`
     position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
