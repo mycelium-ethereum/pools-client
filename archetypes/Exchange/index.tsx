@@ -1,22 +1,22 @@
-import React, { useContext, useState, useMemo } from 'react';
-import BigNumber from 'bignumber.js';
-import styled from 'styled-components';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
+import BigNumber from 'bignumber.js';
+import React, { useContext, useMemo, useState } from 'react';
+import styled from 'styled-components';
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
+import { NetworkHint, NetworkHintContainer } from '~/components/NetworkHint';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { CommitActionSideMap } from '~/constants/commits';
-import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
+import { SwapContext, noDispatch, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { useGasPrice } from '~/hooks/useGasPrice';
 import { usePool } from '~/hooks/usePool';
 import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import CloseIcon from '~/public/img/general/close.svg';
-import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
+import { useStore } from '~/store/main';
 
 import { PoolStatus } from '~/types/pools';
 import { formatBN } from '~/utils/converters';
@@ -25,19 +25,19 @@ import Inputs from './Inputs';
 import Summary from './Summary';
 
 const getTradeOptions = (poolStatus: PoolStatus) => [
-    {
-        key: CommitActionEnum.mint,
-        text: 'Mint',
-        disabled:
-            poolStatus === PoolStatus.Deprecated
-                ? {
-                      optionKey: TooltipKeys.DeprecatedPoolMintCommit,
-                  }
-                : undefined,
-        tooltip: {
-            optionKey: TooltipKeys.TradeMint,
-        },
-    },
+    // {
+    //     key: CommitActionEnum.mint,
+    //     text: 'Mint',
+    //     disabled:
+    //         poolStatus === PoolStatus.Deprecated
+    //             ? {
+    //                   optionKey: TooltipKeys.DeprecatedPoolMintCommit,
+    //               }
+    //             : undefined,
+    //     tooltip: {
+    //         optionKey: TooltipKeys.TradeMint,
+    //     },
+    // },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
@@ -106,8 +106,8 @@ export default styled((({ onClose, className }) => {
 
     const generateTitle = () => {
         switch (commitAction) {
-            case CommitActionEnum.mint:
-                return `Open a Trade`;
+            // case CommitActionEnum.mint:
+            //     return `Open a Trade`;
             case CommitActionEnum.burn:
                 return `Close a Trade`;
             case CommitActionEnum.flip:
@@ -129,7 +129,7 @@ export default styled((({ onClose, className }) => {
 
             <Header>
                 <TWButtonGroupStyled
-                    value={commitAction ?? CommitActionEnum.mint}
+                    value={commitAction ?? CommitActionEnum.burn}
                     size={'lg'}
                     color={'tracer'}
                     fullWidth={true}

@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
+import React, { useMemo, useState } from 'react';
 import Button from '~/components/General/Button';
 import Loading from '~/components/General/Loading';
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General/Logo';
@@ -194,7 +194,7 @@ const PoolRow: React.FC<{
                 </span>
             </TableRowCell>
             <TableRowCell>
-                <Button
+                {/* <Button
                     disabled={farm.rewardsEnded || farm.stakingTokenBalance.eq(0)}
                     className="mx-1 w-[78px] font-bold uppercase"
                     size="xs"
@@ -204,7 +204,7 @@ const PoolRow: React.FC<{
                     }}
                 >
                     STAKE
-                </Button>
+                </Button> */}
                 <Button
                     disabled={farm.myStaked.eq(0)}
                     className="mx-1 w-[96px] font-bold uppercase"
