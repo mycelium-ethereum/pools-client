@@ -94,16 +94,16 @@ const useValues = () => {
         }
     };
 
-    const getCommitActionAsText = (commitType: CommitActionEnum) => {
+    const getCommitActionAsText = (commitType: CommitActionEnum.burn) => {
         switch (commitType) {
-            case CommitActionEnum.mint:
-                return `Mint`;
+            // case CommitActionEnum.mint:
+            //     return `Mint`;
             case CommitActionEnum.burn:
                 return `Burn`;
-            case CommitActionEnum.flip:
-                return `Flip`;
+            // case CommitActionEnum.flip:
+            //     return `Flip`;
             default:
-                return `Mint`;
+                return `Burn`;
         }
     };
 
@@ -119,7 +119,7 @@ const useValues = () => {
     };
 
     const trackTradeAction = (
-        commitType: CommitActionEnum,
+        _: CommitActionEnum,
         balanceType: BalanceTypeEnum,
         tokenToBuy: string,
         tokenToSpend: string,
@@ -137,7 +137,7 @@ const useValues = () => {
             const balanceAsFloat = convertBNToFloat(balance);
             const tokenBuyAmountAsFloat = convertBNToFloat(tokenBuyAmount);
             const tokenSpendAmountAsFloat = convertBNToFloat(tokenSpendAmount);
-            const commitAction = getCommitActionAsText(commitType);
+            const commitAction = getCommitActionAsText(CommitActionEnum.burn);
             const source = getBalanceTypeAsText(balanceType);
             const poolBalanceLongAsFloat = convertBNToFloat(poolBalanceLong);
             const poolBalanceShortAsFloat = convertBNToFloat(poolBalanceShort);

@@ -1,6 +1,6 @@
-import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { BalanceTypeEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButtons from '~/archetypes/BuyTokens/ExchangeButtons';
 import { LeverageSelector, PoolTypeDropdown, SideSelector } from '~/archetypes/BuyTokens/Inputs';
 import MintSummaryModal from '~/archetypes/BuyTokens/MintSummaryModal';
@@ -16,9 +16,9 @@ import useBrowsePools from '~/hooks/useBrowsePools';
 import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
 import InfoIcon from '~/public/img/general/info.svg';
+import { useStore } from '~/store/main';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
-import { useStore } from '~/store/main';
 import { PoolInfo } from '~/types/pools';
 
 const BuyTokens: React.FC = () => {
@@ -33,7 +33,7 @@ const BuyTokens: React.FC = () => {
 
     const amountBN = useBigNumber(amount);
     const isLong = side === SideEnum.long;
-    const commitType = CommitActionSideMap[commitAction][side];
+    const commitType = CommitActionSideMap[CommitActionEnum.burn][side];
 
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
 
