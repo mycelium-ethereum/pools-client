@@ -1,18 +1,18 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 import BigNumber from 'bignumber.js';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import shallow from 'zustand/shallow';
-import { CommitActionEnum, NETWORKS, SideEnum } from '@tracer-protocol/pools-js';
 
 import { Logo, LogoTicker, tokenSymbolToLogoTicker } from '~/components/General';
 import Button from '~/components/General/Button';
 import {
+    ImportedIndicator,
     Table,
     TableHeader,
-    TableRow,
     TableHeaderCell,
+    TableRow,
     TableRowCell,
-    ImportedIndicator,
 } from '~/components/General/TWTable';
 import { OracleDetailsBadge, OracleDetailsBadgeContainer } from '~/components/OracleDetailsBadge';
 import TimeLeft from '~/components/TimeLeft';
@@ -23,11 +23,11 @@ import { default as UpOrDown } from '~/components/UpOrDown';
 import Clock from '~/public/img/general/clock.svg';
 import Info from '~/public/img/general/info.svg';
 import LinkIcon from '~/public/img/general/link.svg';
-import { useStore } from '~/store/main';
 import { selectMarketSpotPrices } from '~/store/MarketSpotPricesSlice';
 import { selectImportedPools } from '~/store/PoolsSlice';
 import { Theme } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
+import { useStore } from '~/store/main';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
 import { PoolStatus } from '~/types/pools';
 import { constructBalancerLink } from '~/utils/balancer';
@@ -680,7 +680,7 @@ const TokenRows: React.FC<
                             className="gradient-button mx-1 my-auto ml-auto w-[70px] uppercase"
                             size="xs"
                             variant="primary-light"
-                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.mint)}
+                            onClick={() => onClickMintBurn(poolAddress, side, CommitActionEnum.burn)}
                         >
                             TRADE
                         </Button>

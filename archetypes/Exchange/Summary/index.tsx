@@ -3,10 +3,7 @@ import { Transition } from '@headlessui/react';
 import { CommitActionEnum } from '@tracer-protocol/pools-js';
 
 import { Logo, tokenSymbolToLogoTicker } from '~/components/General';
-import { getFullAnnualFee } from '~/utils/pools';
 import BurnSummary from './BurnSummary';
-import FlipSummary from './FlipSummary';
-import MintSummary from './MintSummary';
 import * as Styles from './styles';
 import { SummaryProps } from './types';
 
@@ -17,9 +14,9 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
         [isLong],
     );
 
-    const annualFeePercent = useMemo(() => getFullAnnualFee(pool.updateInterval, pool.fee), [pool]);
+    // const annualFeePercent = useMemo(() => getFullAnnualFee(pool.updateInterval, pool.fee), [pool]);
 
-    const mintingFee = pool.committer.mintingFee.times(amount);
+    // const mintingFee = pool.committer.mintingFee.times(amount);
     const burningFee = pool.committer.burningFee.times(amount);
 
     return (
@@ -40,7 +37,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             <span className="font-bold">{token?.symbol}</span>
                         </div>
                     ) : null}
-                    {commitAction === CommitActionEnum.mint && (
+                    {/* {commitAction === CommitActionEnum.mint && (
                         <MintSummary
                             amount={amount}
                             nextTokenPrice={nextTokenPrice}
@@ -57,7 +54,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             burningFee={burningFee}
                             annualFeePercent={annualFeePercent}
                         />
-                    )}
+                    )} */}
 
                     {commitAction === CommitActionEnum.burn && (
                         <BurnSummary
@@ -71,7 +68,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             }}
                         />
                     )}
-
+                    {/* 
                     {commitAction === CommitActionEnum.flip && (
                         <FlipSummary
                             amount={amount}
@@ -84,7 +81,7 @@ export default (({ pool, showBreakdown, amount, isLong, receiveIn, commitAction,
                             burningFee={burningFee}
                             annualFeePercent={annualFeePercent}
                         />
-                    )}
+                    )} */}
                 </Transition>
                 <Styles.Countdown>
                     {`${CommitActionEnum[commitAction]} in`}

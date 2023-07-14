@@ -76,7 +76,7 @@ const MintSummaryModal: React.FC<MSModalProps> = ({
     );
 
     const amountBN = useBigNumber(amount);
-    const commitType = CommitActionSideMap[commitAction][side];
+    const commitType = CommitActionSideMap[CommitActionEnum.burn][side];
 
     const { poolInstance: pool } = usePool(selectedPool);
 

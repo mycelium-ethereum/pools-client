@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { BalanceTypeEnum, SideEnum } from '@tracer-protocol/pools-js';
+import { BalanceTypeEnum, CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButtons from '~/archetypes/BuyTokens/ExchangeButtons';
-import { LeverageSelector, MarketDropdown, PoolTypeDropdown, SideSelector } from '~/archetypes/BuyTokens/Inputs';
+import { LeverageSelector, PoolTypeDropdown, SideSelector } from '~/archetypes/BuyTokens/Inputs';
 import MintSummaryModal from '~/archetypes/BuyTokens/MintSummaryModal';
 import { isInvalidAmount } from '~/archetypes/Exchange/Inputs';
 import AmountInput from '~/archetypes/Exchange/Inputs/AmountInput';
@@ -11,7 +11,7 @@ import Button from '~/components/General/Button';
 import { Container } from '~/components/General/Container';
 import { MarketTypeTip } from '~/components/Tooltips';
 import { CommitActionSideMap } from '~/constants/commits';
-import { noDispatch, swapDefaults, SwapContext, useBigNumber } from '~/context/SwapContext';
+import { SwapContext, noDispatch, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
 import { usePool } from '~/hooks/usePool';
 import usePoolsNextBalances from '~/hooks/usePoolsNextBalances';
@@ -33,7 +33,7 @@ const BuyTokens: React.FC = () => {
 
     const amountBN = useBigNumber(amount);
     const isLong = side === SideEnum.long;
-    const commitType = CommitActionSideMap[commitAction][side];
+    const commitType = CommitActionSideMap[CommitActionEnum.burn][side];
 
     const { poolInstance: pool, userBalances } = usePool(selectedPool);
 
@@ -84,10 +84,10 @@ const BuyTokens: React.FC = () => {
 
     const buyTableData = useMemo(
         () => [
-            {
-                name: 'Market',
-                selector: <MarketDropdown market={market} markets={markets} swapDispatch={swapDispatch} />,
-            },
+            // {
+            //     name: 'Market',
+            //     selector: <MarketDropdown market={market} markets={markets} swapDispatch={swapDispatch} />,
+            // },
             {
                 name: 'Side',
                 selector: <SideSelector side={side} swapDispatch={swapDispatch} />,
@@ -169,9 +169,9 @@ const BuyTokens: React.FC = () => {
         ],
     );
 
-    const handleModalOpen = () => {
-        setSummaryOpen(true);
-    };
+    // const handleModalOpen = () => {
+    //     setSummaryOpen(true);
+    // };
 
     const handleModalClose = () => {
         setSummaryOpen(false);
@@ -240,7 +240,7 @@ const BuyTokens: React.FC = () => {
                             amountBN={amountBN}
                             commitType={commitType}
                             isInvalid={invalidAmount.isInvalid}
-                            onButtonClick={handleModalOpen}
+                            // onButtonClick={handleModalOpen}
                         />
                     ) : null}
                     {!account && (

@@ -1,14 +1,14 @@
-import React, { useContext, useState, useMemo } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
 import styled from 'styled-components';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import ExchangeButton from '~/components/General/Button/ExchangeButton';
 import Divider from '~/components/General/Divider';
 import TWButtonGroup from '~/components/General/TWButtonGroup';
-import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
+import { NetworkHint, NetworkHintContainer } from '~/components/NetworkHint';
 import { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { CommitActionSideMap } from '~/constants/commits';
-import { noDispatch, SwapContext, swapDefaults, useBigNumber } from '~/context/SwapContext';
+import { SwapContext, noDispatch, swapDefaults, useBigNumber } from '~/context/SwapContext';
 import useBalancerETHPrice from '~/hooks/useBalancerETHPrice';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
 import { useGasPrice } from '~/hooks/useGasPrice';
@@ -24,20 +24,20 @@ import Gas from './Gas';
 import Inputs from './Inputs';
 import Summary from './Summary';
 
-const getTradeOptions = (poolStatus: PoolStatus) => [
-    {
-        key: CommitActionEnum.mint,
-        text: 'Mint',
-        disabled:
-            poolStatus === PoolStatus.Deprecated
-                ? {
-                      optionKey: TooltipKeys.DeprecatedPoolMintCommit,
-                  }
-                : undefined,
-        tooltip: {
-            optionKey: TooltipKeys.TradeMint,
-        },
-    },
+const getTradeOptions = (_: PoolStatus) => [
+    // {
+    //     key: CommitActionEnum.mint,
+    //     text: 'Mint',
+    //     disabled:
+    //         poolStatus === PoolStatus.Deprecated
+    //             ? {
+    //                   optionKey: TooltipKeys.DeprecatedPoolMintCommit,
+    //               }
+    //             : undefined,
+    //     tooltip: {
+    //         optionKey: TooltipKeys.TradeMint,
+    //     },
+    // },
     {
         key: CommitActionEnum.burn,
         text: 'Burn',
@@ -45,19 +45,19 @@ const getTradeOptions = (poolStatus: PoolStatus) => [
             optionKey: TooltipKeys.TradeBurn,
         },
     },
-    {
-        key: CommitActionEnum.flip,
-        text: 'Flip',
-        disabled:
-            poolStatus === PoolStatus.Deprecated
-                ? {
-                      optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
-                  }
-                : undefined,
-        tooltip: {
-            optionKey: TooltipKeys.TradeFlip,
-        },
-    },
+    // {
+    //     key: CommitActionEnum.flip,
+    //     text: 'Flip',
+    //     disabled:
+    //         poolStatus === PoolStatus.Deprecated
+    //             ? {
+    //                   optionKey: TooltipKeys.DeprecatedPoolFlipCommit,
+    //               }
+    //             : undefined,
+    //     tooltip: {
+    //         optionKey: TooltipKeys.TradeFlip,
+    //     },
+    // },
 ];
 
 const DEFAULT_GAS_FEE = new BigNumber(0);
@@ -76,7 +76,7 @@ export default styled((({ onClose, className }) => {
 
     const [commitGasFees, setCommitGasFees] = useState<Partial<Record<CommitActionEnum, BigNumber>>>({});
 
-    const commitType = CommitActionSideMap[commitAction][side];
+    const commitType = CommitActionSideMap[CommitActionEnum.burn][side];
 
     const receiveIn = useExpectedCommitExecution(pool.lastUpdate, pool.updateInterval, pool.frontRunningInterval);
     const amountBN = useBigNumber(amount);
@@ -106,14 +106,14 @@ export default styled((({ onClose, className }) => {
 
     const generateTitle = () => {
         switch (commitAction) {
-            case CommitActionEnum.mint:
-                return `Open a Trade`;
+            // case CommitActionEnum.mint:
+            //     return `Open a Trade`;
             case CommitActionEnum.burn:
                 return `Close a Trade`;
-            case CommitActionEnum.flip:
-                return `Reverse a Trade`;
+            // case CommitActionEnum.flip:
+            //     return `Reverse a Trade`;
             default:
-                return `Open a Trade`;
+                return `Close a Trade`;
         }
     };
 
@@ -129,7 +129,7 @@ export default styled((({ onClose, className }) => {
 
             <Header>
                 <TWButtonGroupStyled
-                    value={commitAction ?? CommitActionEnum.mint}
+                    value={commitAction ?? CommitActionEnum.burn}
                     size={'lg'}
                     color={'tracer'}
                     fullWidth={true}

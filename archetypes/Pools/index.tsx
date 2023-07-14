@@ -1,15 +1,14 @@
-import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
-import BigNumber from 'bignumber.js';
 import { SearchOutlined } from '@ant-design/icons';
 import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
-import SlimButton from '~/components/General/Button/SlimButton';
+import BigNumber from 'bignumber.js';
+import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import NetworkHint, { NetworkHintContainer } from '~/components/NetworkHint';
 import PageTable from '~/components/PageTable';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
 import useBrowsePools from '~/hooks/useBrowsePools';
-import { useStore } from '~/store/main';
 import { selectAccount } from '~/store/Web3Slice';
-import { MarketFilterEnum, LeverageFilterEnum, SortByEnum } from '~/types/filters';
+import { useStore } from '~/store/main';
+import { LeverageFilterEnum, MarketFilterEnum, SortByEnum } from '~/types/filters';
 import { marketFilter } from '~/utils/filters';
 import { escapeRegExp } from '~/utils/helpers';
 import { getMarketLeverage } from '~/utils/poolNames';
@@ -18,7 +17,7 @@ import AddAltPoolModal from './AddAltPoolModal';
 import FilterSelects from './FilterSelects';
 import MintBurnModal from './MintBurnModal';
 import PoolsTable from './PoolsTable';
-import { browseReducer, BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnum } from './state';
+import { BrowseState, BrowseTableRowData, DeltaEnum, RebalanceEnum, browseReducer } from './state';
 import * as Styles from './styles';
 
 export const Browse: React.FC = () => {
@@ -171,7 +170,7 @@ export const Browse: React.FC = () => {
                         </Styles.DataRow>
                     );
                 })}
-                <Styles.AltPoolRow>
+                {/* <Styles.AltPoolRow>
                     <Styles.AltPoolTitle>Don’t see the pool you’re after?</Styles.AltPoolTitle>
                     <Styles.AltPoolActions>
                         <SlimButton
@@ -179,7 +178,7 @@ export const Browse: React.FC = () => {
                             onClick={() => dispatch({ type: 'setAddAltPoolModalOpen', open: true })}
                         />
                     </Styles.AltPoolActions>
-                </Styles.AltPoolRow>
+                </Styles.AltPoolRow> */}
             </PageTable.Container>
             {state.mintBurnModalOpen && (
                 <MintBurnModal open={state.mintBurnModalOpen} onClose={handleMintBurnModalClose} />

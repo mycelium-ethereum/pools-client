@@ -10,19 +10,19 @@ export const CommitTypeMap = {
     ShortBurnLongMint: CommitEnum.shortBurnLongMint,
 };
 
-export const CommitActionSideMap: Record<CommitActionEnum, Record<SideEnum, CommitEnum>> = {
-    [CommitActionEnum.mint]: {
-        [SideEnum.long]: CommitEnum.longMint,
-        [SideEnum.short]: CommitEnum.shortMint,
-    },
+export const CommitActionSideMap: Record<CommitActionEnum.burn, Record<SideEnum, CommitEnum>> = {
+    // [CommitActionEnum.mint]: {
+    //     [SideEnum.long]: CommitEnum.longMint,
+    //     [SideEnum.short]: CommitEnum.shortMint,
+    // },
     [CommitActionEnum.burn]: {
         [SideEnum.long]: CommitEnum.longBurn,
         [SideEnum.short]: CommitEnum.shortBurn,
     },
-    [CommitActionEnum.flip]: {
-        [SideEnum.long]: CommitEnum.longBurnShortMint,
-        [SideEnum.short]: CommitEnum.shortBurnLongMint,
-    },
+    // [CommitActionEnum.flip]: {
+    //     [SideEnum.long]: CommitEnum.longBurnShortMint,
+    //     [SideEnum.short]: CommitEnum.shortBurnLongMint,
+    // },
 };
 
 export const CommitTypeName: Record<CommitEnum, string> = {
@@ -48,10 +48,10 @@ export const CommitToQueryFocusMap: Record<CommitEnum, QueryFocus> = {
     [CommitEnum.shortBurnLongMint]: flipQueryFocus,
 };
 
-export const CommitActionToQueryFocusMap: Record<CommitActionEnum, QueryFocus> = {
-    [CommitActionEnum.mint]: mintQueryFocus,
+export const CommitActionToQueryFocusMap: Record<CommitActionEnum.burn, QueryFocus> = {
+    // [CommitActionEnum.mint]: mintQueryFocus,
     [CommitActionEnum.burn]: burnQueryFocus,
-    [CommitActionEnum.flip]: flipQueryFocus,
+    // [CommitActionEnum.flip]: flipQueryFocus,
 };
 
 export const PENDING_COMMIT = 1;

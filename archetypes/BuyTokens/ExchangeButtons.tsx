@@ -1,20 +1,17 @@
-import React, { useMemo, useContext } from 'react';
 import { Transition } from '@headlessui/react';
+import { NETWORKS, Pool, PoolToken, SideEnum } from '@tracer-protocol/pools-js';
+import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import { Pool, PoolToken, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
 import { MintSourceEnum } from '~/archetypes/BuyTokens/MintButton';
 import { calcNumTokens } from '~/archetypes/Exchange/Summary/utils';
 import { BrowseTableRowData } from '~/archetypes/Pools/state';
 import { HiddenExpand } from '~/components/General';
-import Button from '~/components/General/Button';
 import { ExchangeButtonProps } from '~/components/General/Button/ExchangeButton';
 import TimeLeft from '~/components/TimeLeft';
 import { AnalyticsContext } from '~/context/AnalyticsContext';
 import { useBigNumber } from '~/context/SwapContext';
 import useExpectedCommitExecution from '~/hooks/useExpectedCommitExecution';
-import { usePoolInstanceActions } from '~/hooks/usePoolInstanceActions';
 import usePools from '~/hooks/usePools';
-import MyceliumSVG from '~/public/img/logos/mycelium/logo_MYC_small.svg';
 
 import { constructBalancerLink } from '~/utils/balancer';
 import { toApproxCurrency } from '~/utils/converters';
@@ -29,7 +26,6 @@ export type EXButtonsProps = {
     market: string;
     poolTokens: BrowseTableRowData[];
     isInvalid: boolean;
-    onButtonClick: () => void;
 } & ExchangeButtonProps;
 
 export const ExchangeButtons: React.FC<EXButtonsProps> = ({
@@ -45,10 +41,9 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
     swapState,
     account,
     userBalances,
-    onButtonClick,
 }) => {
     const { pools } = usePools();
-    const { approve } = usePoolInstanceActions();
+    // const { approve } = usePoolInstanceActions();
     // Required for tracking trade actions
     const { trackBuyAction } = useContext(AnalyticsContext);
     const amountBN = useBigNumber(amount);
@@ -101,7 +96,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                             <TimeLeft targetTime={receiveIn} />
                         </b>
                     </BuyText>
-                    <MintButtonContainer isValidAmount={isValidAmount} account={account}>
+                    {/* <MintButtonContainer isValidAmount={isValidAmount} account={account}>
                         {userBalances.settlementToken.approvedAmount?.gte(userBalances.settlementToken.balance) ||
                         !userBalances.settlementToken.approvedAmount.eq(0) ? (
                             <TracerMintButton onClick={onButtonClick} disabled={!isValidAmount}>
@@ -124,7 +119,7 @@ export const ExchangeButtons: React.FC<EXButtonsProps> = ({
                                 Unlock {pool.settlementToken.symbol}
                             </Button>
                         )}
-                    </MintButtonContainer>
+                    </MintButtonContainer> */}
                 </BuyButtonContainer>
                 <BuyButtonContainer>
                     <BuyText>
@@ -201,19 +196,19 @@ const BuyButtonContainer = styled.div`
     }
 `;
 
-const MintButtonContainer = styled.div<{
-    isValidAmount: boolean;
-    account?: string;
-}>`
-    position: relative;
-    width: 220px;
-    height: 56px;
-    opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
-    cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
-    button {
-        pointer-events: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'auto' : 'none')};
-    }
-`;
+// const MintButtonContainer = styled.div<{
+//     isValidAmount: boolean;
+//     account?: string;
+// }>`
+//     position: relative;
+//     width: 220px;
+//     height: 56px;
+//     opacity: ${({ isValidAmount, account }) => (isValidAmount || !account ? '1' : '0.5')};
+//     cursor: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'pointer' : 'not-allowed')};
+//     button {
+//         pointer-events: ${({ isValidAmount, account }) => (isValidAmount || !account ? 'auto' : 'none')};
+//     }
+// `;
 
 export const TracerMintButton = styled.button<{ absolute?: boolean }>`
     position: ${({ absolute }) => (absolute ? 'absolute' : 'relative')};
