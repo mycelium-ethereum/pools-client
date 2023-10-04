@@ -14,6 +14,7 @@ export enum TransactionType {
     ARB_BRIDGE = 'ARB_BRIDGE',
     FARM_STAKE_WITHDRAW = 'FARM_STAKE_WITHDRAW',
     FARM_CLAIM = 'FARM_CLAIM',
+    V1_BURN_ALL = 'V1_BURN_ALL',
     DEFAULT = 'DEFAULT',
 }
 
@@ -69,6 +70,11 @@ export type FarmStakeWithdrawProps = {
     farmName: string;
 };
 
+export type V1BurnAllProps = {
+    tokenName: string;
+    settlementTokenName: string;
+};
+
 type GetInjectedSuccessProps<P extends TransactionType> = P extends TransactionType.APPROVE
     ? ApproveProps
     : P extends TransactionType.COMMIT
@@ -81,6 +87,8 @@ type GetInjectedSuccessProps<P extends TransactionType> = P extends TransactionT
     ? ArbBridgeProps
     : P extends TransactionType.FARM_STAKE_WITHDRAW
     ? FarmStakeWithdrawProps
+    : P extends TransactionType.V1_BURN_ALL
+    ? V1BurnAllProps
     : P extends TransactionType.FARM_CLAIM
     ? undefined
     : P extends TransactionType.DEFAULT
@@ -108,7 +116,8 @@ export type AllTransactionParams =
     | TransactionParams<ArbBridgeETHDeposit, TransactionType.ARB_ETH_DEPOSIT>
     | TransactionParams<ArbBridgeBridge, TransactionType.ARB_BRIDGE>
     | TransactionParams<FarmClaim, TransactionType.FARM_CLAIM>
-    | TransactionParams<FarmStakeWithdraw, TransactionType.FARM_STAKE_WITHDRAW>;
+    | TransactionParams<FarmStakeWithdraw, TransactionType.FARM_STAKE_WITHDRAW>
+    | TransactionParams<FarmStakeWithdraw, TransactionType.V1_BURN_ALL>;
 
 export interface ITransactionSlice {
     pendingCount: number;

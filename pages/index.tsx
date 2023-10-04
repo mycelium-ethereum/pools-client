@@ -1,9 +1,10 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import TokenBuySell from '~/archetypes/BuyTokens';
+import Portfolio from '~/archetypes/Portfolio';
 import SEO from '~/components/General/SEO';
 import { PagePath, seoContent } from '~/constants/seo';
 import { SwapStore } from '~/context/SwapContext';
+import { FarmStore } from '~/context/FarmContext';
 
 export default (() => {
     const router = useRouter();
@@ -11,7 +12,9 @@ export default (() => {
     return (
         <SwapStore>
             <SEO {...seoContent[router.pathname as PagePath]} />
-            <TokenBuySell />
+            <FarmStore>
+                <Portfolio />
+            </FarmStore>
         </SwapStore>
     );
 }) as React.FC;

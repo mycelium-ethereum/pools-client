@@ -119,36 +119,9 @@ const NavBarContent: React.FC = () => {
                     <div className="ml-auto flex items-center">
                         <ul className="mr-auto ml-4 mb-0 hidden font-inter text-sm text-white lg:flex">
                             <li className={listItemStyles}>
-                                <Link href="/" passHref>
-                                    <a
-                                        id="buy-tokens"
-                                        className={classNames(linkStyles, route === '' ? selectedStyles : '')}
-                                    >
-                                        Buy
-                                    </a>
-                                </Link>
-                            </li>
-                            <li className={listItemStyles}>
-                                <Link href="/trade" passHref>
-                                    <a
-                                        id="browse-pools"
-                                        className={classNames(linkStyles, route === 'trade' ? selectedStyles : '')}
-                                    >
-                                        Trade
-                                    </a>
-                                </Link>
-                            </li>
-                            <li className={listItemStyles}>
                                 <Link href="/portfolio" passHref>
                                     <a className={classNames(linkStyles, route === 'portfolio' ? selectedStyles : '')}>
                                         Portfolio
-                                    </a>
-                                </Link>
-                            </li>
-                            <li className={listItemStyles}>
-                                <Link href="/stake" passHref>
-                                    <a className={classNames(linkStyles, route === 'stake' ? selectedStyles : '')}>
-                                        Stake
                                     </a>
                                 </Link>
                             </li>

@@ -11,6 +11,7 @@ import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 
 import { OnClickCommit, OnClickStake } from '~/types/portfolio';
 import { ClaimedTokens } from './ClaimedTokensTable';
+import { PoolsV1Tokens } from './PoolsV1TokensTable';
 import { emptyStateHelpCardContent } from './content';
 import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
@@ -103,6 +104,7 @@ export const PortfolioPage = (): JSX.Element => {
                     onClickCommitAction={onClickCommitAction}
                     onClickStake={onClickStake}
                 />
+                <PoolsV1Tokens />
                 <UnclaimedTokens
                     escrowSearch={state.escrowSearch}
                     escrowMarketFilter={state.escrowMarketFilter}

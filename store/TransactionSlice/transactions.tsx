@@ -9,6 +9,7 @@ import {
     CommitProps,
     FarmStakeWithdrawProps,
     TransactionType,
+    V1BurnAllProps,
 } from './types';
 
 const AUTO_DISMISS = 5000; // 4 seconds
@@ -219,5 +220,24 @@ export const transactionMap: Record<
                 closeButton: true,
                 autoClose: AUTO_DISMISS,
             },
+    },
+    V1_BURN_ALL: {
+        pending: (props: V1BurnAllProps) => [
+            <>
+                <Notification title={`Burning ${props.tokenName}`} />
+            </>,
+        ],
+        success: (props: V1BurnAllProps) => ({
+            render: <Notification title={`${props.tokenName} burn submitted, your ${props.settlementTokenName} will be transferred to you at the next upkeep.`} />,
+            type: 'success',
+            isLoading: false,
+            closeButton: true,
+        }),
+        error: () => ({
+            render: <Notification title={`Could not submit burn commit.`} />,
+            type: 'error',
+            isLoading: false,
+            closeButton: true,
+        }),
     },
 };
