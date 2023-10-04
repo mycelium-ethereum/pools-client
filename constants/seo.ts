@@ -2,16 +2,16 @@ export type PagePath = '/' | '/trade' | '/portfolio' | '/stake';
 
 export const seoContent = {
     '/': {
-        title: 'Buy Pool Tokens',
-        description: 'Build and trade with Mycelium Perpetuals and gain leveraged exposure to any market in the world.',
+        title: 'Close Pools Positions',
+        description: 'Close your positions by burning your pools tokens.',
     },
     '/trade': {
         title: 'Trade',
-        description: 'Mint and Burn your Pool Tokens.',
+        description: 'Burn your Pool Tokens.',
     },
     '/portfolio': {
-        title: 'Portfolio',
-        description: 'Track your portfolio performance.',
+        title: 'Close Pools Positions',
+        description: 'Close your positions by burning your pools tokens.',
     },
     '/stake': {
         title: 'Stake',

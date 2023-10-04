@@ -249,4 +249,5 @@ export type PoolCommitStats = {
 export enum PoolStatus {
     Live,
     Deprecated,
+    V1
 }

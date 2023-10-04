@@ -5,6 +5,7 @@ import { IMarketSpotPricesSlice } from './MarketSpotPricesSlice/types';
 import { IPendingCommitSlice } from './PendingCommitSlice/types';
 import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { IPoolsSlice } from './PoolsSlice/types';
+import { IPoolsV1Slice } from './PoolsV1Slice/types';
 import { IThemeSlice } from './ThemeSlice/types';
 import { ITransactionSlice } from './TransactionSlice/types';
 import { IUnsupportedNetworkSlice } from './UnsupportedNetworkSlice/types';
@@ -15,6 +16,7 @@ export type StoreState = {
     transactionSlice: ITransactionSlice;
     themeSlice: IThemeSlice;
     poolsSlice: IPoolsSlice;
+    poolsV1Slice: IPoolsV1Slice;
     poolsInstancesSlice: IPoolsInstancesSlice;
     web3Slice: IWeb3Slice;
     gasSlice: IGasSlice;

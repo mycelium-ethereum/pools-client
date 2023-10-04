@@ -13,7 +13,9 @@ import { IPendingCommitSlice } from './PendingCommitSlice/types';
 import { createPoolsInstancesSlice } from './PoolInstancesSlice';
 import { IPoolsInstancesSlice } from './PoolInstancesSlice/types';
 import { createPoolsSlice } from './PoolsSlice';
+import { createPoolsV1Slice } from './PoolsV1Slice';
 import { IPoolsSlice } from './PoolsSlice/types';
+import { IPoolsV1Slice } from './PoolsV1Slice/types';
 import { onNetworkChange, onAccountChange } from './subscriptions';
 import { createThemeSlice } from './ThemeSlice';
 import { IThemeSlice } from './ThemeSlice/types';
@@ -64,6 +66,7 @@ export const useStore = create<
                 transactionSlice: lens<ITransactionSlice>(createTransactionSlice),
                 themeSlice: lens<IThemeSlice>(createThemeSlice),
                 poolsSlice: lens<IPoolsSlice>(createPoolsSlice),
+                poolsV1Slice: lens<IPoolsV1Slice>(createPoolsV1Slice),
                 poolsInstancesSlice: lens<IPoolsInstancesSlice>(createPoolsInstancesSlice),
                 web3Slice: lens<IWeb3Slice>(createWeb3Slice),
                 gasSlice: lens<IGasSlice>(createGasSlice),
