@@ -37,7 +37,7 @@ export const PoolsV1Tokens = (): JSX.Element => {
 		const poolCommitterInstance = new ethers.Contract(poolCommitter, poolCommitterAbi, provider?.getSigner());
 		if(handleTransaction) {
 
-			console.log('v1 BURN TX', poolCommitterInstance, commitType, amount)
+			// console.log('v1 BURN TX', poolCommßitterInstance, commitType, amount)
 
 			handleTransaction({
 				callMethod: poolCommitterInstance.commit,
@@ -64,7 +64,7 @@ export const PoolsV1Tokens = (): JSX.Element => {
 	}
 
     useEffect(() => {
-        console.log('RREFRESHING POOLS V1 TOKENS')
+        // console.log('RREFRESHING POOLS V1 TOKENS')
         if(account && network && provider && poolsLists[network].pools) {
 			const syncHoldings = async () => {
 				for (const pool of poolsLists[network].pools) {
@@ -112,8 +112,8 @@ export const PoolsV1Tokens = (): JSX.Element => {
 
 						const shortTokenPrice = shortBalance.div(shortSupply);
 						const longTokenPrice = longBalance.div(longSupply);
-						console.log(`v1 ${pool.shortToken.name} price: ${shortTokenPrice.toString()}`);
-						console.log(`v1 ${pool.longToken.name} price: ${longTokenPrice.toString()}`);
+						// console.log(`v1 ${pool.shortToken.name} price: ${shortTokenPrice.toString()}`);
+						// console.log(`v1 ${pool.longToken.name} price: ${longTokenPrice.toString()}`);
 
 						if(shortTokenBalance.gt(0)) {
 
