@@ -59,7 +59,7 @@ export const PortfolioPage = (): JSX.Element => {
     const emptyState = () => {
         return (
             <Styles.Wrapper>
-                <Styles.Banner>
+                {/* <Styles.Banner>
                     {emptyStateHelpCardContent.map((v, i) => (
                         <HelpCard
                             badge={v.badge}
@@ -70,8 +70,8 @@ export const PortfolioPage = (): JSX.Element => {
                             key={`${v.title}-${i}`}
                         />
                     ))}
-                </Styles.Banner>
-                {maxSkew !== undefined && (
+                </Styles.Banner> */}
+                {/* {maxSkew !== undefined && (
                     <div>
                         <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
 
@@ -84,7 +84,7 @@ export const PortfolioPage = (): JSX.Element => {
                             roundedTop={false}
                         />
                     </div>
-                )}
+                )} */}
             </Styles.Wrapper>
         );
     };
@@ -92,11 +92,6 @@ export const PortfolioPage = (): JSX.Element => {
     const filledState = () => {
         return (
             <>
-                <QueuedCommits
-                    queuedCommitsFilter={state.queuedCommitsFilter}
-                    queuedCommitsSearch={state.queuedCommitsSearch}
-                    dispatch={dispatch}
-                />
                 <ClaimedTokens
                     claimedTokensMarketFilter={state.claimedTokensMarketFilter}
                     claimedTokensSearch={state.claimedTokensSearch}
@@ -104,12 +99,17 @@ export const PortfolioPage = (): JSX.Element => {
                     onClickCommitAction={onClickCommitAction}
                     onClickStake={onClickStake}
                 />
-                <PoolsV1Tokens />
                 <UnclaimedTokens
                     escrowSearch={state.escrowSearch}
                     escrowMarketFilter={state.escrowMarketFilter}
                     dispatch={dispatch}
                     onClickCommitAction={onClickCommitAction}
+                />
+                <PoolsV1Tokens />
+                <QueuedCommits
+                    queuedCommitsFilter={state.queuedCommitsFilter}
+                    queuedCommitsSearch={state.queuedCommitsSearch}
+                    dispatch={dispatch}
                 />
                 <Divider text="Historical Data" />
                 <HistoricCommits
@@ -124,7 +124,7 @@ export const PortfolioPage = (): JSX.Element => {
     return (
         <Container>
             <TradeOverviewBanner
-                title={'Portfolio Overview'}
+                title={'Exit Mycelium Pools Positions'}
                 portfolioOverview={portfolioOverview}
                 account={!!account}
                 handleConnect={handleConnect}

@@ -161,6 +161,7 @@ export const useUpdatePoolInstances = (): void => {
                 }
 
                 try {
+                    console.log('POOL LIST', poolLists)
                     const initialisedPools = await Promise.all(
                         poolLists.map(async (pool) => {
                             const poolSDKInstance = await attemptPromiseRecursively({

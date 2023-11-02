@@ -30,7 +30,7 @@ const MobileMenu = ({
                             <AccountDropdown account={account ?? ''} className="min-w-[100%]" />
                         </div>
                         {!!network ? <NetworkDropdown className="relative whitespace-nowrap" /> : null}
-                        <ul>
+                        {/* <ul>
                             {menuContent.map((item) => (
                                 <NavItem key={item.link} paddingLevel={2} selected={path === item.link} linkPadding>
                                     <Link href={item.link} passHref>
@@ -38,7 +38,7 @@ const MobileMenu = ({
                                     </Link>
                                 </NavItem>
                             ))}
-                        </ul>
+                        </ul> */}
                     </ScrollContainer>
                 </NavList>
             </Container>

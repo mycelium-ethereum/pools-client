@@ -47,7 +47,7 @@ export const UnclaimedPoolTokenRow = ({
                     onClick={() => onClickCommitAction(poolAddress, side, CommitActionEnum.burn, true)}
                     content={<>Burn</>}
                 />
-                <TooltipSelector
+                {/* <TooltipSelector
                     tooltip={{
                         key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : undefined,
                     }}
@@ -58,8 +58,8 @@ export const UnclaimedPoolTokenRow = ({
                             content={<>Flip</>}
                         />
                     </div>
-                </TooltipSelector>
-                <Actions
+                </TooltipSelector> */}
+                {/* <Actions
                     token={{
                         address,
                         symbol,
@@ -69,7 +69,7 @@ export const UnclaimedPoolTokenRow = ({
                         type: BlockExplorerAddressType.token,
                         target: address,
                     }}
-                />
+                /> */}
             </ActionsCell>
         </TableRow>
     );

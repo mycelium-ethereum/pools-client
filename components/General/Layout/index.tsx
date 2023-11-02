@@ -1,8 +1,5 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import Footer from '~/components/Footer';
 import UnsupportedNetworkPopup from '~/components/General/UnsupportedNetworkPopup';
-import { UserSnap } from '~/components/General/Usersnap';
 import { GeoblockModal } from '~/components/GeoblockModal';
 import NavBar from '~/components/Nav/Navbar';
 import OnboardTradeModal from '~/components/OnboardModal/Trade';
@@ -14,7 +11,7 @@ export const Layout: React.FC = ({ children }) => {
 
     return (
         <div className={`page matrix:bg-matrix-bg dark:bg-mesh-bg`}>
-            <UserSnap />
+            {/* <UserSnap /> */}
             <NavBar />
             <AnalyticsProvider>{children}</AnalyticsProvider>
             <UnsupportedNetworkPopup />
@@ -30,7 +27,7 @@ export const Layout: React.FC = ({ children }) => {
                     }, 1000);
                 }}
             />
-            <Footer setShowOnboardModal={useRouter().pathname !== '/portfolio' ? setShowOnboardModal : undefined} />
+            {/* <Footer setShowOnboardModal={useRouter().pathname !== '/portfolio' ? setShowOnboardModal : undefined} /> */}
         </div>
     );
 };

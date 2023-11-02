@@ -118,14 +118,14 @@ const NavBarContent: React.FC = () => {
                     <NavLogo onClick={handleMenuClose} />
                     <div className="ml-auto flex items-center">
                         <ul className="mr-auto ml-4 mb-0 hidden font-inter text-sm text-white lg:flex">
-                            <li className={listItemStyles}>
+                            {/* <li className={listItemStyles}>
                                 <Link href="/portfolio" passHref>
                                     <a className={classNames(linkStyles, route === 'portfolio' ? selectedStyles : '')}>
                                         Portfolio
                                     </a>
                                 </Link>
-                            </li>
-                            <li className={listItemStyles}>
+                            </li> */}
+                            {/* <li className={listItemStyles}>
                                 <a
                                     href="https://pools.docs.mycelium.xyz"
                                     target="_blank"
@@ -135,7 +135,7 @@ const NavBarContent: React.FC = () => {
                                 >
                                     <span>Docs</span>
                                 </a>
-                            </li>
+                            </li> */}
                         </ul>
                         <div className="flex justify-end">
                             <Show.MD display="flex">
@@ -146,7 +146,7 @@ const NavBarContent: React.FC = () => {
                                     account={account ?? ''}
                                     className="dark:bg-theme-button-gradient-bg my-auto ml-4"
                                 />
-                                <SlimButton
+                                {/* <SlimButton
                                     gradient
                                     onClick={() => {
                                         window.location.assign('https://swaps.mycelium.xyz/');
@@ -158,7 +158,7 @@ const NavBarContent: React.FC = () => {
                                             Perpetual Swaps
                                         </>
                                     }
-                                />
+                                /> */}
                             </Show.MD>
                             <Hide.LG display="flex">
                                 <HamburgerMenu

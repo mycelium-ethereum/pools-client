@@ -29,7 +29,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                 </NetworkHintContainer>
             </Heading>
             <Styles.Container>
-                <Styles.Banner className={!!account ? '' : 'empty-state'}>
+                {/* <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>
                         <Styles.Subtitle>Valuation</Styles.Subtitle>
                     </Styles.Header>
@@ -41,7 +41,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                             </Styles.Currency>
                         </Styles.Value>
                     </Styles.BannerContent>
-                </Styles.Banner>
+                </Styles.Banner> */}
 
                 {!account && handleConnect && <ConnectWalletBanner handleConnect={handleConnect} />}
             </Styles.Container>
