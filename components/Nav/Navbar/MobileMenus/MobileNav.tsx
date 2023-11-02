@@ -1,26 +1,20 @@
 import React from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { KnownNetwork } from '@tracer-protocol/pools-js';
 import { Container } from '~/components/General/Container';
 import AccountDropdown from '~/components/Nav/Navbar/AccountDropdown';
-import { menuContent } from '~/components/Nav/Navbar/MobileMenus/navContent';
-import { NavItem, NavMenu, NavList, ScrollContainer, MeshBackground } from '~/components/Nav/Navbar/MobileMenus/styles';
+import { NavMenu, NavList, ScrollContainer, MeshBackground } from '~/components/Nav/Navbar/MobileMenus/styles';
 import NetworkDropdown from '~/components/Nav/Navbar/NetworkDropdown';
 
 const MobileMenu = ({
     account,
     network,
     navMenuOpen,
-    handleMenuClose,
 }: {
     account: string;
     network: KnownNetwork | undefined;
     navMenuOpen: boolean;
     handleMenuClose: () => void;
 }): JSX.Element => {
-    const path = useRouter().pathname;
-
     return (
         <NavMenu isOpen={navMenuOpen}>
             <Container className="relative">

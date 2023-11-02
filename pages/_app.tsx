@@ -2,8 +2,8 @@
 process.traceDeprecation = true;
 
 import 'antd/dist/antd.css';
-import { AppProps } from 'next/app';
 import React from 'react';
+import { AppProps } from 'next/app';
 import 'react-toastify/dist/ReactToastify.css';
 import { Layout } from '~/components/General/Layout';
 import { ToastContainerWithStyles } from '~/components/General/Notification/ToastContainerWithStyles';

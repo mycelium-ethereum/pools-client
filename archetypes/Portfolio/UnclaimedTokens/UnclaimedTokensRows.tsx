@@ -3,9 +3,7 @@ import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import SlimButton from '~/components/General/Button/SlimButton';
 import { TableRow } from '~/components/General/TWTable';
 import Actions from '~/components/TokenActions';
-import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
 import { BlockExplorerAddressType } from '~/types/blockExplorers';
-import { PoolStatus } from '~/types/pools';
 import { OverviewAsset } from '~/types/portfolio';
 import { UnclaimedPoolTokenRowProps } from '~/types/unclaimedTokens';
 import { Market, SettlementToken } from '../Market';
@@ -18,14 +16,10 @@ export const UnclaimedPoolTokenRow = ({
     currentTokenPrice,
     onClickCommitAction,
     symbol,
-    address,
-    decimals,
     side,
     poolAddress,
     settlementTokenSymbol,
-    poolStatus,
 }: UnclaimedPoolTokenRowProps): JSX.Element => {
-    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
 
     return (
         <TableRow>

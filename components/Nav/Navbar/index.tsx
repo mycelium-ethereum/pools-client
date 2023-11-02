@@ -1,9 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 import shallow from 'zustand/shallow';
-import SlimButton from '~/components/General/Button/SlimButton';
 import { Container } from '~/components/General/Container';
 import Hide from '~/components/General/Hide';
 import Show from '~/components/General/Show';
@@ -11,12 +8,10 @@ import LauncherMenu from '~/components/Nav/Navbar/MobileMenus/LauncherMenu';
 import NavLogo from '~/components/Nav/Navbar/NavLogo';
 import { ANIMATION_DURATION } from '~/components/Nav/Navbar/Popouts/styles';
 import { NavContext, NavContextProvider } from '~/context/NavContext';
-import MyceliumLogo from '~/public/img/logos/mycelium/logo_MYC_small.svg';
 import { useStore } from '~/store/main';
 import { BreakpointEnum } from '~/store/ThemeSlice/themes';
 import { selectWeb3Info } from '~/store/Web3Slice';
 
-import { classNames } from '~/utils/helpers';
 import AccountDropdown from './AccountDropdown';
 import HamburgerMenu from './MobileMenus/HamburgerMenu';
 import MobileNav from './MobileMenus/MobileNav';
@@ -33,14 +28,7 @@ const NavBar: React.FC = () => {
 const NavBarContent: React.FC = () => {
     const { navMenuOpen, setNavMenuOpen, launcherMenuOpen, setLauncherMenuOpen } = useContext(NavContext);
     const [navBackdrop, setNavBackdrop] = useState<boolean>(true);
-    const routes = useRouter().asPath.split('/');
-    const route = routes[routes.length - 2];
     const { account, network } = useStore(selectWeb3Info, shallow);
-
-    const listItemStyles = 'flex hover:opacity-80';
-    const linkStyles =
-        'flex transition-all duration-300 items-center px-4 py-2 text-base cursor-pointer whitespace-nowrap dark:text-white text-tracer-650';
-    const selectedStyles = 'font-bold';
 
     const handleScroll = (scrollContainer: HTMLDivElement) => {
         if ((!!scrollContainer && scrollContainer.scrollTop >= 1) || window.innerWidth < BreakpointEnum.DesktopSml) {

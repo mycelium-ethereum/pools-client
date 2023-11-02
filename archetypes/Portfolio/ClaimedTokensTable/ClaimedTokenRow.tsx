@@ -1,38 +1,27 @@
 import React from 'react';
-import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import SlimButton from '~/components/General/Button/SlimButton';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
-import Actions from '~/components/TokenActions';
-import { PortfolioSellTooltip, PortfolioStakeTooltip, StyledTooltip } from '~/components/Tooltips';
-import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { StyledTooltip } from '~/components/Tooltips';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
-import { PoolStatus } from '~/types/pools';
 import { Market } from '../Market';
 import { ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
 import { TokensNotional } from '../Tokens';
 
 export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
-    network,
     symbol,
-    address,
     poolAddress,
-    decimals,
     settlementTokenSymbol,
     side,
     balance,
     currentTokenPrice,
     onClickCommitAction,
-    onClickStake,
     leveragedNotionalValue,
-    expectedExecution,
     poolStatus,
 }) => {
-    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
-
     // if there is any balance at all they should stake
-    const shouldStake = !balance.eq(0);
     return (
         <TableRow lined>
             <OverviewTableRowCell>

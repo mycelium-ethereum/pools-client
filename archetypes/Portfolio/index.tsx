@@ -4,7 +4,6 @@ import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import useBrowsePools from '~/hooks/useBrowsePools';
 import usePortfolioOverview from '~/hooks/usePortfolioOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
@@ -12,11 +11,8 @@ import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { OnClickCommit, OnClickStake } from '~/types/portfolio';
 import { ClaimedTokens } from './ClaimedTokensTable';
 import { PoolsV1Tokens } from './PoolsV1TokensTable';
-import { emptyStateHelpCardContent } from './content';
-import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
 import QueuedCommits from './QueuedCommits';
-import { SkewCard } from './SkewCard';
 import { portfolioReducer, initialPortfolioState } from './state';
 import { Container } from './styles';
 import * as Styles from './styles';
@@ -31,7 +27,6 @@ export const PortfolioPage = (): JSX.Element => {
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
     const portfolioOverview = usePortfolioOverview();
-    const { rows: tokens } = useBrowsePools();
 
     const onClickCommitAction: OnClickCommit = (pool, side, action, unclaimed) => {
         swapDispatch({ type: 'setBalanceType', value: unclaimed ? BalanceTypeEnum.escrow : BalanceTypeEnum.wallet });
@@ -53,8 +48,6 @@ export const PortfolioPage = (): JSX.Element => {
     const handleModalClose = () => {
         setMintBurnModalOpen(false);
     };
-
-    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
 
     const emptyState = () => {
         return (
