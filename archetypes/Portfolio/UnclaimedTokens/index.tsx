@@ -36,8 +36,8 @@ export const UnclaimedTokens = ({
 
     return (
         <OverviewTable
-            title="Unclaimed Tokens"
-            subTitle="Your tokens, held with the Pool. Available to claim to a wallet at any time."
+            title="Claimable Tokens"
+            subTitle="Burn your Pool Tokens before claiming"
             firstActionTitle="Markets"
             firstAction={
                 <MarketDropdown

@@ -32,9 +32,9 @@ export const TokensNotional = ({
     approximate?: boolean;
 }): JSX.Element => (
     <>
-        <div>{approximate && '~'}{`${amount.times(price).toFixed(5)} ${settlementTokenSymbol}`}</div>
+        <div>${approximate ? '~' : ''}{`${amount.times(price).toFixed(5)} ${settlementTokenSymbol}`}</div>
         <InnerCellSubText>
-            {`${amount.toFixed(5)} tokens at ${approximate && '~'}${price.toFixed(5)} ${settlementTokenSymbol}/token`}
+            {`${amount.toFixed(5)} tokens at ${approximate ? '~' : ''}${price.toFixed(5)} ${settlementTokenSymbol}/token`}
         </InnerCellSubText>
     </>
 );

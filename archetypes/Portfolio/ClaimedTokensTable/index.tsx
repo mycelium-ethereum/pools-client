@@ -37,8 +37,8 @@ export const ClaimedTokens = ({
 
     return (
         <OverviewTable
-            title="Claimed Tokens"
-            subTitle="Pools tokens in your wallet."
+            title="V2 Tokens in Your Wallet"
+            subTitle="Burn Pool Tokens from here"
             firstActionTitle="Markets"
             firstAction={
                 <MarketDropdown

@@ -4,7 +4,6 @@ import { BalanceTypeEnum } from '@tracer-protocol/pools-js';
 import MintBurnModal from '~/archetypes/Pools/MintBurnModal';
 import Divider from '~/components/General/Divider';
 import { noDispatch, useSwapContext } from '~/context/SwapContext';
-import useBrowsePools from '~/hooks/useBrowsePools';
 import usePortfolioOverview from '~/hooks/usePortfolioOverview';
 import { useStore } from '~/store/main';
 import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
@@ -12,11 +11,8 @@ import { selectAccount, selectHandleConnect } from '~/store/Web3Slice';
 import { OnClickCommit, OnClickStake } from '~/types/portfolio';
 import { ClaimedTokens } from './ClaimedTokensTable';
 import { PoolsV1Tokens } from './PoolsV1TokensTable';
-import { emptyStateHelpCardContent } from './content';
-import { HelpCard } from './HelpCard';
 import HistoricCommits from './HistoricCommits';
 import QueuedCommits from './QueuedCommits';
-import { SkewCard } from './SkewCard';
 import { portfolioReducer, initialPortfolioState } from './state';
 import { Container } from './styles';
 import * as Styles from './styles';
@@ -31,7 +27,6 @@ export const PortfolioPage = (): JSX.Element => {
     const [state, dispatch] = useReducer(portfolioReducer, initialPortfolioState);
     const [mintBurnModalOpen, setMintBurnModalOpen] = useState(false);
     const portfolioOverview = usePortfolioOverview();
-    const { rows: tokens } = useBrowsePools();
 
     const onClickCommitAction: OnClickCommit = (pool, side, action, unclaimed) => {
         swapDispatch({ type: 'setBalanceType', value: unclaimed ? BalanceTypeEnum.escrow : BalanceTypeEnum.wallet });
@@ -54,12 +49,10 @@ export const PortfolioPage = (): JSX.Element => {
         setMintBurnModalOpen(false);
     };
 
-    const maxSkew = tokens.sort((a, b) => b.longToken.effectiveGain - a.longToken.effectiveGain)[0];
-
     const emptyState = () => {
         return (
             <Styles.Wrapper>
-                <Styles.Banner>
+                {/* <Styles.Banner>
                     {emptyStateHelpCardContent.map((v, i) => (
                         <HelpCard
                             badge={v.badge}
@@ -70,8 +63,8 @@ export const PortfolioPage = (): JSX.Element => {
                             key={`${v.title}-${i}`}
                         />
                     ))}
-                </Styles.Banner>
-                {maxSkew !== undefined && (
+                </Styles.Banner> */}
+                {/* {maxSkew !== undefined && (
                     <div>
                         <SkewCard longToken={maxSkew.longToken} shortToken={maxSkew.shortToken} />
 
@@ -84,7 +77,7 @@ export const PortfolioPage = (): JSX.Element => {
                             roundedTop={false}
                         />
                     </div>
-                )}
+                )} */}
             </Styles.Wrapper>
         );
     };
@@ -92,11 +85,6 @@ export const PortfolioPage = (): JSX.Element => {
     const filledState = () => {
         return (
             <>
-                <QueuedCommits
-                    queuedCommitsFilter={state.queuedCommitsFilter}
-                    queuedCommitsSearch={state.queuedCommitsSearch}
-                    dispatch={dispatch}
-                />
                 <ClaimedTokens
                     claimedTokensMarketFilter={state.claimedTokensMarketFilter}
                     claimedTokensSearch={state.claimedTokensSearch}
@@ -104,12 +92,17 @@ export const PortfolioPage = (): JSX.Element => {
                     onClickCommitAction={onClickCommitAction}
                     onClickStake={onClickStake}
                 />
-                <PoolsV1Tokens />
                 <UnclaimedTokens
                     escrowSearch={state.escrowSearch}
                     escrowMarketFilter={state.escrowMarketFilter}
                     dispatch={dispatch}
                     onClickCommitAction={onClickCommitAction}
+                />
+                <PoolsV1Tokens />
+                <QueuedCommits
+                    queuedCommitsFilter={state.queuedCommitsFilter}
+                    queuedCommitsSearch={state.queuedCommitsSearch}
+                    dispatch={dispatch}
                 />
                 <Divider text="Historical Data" />
                 <HistoricCommits
@@ -124,7 +117,7 @@ export const PortfolioPage = (): JSX.Element => {
     return (
         <Container>
             <TradeOverviewBanner
-                title={'Portfolio Overview'}
+                title={'Exit Mycelium Pools Positions'}
                 portfolioOverview={portfolioOverview}
                 account={!!account}
                 handleConnect={handleConnect}

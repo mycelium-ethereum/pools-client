@@ -1,41 +1,27 @@
 import React from 'react';
-import { CommitActionEnum, SideEnum, NETWORKS } from '@tracer-protocol/pools-js';
+import { CommitActionEnum, SideEnum } from '@tracer-protocol/pools-js';
 import SlimButton from '~/components/General/Button/SlimButton';
 import { TableRow } from '~/components/General/TWTable';
 import { PoolStatusBadge, PoolStatusBadgeContainer } from '~/components/PoolStatusBadge';
-import TimeLeft from '~/components/TimeLeft';
-import Actions from '~/components/TokenActions';
-import { PortfolioSellTooltip, PortfolioStakeTooltip, StyledTooltip } from '~/components/Tooltips';
-import TooltipSelector, { TooltipKeys } from '~/components/Tooltips/TooltipSelector';
-import { BlockExplorerAddressType } from '~/types/blockExplorers';
+import { StyledTooltip } from '~/components/Tooltips';
 import { ClaimedRowActions, ClaimedTokenRowProps } from '~/types/claimedTokens';
-import { PoolStatus } from '~/types/pools';
-import { constructBalancerLink } from '~/utils/balancer';
 import { Market } from '../Market';
 import { ActionsCell } from '../OverviewTable/styles';
 import { OverviewTableRowCell } from '../OverviewTable/styles';
 import { TokensNotional } from '../Tokens';
 
 export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions> = ({
-    network,
     symbol,
-    address,
     poolAddress,
-    decimals,
     settlementTokenSymbol,
     side,
     balance,
     currentTokenPrice,
     onClickCommitAction,
-    onClickStake,
     leveragedNotionalValue,
-    expectedExecution,
     poolStatus,
 }) => {
-    const poolIsDeprecated = poolStatus === PoolStatus.Deprecated;
-
     // if there is any balance at all they should stake
-    const shouldStake = !balance.eq(0);
     return (
         <TableRow lined>
             <OverviewTableRowCell>
@@ -57,7 +43,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                 <div>{`${leveragedNotionalValue.toFixed(5)} ${settlementTokenSymbol}`}</div>
             </OverviewTableRowCell>
             <ActionsCell>
-                <PortfolioStakeTooltip>
+                {/* <PortfolioStakeTooltip>
                     <div>
                         <SlimButton
                             // will never be disabled if it gets included as a row it will always be either to stake or to unstake
@@ -76,12 +62,11 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                             />
                         </div>
                     </PortfolioSellTooltip>
-                )}
+                )} */}
                 <StyledTooltip
                     title={
                         <>
-                            Burn the Pool Token on Mycelium and receive it in{' '}
-                            <TimeLeft targetTime={expectedExecution} />.
+                            Burn the Pool Token on Mycelium and then claim your USDC after the next upkeep
                         </>
                     }
                 >
@@ -93,7 +78,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         />
                     </div>
                 </StyledTooltip>
-                <TooltipSelector
+                {/* <TooltipSelector
                     tooltip={{
                         key: poolIsDeprecated ? TooltipKeys.DeprecatedPoolFlipCommit : TooltipKeys.PortfolioFlip,
                     }}
@@ -105,8 +90,8 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                             content={<>FLIP</>}
                         />
                     </div>
-                </TooltipSelector>
-                <Actions
+                </TooltipSelector> */}
+                {/* <Actions
                     token={{
                         address,
                         symbol,
@@ -116,7 +101,7 @@ export const ClaimedTokenRow: React.FC<ClaimedTokenRowProps & ClaimedRowActions>
                         type: BlockExplorerAddressType.token,
                         target: address,
                     }}
-                />
+                /> */}
             </ActionsCell>
         </TableRow>
     );

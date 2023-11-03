@@ -59,12 +59,6 @@ export default (({ className }) => {
             <Option value={NETWORKS.ARBITRUM} onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM)}>
                 Arbitrum
             </Option>
-            <Option
-                value={NETWORKS.ARBITRUM_RINKEBY}
-                onClick={() => switchNetworks(provider, NETWORKS.ARBITRUM_RINKEBY)}
-            >
-                Rinkeby
-            </Option>
         </TWPopup>
     );
 }) as React.FC<{

@@ -2,7 +2,6 @@ import React from 'react';
 import { NetworkHintContainer, NetworkHint } from '~/components/NetworkHint';
 import { Heading } from '~/components/PageTable';
 import { PortfolioOverview } from '~/types/portfolio';
-import { toApproxLocaleString } from '~/utils/converters';
 import * as Styles from './styles';
 import { ConnectWalletBanner } from '../ConnectWalletBanner';
 
@@ -17,8 +16,7 @@ export const DENOTATION_FILTER_OPTIONS = [{ key: 'USD', value: 'USD' }];
 
 export const TIME_FILTER_OPTIONS = [{ key: 'All Time', value: 'All Time' }];
 
-export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, portfolioOverview, handleConnect }) => {
-    const { totalPortfolioValue } = portfolioOverview;
+export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, handleConnect }) => {
 
     return (
         <>
@@ -29,7 +27,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                 </NetworkHintContainer>
             </Heading>
             <Styles.Container>
-                <Styles.Banner className={!!account ? '' : 'empty-state'}>
+                {/* <Styles.Banner className={!!account ? '' : 'empty-state'}>
                     <Styles.Header>
                         <Styles.Subtitle>Valuation</Styles.Subtitle>
                     </Styles.Header>
@@ -41,7 +39,7 @@ export const TradeOverviewBanner: React.FC<BannerTypes> = ({ title, account, por
                             </Styles.Currency>
                         </Styles.Value>
                     </Styles.BannerContent>
-                </Styles.Banner>
+                </Styles.Banner> */}
 
                 {!account && handleConnect && <ConnectWalletBanner handleConnect={handleConnect} />}
             </Styles.Container>

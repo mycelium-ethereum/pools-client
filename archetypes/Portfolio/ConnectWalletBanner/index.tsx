@@ -6,10 +6,10 @@ type CWBProps = {
 };
 
 export const ConnectWalletBanner: React.FC<CWBProps> = ({ handleConnect }) => (
-    <Styles.Container>
+    <Styles.Container style={{ width: '100%' }}>
         <Styles.Background />
         <Styles.Wrapper>
-            <Styles.Title>Connect to Arbitrum to get started with Perpetual Pools</Styles.Title>
+            <Styles.Title>Connect to Arbitrum to burn your Pools Tokens</Styles.Title>
             <Styles.Button onClick={handleConnect}>Connect Wallet</Styles.Button>
         </Styles.Wrapper>
     </Styles.Container>
